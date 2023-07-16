@@ -30,9 +30,33 @@ class EquipmentOwners(Resource):
 
         response = make_response(equip_owners, 200)
         #rules =('-agreements', 'equipment')
-        
+
         return response
 
 api.add_resource(EquipmentOwners, '/equipment_owners')
+
+class Equipments(Resource):
+    def get(self):
+        equipment = [equipment.to_dict() for equipment in Equipment.query.all()]
+
+        response = make_response(equipment, 200)
+
+        return response
+api.add_resource(Equipments, '/equipment')
+
+class EquipmentByType(Resource):
+    def get(self,type):
+        type_test = Equipment.query.filter(Equipment.type == type).all()
+        if type_test:
+            equipment = [equipment.to_dict() for equipment in Equipment.query.filter(Equipment.type == type).all()]
+            response = make_response(equipment, 200)
+            return response
+        else:
+            response = make_response(" We don't support this Equipment quite yet", 404)
+            return response
+        
+        #need to find a way to make all the types easily inputtable, for example Heavy Machinery doesn't get picked up if you do /heavymachinery
+
+api.add_resource(EquipmentByType, '/equipment/<string:type>')
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
