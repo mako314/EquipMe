@@ -40,7 +40,10 @@ export default EquipmentForm;
 
 //was in this (label data-modal-target)
 
+// may have to conditionally render it where this form submits to our owners also and only takes x data.
 
+
+//EQUIPMENT RENTAL LISTING
 // key
 // type
 // make
@@ -50,3 +53,10 @@ export default EquipmentForm;
 // availability
 // delivery
 // quantity
+
+//OWNER CREATION
+// id
+// name
+// location
+// #may need to include a profession, i.e Heavy Machinery, Painting
+// #Also may need to include contact information, this could be a string?
