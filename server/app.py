@@ -48,6 +48,40 @@ class Equipments(Resource):
         response = make_response(equipment, 200)
 
         return response
+    
+    #NEED TO UPDATE FOR VALIDATIONS
+    def post(self):
+        data = request.get_json()
+#name = db.Column(db.String)
+#type = db.Column(db.String)
+#make = db.Column(db.String)
+#model = db.Column(db.String)
+#owner_name = db.Column(db.String)
+#location = db.Column(db.String)
+#availability = db.Column(db.Boolean)
+#delivery = db.Column(db.Boolean)
+#quantity = db.Column(db.Integer)
+        #try:
+        new_equipment = Equipment(
+            name = data['name'],
+            type = data['type'],
+            make = data['make'],
+            model = data['model'],
+            owner_name = data['owner_name'],
+            location = data['location']
+            availability = data['availability'],
+            delivery = data['delivery'],
+            quantity = data['quantity']
+        )
+        db.session.add(new_equipment)
+        db.session.commit()
+
+        response = make_response(new_equipment.to_dict(), 201)
+
+        #except ValueError: 
+        # NEED TO WRITE VALIDATIONS
+        
+
 api.add_resource(Equipments, '/equipment')
 
 #Search and or filter by Equipment type, i.e. Heavy Machinery or painting
