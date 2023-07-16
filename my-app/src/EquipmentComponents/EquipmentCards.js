@@ -32,7 +32,7 @@ function EquipmentCards(){
 
             
             {/* may need to break it up into divs or something for style */}
-
+            {/* NEED A BUTTON TO DELETE AND EDIT HERE */}
         </div>
     )
 
