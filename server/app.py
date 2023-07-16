@@ -102,7 +102,7 @@ if __name__ == '__main__':
 #6 Actual ability to check out a rental, (Users)
 # would be a patch impacting quantity, if 0 are available, need to work logic out on how it would impact that number. Possibly available and checked out as attributes? So make it where if all quantity are checked out = none available?
 
-#7 Post a rental, (new Owners? Anyone?)
+#7 Post a rental, (new Owners? Anyone? Also it should be post an equipment for rent)
 # Post a rental equipment, simply put
 
 #8 Delete a rental listing (Owners)
