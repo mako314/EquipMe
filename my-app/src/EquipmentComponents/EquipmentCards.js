@@ -2,10 +2,10 @@ import React from "react";
 
 function EquipmentCards(){
 
-
+// DO NOT FORGET TO PASS PROPS
 // in the phase 2 project I had nothing here, it was simply a return with props passed into the function
-        //might have to map over a span and include that stuff inside of my availability and delivery stuff for example...
-        //will need to test, because previously the tags were in an array, however in my current dataset the tags would be equivalent to the availability, delivery, and quantity. They're all a single thing and not an array 
+//might have to map over a span and include that stuff inside of my availability and delivery stuff for example...
+//will need to test, because previously the tags were in an array, however in my current dataset the tags would be equivalent to the availability, delivery, and quantity. They're all a single thing and not an array 
 
 
 
@@ -29,6 +29,9 @@ function EquipmentCards(){
             <span> 
                 availability, delivery, and quantity
             </span>
+
+            
+            {/* may need to break it up into divs or something for style */}
 
         </div>
     )

@@ -6,6 +6,7 @@ function App() {
 
   // if anything can write fetches and such here, will see what needs to be use
 
+  // fetches are usEffect, and need useState
 
   return (
     <div className="App">

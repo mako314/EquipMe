@@ -2,7 +2,7 @@ import React from "react";
 import EquipmentCards from "./EquipmentCards";
 
 function EquipmentList(){
-
+    //do not forget to pass in state variable
     // map over things here once it's been fetched
     //something like the following:
 

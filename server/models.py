@@ -17,6 +17,7 @@ class UserRenter(db.Model, SerializerMixin):
     age = db.Column(db.Integer)
     location = db.Column(db.String)
     profession = db.Column(db.String)
+    #might need to add email to identify user
 
     #relationships
     agreements = db.relationship('RentalAgreement', back_populates="renter", overlaps="renters,owners")
@@ -30,6 +31,8 @@ class EquipmentOwner(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     location = db.Column(db.String)
+    #may need to include a profession, i.e Heavy Machinery, Painting
+    #Also may need to include contact information, this could be a string? Maybe email + phone #
 
     #relationships
     agreements = db.relationship('RentalAgreement', back_populates="owner", overlaps="renters,owners")
