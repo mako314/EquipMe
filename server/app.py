@@ -72,12 +72,41 @@ if __name__ == '__main__':
     #holy cow stop coding on main u gOOFY 
 
 #Routes needed -
+# INDEX
 #1. Individual Equipment page
 #2. Rental Owner Page (So the rental owners own page with all their rental listings)
 #3. See All Rentals (Equipment)
 #4. See All owners (Owners)
 #5. Search / Filter rental by type / name / owner
-#6. See all Rentals
-#7. Checkout a rental
-#8. Post a Rental, 
-#9. Take a rental ? (Rental Agreement?)
+#6. Checkout a rental (rental agreement?)
+#7. Post a Rental, 
+#8  Delete a rental
+#9  Edit a rental
+
+# FLOW
+#1. Index page
+# See a featured rental, 3 featured items, recent reviews if possible? 
+
+#2. Rental Owner Page (id or name)
+# Takes you to the Owner of the rentals own homepage-esque, showing all of their available rentals, along with a button to check them out. Possibly add in user authentication so they can sign in and for example edit their rentals.
+
+#3. See all rentals, (Anyone)
+# basically a button / navbar thing that allows an individual to see all the rentals that the site hosts
+
+#4. See All Owners (Anyone)
+# A button / navbar to see everyone that uses the site and lists equipment for rent
+
+#5 A search or filter rental by type / name / owner (Anyone)
+# Same functionality, click owner name be taken to owner page, click equipment and be taken to the equipment (by Id?) page. 
+
+#6 Actual ability to check out a rental, (Users)
+# would be a patch impacting quantity, if 0 are available, need to work logic out on how it would impact that number. Possibly available and checked out as attributes? So make it where if all quantity are checked out = none available?
+
+#7 Post a rental, (new Owners? Anyone?)
+# Post a rental equipment, simply put
+
+#8 Delete a rental listing (Owners)
+# Simply no longer list that rental
+
+#9 Edit a rental, (Owners)
+# if you end up having less because one is in the shop for example, or maybe you move
