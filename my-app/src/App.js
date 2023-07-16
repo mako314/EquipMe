@@ -1,11 +1,16 @@
-import logo from './logo.svg';
-import './App.css';
+// import logo from './logo.svg';
+// import './App.css';
+import React, {useState, useEffect} from 'react';
 
 function App() {
+
+  // if anything can write fetches and such here, will see what needs to be use
+
+
   return (
     <div className="App">
+      {/* rembember react is read top down, so I likely need to put the header / navbar here */} 
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
@@ -23,3 +28,5 @@ function App() {
 }
 
 export default App;
+
+// Don't forget to export stuff, and IMPORT

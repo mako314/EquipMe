@@ -36,7 +36,7 @@ class EquipmentOwners(Resource):
 
 api.add_resource(EquipmentOwners, '/equipment_owners')
 
-#this can either be ID or name,
+#this can either be ID or name, one is written for type
 class EquipmentOwnersById(Resource):
     pass
 api.add_resource(EquipmentOwnersById, '/equipment_owners/<int:id>')
@@ -77,6 +77,7 @@ class Equipments(Resource):
         db.session.commit()
 
         response = make_response(new_equipment.to_dict(), 201)
+        return response
 
         #except ValueError: 
         # NEED TO WRITE VALIDATIONS
