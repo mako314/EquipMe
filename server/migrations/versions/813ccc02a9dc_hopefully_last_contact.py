@@ -1,8 +1,8 @@
-"""<Finish tables, relationships, and columns>
+"""<hopefully last contact>
 
-Revision ID: f95faaf7a0f1
+Revision ID: 813ccc02a9dc
 Revises: 
-Create Date: 2023-07-15 19:29:34.932942
+Create Date: 2023-07-17 16:20:29.486774
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'f95faaf7a0f1'
+revision = '813ccc02a9dc'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -22,6 +22,9 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(), nullable=True),
     sa.Column('location', sa.String(), nullable=True),
+    sa.Column('profession', sa.String(), nullable=True),
+    sa.Column('phone', sa.String(), nullable=True),
+    sa.Column('email', sa.String(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('renters',
@@ -30,6 +33,8 @@ def upgrade():
     sa.Column('age', sa.Integer(), nullable=True),
     sa.Column('location', sa.String(), nullable=True),
     sa.Column('profession', sa.String(), nullable=True),
+    sa.Column('phone', sa.String(), nullable=True),
+    sa.Column('email', sa.String(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('agreements',
@@ -50,6 +55,8 @@ def upgrade():
     sa.Column('make', sa.String(), nullable=True),
     sa.Column('model', sa.String(), nullable=True),
     sa.Column('owner_name', sa.String(), nullable=True),
+    sa.Column('phone', sa.String(), nullable=True),
+    sa.Column('email', sa.String(), nullable=True),
     sa.Column('location', sa.String(), nullable=True),
     sa.Column('availability', sa.Boolean(), nullable=True),
     sa.Column('delivery', sa.Boolean(), nullable=True),

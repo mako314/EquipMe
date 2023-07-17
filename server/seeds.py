@@ -23,44 +23,59 @@ if __name__ == '__main__':
             name="Benjamin Davis", #Rents construction equipment from Amy Wilson (6)
             age=42,
             location="Chicago, Illinois",
-            profession="Construction Equipment Operator" 
+            profession="Construction Equipment Operator",
+            phone="312-555-1122",
+            email="benjamin.davis23@gmail.com"
         ),
         UserRenter(
             name="Ethan Martinez", #Rents Heavy Machinery from David Rodriguez (5)
             age=39,
             location="Miami, Florida",
-            profession="Heavy Machine Operator" 
+            profession="Heavy Machine Operator",
+            phone="305-555-2233",
+            email="ethan.martinez77@yahoo.com" 
         ),
         UserRenter(
             name="William Anderson", #Rents Cleaning Equipment from Daniel Lee (7)
             age=32,
             location="Houston, Texas",
-            profession="Industrial Cleaning Specialist"
+            profession="Industrial Cleaning Specialist",
+            phone="713-555-3344",
+            email="william.anderson89@gmail.com"
         ),
         UserRenter(
             name="Sofia Rodriguez", # Rents Party Equipment from Emily Johnson (2)
             age=29,
             location="Phoenix, Arizona",
-            profession="Party and Event Equipment Organizer"
+            profession="Party and Event Equipment Organizer",
+            phone="602-555-4455",
+            email="sofia.rodriguez12@hotmail.com"
         ),
         UserRenter(
             name="Christian Domingues", #Rents Painting Equipment from Mark Davis (1)
             age=42,
             location="Chicago, Illinois",
-            profession="Painting Contractor" 
+            profession="Painting Contractor",
+            phone="312-555-5566",
+            email="christian.domingues55@yahoo.com" 
         ),
         UserRenter(
             name="Sarah Thompson", #Rents Gardening Equipment from Henry Cavill (4)
             age=30,
             location="Seattle, Washington",
-            profession="Landscape Designer"
+            profession="Landscape Designer",
+            phone="206-555-6677",
+            email="sarah.thompson99@gmail.com"
         ),
         UserRenter(
             name="Thomas Brady", #Rents Automotive Equipment from Andrew Jacons (3)
             age=25,
             location="Houston, Texas",
-            profession="Automotive Mechanic"
+            profession="Automotive Mechanic",
+            phone="713-555-7788",
+            email="thomas.brady21@yahoo.com"
         ),]
+
 
         db.session.add_all(renters)
 #----------------------------------------------------------------
@@ -69,43 +84,73 @@ if __name__ == '__main__':
         equipment_owners = [
         EquipmentOwner(
             name="Mark Davis", # Painting Equipment
-            location="Chicago, Illinois"
+            location="Chicago, Illinois",
+            profession="Plumbing",
+            phone="312-555-6789",
+            email="markdavis82@yahoo.com"
         ),
         EquipmentOwner(
             name="Emily Johnson", # Party Equipment
-            location="Phoenix, Arizona"
+            location="Phoenix, Arizona",
+            profession="Party",
+            phone="602-555-7891",
+            email="ejohnson@live.com"
         ),
         EquipmentOwner(
             name="Andrew Jacobs", #Automotive Equipment
-            location="Houston, Texas"
+            location="Houston, Texas",
+            profession="Automotive",
+            phone="713-555-0123",
+            email="andrewjacobs93@gmail.com"
         ),
         EquipmentOwner(
             name="Henry Cavill", #Garden Equipment
-            location="Seattle, Washington"
+            location="Seattle, Washington",
+            profession="Garden",
+            phone="206-555-3456",
+            email="hcavill34@hotmail.com"
         ),
         EquipmentOwner(
             name="David Rodriguez", #Heavy Machinery
-            location="Miami, Florida"
+            location="Miami, Florida",
+            profession="Heavy Machinery",
+            phone="305-555-1234",
+            email="davidr83@gmail.com"
         ),
         EquipmentOwner(
             name="Amy Wilson", #Construction Equipment
-            location="Chicago, Illinois"
+            location="Chicago, Illinois",
+            profession="Construction",
+            phone="312-555-5678",
+            email="amywilson22@yahoo.com"
         ),
         EquipmentOwner(
             name="Daniel Lee", # Cleaning Equipment
-            location="Houston, Texas"
+            location="Houston, Texas",
+            profession="Cleaning",
+            phone="713-555-4567",
+            email="daniel.lee78@yahoo.com"
         ),
         EquipmentOwner(
             name="Jessica Sanchez", # Plumbing Equipment
-            location="New York City, New York"
+            location="New York City, New York",
+            profession="Plumbing",
+            phone ="212-555-2345",
+            email="jess.sanchez22@gmail.com"
         ),
         EquipmentOwner(
             name="Ryan Phillips", #Power-tool and hand-tool Equipment
-            location="Orlando, Florida"
+            location="Orlando, Florida",
+            profession="Power tools and Hand tools",
+            phone="407-555-9012",
+            email="ryan.phillips87@gmail.com"
         ),
         EquipmentOwner(
             name="Michelle Adams", #Woodwork
-            location="New Orleans, Louisiana"
+            location="New Orleans, Louisiana",
+            profession="Woodworking",
+            phone="504-555-7890",
+            email="madams90@gmail.com"
         )]
         db.session.add_all(equipment_owners)
 #---------------------------------------------------------
@@ -187,14 +232,21 @@ if __name__ == '__main__':
         # ),
 #-------------------------------------------------------------------------------------------------------------------------------------------------
         print("Uploading the current equipment list...")
-        data = pd.read_csv('/home/mako77/code/Flatiron/Projects/EquipMe/extrafiles/Copy_of_equipment_data_but_with_owners-equipment_data.csv')
+        data = pd.read_csv('/home/mako77/code/Flatiron/Projects/EquipMe/extrafiles/equipment_list_with_contact - equipment_data.csv')
 
-        data.columns = ['Equipment_name', 'Equipment_type', 'Make', 'Model', 'Owner', 'Location', 'Availability', 'Delivery', 'Quantity']
+        data.columns = ['Equipment_name', 'Equipment_type', 'Make', 'Model', 'Owner', 'Phone', 'Email', 'Location', 'Availability', 'Delivery', 'Quantity']
         equipment_list = []
 
         for index, row in data.iterrows():
             owner_name = row['Owner']
+            # phone = row['Phone']
+            # email = row['Email'] # We don't really need this, it would be required if we had a relationship
             equipment_owner = EquipmentOwner.query.filter(EquipmentOwner.name == owner_name).first()
+            # owner_phone = EquipmentOwner.query.filter(EquipmentOwner.phone == phone).first()
+            # owner_email = EquipmentOwner.query.filter(EquipmentOwner.email == email).first()
+
+            #this stuff above also unnecessary sorry for poor english, but likely can remove soon
+            
             # owner_listing_name = equipment_owner.name
             equipment = Equipment(
                 name = row['Equipment_name'],
@@ -202,6 +254,8 @@ if __name__ == '__main__':
                 make = row['Make'],
                 model = row['Model'],
                 owner_name = equipment_owner.name,
+                phone = equipment_owner.phone,
+                email = equipment_owner.email,
                 location = row['Location'],
                 availability = row['Availability'],
                 delivery = row['Delivery'],
