@@ -24,6 +24,18 @@ class UserRenters(Resource):
 
 api.add_resource(UserRenters, '/renters')
 
+
+class UserByID(Resource):
+    def get(self, id):
+        user = UserRenter.query.filter(UserRenter.id == id).first()
+
+        if user:
+            return make_response(user.to_dict(),200)
+        else:
+            return make_response("This is not a valid Owner", 404)
+
+api.add_resource(UserByID, '/user/<int:id>')
+
 #Display all Owners of Equipment who list their stuff to rent, users should be able to click the Owner and get taken to their page with all their equipment
 class EquipmentOwners(Resource):
     def get(self):
@@ -35,12 +47,19 @@ class EquipmentOwners(Resource):
         return response
 
 api.add_resource(EquipmentOwners, '/equipment_owners')
-
-#this can either be ID or name,
-class EquipmentOwnersById(Resource):
-    pass
-api.add_resource(EquipmentOwnersById, '/equipment_owners/<int:id>')
 #Display all Equipment, whether available or not, this route should display all the equipment available on the website.
+#this can either be ID or name,
+class EquipmentOwnerById(Resource):
+    def get(self, id):
+        equip_owner = EquipmentOwner.query.filter(EquipmentOwner.id == id).first()
+
+        if equip_owner:
+            return make_response(equip_owner.to_dict(),200)
+        else:
+            return make_response("This is not a valid Owner", 404)
+
+api.add_resource(EquipmentOwnerById, '/equipment_owner/<int:id>')
+
 class Equipments(Resource):
     def get(self):
         equipment = [equipment.to_dict() for equipment in Equipment.query.all()]
@@ -52,15 +71,6 @@ class Equipments(Resource):
     #NEED TO UPDATE FOR VALIDATIONS
     def post(self):
         data = request.get_json()
-#name = db.Column(db.String)
-#type = db.Column(db.String)
-#make = db.Column(db.String)
-#model = db.Column(db.String)
-#owner_name = db.Column(db.String)
-#location = db.Column(db.String)
-#availability = db.Column(db.Boolean)
-#delivery = db.Column(db.Boolean)
-#quantity = db.Column(db.Integer)
         #try:
         new_equipment = Equipment(
             name = data['name'],
@@ -68,6 +78,8 @@ class Equipments(Resource):
             make = data['make'],
             model = data['model'],
             owner_name = data['owner_name'],
+            phone = data['phone'],
+            email = data['email'],
             location = data['location'],
             availability = data['availability'],
             delivery = data['delivery'],
@@ -99,6 +111,19 @@ class EquipmentByType(Resource):
         #need to find a way to make all the types easily inputtable, for example Heavy Machinery doesn't get picked up if you do /heavymachinery
 
 api.add_resource(EquipmentByType, '/equipment/<string:type>')
+
+
+class EquipmentByID(Resource):
+    def get(self, id):
+        equipment = Equipment.query.filter(Equipment.id == id).first()
+        #may be able to do rules to remove agreements, likely not needed information, or is it?
+        if equipment:
+            return make_response(equipment.to_dict(),200)
+        else:
+            return make_response("This is not a valid Owner", 404)
+
+api.add_resource(EquipmentByID, '/equipment/<int:id>')
+
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
 
@@ -144,3 +169,9 @@ if __name__ == '__main__':
 
 #9 Edit a rental, (Owners)
 # if you end up having less because one is in the shop for example, or maybe you move
+
+
+
+
+
+#equipment by ID, owner by ID, and user by ID done. NEED to check whether or not we should do to_dict() rules.
