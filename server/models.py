@@ -35,7 +35,8 @@ class EquipmentOwner(db.Model, SerializerMixin):
     location = db.Column(db.String)
     #may need to include a profession, i.e Heavy Machinery, Painting
     #Also may need to include contact information, this could be a string? Maybe email + phone #
-
+    #reviews also?
+    
     #relationships
     agreements = db.relationship('RentalAgreement', back_populates="owner", overlaps="renters,owners")
 
