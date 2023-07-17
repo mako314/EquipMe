@@ -27,5 +27,5 @@ export default userCards;
 //age
 //location
 //profession
-//#might need to add email to identify user WILL NOT MAKE USER EMAIL PUBLIC IT IS SIMPLY FOR MAKING SURE ITS THEM
-//# and reviews
+//might need to add email to identify user WILL NOT MAKE USER EMAIL PUBLIC IT IS SIMPLY FOR MAKING SURE ITS THEM
+//and reviews

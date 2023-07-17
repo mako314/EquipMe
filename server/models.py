@@ -18,6 +18,7 @@ class UserRenter(db.Model, SerializerMixin):
     location = db.Column(db.String)
     profession = db.Column(db.String)
     #might need to add email to identify user
+    #Also a phone number to reach them?
     # and reviews
 
     #relationships

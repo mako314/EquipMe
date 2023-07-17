@@ -38,7 +38,6 @@ export default OwnerList;
 //age
 //location
 //profession
-
 // NOT YET ADDED TO MY MODELS PLEASE UPDATE ACCORDINGLY
 //#might need to add email to identify user
 // At first I thought this was the USER list, however this is owner
