@@ -17,6 +17,10 @@ class UserRenter(db.Model, SerializerMixin):
     age = db.Column(db.Integer)
     location = db.Column(db.String)
     profession = db.Column(db.String)
+    phone = db.Column(db.String)
+    email = db.Column(db.String)
+
+    #STUFF BELOW IS DONE
     #might need to add email to identify user
     #Also a phone number to reach them?
     # and reviews
@@ -33,6 +37,11 @@ class EquipmentOwner(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     location = db.Column(db.String)
+    profession = db.Column(db.String)
+    phone = db.Column(db.String)
+    email = db.Column(db.String)
+
+    #STUFF BELOW IS DONE
     #may need to include a profession, i.e Heavy Machinery, Painting
     #Also may need to include contact information, this could be a string? Maybe email + phone #
     #reviews also?
@@ -44,9 +53,6 @@ class EquipmentOwner(db.Model, SerializerMixin):
     #overlaps="owners,equipments" #This is a way to access the equipment that an owner has, 
     
     #you can just do a query EquipmentOwner.query.get(1), or equipment = owner.equipment. Then you can do for equipment in owner.equipment print(equipment) for example
-
-    #equipment_inventory = db.Column(db.Integer, db.ForeignKey('equipments.id'))
-    #foreign key is for the child
 
     #Serialization rules
     serialize_rules = ('-agreements.owner', '-equipment.owner' )
@@ -64,6 +70,8 @@ class Equipment(db.Model, SerializerMixin):
     make = db.Column(db.String)
     model = db.Column(db.String)
     owner_name = db.Column(db.String)
+    phone = db.Column(db.String) #this and the one below are recently added.
+    email = db.Column(db.String)
     location = db.Column(db.String)
     availability = db.Column(db.Boolean)
     delivery = db.Column(db.Boolean)
