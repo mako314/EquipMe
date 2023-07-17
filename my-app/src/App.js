@@ -44,3 +44,5 @@ function App() {
 export default App;
 
 // Don't forget to export stuff, and IMPORT
+
+// once again, you can just check Neat-Fleet, along with that you can make sure if there's a homepage it takes you to that you will be able to click links there
