@@ -32,7 +32,7 @@ class UserByID(Resource):
         if user:
             return make_response(user.to_dict(),200)
         else:
-            return make_response("This is not a valid Owner", 404)
+            return make_response("This is not a valid User", 404)
 
 api.add_resource(UserByID, '/user/<int:id>')
 
@@ -89,6 +89,7 @@ class Equipments(Resource):
         db.session.commit()
 
         response = make_response(new_equipment.to_dict(), 201)
+        return response
 
         #except ValueError: 
         # NEED TO WRITE VALIDATIONS
@@ -112,15 +113,17 @@ class EquipmentByType(Resource):
 
 api.add_resource(EquipmentByType, '/equipment/<string:type>')
 
-
 class EquipmentByID(Resource):
+    #get a single piece of equipment
     def get(self, id):
         equipment = Equipment.query.filter(Equipment.id == id).first()
         #may be able to do rules to remove agreements, likely not needed information, or is it?
         if equipment:
             return make_response(equipment.to_dict(),200)
         else:
-            return make_response("This is not a valid Owner", 404)
+            return make_response("We do not currently have this Equipment for rent", 404)
+        
+
 
 api.add_resource(EquipmentByID, '/equipment/<int:id>')
 
