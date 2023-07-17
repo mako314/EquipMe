@@ -36,7 +36,7 @@ class EquipmentOwners(Resource):
 
 api.add_resource(EquipmentOwners, '/equipment_owners')
 
-#this can either be ID or name,
+#this can either be ID or name, one is written for type
 class EquipmentOwnersById(Resource):
     pass
 api.add_resource(EquipmentOwnersById, '/equipment_owners/<int:id>')
@@ -77,6 +77,7 @@ class Equipments(Resource):
         db.session.commit()
 
         response = make_response(new_equipment.to_dict(), 201)
+        return response
 
         #except ValueError: 
         # NEED TO WRITE VALIDATIONS
@@ -121,13 +122,13 @@ if __name__ == '__main__':
 #1. Index page
 # See a featured rental, 3 featured items, recent reviews if possible? 
 
-#2. Rental Owner Page (id or name)
+#2. Rental Owner Page (id or name) {{REACT DONE}}
 # Takes you to the Owner of the rentals own homepage-esque, showing all of their available rentals, along with a button to check them out. Possibly add in user authentication so they can sign in and for example edit their rentals.
 
-#3. See all rentals, (Anyone)
+#3. See all rentals, (Anyone) {{REACT DONE}} NEED TO MAKE BUTTON TO TAKE ONE THERE
 # basically a button / navbar thing that allows an individual to see all the rentals that the site hosts
 
-#4. See All Owners (Anyone)
+#4. See All Owners (Anyone) {{REACT DONE}} NEED TO MAKE BUTTON
 # A button / navbar to see everyone that uses the site and lists equipment for rent
 
 #5 A search or filter rental by type / name / owner (Anyone)
@@ -141,6 +142,8 @@ if __name__ == '__main__':
 
 #8 Delete a rental listing (Owners)
 # Simply no longer list that rental
+#↑ EQUIPMENT CARD DONE, NEED EDIT FORMAT AND ADD DELETE BUTTON
 
+#↓ EQUIPMENT CARD DONE, NEED EDIT FORMAT AND ADD EDIT BUTTON
 #9 Edit a rental, (Owners)
 # if you end up having less because one is in the shop for example, or maybe you move
