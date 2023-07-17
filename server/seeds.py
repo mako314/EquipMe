@@ -154,7 +154,8 @@ if __name__ == '__main__':
         )]
         db.session.add_all(equipment_owners)
 #---------------------------------------------------------
-#rental agreements 
+#Seed rental agreements
+#Rental agreements 
         print("Configuring our current rental agreements...")
         rental_agreements = [
         RentalAgreement(
@@ -231,6 +232,8 @@ if __name__ == '__main__':
         #     owner_id=9  # Ryan Phillips
         # ),
 #-------------------------------------------------------------------------------------------------------------------------------------------------
+#Seed Equipment with panda. 
+#Seed Equipment
         print("Uploading the current equipment list...")
         data = pd.read_csv('/home/mako77/code/Flatiron/Projects/EquipMe/extrafiles/equipment_list_with_contact - equipment_data.csv')
 
