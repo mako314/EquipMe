@@ -310,6 +310,18 @@ class EquipmentByID(Resource):
         
 api.add_resource(EquipmentByID, '/equipment/<int:id>')
 
+
+#---------------------------------------EQUIPMENT Classes--------------------------------------
+
+class RentalAgreements(Resource):
+    def get(self):
+        agreements = [agreement.to_dict() for agreement in RentalAgreement.query.all()]
+
+        response = make_response(agreements, 200)
+
+        return response
+api.add_resource(RentalAgreements, '/rental_agreements')
+
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
 

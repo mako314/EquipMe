@@ -163,63 +163,63 @@ if __name__ == '__main__':
             total_price=150,
             rental_dates="2023-07-15 to 2023-07-18",
             renter_id=1,  # Benjamin Davis
-            owner_id=6  # Amy Wilson
+            equipment_id=38  # Amy Wilson #Available
         ),
         RentalAgreement(
             location="Miami, Florida",
             total_price=200,
             rental_dates="2023-07-19 to 2023-07-23",
             renter_id=2,  # Ethan Martinez
-            owner_id=5  # David Rodriguez
+            equipment_id=8  # David Rodriguez #Available
         ),
         RentalAgreement(
             location="Houston, Texas",
             total_price=100,
             rental_dates="2023-07-17 to 2023-07-20",
             renter_id=3,  # William Anderson
-            owner_id=7  # Daniel Lee
+            equipment_id=317  # Daniel Lee #Available
         ),
         RentalAgreement(
             location="Phoenix, Arizona",
             total_price=80,
             rental_dates="2023-07-16 to 2023-07-19",
             renter_id=4,  # Sofia Rodriguez
-            owner_id=2  # Emily Johnson
+            equipment_id=361  # Emily Johnson #Available
         ),
         RentalAgreement(
             location="Seattle, Washington",
             total_price=180,
             rental_dates="2023-07-18 to 2023-07-21",
             renter_id=6,  # Sarah Thompson
-            owner_id=4  # Henry Cavill
+            equipment_id=121  # Henry Cavill #Available
         ),
         RentalAgreement(
             location="Houston, Texas",
             total_price=120,
             rental_dates="2023-07-22 to 2023-07-24",
             renter_id=7,  # Thomas Brady
-            owner_id=3  # Andrew Jacobs
+            equipment_id=311  # Andrew Jacobs #Available
         ),
         RentalAgreement(
             location="Chicago, Illinois",
             total_price=80,
             rental_dates="2023-07-23 to 2023-07-24",
             renter_id=5,  # Christian Domingues
-            owner_id=1  # Mark Davis
+            equipment_id=238  # Mark Davis #Available
         ),
         RentalAgreement(
             location="Phoenix, Arizona",
             total_price=120,
             rental_dates="2023-07-22 to 2023-07-23",
             renter_id=4,  # Sofia Rodriguez
-            owner_id=2  # Emily Johnson
+            equipment_id=355  # Emily Johnson #Available
         ),
         RentalAgreement(
             location="Dallas, Texas",
             total_price=150,
             rental_dates="2023-07-19 to 2023-07-22",
             renter_id=3,  # William Anderson
-            owner_id=7  # Daniel Lee
+            equipment_id=318  # Daniel Lee #Available
         )]
 
         db.session.add_all(rental_agreements)
