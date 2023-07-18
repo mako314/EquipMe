@@ -199,7 +199,9 @@ class Equipments(Resource):
 
     #get ALL equipment -- DONE
     def get(self):
-        equipment = [equipment.to_dict() for equipment in Equipment.query.all()]
+        equipment = [equipment.to_dict(
+            only =('model','name','make','location')
+        ) for equipment in Equipment.query.all()]
 
         response = make_response(equipment, 200)
 
