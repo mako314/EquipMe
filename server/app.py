@@ -1,4 +1,5 @@
 from models import db, UserRenter, EquipmentOwner, Equipment, RentalAgreement
+from flask_cors import CORS
 from flask_migrate import Migrate
 from flask import Flask, request, make_response, jsonify
 from flask_restful import Api, Resource
@@ -9,6 +10,7 @@ DATABASE = os.environ.get(
     "DB_URI", f"sqlite:///{os.path.join(BASE_DIR, 'app.db')}")
 
 app = Flask(__name__)
+CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
