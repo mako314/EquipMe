@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import './EquipmentComponents/ProductCollection'
-import ProductCollection from './EquipmentComponents/ProductCollection';
+import ProductCollection from './EquipmentComponents/ProductCollection'
+import Header from './EquipmentComponents/Header'
 
 
 function App() {
@@ -18,10 +19,10 @@ function App() {
 
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <ProductCollection equipmentArray={equipmentArray} />
-      </header>
+    <div >
+      <Header />
+      <ProductCollection equipmentArray={equipmentArray} />
+
     </div>
   );
 }
