@@ -91,7 +91,7 @@ class UserByID(Resource):
             # user.agreements do I need to cycle through and delete the agreement relationship also?
             db.session.delete(user)
             db.session.commit()
-            response = make_response({}, 204)
+            response = make_response({"message":"Succesfully deleted!"}, 204)
             return response
         else:
             response = make_response({
@@ -181,7 +181,7 @@ class EquipmentOwnerById(Resource):
             # owner.agreements and owner.equipment do I need to cycle through and delete the agreement relationship also?
             db.session.delete(equip_owner)
             db.session.commit()
-            response = make_response({}, 204)
+            response = make_response({"message":"Succesfully deleted!"}, 204)
             return response
         else:
             response = make_response({
@@ -237,6 +237,7 @@ api.add_resource(Equipments, '/equipment')
 
 #Search and or filter by Equipment type, i.e. Heavy Machinery or painting
 class EquipmentByType(Resource):
+
     def get(self,type):
         type_test = Equipment.query.filter(Equipment.type == type).all()
         if type_test:
@@ -261,7 +262,7 @@ class EquipmentByID(Resource):
         #need a way to input, owner_id and owner maybe a 2 step process?
         #may be able to do rules to remove agreements, likely not needed information, or is it?
         if equipment:
-            return make_response(equipment.to_dict(),200)
+            return make_response(equipment.to_dict(rules = ('-owner',)),200)
         else:
             response = make_response({
             "error": "Equipment not found"
@@ -303,7 +304,7 @@ class EquipmentByID(Resource):
 
             db.session.commit()
             #how do I input succesfully delete into the {}?
-            response = make_response({}, 204)
+            response = make_response({"message":"Succesfully deleted!"}, 204)
             return response
         else:
             response = make_response({
@@ -318,6 +319,7 @@ api.add_resource(EquipmentByID, '/equipment/<int:id>')
 #Rental agreements, need a post and a patch
 class RentalAgreements(Resource):
     #Get ALL rental agreements
+    #list of all the renters and the equipment
     def get(self):
         agreements = [agreement.to_dict() for agreement in RentalAgreement.query.all()]
 
@@ -325,19 +327,36 @@ class RentalAgreements(Resource):
 
         return response
     
+    #post a rental agreement
     def post(self):
         data = request.get_json()
         #try:
+
         #need a way to grab equipment and owner
+        # load category and then from there display 
+        #take the input
+
+        #may need a way to write in validations
         new_rental_agreement = RentalAgreement(
-            
+            location = data['location'],
+            total_price = data['total_price'],
+            rental_dates = data['rental_dates'],
+            renter_id = data['renter_id'],
+            equipment_id = data['equipment_id']
         )
+
+        db.session.add(new_rental_agreement)
+        db.session.commit()
+
+        response = make_response(new_rental_agreement.to_dict(), 201)
+        return response
 
 
 api.add_resource(RentalAgreements, '/rental_agreements')
 
 #Get a rental agreement by ID
 class RentalAgreementsByID(Resource):
+
     #Get a single rental agreement by ID
     def get(self, id):
         agreement = RentalAgreement.query.filter(RentalAgreement.id == id).first()
@@ -350,6 +369,39 @@ class RentalAgreementsByID(Resource):
             }, 404)
             return response
         
+    #delete a single rental agreement
+    def delete(self, id):
+        agreement = RentalAgreement.query.filter(RentalAgreement.id == id).first()
+
+        if agreement:
+            #may need to delete the renter id and equipment id
+            db.session.delete(agreement)
+            db.session.commit()
+            response = make_response({"message":"Succesfully deleted!"}, 204)
+            return response
+        else:
+            response = make_response({
+            "error": "Rental Agreement not found"
+            }, 404)
+            return response
+        
+    #patch a rental agreement
+    def patch(self, id):
+        agreement = RentalAgreement.query.filter(RentalAgreement.id == id).first()
+
+        if agreement:
+            data = request.get_json()
+            for key in data:
+                setattr(agreement, key, data[key])
+            db.session.add(agreement)
+            db.session.commit()
+            response = make_response(agreement.to_dict(), 202)
+            return response
+        else:
+            response = make_response({
+            "error": "Rental Agreement not found"
+            }, 404)
+            return response
 api.add_resource(RentalAgreementsByID, '/rental_agreements/<int:id>')
 
 if __name__ == '__main__':

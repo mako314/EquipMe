@@ -25,7 +25,8 @@ class UserRenter(db.Model, SerializerMixin):
     #Also a phone number to reach them?
     # and reviews
 
-    #relationships
+    #relationships 
+    #cascade for this
     agreements = db.relationship('RentalAgreement', back_populates="renter", overlaps="renters,owners")
 
     #Serialization rules
@@ -49,6 +50,7 @@ class EquipmentOwner(db.Model, SerializerMixin):
     #relationships
     # agreements = db.relationship('RentalAgreement', back_populates="owner", overlaps="renters,owners")
 
+    #do a cascade to make life easier
     equipment = db.relationship('Equipment', back_populates='owner', overlaps="owners,equipments") 
     #overlaps="owners,equipments" #This is a way to access the equipment that an owner has, 
     
