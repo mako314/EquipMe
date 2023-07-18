@@ -1,5 +1,5 @@
 from models import db, UserRenter, EquipmentOwner, Equipment, RentalAgreement
-# from flask_cors import CORS
+from flask_cors import CORS
 from flask_migrate import Migrate
 from flask import Flask, request, make_response, jsonify
 from flask_restful import Api, Resource
@@ -20,7 +20,7 @@ migrate = Migrate(app, db)
 
 db.init_app(app)
 api = Api(app)
-# CORS(app)
+CORS(app)
 #------------------------------------------------------USER RENTER CLASSES----------------------------------------------------------
 
 class UserRenters(Resource):
