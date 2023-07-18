@@ -402,9 +402,6 @@ class RentalAgreementsByID(Resource):
             "error": "Rental Agreement not found"
             }, 404)
             return response
-
-
-
 api.add_resource(RentalAgreementsByID, '/rental_agreements/<int:id>')
 
 if __name__ == '__main__':
