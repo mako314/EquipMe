@@ -32,7 +32,10 @@ class UserByID(Resource):
         if user:
             return make_response(user.to_dict(),200)
         else:
-            return make_response("This is not a valid User", 404)
+            response = make_response({
+            "error": "User not found"
+            }, 404)
+            return response
 
 api.add_resource(UserByID, '/user/<int:id>')
 
@@ -56,7 +59,10 @@ class EquipmentOwnerById(Resource):
         if equip_owner:
             return make_response(equip_owner.to_dict(),200)
         else:
-            return make_response("This is not a valid Owner", 404)
+            response = make_response({
+            "error": "Owner not found"
+            }, 404)
+            return response
 
 api.add_resource(EquipmentOwnerById, '/equipment_owner/<int:id>')
 
@@ -72,6 +78,7 @@ class Equipments(Resource):
     def post(self):
         data = request.get_json()
         #try:
+        #need a way to input, owner_id and owner maybe a 2 step process?
         new_equipment = Equipment(
             name = data['name'],
             type = data['type'],
@@ -106,7 +113,9 @@ class EquipmentByType(Resource):
             response = make_response(equipment, 200)
             return response
         else:
-            response = make_response(" We don't support this Equipment quite yet", 404)
+            response = make_response({
+            "error": "Equipment type not supported yet"
+            }, 404)
             return response
         
         #need to find a way to make all the types easily inputtable, for example Heavy Machinery doesn't get picked up if you do /heavymachinery
@@ -117,13 +126,61 @@ class EquipmentByID(Resource):
     #get a single piece of equipment
     def get(self, id):
         equipment = Equipment.query.filter(Equipment.id == id).first()
+        #need a way to input, owner_id and owner maybe a 2 step process?
         #may be able to do rules to remove agreements, likely not needed information, or is it?
         if equipment:
             return make_response(equipment.to_dict(),200)
         else:
-            return make_response("We do not currently have this Equipment for rent", 404)
+            response = make_response({
+            "error": "Equipment not found"
+            }, 404)
+            return response
+        
+    def patch(self, id):
+        equipment = Equipment.query.filter(Equipment.id == id).first()
+
+        if equipment:
+            #going to need try and except if and when we do validations
+            data = request.get_json()
+            for key in data:
+            #try:
+                setattr(equipment, key, data[key])
+            db.session.add(equipment)
+            db.session.commit()
+
+            response = make_response(equipment.to_dict(), 202)
+            return response
+            #except ValueError:
+        else:
+            response = make_response({
+            "error": "Equipment not found"
+            }, 404)
+            return response
+        
+    def delete(self, id):
+        equipment = Equipment.query.filter(Equipment.id == id).first()
+        if equipment:
+            #Do I only need to delete the foreign key? Or the thing with a relationship also?
+            owners = Equipment.query.filter(Equipment.owner_id == id).all()
+            for owner in owners:
+                db.session.delete(owner)
+            #This should take care of excess stuff, need to inquire about deleting 
+            db.session.delete(equipment)
+
+            db.session.commit()
+            #how do I input succesfully delete into the {}?
+            response = make_response({}, 204)
+            return response
+        else:
+            response = make_response({
+            "error": "Equipment not found"
+            }, 404)
+            return response
         
 
+
+
+        
 
 api.add_resource(EquipmentByID, '/equipment/<int:id>')
 
