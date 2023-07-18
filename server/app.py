@@ -19,13 +19,33 @@ db.init_app(app)
 api = Api(app)
 
 class UserRenters(Resource):
-    def get(self):
-        pass
+    def post(self):
+        data = request.get_json()
+        #try
+        #need a way to attach to rental agreement
+        new_user = UserRenter(
+            name = data['name'],
+            age = data['age'],
+            location = data['location'],
+            profession = data['profession'],
+            phone = data['phone'],
+            email = data['email']
+        )
+
+        db.session.add(new_user)
+        db.session.commit()
+
+        response = make_response(new_user.to_dict(), 201)
+        return response
+
+        #except ValueError: 
+        # NEED TO WRITE VALIDATIONS
 
 api.add_resource(UserRenters, '/renters')
 
 
 class UserByID(Resource):
+    #get one user by ID, may not even be necessary
     def get(self, id):
         user = UserRenter.query.filter(UserRenter.id == id).first()
 
@@ -52,6 +72,7 @@ class EquipmentOwners(Resource):
 api.add_resource(EquipmentOwners, '/equipment_owners')
 #Display all Equipment, whether available or not, this route should display all the equipment available on the website.
 #this can either be ID or name,
+#Get a specific owner of an equipment.
 class EquipmentOwnerById(Resource):
     def get(self, id):
         equip_owner = EquipmentOwner.query.filter(EquipmentOwner.id == id).first()
@@ -67,6 +88,7 @@ class EquipmentOwnerById(Resource):
 api.add_resource(EquipmentOwnerById, '/equipment_owner/<int:id>')
 
 class Equipments(Resource):
+    #get ALL equipment
     def get(self):
         equipment = [equipment.to_dict() for equipment in Equipment.query.all()]
 
@@ -74,6 +96,7 @@ class Equipments(Resource):
 
         return response
     
+    #POST EQUIPMENT, DONE
     #NEED TO UPDATE FOR VALIDATIONS
     def post(self):
         data = request.get_json()
@@ -135,7 +158,7 @@ class EquipmentByID(Resource):
             "error": "Equipment not found"
             }, 404)
             return response
-        
+    #Patch equipment DONE
     def patch(self, id):
         equipment = Equipment.query.filter(Equipment.id == id).first()
 
@@ -156,7 +179,7 @@ class EquipmentByID(Resource):
             "error": "Equipment not found"
             }, 404)
             return response
-        
+    #DELETE EQUIPMENT - DONE
     def delete(self, id):
         equipment = Equipment.query.filter(Equipment.id == id).first()
         if equipment:
@@ -177,11 +200,6 @@ class EquipmentByID(Resource):
             }, 404)
             return response
         
-
-
-
-        
-
 api.add_resource(EquipmentByID, '/equipment/<int:id>')
 
 if __name__ == '__main__':
