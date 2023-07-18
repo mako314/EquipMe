@@ -34,3 +34,6 @@ Coordination: The platform would facilitate the coordination of pick-ups or deli
 
   // Tomorrow need to work on properly setting up fetches and the rest is smooth sailing, so basically watch the react video and linking it up and follow that guide
   // Then formik and yup
+
+
+  // Remove - owners from equipment, what else to remove?
