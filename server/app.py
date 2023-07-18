@@ -323,7 +323,7 @@ class RentalAgreements(Resource):
     #Get ALL rental agreements
     #list of all the renters and the equipment
     def get(self):
-        agreements = [agreement.to_dict() for agreement in RentalAgreement.query.all()]
+        agreements = [agreement.to_dict( only = ('equipment','renter','rental_dates')) for agreement in RentalAgreement.query.all()]
 
         response = make_response(agreements, 200)
 
