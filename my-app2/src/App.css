@@ -40,16 +40,17 @@
 
 
 nav {
-  font: 120% "Audiowide", cursive;
+  height: 15vh;
+
   display: flex;
-  flex-flow: row wrap;
-  justify-content: center;
-  background: linear-gradient(200deg, red, violet);
-  background-size: 600% 600%;
-  background-attachment: fixed;
-  height: 100%;
-  min-height: 100%;
-  animation: TackyGradient 12s ease infinite;
+  /* 1 */
+  justify-content: space-between;
+  align-items: center;
+  /* 2 */
+  padding: 1rem 2rem;
+  /* 3 */
+  background: black;
+  /* 4 */
 }
 
 .cards {
@@ -133,4 +134,106 @@ nav {
   .cards__item {
     width: 50%;
   }
+}
+
+#logo {
+  max-width: 12%;
+
+  align-content: left;
+}
+
+/* The dropdown container */
+.dropdown {
+  float: left;
+  overflow: hidden;
+  background-color: lightcoral;
+  display: flex;
+  max-height: 50%;
+}
+
+/* Dropdown button */
+.dropdown .dropbtn {
+  font-size: 16px;
+  align-content: right;
+  border: none;
+  outline: none;
+  color: white;
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: inherit;
+  /* Important for vertical align on mobile phones */
+  margin: 0;
+  /* Important for vertical align on mobile phones */
+}
+
+/* Add a red background color to navbar links on hover */
+.navbar a:hover,
+.dropdown:hover .dropbtn {
+  background-color: red;
+}
+
+/* Dropdown content (hidden by default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  float: none;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+/* Add a grey background color to dropdown links on hover */
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.search {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.searchTerm {
+  width: 75%;
+  border: 3px solid lightcoral;
+  border-right: none;
+  padding: 5px;
+  height: 20px;
+  border-radius: 5px 0 0 5px;
+  outline: none;
+  color: #9DBFAF;
+
+}
+
+.searchTerm:focus {
+  color: lightcoral;
+}
+
+
+.searchButton {
+  width: 40px;
+  height: 36px;
+  border: 1px solid lightcoral;
+  background: lightcoral;
+  text-align: center;
+  color: #fff;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+  font-size: 20px;
 }
