@@ -47,7 +47,7 @@ class EquipmentOwner(db.Model, SerializerMixin):
     #reviews also?
     
     #relationships
-    agreements = db.relationship('RentalAgreement', back_populates="owner", overlaps="renters,owners")
+    # agreements = db.relationship('RentalAgreement', back_populates="owner", overlaps="renters,owners")
 
     equipment = db.relationship('Equipment', back_populates='owner', overlaps="owners,equipments") 
     #overlaps="owners,equipments" #This is a way to access the equipment that an owner has, 
@@ -55,7 +55,7 @@ class EquipmentOwner(db.Model, SerializerMixin):
     #you can just do a query EquipmentOwner.query.get(1), or equipment = owner.equipment. Then you can do for equipment in owner.equipment print(equipment) for example
 
     #Serialization rules
-    serialize_rules = ('-agreements.owner', '-equipment.owner' )
+    serialize_rules = ('-equipment.owner', )
 
     def __repr__(self):
         return f"My name is {self.name}"
@@ -82,8 +82,10 @@ class Equipment(db.Model, SerializerMixin):
 
     owner = db.relationship("EquipmentOwner", back_populates="equipment", overlaps="owners,equipments" )
 
+    agreements = db.relationship('RentalAgreement', back_populates="equipment", overlaps="renters,equipments")
+
     #Serialization rules
-    serialize_rules = ('-owner.equipment', )
+    serialize_rules = ('-owner.equipment', '-agreements.equipment' )
 
 
 class RentalAgreement(db.Model, SerializerMixin):
@@ -97,17 +99,17 @@ class RentalAgreement(db.Model, SerializerMixin):
 
     #relationships
     renter_id = db.Column(db.Integer, db.ForeignKey('renters.id'))
-    owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'))
+    equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
 
     #this hopefully connects it
     renter = db.relationship(
         "UserRenter", back_populates="agreements", overlaps="renters,owners"
     )
-    owner = db.relationship(
-        "EquipmentOwner", back_populates="agreements", overlaps="renters,owners")
+    equipment = db.relationship(
+        "Equipment", back_populates="agreements", overlaps="renters,equipment")
     
     #Serialization rules
-    serialize_rules = ('-owner.agreements', '-renter.agreements' )
+    serialize_rules = ('-equipment.agreements', '-renter.agreements' )
 
     def __repr__(self):
         return f"<Rental Agreement: Equipment in {self.location}, Total Price: {self.total_price}, Rental Dates: {self.rental_dates}>"

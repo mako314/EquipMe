@@ -19,15 +19,93 @@ migrate = Migrate(app, db)
 
 db.init_app(app)
 api = Api(app)
+#---------------------------------------USER RENTER CLASSES--------------------------------------
+
 
 class UserRenters(Resource):
-    def get(self):
-        pass
+    
+    #post to users, DONE, unsure if i want to be able to see all users..
+    def post(self):
+        data = request.get_json()
+        #try
+        #need a way to attach to rental agreement
+        new_user = UserRenter(
+            name = data['name'],
+            age = data['age'],
+            location = data['location'],
+            profession = data['profession'],
+            phone = data['phone'],
+            email = data['email']
+        )
 
+        db.session.add(new_user)
+        db.session.commit()
+
+        response = make_response(new_user.to_dict(), 201)
+        return response
+
+        #except ValueError: 
+        # NEED TO WRITE VALIDATIONS
 api.add_resource(UserRenters, '/renters')
+
+
+class UserByID(Resource):
+
+    #get one user by ID, may not even be necessary
+    def get(self, id):
+        user = UserRenter.query.filter(UserRenter.id == id).first()
+
+        if user:
+            return make_response(user.to_dict(),200)
+        else:
+            response = make_response({
+            "error": "User not found"
+            }, 404)
+            return response
+        
+    #PATCH USER DONE
+    def patch(self, id):
+        user = UserRenter.query.filter(UserRenter.id == id).first()
+        if user:
+            #try FOR VALIDATION
+            data = request.get_json()
+            for key in data:
+                setattr(user, key, data[key])
+            db.session.add(user)
+            db.session.commit()
+
+            response = make_response(user.to_dict(), 202)
+            return response
+            #except ValueError:
+        else:
+            response = make_response({
+            "error": "User not found"
+            }, 404)
+            return response
+        
+    #DELETE USER -- OPERATIONAL, WOULD LIKE TO RETURN A MESSAGE
+    def delete(self,id):
+        user = UserRenter.query.filter(UserRenter.id == id).first()
+        if user:
+            # user.agreements do I need to cycle through and delete the agreement relationship also?
+            db.session.delete(user)
+            db.session.commit()
+            response = make_response({}, 204)
+            return response
+        else:
+            response = make_response({
+            "error": "User not found"
+            }, 404)
+            return response
+api.add_resource(UserByID, '/user/<int:id>')
+
+
+#---------------------------------------EQUIPMENT Owners Classes--------------------------------------
 
 #Display all Owners of Equipment who list their stuff to rent, users should be able to click the Owner and get taken to their page with all their equipment
 class EquipmentOwners(Resource):
+
+    #succesful get to display
     def get(self):
         equip_owners = [owner.to_dict() for owner in EquipmentOwner.query.all()]
 
@@ -35,15 +113,90 @@ class EquipmentOwners(Resource):
         #rules =('-agreements', 'equipment')
 
         return response
+    
+    #POST EQUIPMENT OWNERS -- DONE
+    def post(self):
+        data = request.get_json()
+        #try:
+        new_owner = EquipmentOwner(
+            name = data['name'],
+            location = data['location'],
+            profession = data['profession'],
+            phone = data['phone'],
+            email = data['email']
+        )
+        db.session.add(new_owner)
+        db.session.commit()
+
+        response = make_response(new_owner.to_dict(), 201)
+        return response
+
+        #except ValueError: 
+        # NEED TO WRITE VALIDATIONS
 
 api.add_resource(EquipmentOwners, '/equipment_owners')
-
-#this can either be ID or name,
-class EquipmentOwnersById(Resource):
-    pass
-api.add_resource(EquipmentOwnersById, '/equipment_owners/<int:id>')
 #Display all Equipment, whether available or not, this route should display all the equipment available on the website.
+#this can either be ID or name,
+
+#Get a specific owner of an equipment.
+class EquipmentOwnerById(Resource):
+
+    #succesfully GET OWNER by ID
+    def get(self, id):
+        equip_owner = EquipmentOwner.query.filter(EquipmentOwner.id == id).first()
+
+        if equip_owner:
+            return make_response(equip_owner.to_dict(),200)
+        else:
+            response = make_response({
+            "error": "Owner not found"
+            }, 404)
+            return response
+        
+    #PATCH OWNER by ID -- DONE
+    def patch(self, id):
+        equip_owner = EquipmentOwner.query.filter(EquipmentOwner.id == id).first()
+        if equip_owner:
+            #try
+            data = request.get_json()
+            for key in data:
+                setattr(equip_owner, key, data[key])
+            db.session.add(equip_owner)
+            db.session.commit()
+
+            response = make_response(equip_owner.to_dict(), 202)
+            return response
+            #except ValueError:
+        else:
+            response = make_response({
+            "error": "Owner not found"
+            }, 404)
+            return response
+        
+    #DELETE OWNER by ID -- DONE
+    def delete(self, id):
+        equip_owner = EquipmentOwner.query.filter(EquipmentOwner.id == id).first()
+        if equip_owner:
+            # owner.agreements and owner.equipment do I need to cycle through and delete the agreement relationship also?
+            db.session.delete(equip_owner)
+            db.session.commit()
+            response = make_response({}, 204)
+            return response
+        else:
+            response = make_response({
+            "error": "Owner not found"
+            }, 404)
+            return response
+
+
+api.add_resource(EquipmentOwnerById, '/equipment_owner/<int:id>')
+
+
+#---------------------------------------EQUIPMENT Classes--------------------------------------
+
 class Equipments(Resource):
+
+    #get ALL equipment -- DONE
     def get(self):
         equipment = [equipment.to_dict() for equipment in Equipment.query.all()]
 
@@ -51,25 +204,20 @@ class Equipments(Resource):
 
         return response
     
+    #POST EQUIPMENT, DONE
     #NEED TO UPDATE FOR VALIDATIONS
     def post(self):
         data = request.get_json()
-#name = db.Column(db.String)
-#type = db.Column(db.String)
-#make = db.Column(db.String)
-#model = db.Column(db.String)
-#owner_name = db.Column(db.String)
-#location = db.Column(db.String)
-#availability = db.Column(db.Boolean)
-#delivery = db.Column(db.Boolean)
-#quantity = db.Column(db.Integer)
         #try:
+        #need a way to input, owner_id and owner maybe a 2 step process?
         new_equipment = Equipment(
             name = data['name'],
             type = data['type'],
             make = data['make'],
             model = data['model'],
             owner_name = data['owner_name'],
+            phone = data['phone'],
+            email = data['email'],
             location = data['location'],
             availability = data['availability'],
             delivery = data['delivery'],
@@ -79,10 +227,10 @@ class Equipments(Resource):
         db.session.commit()
 
         response = make_response(new_equipment.to_dict(), 201)
+        return response
 
         #except ValueError: 
         # NEED TO WRITE VALIDATIONS
-        
 
 api.add_resource(Equipments, '/equipment')
 
@@ -95,12 +243,87 @@ class EquipmentByType(Resource):
             response = make_response(equipment, 200)
             return response
         else:
-            response = make_response(" We don't support this Equipment quite yet", 404)
+            response = make_response({
+            "error": "Equipment type not supported yet"
+            }, 404)
             return response
         
         #need to find a way to make all the types easily inputtable, for example Heavy Machinery doesn't get picked up if you do /heavymachinery
 
 api.add_resource(EquipmentByType, '/equipment/<string:type>')
+
+class EquipmentByID(Resource):
+
+    #get a single piece of equipment -- done
+    def get(self, id):
+        equipment = Equipment.query.filter(Equipment.id == id).first()
+        #need a way to input, owner_id and owner maybe a 2 step process?
+        #may be able to do rules to remove agreements, likely not needed information, or is it?
+        if equipment:
+            return make_response(equipment.to_dict(),200)
+        else:
+            response = make_response({
+            "error": "Equipment not found"
+            }, 404)
+            return response
+        
+    #Patch equipment DONE
+    def patch(self, id):
+        equipment = Equipment.query.filter(Equipment.id == id).first()
+
+        if equipment:
+            #try:
+            #going to need try and except if and when we do validations
+            data = request.get_json()
+            for key in data:
+                setattr(equipment, key, data[key])
+            db.session.add(equipment)
+            db.session.commit()
+
+            response = make_response(equipment.to_dict(), 202)
+            return response
+            #except ValueError:
+        else:
+            response = make_response({
+            "error": "Equipment not found"
+            }, 404)
+            return response
+        
+    #DELETE EQUIPMENT - DONE -- WOULD LIKE TO RETURN A MESSAGE
+    def delete(self, id):
+        equipment = Equipment.query.filter(Equipment.id == id).first()
+        if equipment:
+            #Do I only need to delete the foreign key? Or the thing with a relationship also?
+            owners = Equipment.query.filter(Equipment.owner_id == id).all()
+            for owner in owners:
+                db.session.delete(owner)
+            #This should take care of excess stuff, need to inquire about deleting 
+            db.session.delete(equipment)
+
+            db.session.commit()
+            #how do I input succesfully delete into the {}?
+            response = make_response({}, 204)
+            return response
+        else:
+            response = make_response({
+            "error": "Equipment not found"
+            }, 404)
+            return response
+        
+api.add_resource(EquipmentByID, '/equipment/<int:id>')
+
+
+#---------------------------------------EQUIPMENT Classes--------------------------------------
+
+class RentalAgreements(Resource):
+    def get(self):
+        agreements = [agreement.to_dict() for agreement in RentalAgreement.query.all()]
+
+        response = make_response(agreements, 200)
+
+        return response
+api.add_resource(RentalAgreements, '/rental_agreements')
+
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
 
@@ -146,3 +369,9 @@ if __name__ == '__main__':
 
 #9 Edit a rental, (Owners)
 # if you end up having less because one is in the shop for example, or maybe you move
+
+
+
+
+
+#equipment by ID, owner by ID, and user by ID done. NEED to check whether or not we should do to_dict() rules.
