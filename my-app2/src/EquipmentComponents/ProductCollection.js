@@ -1,10 +1,10 @@
 import React from "react";
-import ProductCard from "./EquipmentCard"
+import ProductCard from "./ProductCard"
 
-function ProductCollection({ productCollection }) {
+function ProductCollection({ equipmentArray }) {
 
-    const equipmentCards = productCollection?.map((item) => {
-        return <ProductCard key={item.name} name={item.name} model={item.model} />
+    const equipmentCards = equipmentArray?.map((item) => {
+        return <ProductCard key={item.name} name={item.name} model={item.model} make={item.make} location={item.location} />
     })
 
     return (<div className="cards">
