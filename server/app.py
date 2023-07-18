@@ -1,5 +1,5 @@
 from models import db, UserRenter, EquipmentOwner, Equipment, RentalAgreement
-from flask_cors import CORS
+# from flask_cors import CORS
 from flask_migrate import Migrate
 from flask import Flask, request, make_response, jsonify
 from flask_restful import Api, Resource
@@ -10,17 +10,18 @@ DATABASE = os.environ.get(
     "DB_URI", f"sqlite:///{os.path.join(BASE_DIR, 'app.db')}")
 
 app = Flask(__name__)
-CORS(app)
+
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
+
 
 migrate = Migrate(app, db)
 
 db.init_app(app)
 api = Api(app)
-#---------------------------------------USER RENTER CLASSES--------------------------------------
-
+# CORS(app)
+#------------------------------------------------------USER RENTER CLASSES----------------------------------------------------------
 
 class UserRenters(Resource):
     
@@ -100,7 +101,7 @@ class UserByID(Resource):
 api.add_resource(UserByID, '/user/<int:id>')
 
 
-#---------------------------------------EQUIPMENT Owners Classes--------------------------------------
+#-----------------------------------------------------------EQUIPMENT Owners Classes--------------------------------------------------------------
 
 #Display all Owners of Equipment who list their stuff to rent, users should be able to click the Owner and get taken to their page with all their equipment
 class EquipmentOwners(Resource):
@@ -192,7 +193,7 @@ class EquipmentOwnerById(Resource):
 api.add_resource(EquipmentOwnerById, '/equipment_owner/<int:id>')
 
 
-#---------------------------------------EQUIPMENT Classes--------------------------------------
+#-----------------------------------------------------EQUIPMENT Classes------------------------------------------------------------------
 
 class Equipments(Resource):
 
@@ -254,7 +255,7 @@ api.add_resource(EquipmentByType, '/equipment/<string:type>')
 
 class EquipmentByID(Resource):
 
-    #get a single piece of equipment -- done
+    #Get a single piece of equipment -- done
     def get(self, id):
         equipment = Equipment.query.filter(Equipment.id == id).first()
         #need a way to input, owner_id and owner maybe a 2 step process?
@@ -313,16 +314,43 @@ class EquipmentByID(Resource):
 api.add_resource(EquipmentByID, '/equipment/<int:id>')
 
 
-#---------------------------------------EQUIPMENT Classes--------------------------------------
-
+#-----------------------------------------------Rental Agreement Classes-----------------------------------------------------------------------------
+#Rental agreements, need a post and a patch
 class RentalAgreements(Resource):
+    #Get ALL rental agreements
     def get(self):
         agreements = [agreement.to_dict() for agreement in RentalAgreement.query.all()]
 
         response = make_response(agreements, 200)
 
         return response
+    
+    def post(self):
+        data = request.get_json()
+        #try:
+        #need a way to grab equipment and owner
+        new_rental_agreement = RentalAgreement(
+            
+        )
+
+
 api.add_resource(RentalAgreements, '/rental_agreements')
+
+#Get a rental agreement by ID
+class RentalAgreementsByID(Resource):
+    #Get a single rental agreement by ID
+    def get(self, id):
+        agreement = RentalAgreement.query.filter(RentalAgreement.id == id).first()
+
+        if agreement:
+            return make_response(agreement.to_dict(), 200)
+        else:
+            response = make_response({
+            "error": "Rental Agreement not found"
+            }, 404)
+            return response
+        
+api.add_resource(RentalAgreementsByID, '/rental_agreements/<int:id>')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
