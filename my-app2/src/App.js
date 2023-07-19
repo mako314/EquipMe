@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import ProductCollection from './EquipmentComponents/ProductCollection'
-import Header from './EquipmentComponents/Header'
 import OwnerCollection from './EquipmentComponents/OwnerCollection';
 import { Route, Routes } from 'react-router-dom';
 import NavBar from './EquipmentComponents/NavBar';
@@ -12,7 +11,7 @@ import OwnerDisplay from './EquipmentComponents/OwnerDisplay';
 
 function App() {
   const [equipmentArray, setEquipmentArray] = useState([])
-  const [equipmentOwnerArray, setEquipmentOwnerArray] = useState([])
+  const [searchTerm, setSearchTerm] = useState("")
 
 
   useEffect(() => {
@@ -23,12 +22,17 @@ function App() {
       })
   }, [])
 
+
+  const filteredEquipmentArray = equipmentArray.filter((item) => {
+    return item.model.toLowerCase().includes(searchTerm.toLowerCase()) || item.location.toLowerCase().includes(searchTerm.toLowerCase()) || item.make.toLowerCase().includes(searchTerm.toLowerCase()) || item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  })
+
   return (
     <div >
-      <NavBar />
+      <NavBar setSearchTerm={setSearchTerm} />
       <Routes>
-        <Route path='/equipment' element={<ProductCollection equipmentArray={equipmentArray} />} />
-        <Route path='/equipment_owners' element={<OwnerCollection />} />
+        <Route path='/equipment' element={<ProductCollection equipmentArray={filteredEquipmentArray} />} />
+        <Route path='/equipment_owners' element={<OwnerCollection searchTerm={searchTerm} />} />
         <Route path='/rental_agreements' element={<RentalCollection />} />
         <Route path='/equipment/:id' element={<ProductDisplay />} />
         <Route path='/equipment_owners/:id' element={<OwnerDisplay />} />
