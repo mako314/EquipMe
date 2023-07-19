@@ -26,6 +26,13 @@ CORS(app)
 class UserRenters(Resource):
     
     #post to users, DONE, unsure if i want to be able to see all users..
+    def get(self):
+        users = [user.to_dict() for user in UserRenter.query.all()]
+
+        response = make_response(users, 200)
+
+        return response
+
     def post(self):
         data = request.get_json()
         #try
@@ -108,8 +115,8 @@ class EquipmentOwners(Resource):
 
     #succesful get to display
     def get(self):
-        equip_owners = [owner.to_dict(only = ('id', 'email', 'location', 'name', 'phone','equipment')) for owner in EquipmentOwner.query.all()]
-
+        equip_owners = [owner.to_dict(only = ('id', 'profession', 'email', 'location', 'name', 'phone','equipment')) for owner in EquipmentOwner.query.all()]
+        #had to allow ID also to grab it with link
         response = make_response(equip_owners, 200)
         #rules =('-agreements', 'equipment')
 
