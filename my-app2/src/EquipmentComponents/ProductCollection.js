@@ -2,7 +2,6 @@ import React from "react";
 import ProductCard from "./ProductCard"
 
 function ProductCollection({ equipmentArray }) {
-    console.log(equipmentArray)
 
     //changed the key to item.id which is unique
     const equipmentCards = equipmentArray?.map((item) => {

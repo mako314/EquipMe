@@ -7,6 +7,7 @@ import { Route, Routes } from 'react-router-dom';
 import NavBar from './EquipmentComponents/NavBar';
 import RentalCollection from './EquipmentComponents/RentalCollection';
 import ProductDisplay from './EquipmentComponents/ProductDisplay';
+import OwnerDisplay from './EquipmentComponents/OwnerDisplay';
 
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
         <Route path='/equipment_owners' element={<OwnerCollection />} />
         <Route path='/rental_agreements' element={<RentalCollection />} />
         <Route path='/equipment/:id' element={<ProductDisplay />} />
+        <Route path='/equipment_owners/:id' element={<OwnerDisplay />} />
 
       </Routes>
 

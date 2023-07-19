@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 
 function EquipmentDisplay(){
-    const [oneEquipment, SetOneEquipment] = useState([])
+    const [oneEquipment, setOneEquipment] = useState([])
     const { model, name, make, location, email, phone} = oneEquipment
 
     const { id } = useParams()
@@ -13,7 +13,7 @@ function EquipmentDisplay(){
         fetch(`http://127.0.0.1:5555/equipment/${id}`)
           .then((resp) => resp.json())
           .then((data) => {
-            SetOneEquipment(data)
+            setOneEquipment(data)
           })
       }, [])
 
