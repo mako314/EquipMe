@@ -4,7 +4,7 @@ import Header from './Header';
 import SearchBar from "./SearchBar";
 
 
-function NavBar({ }) {
+function NavBar({ setSearchTerm }) {
 
     // const navArray = consoleArray.map((cons) => {
     //     return (
@@ -21,7 +21,7 @@ function NavBar({ }) {
     return (
         <nav>
             <Header />
-            <SearchBar />
+            <SearchBar setSearchTerm={setSearchTerm} />
             <div className="dropdown">
                 <button className="dropbtn">Menu
                     <i className="fa fa-caret-down"></i>

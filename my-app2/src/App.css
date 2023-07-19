@@ -49,7 +49,7 @@ nav {
   /* 2 */
   padding: 1rem 2rem;
   /* 3 */
-  background: black;
+  background: #FFC500;
   /* 4 */
 }
 
@@ -138,7 +138,6 @@ nav {
 
 #logo {
   max-width: 12%;
-
   align-content: left;
 }
 
@@ -146,7 +145,7 @@ nav {
 .dropdown {
   float: left;
   overflow: hidden;
-  background-color: lightcoral;
+  background-color: black;
   display: flex;
   max-height: 50%;
 }
@@ -211,7 +210,7 @@ nav {
 
 .searchTerm {
   width: 75%;
-  border: 3px solid lightcoral;
+  border: 3px solid black;
   border-right: none;
   padding: 5px;
   height: 20px;
@@ -229,8 +228,8 @@ nav {
 .searchButton {
   width: 40px;
   height: 36px;
-  border: 1px solid lightcoral;
-  background: lightcoral;
+  border: 1px solid black;
+  background: black;
   text-align: center;
   color: #fff;
   border-radius: 0 5px 5px 0;
