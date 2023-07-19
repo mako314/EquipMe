@@ -37,19 +37,6 @@ function NavBar({ setSearchTerm }) {
                 </button>
                 <div className="dropdown-content">
                     <NavLink
-                        key={"Home"}
-                        name={"Home"}
-                        to={"/"}>
-                        Home
-                    </NavLink>
-                </button>
-            </div>
-            <div className="dropdown">
-                <button className="dropbtn">Menu
-                    <i className="fa fa-caret-down"></i>
-                </button>
-                <div className="dropdown-content">
-                    <NavLink
                         key={"Equipment"}
                         name={"Equipment"}
                         to={"/equipment"}>
