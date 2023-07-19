@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 function OwnerCard({ id, email, name, location, phone, equipmentArray}) {
-    console.log(id)
     const equipmentNames = equipmentArray?.map((data) => {
         return data.make + " " + data.model + " - "
     })

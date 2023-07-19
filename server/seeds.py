@@ -235,7 +235,7 @@ if __name__ == '__main__':
 #Seed Equipment with panda. 
 #Seed Equipment
         print("Uploading the current equipment list...")
-        data = pd.read_csv('~/Development/code/phase4/EquipMe/extrafiles/equipment_list_with_contact - equipment_data.csv')
+        data = pd.read_csv('/home/mako77/code/Flatiron/Projects/EquipMe/extrafiles/equipment_list_with_contact - equipment_data.csv')
 
         data.columns = ['Equipment_name', 'Equipment_type', 'Make', 'Model', 'Owner', 'Phone', 'Email', 'Location', 'Availability', 'Delivery', 'Quantity']
         equipment_list = []
