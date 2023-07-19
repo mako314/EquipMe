@@ -13,7 +13,7 @@ function OwnerCollection({ }) {
     }, [])
 
     const ownerCards = equipmentOwnerArray?.map((item) => {
-        return <OwnerCard key={item.email} email={item.email} name={item.name} location={item.location} phone={item.phone} equipmentArray={item.equipment} />
+        return <OwnerCard key={item.email} id={item.id} email={item.email} name={item.name} location={item.location} phone={item.phone} equipmentArray={item.equipment}/>
     })
 
     return (<div className="cards">

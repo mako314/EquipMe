@@ -108,7 +108,7 @@ class EquipmentOwners(Resource):
 
     #succesful get to display
     def get(self):
-        equip_owners = [owner.to_dict() for owner in EquipmentOwner.query.all()]
+        equip_owners = [owner.to_dict(only = ('id', 'email', 'location', 'name', 'phone','equipment')) for owner in EquipmentOwner.query.all()]
 
         response = make_response(equip_owners, 200)
         #rules =('-agreements', 'equipment')
@@ -199,7 +199,9 @@ class Equipments(Resource):
 
     #get ALL equipment -- DONE
     def get(self):
-        equipment = [equipment.to_dict() for equipment in Equipment.query.all()]
+        equipment = [equipment.to_dict(
+            only =('id','model','name','make','location')
+        ) for equipment in Equipment.query.all()]
 
         response = make_response(equipment, 200)
 
@@ -321,7 +323,7 @@ class RentalAgreements(Resource):
     #Get ALL rental agreements
     #list of all the renters and the equipment
     def get(self):
-        agreements = [agreement.to_dict() for agreement in RentalAgreement.query.all()]
+        agreements = [agreement.to_dict( only = ('equipment','renter','rental_dates')) for agreement in RentalAgreement.query.all()]
 
         response = make_response(agreements, 200)
 
