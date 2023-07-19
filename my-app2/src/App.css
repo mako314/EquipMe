@@ -2,57 +2,11 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
 .App-link {
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-
-nav {
-  height: 15vh;
-
-  display: flex;
-  /* 1 */
-  justify-content: space-between;
-  align-items: center;
-  /* 2 */
-  padding: 1rem 2rem;
-  /* 3 */
-  background: black;
-  /* 4 */
-}
-
+/* Card related stuff */
 .cards {
   display: flex;
   flex-wrap: wrap;
@@ -136,40 +90,61 @@ nav {
   }
 }
 
+
+/* NavBar Related CSS */
+nav {
+  height: 5%;
+  display: flex;
+  justify-content: left;
+  background: rgb(254, 180, 84);
+
+}
+
 #logo {
   max-width: 12%;
-
   align-content: left;
+}
+
+.homediv {
+  float: left;
+  overflow: hidden;
+  background-color: rgb(254, 180, 84);
+  display: flex;
+  padding-top: 5%;
+  flex-grow: 0.5;
+}
+
+.homediv .homebutton {
+  font-size: 16px;
+  border: none;
+  outline: none;
+  color: white;
+  background-color: lightcoral;
+  font-family: inherit;
+  margin: 0;
+  flex-grow: inherit;
 }
 
 /* The dropdown container */
 .dropdown {
   float: left;
   overflow: hidden;
-  background-color: lightcoral;
+  background-color: rgb(254, 180, 84);
   display: flex;
-  max-height: 50%;
+  padding-top: 5%;
+  flex-grow: 0.5;
 }
 
 /* Dropdown button */
 .dropdown .dropbtn {
   font-size: 16px;
-  align-content: right;
   border: none;
   outline: none;
   color: white;
-  padding: 14px 16px;
-  background-color: inherit;
+  background-color: lightcoral;
   font-family: inherit;
-  /* Important for vertical align on mobile phones */
   margin: 0;
-  /* Important for vertical align on mobile phones */
-}
-
-/* Add a red background color to navbar links on hover */
-.navbar a:hover,
-.dropdown:hover .dropbtn {
-  background-color: red;
+  flex-grow: inherit;
 }
 
 /* Dropdown content (hidden by default) */
@@ -224,7 +199,6 @@ nav {
 .searchTerm:focus {
   color: lightcoral;
 }
-
 
 .searchButton {
   width: 40px;

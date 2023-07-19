@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from 'react-router-dom';
-import Header from './Header';
 import SearchBar from "./SearchBar";
+import Header from "./Header";
 
 
 function NavBar({ }) {
@@ -21,44 +21,44 @@ function NavBar({ }) {
     return (
         <nav>
             <Header />
-            <SearchBar />
+            <div className="homediv">
+                <button className="homebutton">
+                    <NavLink
+                        key={"Home"}
+                        name={"Home"}
+                        to={"/"}>
+                        Home
+                    </NavLink>
+                </button>
+            </div>
             <div className="dropdown">
                 <button className="dropbtn">Menu
                     <i className="fa fa-caret-down"></i>
                 </button>
                 <div className="dropdown-content">
                     <NavLink
-                        key={"Home"}
-                        name={"Home"}
-                        to={"/"}
-                    >
-                        Home
-                    </NavLink>
-                    <NavLink
                         key={"Equipment"}
                         name={"Equipment"}
-                        to={"/equipment"}
-                    >
+                        to={"/equipment"}>
                         Equipment
                     </NavLink>
                     <NavLink
                         key={"Equipment Owners"}
                         name={"Equipment Owners"}
-                        to={"/equipment_owners"}
-                    >
+                        to={"/equipment_owners"}>
                         Equipment Owners
                     </NavLink>
                     <NavLink
                         key={"Rental Agreements"}
                         name={"Rental Agreements"}
-                        to={"/rental_agreements"}
-                    >
+                        to={"/rental_agreements"}>
                         Rental Agreements
                     </NavLink>
 
                     {/* {navArray} */}
                 </div>
             </div>
+            <SearchBar />
         </nav>
     )
 }
