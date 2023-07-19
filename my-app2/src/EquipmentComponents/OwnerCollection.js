@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import OwnerCard from "./OwnerCard";
 
-function OwnerCollection({handleEdit}) {
+
+function OwnerCollection({ searchTerm, handleEdit }) {
+  
     const [equipmentOwnerArray, setEquipmentOwnerArray] = useState([])
 
     useEffect(() => {
@@ -13,7 +15,9 @@ function OwnerCollection({handleEdit}) {
     }, [])
 
     const ownerCards = equipmentOwnerArray?.map((item) => {
-        return <OwnerCard key={item.email} id={item.id} email={item.email} name={item.name} location={item.location} phone={item.phone} equipmentArray={item.equipment} handleEdit={handleEdit} item={item}/>
+
+        if (item.name.toLowerCase().includes(searchTerm.toLowerCase()) || item.location.toLowerCase().includes(searchTerm.toLowerCase()) || item.email.toLowerCase().includes(searchTerm.toLowerCase()) || item.phone.toLowerCase().includes(searchTerm.toLowerCase()))
+            return <OwnerCard key={item.email} id={item.id} email={item.email} name={item.name} location={item.location} phone={item.phone} equipmentArray={item.equipment} handleEdit={handleEdit} item={item} />
     })
 
     return (<div className="cards">

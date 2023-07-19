@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import ProductCollection from './EquipmentComponents/ProductCollection'
-import Header from './EquipmentComponents/Header'
 import OwnerCollection from './EquipmentComponents/OwnerCollection';
 import { useNavigate, Route, Routes } from 'react-router-dom';
 import NavBar from './EquipmentComponents/NavBar';
@@ -19,7 +18,7 @@ function App() {
   //forgot to const navigate = useNavigate()
   const navigate = useNavigate()
   const [equipmentArray, setEquipmentArray] = useState([])
-  const [equipmentOwnerArray, setEquipmentOwnerArray] = useState([])
+  const [searchTerm, setSearchTerm] = useState("")
 
   //These useStates will handle POST. Grabbing and ...spreading so it updates accordingly.
   const [users, setUsers] = useState([])
@@ -37,6 +36,7 @@ function App() {
         setEquipmentArray(data)
       })
   }, [])
+
 
 //These will be the Post useEffects - USERS
   useEffect(() => {
@@ -85,12 +85,23 @@ const handleEdit = (owner) => {
 
 
 
+
+  const filteredEquipmentArray = equipmentArray.filter((item) => {
+    return item.model.toLowerCase().includes(searchTerm.toLowerCase()) || item.location.toLowerCase().includes(searchTerm.toLowerCase()) || item.make.toLowerCase().includes(searchTerm.toLowerCase()) || item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  })
+
+
   return (
     <div >
-      <NavBar />
+      <NavBar setSearchTerm={setSearchTerm} />
       <Routes>
+
         <Route path='/equipment' element={<ProductCollection equipmentArray={equipmentArray} />} />
         <Route path='/equipment_owners' element={<OwnerCollection handleEdit={handleEdit}/>} />
+
+        <Route path='/equipment' element={<ProductCollection equipmentArray={filteredEquipmentArray} />} />
+        <Route path='/equipment_owners' element={<OwnerCollection searchTerm={searchTerm} />} />
+
         <Route path='/rental_agreements' element={<RentalCollection />} />
         <Route path='/equipment/:id' element={<ProductDisplay />} />
         <Route path='/equipment_owners/:id' element={<OwnerDisplay />} />
