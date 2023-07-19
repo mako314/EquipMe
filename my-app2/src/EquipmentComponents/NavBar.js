@@ -4,7 +4,7 @@ import SearchBar from "./SearchBar";
 import Header from "./Header";
 
 
-function NavBar({ }) {
+function NavBar({ setSearchTerm }) {
 
     // const navArray = consoleArray.map((cons) => {
     //     return (
@@ -23,6 +23,19 @@ function NavBar({ }) {
             <Header />
             <div className="homediv">
                 <button className="homebutton">
+                    <NavLink
+                        key={"Home"}
+                        name={"Home"}
+                        to={"/"}>
+                        Home
+                    </NavLink>
+                </button>
+            </div>
+            <div className="dropdown">
+                <button className="dropbtn">Menu
+                    <i className="fa fa-caret-down"></i>
+                </button>
+                <div className="dropdown-content">
                     <NavLink
                         key={"Home"}
                         name={"Home"}
@@ -58,7 +71,8 @@ function NavBar({ }) {
                     {/* {navArray} */}
                 </div>
             </div>
-            <SearchBar />
+            
+            <SearchBar setSearchTerm={setSearchTerm} />
         </nav>
     )
 }
