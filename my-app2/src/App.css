@@ -1,10 +1,10 @@
-.App {
+/* .App {
   text-align: center;
 }
 
 .App-link {
   color: #61dafb;
-}
+} */
 /* Card related stuff */
 .cards {
   display: flex;
@@ -91,17 +91,37 @@
 
 
 /* NavBar Related CSS */
-nav {
-  height: 5%;
-  display: flex;
-  justify-content: left;
-  background: rgb(254, 180, 84);
+* {
+  box-sizing: border-box;
 
+}
+nav {
+  background-color: rgb(254, 180, 84);
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0 1rem;
 }
 
 #logo {
-  max-width: 12%;
+  max-width: 10%;
   align-content: left;
+}
+
+a {
+  text-decoration: none;
+}
+
+.buttons {
+  display: flex;
+  align-items: flex-start;
+  font-size: 16px;
+  width: 50%;
+  height: 100%;
+  text-align: center;
+  padding-top: 5%;
+  padding-bottom: 3px;
+  padding-right: 3px;
 }
 
 .homediv {
@@ -110,50 +130,68 @@ nav {
   background-color: rgb(254, 180, 84);
   display: flex;
   padding-top: 5%;
-  flex-grow: 0.5;
+  flex-grow: 0.35;
 }
 
-.homediv .homebutton {
+.homediv .homebutton, a {
+  background-color: whitesmoke;
+  color: black;
   font-size: 16px;
-  border: none;
+  border: 1;
   outline: none;
-  color: white;
-  background-color: lightcoral;
   font-family: inherit;
   margin: 0;
+  padding: 0;
+  width: 100%;
   flex-grow: inherit;
+  display: block;
+  text-align: center;
+  height: 40px;
+  border-radius: 5px 5px 5px 5px;
 }
+
+button.homebutton {
+  height: 100%;
+} 
 
 /* The dropdown container */
 .dropdown {
   float: left;
-  overflow: hidden;
   background-color: rgb(254, 180, 84);
   display: flex;
   padding-top: 5%;
-  flex-grow: 0.5;
+  flex-grow: 0.35;
 }
 
 /* Dropdown button */
 .dropdown .dropbtn {
   font-size: 16px;
-  border: none;
+  border: 1;
   outline: none;
-  color: white;
-  background-color: lightcoral;
+  color: black;
+  background-color: whitesmoke;
   font-family: inherit;
   margin: 0;
+  padding: 0;
+  width: 100%;
   flex-grow: inherit;
+  height: 40px;
+  border-radius: 5px 5px 5px 5px;
 }
 
 /* Dropdown content (hidden by default) */
 .dropdown-content {
   display: none;
   position: absolute;
+  top: 144px;
   background-color: #f9f9f9;
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
+}
+
+.dropdown-content.show {
+  display: block;
 }
 
 /* Links inside the dropdown */
@@ -166,6 +204,8 @@ nav {
   text-align: left;
 }
 
+
+/* old css for the hover in case we wanted */
 /* Add a grey background color to dropdown links on hover */
 .dropdown-content a:hover {
   background-color: #ddd;
@@ -176,19 +216,47 @@ nav {
   display: block;
 }
 
+/*List button css*/
+
+.listButtonDiv {
+  float: left;
+  overflow: hidden;
+  background-color: rgb(254, 180, 84);
+  display: flex;
+  padding-top: 5%;
+  flex-grow: 0.35;
+}
+
+.listButtonDiv .listButton {
+  background-color: whitesmoke;
+  color: black;
+  font-size: 16px;
+  border: 1;
+  outline: none;
+  font-family: inherit;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  flex-grow: inherit;
+  display: block;
+  text-align: center;
+  height: 40px;
+  border-radius: 5px 5px 5px 5px;
+}
+
 .search {
   width: 50%;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: right;
+  align-items: right;
+  padding-top: 106px;
 }
 
 .searchTerm {
   width: 75%;
+  height: 36px;
   border: 3px solid black;
   border-right: none;
-  padding: 5px;
-  height: 20px;
   border-radius: 5px 0 0 5px;
   outline: none;
   color: #9DBFAF;
@@ -196,7 +264,7 @@ nav {
 }
 
 .searchTerm:focus {
-  color: lightcoral;
+  color: black;
 }
 
 .searchButton {
