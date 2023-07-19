@@ -3,22 +3,31 @@ import './App.css';
 import ProductCollection from './EquipmentComponents/ProductCollection'
 import Header from './EquipmentComponents/Header'
 import OwnerCollection from './EquipmentComponents/OwnerCollection';
-import { Route, Routes } from 'react-router-dom';
+import { useNavigate, Route, Routes } from 'react-router-dom';
 import NavBar from './EquipmentComponents/NavBar';
 import RentalCollection from './EquipmentComponents/RentalCollection';
 import ProductDisplay from './EquipmentComponents/ProductDisplay';
 import OwnerDisplay from './EquipmentComponents/OwnerDisplay';
 import UserForm from './EquipmentComponents/UserForm';
 import OwnerForm from './EquipmentComponents/OwnerForm'
+import OwnerEditForm from './EquipmentComponents/OwnerEditForm';
+
 
 
 function App() {
+
+  //forgot to const navigate = useNavigate()
+  const navigate = useNavigate()
   const [equipmentArray, setEquipmentArray] = useState([])
   const [equipmentOwnerArray, setEquipmentOwnerArray] = useState([])
 
-  //These useStates will handle Post. Grabbing and ...spreading so it updates accordingly.
+  //These useStates will handle POST. Grabbing and ...spreading so it updates accordingly.
   const [users, setUsers] = useState([])
   const [owners, setOwners] = useState([])
+
+  //These useStates will handle PATCH.
+  const [ownerToEdit, setOwnerToEdit] = useState([])
+  //const [ownerUpdate, setownerUpdate] = useState([]) // Wont likely need
 
 
   useEffect(() => {
@@ -41,6 +50,7 @@ function App() {
   const addUser = (user) => {
     setUsers(users => [...users, user])
   }
+//--------------------------------------------
 
 //These will be the Post useEffects - OWNERS
   useEffect(() => {
@@ -54,9 +64,24 @@ function App() {
   const addOwner = (owner) => {
     setOwners(owners => [...owners, owner])
   }
+//-------------------------------------------------------------
+// EDIT OWNERS
 
+const updateOwner = (ownerToUpdate) => {
+  setOwners(owners => owners.map(owner => {
+    if (owner.id === ownerToUpdate.id){
+      return ownerToUpdate
+    } else {
+      return owner
+    }
+  }))
 
+}
 
+const handleEdit = (owner) => {
+  setOwnerToEdit(owner)
+  navigate(`/owner/${owner.id}/edit`)
+}
 
 
 
@@ -65,12 +90,13 @@ function App() {
       <NavBar />
       <Routes>
         <Route path='/equipment' element={<ProductCollection equipmentArray={equipmentArray} />} />
-        <Route path='/equipment_owners' element={<OwnerCollection />} />
+        <Route path='/equipment_owners' element={<OwnerCollection handleEdit={handleEdit}/>} />
         <Route path='/rental_agreements' element={<RentalCollection />} />
         <Route path='/equipment/:id' element={<ProductDisplay />} />
         <Route path='/equipment_owners/:id' element={<OwnerDisplay />} />
         <Route path='/renter_signup' element={<UserForm addUser={addUser}/>} />
         <Route path='/owner_signup' element={<OwnerForm addOwner={addOwner}/>} />
+        <Route path='/owner/:id/edit' element={<OwnerEditForm ownerToEdit={ownerToEdit} updateOwner={updateOwner}/>} />
       </Routes>
 
     </div>

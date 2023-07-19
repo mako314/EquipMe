@@ -31,11 +31,17 @@ function UserForm({addOwner}){
                 },
                 body: JSON.stringify(values)
             })
-                .then(res => res.json())
-                .then(owner => {
-                    addOwner(owner)
-                    navigate('/equipment_owners')
+                .then(res => {
+                    if (res.ok){
+                        res.json().then(owner => {
+                            addOwner(owner)
+                            navigate('/equipment_owners')
+                        })
+                    } else {
+                        res.json().then(error => setError(error)) //for backend errors
+                    }
                 })
+            
         }
     })
 
@@ -46,7 +52,11 @@ function UserForm({addOwner}){
             <form className="form" onSubmit={formik.handleSubmit}>
                 <div className="signup-form">
                     
+                    {/* display errors from formik/yup */}
                     { formik.errors && Object.values(formik.errors).map(e => <p>{e}</p>) }
+                    
+                    {/* display errors from backend */}
+                    {error && <p>{error}</p>}
 
                     <div className="owner-form"> 
                     <label>Name</label>

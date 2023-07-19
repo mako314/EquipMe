@@ -1,10 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function OwnerCard({ id, email, name, location, phone, equipmentArray}) {
+function OwnerCard({ id, email, name, location, phone, equipmentArray, handleEdit, item}) {
+    
     const equipmentNames = equipmentArray?.map((data) => {
         return data.make + " " + data.model + " - "
     })
+    
+
+    //test can likely delete below
+    // console.log(item)
 
     return (
         <li className="cards__item">
@@ -18,6 +23,7 @@ function OwnerCard({ id, email, name, location, phone, equipmentArray}) {
                     <p className="card__text">Owner Email: {email}</p>
                 </div>
             </Link>
+            <button onClick = {() => handleEdit(item)}>EDIT</button>
             </div>
         </li>
     )

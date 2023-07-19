@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import OwnerCard from "./OwnerCard";
 
-function OwnerCollection({ }) {
+function OwnerCollection({handleEdit}) {
     const [equipmentOwnerArray, setEquipmentOwnerArray] = useState([])
 
     useEffect(() => {
@@ -13,7 +13,7 @@ function OwnerCollection({ }) {
     }, [])
 
     const ownerCards = equipmentOwnerArray?.map((item) => {
-        return <OwnerCard key={item.email} id={item.id} email={item.email} name={item.name} location={item.location} phone={item.phone} equipmentArray={item.equipment}/>
+        return <OwnerCard key={item.email} id={item.id} email={item.email} name={item.name} location={item.location} phone={item.phone} equipmentArray={item.equipment} handleEdit={handleEdit} item={item}/>
     })
 
     return (<div className="cards">
