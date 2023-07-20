@@ -1,8 +1,8 @@
-"""<f columns>
+"""Type Added to Equipment Getter
 
-Revision ID: e7be7fb7afe2
+Revision ID: 9d07d7913e1f
 Revises: 
-Create Date: 2023-07-18 11:11:28.262456
+Create Date: 2023-07-19 18:13:06.268161
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'e7be7fb7afe2'
+revision = '9d07d7913e1f'
 down_revision = None
 branch_labels = None
 depends_on = None

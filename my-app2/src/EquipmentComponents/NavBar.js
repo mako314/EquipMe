@@ -6,22 +6,11 @@ import Header from "./Header";
 
 function NavBar({ setSearchTerm }) {
 
-    // const navArray = consoleArray.map((cons) => {
-    //     return (
-    //         <NavLink
-    //             key={cons.id}
-    //             name={cons.name}
-    //             to={cons.name.replace(/\s/g, '')}
-    //         >
-    //             {cons.name}
-    //         </NavLink>
-    //     )
-    // })
 
-const toggleDropContent = () => {
-    const dropDownContent = document.querySelector('.dropdown-content');
-    dropDownContent.classList.toggle('show');
-};
+    const toggleDropContent = () => {
+        const dropDownContent = document.querySelector('.dropdown-content');
+        dropDownContent.classList.toggle('show');
+    };
 
     return (
         <nav>
@@ -52,7 +41,7 @@ const toggleDropContent = () => {
                             to={"/equipment_owners"}>
                             Equipment Owners
                         </NavLink>
-                        
+
                         <NavLink
                             key={"Rental Agreements"}
                             name={"Rental Agreements"}
@@ -70,6 +59,7 @@ const toggleDropContent = () => {
                 </div>
             </div>
             <SearchBar setSearchTerm={setSearchTerm} />
+
         </nav>
     )
 }

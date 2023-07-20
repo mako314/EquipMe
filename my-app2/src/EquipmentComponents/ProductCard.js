@@ -1,25 +1,30 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function ProductCard({ id, name, model, make, location }) {
 
-    // function handleClick (){
-    //     <Link to={`/equipment/${id}`}></Link>
-    // }
+    const navigate = useNavigate();
+
+
+    function handleClick(e) {
+        navigate(`/equipment/${id}`)
+    }
 
     return (
-        <li className="cards__item">
-            <div className="card">
-            <Link to={`/equipment/${id}`}>
-                <div className="card__content">
-                    <div className="card__title">Product Model: {model}</div>
-                    <p className="card__text">Name: {name}</p>
-                    <p className="card__text">Manufacturer: {make}</p>
-                    <p className="card__text">Available Locations: {location}</p>
+        <div className="min-h-screen bg-gray-100 flex items-center">
+            <div className="container mx-auto p-9 bg-white max-w-sm rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition duration-300">
+                <img className="rounded-xl" src="https://t4.ftcdn.net/jpg/00/93/18/45/360_F_93184515_pMvi6Fz6o1Qu32kM6lXycawPq8igxjIc.jpg" alt="" />
+                <div className="flex justify-between items-center">
+                    <div>
+                        <h1 className="mt-5 text-2xl font-semibold">{model}</h1>
+                        <p className="mt-2">{name} <br /> {make} <br /> {location} </p>
+                    </div>
+                    <div>
+                        <button className="text-white text-md font-semibold bg-green-400 py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition duration-500 transform-gpu hover:scale-110 " onClick={handleClick}>More Info</button>
+                    </div>
                 </div>
-             </Link>
             </div>
-        </li>
+        </div>
     )
 }
 
