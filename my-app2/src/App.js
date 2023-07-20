@@ -3,6 +3,7 @@ import './App.css';
 import ProductCollection from './EquipmentComponents/ProductCollection'
 import OwnerCollection from './EquipmentComponents/OwnerCollection';
 import { Route, Routes } from 'react-router-dom';
+import HomePage from './EquipmentComponents/Homepage';
 import NavBar from './EquipmentComponents/NavBar';
 import RentalCollection from './EquipmentComponents/RentalCollection';
 import ProductDisplay from './EquipmentComponents/ProductDisplay';
@@ -31,6 +32,7 @@ function App() {
     <div >
       <NavBar setSearchTerm={setSearchTerm} />
       <Routes>
+        <Route path='/' element={<HomePage/ >} />
         <Route path='/equipment' element={<ProductCollection equipmentArray={filteredEquipmentArray} />} />
         <Route path='/equipment_owners' element={<OwnerCollection searchTerm={searchTerm} />} />
         <Route path='/rental_agreements' element={<RentalCollection />} />
