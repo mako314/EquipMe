@@ -35,22 +35,24 @@ class UserRenters(Resource):
 
     def post(self):
         data = request.get_json()
-        #try
-        #need a way to attach to rental agreement
-        new_user = UserRenter(
-            name = data['name'],
-            age = data['age'],
-            location = data['location'],
-            profession = data['profession'],
-            phone = data['phone'],
-            email = data['email']
-        )
+        try:
+            #need a way to attach to rental agreement
+            new_user = UserRenter(
+                name = data['name'],
+                age = data['age'],
+                location = data['location'],
+                profession = data['profession'],
+                phone = data['phone'],
+                email = data['email']
+            )
 
-        db.session.add(new_user)
-        db.session.commit()
+            db.session.add(new_user)
+            db.session.commit()
 
-        response = make_response(new_user.to_dict(), 201)
-        return response
+            response = make_response(new_user.to_dict(), 201)
+            return response
+        except ValueError:
+            return make_response({"error": ["validations errors, check your input and try again"]} , 400)
 
         #except ValueError: 
         # NEED TO WRITE VALIDATIONS
@@ -75,16 +77,18 @@ class UserByID(Resource):
     def patch(self, id):
         user = UserRenter.query.filter(UserRenter.id == id).first()
         if user:
-            #try FOR VALIDATION
-            data = request.get_json()
-            for key in data:
-                setattr(user, key, data[key])
-            db.session.add(user)
-            db.session.commit()
+            try:
+                data = request.get_json()
+                for key in data:
+                    setattr(user, key, data[key])
+                db.session.add(user)
+                db.session.commit()
 
-            response = make_response(user.to_dict(), 202)
-            return response
-            #except ValueError:
+                response = make_response(user.to_dict(), 202)
+                return response
+            except ValueError:
+                return make_response({"error": ["validations errors, check your input and try again"]} , 400)
+
         else:
             response = make_response({
             "error": "User not found"
@@ -125,21 +129,22 @@ class EquipmentOwners(Resource):
     #POST EQUIPMENT OWNERS -- DONE
     def post(self):
         data = request.get_json()
-        #try:
-        new_owner = EquipmentOwner(
-            name = data['name'],
-            location = data['location'],
-            profession = data['profession'],
-            phone = data['phone'],
-            email = data['email']
-        )
-        db.session.add(new_owner)
-        db.session.commit()
+        try:
+            new_owner = EquipmentOwner(
+                name = data['name'],
+                location = data['location'],
+                profession = data['profession'],
+                phone = data['phone'],
+                email = data['email']
+            )
+            db.session.add(new_owner)
+            db.session.commit()
 
-        response = make_response(new_owner.to_dict(), 201)
-        return response
+            response = make_response(new_owner.to_dict(), 201)
+            return response
 
-        #except ValueError: 
+        except ValueError:
+            return make_response({"error": ["validations errors, check your input and try again"]} , 400)
         # NEED TO WRITE VALIDATIONS
 
 api.add_resource(EquipmentOwners, '/equipment_owners')
@@ -165,16 +170,17 @@ class EquipmentOwnerById(Resource):
     def patch(self, id):
         equip_owner = EquipmentOwner.query.filter(EquipmentOwner.id == id).first()
         if equip_owner:
-            #try
-            data = request.get_json()
-            for key in data:
-                setattr(equip_owner, key, data[key])
-            db.session.add(equip_owner)
-            db.session.commit()
+            try:
+                data = request.get_json()
+                for key in data:
+                    setattr(equip_owner, key, data[key])
+                db.session.add(equip_owner)
+                db.session.commit()
 
-            response = make_response(equip_owner.to_dict(), 202)
-            return response
-            #except ValueError:
+                response = make_response(equip_owner.to_dict(), 202)
+                return response
+            except ValueError:
+                return make_response({"error": ["validations errors, check your input and try again"]} , 400)
         else:
             response = make_response({
             "error": "Owner not found"
@@ -208,7 +214,7 @@ class Equipments(Resource):
     #get ALL equipment -- DONE
     def get(self):
         equipment = [equipment.to_dict(
-            only =('id','model','name','make','location', 'type','phone','email','location','availability','delivery','quantity')
+            only =('id','model','name','make','location', 'type','phone','email','location','availability','delivery','quantity') #needed to include all of this for when one patches
         ) for equipment in Equipment.query.all()]
 
         response = make_response(equipment, 200)
@@ -219,31 +225,32 @@ class Equipments(Resource):
     #NEED TO UPDATE FOR VALIDATIONS
     def post(self):
         data = request.get_json()
-        #try:
+        try:
         #need a way to input, owner_id and owner maybe a 2 step process?
-        new_equipment = Equipment(
-            name = data['name'],
-            type = data['type'],
-            make = data['make'],
-            model = data['model'],
-            owner_name = data['owner_name'],
-            phone = data['phone'],
-            email = data['email'],
-            location = data['location'],
-            availability = data['availability'],
-            delivery = data['delivery'],
-            quantity = data['quantity']
-        )
-        db.session.add(new_equipment)
-        db.session.commit()
+            new_equipment = Equipment(
+                name = data['name'],
+                type = data['type'],
+                make = data['make'],
+                model = data['model'],
+                owner_name = data['owner_name'],
+                phone = data['phone'],
+                email = data['email'],
+                location = data['location'],
+                availability = data['availability'],
+                delivery = data['delivery'],
+                quantity = data['quantity']
+            )
+            db.session.add(new_equipment)
+            db.session.commit()
 
-        response = make_response(new_equipment.to_dict(), 201)
-        return response
-    
-        #if data['availability] == 'yes'
-        #availability = True
+            response = make_response(new_equipment.to_dict(), 201)
+            return response
         
-        #except ValueError: 
+            #if data['availability] == 'yes'
+            #availability = True
+        
+        except ValueError:
+            return make_response({"error": ["validations errors, check your input and try again"]} , 400)
         # NEED TO WRITE VALIDATIONS
 
 api.add_resource(Equipments, '/equipment')
@@ -287,17 +294,18 @@ class EquipmentByID(Resource):
         equipment = Equipment.query.filter(Equipment.id == id).first()
 
         if equipment:
-            #try:
-            #going to need try and except if and when we do validations
-            data = request.get_json()
-            for key in data:
-                setattr(equipment, key, data[key])
-            db.session.add(equipment)
-            db.session.commit()
+            try:
+                #going to need try and except if and when we do validations
+                data = request.get_json()
+                for key in data:
+                    setattr(equipment, key, data[key])
+                db.session.add(equipment)
+                db.session.commit()
 
-            response = make_response(equipment.to_dict(), 202)
-            return response
-            #except ValueError:
+                response = make_response(equipment.to_dict(), 202)
+                return response
+            except ValueError:
+                return make_response({"error": ["validations errors, check your input and try again"]} , 400)
         else:
             response = make_response({
             "error": "Equipment not found"

@@ -32,6 +32,30 @@ class UserRenter(db.Model, SerializerMixin):
     #Serialization rules
     serialize_rules = ('-agreements.renter', )
 
+    #VALIDATES HERE
+    @validates("email")
+    def validates_email(self, key, email):
+        if len(email) > 0 and "@"  in email:
+            return email
+        else:
+            raise ValueError("Please check that you entered your email correctly")
+    
+    @validates("name")
+    def validates_name(self, key, name):
+        if len(name) > 0:
+            return name
+        else:
+            raise ValueError("Please input a name")
+
+    @validates("age")
+    def validates_age(self, key, age):
+        if age >= 18:
+            return age
+        else:
+            raise ValueError("Sorry, but you must be 18 years or older to sign up.")
+    
+
+
 class EquipmentOwner(db.Model, SerializerMixin):
     __tablename__ = "owners"
 
@@ -58,6 +82,21 @@ class EquipmentOwner(db.Model, SerializerMixin):
 
     #Serialization rules
     serialize_rules = ('-equipment.owner', )
+
+    #VALIDATIONS HERE
+    @validates("email")
+    def validates_email(self, key, email):
+        if len(email) > 0 and "@"  in email:
+            return email
+        else:
+            raise ValueError("Please check that you entered your email correctly")
+        
+    @validates("name")
+    def validates_name(self, key, name):
+        if len(name) > 0:
+            return name
+        else:
+            raise ValueError("Please input a name")
 
     def __repr__(self):
         return f"My name is {self.name}"
@@ -88,6 +127,22 @@ class Equipment(db.Model, SerializerMixin):
 
     #Serialization rules
     serialize_rules = ('-owner.equipment', '-agreements.equipment' )
+
+    #VALIDATIONS BEGIN HERE
+    @validates("email")
+    def validates_email(self, key, email):
+        if len(email) > 0 and "@"  in email:
+            return email
+        else:
+            raise ValueError("Please check that you entered your email correctly")
+        
+    @validates("quantity")
+    def validates_quanity(self, key, quantity):
+        if quantity > 0:
+            return quantity
+        else:
+            raise ValueError("You cannot list nothing, please enter a quantity greater than 0.")
+
 
 
 class RentalAgreement(db.Model, SerializerMixin):
