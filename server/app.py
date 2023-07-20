@@ -129,21 +129,22 @@ class EquipmentOwners(Resource):
     #POST EQUIPMENT OWNERS -- DONE
     def post(self):
         data = request.get_json()
-        #try:
-        new_owner = EquipmentOwner(
-            name = data['name'],
-            location = data['location'],
-            profession = data['profession'],
-            phone = data['phone'],
-            email = data['email']
-        )
-        db.session.add(new_owner)
-        db.session.commit()
+        try:
+            new_owner = EquipmentOwner(
+                name = data['name'],
+                location = data['location'],
+                profession = data['profession'],
+                phone = data['phone'],
+                email = data['email']
+            )
+            db.session.add(new_owner)
+            db.session.commit()
 
-        response = make_response(new_owner.to_dict(), 201)
-        return response
+            response = make_response(new_owner.to_dict(), 201)
+            return response
 
-        #except ValueError: 
+        except ValueError:
+            return make_response({"error": ["validations errors, check your input and try again"]} , 400)
         # NEED TO WRITE VALIDATIONS
 
 api.add_resource(EquipmentOwners, '/equipment_owners')
@@ -169,16 +170,17 @@ class EquipmentOwnerById(Resource):
     def patch(self, id):
         equip_owner = EquipmentOwner.query.filter(EquipmentOwner.id == id).first()
         if equip_owner:
-            #try
-            data = request.get_json()
-            for key in data:
-                setattr(equip_owner, key, data[key])
-            db.session.add(equip_owner)
-            db.session.commit()
+            try:
+                data = request.get_json()
+                for key in data:
+                    setattr(equip_owner, key, data[key])
+                db.session.add(equip_owner)
+                db.session.commit()
 
-            response = make_response(equip_owner.to_dict(), 202)
-            return response
-            #except ValueError:
+                response = make_response(equip_owner.to_dict(), 202)
+                return response
+            except ValueError:
+                return make_response({"error": ["validations errors, check your input and try again"]} , 400)
         else:
             response = make_response({
             "error": "Owner not found"
