@@ -35,22 +35,24 @@ class UserRenters(Resource):
 
     def post(self):
         data = request.get_json()
-        #try
-        #need a way to attach to rental agreement
-        new_user = UserRenter(
-            name = data['name'],
-            age = data['age'],
-            location = data['location'],
-            profession = data['profession'],
-            phone = data['phone'],
-            email = data['email']
-        )
+        try:
+            #need a way to attach to rental agreement
+            new_user = UserRenter(
+                name = data['name'],
+                age = data['age'],
+                location = data['location'],
+                profession = data['profession'],
+                phone = data['phone'],
+                email = data['email']
+            )
 
-        db.session.add(new_user)
-        db.session.commit()
+            db.session.add(new_user)
+            db.session.commit()
 
-        response = make_response(new_user.to_dict(), 201)
-        return response
+            response = make_response(new_user.to_dict(), 201)
+            return response
+        except ValueError:
+            return make_response({"error": ["validations errors, check your input and try again"]} , 400)
 
         #except ValueError: 
         # NEED TO WRITE VALIDATIONS
@@ -75,16 +77,18 @@ class UserByID(Resource):
     def patch(self, id):
         user = UserRenter.query.filter(UserRenter.id == id).first()
         if user:
-            #try FOR VALIDATION
-            data = request.get_json()
-            for key in data:
-                setattr(user, key, data[key])
-            db.session.add(user)
-            db.session.commit()
+            try:
+                data = request.get_json()
+                for key in data:
+                    setattr(user, key, data[key])
+                db.session.add(user)
+                db.session.commit()
 
-            response = make_response(user.to_dict(), 202)
-            return response
-            #except ValueError:
+                response = make_response(user.to_dict(), 202)
+                return response
+            except ValueError:
+                return make_response({"error": ["validations errors, check your input and try again"]} , 400)
+
         else:
             response = make_response({
             "error": "User not found"
