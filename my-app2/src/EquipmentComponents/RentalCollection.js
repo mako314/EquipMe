@@ -13,7 +13,7 @@ function RentalCollection({ }) {
     }, [])
 
     const rentalCards = rentalAgreementArray?.map((item) => {
-        return <RentalCard equipmentName={item.equipment.name} rentalDates={item.rental_dates} renterName={item.renter.name} />
+        return <RentalCard key={item.id} equipmentName={item.equipment.name} rentalDates={item.rental_dates} renterName={item.renter.name} />
     })
 
     return (<div className="cards">

@@ -1,373 +1,373 @@
 Equipment_name,Equipment_type,Make,Model,Owner,Phone,Email,Location,Availability,Delivery,Quantity
-Excavator,Heavy Machinery,Caterpillar,336E L,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",True,False,3
-Excavator,Heavy Machinery,Komatsu,PC210LC-11,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",False,False,4
-Excavator,Heavy Machinery,Hitachi,ZX350LC-6,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",True,True,7
-Excavator,Heavy Machinery,Volvo Construction Equipment,EC380E,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",False,False,4
-Excavator,Heavy Machinery,JCB,JS220,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",True,True,5
-Bulldozer,Heavy Machinery,Caterpillar,D6T,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",True,False,6
-Bulldozer,Heavy Machinery,Komatsu,D65EX-18,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",True,True,3
-Bulldozer,Heavy Machinery,John Deere,850K,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",True,True,2
-Bulldozer,Heavy Machinery,Liebherr,PR 746,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",False,True,8
-Bulldozer,Heavy Machinery,Case Construction Equipment,1150M,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",False,True,1
-Backhoe,Heavy Machinery,JCB,3CX,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",True,False,2
-Backhoe,Heavy Machinery,Caterpillar,430F/430F IT,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",False,False,4
-Backhoe,Heavy Machinery,Case Construction Equipment,580N,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",True,False,8
-Backhoe,Heavy Machinery,Volvo Construction Equipment,BL61B,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",False,False,3
-Backhoe,Heavy Machinery,New Holland Construction,B95C,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",True,True,6
-Crane,Heavy Machinery,Liebherr,LTM 1090-4.2,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",True,False,4
-Crane,Heavy Machinery,Terex Corporation,RT780,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",True,True,2
-Crane,Heavy Machinery,Tadano Ltd.,GR-800EX,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",True,False,6
-Crane,Heavy Machinery,Manitowoc Cranes,M-250 Series 2,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",False,True,7
-Crane,Heavy Machinery,Kobelco Construction Machinery,CKE2500G-2,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",False,True,3
-Concrete Mixer,Equipment,Caterpillar,CT660,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",True,True,3
-Concrete Mixer,Equipment,Liebherr,HTM 804,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",False,True,3
-Concrete Mixer,Equipment,SANY Group,SY306C-8,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",True,False,4
-Concrete Mixer,Equipment,Putzmeister,PM 702,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",False,False,5
-Concrete Mixer,Equipment,Schwing Stetter,SLM 4000,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",True,False,2
-Jackhammer,Tool,Bosch,GSH 16-30,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",True,False,1
-Jackhammer,Tool,Makita,HM1812,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",True,True,6
-Jackhammer,Tool,Hilti,TE 3000-AVR,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",True,False,7
-Jackhammer,Tool,Hitachi Power Tools,H65,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",False,True,8
-Jackhammer,Tool,Dewalt,D25980,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",False,False,4
-Scaffolding,Equipment,Layher,Allround Scaffolding,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",True,True,3
-Scaffolding,Equipment,PERI,PERI UP,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",False,True,4
-Scaffolding,Equipment,Harsco Infrastructure,Modular Access System,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",True,True,4
-Scaffolding,Equipment,Altrad,Altrad Plettac Assco,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",False,True,4
-Scaffolding,Equipment,Waco International,Waco Ringlock,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",True,False,1
-Forklift,Industrial Vehicle,Toyota Material Handling,8FGCU25,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",True,False,2
-Forklift,Industrial Vehicle,Hyster-Yale Materials Handling,H190-360HD2,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",True,True,6
-Forklift,Industrial Vehicle,Crown Equipment Corporation,C-5 Series,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",True,False,3
-Forklift,Industrial Vehicle,Linde Material Handling,H35D,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",False,True,4
-Forklift,Industrial Vehicle,Mitsubishi Logisnext,FGE35AN,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",False,True,7
-Trencher,Machine,Ditch Witch,RT45,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",True,True,3
-Trencher,Machine,Vermeer Corporation,RTX750,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",False,True,3
-Trencher,Machine,Tesmec S.p.A.,TRS 1475,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",True,False,4
-Trencher,Machine,Barreto Manufacturing,1320H,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",False,False,4
-Trencher,Machine,Toro Company,TRX-26,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",True,False,6
-Compactor,Equipment,Caterpillar,CS54B,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",True,False,1
-Compactor,Equipment,Volvo Construction Equipment,SD115B,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",True,True,1
-Compactor,Equipment,Hamm AG,3412,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",True,False,4
-Compactor,Equipment,Bomag,BW 211 D-5,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",False,True,2
-Compactor,Equipment,Dynapac,CC800,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",False,False,5
-Drill,Power Tool,Makita,XPH07Z,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,True,4
-Drill,Power Tool,DeWalt,DCD996B,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",False,True,7
-Drill,Power Tool,Bosch,HDS181A,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,True,2
-Drill,Power Tool,Milwaukee,2804-20,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",False,True,5
-Drill,Power Tool,Black & Decker,LDX120C,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,False,3
-Saw,Power Tool,Makita,XSH06Z,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,False,6
-Saw,Power Tool,DeWalt,DWE575,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,True,8
-Saw,Power Tool,Bosch,CS10,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,False,5
-Saw,Power Tool,Milwaukee,2730-20,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",False,True,2
-Saw,Power Tool,Festool,TS 55 REQ,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",False,True,3
-Sander,Power Tool,Makita,XOB01Z,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,True,9
-Sander,Power Tool,DeWalt,DWE6423K,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",False,True,4
-Sander,Power Tool,Bosch,ROS20VSC,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,False,7
-Sander,Power Tool,Festool,ETS EC 125/3 EQ,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",False,False,2
-Sander,Power Tool,Porter-Cable,382,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,False,6
-Power Screwdriver,Power Tool,Makita,XDT16Z,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,False,5
-Power Screwdriver,Power Tool,DeWalt,DCF887B,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,True,3
-Power Screwdriver,Power Tool,Bosch,GSR12V-300FCB22,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,False,4
-Power Screwdriver,Power Tool,Milwaukee,2850-20,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",False,True,2
-Power Screwdriver,Power Tool,Black & Decker,BDCSFL20C,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",False,False,7
-Angle Grinder,Power Tool,Makita,XAG04Z,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,True,3
-Angle Grinder,Power Tool,DeWalt,DWE402,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",False,True,5
-Angle Grinder,Power Tool,Bosch,GWS13-50VSP,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,True,2
-Angle Grinder,Power Tool,Milwaukee,2780-20,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",False,True,6
-Angle Grinder,Power Tool,Metabo,WP9-115,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,False,4
-Impact Wrench,Power Tool,Makita,XWT08Z,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,False,8
-Impact Wrench,Power Tool,DeWalt,DCF899B,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,True,6
-Impact Wrench,Power Tool,Bosch,IXO V Max,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,False,3
-Impact Wrench,Power Tool,Milwaukee,2767-20,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",False,True,5
-Impact Wrench,Power Tool,Ingersoll Rand,W7150-K2,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",False,True,2
-Nail Gun,Power Tool,Makita,XNB01Z,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,True,7
-Nail Gun,Power Tool,DeWalt,DCN692B,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",False,True,3
-Nail Gun,Power Tool,Hitachi,NR90AES1,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,False,4
-Nail Gun,Power Tool,Bostitch,N62FNK-2,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",False,False,6
-Nail Gun,Power Tool,Paslode,902600,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,True,5
-Hammer,Hand Tool,Estwing,E3-16C,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,False,5
-Hammer,Hand Tool,Stanley,51-624,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,True,3
-Hammer,Hand Tool,Vaughan,CF2HC,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,True,4
-Hammer,Hand Tool,Stiletto,TI14SC-F,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",False,True,6
-Hammer,Hand Tool,Craftsman,948962,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",False,True,2
-Screwdriver,Hand Tool,Wiha,32092,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,False,6
-Screwdriver,Hand Tool,Wera,5138216001,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",False,False,5
-Screwdriver,Hand Tool,Klein Tools,603-4,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,True,3
-Screwdriver,Hand Tool,Stanley,66-052,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",False,False,7
-Screwdriver,Hand Tool,Craftsman,47477,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,True,4
-Wrench,Hand Tool,Snap-on,SOEXRM710,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,True,6
-Wrench,Hand Tool,Craftsman,44262,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,True,5
-Wrench,Hand Tool,GearWrench,84912N,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,True,3
-Wrench,Hand Tool,Channellock,8WCB,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",False,False,4
-Wrench,Hand Tool,Crescent,AC24VS,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",False,False,2
-Pliers,Hand Tool,Knipex,8701250,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,True,6
-Pliers,Hand Tool,Klein Tools,D213-9NE,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",False,False,4
-Pliers,Hand Tool,Channellock,440,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,True,7
-Pliers,Hand Tool,Irwin Tools,2078309,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",False,True,3
-Pliers,Hand Tool,Craftsman,45471,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,True,5
-Measuring Tool,Hand Tool,Stanley,33-425,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,True,5
-Measuring Tool,Hand Tool,Lufkin,L625SCTMP,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,False,2
-Measuring Tool,Hand Tool,Milwaukee,48-22-6625,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,False,6
-Measuring Tool,Hand Tool,Johnson Level & Tool,406EM-S,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",False,True,4
-Measuring Tool,Hand Tool,Bosch,GLM 20,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",False,False,3
-Cutting Tool,Hand Tool,Stanley,10-099,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,True,4
-Cutting Tool,Hand Tool,Irwin Tools,2014100,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",False,True,6
-Cutting Tool,Hand Tool,Lenox,12132HT50,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,True,2
-Cutting Tool,Hand Tool,Bahco,2444,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",False,True,5
-Cutting Tool,Hand Tool,Fiskars,375591-1001,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",True,False,7
-Lawnmower,Garden Lawnmower,Honda,HRX217VKA,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",True,False,5
-Lawnmower,Garden Lawnmower,Toro,20339,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",True,True,3
-Lawnmower,Garden Lawnmower,Husqvarna,LC121P,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",True,False,4
-Lawnmower,Garden Lawnmower,Craftsman,11A-U2V2791,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",False,True,6
-Lawnmower,Garden Lawnmower,EGO,LM2102SP,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",False,True,2
-Trimmer,Garden Trimmer,Black & Decker,LST300,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",True,True,5
-Trimmer,Garden Trimmer,STIHL,FS 40 C-E,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",False,True,3
-Trimmer,Garden Trimmer,Echo,SRM-225,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",True,False,4
-Trimmer,Garden Trimmer,Greenworks,21302,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",False,False,6
-Trimmer,Garden Trimmer,Worx,WG163,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",True,True,2
-Shovel,Garden Shovel,Fiskars,96685935J,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",True,False,6
-Shovel,Garden Shovel,Bully Tools,92712,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",True,True,4
-Shovel,Garden Shovel,Ames,2535600,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",True,True,5
-Shovel,Garden Shovel,True Temper,1564500,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",False,True,3
-Shovel,Garden Shovel,Spear & Jackson,4454BS,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",False,True,7
-Rake,Garden Rake,Ames,2915712,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",True,False,6
-Rake,Garden Rake,Bully Tools,92309,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",False,False,4
-Rake,Garden Rake,Corona,RA-20,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",True,False,5
-Rake,Garden Rake,True Temper,2914000,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",False,False,3
-Rake,Garden Rake,Gardenite,GGT3,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",True,True,7
-Hedge Trimmer,Garden Hedge Trimmer,Black & Decker,LHT2436,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",True,False,4
-Hedge Trimmer,Garden Hedge Trimmer,STIHL,HS 45,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",True,True,6
-Hedge Trimmer,Garden Hedge Trimmer,Greenworks,22122,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",True,True,3
-Hedge Trimmer,Garden Hedge Trimmer,Husqvarna,122HD60,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",False,True,5
-Hedge Trimmer,Garden Hedge Trimmer,Worx,WG261,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",False,True,2
-Pruning Tool,Garden Pruning Tool,Felco,F-2,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",True,False,5
-Pruning Tool,Garden Pruning Tool,Fiskars,91095935J,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",False,False,3
-Pruning Tool,Garden Pruning Tool,Corona,RS 7265D,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",True,True,4
-Pruning Tool,Garden Pruning Tool,ARS,VS-8R,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",False,False,6
-Pruning Tool,Garden Pruning Tool,Bahco,PG-72,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",True,True,2
-Garden Hose,Garden Garden Hose,Craftsman,CM-IFMD-2,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",True,True,7
-Garden Hose,Garden Garden Hose,Flexzilla,HFZG525YW,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",True,True,5
-Garden Hose,Garden Garden Hose,Gilmour,874501-1001,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",True,True,4
-Garden Hose,Garden Garden Hose,Dramm,10-17003,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",False,False,6
-Garden Hose,Garden Garden Hose,Water Right,WR12420,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",False,False,3
-Sprinkler,Garden Sprinkler,Rain Bird,25PJDAC,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",True,False,6
-Sprinkler,Garden Sprinkler,Orbit,56667N,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",False,False,4
-Sprinkler,Garden Sprinkler,Melnor,XT4200-IN,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",True,True,5
-Sprinkler,Garden Sprinkler,Hunter,PGP-ADJ,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",False,False,3
-Sprinkler,Garden Sprinkler,Gilmour,805013-1001,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",True,True,7
-Planer,Power Tool,DeWalt,DW735X,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",True,True,5
-Planer,Power Tool,Makita,2012NB,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",True,True,3
-Planer,Power Tool,Bosch,PL2632K,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",True,True,4
-Planer,Power Tool,Jet,JWP-15HH,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",False,False,6
-Planer,Power Tool,Porter-Cable,PC305TP,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",False,False,2
-Router,Power Tool,DeWalt,DWP611,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",True,True,5
-Router,Power Tool,Bosch,1617EVSPK,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",False,False,3
-Router,Power Tool,Makita,RT0701CX7,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",True,True,4
-Router,Power Tool,Festool,OF 1400 EQ,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",False,True,6
-Router,Power Tool,Porter-Cable,892,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",True,True,2
-Chisel,Hand Tool,Narex,863010,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",True,True,5
-Chisel,Hand Tool,Stanley,16-791,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",True,False,3
-Chisel,Hand Tool,Two Cherries,500-1561,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",True,False,4
-Chisel,Hand Tool,Ashley Iles,RD4PCE,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",False,True,6
-Chisel,Hand Tool,Sorby,SET-6ST,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",False,True,2
-Woodworking Bench,Workbench,Sjöbergs,33280,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",True,True,5
-Woodworking Bench,Workbench,Festool,MFT/3-Kapex,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",False,False,3
-Woodworking Bench,Workbench,Kreg,KWS1000,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",True,False,4
-Woodworking Bench,Workbench,Rockler,56204,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",False,True,6
-Woodworking Bench,Workbench,Grizzly Industrial,G9915,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",True,False,2
-Table Saw,Power Tool,SawStop,PCS31230-TGP252,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",True,True,5
-Table Saw,Power Tool,DeWalt,DWE7491RS,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",True,True,3
-Table Saw,Power Tool,Bosch,4100-09,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",True,True,4
-Table Saw,Power Tool,Powermatic,PM1000,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",False,True,6
-Table Saw,Power Tool,Jet,725005K,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",False,False,2
-Miter Saw,Power Tool,DeWalt,DWS780,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",True,False,5
-Miter Saw,Power Tool,Makita,LS1019L,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",False,True,3
-Miter Saw,Power Tool,Bosch,GCM12SD,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",True,True,4
-Miter Saw,Power Tool,Festool,KS 120 REB,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",False,True,6
-Miter Saw,Power Tool,Hitachi,C10FCGS,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",True,False,2
-Band Saw,Power Tool,Laguna Tools,MBAND1412-175,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",True,False,5
-Band Saw,Power Tool,Jet,JWBS-14SFX,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",True,True,3
-Band Saw,Power Tool,Grizzly Industrial,G0555LX,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",True,False,4
-Band Saw,Power Tool,Rikon,10-326,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",False,True,6
-Band Saw,Power Tool,Powermatic,PWBS-14CS,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",False,True,2
-Woodturning Lathe,Power Tool,Jet,JWL-1440VSK,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",True,True,5
-Woodturning Lathe,Power Tool,Laguna Tools,REVO 18|36,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",False,True,3
-Woodturning Lathe,Power Tool,Nova,1624-44,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",True,False,4
-Woodturning Lathe,Power Tool,Powermatic,3520C,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",False,False,6
-Woodturning Lathe,Power Tool,Rikon,70-220VSR,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",True,True,2
-Pipe Cutters,Plumbing Equipment,Ridgid,31632,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",True,True,5
-Pipe Cutters,Plumbing Equipment,Milwaukee Tool,48-22-4253,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",True,True,3
-Pipe Cutters,Plumbing Equipment,Lenox,21011TC138,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",True,False,4
-Pipe Cutters,Plumbing Equipment,Wheeler-Rex,590,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",False,False,6
-Pipe Cutters,Plumbing Equipment,Rothenberger,70020,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",False,True,2
-Pipe Wrenches,Plumbing Equipment,Ridgid,31000,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",True,False,5
-Pipe Wrenches,Plumbing Equipment,Irwin Tools,2078610,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",False,True,3
-Pipe Wrenches,Plumbing Equipment,Channellock,804,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",True,True,4
-Pipe Wrenches,Plumbing Equipment,Knipex,83 30 015,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",False,True,6
-Pipe Wrenches,Plumbing Equipment,Craftsman,9-45102,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",True,True,2
-Pipe Threaders,Plumbing Equipment,Ridgid,36475,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",True,False,5
-Pipe Threaders,Plumbing Equipment,Rothenberger,63204,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",True,False,3
-Pipe Threaders,Plumbing Equipment,Reed Manufacturing,R12+,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",True,True,4
-Pipe Threaders,Plumbing Equipment,Wheeler-Rex,3890,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",False,True,6
-Pipe Threaders,Plumbing Equipment,Oster,784-SL,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",False,True,2
-Pipe Benders,Plumbing Equipment,Ridgid,38048,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",True,False,5
-Pipe Benders,Plumbing Equipment,Greenlee,841,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",False,False,3
-Pipe Benders,Plumbing Equipment,Gardner Bender,930,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",True,True,4
-Pipe Benders,Plumbing Equipment,Imperial Tool,364-FHB08,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",False,False,6
-Pipe Benders,Plumbing Equipment,Klein Tools,56206,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",True,True,2
-Plumbing Snakes,Plumbing Equipment,Ridgid,59802,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",True,True,5
-Plumbing Snakes,Plumbing Equipment,General Pipe Cleaners,DRZ-PH,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",True,True,3
-Plumbing Snakes,Plumbing Equipment,Milwaukee Tool,2572B-21,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",True,True,4
-Plumbing Snakes,Plumbing Equipment,Cobra Products,82550,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",False,False,6
-Plumbing Snakes,Plumbing Equipment,BrassCraft,BC260,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",False,False,2
-Paint Sprayers,Painting and Decorating Tools,Graco,Magnum X7,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",True,True,3
-Paint Sprayers,Painting and Decorating Tools,Wagner,Flexio 590,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",False,True,5
-Paint Sprayers,Painting and Decorating Tools,Titan,ControlMax 1700 Pro,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",True,True,2
-Paint Sprayers,Painting and Decorating Tools,Fuji Spray,Mini-Mite 4 Platinum,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",False,False,4
-Paint Sprayers,Painting and Decorating Tools,HomeRight,Super Finish Max,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",True,False,6
-Paint Rollers,Painting and Decorating Tools,Purdy,White Dove,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",True,True,5
-Paint Rollers,Painting and Decorating Tools,Wooster Brush Company,Pro Doo-Z,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",True,True,3
-Paint Rollers,Painting and Decorating Tools,Harris,T-Class Super Refresh Roller,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",True,True,4
-Paint Rollers,Painting and Decorating Tools,Shur-Line,Paint + Prime Roller Kit,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",False,True,6
-Paint Rollers,Painting and Decorating Tools,Linzer Products,Golden Eagle,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",False,True,2
-Paint Brushes,Painting and Decorating Tools,Purdy,Monarch Elite,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",True,True,5
-Paint Brushes,Painting and Decorating Tools,Wooster Brush Company,Silver Tip,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",False,False,3
-Paint Brushes,Painting and Decorating Tools,Harris,Taskmasters,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",True,False,4
-Paint Brushes,Painting and Decorating Tools,Benjamin Moore,Advance,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",False,True,6
-Paint Brushes,Painting and Decorating Tools,Proform Technologies,Contractor Series,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",True,True,2
-Wallpaper Steamers,Painting and Decorating Tools,Wagner,715 Power Steamer,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",True,True,5
-Wallpaper Steamers,Painting and Decorating Tools,Earlex,SS77USSG Steammaster,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",True,True,3
-Wallpaper Steamers,Painting and Decorating Tools,HomeRight,SteamMachine,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",True,True,4
-Wallpaper Steamers,Painting and Decorating Tools,Zinsser,DIF Wallpaper Stripper,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",False,True,6
-Wallpaper Steamers,Painting and Decorating Tools,Black & Decker,BDS200,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",False,False,2
-Paint Scrapers,Painting and Decorating Tools,Hyde Tools,10530 MaxxGrip,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",True,False,5
-Paint Scrapers,Painting and Decorating Tools,Warner Manufacturing,8150 ProGrip,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",False,True,3
-Paint Scrapers,Painting and Decorating Tools,Red Devil,3010,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",True,True,4
-Paint Scrapers,Painting and Decorating Tools,Stanley,28-593,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",False,True,6
-Paint Scrapers,Painting and Decorating Tools,Titan Tools,17002,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",True,True,2
-Drop Cloths,Painting and Decorating Tools,Trimaco,Canvas Drop Cloth,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",True,True,5
-Drop Cloths,Painting and Decorating Tools,CoverGrip,Safety Drop Cloth,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",True,True,3
-Drop Cloths,Painting and Decorating Tools,Everhard,8 oz Heavy-Duty Canvas Drop Cloth,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",True,False,4
-Drop Cloths,Painting and Decorating Tools,BATES Choice,Plastic Drop Cloth,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",False,False,6
-Drop Cloths,Painting and Decorating Tools,Simpli-Magic,Clear Plastic Drop Cloth,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",False,True,2
-Paint Trays and Liners,Painting and Decorating Tools,Wooster Brush Company,Paint Tray,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",True,True,5
-Paint Trays and Liners,Painting and Decorating Tools,Linzer Products,Metal Paint Tray,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",False,True,3
-Paint Trays and Liners,Painting and Decorating Tools,Dynamic Paint Products,Deep Well Paint Tray,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",True,True,4
-Paint Trays and Liners,Painting and Decorating Tools,Shur-Line,Paint Tray Kit,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",False,True,6
-Paint Trays and Liners,Painting and Decorating Tools,HANDy Paint Products,Handy Paint Pail,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",True,True,2
-Painters Tape,Painting and Decorating Tools,3M,ScotchBlue Original,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",True,False,5
-Painters Tape,Painting and Decorating Tools,FrogTape,Multi-Surface,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",True,False,3
-Painters Tape,Painting and Decorating Tools,ScotchBlue,Delicate Surfaces,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",True,True,4
-Painters Tape,Painting and Decorating Tools,Shurtape,FrogTape Pro Grade,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",False,True,6
-Painters Tape,Painting and Decorating Tools,Duck Brand,Clean Release,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",False,True,2
-Ladders and Scaffolding,Painting and Decorating Tools,Werner,MT-22,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",True,True,5
-Ladders and Scaffolding,Painting and Decorating Tools,Little Giant,Revolution,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",False,True,3
-Ladders and Scaffolding,Painting and Decorating Tools,Louisville Ladder,FE3220,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",True,True,4
-Ladders and Scaffolding,Painting and Decorating Tools,Gorilla Ladders,5.5 ft. Aluminum Hybrid Ladder,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",False,False,6
-Ladders and Scaffolding,Painting and Decorating Tools,Metaltech,Safeclimb Baker Style Scaffold Tower,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",True,False,2
-Jacks,Automotive Tools,Craftsman,3-Ton Floor Jack,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",True,True,4
-Jacks,Automotive Tools,Hein-Werner Automotive,2-Ton Service Jack,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",True,True,5
-Jacks,Automotive Tools,Arcan,Quick Rise Steel Floor Jack,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",True,True,2
-Jacks,Automotive Tools,Powerbuilt,All-in-One Bottle Jack,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",False,True,6
-Jacks,Automotive Tools,Torin,Scissor Jack,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",False,True,3
-Wrench Sets,Automotive Tools,Craftsman,Metric and Standard Wrench Set,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",True,True,5
-Wrench Sets,Automotive Tools,GearWrench,120XP Ratcheting Wrench Set,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",False,True,3
-Wrench Sets,Automotive Tools,Snap-on,Flank Drive Plus Combination Wrench Set,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",True,True,4
-Wrench Sets,Automotive Tools,Tekton,Combination Wrench Set with Store and Go Keeper,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",False,False,6
-Wrench Sets,Automotive Tools,Husky,Universal Mechanics Tool Set with Wrenches,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",True,False,2
-Socket Sets,Automotive Tools,Craftsman,1/2-Inch Drive Socket Set,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",True,True,5
-Socket Sets,Automotive Tools,GearWrench,3/8-Inch Drive Socket Set,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",True,True,3
-Socket Sets,Automotive Tools,Snap-on,1/4-Inch Drive Socket Set,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",True,True,4
-Socket Sets,Automotive Tools,Tekton,Impact Socket Set,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",False,True,6
-Socket Sets,Automotive Tools,Husky,Universal Pass-Thru Socket and Ratchet Set,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",False,True,2
-Diagnostic Equipment,Automotive Tools,Autel,MaxiCOM MK808 OBD2 Scanner,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",True,True,5
-Diagnostic Equipment,Automotive Tools,Launch,X431 PROS Mini OBD2 Scan Tool,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",False,False,3
-Diagnostic Equipment,Automotive Tools,Innova,3100i Diagnostic Code Reader,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",True,False,4
-Diagnostic Equipment,Automotive Tools,Actron,CP9690 Elite AutoScanner,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",False,True,6
-Diagnostic Equipment,Automotive Tools,BlueDriver,Bluetooth Pro OBDII Scan Tool,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",True,True,2
-Jack Stands,Automotive Tools,Torin,Steel Jack Stands,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",True,True,5
-Jack Stands,Automotive Tools,Powerbuilt,Unijack Bottle Jack and Jack Stand,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",True,True,3
-Jack Stands,Automotive Tools,Hein-Werner Automotive,Heavy-Duty Jack Stands,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",True,True,4
-Jack Stands,Automotive Tools,OTC,Aluminum Jack Stands,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",False,True,6
-Jack Stands,Automotive Tools,ESCO,3-Ton Jack Stand,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",False,True,2
-Tire Inflators,Automotive Tools,Viair,Portable Air Compressor,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",True,True,5
-Tire Inflators,Automotive Tools,Kensun,AC/DC Tire Inflator,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",False,False,3
-Tire Inflators,Automotive Tools,EPAuto,12V DC Portable Air Compressor,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",True,False,4
-Tire Inflators,Automotive Tools,JACO,Tire Inflator with Pressure Gauge,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",False,True,6
-Tire Inflators,Automotive Tools,AstroAI,Portable Air Compressor Pump,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",True,True,2
-Oil Change Tools,Automotive Tools,Lisle,Oil Filter Wrench,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",True,True,5
-Oil Change Tools,Automotive Tools,Craftsman,Oil Drain Pan,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",True,True,3
-Oil Change Tools,Automotive Tools,Motivx Tools,Oil Filter Wrench Set,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",True,True,4
-Oil Change Tools,Automotive Tools,OEMTOOLS,Oil Funnel,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",False,True,6
-Oil Change Tools,Automotive Tools,Lumax,Oil Drain Plug,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",False,False,2
-Battery Tools,Automotive Tools,NOCO,Genius G3500 Battery Charger,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",True,False,5
-Battery Tools,Automotive Tools,Schumacher,SE-1052 Battery Charger,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",False,True,3
-Battery Tools,Automotive Tools,Battery Tender,Plus Battery Charger,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",True,True,4
-Battery Tools,Automotive Tools,Associated Equipment,Hand-Held Battery Tester,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",False,True,6
-Battery Tools,Automotive Tools,CTEK,Multi US 7002 Battery Charger,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",True,True,2
-Brake Tools,Automotive Tools,OTC,Brake Caliper Tool Set,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",True,True,5
-Brake Tools,Automotive Tools,Lisle,Brake Bleeder Kit,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",True,True,3
-Brake Tools,Automotive Tools,ABN,Brake Pad Spreader Tool,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",True,True,4
-Brake Tools,Automotive Tools,Performance Tool,Brake Pad Gauge,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",False,True,6
-Brake Tools,Automotive Tools,Powerbuilt,Brake Line Flaring Tool Kit,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",False,False,2
-Engine Tools,Automotive Tools,OTC,Spark Plug Socket Set,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",True,False,5
-Engine Tools,Automotive Tools,Lisle,Timing Belt Tool Kit,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",False,True,3
-Engine Tools,Automotive Tools,Actron,Compression Tester Kit,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",True,True,4
-Engine Tools,Automotive Tools,CTA Tools,Engine Cylinder Hone,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",False,True,6
-Engine Tools,Automotive Tools,Lang Tools,Valve Spring Compressor,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",True,True,2
-Carpet Cleaners,Carpet Cleaners,Bissell,Big Green Professional Carpet Cleaner,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",True,True,3
-Carpet Cleaners,Carpet Cleaners,Hoover,Power Scrub Elite Pet Upright Carpet Cleaner,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",True,True,5
-Carpet Cleaners,Carpet Cleaners,Rug Doctor,Deep Carpet Cleaner,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",True,False,2
-Pressure Washers,Pressure Washers,Karcher,K5 Premium Electric Power Pressure Washer,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",False,False,4
-Pressure Washers,Pressure Washers,Sun Joe,SPX3000 Electric High Pressure Washer,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",False,True,6
-Pressure Washers,Pressure Washers,Simpson,MegaShot Gas Pressure Washer,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",True,True,3
-Vacuum Cleaners,Vacuum Cleaners,Dyson,V11 Animal Cordless Vacuum Cleaner,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",False,True,7
-Vacuum Cleaners,Vacuum Cleaners,Shark,Navigator Lift-Away Professional NV356E Upright Vacuum,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",True,True,5
-Vacuum Cleaners,Vacuum Cleaners,Miele,Classic C1 Pure Suction Canister Vacuum Cleaner,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",False,True,2
-Floor Scrubbers,Floor Scrubbers,Tennant,T300 Walk-Behind Floor Scrubber,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",True,True,3
-Floor Scrubbers,Floor Scrubbers,Nilfisk,SC351 Compact Walk-Behind Floor Scrubber,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",True,True,4
-Floor Scrubbers,Floor Scrubbers,Clarke,Focus II Midsize Boost 28 Walk-Behind Floor Scrubber,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",True,True,2
-Window Cleaners,Window Cleaners,Ettore,Professional Window Cleaning Kit,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",True,False,5
-Window Cleaners,Window Cleaners,Unger,Professional Microfiber Window Cleaning Kit,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",False,False,3
-Window Cleaners,Window Cleaners,Pulex,Professional Window Cleaning Squeegee,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",False,True,2
-Steam Cleaners,Steam Cleaners,McCulloch,MC1385 Deluxe Canister Steam Cleaner,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",True,True,4
-Steam Cleaners,Steam Cleaners,Dupray,Neat Steam Cleaner Multipurpose Heavy Duty Steamer,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",False,True,3
-Steam Cleaners,Steam Cleaners,Bissell,PowerFresh Slim Steam Mop,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",True,True,6
-Air Purifiers,Air Purifiers,Coway,Airmega 400S Smart Air Purifier,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",False,True,2
-Air Purifiers,Air Purifiers,Honeywell,True HEPA Allergen Remover HPA300,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",True,True,4
-Air Purifiers,Air Purifiers,Blueair,Blue Pure 211+ Air Purifier,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",True,False,3
-Dusting Tools,Dusting Tools,OXO,Good Grips Microfiber Hand Duster,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",True,False,6
-Dusting Tools,Dusting Tools,Swiffer,Dusters Heavy Duty Super Extender Starter Kit,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",True,True,5
-Dusting Tools,Dusting Tools,Casabella,Wayclean Deluxe Microfiber Dusting Pad,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",False,True,3
-Janitorial Carts and Trolleys,Janitorial Carts and Trolleys,Rubbermaid,Commercial Cleaning Cart with Zippered Yellow Vinyl Bag,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",False,True,2
-Janitorial Carts and Trolleys,Janitorial Carts and Trolleys,Carlisle,Janitorial Cleaning Cart with 3-Shelf,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",True,True,4
-Janitorial Carts and Trolleys,Janitorial Carts and Trolleys,Uline,Janitorial Cleaning Cart with 2-Shelf,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",False,True,3
-Tents,Structure Tent,E-Z UP,Speed Shelter,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",True,True,5
-Tents,Canopy Tent,Coleman,Instant Canopy,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",False,True,3
-Tents,Frame Tent,Big Agnes,Flying Diamond,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",True,True,2
-Tables,Rectangular Table,Lifetime,Commercial Folding Table,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",True,False,8
-Tables,Round Table,Flash Furniture,Plastic Folding Table,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",True,False,6
-Tables,Folding Table,Cosco,Centerfold Table,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",True,True,10
-Chairs,Folding Chair,Resol,White Plastic Folding Chair,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",False,True,20
-Chairs,Banquet Chair,Hercules,Padded Stackable Chair,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",False,True,12
-Chairs,Chiavari Chair,Mity Lite,Resin Chiavari Chair,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",True,True,15
-Sound Systems,Portable PA System,JBL,PartyBox 300,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",False,True,2
-Sound Systems,Wireless Speaker,Bose,SoundLink Revolve+,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",True,True,4
-Sound Systems,Portable PA System,Yamaha,Stagepas 1K,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",False,False,3
-Projectors,Video Projector,Epson,Home Cinema 2150,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",True,False,2
-Projectors,Portable Projector,Optoma,HD146X,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",True,True,3
-Projectors,Multimedia Projector,BenQ,TH671ST,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",True,True,4
-Lighting Equipment,String Lights,Chauvet,LED Fairy Lights,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",True,True,10
-Lighting Equipment,Spotlight,ADJ (American DJ),Mega Go Par64 Plus,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",False,True,6
-Lighting Equipment,Uplighting Fixture,Elation,COLORband T3 BT,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",False,True,8
-Dance Floors,Portable Dance Floor,SnapLock Dance Floors,Event Wood Dance Floor,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",True,True,3
-Dance Floors,LED Dance Floor,Greatmats,Dance Floor Tiles - LED,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",False,True,2
-Dance Floors,Modular Dance Floor,IncStores,Max Tile Portable Dance Floor,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",True,True,4
-Linens and Tableware,Tablecloth,LinenTablecloth,Polyester Rectangular Tablecloth,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",False,False,15
-Linens and Tableware,Chair Cover,BalsaCircle,Spandex Chair Cover,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",True,False,20
-Linens and Tableware,Table Runner,Tiger Chef,Satin Table Runner,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",True,True,10
-Event Decorations,Centerpiece,Unique Industries,Foil Spray Centerpiece,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",True,True,12
-Event Decorations,Balloons,Beistle,Latex Balloons,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",True,True,50
-Event Decorations,Backdrop,Creative Converting,Plastic Tablecloth Backdrop,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",False,True,5
-Food and Beverage Service Equipment,Chafing Dish,Winco,Madison Chafer,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",False,True,3
-Food and Beverage Service Equipment,Beverage Dispenser,Carlisle,Cateraide Insulated Beverage Dispenser,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",True,True,4
-Food and Beverage Service Equipment,Serving Tray,Update International,Round Stainless Steel Serving Tray,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",False,False,6
+Excavator,Heavy Machinery,Caterpillar,336E L,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",'True','False',3
+Excavator,Heavy Machinery,Komatsu,PC210LC-11,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",'False','False',4
+Excavator,Heavy Machinery,Hitachi,ZX350LC-6,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",'True','True',7
+Excavator,Heavy Machinery,Volvo Construction Equipment,EC380E,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",'False','False',4
+Excavator,Heavy Machinery,JCB,JS220,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",'True','True',5
+Bulldozer,Heavy Machinery,Caterpillar,D6T,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",'True','False',6
+Bulldozer,Heavy Machinery,Komatsu,D65EX-18,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",'True','True',3
+Bulldozer,Heavy Machinery,John Deere,850K,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",'True','True',2
+Bulldozer,Heavy Machinery,Liebherr,PR 746,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",'False','True',8
+Bulldozer,Heavy Machinery,Case Construction Equipment,1150M,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",'False','True',1
+Backhoe,Heavy Machinery,JCB,3CX,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",'True','False',2
+Backhoe,Heavy Machinery,Caterpillar,430F/430F IT,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",'False','False',4
+Backhoe,Heavy Machinery,Case Construction Equipment,580N,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",'True','False',8
+Backhoe,Heavy Machinery,Volvo Construction Equipment,BL61B,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",'False','False',3
+Backhoe,Heavy Machinery,New Holland Construction,B95C,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",'True','True',6
+Crane,Heavy Machinery,Liebherr,LTM 1090-4.2,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",'True','False',4
+Crane,Heavy Machinery,Terex Corporation,RT780,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",'True','True',2
+Crane,Heavy Machinery,Tadano Ltd.,GR-800EX,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",'True','False',6
+Crane,Heavy Machinery,Manitowoc Cranes,M-250 Series 2,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",'False','True',7
+Crane,Heavy Machinery,Kobelco Construction Machinery,CKE2500G-2,David Rodriguez,305-555-1234,davidr83@gmail.com,"Miami, Florida",'False','True',3
+Concrete Mixer,Equipment,Caterpillar,CT660,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",'True','True',3
+Concrete Mixer,Equipment,Liebherr,HTM 804,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",'False','True',3
+Concrete Mixer,Equipment,SANY Group,SY306C-8,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",'True','False',4
+Concrete Mixer,Equipment,Putzmeister,PM 702,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",'False','False',5
+Concrete Mixer,Equipment,Schwing Stetter,SLM 4000,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",'True','False',2
+Jackhammer,Tool,Bosch,GSH 16-30,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",'True','False',1
+Jackhammer,Tool,Makita,HM1812,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",'True','True',6
+Jackhammer,Tool,Hilti,TE 3000-AVR,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",'True','False',7
+Jackhammer,Tool,Hitachi Power Tools,H65,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",'False','True',8
+Jackhammer,Tool,Dewalt,D25980,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",'False','False',4
+Scaffolding,Equipment,Layher,Allround Scaffolding,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",'True','True',3
+Scaffolding,Equipment,PERI,PERI UP,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",'False','True',4
+Scaffolding,Equipment,Harsco Infrastructure,Modular Access System,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",'True','True',4
+Scaffolding,Equipment,Altrad,Altrad Plettac Assco,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",'False','True',4
+Scaffolding,Equipment,Waco International,Waco Ringlock,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",'True','False',1
+Forklift,Industrial Vehicle,Toyota Material Handling,8FGCU25,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",'True','False',2
+Forklift,Industrial Vehicle,Hyster-Yale Materials Handling,H190-360HD2,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",'True','True',6
+Forklift,Industrial Vehicle,Crown Equipment Corporation,C-5 Series,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",'True','False',3
+Forklift,Industrial Vehicle,Linde Material Handling,H35D,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",'False','True',4
+Forklift,Industrial Vehicle,Mitsubishi Logisnext,FGE35AN,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",'False','True',7
+Trencher,Machine,Ditch Witch,RT45,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",'True','True',3
+Trencher,Machine,Vermeer Corporation,RTX750,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",'False','True',3
+Trencher,Machine,Tesmec S.p.A.,TRS 1475,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",'True','False',4
+Trencher,Machine,Barreto Manufacturing,1320H,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",'False','False',4
+Trencher,Machine,Toro Company,TRX-26,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",'True','False',6
+Compactor,Equipment,Caterpillar,CS54B,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",'True','False',1
+Compactor,Equipment,Volvo Construction Equipment,SD115B,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",'True','True',1
+Compactor,Equipment,Hamm AG,3412,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",'True','False',4
+Compactor,Equipment,Bomag,BW 211 D-5,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",'False','True',2
+Compactor,Equipment,Dynapac,CC800,Amy Wilson,312-555-5678,amywilson22@yahoo.com,"Chicago, Illinois",'False','False',5
+Drill,Power Tool,Makita,XPH07Z,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','True',4
+Drill,Power Tool,DeWalt,DCD996B,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'False','True',7
+Drill,Power Tool,Bosch,HDS181A,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','True',2
+Drill,Power Tool,Milwaukee,2804-20,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'False','True',5
+Drill,Power Tool,Black & Decker,LDX120C,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','False',3
+Saw,Power Tool,Makita,XSH06Z,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','False',6
+Saw,Power Tool,DeWalt,DWE575,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','True',8
+Saw,Power Tool,Bosch,CS10,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','False',5
+Saw,Power Tool,Milwaukee,2730-20,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'False','True',2
+Saw,Power Tool,Festool,TS 55 REQ,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'False','True',3
+Sander,Power Tool,Makita,XOB01Z,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','True',9
+Sander,Power Tool,DeWalt,DWE6423K,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'False','True',4
+Sander,Power Tool,Bosch,ROS20VSC,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','False',7
+Sander,Power Tool,Festool,ETS EC 125/3 EQ,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'False','False',2
+Sander,Power Tool,Porter-Cable,382,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','False',6
+Power Screwdriver,Power Tool,Makita,XDT16Z,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','False',5
+Power Screwdriver,Power Tool,DeWalt,DCF887B,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','True',3
+Power Screwdriver,Power Tool,Bosch,GSR12V-300FCB22,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','False',4
+Power Screwdriver,Power Tool,Milwaukee,2850-20,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'False','True',2
+Power Screwdriver,Power Tool,Black & Decker,BDCSFL20C,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'False','False',7
+Angle Grinder,Power Tool,Makita,XAG04Z,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','True',3
+Angle Grinder,Power Tool,DeWalt,DWE402,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'False','True',5
+Angle Grinder,Power Tool,Bosch,GWS13-50VSP,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','True',2
+Angle Grinder,Power Tool,Milwaukee,2780-20,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'False','True',6
+Angle Grinder,Power Tool,Metabo,WP9-115,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','False',4
+Impact Wrench,Power Tool,Makita,XWT08Z,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','False',8
+Impact Wrench,Power Tool,DeWalt,DCF899B,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','True',6
+Impact Wrench,Power Tool,Bosch,IXO V Max,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','False',3
+Impact Wrench,Power Tool,Milwaukee,2767-20,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'False','True',5
+Impact Wrench,Power Tool,Ingersoll Rand,W7150-K2,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'False','True',2
+Nail Gun,Power Tool,Makita,XNB01Z,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','True',7
+Nail Gun,Power Tool,DeWalt,DCN692B,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'False','True',3
+Nail Gun,Power Tool,Hitachi,NR90AES1,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','False',4
+Nail Gun,Power Tool,Bostitch,N62FNK-2,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'False','False',6
+Nail Gun,Power Tool,Paslode,902600,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','True',5
+Hammer,Hand Tool,Estwing,E3-16C,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','False',5
+Hammer,Hand Tool,Stanley,51-624,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','True',3
+Hammer,Hand Tool,Vaughan,CF2HC,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','True',4
+Hammer,Hand Tool,Stiletto,TI14SC-F,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'False','True',6
+Hammer,Hand Tool,Craftsman,948962,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'False','True',2
+Screwdriver,Hand Tool,Wiha,32092,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','False',6
+Screwdriver,Hand Tool,Wera,5138216001,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'False','False',5
+Screwdriver,Hand Tool,Klein Tools,603-4,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','True',3
+Screwdriver,Hand Tool,Stanley,66-052,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'False','False',7
+Screwdriver,Hand Tool,Craftsman,47477,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','True',4
+Wrench,Hand Tool,Snap-on,SOEXRM710,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','True',6
+Wrench,Hand Tool,Craftsman,44262,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','True',5
+Wrench,Hand Tool,GearWrench,84912N,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','True',3
+Wrench,Hand Tool,Channellock,8WCB,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'False','False',4
+Wrench,Hand Tool,Crescent,AC24VS,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'False','False',2
+Pliers,Hand Tool,Knipex,8701250,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','True',6
+Pliers,Hand Tool,Klein Tools,D213-9NE,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'False','False',4
+Pliers,Hand Tool,Channellock,440,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','True',7
+Pliers,Hand Tool,Irwin Tools,2078309,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'False','True',3
+Pliers,Hand Tool,Craftsman,45471,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','True',5
+Measuring Tool,Hand Tool,Stanley,33-425,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','True',5
+Measuring Tool,Hand Tool,Lufkin,L625SCTMP,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','False',2
+Measuring Tool,Hand Tool,Milwaukee,48-22-6625,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','False',6
+Measuring Tool,Hand Tool,Johnson Level & Tool,406EM-S,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'False','True',4
+Measuring Tool,Hand Tool,Bosch,GLM 20,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'False','False',3
+Cutting Tool,Hand Tool,Stanley,10-099,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','True',4
+Cutting Tool,Hand Tool,Irwin Tools,2014100,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'False','True',6
+Cutting Tool,Hand Tool,Lenox,12132HT50,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','True',2
+Cutting Tool,Hand Tool,Bahco,2444,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'False','True',5
+Cutting Tool,Hand Tool,Fiskars,375591-1001,Ryan Phillips,407-555-9012,ryan.phillips87@gmail.com,"Orlando, Florida",'True','False',7
+Lawnmower,Garden Lawnmower,Honda,HRX217VKA,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'True','False',5
+Lawnmower,Garden Lawnmower,Toro,20339,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'True','True',3
+Lawnmower,Garden Lawnmower,Husqvarna,LC121P,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'True','False',4
+Lawnmower,Garden Lawnmower,Craftsman,11A-U2V2791,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'False','True',6
+Lawnmower,Garden Lawnmower,EGO,LM2102SP,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'False','True',2
+Trimmer,Garden Trimmer,Black & Decker,LST300,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'True','True',5
+Trimmer,Garden Trimmer,STIHL,FS 40 C-E,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'False','True',3
+Trimmer,Garden Trimmer,Echo,SRM-225,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'True','False',4
+Trimmer,Garden Trimmer,Greenworks,21302,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'False','False',6
+Trimmer,Garden Trimmer,Worx,WG163,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'True','True',2
+Shovel,Garden Shovel,Fiskars,96685935J,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'True','False',6
+Shovel,Garden Shovel,Bully Tools,92712,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'True','True',4
+Shovel,Garden Shovel,Ames,2535600,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'True','True',5
+Shovel,Garden Shovel,'True' Temper,1564500,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'False','True',3
+Shovel,Garden Shovel,Spear & Jackson,4454BS,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'False','True',7
+Rake,Garden Rake,Ames,2915712,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'True','False',6
+Rake,Garden Rake,Bully Tools,92309,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'False','False',4
+Rake,Garden Rake,Corona,RA-20,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'True','False',5
+Rake,Garden Rake,'True' Temper,2914000,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'False','False',3
+Rake,Garden Rake,Gardenite,GGT3,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'True','True',7
+Hedge Trimmer,Garden Hedge Trimmer,Black & Decker,LHT2436,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'True','False',4
+Hedge Trimmer,Garden Hedge Trimmer,STIHL,HS 45,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'True','True',6
+Hedge Trimmer,Garden Hedge Trimmer,Greenworks,22122,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'True','True',3
+Hedge Trimmer,Garden Hedge Trimmer,Husqvarna,122HD60,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'False','True',5
+Hedge Trimmer,Garden Hedge Trimmer,Worx,WG261,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'False','True',2
+Pruning Tool,Garden Pruning Tool,Felco,F-2,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'True','False',5
+Pruning Tool,Garden Pruning Tool,Fiskars,91095935J,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'False','False',3
+Pruning Tool,Garden Pruning Tool,Corona,RS 7265D,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'True','True',4
+Pruning Tool,Garden Pruning Tool,ARS,VS-8R,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'False','False',6
+Pruning Tool,Garden Pruning Tool,Bahco,PG-72,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'True','True',2
+Garden Hose,Garden Garden Hose,Craftsman,CM-IFMD-2,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'True','True',7
+Garden Hose,Garden Garden Hose,Flexzilla,HFZG525YW,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'True','True',5
+Garden Hose,Garden Garden Hose,Gilmour,874501-1001,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'True','True',4
+Garden Hose,Garden Garden Hose,Dramm,10-17003,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'False','False',6
+Garden Hose,Garden Garden Hose,Water Right,WR12420,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'False','False',3
+Sprinkler,Garden Sprinkler,Rain Bird,25PJDAC,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'True','False',6
+Sprinkler,Garden Sprinkler,Orbit,56667N,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'False','False',4
+Sprinkler,Garden Sprinkler,Melnor,XT4200-IN,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'True','True',5
+Sprinkler,Garden Sprinkler,Hunter,PGP-ADJ,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'False','False',3
+Sprinkler,Garden Sprinkler,Gilmour,805013-1001,Henry Cavill,206-555-3456,hcavill34@hotmail.com,"Seattle, Washington",'True','True',7
+Planer,Power Tool,DeWalt,DW735X,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'True','True',5
+Planer,Power Tool,Makita,2012NB,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'True','True',3
+Planer,Power Tool,Bosch,PL2632K,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'True','True',4
+Planer,Power Tool,Jet,JWP-15HH,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'False','False',6
+Planer,Power Tool,Porter-Cable,PC305TP,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'False','False',2
+Router,Power Tool,DeWalt,DWP611,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'True','True',5
+Router,Power Tool,Bosch,1617EVSPK,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'False','False',3
+Router,Power Tool,Makita,RT0701CX7,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'True','True',4
+Router,Power Tool,Festool,OF 1400 EQ,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'False','True',6
+Router,Power Tool,Porter-Cable,892,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'True','True',2
+Chisel,Hand Tool,Narex,863010,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'True','True',5
+Chisel,Hand Tool,Stanley,16-791,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'True','False',3
+Chisel,Hand Tool,Two Cherries,500-1561,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'True','False',4
+Chisel,Hand Tool,Ashley Iles,RD4PCE,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'False','True',6
+Chisel,Hand Tool,Sorby,SET-6ST,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'False','True',2
+Woodworking Bench,Workbench,Sjöbergs,33280,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'True','True',5
+Woodworking Bench,Workbench,Festool,MFT/3-Kapex,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'False','False',3
+Woodworking Bench,Workbench,Kreg,KWS1000,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'True','False',4
+Woodworking Bench,Workbench,Rockler,56204,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'False','True',6
+Woodworking Bench,Workbench,Grizzly Industrial,G9915,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'True','False',2
+Table Saw,Power Tool,SawStop,PCS31230-TGP252,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'True','True',5
+Table Saw,Power Tool,DeWalt,DWE7491RS,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'True','True',3
+Table Saw,Power Tool,Bosch,4100-09,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'True','True',4
+Table Saw,Power Tool,Powermatic,PM1000,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'False','True',6
+Table Saw,Power Tool,Jet,725005K,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'False','False',2
+Miter Saw,Power Tool,DeWalt,DWS780,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'True','False',5
+Miter Saw,Power Tool,Makita,LS1019L,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'False','True',3
+Miter Saw,Power Tool,Bosch,GCM12SD,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'True','True',4
+Miter Saw,Power Tool,Festool,KS 120 REB,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'False','True',6
+Miter Saw,Power Tool,Hitachi,C10FCGS,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'True','False',2
+Band Saw,Power Tool,Laguna Tools,MBAND1412-175,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'True','False',5
+Band Saw,Power Tool,Jet,JWBS-14SFX,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'True','True',3
+Band Saw,Power Tool,Grizzly Industrial,G0555LX,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'True','False',4
+Band Saw,Power Tool,Rikon,10-326,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'False','True',6
+Band Saw,Power Tool,Powermatic,PWBS-14CS,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'False','True',2
+Woodturning Lathe,Power Tool,Jet,JWL-1440VSK,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'True','True',5
+Woodturning Lathe,Power Tool,Laguna Tools,REVO 18|36,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'False','True',3
+Woodturning Lathe,Power Tool,Nova,1624-44,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'True','False',4
+Woodturning Lathe,Power Tool,Powermatic,3520C,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'False','False',6
+Woodturning Lathe,Power Tool,Rikon,70-220VSR,Michelle Adams,504-555-7890,madams90@gmail.com,"New Orleans, Louisiana",'True','True',2
+Pipe Cutters,Plumbing Equipment,Ridgid,31632,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",'True','True',5
+Pipe Cutters,Plumbing Equipment,Milwaukee Tool,48-22-4253,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",'True','True',3
+Pipe Cutters,Plumbing Equipment,Lenox,21011TC138,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",'True','False',4
+Pipe Cutters,Plumbing Equipment,Wheeler-Rex,590,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",'False','False',6
+Pipe Cutters,Plumbing Equipment,Rothenberger,70020,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",'False','True',2
+Pipe Wrenches,Plumbing Equipment,Ridgid,31000,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",'True','False',5
+Pipe Wrenches,Plumbing Equipment,Irwin Tools,2078610,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",'False','True',3
+Pipe Wrenches,Plumbing Equipment,Channellock,804,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",'True','True',4
+Pipe Wrenches,Plumbing Equipment,Knipex,83 30 015,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",'False','True',6
+Pipe Wrenches,Plumbing Equipment,Craftsman,9-45102,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",'True','True',2
+Pipe Threaders,Plumbing Equipment,Ridgid,36475,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",'True','False',5
+Pipe Threaders,Plumbing Equipment,Rothenberger,63204,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",'True','False',3
+Pipe Threaders,Plumbing Equipment,Reed Manufacturing,R12+,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",'True','True',4
+Pipe Threaders,Plumbing Equipment,Wheeler-Rex,3890,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",'False','True',6
+Pipe Threaders,Plumbing Equipment,Oster,784-SL,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",'False','True',2
+Pipe Benders,Plumbing Equipment,Ridgid,38048,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",'True','False',5
+Pipe Benders,Plumbing Equipment,Greenlee,841,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",'False','False',3
+Pipe Benders,Plumbing Equipment,Gardner Bender,930,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",'True','True',4
+Pipe Benders,Plumbing Equipment,Imperial Tool,364-FHB08,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",'False','False',6
+Pipe Benders,Plumbing Equipment,Klein Tools,56206,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",'True','True',2
+Plumbing Snakes,Plumbing Equipment,Ridgid,59802,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",'True','True',5
+Plumbing Snakes,Plumbing Equipment,General Pipe Cleaners,DRZ-PH,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",'True','True',3
+Plumbing Snakes,Plumbing Equipment,Milwaukee Tool,2572B-21,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",'True','True',4
+Plumbing Snakes,Plumbing Equipment,Cobra Products,82550,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",'False','False',6
+Plumbing Snakes,Plumbing Equipment,BrassCraft,BC260,Jessica Sanchez,212-555-2345,jess.sanchez22@gmail.com,"New York City, New York",'False','False',2
+Paint Sprayers,Painting and Decorating Tools,Graco,Magnum X7,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'True','True',3
+Paint Sprayers,Painting and Decorating Tools,Wagner,Flexio 590,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'False','True',5
+Paint Sprayers,Painting and Decorating Tools,Titan,ControlMax 1700 Pro,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'True','True',2
+Paint Sprayers,Painting and Decorating Tools,Fuji Spray,Mini-Mite 4 Platinum,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'False','False',4
+Paint Sprayers,Painting and Decorating Tools,HomeRight,Super Finish Max,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'True','False',6
+Paint Rollers,Painting and Decorating Tools,Purdy,White Dove,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'True','True',5
+Paint Rollers,Painting and Decorating Tools,Wooster Brush Company,Pro Doo-Z,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'True','True',3
+Paint Rollers,Painting and Decorating Tools,Harris,T-Class Super Refresh Roller,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'True','True',4
+Paint Rollers,Painting and Decorating Tools,Shur-Line,Paint + Prime Roller Kit,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'False','True',6
+Paint Rollers,Painting and Decorating Tools,Linzer Products,Golden Eagle,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'False','True',2
+Paint Brushes,Painting and Decorating Tools,Purdy,Monarch Elite,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'True','True',5
+Paint Brushes,Painting and Decorating Tools,Wooster Brush Company,Silver Tip,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'False','False',3
+Paint Brushes,Painting and Decorating Tools,Harris,Taskmasters,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'True','False',4
+Paint Brushes,Painting and Decorating Tools,Benjamin Moore,Advance,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'False','True',6
+Paint Brushes,Painting and Decorating Tools,Proform Technologies,Contractor Series,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'True','True',2
+Wallpaper Steamers,Painting and Decorating Tools,Wagner,715 Power Steamer,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'True','True',5
+Wallpaper Steamers,Painting and Decorating Tools,Earlex,SS77USSG Steammaster,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'True','True',3
+Wallpaper Steamers,Painting and Decorating Tools,HomeRight,SteamMachine,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'True','True',4
+Wallpaper Steamers,Painting and Decorating Tools,Zinsser,DIF Wallpaper Stripper,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'False','True',6
+Wallpaper Steamers,Painting and Decorating Tools,Black & Decker,BDS200,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'False','False',2
+Paint Scrapers,Painting and Decorating Tools,Hyde Tools,10530 MaxxGrip,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'True','False',5
+Paint Scrapers,Painting and Decorating Tools,Warner Manufacturing,8150 ProGrip,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'False','True',3
+Paint Scrapers,Painting and Decorating Tools,Red Devil,3010,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'True','True',4
+Paint Scrapers,Painting and Decorating Tools,Stanley,28-593,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'False','True',6
+Paint Scrapers,Painting and Decorating Tools,Titan Tools,17002,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'True','True',2
+Drop Cloths,Painting and Decorating Tools,Trimaco,Canvas Drop Cloth,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'True','True',5
+Drop Cloths,Painting and Decorating Tools,CoverGrip,Safety Drop Cloth,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'True','True',3
+Drop Cloths,Painting and Decorating Tools,Everhard,8 oz Heavy-Duty Canvas Drop Cloth,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'True','False',4
+Drop Cloths,Painting and Decorating Tools,BATES Choice,Plastic Drop Cloth,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'False','False',6
+Drop Cloths,Painting and Decorating Tools,Simpli-Magic,Clear Plastic Drop Cloth,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'False','True',2
+Paint Trays and Liners,Painting and Decorating Tools,Wooster Brush Company,Paint Tray,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'True','True',5
+Paint Trays and Liners,Painting and Decorating Tools,Linzer Products,Metal Paint Tray,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'False','True',3
+Paint Trays and Liners,Painting and Decorating Tools,Dynamic Paint Products,Deep Well Paint Tray,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'True','True',4
+Paint Trays and Liners,Painting and Decorating Tools,Shur-Line,Paint Tray Kit,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'False','True',6
+Paint Trays and Liners,Painting and Decorating Tools,HANDy Paint Products,Handy Paint Pail,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'True','True',2
+Painters Tape,Painting and Decorating Tools,3M,ScotchBlue Original,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'True','False',5
+Painters Tape,Painting and Decorating Tools,FrogTape,Multi-Surface,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'True','False',3
+Painters Tape,Painting and Decorating Tools,ScotchBlue,Delicate Surfaces,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'True','True',4
+Painters Tape,Painting and Decorating Tools,Shurtape,FrogTape Pro Grade,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'False','True',6
+Painters Tape,Painting and Decorating Tools,Duck Brand,Clean Release,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'False','True',2
+Ladders and Scaffolding,Painting and Decorating Tools,Werner,MT-22,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'True','True',5
+Ladders and Scaffolding,Painting and Decorating Tools,Little Giant,Revolution,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'False','True',3
+Ladders and Scaffolding,Painting and Decorating Tools,Louisville Ladder,FE3220,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'True','True',4
+Ladders and Scaffolding,Painting and Decorating Tools,Gorilla Ladders,5.5 ft. Aluminum Hybrid Ladder,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'False','False',6
+Ladders and Scaffolding,Painting and Decorating Tools,Metaltech,Safeclimb Baker Style Scaffold Tower,Mark Davis,312-555-6789,markdavis82@yahoo.com,"Chicago, Illinois",'True','False',2
+Jacks,Automotive Tools,Craftsman,3-Ton Floor Jack,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'True','True',4
+Jacks,Automotive Tools,Hein-Werner Automotive,2-Ton Service Jack,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'True','True',5
+Jacks,Automotive Tools,Arcan,Quick Rise Steel Floor Jack,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'True','True',2
+Jacks,Automotive Tools,Powerbuilt,All-in-One Bottle Jack,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'False','True',6
+Jacks,Automotive Tools,Torin,Scissor Jack,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'False','True',3
+Wrench Sets,Automotive Tools,Craftsman,Metric and Standard Wrench Set,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'True','True',5
+Wrench Sets,Automotive Tools,GearWrench,120XP Ratcheting Wrench Set,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'False','True',3
+Wrench Sets,Automotive Tools,Snap-on,Flank Drive Plus Combination Wrench Set,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'True','True',4
+Wrench Sets,Automotive Tools,Tekton,Combination Wrench Set with Store and Go Keeper,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'False','False',6
+Wrench Sets,Automotive Tools,Husky,Universal Mechanics Tool Set with Wrenches,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'True','False',2
+Socket Sets,Automotive Tools,Craftsman,1/2-Inch Drive Socket Set,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'True','True',5
+Socket Sets,Automotive Tools,GearWrench,3/8-Inch Drive Socket Set,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'True','True',3
+Socket Sets,Automotive Tools,Snap-on,1/4-Inch Drive Socket Set,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'True','True',4
+Socket Sets,Automotive Tools,Tekton,Impact Socket Set,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'False','True',6
+Socket Sets,Automotive Tools,Husky,Universal Pass-Thru Socket and Ratchet Set,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'False','True',2
+Diagnostic Equipment,Automotive Tools,Autel,MaxiCOM MK808 OBD2 Scanner,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'True','True',5
+Diagnostic Equipment,Automotive Tools,Launch,X431 PROS Mini OBD2 Scan Tool,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'False','False',3
+Diagnostic Equipment,Automotive Tools,Innova,3100i Diagnostic Code Reader,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'True','False',4
+Diagnostic Equipment,Automotive Tools,Actron,CP9690 Elite AutoScanner,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'False','True',6
+Diagnostic Equipment,Automotive Tools,BlueDriver,Bluetooth Pro OBDII Scan Tool,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'True','True',2
+Jack Stands,Automotive Tools,Torin,Steel Jack Stands,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'True','True',5
+Jack Stands,Automotive Tools,Powerbuilt,Unijack Bottle Jack and Jack Stand,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'True','True',3
+Jack Stands,Automotive Tools,Hein-Werner Automotive,Heavy-Duty Jack Stands,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'True','True',4
+Jack Stands,Automotive Tools,OTC,Aluminum Jack Stands,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'False','True',6
+Jack Stands,Automotive Tools,ESCO,3-Ton Jack Stand,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'False','True',2
+Tire Inflators,Automotive Tools,Viair,Portable Air Compressor,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'True','True',5
+Tire Inflators,Automotive Tools,Kensun,AC/DC Tire Inflator,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'False','False',3
+Tire Inflators,Automotive Tools,EPAuto,12V DC Portable Air Compressor,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'True','False',4
+Tire Inflators,Automotive Tools,JACO,Tire Inflator with Pressure Gauge,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'False','True',6
+Tire Inflators,Automotive Tools,AstroAI,Portable Air Compressor Pump,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'True','True',2
+Oil Change Tools,Automotive Tools,Lisle,Oil Filter Wrench,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'True','True',5
+Oil Change Tools,Automotive Tools,Craftsman,Oil Drain Pan,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'True','True',3
+Oil Change Tools,Automotive Tools,Motivx Tools,Oil Filter Wrench Set,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'True','True',4
+Oil Change Tools,Automotive Tools,OEMTOOLS,Oil Funnel,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'False','True',6
+Oil Change Tools,Automotive Tools,Lumax,Oil Drain Plug,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'False','False',2
+Battery Tools,Automotive Tools,NOCO,Genius G3500 Battery Charger,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'True','False',5
+Battery Tools,Automotive Tools,Schumacher,SE-1052 Battery Charger,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'False','True',3
+Battery Tools,Automotive Tools,Battery Tender,Plus Battery Charger,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'True','True',4
+Battery Tools,Automotive Tools,Associated Equipment,Hand-Held Battery Tester,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'False','True',6
+Battery Tools,Automotive Tools,CTEK,Multi US 7002 Battery Charger,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'True','True',2
+Brake Tools,Automotive Tools,OTC,Brake Caliper Tool Set,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'True','True',5
+Brake Tools,Automotive Tools,Lisle,Brake Bleeder Kit,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'True','True',3
+Brake Tools,Automotive Tools,ABN,Brake Pad Spreader Tool,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'True','True',4
+Brake Tools,Automotive Tools,Performance Tool,Brake Pad Gauge,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'False','True',6
+Brake Tools,Automotive Tools,Powerbuilt,Brake Line Flaring Tool Kit,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'False','False',2
+Engine Tools,Automotive Tools,OTC,Spark Plug Socket Set,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'True','False',5
+Engine Tools,Automotive Tools,Lisle,Timing Belt Tool Kit,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'False','True',3
+Engine Tools,Automotive Tools,Actron,Compression Tester Kit,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'True','True',4
+Engine Tools,Automotive Tools,CTA Tools,Engine Cylinder Hone,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'False','True',6
+Engine Tools,Automotive Tools,Lang Tools,Valve Spring Compressor,Andrew Jacobs,713-555-0123,andrewjacobs93@gmail.com,"Houston, Texas",'True','True',2
+Carpet Cleaners,Carpet Cleaners,Bissell,Big Green Professional Carpet Cleaner,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",'True','True',3
+Carpet Cleaners,Carpet Cleaners,Hoover,Power Scrub Elite Pet Upright Carpet Cleaner,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",'True','True',5
+Carpet Cleaners,Carpet Cleaners,Rug Doctor,Deep Carpet Cleaner,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",'True','False',2
+Pressure Washers,Pressure Washers,Karcher,K5 Premium Electric Power Pressure Washer,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",'False','False',4
+Pressure Washers,Pressure Washers,Sun Joe,SPX3000 Electric High Pressure Washer,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",'False','True',6
+Pressure Washers,Pressure Washers,Simpson,MegaShot Gas Pressure Washer,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",'True','True',3
+Vacuum Cleaners,Vacuum Cleaners,Dyson,V11 Animal Cordless Vacuum Cleaner,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",'False','True',7
+Vacuum Cleaners,Vacuum Cleaners,Shark,Navigator Lift-Away Professional NV356E Upright Vacuum,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",'True','True',5
+Vacuum Cleaners,Vacuum Cleaners,Miele,Classic C1 Pure Suction Canister Vacuum Cleaner,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",'False','True',2
+Floor Scrubbers,Floor Scrubbers,Tennant,T300 Walk-Behind Floor Scrubber,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",'True','True',3
+Floor Scrubbers,Floor Scrubbers,Nilfisk,SC351 Compact Walk-Behind Floor Scrubber,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",'True','True',4
+Floor Scrubbers,Floor Scrubbers,Clarke,Focus II Midsize Boost 28 Walk-Behind Floor Scrubber,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",'True','True',2
+Window Cleaners,Window Cleaners,Ettore,Professional Window Cleaning Kit,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",'True','False',5
+Window Cleaners,Window Cleaners,Unger,Professional Microfiber Window Cleaning Kit,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",'False','False',3
+Window Cleaners,Window Cleaners,Pulex,Professional Window Cleaning Squeegee,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",'False','True',2
+Steam Cleaners,Steam Cleaners,McCulloch,MC1385 Deluxe Canister Steam Cleaner,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",'True','True',4
+Steam Cleaners,Steam Cleaners,Dupray,Neat Steam Cleaner Multipurpose Heavy Duty Steamer,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",'False','True',3
+Steam Cleaners,Steam Cleaners,Bissell,PowerFresh Slim Steam Mop,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",'True','True',6
+Air Purifiers,Air Purifiers,Coway,Airmega 400S Smart Air Purifier,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",'False','True',2
+Air Purifiers,Air Purifiers,Honeywell,'True' HEPA Allergen Remover HPA300,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",'True','True',4
+Air Purifiers,Air Purifiers,Blueair,Blue Pure 211+ Air Purifier,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",'True','False',3
+Dusting Tools,Dusting Tools,OXO,Good Grips Microfiber Hand Duster,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",'True','False',6
+Dusting Tools,Dusting Tools,Swiffer,Dusters Heavy Duty Super Extender Starter Kit,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",'True','True',5
+Dusting Tools,Dusting Tools,Casabella,Wayclean Deluxe Microfiber Dusting Pad,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",'False','True',3
+Janitorial Carts and Trolleys,Janitorial Carts and Trolleys,Rubbermaid,Commercial Cleaning Cart with Zippered Yellow Vinyl Bag,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",'False','True',2
+Janitorial Carts and Trolleys,Janitorial Carts and Trolleys,Carlisle,Janitorial Cleaning Cart with 3-Shelf,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",'True','True',4
+Janitorial Carts and Trolleys,Janitorial Carts and Trolleys,Uline,Janitorial Cleaning Cart with 2-Shelf,Daniel Lee,713-555-4567,daniel.lee78@yahoo.com,"Houston, Texas",'False','True',3
+Tents,Structure Tent,E-Z UP,Speed Shelter,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",'True','True',5
+Tents,Canopy Tent,Coleman,Instant Canopy,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",'False','True',3
+Tents,Frame Tent,Big Agnes,Flying Diamond,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",'True','True',2
+Tables,Rectangular Table,Lifetime,Commercial Folding Table,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",'True','False',8
+Tables,Round Table,Flash Furniture,Plastic Folding Table,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",'True','False',6
+Tables,Folding Table,Cosco,Centerfold Table,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",'True','True',10
+Chairs,Folding Chair,Resol,White Plastic Folding Chair,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",'False','True',20
+Chairs,Banquet Chair,Hercules,Padded Stackable Chair,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",'False','True',12
+Chairs,Chiavari Chair,Mity Lite,Resin Chiavari Chair,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",'True','True',15
+Sound Systems,Portable PA System,JBL,PartyBox 300,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",'False','True',2
+Sound Systems,Wireless Speaker,Bose,SoundLink Revolve+,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",'True','True',4
+Sound Systems,Portable PA System,Yamaha,Stagepas 1K,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",'False','False',3
+Projectors,Video Projector,Epson,Home Cinema 2150,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",'True','False',2
+Projectors,Portable Projector,Optoma,HD146X,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",'True','True',3
+Projectors,Multimedia Projector,BenQ,TH671ST,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",'True','True',4
+Lighting Equipment,String Lights,Chauvet,LED Fairy Lights,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",'True','True',10
+Lighting Equipment,Spotlight,ADJ (American DJ),Mega Go Par64 Plus,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",'False','True',6
+Lighting Equipment,Uplighting Fixture,Elation,COLORband T3 BT,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",'False','True',8
+Dance Floors,Portable Dance Floor,SnapLock Dance Floors,Event Wood Dance Floor,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",'True','True',3
+Dance Floors,LED Dance Floor,Greatmats,Dance Floor Tiles - LED,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",'False','True',2
+Dance Floors,Modular Dance Floor,IncStores,Max Tile Portable Dance Floor,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",'True','True',4
+Linens and Tableware,Tablecloth,LinenTablecloth,Polyester Rectangular Tablecloth,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",'False','False',15
+Linens and Tableware,Chair Cover,BalsaCircle,Spandex Chair Cover,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",'True','False',20
+Linens and Tableware,Table Runner,Tiger Chef,Satin Table Runner,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",'True','True',10
+Event Decorations,Centerpiece,Unique Industries,Foil Spray Centerpiece,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",'True','True',12
+Event Decorations,Balloons,Beistle,Latex Balloons,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",'True','True',50
+Event Decorations,Backdrop,Creative Converting,Plastic Tablecloth Backdrop,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",'False','True',5
+Food and Beverage Service Equipment,Chafing Dish,Winco,Madison Chafer,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",'False','True',3
+Food and Beverage Service Equipment,Beverage Dispenser,Carlisle,Cateraide Insulated Beverage Dispenser,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",'True','True',4
+Food and Beverage Service Equipment,Serving Tray,Update International,Round Stainless Steel Serving Tray,Emily Johnson,602-555-7891,ejohnson@live.com,"Phoenix, Arizona",'False','False',6

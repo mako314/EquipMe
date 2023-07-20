@@ -4,29 +4,34 @@ import { useNavigate } from "react-router-dom";
 import {useFormik} from "formik"
 import { object, string, number} from 'yup'
 
-function UserForm({ addUser }){
+function ProductForm({ addEquipment }){
     const [error, setError] = useState()
     const navigate = useNavigate()
 
     const formSchema = object({
         name: string().required('Please enter a name'),
-        age: number().positive().required('You must be 18 years or older to sign up'),
+        quantity: number().positive().required('You cannot list less than 0 items.'),
         email: string().required('Please enter an email address')
     })
 
-    //user POST
+    //Equipment POST
     const formik = useFormik({
         initialValues: {
             name: '',
-            age: '',
-            location: '',
-            profession: '',
+            type: '',
+            make: '',
+            model: '',
+            owner_name: '',
             phone: '',
-            email: ''
+            email: '',
+            location: '',
+            availability: '',
+            delivery: '',
+            quantity: ''
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
-            fetch('http://127.0.0.1:5555/renters' , {
+            fetch('http://127.0.0.1:5555/equipment' , {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -35,17 +40,17 @@ function UserForm({ addUser }){
             })
                 .then(res => {
                     if (res.ok){
-                        res.json().then(user => {
-                            addUser(user)
+                        res.json().then(equipment => {
+                            addEquipment(equipment)
                             navigate('/equipment')
                         })
                     } else {
                         res.json().then(error => setError(error)) //for backend errors
                     }
                 })
+                
         }
     })
-
 
 
 
@@ -75,15 +80,65 @@ function UserForm({ addUser }){
                     </div>
 
                     <div className="submit-form"> 
-                    <label>Age</label>
+                    <label>Type</label>
                     <input
                         type="text"
-                        name="age"
-                        value={formik.values.age}
+                        name="type"
+                        value={formik.values.type}
                         onChange={formik.handleChange}
                     />
                     </div>
 
+                    <div className="submit-form"> 
+                    <label>Manufacturer</label>
+                    <input
+                        type="text"
+                        name="make"
+                        value={formik.values.make}
+                        onChange={formik.handleChange}
+                    />
+                    </div>
+
+                    <div className="submit-form"> 
+                    <label>Model</label>
+                    <input
+                        type="text"
+                        name="model"
+                        value={formik.values.model}
+                        onChange={formik.handleChange}
+                    />
+                    </div>
+
+                    <div className="submit-form"> 
+                    <label>Owner Name</label>
+                    <input
+                        type="text"
+                        name="owner_name"
+                        value={formik.values.owner_name}
+                        onChange={formik.handleChange}
+                    />
+                    </div>
+
+                    <div className="submit-form"> 
+                    <label>Phone</label>
+                    <input
+                        type="text"
+                        name="phone"
+                        value={formik.values.phone}
+                        onChange={formik.handleChange}
+                    />
+                    </div>
+
+                    <div className="submit-form"> 
+                    <label>Email</label>
+                    <input
+                        type="text"
+                        name="email"
+                        value={formik.values.email}
+                        onChange={formik.handleChange}
+                    />
+                    </div>
+                    
                     <div className="submit-form"> 
                     <label>Location</label>
                     <input
@@ -95,34 +150,35 @@ function UserForm({ addUser }){
                     </div>
                     
                     <div className="submit-form"> 
-                    <label>Profession</label>
+                    <label>Availability</label>
                     <input
                         type="text"
-                        name="profession"
-                        value={formik.values.profession}
+                        name="availability"
+                        value={formik.values.availability}
+                        onChange={formik.handleChange}
+                    />
+                    </div>
+
+                    <div className="submit-form"> 
+                    <label>Delivery</label>
+                    <input
+                        type="text"
+                        name="delivery"
+                        value={formik.values.delivery}
                         onChange={formik.handleChange}
                     />
                     </div>
                     
                     <div className="submit-form"> 
-                    <label>Phone</label>
+                    <label>Quantity</label>
                     <input
                         type="text"
-                        name="phone"
-                        value={formik.values.phone}
+                        name="quantity"
+                        value={formik.values.quantity}
                         onChange={formik.handleChange}
                     />
                     </div>
                     
-                    <div className="submit-form"> 
-                    <label>Email</label>
-                    <input
-                        type="text"
-                        name="email"
-                        value={formik.values.email}
-                        onChange={formik.handleChange}
-                    />
-                    </div>
                 </div>
                 <input type='submit' className="submit-btn"/>
             </form>
@@ -130,4 +186,4 @@ function UserForm({ addUser }){
     )
 }
 
-export default UserForm;
+export default ProductForm;

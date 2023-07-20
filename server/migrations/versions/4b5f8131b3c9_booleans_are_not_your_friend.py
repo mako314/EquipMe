@@ -1,8 +1,8 @@
-"""<f columns>
+"""<booleans are not your friend>
 
-Revision ID: e7be7fb7afe2
+Revision ID: 4b5f8131b3c9
 Revises: 
-Create Date: 2023-07-18 11:11:28.262456
+Create Date: 2023-07-20 13:37:32.027942
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'e7be7fb7afe2'
+revision = '4b5f8131b3c9'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -47,8 +47,8 @@ def upgrade():
     sa.Column('phone', sa.String(), nullable=True),
     sa.Column('email', sa.String(), nullable=True),
     sa.Column('location', sa.String(), nullable=True),
-    sa.Column('availability', sa.Boolean(), nullable=True),
-    sa.Column('delivery', sa.Boolean(), nullable=True),
+    sa.Column('availability', sa.String(), nullable=True),
+    sa.Column('delivery', sa.String(), nullable=True),
     sa.Column('quantity', sa.Integer(), nullable=True),
     sa.Column('owner_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['owner_id'], ['owners.id'], ),

@@ -21,7 +21,7 @@ function OwnerDisplay() {
     return equipment.name + " " + equipment.make + " " + equipment.model
   })
 
-  console.log(equipmentNames)
+  // console.log(equipmentNames)
 
 
 

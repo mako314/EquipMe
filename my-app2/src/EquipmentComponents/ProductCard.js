@@ -1,11 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function ProductCard({ id, name, model, make, location }) {
+function ProductCard({ id, name, model, make, location, item, handleEquipmentDelete, handleEditEquipment }) {
 
-    // function handleClick (){
-    //     <Link to={`/equipment/${id}`}></Link>
-    // }
 
     return (
         <li className="cards__item">
@@ -18,6 +15,8 @@ function ProductCard({ id, name, model, make, location }) {
                     <p className="card__text">Available Locations: {location}</p>
                 </div>
              </Link>
+             <button onClick = {() => handleEditEquipment(item)}>EDIT</button>
+             <button onClick = {() => handleEquipmentDelete(item)}>DELETE</button>
             </div>
         </li>
     )
