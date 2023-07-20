@@ -58,12 +58,14 @@ function OwnerEditForm({ownerToEdit, updateOwner}){
             
             <form className="form" onSubmit={formik.handleSubmit}>
                 <div className="signup-form">
+
                     {/* display errors from formik/yup */}
                     { formik.errors && Object.values(formik.errors).map(e => <p>{e}</p>) }
 
                     {/* display errors from backend */}
                     {error && <p>{error}</p>}
-                    <div className="owner-form"> 
+
+                    <div className="submit-form"> 
                     <label>Name</label>
                     <input
                         type="text"
@@ -73,7 +75,7 @@ function OwnerEditForm({ownerToEdit, updateOwner}){
                     />
                     </div>
 
-                    <div className="owner-form"> 
+                    <div className="submit-form"> 
                     <label>Location</label>
                     <input
                         type="text"
@@ -83,7 +85,7 @@ function OwnerEditForm({ownerToEdit, updateOwner}){
                     />
                     </div>
                     
-                    <div className="owner-form"> 
+                    <div className="submit-form"> 
                     <label>Profession</label>
                     <input
                         type="text"
@@ -93,7 +95,7 @@ function OwnerEditForm({ownerToEdit, updateOwner}){
                     />
                     </div>
                     
-                    <div className="owner-form"> 
+                    <div className="submit-form"> 
                     <label>Phone</label>
                     <input
                         type="text"
@@ -103,7 +105,7 @@ function OwnerEditForm({ownerToEdit, updateOwner}){
                     />
                     </div>
                     
-                    <div className="owner-form"> 
+                    <div className="submit-form"> 
                     <label>Email</label>
                     <input
                         type="text"

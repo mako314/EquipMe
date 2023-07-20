@@ -5,11 +5,14 @@ import OwnerCollection from './EquipmentComponents/OwnerCollection';
 import { useNavigate, Route, Routes } from 'react-router-dom';
 import NavBar from './EquipmentComponents/NavBar';
 import RentalCollection from './EquipmentComponents/RentalCollection';
+//-------------------------Display Pages-----------------------------------
 import ProductDisplay from './EquipmentComponents/ProductDisplay';
 import OwnerDisplay from './EquipmentComponents/OwnerDisplay';
+//-------------------------Forms----------------------------------------
 import UserForm from './EquipmentComponents/UserForm';
 import OwnerForm from './EquipmentComponents/OwnerForm'
 import OwnerEditForm from './EquipmentComponents/OwnerEditForm';
+import ProductForm from './EquipmentComponents/ProductForm';
 
 
 
@@ -29,6 +32,8 @@ function App() {
   //const [ownerUpdate, setownerUpdate] = useState([]) // Wont likely need
 
 
+//---------------------------------Posts and general Fetches -----------------------
+//Going to improvise this for the post also
   useEffect(() => {
     fetch("http://127.0.0.1:5555/equipment")
       .then((resp) => resp.json())
@@ -37,6 +42,11 @@ function App() {
       })
   }, [])
 
+  const addEquipment = (equipment) => {
+    setEquipmentArray(equipmentArray => [...equipmentArray, equipment])
+  }
+
+//----------------------------------------------------------------
 
 //These will be the Post useEffects - USERS
   useEffect(() => {
@@ -64,8 +74,9 @@ function App() {
   const addOwner = (owner) => {
     setOwners(owners => [...owners, owner])
   }
-//-------------------------------------------------------------
-// EDIT OWNERS
+// The above is also used for EDIT
+//-----------------------Edit content begins here----------------------------------
+// EDIT OWNERS------
 
 const updateOwner = (ownerToUpdate) => {
   setOwners(owners => owners.map(owner => {
@@ -82,8 +93,7 @@ const handleEdit = (owner) => {
   setOwnerToEdit(owner)
   navigate(`/owner/${owner.id}/edit`)
 }
-
-
+//------------------------------------------------------------------------
 
 
   const filteredEquipmentArray = equipmentArray.filter((item) => {
@@ -105,8 +115,12 @@ const handleEdit = (owner) => {
         <Route path='/rental_agreements' element={<RentalCollection />} />
         <Route path='/equipment/:id' element={<ProductDisplay />} />
         <Route path='/equipment_owners/:id' element={<OwnerDisplay />} />
+
+        {/* Respective Posts */}
         <Route path='/renter_signup' element={<UserForm addUser={addUser}/>} />
         <Route path='/owner_signup' element={<OwnerForm addOwner={addOwner}/>} />
+        <Route path='/equipment_signup' element={<ProductForm addEquipment={addEquipment}/>} />
+        
         <Route path='/owner/:id/edit' element={<OwnerEditForm ownerToEdit={ownerToEdit} updateOwner={updateOwner}/>} />
       </Routes>
 
