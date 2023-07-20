@@ -95,6 +95,13 @@ class Equipment(db.Model, SerializerMixin):
             return email
         else:
             raise ValueError("Please check that you entered the email correctly")
+        
+    @validates("quantity")
+    def validates_quanity(self, key, quantity):
+        if quantity > 0:
+            return quantity
+        else:
+            raise ValueError("You cannot list nothing, please enter a quantity greater than 0.")
 
 
 
