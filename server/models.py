@@ -26,7 +26,7 @@ class UserRenter(db.Model, SerializerMixin):
     # and reviews
 
     #relationships 
-    #cascade for this
+    #do a cascade to make life easier
     agreements = db.relationship('RentalAgreement', back_populates="renter", overlaps="renters,owners")
 
     #Serialization rules
@@ -119,6 +119,8 @@ class Equipment(db.Model, SerializerMixin):
     quantity = db.Column(db.Integer)
 
     #relationship
+    #do a cascade to make life easier
+
     owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'))
 
     owner = db.relationship("EquipmentOwner", back_populates="equipment", overlaps="owners,equipments" )
@@ -155,6 +157,7 @@ class RentalAgreement(db.Model, SerializerMixin):
     #need a way to grab the equipment
 
     #relationships
+    #do a cascade to make life easier
     renter_id = db.Column(db.Integer, db.ForeignKey('renters.id'))
     equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
 
