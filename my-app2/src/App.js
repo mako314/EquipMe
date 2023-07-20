@@ -31,13 +31,13 @@ function App() {
 
   //These useStates will handle PATCH.
   const [ownerToEdit, setOwnerToEdit] = useState([])
-  const [equipmentToEdit, setEquipmentToEdit] = useState([]) 
+  const [equipmentToEdit, setEquipmentToEdit] = useState([])
 
   //Do I even need two state variables to do this ? Turns out all original fetches work
 
 
-//---------------------------------Posts and general Fetches -----------------------
-//Going to improvise this for the post also / maybe patch also?
+  //---------------------------------Posts and general Fetches -----------------------
+  //Going to improvise this for the post also / maybe patch also?
   useEffect(() => {
     fetch("http://127.0.0.1:5555/equipment")
       .then((resp) => resp.json())
@@ -50,9 +50,9 @@ function App() {
     setEquipmentArray(equipmentArray => [...equipmentArray, equipment])
   }
 
-//----------------------------------------------------------------
+  //----------------------------------------------------------------
 
-//These will be the Post useEffects - USERS
+  //These will be the Post useEffects - USERS
   useEffect(() => {
     fetch("http://127.0.0.1:5555/renters")
       .then((resp) => resp.json())
@@ -64,9 +64,9 @@ function App() {
   const addUser = (user) => {
     setUsers(users => [...users, user])
   }
-//--------------------------------------------
+  //--------------------------------------------
 
-//These will be the Post useEffects - OWNERS -- THIS HAD RENTERS
+  //These will be the Post useEffects - OWNERS -- THIS HAD RENTERS
   useEffect(() => {
     fetch("http://127.0.0.1:5555/equipment_owners")
       .then((resp) => resp.json())
@@ -79,101 +79,101 @@ function App() {
     setOwners(owners => [...owners, owner])
   }
 
-// The above is also used for EDIT by that I mean the state variable setOwners
+  // The above is also used for EDIT by that I mean the state variable setOwners
 
-//-----------------------Edit content begins here----------------------------------
-// EDIT/PATCH OWNERS-------------------------
+  //-----------------------Edit content begins here----------------------------------
+  // EDIT/PATCH OWNERS-------------------------
 
-const updateOwner = (ownerToUpdate) => {
-  setOwners(owners => owners.map(owner => {
-    if (owner.id === ownerToUpdate.id){
-      return ownerToUpdate
-    } else {
-      return owner
-    }
-  }))
+  const updateOwner = (ownerToUpdate) => {
+    setOwners(owners => owners.map(owner => {
+      if (owner.id === ownerToUpdate.id) {
+        return ownerToUpdate
+      } else {
+        return owner
+      }
+    }))
 
-}
+  }
 
-const handleEditOwner = (owner) => {
-  setOwnerToEdit(owner)
-  navigate(`/owner/${owner.id}/edit`)
-}
-
-
-//EDIT/PATCH Equipment --------------------------
-
-const updateEquipment = (equipmentToUpdate) => {
-  setEquipmentArray(equipments => equipments.map(equipment => {
-    if (equipment.id === equipmentToUpdate.id){
-      return equipmentToUpdate
-    } else {
-      return equipment
-    }
-  }))
-
-}
-
-const handleEditEquipment = (equipment) => {
-  setEquipmentToEdit(equipment)
-  navigate(`/equipment/${equipment.id}/edit`)
-}
-
-//-----------------------------------------DELETE CONTENT BELOW--------------------
-// ------------------------delete here FOR OWNER-------------------------------
-
-const deleteOwner = (ownerToDelete) => {
-  setOwners(owners => 
-    owners.filter(owner => owner.id !== ownerToDelete.id))
-}
+  const handleEditOwner = (owner) => {
+    setOwnerToEdit(owner)
+    navigate(`/owner/${owner.id}/edit`)
+  }
 
 
-const handleOwnerDelete = (owner) => {
-  fetch(`http://127.0.0.1:5555/equipment_owner/${owner.id}`, {
-    method: "DELETE"
-  })
-  .then(() =>{
-    deleteOwner(owner)
-    navigate('/equipment_owners')
-  })
-}
+  //EDIT/PATCH Equipment --------------------------
+
+  const updateEquipment = (equipmentToUpdate) => {
+    setEquipmentArray(equipments => equipments.map(equipment => {
+      if (equipment.id === equipmentToUpdate.id) {
+        return equipmentToUpdate
+      } else {
+        return equipment
+      }
+    }))
+
+  }
+
+  const handleEditEquipment = (equipment) => {
+    setEquipmentToEdit(equipment)
+    navigate(`/equipment/${equipment.id}/edit`)
+  }
+
+  //-----------------------------------------DELETE CONTENT BELOW--------------------
+  // ------------------------delete here FOR OWNER-------------------------------
+
+  const deleteOwner = (ownerToDelete) => {
+    setOwners(owners =>
+      owners.filter(owner => owner.id !== ownerToDelete.id))
+  }
 
 
-//--------------------Delete for PRODUCTS/EQUIPMENT below---------------------------------------------------
-
-const deleteEquipment = (equipmentToDelete) => {
-  setEquipmentArray(equipments => 
-    equipments.filter(equipment => equipment.id !== equipmentToDelete.id))
-}
-
-const handleEquipmentDelete = (equipment) => {
-  fetch(`http://127.0.0.1:5555/equipment/${equipment.id}`, {
-    method: "DELETE"
-  })
-  .then(() =>{
-    deleteEquipment(equipment)
-    navigate('/equipment')
-  })
-}
-//------------------------------------------------------------------------------------------------------
+  const handleOwnerDelete = (owner) => {
+    fetch(`http://127.0.0.1:5555/equipment_owner/${owner.id}`, {
+      method: "DELETE"
+    })
+      .then(() => {
+        deleteOwner(owner)
+        navigate('/equipment_owners')
+      })
+  }
 
 
+  //--------------------Delete for PRODUCTS/EQUIPMENT below---------------------------------------------------
+
+  const deleteEquipment = (equipmentToDelete) => {
+    setEquipmentArray(equipments =>
+      equipments.filter(equipment => equipment.id !== equipmentToDelete.id))
+  }
+
+  const handleEquipmentDelete = (equipment) => {
+    fetch(`http://127.0.0.1:5555/equipment/${equipment.id}`, {
+      method: "DELETE"
+    })
+      .then(() => {
+        deleteEquipment(equipment)
+        navigate('/equipment')
+      })
+  }
+  //------------------------------------------------------------------------------------------------------
 
 
 
-// I believe this is the search -----------------------
+
+
+  // I believe this is the search -----------------------
   const filteredEquipmentArray = equipmentArray.filter((item) => {
     return item.model.toLowerCase().includes(searchTerm.toLowerCase()) || item.location.toLowerCase().includes(searchTerm.toLowerCase()) || item.make.toLowerCase().includes(searchTerm.toLowerCase()) || item.name.toLowerCase().includes(searchTerm.toLowerCase())
   })
-//-----------------------------------------------------
+  //-----------------------------------------------------
 
   return (
     <div >
       <NavBar setSearchTerm={setSearchTerm} />
       <Routes>
 
-        <Route path='/equipment' element={<ProductCollection equipmentArray={equipmentArray} handleEquipmentDelete={handleEquipmentDelete} handleEditEquipment={handleEditEquipment}/>} />
-        <Route path='/equipment_owners' element={<OwnerCollection searchTerm={searchTerm} handleEditOwner={handleEditOwner} handleOwnerDelete={handleOwnerDelete} equipmentOwnerArray={owners}/>} />
+        <Route path='/equipment' element={<ProductCollection equipmentArray={filteredEquipmentArray} handleEquipmentDelete={handleEquipmentDelete} handleEditEquipment={handleEditEquipment} />} />
+        <Route path='/equipment_owners' element={<OwnerCollection searchTerm={searchTerm} handleEditOwner={handleEditOwner} handleOwnerDelete={handleOwnerDelete} equipmentOwnerArray={owners} />} />
         <Route path='/rental_agreements' element={<RentalCollection />} />
 
         {/* ID ROUTES */}
@@ -181,13 +181,13 @@ const handleEquipmentDelete = (equipment) => {
         <Route path='/equipment_owners/:id' element={<OwnerDisplay />} />
 
         {/* Respective Posts */}
-        <Route path='/renter_signup' element={<UserForm addUser={addUser}/>} />
-        <Route path='/owner_signup' element={<OwnerForm addOwner={addOwner}/>} />
-        <Route path='/equipment_signup' element={<ProductForm addEquipment={addEquipment}/>} />
-        
+        <Route path='/renter_signup' element={<UserForm addUser={addUser} />} />
+        <Route path='/owner_signup' element={<OwnerForm addOwner={addOwner} />} />
+        <Route path='/equipment_signup' element={<ProductForm addEquipment={addEquipment} />} />
+
         {/* Respective Edit Routes */}
-        <Route path='/owner/:id/edit' element={<OwnerEditForm ownerToEdit={ownerToEdit} updateOwner={updateOwner}/>} />
-        <Route path='/equipment/:id/edit' element={<ProductEditForm equipmentToEdit={equipmentToEdit} updateEquipment={updateEquipment}/>} />      
+        <Route path='/owner/:id/edit' element={<OwnerEditForm ownerToEdit={ownerToEdit} updateOwner={updateOwner} />} />
+        <Route path='/equipment/:id/edit' element={<ProductEditForm equipmentToEdit={equipmentToEdit} updateEquipment={updateEquipment} />} />
       </Routes>
 
     </div>
