@@ -184,6 +184,7 @@ class EquipmentOwnerById(Resource):
     #DELETE OWNER by ID -- DONE
     def delete(self, id):
         equip_owner = EquipmentOwner.query.filter(EquipmentOwner.id == id).first()
+        print(equip_owner.id)
         if equip_owner:
             # owner.agreements and owner.equipment do I need to cycle through and delete the agreement relationship also?
             db.session.delete(equip_owner)
@@ -207,7 +208,7 @@ class Equipments(Resource):
     #get ALL equipment -- DONE
     def get(self):
         equipment = [equipment.to_dict(
-            only =('id','model','name','make','location')
+            only =('id','model','name','make','location', 'type','phone','email','location','availability','delivery','quantity')
         ) for equipment in Equipment.query.all()]
 
         response = make_response(equipment, 200)
@@ -238,7 +239,10 @@ class Equipments(Resource):
 
         response = make_response(new_equipment.to_dict(), 201)
         return response
-
+    
+        #if data['availability] == 'yes'
+        #availability = True
+        
         #except ValueError: 
         # NEED TO WRITE VALIDATIONS
 

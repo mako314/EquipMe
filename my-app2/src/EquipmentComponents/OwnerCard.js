@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function OwnerCard({ id, email, name, location, phone, equipmentArray, handleEdit, item}) {
+function OwnerCard({ id, email, name, location, phone, equipmentArray, handleEditOwner, item, handleOwnerDelete}) {
     
     const equipmentNames = equipmentArray?.map((data) => {
         return data.make + " " + data.model + " - "
@@ -23,7 +23,8 @@ function OwnerCard({ id, email, name, location, phone, equipmentArray, handleEdi
                     <p className="card__text">Owner Email: {email}</p>
                 </div>
             </Link>
-            <button onClick = {() => handleEdit(item)}>EDIT</button>
+            <button onClick = {() => handleEditOwner(item)}>EDIT</button>
+            <button onClick = {() => handleOwnerDelete(item)}>DELETE</button>
             </div>
         </li>
     )

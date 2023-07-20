@@ -75,8 +75,8 @@ class Equipment(db.Model, SerializerMixin):
     phone = db.Column(db.String) #this and the one below are recently added.
     email = db.Column(db.String)
     location = db.Column(db.String)
-    availability = db.Column(db.Boolean)
-    delivery = db.Column(db.Boolean)
+    availability = db.Column(db.String)
+    delivery = db.Column(db.String)
     quantity = db.Column(db.Integer)
 
     #relationship
