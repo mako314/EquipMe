@@ -225,31 +225,32 @@ class Equipments(Resource):
     #NEED TO UPDATE FOR VALIDATIONS
     def post(self):
         data = request.get_json()
-        #try:
+        try:
         #need a way to input, owner_id and owner maybe a 2 step process?
-        new_equipment = Equipment(
-            name = data['name'],
-            type = data['type'],
-            make = data['make'],
-            model = data['model'],
-            owner_name = data['owner_name'],
-            phone = data['phone'],
-            email = data['email'],
-            location = data['location'],
-            availability = data['availability'],
-            delivery = data['delivery'],
-            quantity = data['quantity']
-        )
-        db.session.add(new_equipment)
-        db.session.commit()
+            new_equipment = Equipment(
+                name = data['name'],
+                type = data['type'],
+                make = data['make'],
+                model = data['model'],
+                owner_name = data['owner_name'],
+                phone = data['phone'],
+                email = data['email'],
+                location = data['location'],
+                availability = data['availability'],
+                delivery = data['delivery'],
+                quantity = data['quantity']
+            )
+            db.session.add(new_equipment)
+            db.session.commit()
 
-        response = make_response(new_equipment.to_dict(), 201)
-        return response
-    
-        #if data['availability] == 'yes'
-        #availability = True
+            response = make_response(new_equipment.to_dict(), 201)
+            return response
         
-        #except ValueError: 
+            #if data['availability] == 'yes'
+            #availability = True
+        
+        except ValueError:
+            return make_response({"error": ["validations errors, check your input and try again"]} , 400)
         # NEED TO WRITE VALIDATIONS
 
 api.add_resource(Equipments, '/equipment')
@@ -293,17 +294,18 @@ class EquipmentByID(Resource):
         equipment = Equipment.query.filter(Equipment.id == id).first()
 
         if equipment:
-            #try:
-            #going to need try and except if and when we do validations
-            data = request.get_json()
-            for key in data:
-                setattr(equipment, key, data[key])
-            db.session.add(equipment)
-            db.session.commit()
+            try:
+                #going to need try and except if and when we do validations
+                data = request.get_json()
+                for key in data:
+                    setattr(equipment, key, data[key])
+                db.session.add(equipment)
+                db.session.commit()
 
-            response = make_response(equipment.to_dict(), 202)
-            return response
-            #except ValueError:
+                response = make_response(equipment.to_dict(), 202)
+                return response
+            except ValueError:
+                return make_response({"error": ["validations errors, check your input and try again"]} , 400)
         else:
             response = make_response({
             "error": "Equipment not found"

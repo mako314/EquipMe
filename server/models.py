@@ -128,7 +128,6 @@ class Equipment(db.Model, SerializerMixin):
     #Serialization rules
     serialize_rules = ('-owner.equipment', '-agreements.equipment' )
 
-    #DONT FORGET TRY AND EXCEPTS IN POSTS AND PATCHES
     #VALIDATIONS BEGIN HERE
     @validates("email")
     def validates_email(self, key, email):
