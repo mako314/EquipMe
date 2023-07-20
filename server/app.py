@@ -208,7 +208,7 @@ class Equipments(Resource):
     #get ALL equipment -- DONE
     def get(self):
         equipment = [equipment.to_dict(
-            only =('id','model','name','make','location', 'type','phone','email','location','availability','delivery','quantity')
+            only =('id','model','name','make','location', 'type','phone','email','location','availability','delivery','quantity') #needed to include all of this for when one patches
         ) for equipment in Equipment.query.all()]
 
         response = make_response(equipment, 200)

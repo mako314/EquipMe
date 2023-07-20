@@ -89,6 +89,14 @@ class Equipment(db.Model, SerializerMixin):
     #Serialization rules
     serialize_rules = ('-owner.equipment', '-agreements.equipment' )
 
+    @validates("email")
+    def validates_email(self, key, email):
+        if 0> len(email) and "@"  in email:
+            return email
+        else:
+            raise ValueError("Please check that you entered the email correctly")
+
+
 
 class RentalAgreement(db.Model, SerializerMixin):
     __tablename__ = "agreements"
