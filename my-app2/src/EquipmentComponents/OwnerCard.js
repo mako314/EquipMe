@@ -1,32 +1,38 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-function OwnerCard({ id, email, name, location, phone, equipmentArray, handleEditOwner, item, handleOwnerDelete}) {
-    
-    const equipmentNames = equipmentArray?.map((data) => {
-        return data.make + " " + data.model + " - "
-    })
-    
+function OwnerCard({ id, email, name, location, phone, equipmentArray, handleEditOwner, item, handleOwnerDelete }) {
+
 
     //test can likely delete below
     // console.log(item)
 
+    const navigate = useNavigate();
+
+    function handleClick(e) {
+        navigate(`/equipment_owner/${id}`)
+    }
+
     return (
-        <li className="cards__item">
-            <div className="card">
-            <Link to={`/equipment_owners/${id}`}>
-                <div className="card__content">
-                    <div className="card__title">Owner Name: {name}</div>
-                    <p className="card__text">Owner Location: {location}</p>
-                    <p className="card__text">Owner Phone Number: {phone}</p>
-                    <p className="card__text">Owner Equipment Names: {equipmentNames}</p>
-                    <p className="card__text">Owner Email: {email}</p>
+
+        <div className="min-h-screen bg-gray-100 flex items-center">
+            <div className="container mx-auto p-9 bg-white max-w-sm rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition duration-300">
+                <img className="rounded-xl" src="https://static.vecteezy.com/system/resources/previews/007/335/692/original/account-icon-template-vector.jpg" alt="" />
+                <div className="flex justify-between items-center">
+                    <div>
+                        <h1 className="mt-5 text-2xl font-semibold">{name}</h1>
+                        <p className="mt-2">{email} <br /> {phone} <br /> {location} </p>
+                    </div>
+                    <div>
+                        <button className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700" onClick={handleClick}>More Info</button>
+                        <button className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700" onClick={() => handleEditOwner(item)}>Edit Owner</button>
+                        <button className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700" onClick={() => handleOwnerDelete(item)}>Delete Owner</button>
+                    </div>
                 </div>
-            </Link>
-            <button onClick = {() => handleEditOwner(item)}>EDIT</button>
-            <button onClick = {() => handleOwnerDelete(item)}>DELETE</button>
             </div>
-        </li>
+        </div>
+
+
     )
 }
 
