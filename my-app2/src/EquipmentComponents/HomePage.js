@@ -2,7 +2,7 @@ import React from 'react';
 import 'tailwindcss/tailwind.css';
 import { useNavigate } from 'react-router-dom';
 
-function HomePage({ equipmentArray }) {
+function HomePage({ equipmentArray, setFeaturedRental }) {
 
     const featuredModel = "336E L";
     const navigate = useNavigate();
@@ -12,6 +12,16 @@ function HomePage({ equipmentArray }) {
             return item.model == featuredModel
         })
         navigate(`/equipment/${test_item[0].id}`)
+    }
+
+    function handleClick2(e) {
+        const test_item = equipmentArray?.filter((item) => {
+            return item.model == featuredModel
+        })
+        setFeaturedRental(test_item)
+        navigate(`/rental_signup_prepop`)
+        // Set a state from app.js that is within rental form, and only when set will it prepopulate the form
+
     }
 
     // console.log(equipmentArray[116])
@@ -29,8 +39,8 @@ function HomePage({ equipmentArray }) {
                         Looking to rent an excavator for your construction or mining project? Consider the 336E L Excavator by Caterpillar Inc. This robust and reliable model offers impressive digging capabilities and comes equipped with a comfortable operator cabin, ensuring efficiency and ease of operation. Rent the 336E L Excavator today to tackle your earth-moving tasks with confidence and precision
                     </p>
                     <div className="flex justify-center">
-                        <button className="inline-flex text-white bg-amber-500 border-0 py-2 px-6 focus:outline-none hover:bg-gray-600 rounded text-lg">Rent</button>
-                        <button className="ml-4 inline-flex text-white bg-amber-500 border-0 py-2 px-6 focus:outline-none hover:bg-gray-600 rounded text-lg">Info</button>
+                        <button className="inline-flex text-white bg-amber-500 border-0 py-2 px-6 focus:outline-none hover:bg-gray-600 rounded text-lg" onClick={handleClick2}>Rent</button>
+                        <button className="ml-4 inline-flex text-white bg-amber-500 border-0 py-2 px-6 focus:outline-none hover:bg-gray-600 rounded text-lg" onClick={handleClick}>Info</button>
 
                     </div>
                 </div>
