@@ -11,6 +11,7 @@ function RentalCollection({ }) {
                 setRentalAgreementArray(data)
             })
     }, [])
+    console.log(rentalAgreementArray)
 
     const rentalCards = rentalAgreementArray?.map((item) => {
         return <RentalCard key={item.id} equipmentName={item.equipment.name} rentalDates={item.rental_dates} renterName={item.renter.name} />
