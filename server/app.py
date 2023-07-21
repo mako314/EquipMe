@@ -335,6 +335,18 @@ class EquipmentByID(Resource):
         
 api.add_resource(EquipmentByID, '/equipment/<int:id>')
 
+#GET ALL EQUIPMENT BY THEIR OWNER ID, THIS IS USED IN OUR RENTAL AGREEMENT FORM
+class AllEquipmentByID(Resource):
+    def get(self,id):
+        equipment = [equipment.to_dict(
+            only =('id','model','name','make','location', 'type','phone','email','location','availability','delivery','quantity', 'owner_name') #needed to include all of this for when one patches
+        ) for equipment in Equipment.query.filter(Equipment.owner_id == id).all()]
+
+        response = make_response(equipment, 200)
+
+        return response
+
+api.add_resource(AllEquipmentByID, '/all_equipment/<int:id>')
 
 #-----------------------------------------------Rental Agreement Classes-----------------------------------------------------------------------------
 #Rental agreements, need a post and a patch
