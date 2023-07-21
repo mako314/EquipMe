@@ -16,7 +16,7 @@ function HomePage({ equipmentArray }) {
 
     console.log(equipmentArray[116])
 
-
+    // Featured item everything is hard coded btw
     const featuredThing =
         <section class="text-gray-600 body-font">
             <div class="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
@@ -30,7 +30,7 @@ function HomePage({ equipmentArray }) {
                     </p>
                     <div class="flex justify-center">
                         <button class="inline-flex text-white bg-amber-500 border-0 py-2 px-6 focus:outline-none hover:bg-gray-600 rounded text-lg">Rent</button>
-                        <button class="ml-4 inline-flex text-white bg-amber-500 border-0 py-2 px-6 focus:outline-none hover:bg-gray-600 rounded text-lg" onClick={handleClick}>Info</button>
+                        <button class="ml-4 inline-flex text-white bg-amber-500 border-0 py-2 px-6 focus:outline-none hover:bg-gray-600 rounded text-lg">Info</button>
 
                     </div>
                 </div>
@@ -40,13 +40,15 @@ function HomePage({ equipmentArray }) {
             </div>
         </section>
 
+
+    // three item portion
     const threeItems =
         <div>
             <section class="text-gray-600 body-font">
                 <div class="container px-5 py-24 mx-auto">
                     <div class="flex flex-col">
                         <div class="h-1 bg-gray-200 rounded overflow-hidden">
-                            <div class="w-24 h-full bg-indigo-500"></div>
+                            <div class="w-24 h-full bg-amber-500"></div>
                         </div>
                         <div class="flex flex-wrap sm:flex-row flex-col py-6 mb-12">
                             <h1 class="sm:w-2/5 text-gray-900 font-medium title-font text-2xl mb-2 sm:mb-0"> Please Rent From us We're still Paying our Government Bailout</h1>
@@ -60,7 +62,7 @@ function HomePage({ equipmentArray }) {
                             </div>
                             <h2 class="text-xl font-medium title-font text-gray-900 mt-5">Toro 20339 Lawnmower</h2>
                             <p class="text-base leading-relaxed mt-2">Toro 20339 Lawnmower, a powerful and efficient machine perfect for tackling any lawn size. Easy-to-use, it features self-propelled technology and a wide cutting deck for a seamless mowing experience.</p>
-                            <a class="text-indigo-500 inline-flex items-center mt-3">Learn More
+                            <a class="text-purple-500 inline-flex items-center mt-3">Learn More
                                 <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
                                     <path d="M5 12h14M12 5l7 7-7 7"></path>
                                 </svg>
@@ -73,7 +75,7 @@ function HomePage({ equipmentArray }) {
                             </div>
                             <h2 class="text-xl font-medium title-font text-gray-900 mt-5">Toyota Material Handling 8FGCU25</h2>
                             <p class="text-base leading-relaxed mt-2">Toyota Material Handling 8FGCU25, a reliable and versatile forklift with a maximum lifting capacity of 5,000 pounds. Equipped with advanced safety features and smooth maneuverability, it's the ideal choice for handling heavy loads in various industrial settings.</p>
-                            <a class="text-indigo-500 inline-flex items-center mt-3">Learn More
+                            <a class="text-purple-500 inline-flex items-center mt-3">Learn More
                                 <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
                                     <path d="M5 12h14M12 5l7 7-7 7"></path>
                                 </svg>
@@ -87,19 +89,22 @@ function HomePage({ equipmentArray }) {
                             <h2 class="text-xl font-medium title-font text-gray-900 mt-5">Laguna Tools REVO 18|36</h2>
                             <p class="text-base leading-relaxed mt-2">The Laguna Tools REVO 18|36 woodworking lathe for precision and versatility in your woodworking projects. With its spacious capacity and user-friendly controls, this lathe is perfect for both beginners and experienced woodworkers alike.
                             </p>
-                            <a class="text-indigo-500 inline-flex items-center mt-3">Learn More
+                            <a class="text-purple-500 inline-flex items-center mt-3">Learn More
                                 <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
                                     <path d="M5 12h14M12 5l7 7-7 7"></path>
                                 </svg>
                             </a>
                             {/* this needs to be a button */}
                         </div>
+                        <div class="lg:max-w-lg lg:w-full md:w-1/2 w-5/6">
+                            <img class="object-cover object-center rounded" alt="hero" src="https://www.trucksnl.com/pictures/ad-7355885-87863fddf344dc0d/crawler_excavator_caterpillar_336el_2014_7355885.jpg?format=jpg&quality=70&w=1110&h=832" />
+                        </div>
                     </div>
                 </div>
             </section>
         </div>
 
-
+    //small tutorial for getting a rental or listing
     const tutorial =
         <div>
             <section class="text-gray-600 body-font">
@@ -110,62 +115,46 @@ function HomePage({ equipmentArray }) {
                                 <div class="h-full w-10 absolute inset-0 flex items-center justify-center">
                                     <div class="h-full w-1 bg-gray-200 pointer-events-none"></div>
                                 </div>
-                                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-indigo-500 inline-flex items-center justify-center text-white relative z-10">
-                                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
-                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-amber-500 inline-flex items-center justify-center text-white relative z-10">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
                                     </svg>
                                 </div>
                                 <div class="flex-grow pl-4">
                                     <h2 class="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">STEP 1</h2>
-                                    <p class="leading-relaxed">VHS cornhole pop-up, try-hard 8-bit iceland helvetica. Kinfolk bespoke try-hard cliche palo santo offal.</p>
+                                    <p class="leading-relaxed">Create an account or a listing.</p>
                                 </div>
                             </div>
                             <div class="flex relative pb-12">
                                 <div class="h-full w-10 absolute inset-0 flex items-center justify-center">
                                     <div class="h-full w-1 bg-gray-200 pointer-events-none"></div>
                                 </div>
-                                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-indigo-500 inline-flex items-center justify-center text-white relative z-10">
-                                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
-                                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-amber-500 inline-flex items-center justify-center text-white relative z-10">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
                                     </svg>
                                 </div>
                                 <div class="flex-grow pl-4">
                                     <h2 class="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">STEP 2</h2>
-                                    <p class="leading-relaxed">Vice migas literally kitsch +1 pok pok. Truffaut hot chicken slow-carb health goth, vape typewriter.</p>
+                                    <p class="leading-relaxed">Book equipment, or connect with professionals looking to rent.</p>
                                 </div>
                             </div>
                             <div class="flex relative pb-12">
                                 <div class="h-full w-10 absolute inset-0 flex items-center justify-center">
                                     <div class="h-full w-1 bg-gray-200 pointer-events-none"></div>
                                 </div>
-                                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-indigo-500 inline-flex items-center justify-center text-white relative z-10">
-                                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
-                                        <circle cx="12" cy="5" r="3"></circle>
-                                        <path d="M12 22V8M5 12H2a10 10 0 0020 0h-3"></path>
+                                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-amber-500 inline-flex items-center justify-center text-white relative z-10">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M11.35 3.836c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m8.9-4.414c.376.023.75.05 1.124.08 1.131.094 1.976 1.057 1.976 2.192V16.5A2.25 2.25 0 0118 18.75h-2.25m-7.5-10.5H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V18.75m-7.5-10.5h6.375c.621 0 1.125.504 1.125 1.125v9.375m-8.25-3l1.5 1.5 3-3.75" />
                                     </svg>
                                 </div>
                                 <div class="flex-grow pl-4">
                                     <h2 class="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">STEP 3</h2>
-                                    <p class="leading-relaxed">Coloring book nar whal glossier master cleanse umami. Salvia +1 master cleanse blog taiyaki.</p>
-                                </div>
-                            </div>
-                            <div class="flex relative pb-12">
-                                <div class="h-full w-10 absolute inset-0 flex items-center justify-center">
-                                    <div class="h-full w-1 bg-gray-200 pointer-events-none"></div>
-                                </div>
-                                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-indigo-500 inline-flex items-center justify-center text-white relative z-10">
-                                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
-                                        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
-                                        <circle cx="12" cy="7" r="4"></circle>
-                                    </svg>
-                                </div>
-                                <div class="flex-grow pl-4">
-                                    <h2 class="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">STEP 4</h2>
-                                    <p class="leading-relaxed">VHS cornhole pop-up, try-hard 8-bit iceland helvetica. Kinfolk bespoke try-hard cliche palo santo offal.</p>
+                                    <p class="leading-relaxed">Sign a rental agreement that's been officiated by our team of lawyers.</p>
                                 </div>
                             </div>
                             <div class="flex relative">
-                                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-indigo-500 inline-flex items-center justify-center text-white relative z-10">
+                                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-amber-500 inline-flex items-center justify-center text-white relative z-10">
                                     <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
                                         <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
                                         <path d="M22 4L12 14.01l-3-3"></path>
@@ -173,15 +162,16 @@ function HomePage({ equipmentArray }) {
                                 </div>
                                 <div class="flex-grow pl-4">
                                     <h2 class="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">FINISH</h2>
-                                    <p class="leading-relaxed">Pitchfork ugh tattooed scenester echo park gastropub whatever cold-pressed retro.</p>
+                                    <p class="leading-relaxed">Pickup your equipment at an agreed upon location, or have it delivered to your worksite!</p>
                                 </div>
                             </div>
                         </div>
-                        <img class="lg:w-3/5 md:w-1/2 object-cover object-center rounded-lg md:mt-0 mt-12" src="https://dummyimage.com/1200x500" alt="step" />
+                        <img class="lg:w-3/5 md:w-1/2 object-cover object-center rounded-lg md:mt-0 mt-12" src="https://www.westernstatescat.com/wp-content/uploads/2016/12/Jackson-Team.jpg" alt="step" />
                     </div>
                 </div>
             </section>
         </div>
+
 
 
 
@@ -204,8 +194,8 @@ function HomePage({ equipmentArray }) {
 
             {featuredThing}
             {threeItems}
+            {tutorial}
         </div>
-
 
     );
 }
