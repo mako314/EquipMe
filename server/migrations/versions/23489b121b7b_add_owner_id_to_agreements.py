@@ -1,8 +1,8 @@
-"""<booleans are not your friend>
+"""<add owner_id to agreements>
 
-Revision ID: 4b5f8131b3c9
+Revision ID: 23489b121b7b
 Revises: 
-Create Date: 2023-07-20 13:37:32.027942
+Create Date: 2023-07-20 23:45:53.795697
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '4b5f8131b3c9'
+revision = '23489b121b7b'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -59,9 +59,11 @@ def upgrade():
     sa.Column('location', sa.String(), nullable=True),
     sa.Column('total_price', sa.Integer(), nullable=True),
     sa.Column('rental_dates', sa.String(), nullable=True),
+    sa.Column('owner_id', sa.Integer(), nullable=True),
     sa.Column('renter_id', sa.Integer(), nullable=True),
     sa.Column('equipment_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['equipment_id'], ['equipments.id'], ),
+    sa.ForeignKeyConstraint(['owner_id'], ['owners.id'], ),
     sa.ForeignKeyConstraint(['renter_id'], ['renters.id'], ),
     sa.PrimaryKeyConstraint('id')
     )

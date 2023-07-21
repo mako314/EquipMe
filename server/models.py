@@ -166,18 +166,17 @@ class RentalAgreement(db.Model, SerializerMixin):
 
     #this hopefully connects it
     renter = db.relationship(
-        "UserRenter", back_populates="agreements", overlaps="agreements,renters"
+        "UserRenter", back_populates="agreements", overlaps="renters,owners"
     )
     equipment = db.relationship(
-        "Equipment", back_populates="agreements", overlaps="agreements,equipment"
-    )
+        "Equipment", back_populates="agreements", overlaps="renters,equipment")
     
     owner = db.relationship(
-        "EquipmentOwner", back_populates="agreements", overlaps="agreements,owner"
+        "EquipmentOwner", back_populates="agreements", overlaps="renters,agreements"
     )
     
     #Serialization rules
-    serialize_rules = ('-equipment.agreements', '-renter.agreements', '-owner.agreements')
+    serialize_rules = ('-renter.agreements', '-owner.equipment', '-owner.agreements', '-equipment.owner', '-equipment.agreements')
 
     def __repr__(self):
         return f"<Rental Agreement: Equipment in {self.location}, Total Price: {self.total_price}, Rental Dates: {self.rental_dates}>"

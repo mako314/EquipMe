@@ -251,15 +251,7 @@ if __name__ == '__main__':
 
         for index, row in data.iterrows():
             owner_name = row['Owner']
-            # phone = row['Phone']
-            # email = row['Email'] # We don't really need this, it would be required if we had a relationship
             equipment_owner = EquipmentOwner.query.filter(EquipmentOwner.name == owner_name).first()
-            # owner_phone = EquipmentOwner.query.filter(EquipmentOwner.phone == phone).first()
-            # owner_email = EquipmentOwner.query.filter(EquipmentOwner.email == email).first()
-
-            #this stuff above also unnecessary sorry for poor english, but likely can remove soon
-            
-            # owner_listing_name = equipment_owner.name
             equipment = Equipment(
                 name = row['Equipment_name'],
                 type = row['Equipment_type'],
