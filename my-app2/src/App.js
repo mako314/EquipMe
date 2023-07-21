@@ -20,6 +20,7 @@ import OwnerEditForm from './EquipmentComponents/OwnerEditForm';
 import ProductForm from './EquipmentComponents/ProductForm';
 import ProductEditForm from './EquipmentComponents/ProductEditForm';
 import RentalForm from './EquipmentComponents/RentalForm';
+import RentalFormPrepop from './EquipmentComponents/RentalFormPrepop';
 
 function App() {
 
@@ -36,6 +37,7 @@ function App() {
   //These useStates will handle PATCH.
   const [ownerToEdit, setOwnerToEdit] = useState([])
   const [equipmentToEdit, setEquipmentToEdit] = useState([])
+  const [featuredRental, setFeaturedRental] = useState([])
 
   //Do I even need two state variables to do this ? Turns out all original fetches work
 
@@ -83,22 +85,22 @@ function App() {
     setOwners(owners => [...owners, owner])
   }
 
-// The above is also used for EDIT by that I mean the state variable setOwners
+  // The above is also used for EDIT by that I mean the state variable setOwners
 
-//---------------------------------------------------------------------------------
-//POST RENTAL AGREEMENTS
+  //---------------------------------------------------------------------------------
+  //POST RENTAL AGREEMENTS
 
-useEffect(() => {
-  fetch("http://127.0.0.1:5555/rental_agreements")
-    .then((resp) => resp.json())
-    .then((data) => {
-      setRentalAgreement(data)
-    })
-}, [])
+  useEffect(() => {
+    fetch("http://127.0.0.1:5555/rental_agreements")
+      .then((resp) => resp.json())
+      .then((data) => {
+        setRentalAgreement(data)
+      })
+  }, [])
 
-const addRentalAgreement = (rentalAgreement) => {
-  setRentalAgreement(rentalAgreements => [...rentalAgreements, rentalAgreement])
-}
+  const addRentalAgreement = (rentalAgreement) => {
+    setRentalAgreement(rentalAgreements => [...rentalAgreements, rentalAgreement])
+  }
 
   //-----------------------Edit content begins here----------------------------------
   // EDIT/PATCH OWNERS-------------------------
@@ -191,7 +193,7 @@ const addRentalAgreement = (rentalAgreement) => {
       <NavBar setSearchTerm={setSearchTerm} />
       <Routes>
 
-        <Route path='/' element={<HomePage equipmentArray={equipmentArray}/>}/>
+        <Route path='/' element={<HomePage equipmentArray={equipmentArray} setFeaturedRental={setFeaturedRental} />} />
 
         <Route path='/equipment' element={<ProductCollection equipmentArray={filteredEquipmentArray} handleEquipmentDelete={handleEquipmentDelete} handleEditEquipment={handleEditEquipment} />} />
         <Route path='/equipment_owners' element={<OwnerCollection searchTerm={searchTerm} handleEditOwner={handleEditOwner} handleOwnerDelete={handleOwnerDelete} equipmentOwnerArray={owners} />} />
@@ -205,12 +207,14 @@ const addRentalAgreement = (rentalAgreement) => {
         <Route path='/renter_signup' element={<UserForm addUser={addUser} />} />
         <Route path='/owner_signup' element={<OwnerForm addOwner={addOwner} />} />
         <Route path='/equipment_signup' element={<ProductForm addEquipment={addEquipment} />} />
-        <Route path='/rental_signup' element={<RentalForm addRentalAgreement={addRentalAgreement} owners={owners} equipmentArray={equipmentArray}/>} />
+        <Route path='/rental_signup' element={<RentalForm addRentalAgreement={addRentalAgreement} owners={owners} equipmentArray={equipmentArray} />} />
+        <Route path='/rental_signup_prepop' element={<RentalFormPrepop addRentalAgreement={addRentalAgreement} owners={owners} equipmentArray={equipmentArray} featuredRental={featuredRental} />} />
+
 
         {/* Respective Edit Routes */}
         <Route path='/owner/:id/edit' element={<OwnerEditForm ownerToEdit={ownerToEdit} updateOwner={updateOwner} />} />
         <Route path='/equipment/:id/edit' element={<ProductEditForm equipmentToEdit={equipmentToEdit} updateEquipment={updateEquipment} />} />
-        
+
       </Routes>
 
 
