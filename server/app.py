@@ -214,7 +214,7 @@ class Equipments(Resource):
     #get ALL equipment -- DONE
     def get(self):
         equipment = [equipment.to_dict(
-            only =('id','model','name','make','location', 'type','phone','email','location','availability','delivery','quantity') #needed to include all of this for when one patches
+            only =('id','model','name','make','location', 'type','phone','email','location','availability','delivery','quantity', 'owner_name') #needed to include all of this for when one patches
         ) for equipment in Equipment.query.all()]
 
         response = make_response(equipment, 200)
@@ -255,24 +255,25 @@ class Equipments(Resource):
 
 api.add_resource(Equipments, '/equipment')
 
+#-------------------------------
 #Search and or filter by Equipment type, i.e. Heavy Machinery or painting
-class EquipmentByType(Resource):
+class EquipmentByLocation(Resource):
 
-    def get(self,type):
-        type_test = Equipment.query.filter(Equipment.type == type).all()
-        if type_test:
-            equipment = [equipment.to_dict() for equipment in Equipment.query.filter(Equipment.type == type).all()]
+    def get(self,location):
+        location_test = Equipment.query.filter(Equipment.location == location).all()
+        if location_test:
+            equipment = [equipment.to_dict(rules =('-agreements', '-owner.agreements')) for equipment in Equipment.query.filter(Equipment.location == location).all()]
             response = make_response(equipment, 200)
             return response
         else:
             response = make_response({
-            "error": "Equipment type not supported yet"
+            "error": "No equipment in your location"
             }, 404)
             return response
         
-        #need to find a way to make all the types easily inputtable, for example Heavy Machinery doesn't get picked up if you do /heavymachinery
+        #need to find a way to make all the locations easily inputtable, for example Heavy Machinery doesn't get picked up if you do /heavymachinery
 
-api.add_resource(EquipmentByType, '/equipment/<string:type>')
+api.add_resource(EquipmentByLocation, '/equipment/location/<string:location>')
 
 class EquipmentByID(Resource):
 
@@ -335,6 +336,18 @@ class EquipmentByID(Resource):
         
 api.add_resource(EquipmentByID, '/equipment/<int:id>')
 
+#GET ALL EQUIPMENT BY THEIR OWNER ID, THIS IS USED IN OUR RENTAL AGREEMENT FORM
+class AllEquipmentByID(Resource):
+    def get(self,id):
+        equipment = [equipment.to_dict(
+            only =('id','model','name','make','location', 'type','phone','email','location','availability','delivery','quantity', 'owner_name') #needed to include all of this for when one patches
+        ) for equipment in Equipment.query.filter(Equipment.owner_id == id).all()]
+
+        response = make_response(equipment, 200)
+
+        return response
+
+api.add_resource(AllEquipmentByID, '/all_equipment/<int:id>')
 
 #-----------------------------------------------Rental Agreement Classes-----------------------------------------------------------------------------
 #Rental agreements, need a post and a patch
@@ -362,6 +375,7 @@ class RentalAgreements(Resource):
             location = data['location'],
             total_price = data['total_price'],
             rental_dates = data['rental_dates'],
+            owner_id = data['owner_id'],
             renter_id = data['renter_id'],
             equipment_id = data['equipment_id']
         )

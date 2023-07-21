@@ -75,13 +75,15 @@ class EquipmentOwner(db.Model, SerializerMixin):
     # agreements = db.relationship('RentalAgreement', back_populates="owner", overlaps="renters,owners")
 
     #do a cascade to make life easier
-    equipment = db.relationship('Equipment', back_populates='owner', overlaps="owners,equipments") 
+    equipment = db.relationship('Equipment', back_populates='owner', overlaps="owners,equipments")
+
+    agreements = db.relationship('RentalAgreement', back_populates ='owner', overlaps="owners,agreements")
     #overlaps="owners,equipments" #This is a way to access the equipment that an owner has, 
     
     #you can just do a query EquipmentOwner.query.get(1), or equipment = owner.equipment. Then you can do for equipment in owner.equipment print(equipment) for example
 
     #Serialization rules
-    serialize_rules = ('-equipment.owner', )
+    serialize_rules = ('-equipment.owner', '-agreements.owner' )
 
     #VALIDATIONS HERE
     @validates("email")
@@ -158,6 +160,7 @@ class RentalAgreement(db.Model, SerializerMixin):
 
     #relationships
     #do a cascade to make life easier
+    owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'))
     renter_id = db.Column(db.Integer, db.ForeignKey('renters.id'))
     equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
 
@@ -168,8 +171,12 @@ class RentalAgreement(db.Model, SerializerMixin):
     equipment = db.relationship(
         "Equipment", back_populates="agreements", overlaps="renters,equipment")
     
+    owner = db.relationship(
+        "EquipmentOwner", back_populates="agreements", overlaps="renters,agreements"
+    )
+    
     #Serialization rules
-    serialize_rules = ('-equipment.agreements', '-renter.agreements' )
+    serialize_rules = ('-renter.agreements', '-owner.equipment', '-owner.agreements', '-equipment.owner', '-equipment.agreements')
 
     def __repr__(self):
         return f"<Rental Agreement: Equipment in {self.location}, Total Price: {self.total_price}, Rental Dates: {self.rental_dates}>"

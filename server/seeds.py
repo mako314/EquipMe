@@ -162,6 +162,7 @@ if __name__ == '__main__':
             location="Chicago, Illinois",
             total_price=150,
             rental_dates="2023-07-15 to 2023-07-18",
+            owner_id = 6, # Amy Wilson
             renter_id=1,  # Benjamin Davis
             equipment_id=38  # Amy Wilson #Available
         ),
@@ -169,6 +170,7 @@ if __name__ == '__main__':
             location="Miami, Florida",
             total_price=200,
             rental_dates="2023-07-19 to 2023-07-23",
+            owner_id = 5, # David Rodriguez
             renter_id=2,  # Ethan Martinez
             equipment_id=8  # David Rodriguez #Available
         ),
@@ -176,6 +178,7 @@ if __name__ == '__main__':
             location="Houston, Texas",
             total_price=100,
             rental_dates="2023-07-17 to 2023-07-20",
+            owner_id = 7, # Daniel Lee
             renter_id=3,  # William Anderson
             equipment_id=317  # Daniel Lee #Available
         ),
@@ -183,6 +186,7 @@ if __name__ == '__main__':
             location="Phoenix, Arizona",
             total_price=80,
             rental_dates="2023-07-16 to 2023-07-19",
+            owner_id = 2, # Emily Johnson
             renter_id=4,  # Sofia Rodriguez
             equipment_id=361  # Emily Johnson #Available
         ),
@@ -190,6 +194,7 @@ if __name__ == '__main__':
             location="Seattle, Washington",
             total_price=180,
             rental_dates="2023-07-18 to 2023-07-21",
+            owner_id = 4, # Henry Cavill
             renter_id=6,  # Sarah Thompson
             equipment_id=121  # Henry Cavill #Available
         ),
@@ -197,6 +202,7 @@ if __name__ == '__main__':
             location="Houston, Texas",
             total_price=120,
             rental_dates="2023-07-22 to 2023-07-24",
+            owner_id = 3, # Andrew Jacobs
             renter_id=7,  # Thomas Brady
             equipment_id=311  # Andrew Jacobs #Available
         ),
@@ -204,6 +210,7 @@ if __name__ == '__main__':
             location="Chicago, Illinois",
             total_price=80,
             rental_dates="2023-07-23 to 2023-07-24",
+            owner_id = 1, # Mark Davis
             renter_id=5,  # Christian Domingues
             equipment_id=238  # Mark Davis #Available
         ),
@@ -211,6 +218,7 @@ if __name__ == '__main__':
             location="Phoenix, Arizona",
             total_price=120,
             rental_dates="2023-07-22 to 2023-07-23",
+            owner_id = 2, # Emily Johnson
             renter_id=4,  # Sofia Rodriguez
             equipment_id=355  # Emily Johnson #Available
         ),
@@ -218,6 +226,7 @@ if __name__ == '__main__':
             location="Dallas, Texas",
             total_price=150,
             rental_dates="2023-07-19 to 2023-07-22",
+            owner_id = 7,
             renter_id=3,  # William Anderson
             equipment_id=318  # Daniel Lee #Available
         )]
@@ -235,22 +244,14 @@ if __name__ == '__main__':
 #Seed Equipment with panda. 
 #Seed Equipment
         print("Uploading the current equipment list...")
-        data = pd.read_csv('/Users/SeanKeough/Development/code/phase4/EquipMe/extrafiles/equipment_list_with_contact - equipment_data.csv')
+        data = pd.read_csv('/home/mako77/code/Flatiron/Projects/EquipMe/extrafiles/equipment_list_with_contact - equipment_data.csv')
 
         data.columns = ['Equipment_name', 'Equipment_type', 'Make', 'Model', 'Owner', 'Phone', 'Email', 'Location', 'Availability', 'Delivery', 'Quantity']
         equipment_list = []
 
         for index, row in data.iterrows():
             owner_name = row['Owner']
-            # phone = row['Phone']
-            # email = row['Email'] # We don't really need this, it would be required if we had a relationship
             equipment_owner = EquipmentOwner.query.filter(EquipmentOwner.name == owner_name).first()
-            # owner_phone = EquipmentOwner.query.filter(EquipmentOwner.phone == phone).first()
-            # owner_email = EquipmentOwner.query.filter(EquipmentOwner.email == email).first()
-
-            #this stuff above also unnecessary sorry for poor english, but likely can remove soon
-            
-            # owner_listing_name = equipment_owner.name
             equipment = Equipment(
                 name = row['Equipment_name'],
                 type = row['Equipment_type'],

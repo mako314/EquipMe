@@ -1,22 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import { useNavigate, Route, Routes } from 'react-router-dom';
+//---------------------Homepage and Navbar-------------
+import HomePage from './EquipmentComponents/HomePage';
+import NavBar from './EquipmentComponents/NavBar';
+//---------------------Collections--------------------
 import ProductCollection from './EquipmentComponents/ProductCollection'
 import OwnerCollection from './EquipmentComponents/OwnerCollection';
-import { useNavigate, Route, Routes } from 'react-router-dom';
-import NavBar from './EquipmentComponents/NavBar';
 import RentalCollection from './EquipmentComponents/RentalCollection';
 //-------------------------Display Pages-----------------------------------
 import ProductDisplay from './EquipmentComponents/ProductDisplay';
 import OwnerDisplay from './EquipmentComponents/OwnerDisplay';
 //-------------------------Forms----------------------------------------
 import UserForm from './EquipmentComponents/UserForm';
-//-----------------------------------------------------------------------
+//-------------------------OwnerForms---------------------------------------
 import OwnerForm from './EquipmentComponents/OwnerForm'
 import OwnerEditForm from './EquipmentComponents/OwnerEditForm';
-//-----------------------------------------------------------------------
+//------------------------ProductForm-------------------------------------
 import ProductForm from './EquipmentComponents/ProductForm';
 import ProductEditForm from './EquipmentComponents/ProductEditForm';
-
+import RentalForm from './EquipmentComponents/RentalForm';
 
 function App() {
 
@@ -28,6 +31,7 @@ function App() {
   //These useStates will handle POST. Grabbing and ...spreading so it updates accordingly.
   const [users, setUsers] = useState([])
   const [owners, setOwners] = useState([])
+  const [rentalAgreement, setRentalAgreement] = useState([])
 
   //These useStates will handle PATCH.
   const [ownerToEdit, setOwnerToEdit] = useState([])
@@ -79,7 +83,22 @@ function App() {
     setOwners(owners => [...owners, owner])
   }
 
-  // The above is also used for EDIT by that I mean the state variable setOwners
+// The above is also used for EDIT by that I mean the state variable setOwners
+
+//---------------------------------------------------------------------------------
+//POST RENTAL AGREEMENTS
+
+useEffect(() => {
+  fetch("http://127.0.0.1:5555/rental_agreements")
+    .then((resp) => resp.json())
+    .then((data) => {
+      setRentalAgreement(data)
+    })
+}, [])
+
+const addRentalAgreement = (rentalAgreement) => {
+  setRentalAgreement(rentalAgreements => [...rentalAgreements, rentalAgreement])
+}
 
   //-----------------------Edit content begins here----------------------------------
   // EDIT/PATCH OWNERS-------------------------
@@ -172,6 +191,8 @@ function App() {
       <NavBar setSearchTerm={setSearchTerm} />
       <Routes>
 
+        <Route path='/' element={<HomePage equipmentArray={equipmentArray}/>}/>
+
         <Route path='/equipment' element={<ProductCollection equipmentArray={filteredEquipmentArray} handleEquipmentDelete={handleEquipmentDelete} handleEditEquipment={handleEditEquipment} />} />
         <Route path='/equipment_owners' element={<OwnerCollection searchTerm={searchTerm} handleEditOwner={handleEditOwner} handleOwnerDelete={handleOwnerDelete} equipmentOwnerArray={owners} />} />
         <Route path='/rental_agreements' element={<RentalCollection />} />
@@ -184,11 +205,14 @@ function App() {
         <Route path='/renter_signup' element={<UserForm addUser={addUser} />} />
         <Route path='/owner_signup' element={<OwnerForm addOwner={addOwner} />} />
         <Route path='/equipment_signup' element={<ProductForm addEquipment={addEquipment} />} />
+        <Route path='/rental_signup' element={<RentalForm addRentalAgreement={addRentalAgreement} owners={owners} equipmentArray={equipmentArray}/>} />
 
         {/* Respective Edit Routes */}
         <Route path='/owner/:id/edit' element={<OwnerEditForm ownerToEdit={ownerToEdit} updateOwner={updateOwner} />} />
         <Route path='/equipment/:id/edit' element={<ProductEditForm equipmentToEdit={equipmentToEdit} updateEquipment={updateEquipment} />} />
+        
       </Routes>
+
 
     </div>
   );
