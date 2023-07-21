@@ -20,7 +20,7 @@ function ProductCard({ id, name, model, make, location }) {
                         <p className="mt-2">{name} <br /> {make} <br /> {location} </p>
                     </div>
                     <div>
-                        <button className="text-white text-md font-semibold bg-green-400 py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition duration-500 transform-gpu hover:scale-110 " onClick={handleClick}>More Info</button>
+                        <button className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700" onClick={handleClick}>More Info</button>
                     </div>
                 </div>
             </div>
