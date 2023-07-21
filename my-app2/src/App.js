@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import { useNavigate, Route, Routes } from 'react-router-dom';
+//---------------------Homepage and Navbar-------------
+import HomePage from './EquipmentComponents/HomePage';
+import NavBar from './EquipmentComponents/NavBar';
+//---------------------Collections--------------------
 import ProductCollection from './EquipmentComponents/ProductCollection'
 import OwnerCollection from './EquipmentComponents/OwnerCollection';
-import { useNavigate, Route, Routes } from 'react-router-dom';
-import NavBar from './EquipmentComponents/NavBar';
 import RentalCollection from './EquipmentComponents/RentalCollection';
 //-------------------------Display Pages-----------------------------------
 import ProductDisplay from './EquipmentComponents/ProductDisplay';
@@ -188,6 +191,8 @@ const addRentalAgreement = (rentalAgreement) => {
       <NavBar setSearchTerm={setSearchTerm} />
       <Routes>
 
+        <Route path='/' element={<HomePage equipmentArray={equipmentArray}/>}/>
+
         <Route path='/equipment' element={<ProductCollection equipmentArray={filteredEquipmentArray} handleEquipmentDelete={handleEquipmentDelete} handleEditEquipment={handleEditEquipment} />} />
         <Route path='/equipment_owners' element={<OwnerCollection searchTerm={searchTerm} handleEditOwner={handleEditOwner} handleOwnerDelete={handleOwnerDelete} equipmentOwnerArray={owners} />} />
         <Route path='/rental_agreements' element={<RentalCollection />} />
@@ -205,7 +210,9 @@ const addRentalAgreement = (rentalAgreement) => {
         {/* Respective Edit Routes */}
         <Route path='/owner/:id/edit' element={<OwnerEditForm ownerToEdit={ownerToEdit} updateOwner={updateOwner} />} />
         <Route path='/equipment/:id/edit' element={<ProductEditForm equipmentToEdit={equipmentToEdit} updateEquipment={updateEquipment} />} />
+        
       </Routes>
+
 
     </div>
   );
