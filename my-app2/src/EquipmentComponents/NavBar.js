@@ -18,10 +18,10 @@ function NavBar({ setSearchTerm }) {
     //     )
     // })
 
-const toggleDropContent = () => {
-    const dropDownContent = document.querySelector('.dropdown-content');
-    dropDownContent.classList.toggle('show');
-};
+    const toggleDropContent = () => {
+        const dropDownContent = document.querySelector('.dropdown-content');
+        dropDownContent.classList.toggle('show');
+    };
 
     return (
         <nav>
@@ -52,7 +52,7 @@ const toggleDropContent = () => {
                             to={"/equipment_owners"}>
                             Equipment Owners
                         </NavLink>
-                        
+
                         <NavLink
                             key={"Rental Agreements"}
                             name={"Rental Agreements"}
@@ -65,7 +65,12 @@ const toggleDropContent = () => {
                 </div>
                 <div className="listButtonDiv">
                     <button className="listButton">
-                        List Item
+                        <NavLink
+                            key={"List Item"}
+                            name={"List Item"}
+                            to={"/owner_signup"}>
+                            Become an Owner
+                        </NavLink>
                     </button>
                 </div>
             </div>
