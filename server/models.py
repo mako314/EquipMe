@@ -113,12 +113,19 @@ class Equipment(db.Model, SerializerMixin):
     make = db.Column(db.String)
     model = db.Column(db.String)
     owner_name = db.Column(db.String)
+
     phone = db.Column(db.String) #this and the one below are recently added.
-    email = db.Column(db.String)
+    email = db.Column(db.String) #This is already included via the owner relationship.
+
     location = db.Column(db.String)
     availability = db.Column(db.String)
     delivery = db.Column(db.String)
     quantity = db.Column(db.Integer)
+
+    # cost_per_day = db.Column(db.Integer)
+    # cost_per_week = db.Column(db.Integer)
+    # cost_per_month = db.Column(db.Integer)
+
 
     #relationship
     #do a cascade to make life easier
@@ -156,6 +163,7 @@ class RentalAgreement(db.Model, SerializerMixin):
     location = db.Column(db.String)
     total_price = db.Column(db.Integer) # Maybe find a way to find the daily cost / hourly cost?
     rental_dates = db.Column(db.String) #maybe integer?
+    # legal_doc = db.Column(db.String) # need a way to upload documentation 
     #need a way to grab the equipment
 
     #relationships

@@ -106,9 +106,6 @@ function HomePage({ equipmentArray, setFeaturedRental }) {
                             </a>
                             {/* this needs to be a button */}
                         </div>
-                        <div className="lg:max-w-lg lg:w-full md:w-1/2 w-5/6">
-                            <img className="object-cover object-center rounded" alt="hero" src="https://www.trucksnl.com/pictures/ad-7355885-87863fddf344dc0d/crawler_excavator_caterpillar_336el_2014_7355885.jpg?format=jpg&quality=70&w=1110&h=832" />
-                        </div>
                     </div>
                 </div>
             </section>

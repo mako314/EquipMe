@@ -2,25 +2,25 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import { useNavigate, Route, Routes } from 'react-router-dom';
 //---------------------Homepage and Navbar-------------
-import HomePage from './EquipmentComponents/HomePage';
-import NavBar from './EquipmentComponents/NavBar';
+import HomePage from './HomePageComponents/HomePage';
+import NavBar from './HeaderFooterComponents/NavBar';
 //---------------------Collections--------------------
-import ProductCollection from './EquipmentComponents/ProductCollection'
-import OwnerCollection from './EquipmentComponents/OwnerCollection';
-import RentalCollection from './EquipmentComponents/RentalCollection';
+import ProductCollection from './EquipmentComponents/ProductCollection';
+import OwnerCollection from './OwnerComponents/OwnerCollection';
+import RentalCollection from './RentalComponents/RentalCollection'
 //-------------------------Display Pages-----------------------------------
 import ProductDisplay from './EquipmentComponents/ProductDisplay';
-import OwnerDisplay from './EquipmentComponents/OwnerDisplay';
+import OwnerDisplay from './OwnerComponents/OwnerDisplay';
 //-------------------------Forms----------------------------------------
-import UserForm from './EquipmentComponents/UserForm';
+import UserForm from './UserComponents/UserForm';
 //-------------------------OwnerForms---------------------------------------
-import OwnerForm from './EquipmentComponents/OwnerForm'
-import OwnerEditForm from './EquipmentComponents/OwnerEditForm';
+import OwnerForm from './OwnerComponents/OwnerForm';
+import OwnerEditForm from './OwnerComponents/OwnerEditForm'
 //------------------------ProductForm-------------------------------------
 import ProductForm from './EquipmentComponents/ProductForm';
 import ProductEditForm from './EquipmentComponents/ProductEditForm';
-import RentalForm from './EquipmentComponents/RentalForm';
-import RentalFormPrepop from './EquipmentComponents/RentalFormPrepop';
+import RentalForm from './RentalComponents/RentalForm';
+import RentalFormPrepop from './RentalComponents/RentalFormPrepop'
 
 function App() {
 

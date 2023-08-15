@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ProductCard from "./ProductCard"
-import Pagination from "./Pagination";
+import Pagination from '../PaginationComponents/Pagination'
 
 function ProductCollection({ equipmentArray, handleEquipmentDelete, handleEditEquipment }) {
 
