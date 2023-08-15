@@ -156,6 +156,7 @@ class RentalAgreement(db.Model, SerializerMixin):
     location = db.Column(db.String)
     total_price = db.Column(db.Integer) # Maybe find a way to find the daily cost / hourly cost?
     rental_dates = db.Column(db.String) #maybe integer?
+    legal_doc = db.Column(db.String) # need a way to upload documentation 
     #need a way to grab the equipment
 
     #relationships
