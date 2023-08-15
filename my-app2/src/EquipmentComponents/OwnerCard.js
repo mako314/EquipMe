@@ -10,7 +10,7 @@ function OwnerCard({ id, email, name, location, phone, equipmentArray, handleEdi
     const navigate = useNavigate();
 
     function handleClick(e) {
-        navigate(`/equipment_owner/${id}`)
+        navigate(`/equipment_owners/${id}`)
     }
 
     return (

@@ -113,8 +113,8 @@ class Equipment(db.Model, SerializerMixin):
     make = db.Column(db.String)
     model = db.Column(db.String)
     owner_name = db.Column(db.String)
-    phone = db.Column(db.String) #this and the one below are recently added.
-    email = db.Column(db.String)
+    # phone = db.Column(db.String) #this and the one below are recently added.
+    # email = db.Column(db.String) #This is already included via the owner relationship.
     location = db.Column(db.String)
     availability = db.Column(db.String)
     delivery = db.Column(db.String)
