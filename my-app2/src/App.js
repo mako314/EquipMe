@@ -10,17 +10,17 @@ import OwnerCollection from './OwnerComponents/OwnerCollection';
 import RentalCollection from './RentalComponents/RentalCollection'
 //-------------------------Display Pages-----------------------------------
 import ProductDisplay from './EquipmentComponents/ProductDisplay';
-import OwnerDisplay from './OwnerComponents/OwnerDisplay'
+import OwnerDisplay from './OwnerComponents/OwnerDisplay';
 //-------------------------Forms----------------------------------------
-import UserForm from './EquipmentComponents/UserForm';
+import UserForm from './UserComponents/UserForm';
 //-------------------------OwnerForms---------------------------------------
-import OwnerForm from './EquipmentComponents/OwnerForm'
-import OwnerEditForm from './EquipmentComponents/OwnerEditForm';
+import OwnerForm from './OwnerComponents/OwnerForm';
+import OwnerEditForm from './OwnerComponents/OwnerEditForm'
 //------------------------ProductForm-------------------------------------
 import ProductForm from './EquipmentComponents/ProductForm';
 import ProductEditForm from './EquipmentComponents/ProductEditForm';
-import RentalForm from './EquipmentComponents/RentalForm';
-import RentalFormPrepop from './EquipmentComponents/RentalFormPrepop';
+import RentalForm from './RentalComponents/RentalForm';
+import RentalFormPrepop from './RentalComponents/RentalFormPrepop'
 
 function App() {
 
