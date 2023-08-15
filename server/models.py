@@ -120,6 +120,11 @@ class Equipment(db.Model, SerializerMixin):
     delivery = db.Column(db.String)
     quantity = db.Column(db.Integer)
 
+    cost_per_day = db.Column(db.Integer)
+    cost_per_week = db.Column(db.Integer)
+    cost_per_month = db.Column(db.Integer)
+    
+
     #relationship
     #do a cascade to make life easier
 
