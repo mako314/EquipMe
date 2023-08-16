@@ -1,9 +1,5 @@
-from random import choice as rc, randrange
-from app import app
 from models import db, User, EquipmentOwner, Equipment, RentalAgreement
-
 import pandas as pd
-
 from app import app
 from random import randint, choice as rc
 
