@@ -110,30 +110,27 @@ function RentalForm({ addRentalAgreement, owners, equipmentArray, featuredRental
           {error && <p>{error}</p>}
       
       <div>
-        <label htmlFor="name" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Name </label>
-        <input type="text" name="name" value={formik.values.name} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
-      </div>
-
-      <div className="sm:col-span-2">
-        <label htmlFor="location" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">Location</label>
+        <label htmlFor="location" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Location </label>
         <input type="text" name="location" value={formik.values.location} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
       </div>
-
-      <div className="sm:col-span-2">
-        <label htmlFor="email" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">Email</label>
-        <input type="text" name="email" value={formik.values.email} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
-      </div>
-
+      
       <div className="sm:col-span-2">
         <label htmlFor="phone" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">Phone</label>
         <input type="text" name="phone" value={formik.values.phone} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
       </div>
 
+
       <div className="sm:col-span-2">
-        <label htmlFor="profession" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">Profession</label>
-        <input type="text" name="profession" value={formik.values.profession} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+        <label htmlFor="total_price" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">Total Price</label>
+        <input type="text" name="total_price" value={formik.values.total_price} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
       </div>
 
+      <div className="sm:col-span-2">
+        <label htmlFor="rental_dates" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">Rental Dates</label>
+        <input type="text" name="rental_dates" value={formik.values.rental_dates} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+      </div>
+
+ 
 
       <div className="flex items-center justify-between sm:col-span-2">
 
