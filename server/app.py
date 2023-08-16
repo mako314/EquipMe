@@ -11,6 +11,68 @@ from config import db, app, api
 from sqlalchemy import asc
 
 
+#------------------------------------User LOGIN------------------------------------------------------------------------------
+
+class Login(Resource):
+
+    def get(self):
+        pass
+
+    def post(self):
+        data = request.get_json()
+        #Test to find username,
+        username = data['username']
+        user = User.query.filter(User.username == username).first()
+        #Grab password
+        password = data['password']
+        # print(user)
+        #Test to see if password matches
+        if user:
+            if user.authenticate(password):
+                session['user_id'] = user.id
+                return user.to_dict(), 200
+        #Do I need to JSONIFY^ ?
+
+        return make_response({'error': 'Invalid username or password'}, 401)
+
+api.add_resource(Login, '/login')
+#------------------------------------------------------------------------------------------------------------------------------
+
+#------------------------------------User LOGOUT------------------------------------------------------------------------------
+
+class Logout(Resource):
+
+    def delete(self): # just add this line!
+        session['user_id'] = None
+        return {'message': '204: No Content'}, 204
+
+api.add_resource(Logout, '/logout')
+#------------------------------------------------------------------------------------------------------------------------------
+
+#------------------------------------Check Session------------------------------------------------------------------------------
+
+class CheckSession(Resource):
+
+    def get(self):
+
+        # user_id = session.get('user_id')
+
+        # if user_id:
+
+        #     user_row = User.query.filter(User.id == user_id).first()
+
+        #     response = make_response(jsonify(user_row.to_dict()), 200)
+
+
+
+        user = User.query.filter(User.id == session.get('user_id')).first()
+        if user:
+            return user.to_dict()
+        else:
+            return {'message': '401: Not Authorized'}, 401
+
+api.add_resource(CheckSession, '/check_session')
+#------------------------------------------------------------------------------------------------------------------------------
 
 
 
