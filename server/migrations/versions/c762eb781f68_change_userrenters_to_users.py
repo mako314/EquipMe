@@ -1,8 +1,8 @@
-"""<add owner_id to agreements>
+"""<change UserRenters to Users>
 
-Revision ID: 23489b121b7b
+Revision ID: c762eb781f68
 Revises: 
-Create Date: 2023-07-20 23:45:53.795697
+Create Date: 2023-08-16 19:05:25.967327
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '23489b121b7b'
+revision = 'c762eb781f68'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -51,7 +51,7 @@ def upgrade():
     sa.Column('delivery', sa.String(), nullable=True),
     sa.Column('quantity', sa.Integer(), nullable=True),
     sa.Column('owner_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['owner_id'], ['owners.id'], ),
+    sa.ForeignKeyConstraint(['owner_id'], ['owners.id'], name=op.f('fk_equipments_owner_id_owners')),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('agreements',
@@ -62,9 +62,9 @@ def upgrade():
     sa.Column('owner_id', sa.Integer(), nullable=True),
     sa.Column('renter_id', sa.Integer(), nullable=True),
     sa.Column('equipment_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['equipment_id'], ['equipments.id'], ),
-    sa.ForeignKeyConstraint(['owner_id'], ['owners.id'], ),
-    sa.ForeignKeyConstraint(['renter_id'], ['renters.id'], ),
+    sa.ForeignKeyConstraint(['equipment_id'], ['equipments.id'], name=op.f('fk_agreements_equipment_id_equipments')),
+    sa.ForeignKeyConstraint(['owner_id'], ['owners.id'], name=op.f('fk_agreements_owner_id_owners')),
+    sa.ForeignKeyConstraint(['renter_id'], ['renters.id'], name=op.f('fk_agreements_renter_id_renters')),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###

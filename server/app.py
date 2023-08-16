@@ -1,33 +1,88 @@
-from models import db, UserRenter, EquipmentOwner, Equipment, RentalAgreement
-from flask_cors import CORS
-from flask_migrate import Migrate
-from flask import Flask, request, make_response, jsonify
-from flask_restful import Api, Resource
-import os
+from models import db, User, EquipmentOwner, Equipment, RentalAgreement
+# from flask_cors import CORS
+# from flask_migrate import Migrate
+# from flask import Flask, request, make_response, jsonify
+# from flask_restful import Api, Resource
+# import os
 
-BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-DATABASE = os.environ.get(
-    "DB_URI", f"sqlite:///{os.path.join(BASE_DIR, 'app.db')}")
-
-app = Flask(__name__)
-
-app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.json.compact = False
+from flask import Flask, request, make_response, jsonify, session
+from flask_restful import Resource
+from config import db, app, api
+from sqlalchemy import asc
 
 
-migrate = Migrate(app, db)
+#------------------------------------User LOGIN------------------------------------------------------------------------------
 
-db.init_app(app)
-api = Api(app)
-CORS(app)
+class Login(Resource):
+
+    def get(self):
+        pass
+
+    def post(self):
+        data = request.get_json()
+        #Test to find username,
+        username = data['username']
+        user = User.query.filter(User.username == username).first()
+        #Grab password
+        password = data['password']
+        # print(user)
+        #Test to see if password matches
+        if user:
+            if user.authenticate(password):
+                session['user_id'] = user.id
+                return user.to_dict(), 200
+        #Do I need to JSONIFY^ ?
+
+        return make_response({'error': 'Invalid username or password'}, 401)
+
+api.add_resource(Login, '/login')
+#------------------------------------------------------------------------------------------------------------------------------
+
+#------------------------------------User LOGOUT------------------------------------------------------------------------------
+
+class Logout(Resource):
+
+    def delete(self): # just add this line!
+        session['user_id'] = None
+        return {'message': '204: No Content'}, 204
+
+api.add_resource(Logout, '/logout')
+#------------------------------------------------------------------------------------------------------------------------------
+
+#------------------------------------Check Session------------------------------------------------------------------------------
+
+class CheckSession(Resource):
+
+    def get(self):
+
+        # user_id = session.get('user_id')
+
+        # if user_id:
+
+        #     user_row = User.query.filter(User.id == user_id).first()
+
+        #     response = make_response(jsonify(user_row.to_dict()), 200)
+
+
+
+        user = User.query.filter(User.id == session.get('user_id')).first()
+        if user:
+            return user.to_dict()
+        else:
+            return {'message': '401: Not Authorized'}, 401
+
+api.add_resource(CheckSession, '/check_session')
+#------------------------------------------------------------------------------------------------------------------------------
+
+
+
 #------------------------------------------------------USER RENTER CLASSES----------------------------------------------------------
 
-class UserRenters(Resource):
+class Users(Resource):
     
     #post to users, DONE, unsure if i want to be able to see all users..
     def get(self):
-        users = [user.to_dict() for user in UserRenter.query.all()]
+        users = [user.to_dict() for user in User.query.all()]
 
         response = make_response(users, 200)
 
@@ -37,7 +92,7 @@ class UserRenters(Resource):
         data = request.get_json()
         try:
             #need a way to attach to rental agreement
-            new_user = UserRenter(
+            new_user = User(
                 name = data['name'],
                 age = data['age'],
                 location = data['location'],
@@ -56,14 +111,14 @@ class UserRenters(Resource):
 
         #except ValueError: 
         # NEED TO WRITE VALIDATIONS
-api.add_resource(UserRenters, '/renters')
+api.add_resource(Users, '/renters')
 
 
 class UserByID(Resource):
 
     #get one user by ID, may not even be necessary
     def get(self, id):
-        user = UserRenter.query.filter(UserRenter.id == id).first()
+        user = User.query.filter(User.id == id).first()
 
         if user:
             return make_response(user.to_dict(),200)
@@ -75,7 +130,7 @@ class UserByID(Resource):
         
     #PATCH USER DONE
     def patch(self, id):
-        user = UserRenter.query.filter(UserRenter.id == id).first()
+        user = User.query.filter(User.id == id).first()
         if user:
             try:
                 data = request.get_json()
@@ -97,7 +152,7 @@ class UserByID(Resource):
         
     #DELETE USER -- OPERATIONAL, WOULD LIKE TO RETURN A MESSAGE
     def delete(self,id):
-        user = UserRenter.query.filter(UserRenter.id == id).first()
+        user = User.query.filter(User.id == id).first()
         if user:
             # user.agreements do I need to cycle through and delete the agreement relationship also?
             db.session.delete(user)
