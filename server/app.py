@@ -1,9 +1,16 @@
-from models import db, UserRenter, EquipmentOwner, Equipment, RentalAgreement
+from models import db, User, EquipmentOwner, Equipment, RentalAgreement
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask import Flask, request, make_response, jsonify
 from flask_restful import Api, Resource
 import os
+
+
+
+from flask import Flask, request, make_response, jsonify, session
+from flask_restful import Resource
+from config import db, app, api
+from sqlalchemy import asc
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 DATABASE = os.environ.get(
@@ -23,11 +30,11 @@ api = Api(app)
 CORS(app)
 #------------------------------------------------------USER RENTER CLASSES----------------------------------------------------------
 
-class UserRenters(Resource):
+class Users(Resource):
     
     #post to users, DONE, unsure if i want to be able to see all users..
     def get(self):
-        users = [user.to_dict() for user in UserRenter.query.all()]
+        users = [user.to_dict() for user in User.query.all()]
 
         response = make_response(users, 200)
 
@@ -37,7 +44,7 @@ class UserRenters(Resource):
         data = request.get_json()
         try:
             #need a way to attach to rental agreement
-            new_user = UserRenter(
+            new_user = User(
                 name = data['name'],
                 age = data['age'],
                 location = data['location'],
@@ -56,14 +63,14 @@ class UserRenters(Resource):
 
         #except ValueError: 
         # NEED TO WRITE VALIDATIONS
-api.add_resource(UserRenters, '/renters')
+api.add_resource(Users, '/renters')
 
 
 class UserByID(Resource):
 
     #get one user by ID, may not even be necessary
     def get(self, id):
-        user = UserRenter.query.filter(UserRenter.id == id).first()
+        user = User.query.filter(User.id == id).first()
 
         if user:
             return make_response(user.to_dict(),200)
@@ -75,7 +82,7 @@ class UserByID(Resource):
         
     #PATCH USER DONE
     def patch(self, id):
-        user = UserRenter.query.filter(UserRenter.id == id).first()
+        user = User.query.filter(User.id == id).first()
         if user:
             try:
                 data = request.get_json()
@@ -97,7 +104,7 @@ class UserByID(Resource):
         
     #DELETE USER -- OPERATIONAL, WOULD LIKE TO RETURN A MESSAGE
     def delete(self,id):
-        user = UserRenter.query.filter(UserRenter.id == id).first()
+        user = User.query.filter(User.id == id).first()
         if user:
             # user.agreements do I need to cycle through and delete the agreement relationship also?
             db.session.delete(user)

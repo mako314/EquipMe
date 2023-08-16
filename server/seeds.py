@@ -1,10 +1,11 @@
 from random import choice as rc, randrange
+from app import app
+from models import db, User, EquipmentOwner, Equipment, RentalAgreement
+
+import pandas as pd
 
 from app import app
-from models import db, UserRenter, EquipmentOwner, Equipment, RentalAgreement
-
 from random import randint, choice as rc
-import pandas as pd
 
 if __name__ == '__main__':
     with app.app_context():
@@ -13,13 +14,13 @@ if __name__ == '__main__':
         RentalAgreement.query.delete()
         Equipment.query.delete()
         EquipmentOwner.query.delete()
-        UserRenter.query.delete()
+        User.query.delete()
 
 #----------------------------------------------------------------------
 #Seed Renters
         print("Seeding potential renters...")
         renters = [
-        UserRenter(
+        User(
             name="Benjamin Davis", #Rents construction equipment from Amy Wilson (6)
             age=42,
             location="Chicago, Illinois",
@@ -27,7 +28,7 @@ if __name__ == '__main__':
             phone="312-555-1122",
             email="benjamin.davis23@gmail.com"
         ),
-        UserRenter(
+        User(
             name="Ethan Martinez", #Rents Heavy Machinery from David Rodriguez (5)
             age=39,
             location="Miami, Florida",
@@ -35,7 +36,7 @@ if __name__ == '__main__':
             phone="305-555-2233",
             email="ethan.martinez77@yahoo.com" 
         ),
-        UserRenter(
+        User(
             name="William Anderson", #Rents Cleaning Equipment from Daniel Lee (7)
             age=32,
             location="Houston, Texas",
@@ -43,7 +44,7 @@ if __name__ == '__main__':
             phone="713-555-3344",
             email="william.anderson89@gmail.com"
         ),
-        UserRenter(
+        User(
             name="Sofia Rodriguez", # Rents Party Equipment from Emily Johnson (2)
             age=29,
             location="Phoenix, Arizona",
@@ -51,7 +52,7 @@ if __name__ == '__main__':
             phone="602-555-4455",
             email="sofia.rodriguez12@hotmail.com"
         ),
-        UserRenter(
+        User(
             name="Christian Domingues", #Rents Painting Equipment from Mark Davis (1)
             age=42,
             location="Chicago, Illinois",
@@ -59,7 +60,7 @@ if __name__ == '__main__':
             phone="312-555-5566",
             email="christian.domingues55@yahoo.com" 
         ),
-        UserRenter(
+        User(
             name="Sarah Thompson", #Rents Gardening Equipment from Henry Cavill (4)
             age=30,
             location="Seattle, Washington",
@@ -67,7 +68,7 @@ if __name__ == '__main__':
             phone="206-555-6677",
             email="sarah.thompson99@gmail.com"
         ),
-        UserRenter(
+        User(
             name="Thomas Brady", #Rents Automotive Equipment from Andrew Jacons (3)
             age=25,
             location="Houston, Texas",
