@@ -93,12 +93,15 @@ class Users(Resource):
         try:
             #need a way to attach to rental agreement
             new_user = User(
-                name = data['name'],
+                firstName = data['firstName'],
+                lastName = data['lastName'],
                 age = data['age'],
+                email = data['email'],
+                phone = data['phone'],
                 location = data['location'],
                 profession = data['profession'],
-                phone = data['phone'],
-                email = data['email']
+                profileImg = data['profileImg'],
+                bannerImg = data['bannerImg'],    
             )
 
             db.session.add(new_user)
