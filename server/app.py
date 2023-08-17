@@ -111,7 +111,7 @@ class Users(Resource):
 
         #except ValueError: 
         # NEED TO WRITE VALIDATIONS
-api.add_resource(Users, '/renters')
+api.add_resource(Users, '/users')
 
 
 class UserByID(Resource):
@@ -410,7 +410,7 @@ class RentalAgreements(Resource):
     #Get ALL rental agreements
     #list of all the renters and the equipment
     def get(self):
-        agreements = [agreement.to_dict( only = ('equipment','renter','rental_dates')) for agreement in RentalAgreement.query.all()]
+        agreements = [agreement.to_dict( only = ('equipment','user','rental_dates')) for agreement in RentalAgreement.query.all()]
 
         response = make_response(agreements, 200)
 
@@ -431,7 +431,7 @@ class RentalAgreements(Resource):
             total_price = data['total_price'],
             rental_dates = data['rental_dates'],
             owner_id = data['owner_id'],
-            renter_id = data['renter_id'],
+            user_id = data['user_id'],
             equipment_id = data['equipment_id']
         )
 
