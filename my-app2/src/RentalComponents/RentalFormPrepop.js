@@ -16,7 +16,7 @@ function RentalForm({ addRentalAgreement, owners, equipmentArray, featuredRental
     const formSchema = object({
         location: string().required('We need your coordinates Masterchief'),
         total_price: number().positive().required('You must enter a positive offer.'),
-        renter_id: string().required('Please select who you would like to rent from.')
+        user_id: string().required('Please select who you would like to rent from.')
     })
 
     //user POST
@@ -26,7 +26,7 @@ function RentalForm({ addRentalAgreement, owners, equipmentArray, featuredRental
             total_price: '',
             rental_dates: '',
             owner_id: featuredRental[0].owner_name,
-            renter_id: '',
+            user_id: '',
             equipment_id: featuredRental[0].id
         },
         validationSchema: formSchema,
@@ -249,8 +249,8 @@ export default RentalForm;
                         <label>My Name or Company: </label>
                         <input
                             type="text"
-                            name="renter_id"
-                            value={formik.values.renter_id}
+                            name="user_id"
+                            value={formik.values.user_id}
                             onChange={formik.handleChange}
                         />
                     </div>

@@ -21,8 +21,8 @@ class Login(Resource):
     def post(self):
         data = request.get_json()
         #Test to find username,
-        username = data['username']
-        user = User.query.filter(User.username == username).first()
+        email = data['email']
+        user = User.query.filter(User.email == email).first()
         #Grab password
         password = data['password']
         # print(user)
@@ -93,15 +93,22 @@ class Users(Resource):
         try:
             #need a way to attach to rental agreement
             new_user = User(
-                name = data['name'],
+                firstName = data['firstName'],
+                lastName = data['lastName'],
                 age = data['age'],
+                email = data['email'],
+                _password_hash = data['password'],
+                phone = data['phone'],
                 location = data['location'],
                 profession = data['profession'],
-                phone = data['phone'],
-                email = data['email']
+                profileImg = data['profileImg'],
+                bannerImg = data['bannerImg'],    
             )
 
             db.session.add(new_user)
+
+            new_user.password_hash = new_user._password_hash
+
             db.session.commit()
 
             response = make_response(new_user.to_dict(), 201)
@@ -111,7 +118,7 @@ class Users(Resource):
 
         #except ValueError: 
         # NEED TO WRITE VALIDATIONS
-api.add_resource(Users, '/renters')
+api.add_resource(Users, '/users')
 
 
 class UserByID(Resource):
@@ -410,7 +417,7 @@ class RentalAgreements(Resource):
     #Get ALL rental agreements
     #list of all the renters and the equipment
     def get(self):
-        agreements = [agreement.to_dict( only = ('equipment','renter','rental_dates')) for agreement in RentalAgreement.query.all()]
+        agreements = [agreement.to_dict( only = ('equipment','user','rental_dates')) for agreement in RentalAgreement.query.all()]
 
         response = make_response(agreements, 200)
 
@@ -431,7 +438,7 @@ class RentalAgreements(Resource):
             total_price = data['total_price'],
             rental_dates = data['rental_dates'],
             owner_id = data['owner_id'],
-            renter_id = data['renter_id'],
+            user_id = data['user_id'],
             equipment_id = data['equipment_id']
         )
 

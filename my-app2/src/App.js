@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import './App.css';
 import { useNavigate, Route, Routes } from 'react-router-dom';
+
+import './App.css';
 //---------------------Homepage and Navbar-------------
 import HomePage from './HomePageComponents/HomePage';
 import NavBar from './HeaderFooterComponents/NavBar';
@@ -21,6 +22,9 @@ import ProductForm from './EquipmentComponents/ProductForm';
 import ProductEditForm from './EquipmentComponents/ProductEditForm';
 import RentalForm from './RentalComponents/RentalForm';
 import RentalFormPrepop from './RentalComponents/RentalFormPrepop'
+
+//----------------------Login Functionality-----------------------------
+import UserLogin from './UserComponents/UserLogin';
 
 function App() {
 
@@ -215,6 +219,7 @@ function App() {
         <Route path='/owner/:id/edit' element={<OwnerEditForm ownerToEdit={ownerToEdit} updateOwner={updateOwner} />} />
         <Route path='/equipment/:id/edit' element={<ProductEditForm equipmentToEdit={equipmentToEdit} updateEquipment={updateEquipment} />} />
 
+        <Route path='login' element={<UserLogin/>}/>
       </Routes>
 
 
