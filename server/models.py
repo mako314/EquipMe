@@ -10,12 +10,21 @@ class User(db.Model, SerializerMixin):
     __tablename__ = "renters"
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
+
+    firstName = db.Column(db.String)
+    lastName = db.Column(db.String)
+    age = db.Column(db.Integer)
+    email = db.Column(db.String)
+    _password_hash = db.Column(db.String, nullable=False)
+    phone = db.Column(db.String)
+
     age = db.Column(db.Integer)
     location = db.Column(db.String)
     profession = db.Column(db.String)
-    phone = db.Column(db.String)
-    email = db.Column(db.String)
+    
+    profileImg = db.Column(db.String)
+    bannerImg = db.Column(db.String)
+
 
     #STUFF BELOW IS DONE
     #might need to add email to identify user
