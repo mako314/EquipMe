@@ -21,8 +21,8 @@ class Login(Resource):
     def post(self):
         data = request.get_json()
         #Test to find username,
-        username = data['username']
-        user = User.query.filter(User.username == username).first()
+        email = data['email']
+        user = User.query.filter(User.email == email).first()
         #Grab password
         password = data['password']
         # print(user)
