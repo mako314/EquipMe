@@ -19,14 +19,14 @@ function UserLogin(){
     function handleLogin(e) {
         e.preventDefault();
 
-        let username = e.target.username.value;
+        let email = e.target.email.value;
 
         fetch("/login", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify( { username } ),
+            body: JSON.stringify( { email } ),
           }).then((resp) => {
             if (resp.ok) {
               resp.json().then((user) => setUser(user));
@@ -46,8 +46,8 @@ function UserLogin(){
     <>
     <h1>Login Form</h1>
     <form onSubmit = {handleLogin}>
-        <label>Username: </label>
-        <input id = "username" type = "text" />
+        <label> Email: </label>
+        <input id = "email" type = "text" />
         <button type = "submit">Login</button>
     </form>
 
