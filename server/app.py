@@ -97,6 +97,7 @@ class Users(Resource):
                 lastName = data['lastName'],
                 age = data['age'],
                 email = data['email'],
+                _password_hash = data['password'],
                 phone = data['phone'],
                 location = data['location'],
                 profession = data['profession'],
@@ -105,6 +106,9 @@ class Users(Resource):
             )
 
             db.session.add(new_user)
+
+            new_user.password_hash = new_user._password_hash
+
             db.session.commit()
 
             response = make_response(new_user.to_dict(), 201)
