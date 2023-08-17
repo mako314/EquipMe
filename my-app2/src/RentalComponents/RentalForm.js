@@ -10,12 +10,15 @@ function RentalForm({ addRentalAgreement, owners, equipmentArray }){
     const [locRent, setLocRent] = useState("")
     const [selectFrom, setSelectFrom] = useState([])
 
+    //Going to need to edit this with useEffect like I did prior in the hobbyWars code, waiting for stuff to set and then using setFormikValues
+    
+
     const navigate = useNavigate()
 
     const formSchema = object({
         location: string().required('We need your coordinates Masterchief'),
         total_price: number().positive().required('You must enter a positive offer.'),
-        renter_id: string().required('Please select who you would like to rent from.')
+        user_id: string().required('Please select who you would like to rent from.')
     })
 
     //user POST
@@ -25,7 +28,7 @@ function RentalForm({ addRentalAgreement, owners, equipmentArray }){
             total_price: '',
             rental_dates: '',
             owner_id: '',
-            renter_id: '',
+            user_id: '',
             equipment_id: ''
         },
         validationSchema: formSchema,
@@ -146,8 +149,8 @@ function RentalForm({ addRentalAgreement, owners, equipmentArray }){
                         <label>Who would you like to rent from?</label>
                     <select
                         className="text-black"
-                        name="renter_id"
-                        value={formik.values.renter_id}
+                        name="user_id"
+                        value={formik.values.user_id}
                         onChange={handleOwnerFilter}>
                         <option> Select from the options below:</option>
                         {mappedOwnerSelect}
