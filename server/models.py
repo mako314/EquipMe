@@ -7,7 +7,7 @@ from config import db, bcrypt
 
 
 class User(db.Model, SerializerMixin):
-    __tablename__ = "renters"
+    __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
 
@@ -33,10 +33,10 @@ class User(db.Model, SerializerMixin):
 
     #relationships 
     #do a cascade to make life easier
-    agreements = db.relationship('RentalAgreement', back_populates="renter", overlaps="renters,owners")
+    agreements = db.relationship('RentalAgreement', back_populates="user", overlaps="users,owners")
 
     #Serialization rules
-    serialize_rules = ('-agreements.renter', )
+    serialize_rules = ('-agreements.user', )
 
 
     #PROPERTIES
@@ -95,7 +95,7 @@ class EquipmentOwner(db.Model, SerializerMixin):
     #reviews also?
     
     #relationships
-    # agreements = db.relationship('RentalAgreement', back_populates="owner", overlaps="renters,owners")
+    # agreements = db.relationship('RentalAgreement', back_populates="owner", overlaps="users,owners")
 
     #do a cascade to make life easier
     equipment = db.relationship('Equipment', back_populates='owner', overlaps="owners,equipments")
@@ -157,7 +157,7 @@ class Equipment(db.Model, SerializerMixin):
 
     owner = db.relationship("EquipmentOwner", back_populates="equipment", overlaps="owners,equipments" )
 
-    agreements = db.relationship('RentalAgreement', back_populates="equipment", overlaps="renters,equipments")
+    agreements = db.relationship('RentalAgreement', back_populates="equipment", overlaps="users,equipments")
 
     #Serialization rules
     serialize_rules = ('-owner.equipment', '-agreements.equipment' )
@@ -192,22 +192,22 @@ class RentalAgreement(db.Model, SerializerMixin):
     #relationships
     #do a cascade to make life easier
     owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'))
-    renter_id = db.Column(db.Integer, db.ForeignKey('renters.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
 
     #this hopefully connects it
-    renter = db.relationship(
-        "User", back_populates="agreements", overlaps="renters,owners"
+    user = db.relationship(
+        "User", back_populates="agreements", overlaps="users,owners"
     )
     equipment = db.relationship(
-        "Equipment", back_populates="agreements", overlaps="renters,equipment")
+        "Equipment", back_populates="agreements", overlaps="users,equipment")
     
     owner = db.relationship(
-        "EquipmentOwner", back_populates="agreements", overlaps="renters,agreements"
+        "EquipmentOwner", back_populates="agreements", overlaps="users,agreements"
     )
     
     #Serialization rules
-    serialize_rules = ('-renter.agreements', '-owner.equipment', '-owner.agreements', '-equipment.owner', '-equipment.agreements')
+    serialize_rules = ('-user.agreements', '-owner.equipment', '-owner.agreements', '-equipment.owner', '-equipment.agreements')
 
     def __repr__(self):
         return f"<Rental Agreement: Equipment in {self.location}, Total Price: {self.total_price}, Rental Dates: {self.rental_dates}>"
