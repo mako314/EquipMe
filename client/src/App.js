@@ -30,6 +30,12 @@ function App() {
 
   //forgot to const navigate = useNavigate()
   const navigate = useNavigate()
+
+
+  //Grab user and have it throughout the whole app
+  const [user, setUser] = useState(null)
+  
+  //These useStates will handle POST. Grabbing and ...spreading so it updates accordingly. Set Search Term & Grab Equipment Array
   const [equipmentArray, setEquipmentArray] = useState([])
   const [searchTerm, setSearchTerm] = useState("")
 
@@ -44,6 +50,21 @@ function App() {
   const [featuredRental, setFeaturedRental] = useState([])
 
   //Do I even need two state variables to do this ? Turns out all original fetches work
+
+  //-------------------------------------------- CHECK SESSION TO STAY LOGGED IN ON REFRESH--------------------------
+    
+  useEffect(() => {
+    fetch("/check_session").then((response) => {
+      if (response.ok) {
+        response.json().then((user) => setUser(user));
+      }
+    });
+  }, []);
+
+  console.log(user)
+
+ //------------------------------------------------------------------------------------------------------------------
+  //---------------------------------Fetches -----------------------
 
 
   //---------------------------------Posts and general Fetches -----------------------
@@ -219,7 +240,7 @@ function App() {
         <Route path='/owner/:id/edit' element={<OwnerEditForm ownerToEdit={ownerToEdit} updateOwner={updateOwner} />} />
         <Route path='/equipment/:id/edit' element={<ProductEditForm equipmentToEdit={equipmentToEdit} updateEquipment={updateEquipment} />} />
 
-        <Route path='login' element={<UserLogin/>}/>
+        <Route path='/login' element={<UserLogin user={user} setUser={setUser}/>}/>
       </Routes>
 
 

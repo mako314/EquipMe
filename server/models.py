@@ -149,6 +149,8 @@ class Equipment(db.Model, SerializerMixin):
     # cost_per_week = db.Column(db.Integer)
     # cost_per_month = db.Column(db.Integer)
 
+    #Should add things like a deposit required, short description, condition to rent vehicle i.e. license required? Y/N? What else could be included needs to be brainstormed
+
 
     #relationship
     #do a cascade to make life easier
