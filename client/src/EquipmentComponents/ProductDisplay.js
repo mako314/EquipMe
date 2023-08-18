@@ -19,39 +19,43 @@ function EquipmentDisplay() {
 
   console.log(oneEquipment)
 
+  // Need to make some onclicks for when a user clicks description, reviews, details etc. 
+
+  //What can I include in details? Possibly whether or not the vehicle is available for delivery? Deposit ? ETC?
+
 
 
   let loggedOutDisplay
   loggedOutDisplay=(
-    <section class="text-gray-400 bg-gray-900 body-font overflow-hidden">
-      <div class="container px-5 py-24 mx-auto">
-        <div class="lg:w-4/5 mx-auto flex flex-wrap">
-          <div class="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">
-            <h2 class="text-sm title-font text-gray-500 tracking-widest">{name}</h2>
-            <h1 class="text-white text-3xl title-font font-medium mb-4">{make + model}</h1>
-            <div class="flex mb-4">
-              <a class="flex-grow text-indigo-400 border-b-2 border-indigo-500 py-1 text-lg px-1 mr-2">Description</a>
-              <a class="flex-grow border-b-2 border-gray-800 py-1 text-lg px-1 mr-2">Reviews</a>
-              <a class="flex-grow border-b-2 border-gray-800 py-1 text-lg px-1">Details</a>
+    <section className="text-gray-400 bg-gray-900 body-font overflow-hidden">
+      <div className="container px-5 py-24 mx-auto">
+        <div className="lg:w-4/5 mx-auto flex flex-wrap">
+          <div className="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">
+            <h2 className="text-sm title-font text-gray-500 tracking-widest">{name}</h2>
+            <h1 className="text-white text-3xl title-font font-medium mb-4">{make + model}</h1>
+            <div className="flex mb-4">
+              <a className="flex-grow text-indigo-400 border-b-2 border-indigo-500 py-1 text-lg px-1 mr-2">Description</a>
+              <a className="flex-grow border-b-2 border-gray-800 py-1 text-lg px-1 mr-2">Reviews</a>
+              <a className="flex-grow border-b-2 border-gray-800 py-1 text-lg px-1">Details</a>
             </div>
-            <p class="leading-relaxed mb-4">Fam locavore kickstarter distillery. Mixtape chillwave tumeric sriracha taximy chia microdosing tilde DIY. XOXO fam iligo juiceramps cornhole raw denim forage brooklyn. Everyday carry +1 seitan poutine tumeric. Gastropub blue bottle austin listicle pour-over, neutra jean.</p>
-            <div class="flex border-t border-gray-800 py-2">
-              <span class="text-gray-500">Location</span>
-              <span class="ml-auto text-white">{location}</span>
+            <p className="leading-relaxed mb-4">Fam locavore kickstarter distillery. Mixtape chillwave tumeric sriracha taximy chia microdosing tilde DIY. XOXO fam iligo juiceramps cornhole raw denim forage brooklyn. Everyday carry +1 seitan poutine tumeric. Gastropub blue bottle austin listicle pour-over, neutra jean.</p>
+            <div className="flex border-t border-gray-800 py-2">
+              <span className="text-gray-500">Location</span>
+              <span className="ml-auto text-white">{location}</span>
             </div>
-            <div class="flex border-t border-gray-800 py-2">
-              <span class="text-gray-500">Size</span>
-              <span class="ml-auto text-white">Medium</span>
+            <div className="flex border-t border-gray-800 py-2">
+              <span className="text-gray-500">Size</span>
+              <span className="ml-auto text-white">Medium</span>
             </div>
-            <div class="flex border-t border-b mb-6 border-gray-800 py-2">
-              <span class="text-gray-500">Quantity</span>
-              <span class="ml-auto text-white">{quantity}</span>
+            <div className="flex border-t border-b mb-6 border-gray-800 py-2">
+              <span className="text-gray-500">Quantity</span>
+              <span className="ml-auto text-white">{quantity}</span>
             </div>
-            <div class="flex">
-              <span class="title-font font-medium text-2xl text-white">$58.00</span>
-              <button class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">Button</button>
-              <button class="rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
-                <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+            <div className="flex">
+              <span className="title-font font-medium text-2xl text-white">$58.00</span>
+              <button className="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">Rent Now</button>
+              <button className="rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
+                <svg fill="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-5 h-5" viewBox="0 0 24 24">
                   <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
                 </svg>
               </button>
