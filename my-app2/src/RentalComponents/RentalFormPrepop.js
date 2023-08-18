@@ -31,7 +31,7 @@ function RentalForm({ addRentalAgreement, owners, equipmentArray, featuredRental
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
-            fetch('http://127.0.0.1:5555/rental_agreements', {
+            fetch('/rental_agreements', {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -78,7 +78,7 @@ function RentalForm({ addRentalAgreement, owners, equipmentArray, featuredRental
     // ))
 
     // useEffect(() => {
-    //     fetch(`http://127.0.0.1:5555/all_equipment/${rentFrom}`)
+    //     fetch(`/all_equipment/${rentFrom}`)
     //         .then((resp) => resp.json())
     //         .then((data) => {
     //             setSelectFrom(data)

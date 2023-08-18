@@ -5,7 +5,7 @@ function RentalCollection({ }) {
     const [rentalAgreementArray, setRentalAgreementArray] = useState([])
 
     useEffect(() => {
-        fetch("http://127.0.0.1:5555/rental_agreements")
+        fetch("/rental_agreements")
             .then((resp) => resp.json())
             .then((data) => {
                 setRentalAgreementArray(data)

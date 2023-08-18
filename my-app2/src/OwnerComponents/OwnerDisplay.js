@@ -10,7 +10,7 @@ function OwnerDisplay() {
   // const navigate = useNavigate()
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:5555/equipment_owner/${id}`)
+    fetch(`/equipment_owner/${id}`)
       .then((resp) => resp.json())
       .then((data) => {
         setOwner(data)

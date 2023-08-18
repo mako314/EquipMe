@@ -7,7 +7,7 @@ function OwnerCollection({ searchTerm, handleEditOwner, handleOwnerDelete, equip
     // const [equipmentOwnerArray, setEquipmentOwnerArray] = useState([])
 
     // useEffect(() => {
-    //     fetch("http://127.0.0.1:5555/equipment_owners")
+    //     fetch("/equipment_owners")
     //         .then((resp) => resp.json())
     //         .then((data) => {
     //             setEquipmentOwnerArray(data)

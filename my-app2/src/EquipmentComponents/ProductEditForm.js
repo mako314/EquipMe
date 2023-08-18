@@ -30,7 +30,7 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
-            fetch(`http://127.0.0.1:5555/equipment/${equipmentToEdit.id}` , {
+            fetch(`/equipment/${equipmentToEdit.id}` , {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json"

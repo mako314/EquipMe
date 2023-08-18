@@ -49,7 +49,7 @@ function App() {
   //---------------------------------Posts and general Fetches -----------------------
   //Going to improvise this for the post also / maybe patch also?
   useEffect(() => {
-    fetch("http://127.0.0.1:5555/equipment")
+    fetch("/equipment")
       .then((resp) => resp.json())
       .then((data) => {
         setEquipmentArray(data)
@@ -64,7 +64,7 @@ function App() {
 
   //These will be the Post useEffects - USERS
   useEffect(() => {
-    fetch("http://127.0.0.1:5555/renters")
+    fetch("/renters")
       .then((resp) => resp.json())
       .then((data) => {
         setUsers(data)
@@ -78,7 +78,7 @@ function App() {
 
   //These will be the Post useEffects - OWNERS -- THIS HAD RENTERS
   useEffect(() => {
-    fetch("http://127.0.0.1:5555/equipment_owners")
+    fetch("/equipment_owners")
       .then((resp) => resp.json())
       .then((data) => {
         setOwners(data)
@@ -95,7 +95,7 @@ function App() {
   //POST RENTAL AGREEMENTS
 
   useEffect(() => {
-    fetch("http://127.0.0.1:5555/rental_agreements")
+    fetch("/rental_agreements")
       .then((resp) => resp.json())
       .then((data) => {
         setRentalAgreement(data)
@@ -154,7 +154,7 @@ function App() {
 
 
   const handleOwnerDelete = (owner) => {
-    fetch(`http://127.0.0.1:5555/equipment_owner/${owner.id}`, {
+    fetch(`/equipment_owner/${owner.id}`, {
       method: "DELETE"
     })
       .then(() => {
@@ -172,7 +172,7 @@ function App() {
   }
 
   const handleEquipmentDelete = (equipment) => {
-    fetch(`http://127.0.0.1:5555/equipment/${equipment.id}`, {
+    fetch(`/equipment/${equipment.id}`, {
       method: "DELETE"
     })
       .then(() => {
