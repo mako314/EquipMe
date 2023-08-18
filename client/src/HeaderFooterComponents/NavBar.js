@@ -73,6 +73,18 @@ function NavBar({ setSearchTerm }) {
                         </NavLink>
                     </button>
                 </div>
+
+                <div className="loginButtonDiv">
+                    <button className="loginButton">
+                        <NavLink
+                            key={"Login"}
+                            name={"Login"}
+                            to={"/login"}>
+                            Login
+                        </NavLink>
+                    </button>
+                </div>
+
             </div>
             <SearchBar setSearchTerm={setSearchTerm} />
         </nav>
