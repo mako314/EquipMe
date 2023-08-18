@@ -22,6 +22,7 @@ class Login(Resource):
         data = request.get_json()
         #Test to find username,
         email = data['email']
+        print(email)
         user = User.query.filter(User.email == email).first()
         #Grab password
         password = data['password']
@@ -33,7 +34,7 @@ class Login(Resource):
                 return user.to_dict(), 200
         #Do I need to JSONIFY^ ?
 
-        return make_response({'error': 'Invalid username or password'}, 401)
+        return make_response({'error': 'Invalid email or password'}, 401)
 
 api.add_resource(Login, '/login')
 #------------------------------------------------------------------------------------------------------------------------------

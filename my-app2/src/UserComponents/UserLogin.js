@@ -22,7 +22,7 @@ function UserLogin(){
         let email = e.target.email.value;
         let password = e.target.password.value;
 
-        fetch("/login", {
+        fetch('/login', {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
