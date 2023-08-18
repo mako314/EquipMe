@@ -10,7 +10,7 @@ function EquipmentDisplay() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:5555/equipment/${id}`)
+    fetch(`/equipment/${id}`)
       .then((resp) => resp.json())
       .then((data) => {
         setOneEquipment(data)

@@ -24,7 +24,7 @@ function UserForm({addOwner}){
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
-            fetch('http://127.0.0.1:5555/equipment_owners' , {
+            fetch('/equipment_owners' , {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

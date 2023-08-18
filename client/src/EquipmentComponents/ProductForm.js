@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import {useFormik} from "formik"
 import { object, string, number} from 'yup'
 
-function ProductEditForm({equipmentToEdit, updateEquipment}){
+function ProductForm({ addEquipment }){
     const [error, setError] = useState()
     const navigate = useNavigate()
 
@@ -14,41 +14,49 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
         email: string().required('Please enter an email address')
     })
 
+    //Equipment POST
     const formik = useFormik({
         initialValues: {
-            name: equipmentToEdit.name,
-            type: equipmentToEdit.type,
-            make: equipmentToEdit.make,
-            model: equipmentToEdit.model,
-            owner_name: equipmentToEdit.owner_name,
-            phone: equipmentToEdit.phone,
-            email: equipmentToEdit.email,
-            location: equipmentToEdit.location,
-            availability: equipmentToEdit.availability,
-            delivery: equipmentToEdit.delivery,
-            quantity: equipmentToEdit.quantity
+            name: '',
+            type: '',
+            make: '',
+            model: '',
+            owner_name: '',
+            phone: '',
+            email: '',
+            location: '',
+            availability: '',
+            delivery: '',
+            quantity: ''
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
-            fetch(`http://127.0.0.1:5555/equipment/${equipmentToEdit.id}` , {
-                method: "PATCH",
+            fetch('/equipment' , {
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify(values)
             })
-              .then(res =>{
-                if (res.ok) {
-                    res.json().then(equipment => {
-                        updateEquipment(equipment)
-                        navigate(`/equipment/${equipmentToEdit.id}`)
-                    })
-                } else {
-                    res.json().then(error => setError(error)) //for backend errors
-                }
-              })
+                .then(res => {
+                    if (res.ok){
+                        res.json().then(equipment => {
+                            addEquipment(equipment)
+                            navigate('/equipment')
+                        })
+                    } else {
+                        res.json().then(error => setError(error)) //for backend errors
+                    }
+                })
+                
         }
     })
+
+
+
+    // <form className="form" onSubmit={formik.handleSubmit}> FOR THE LOVE OF GOD INCLUDE THE SUBMIT IN THE FORM
+    // MAKE 2 FORM COMPONENTS, CONDITIONALLY RENDER THOSE 2
+
 
     return (
         <div className = "form-container">
@@ -97,6 +105,16 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
                         type="text"
                         name="model"
                         value={formik.values.model}
+                        onChange={formik.handleChange}
+                    />
+                    </div>
+
+                    <div className="submit-form"> 
+                    <label>Owner Name</label>
+                    <input
+                        type="text"
+                        name="owner_name"
+                        value={formik.values.owner_name}
                         onChange={formik.handleChange}
                     />
                     </div>
@@ -166,7 +184,6 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
             </form>
         </div>
     )
-
 }
 
-export default ProductEditForm;
+export default ProductForm;
