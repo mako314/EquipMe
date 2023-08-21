@@ -1,12 +1,15 @@
 import React, { useState } from "react"
 import { Link, useNavigate} from 'react-router-dom';
 import {ReactComponent as EquipMeLogo } from '../Content/EquipMeLogo.svg'
-// import SearchBar from "./SearchBar";
+import SearchBar from "./SearchBar";
 // import Header from "./Header";
 
 
 function NavBar({ setSearchTerm }) {
+
     const [isToggleOpen, setIsToggleOpen] = useState(false)
+
+    const navigate = useNavigate();
     
     // const navArray = consoleArray.map((cons) => {
     //     return (
@@ -20,7 +23,7 @@ function NavBar({ setSearchTerm }) {
     //     )
     // })
 
-    const navigate = useNavigate();
+    
 
     
 
@@ -37,7 +40,7 @@ function NavBar({ setSearchTerm }) {
             {/*      <!-- Brand logo --> */}
 
             {/* <Link to='/'> */}
-            <span
+            <Link to="/"
             id="WindUI"
             aria-label="WindUI logo"
             aria-current="page"
@@ -45,8 +48,8 @@ function NavBar({ setSearchTerm }) {
             href="javascript:void(0)"
             >
             <EquipMeLogo className="h-12 w-12" />
-            <span className="ml-3 text-xl text-white">Equip Me</span>
-            </span>
+            <span className={`ml-3 text-xl ${isToggleOpen ? 'text-black' : 'text-white'}`}>Equip Me</span>
+            </Link>
             {/* </Link> */}
 
             {/*      <!-- Mobile trigger --> */}
@@ -86,6 +89,21 @@ function NavBar({ setSearchTerm }) {
                   : "invisible opacity-0"
               }`}
             >
+
+            <li role="none" className="flex items-stretch">
+                    <span
+                    role="menuitem"
+                    aria-haspopup="false"
+                    tabIndex="0"
+                    className={`flex items-center gap-2 py-4 text-${
+                        isToggleOpen ? "black" : "white"
+                    } transition-colors duration-300 hover:text-amber-500 lg:px-8`}
+                    >
+                    <SearchBar setSearchTerm={setSearchTerm} isToggleOpen={isToggleOpen}/>
+                    </span>
+            </li>
+            
+
             <li role="none" className="flex items-stretch">
                     <Link
                     to="/equipment" 
@@ -132,7 +150,9 @@ function NavBar({ setSearchTerm }) {
             
             <div className="ml-auto flex items-center px-6 lg:ml-0 lg:p-0">
               <button className="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded bg-amber-500 px-5 text-sm font-medium tracking-wide text-white shadow-md shadow-amber-200 transition duration-300 hover:bg-emerald-600 hover:shadow-sm hover:shadow-emerald-200 focus:bg-emerald-700 focus:shadow-sm focus:shadow-emerald-200 focus-visible:outline-none disabled:cursor-not-allowed disabled:border-emerald-300 disabled:bg-emerald-300 disabled:shadow-none">
+                <Link to='/login'>
                 <span>Login</span>
+                </Link>
               </button>
             
             </div>
