@@ -48,7 +48,7 @@ function NavBar({ setSearchTerm }) {
             href="javascript:void(0)"
             >
             <EquipMeLogo className="h-12 w-12" />
-            <span className="ml-3 text-xl text-white">Equip Me</span>
+            <span className={`ml-3 text-xl ${isToggleOpen ? 'text-black' : 'text-white'}`}>Equip Me</span>
             </Link>
             {/* </Link> */}
 
