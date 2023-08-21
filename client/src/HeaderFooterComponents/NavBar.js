@@ -1,12 +1,15 @@
 import React, { useState } from "react"
 import { Link, useNavigate} from 'react-router-dom';
 import {ReactComponent as EquipMeLogo } from '../Content/EquipMeLogo.svg'
-// import SearchBar from "./SearchBar";
+import SearchBar from "./SearchBar";
 // import Header from "./Header";
 
 
 function NavBar({ setSearchTerm }) {
+
     const [isToggleOpen, setIsToggleOpen] = useState(false)
+
+    const navigate = useNavigate();
     
     // const navArray = consoleArray.map((cons) => {
     //     return (
@@ -20,7 +23,7 @@ function NavBar({ setSearchTerm }) {
     //     )
     // })
 
-    const navigate = useNavigate();
+    
 
     
 
@@ -86,6 +89,21 @@ function NavBar({ setSearchTerm }) {
                   : "invisible opacity-0"
               }`}
             >
+
+            <li role="none" className="flex items-stretch">
+                    <span
+                    role="menuitem"
+                    aria-haspopup="false"
+                    tabIndex="0"
+                    className={`flex items-center gap-2 py-4 text-${
+                        isToggleOpen ? "black" : "white"
+                    } transition-colors duration-300 hover:text-amber-500 lg:px-8`}
+                    >
+                    <SearchBar setSearchTerm={setSearchTerm} isToggleOpen={isToggleOpen}/>
+                    </span>
+            </li>
+            
+
             <li role="none" className="flex items-stretch">
                     <Link
                     to="/equipment" 
