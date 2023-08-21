@@ -1,11 +1,15 @@
 import React from "react";
-import InputPlaceholder from 'react-input-placeholder';
+import "../App.css"
 
 function SearchBar({ setSearchTerm, isToggleOpen}) {
 
     function handleChange(e) {
         setSearchTerm(e.target.value)
     }
+
+
+    // {`${isToggleOpen ? 'desktopSearch' : 'mobileSearch'}`}
+
     return (
         // <div className="search">
         //     <input type="text" placeholder="Looking for something?" className="searchTerm" onChange={handleChange} />
@@ -31,6 +35,7 @@ function SearchBar({ setSearchTerm, isToggleOpen}) {
         {/* Updated styles for the search input */}
         <div className={` ${isToggleOpen ? 'bg-amber-500' : 'bg-white bg-opacity-30'} rounded-full flex items-center px-4 py-2 focus-within:ring ${isToggleOpen ? 'ring-black' : 'ring-amber-500'}`}>
             <input
+            id = 'searchBar'
             type="text"
             placeholder= "Looking for something?"
             placeholderColor={isToggleOpen ? 'black' : 'white'}
