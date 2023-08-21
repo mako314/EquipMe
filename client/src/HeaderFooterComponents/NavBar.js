@@ -90,18 +90,7 @@ function NavBar({ setSearchTerm }) {
               }`}
             >
 
-              <li role="none" className="flex items-stretch">
-                <span
-                  role="menuitem"
-                  aria-haspopup="false"
-                  tabIndex="0"
-                  className="flex items-center gap-2 py-4 text-white transition-colors duration-300 hover:text-amber-500 focus:bg-emerald-50 focus:outline-none focus-visible:outline-none lg:px-8"
-                  href="javascript:void(0)"
-                >
-                  <span>Home</span>
-                </span>
-              </li>
-
+              <Link to='/owner_signup'> 
               <li role="none" className="flex items-stretch">
                 <span
                   role="menuitem"
@@ -111,9 +100,10 @@ function NavBar({ setSearchTerm }) {
                   className="flex items-center gap-2 py-4 text-white transition-colors duration-300 hover:text-amber-500 focus:bg-emerald-50 focus:outline-none focus-visible:outline-none lg:px-8"
                   href="javascript:void(0)"
                 >
-                  <span>Features</span>
+                  <span>Contractor Signup</span>
                 </span>
               </li>
+              </Link>
 
               <Link to='/equipment_owners'> 
               <li role="none" className="flex items-stretch">
@@ -143,6 +133,20 @@ function NavBar({ setSearchTerm }) {
                </Link>
 
               </li>
+
+              <Link to='/login'>
+              <li role="none" className="flex items-stretch">
+                <span
+                  role="menuitem"
+                  aria-haspopup="false"
+                  tabIndex="0"
+                  className="flex items-center gap-2 py-4 text-white transition-colors duration-300 hover:text-amber-500 focus:bg-emerald-50 focus:outline-none focus-visible:outline-none lg:px-8"
+                  href="javascript:void(0)"
+                >
+                  <span>Login</span>
+                </span>
+              </li>
+              </Link>
 
             </ul>
 
