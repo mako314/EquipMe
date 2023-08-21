@@ -38,6 +38,8 @@ Sometimes text color is bugging on navbar if you move too quickly, need to find 
 
 2. REVIEWS AND COMMENTS, STAR RATING
 
+3. Incorporate their rental agreements in a drop down menu, allow them to select from existing, previous, and possibly future ones.
+Individuals should be able to view their rental agreements based on a date format 30-60-90-180-360
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------NAVBAR ITSELF--------------------------------------------------------------------------------------------------
@@ -58,3 +60,12 @@ Sometimes text color is bugging on navbar if you move too quickly, need to find 
 3.1 Show interest, reach out. 
 3.2 After reaching out, discuss, send rental agreement to partner. 
 3.3 After partner accepts the rental agreement is formed.
+
+
+4. Find a way to upload documents to the rental agreement, take deposits in, and from there it can be submitted.
+4.1 Both the Renter and the Owner need to have the following:
+Proof of renters insurance (Renter)
+Proof of Owners equipment insurance (Owner)
+Proof of Ownership (Owner) <--This should likely not be visible to the renter, but to a site admin-->
+
+5. Include a created at date, updated at.
