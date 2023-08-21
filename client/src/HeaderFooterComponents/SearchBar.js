@@ -1,4 +1,5 @@
 import React from "react";
+import InputPlaceholder from 'react-input-placeholder';
 
 function SearchBar({ setSearchTerm, isToggleOpen}) {
 
@@ -31,7 +32,8 @@ function SearchBar({ setSearchTerm, isToggleOpen}) {
         <div className={` ${isToggleOpen ? 'bg-amber-500' : 'bg-white bg-opacity-30'} rounded-full flex items-center px-4 py-2 focus-within:ring ${isToggleOpen ? 'ring-black' : 'ring-amber-500'}`}>
             <input
             type="text"
-            placeholder={`${isToggleOpen ? "Looking for something?" : "Looking for something?"}`}
+            placeholder= "Looking for something?"
+            placeholderColor={isToggleOpen ? 'black' : 'white'}
             className={`searchTerm bg-transparent border-none focus:outline-none ${
                 isToggleOpen ? "text-black" : "text-white"
               } flex-1`}
