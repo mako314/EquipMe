@@ -90,7 +90,7 @@ function NavBar({ setSearchTerm }) {
                   role="menuitem"
                   aria-haspopup="false"
                   tabIndex="0"
-                  className="flex items-center gap-2 py-4 text-white transition-colors duration-300 hover:text-emerald-500 focus:bg-emerald-50 focus:outline-none focus-visible:outline-none lg:px-8"
+                  className="flex items-center gap-2 py-4 text-white transition-colors duration-300 hover:text-amber-500 focus:bg-emerald-50 focus:outline-none focus-visible:outline-none lg:px-8"
                   href="javascript:void(0)"
                 >
                   <span>Home</span>
@@ -102,7 +102,7 @@ function NavBar({ setSearchTerm }) {
                   aria-current="page"
                   aria-haspopup="false"
                   tabIndex="0"
-                  className="flex items-center gap-2 py-4 text-white transition-colors duration-300 hover:text-emerald-600 focus:bg-emerald-50 focus:outline-none focus-visible:outline-none lg:px-8"
+                  className="flex items-center gap-2 py-4 text-white transition-colors duration-300 hover:text-amber-500 focus:bg-emerald-50 focus:outline-none focus-visible:outline-none lg:px-8"
                   href="javascript:void(0)"
                 >
                   <span>Features</span>
@@ -113,7 +113,7 @@ function NavBar({ setSearchTerm }) {
                   role="menuitem"
                   aria-haspopup="false"
                   tabIndex="0"
-                  className="flex items-center gap-2 py-4 text-white transition-colors duration-300 hover:text-emerald-500 focus:bg-emerald-50 focus:outline-none focus-visible:outline-none lg:px-8"
+                  className="flex items-center gap-2 py-4 text-white transition-colors duration-300 hover:text-amber-500 focus:bg-emerald-50 focus:outline-none focus-visible:outline-none lg:px-8"
                   href="javascript:void(0)"
                 >
                   <span>Pricing</span>
@@ -124,7 +124,7 @@ function NavBar({ setSearchTerm }) {
                   role="menuitem"
                   aria-haspopup="false"
                   tabIndex="0"
-                  className="flex items-center gap-2 py-4 text-white transition-colors duration-300 hover:text-emerald-500 focus:bg-emerald-50 focus:outline-none focus-visible:outline-none lg:px-8"
+                  className="flex items-center gap-2 py-4 text-white transition-colors duration-300 hover:text-amber-500 focus:bg-emerald-50 focus:outline-none focus-visible:outline-none lg:px-8"
                   href="javascript:void(0)"
                 >
                   <span>About</span>
