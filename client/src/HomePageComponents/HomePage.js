@@ -185,10 +185,10 @@ function HomePage({ equipmentArray, setFeaturedRental }) {
 
     return (
         <div>
-            <section className="bg-gray-900 dark:bg-gray-900">
+            <section className="">
                 <div className="gap-16 items-center py-8 px-4 mx-auto max-w-screen-xl lg:grid lg:grid-cols-2 lg:py-16 lg:px-6">
-                    <div className="font-light  text-white dark:text-white-900">
-                        <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-white dark:text-white-900">We didn't reinvent the wheel</h2>
+                    <div className="font-light  text-black dark:text-black-900">
+                        <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-black dark:text-black-900">We didn't reinvent the wheel</h2>
                         <p className="mb-4">Unleash Your Potential with EquipMe Rentals!</p>
                         <p>Get ready to conquer any project with our vast range of equipment and tools. From excavators to power tools, we've got it all! Find what you need, when you need it, and at unbeatable prices. Say goodbye to expensive purchases and hello to affordable rentals. Start exploring now and experience the ease and convenience of our rental services. Your next big project starts here!</p>
                     </div>
