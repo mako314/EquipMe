@@ -35,6 +35,7 @@ function NavBar({ setSearchTerm }) {
           >
             {/*      <!-- Brand logo --> */}
 
+            <Link to='/'>
             <span
             id="WindUI"
             aria-label="WindUI logo"
@@ -45,6 +46,7 @@ function NavBar({ setSearchTerm }) {
             <EquipMeLogo className="h-20 w-20 rounded-full" />
             <span className="ml-3 text-xl text-white">Equip Me</span>
             </span>
+            </Link>
             
             {/*      <!-- Mobile trigger --> */}
 
@@ -75,7 +77,9 @@ function NavBar({ setSearchTerm }) {
                 ></span>
               </div>
             </button>
+
             {/*      <!-- Navigation links --> */}
+
             <ul
               role="menubar"
               aria-label="Select page"
@@ -85,6 +89,7 @@ function NavBar({ setSearchTerm }) {
                   : "invisible opacity-0"
               }`}
             >
+
               <li role="none" className="flex items-stretch">
                 <span
                   role="menuitem"
@@ -96,6 +101,7 @@ function NavBar({ setSearchTerm }) {
                   <span>Home</span>
                 </span>
               </li>
+
               <li role="none" className="flex items-stretch">
                 <span
                   role="menuitem"
@@ -108,6 +114,8 @@ function NavBar({ setSearchTerm }) {
                   <span>Features</span>
                 </span>
               </li>
+
+              <Link to='/equipment_owners'> 
               <li role="none" className="flex items-stretch">
                 <span
                   role="menuitem"
@@ -116,10 +124,13 @@ function NavBar({ setSearchTerm }) {
                   className="flex items-center gap-2 py-4 text-white transition-colors duration-300 hover:text-amber-500 focus:bg-emerald-50 focus:outline-none focus-visible:outline-none lg:px-8"
                   href="javascript:void(0)"
                 >
-                  <span>Pricing</span>
+                  <span>Contractors</span>
                 </span>
               </li>
+              </Link>
+
               <li role="none" className="flex items-stretch">
+              <Link to='/equipment' >
                 <span
                   role="menuitem"
                   aria-haspopup="false"
@@ -127,10 +138,14 @@ function NavBar({ setSearchTerm }) {
                   className="flex items-center gap-2 py-4 text-white transition-colors duration-300 hover:text-amber-500 focus:bg-emerald-50 focus:outline-none focus-visible:outline-none lg:px-8"
                   href="javascript:void(0)"
                 >
-                  <span>About</span>
+                  <span className="inline-block" >Equipment</span>
                 </span>
+               </Link>
+
               </li>
+
             </ul>
+
           </nav>
         </div>
       </header>
