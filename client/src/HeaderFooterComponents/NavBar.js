@@ -35,7 +35,7 @@ function NavBar({ setSearchTerm }) {
           >
             {/*      <!-- Brand logo --> */}
 
-            <a
+            <span
             id="WindUI"
             aria-label="WindUI logo"
             aria-current="page"
@@ -44,7 +44,7 @@ function NavBar({ setSearchTerm }) {
             >
             <EquipMeLogo className="h-20 w-20 rounded-full" />
             <span className="ml-3 text-xl text-white">Equip Me</span>
-            </a>
+            </span>
             
             {/*      <!-- Mobile trigger --> */}
 
@@ -86,7 +86,7 @@ function NavBar({ setSearchTerm }) {
               }`}
             >
               <li role="none" className="flex items-stretch">
-                <a
+                <span
                   role="menuitem"
                   aria-haspopup="false"
                   tabIndex="0"
@@ -94,10 +94,10 @@ function NavBar({ setSearchTerm }) {
                   href="javascript:void(0)"
                 >
                   <span>Home</span>
-                </a>
+                </span>
               </li>
               <li role="none" className="flex items-stretch">
-                <a
+                <span
                   role="menuitem"
                   aria-current="page"
                   aria-haspopup="false"
@@ -106,10 +106,10 @@ function NavBar({ setSearchTerm }) {
                   href="javascript:void(0)"
                 >
                   <span>Features</span>
-                </a>
+                </span>
               </li>
               <li role="none" className="flex items-stretch">
-                <a
+                <span
                   role="menuitem"
                   aria-haspopup="false"
                   tabIndex="0"
@@ -117,10 +117,10 @@ function NavBar({ setSearchTerm }) {
                   href="javascript:void(0)"
                 >
                   <span>Pricing</span>
-                </a>
+                </span>
               </li>
               <li role="none" className="flex items-stretch">
-                <a
+                <span
                   role="menuitem"
                   aria-haspopup="false"
                   tabIndex="0"
@@ -128,7 +128,7 @@ function NavBar({ setSearchTerm }) {
                   href="javascript:void(0)"
                 >
                   <span>About</span>
-                </a>
+                </span>
               </li>
             </ul>
           </nav>
