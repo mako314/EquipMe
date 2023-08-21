@@ -28,13 +28,33 @@ Want to add:
 12. When searching and hitting enter, find a way (maybe a search-results page?) that kind of fetches the data and outputs what an individual could be looking for. Could be through the equipment for example, or the owners "partners"
 
 
+Sometimes text color is bugging on navbar if you move too quickly, need to find a solution for this.
+
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------USER IN ITSELF------------------------------------------------------------------------------------
+------------------------------------------------------------------------------USER IN ITSELF---------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 1. Profile page with favorites, possily separate from their actual user profile where owners can check reviews / leave reviews
 
-
-
-
 2. REVIEWS AND COMMENTS, STAR RATING
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------NAVBAR ITSELF--------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+1. Reinvented the navbar to actually look nice, included the search bar, added a mobile view and such.
+2. So ideally, I want the search to not only be on change, but also an on submit if possible. When the search is submitted it takes one to a search result page that can show them what they're looking for, be it partners, or be it specific equipment.
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------Rental Agreements ITSELF------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+1. Along with documentation upload, I'd like to make a nice card that reflects on the users dashboard / profile. When clicked it'll populate with the rental agreements that user currently has. Ideally they'd never be able to delete rental agreements (Unless one was submitted incorrectly, a new agreement was reached)
+
+2. I'd like to incorporate a sort of message system for users to discuss with partners about rental agreements.
+
+3. 3 way system:
+3.1 Show interest, reach out. 
+3.2 After reaching out, discuss, send rental agreement to partner. 
+3.3 After partner accepts the rental agreement is formed.

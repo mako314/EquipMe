@@ -25,6 +25,8 @@ class User(db.Model, SerializerMixin):
     profileImg = db.Column(db.String)
     bannerImg = db.Column(db.String)
 
+    #Would I need a document attribute here? To hold a users document such as insurance and such?
+
 
     #STUFF BELOW IS DONE
     #might need to add email to identify user
