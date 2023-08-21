@@ -35,7 +35,8 @@ function NavBar({ setSearchTerm }) {
             role="navigation"
           >
             {/*      <!-- Brand logo --> */}
-            <Link to='/'>
+
+            {/* <Link to='/'> */}
             <span
             id="WindUI"
             aria-label="WindUI logo"
@@ -46,7 +47,7 @@ function NavBar({ setSearchTerm }) {
             <EquipMeLogo className="h-12 w-12" />
             <span className="ml-3 text-xl text-white">Equip Me</span>
             </span>
-            </Link>
+            {/* </Link> */}
 
             {/*      <!-- Mobile trigger --> */}
 
