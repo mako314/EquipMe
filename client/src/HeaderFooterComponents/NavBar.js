@@ -35,7 +35,7 @@ function NavBar({ setSearchTerm }) {
             role="navigation"
           >
             {/*      <!-- Brand logo --> */}
-
+            <Link to='/'>
             <span
             id="WindUI"
             aria-label="WindUI logo"
@@ -46,6 +46,7 @@ function NavBar({ setSearchTerm }) {
             <EquipMeLogo className="h-12 w-12" />
             <span className="ml-3 text-xl text-white">Equip Me</span>
             </span>
+            </Link>
 
             {/*      <!-- Mobile trigger --> */}
 
@@ -84,44 +85,47 @@ function NavBar({ setSearchTerm }) {
                   : "invisible opacity-0"
               }`}
             >
-              {/* <Link to='/equipment'>  */}
             <li role="none" className="flex items-stretch">
                     <Link
                     to="/equipment" 
                     role="menuitem"
                     aria-haspopup="false"
                     tabIndex="0"
-                    className="flex items-center gap-2 py-4 text-white transition-colors duration-300 hover:text-amber-500 lg:px-8"
+                    className={`flex items-center gap-2 py-4 text-${
+                        isToggleOpen ? "black" : "white"
+                    } transition-colors duration-300 hover:text-amber-500 lg:px-8`}
                     >
                     Equipment
                     </Link>
             </li>
-              {/* </Link> */}
 
-              <li role="none" className="flex items-stretch">
-                <span
-                  role="menuitem"
-                  aria-current="page"
-                  aria-haspopup="false"
-                  tabIndex="0"
-                  className="flex items-center gap-2 py-4 text-white transition-colors duration-300 hover:text-amber-500 lg:px-8"
-                  href="javascript:void(0)"
-                >
-                  Pricing
-                </span>
-              </li>
+            <li role="none" className="flex items-stretch">
+                    <Link
+                    to="/equipment_owners" 
+                    role="menuitem"
+                    aria-haspopup="false"
+                    tabIndex="0"
+                    className={`flex items-center gap-2 py-4 text-${
+                        isToggleOpen ? "black" : "white"
+                    } transition-colors duration-300 hover:text-amber-500 lg:px-8`}
+                    >
+                    Our Partners
+                    </Link>
+            </li>
               
-              <li role="none" className="flex items-stretch">
-                <span
-                  role="menuitem"
-                  aria-haspopup="false"
-                  tabIndex="0"
-                  className="flex items-center gap-2 py-4 text-white transition-colors duration-300 hover:text-amber-500 lg:px-8"
-                  href="javascript:void(0)"
-                >
-                  About
-                </span>
-              </li>
+            <li role="none" className="flex items-stretch">
+                    <Link
+                    to="/owner_signup" 
+                    role="menuitem"
+                    aria-haspopup="false"
+                    tabIndex="0"
+                    className={`flex items-center gap-2 py-4 text-${
+                        isToggleOpen ? "black" : "white"
+                    } transition-colors duration-300 hover:text-amber-500 lg:px-8`}
+                    >
+                    Become a Partner
+                    </Link>
+            </li>
 
             </ul>
             
