@@ -36,7 +36,7 @@ function NavBar({ setSearchTerm }) {
           >
             {/*      <!-- Brand logo --> */}
 
-            <a
+            <span
             id="WindUI"
             aria-label="WindUI logo"
             aria-current="page"
@@ -45,7 +45,7 @@ function NavBar({ setSearchTerm }) {
             >
             <EquipMeLogo className="h-12 w-12" />
             <span className="ml-3 text-xl text-white">Equip Me</span>
-            </a>
+            </span>
 
             {/*      <!-- Mobile trigger --> */}
 
@@ -84,45 +84,52 @@ function NavBar({ setSearchTerm }) {
                   : "invisible opacity-0"
               }`}
             >
+              {/* <Link to='/equipment'>  */}
+            <li role="none" className="flex items-stretch">
+                    <Link
+                    to="/equipment" 
+                    role="menuitem"
+                    aria-haspopup="false"
+                    tabIndex="0"
+                    className="flex items-center gap-2 py-4 text-white transition-colors duration-300 hover:text-amber-500 lg:px-8"
+                    >
+                    Equipment
+                    </Link>
+            </li>
+              {/* </Link> */}
+
               <li role="none" className="flex items-stretch">
-                <a
-                  role="menuitem"
-                  aria-haspopup="false"
-                  tabIndex="0"
-                  className="flex items-center gap-2 py-4 transition-colors duration-300 hover:text-emerald-500 focus:bg-emerald-50 focus:outline-none focus-visible:outline-none lg:px-8"
-                  href="javascript:void(0)"
-                >
-                  <span>Features</span>
-                </a>
-              </li>
-              <li role="none" className="flex items-stretch">
-                <a
+                <span
                   role="menuitem"
                   aria-current="page"
                   aria-haspopup="false"
                   tabIndex="0"
-                  className="flex items-center gap-2 py-4 text-emerald-500 transition-colors duration-300 hover:text-emerald-600 focus:bg-emerald-50 focus:outline-none focus-visible:outline-none lg:px-8"
+                  className="flex items-center gap-2 py-4 text-white transition-colors duration-300 hover:text-amber-500 lg:px-8"
                   href="javascript:void(0)"
                 >
-                  <span>Pricing</span>
-                </a>
+                  Pricing
+                </span>
               </li>
+              
               <li role="none" className="flex items-stretch">
-                <a
+                <span
                   role="menuitem"
                   aria-haspopup="false"
                   tabIndex="0"
-                  className="flex items-center gap-2 py-4 transition-colors duration-300 hover:text-emerald-500 focus:bg-emerald-50 focus:outline-none focus-visible:outline-none lg:px-8"
+                  className="flex items-center gap-2 py-4 text-white transition-colors duration-300 hover:text-amber-500 lg:px-8"
                   href="javascript:void(0)"
                 >
-                  <span>About</span>
-                </a>
+                  About
+                </span>
               </li>
+
             </ul>
+            
             <div className="ml-auto flex items-center px-6 lg:ml-0 lg:p-0">
-              <button className="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded bg-emerald-500 px-5 text-sm font-medium tracking-wide text-white shadow-md shadow-emerald-200 transition duration-300 hover:bg-emerald-600 hover:shadow-sm hover:shadow-emerald-200 focus:bg-emerald-700 focus:shadow-sm focus:shadow-emerald-200 focus-visible:outline-none disabled:cursor-not-allowed disabled:border-emerald-300 disabled:bg-emerald-300 disabled:shadow-none">
-                <span>Try it free</span>
+              <button className="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded bg-amber-500 px-5 text-sm font-medium tracking-wide text-white shadow-md shadow-amber-200 transition duration-300 hover:bg-emerald-600 hover:shadow-sm hover:shadow-emerald-200 focus:bg-emerald-700 focus:shadow-sm focus:shadow-emerald-200 focus-visible:outline-none disabled:cursor-not-allowed disabled:border-emerald-300 disabled:bg-emerald-300 disabled:shadow-none">
+                <span>Login</span>
               </button>
+            
             </div>
           </nav>
         </div>
