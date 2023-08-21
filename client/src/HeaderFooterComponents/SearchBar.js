@@ -25,10 +25,10 @@ function SearchBar({ setSearchTerm, isToggleOpen}) {
         //     <i className="fa fa-search"></i>
         // </button>
         // </div>
-        <div className={`search ${isToggleOpen ? "text-black" : "text-black"} transition-colors duration-300 hover:text-amber-500 lg:px-8`}>
+        <div className={` ${isToggleOpen ? "text-black" : "text-black"} transition-colors duration-300 hover:text-amber-500 lg:px-8`}>
 
         {/* Updated styles for the search input */}
-        <div className={`searchInput bg-white bg-opacity-30 rounded-full flex items-center px-4 py-2 focus-within:ring focus-within:ring-amber-500`}>
+        <div className={` ${isToggleOpen ? 'bg-amber-500' : 'bg-white bg-opacity-30'} rounded-full flex items-center px-4 py-2 focus-within:ring ${isToggleOpen ? 'ring-black' : 'ring-amber-500'}`}>
             <input
             type="text"
             placeholder={`${isToggleOpen ? "Looking for something?" : "Looking for something?"}`}
@@ -37,8 +37,8 @@ function SearchBar({ setSearchTerm, isToggleOpen}) {
               } flex-1`}
             onChange={handleChange}
             />
-            <button className="searchButton">
-            <i className="fa fa-search"></i>
+            <button className="">
+            <i className=""></i>
             </button>
         </div>
         </div>
