@@ -23,6 +23,9 @@ function NavBar({ setSearchTerm }) {
     //     )
     // })
 
+    const closeMobileView = () => {
+      setIsToggleOpen(false);
+    };
     
 
     
@@ -110,6 +113,7 @@ function NavBar({ setSearchTerm }) {
                     role="menuitem"
                     aria-haspopup="false"
                     tabIndex="0"
+                    onClick={closeMobileView} // Close the mobile view when link is clicked
                     className={`flex items-center gap-2 py-4 text-${
                         isToggleOpen ? "black" : "white"
                     } transition-colors duration-300 hover:text-amber-500 lg:px-8`}
@@ -124,6 +128,7 @@ function NavBar({ setSearchTerm }) {
                     role="menuitem"
                     aria-haspopup="false"
                     tabIndex="0"
+                    onClick={closeMobileView} // Close the mobile view when link is clicked
                     className={`flex items-center gap-2 py-4 text-${
                         isToggleOpen ? "black" : "white"
                     } transition-colors duration-300 hover:text-amber-500 lg:px-8`}
@@ -138,6 +143,7 @@ function NavBar({ setSearchTerm }) {
                     role="menuitem"
                     aria-haspopup="false"
                     tabIndex="0"
+                    onClick={closeMobileView} // Close the mobile view when link is clicked
                     className={`flex items-center gap-2 py-4 text-${
                         isToggleOpen ? "black" : "white"
                     } transition-colors duration-300 hover:text-amber-500 lg:px-8`}
@@ -150,7 +156,9 @@ function NavBar({ setSearchTerm }) {
             
             <div className="ml-auto flex items-center px-6 lg:ml-0 lg:p-0">
               <button className="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded bg-amber-500 px-5 text-sm font-medium tracking-wide text-white shadow-md shadow-amber-200 transition duration-300 hover:bg-emerald-600 hover:shadow-sm hover:shadow-emerald-200 focus:bg-emerald-700 focus:shadow-sm focus:shadow-emerald-200 focus-visible:outline-none disabled:cursor-not-allowed disabled:border-emerald-300 disabled:bg-emerald-300 disabled:shadow-none">
-                <Link to='/login'>
+                <Link to='/login'
+                onClick={closeMobileView} // Close the mobile view when link is clicked
+                >
                 <span>Login</span>
                 </Link>
               </button>
@@ -165,69 +173,3 @@ function NavBar({ setSearchTerm }) {
 }
 
 export default NavBar;
-
-
-{/* <nav>
-            <Header />
-            <div className="buttons">
-                <div className="homediv">
-                    <NavLink className={"homebutton"} key={"Home"} name={"Home"} to={"/"}>
-                        <button className="homebutton">Home
-                        </button>
-                    </NavLink>
-                </div>
-
-                <div className="dropdown">
-                    <button className="dropbtn" onClick={toggleDropContent}> Menu
-                        <i className="fa fa-caret-down"></i>
-                    </button>
-                    <div className="dropdown-content">
-                        <NavLink
-                            key={"Equipment"}
-                            name={"Equipment"}
-                            to={"/equipment"}>
-                            Equipment
-                        </NavLink>
-
-                        <NavLink
-                            key={"Equipment Owners"}
-                            name={"Equipment Owners"}
-                            to={"/equipment_owners"}>
-                            Equipment Owners
-                        </NavLink>
-
-                        <NavLink
-                            key={"Rental Agreements"}
-                            name={"Rental Agreements"}
-                            to={"/rental_agreements"}>
-                            Rental Agreements
-                        </NavLink>
-
-                        {/* {navArray} */}
-            //         </div>
-            //     </div>
-            //     <div className="listButtonDiv">
-            //         <button className="listButton">
-            //             <NavLink
-            //                 key={"List Item"}
-            //                 name={"List Item"}
-            //                 to={"/owner_signup"}>
-            //                 Become an Owner
-            //             </NavLink>
-            //         </button>
-            //     </div>
-
-            //     <div className="loginButtonDiv">
-            //         <button className="loginButton">
-            //             <NavLink
-            //                 key={"Login"}
-            //                 name={"Login"}
-            //                 to={"/login"}>
-            //                 Login
-            //             </NavLink>
-            //         </button>
-            //     </div>
-
-            // </div>
-        //     <SearchBar setSearchTerm={setSearchTerm} />
-        // </nav> */}
