@@ -25,6 +25,8 @@ Want to add:
 10. Require authorization to post Equipment (proof of ownership)
 11. Terms and conditions (basic, but can allow for owners to input their own)
 
+12. When searching and hitting enter, find a way (maybe a search-results page?) that kind of fetches the data and outputs what an individual could be looking for. Could be through the equipment for example, or the owners "partners"
+
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------USER IN ITSELF------------------------------------------------------------------------------------
