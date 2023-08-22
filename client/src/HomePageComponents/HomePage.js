@@ -61,7 +61,7 @@ function HomePage({ equipmentArray, setFeaturedRental }) {
                             <div className="w-24 h-full bg-amber-500"></div>
                         </div>
                         <div className="flex flex-wrap sm:flex-row flex-col py-6 mb-12">
-                            <h1 className="sm:w-2/5 text-gray-900 font-medium title-font text-2xl mb-2 sm:mb-0"> Please Rent From us We're still Paying our Government Bailout</h1>
+                            <h2 className="sm:w-2/5 text-gray-900 font-medium title-font text-2xl mb-2 sm:mb-0"> Together With our Partners, Dreams are Conquered.</h2>
                             <p className="sm:w-3/5 leading-relaxed text-base sm:pl-10 pl-0">Welcome to EquipMe, your ultimate renting and sharing platform for tools and equipment! Whether you're a DIY enthusiast, a homeowner, or a professional contractor, EquipMe offers a seamless and efficient way to access a wide range of tools and equipment for all your projects and tasks. Join our community today and experience the convenience of renting, sharing, and connecting with fellow users in need of the perfect tools for their next venture.</p>
                         </div>
                     </div>
@@ -128,7 +128,7 @@ function HomePage({ equipmentArray, setFeaturedRental }) {
                                     </svg>
                                 </div>
                                 <div className="flex-grow pl-4">
-                                    <h2 className="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">STEP 1</h2>
+                                    <h2 className="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">STEP 1 : GET STARTED</h2>
                                     <p className="leading-relaxed">Create an account or a listing.</p>
                                 </div>
                             </div>
@@ -142,8 +142,8 @@ function HomePage({ equipmentArray, setFeaturedRental }) {
                                     </svg>
                                 </div>
                                 <div className="flex-grow pl-4">
-                                    <h2 className="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">STEP 2</h2>
-                                    <p className="leading-relaxed">Book equipment, or connect with professionals looking to rent.</p>
+                                    <h2 className="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">STEP 2 : DISCOVER THE OPTIONS</h2>
+                                    <p className="leading-relaxed">Explore a wide range of equipment and connect with experts offering their rentals.</p>
                                 </div>
                             </div>
                             <div className="flex relative pb-12">
@@ -156,8 +156,8 @@ function HomePage({ equipmentArray, setFeaturedRental }) {
                                     </svg>
                                 </div>
                                 <div className="flex-grow pl-4">
-                                    <h2 className="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">STEP 3</h2>
-                                    <p className="leading-relaxed">Sign a rental agreement that's been officiated by our team of lawyers.</p>
+                                    <h2 className="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">STEP 3 : RENT CONFIDENTLY</h2>
+                                    <p className="leading-relaxed">Finalize your rental with a legally approved agreement.</p>
                                 </div>
                             </div>
                             <div className="flex relative">
@@ -168,7 +168,7 @@ function HomePage({ equipmentArray, setFeaturedRental }) {
                                     </svg>
                                 </div>
                                 <div className="flex-grow pl-4">
-                                    <h2 className="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">FINISH</h2>
+                                    <h2 className="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">STEP 4 : FINISH</h2>
                                     <p className="leading-relaxed">Pickup your equipment at an agreed upon location, or have it delivered to your worksite!</p>
                                 </div>
                             </div>
@@ -186,7 +186,7 @@ function HomePage({ equipmentArray, setFeaturedRental }) {
   <section class="mx-auto max-w-screen-2xl px-4 md:px-8">
     <div class="mb-8 flex flex-wrap justify-between md:mb-16">
       <div class="mb-6 flex w-full flex-col justify-center sm:mb-12 lg:mb-0 lg:w-1/3 lg:pb-24 lg:pt-48">
-        <h1 class="mb-4 text-4xl font-bold text-black sm:text-5xl md:mb-8 md:text-6xl">EquipMe <br/>Connect.<br/> Rent.<br/> Prosper.</h1>
+        <h1 class="mb-4 text-4xl font-bold text-black sm:text-5xl md:mb-8 md:text-6xl">EquipMe <br/>Connect. Rent. Prosper.</h1>
 
         <p class="max-w-md leading-relaxed text-gray-500 xl:text-lg">Unleash the potential of your projects with EquipMe's collection of top-tier tools and equipment. Your one-stop destination for gear that's as passionate about your projects as you are.</p>
       </div>
