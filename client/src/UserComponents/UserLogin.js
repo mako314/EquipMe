@@ -3,8 +3,6 @@ function UserLogin(){
 
     const [user, setUser] = useState(null); // stores user on client-side
 
-
-
     console.log(user);
 
     // grabs current session from server-side and sets state
@@ -92,5 +90,5 @@ function UserLogin(){
 
     )
 }
-export const UserContext = createContext(user);
+
 export default UserLogin;
