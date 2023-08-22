@@ -25,7 +25,7 @@ import RentalFormPrepop from './RentalComponents/RentalFormPrepop'
 
 //----------------------Login Functionality-----------------------------
 import UserLogin from './UserComponents/UserLogin';
-import { UserProvider } from './UserComponents/UserContext';
+import  {UserProvider}  from './UserComponents/UserContext';
 
 function App() {
 
@@ -216,11 +216,10 @@ function App() {
   //-----------------------------------------------------
 
   return (
-    <div >
+    <UserProvider> 
+    <>
       <NavBar setSearchTerm={setSearchTerm} />
-      <UserProvider.Provider
-      user={user} setUser={setUser}
-    > 
+      
       <Routes>
       
         <Route path='/' element={<HomePage equipmentArray={equipmentArray} setFeaturedRental={setFeaturedRental} />} />
@@ -248,10 +247,8 @@ function App() {
         <Route path='/login' element={<UserLogin user={user} setUser={setUser}/>}/>
       
       </Routes>
-      </UserProvider.Provider>
-
-
-    </div>
+    </>
+    </UserProvider>
   );
 }
 
