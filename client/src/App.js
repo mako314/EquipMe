@@ -25,6 +25,7 @@ import RentalFormPrepop from './RentalComponents/RentalFormPrepop'
 
 //----------------------Login Functionality-----------------------------
 import UserLogin from './UserComponents/UserLogin';
+import { UserContext } from './UserComponents/UserLogin'
 
 function App() {
 
@@ -34,13 +35,14 @@ function App() {
 
   //Grab user and have it throughout the whole app
   const [user, setUser] = useState(null)
+
   
   //These useStates will handle POST. Grabbing and ...spreading so it updates accordingly. Set Search Term & Grab Equipment Array
   const [equipmentArray, setEquipmentArray] = useState([])
   const [searchTerm, setSearchTerm] = useState("")
 
   //These useStates will handle POST. Grabbing and ...spreading so it updates accordingly.
-  const [users, setUsers] = useState([])
+  const [newUsers, setNewUsers] = useState([])
   const [owners, setOwners] = useState([])
   const [rentalAgreement, setRentalAgreement] = useState([])
 
@@ -88,12 +90,12 @@ function App() {
     fetch("/renters")
       .then((resp) => resp.json())
       .then((data) => {
-        setUsers(data)
+        setNewUsers(data)
       })
   }, [])
 
   const addUser = (user) => {
-    setUsers(users => [...users, user])
+    setNewUsers(users => [...users, user])
   }
   //--------------------------------------------
 
@@ -217,7 +219,9 @@ function App() {
     <div >
       <NavBar setSearchTerm={setSearchTerm} />
       <Routes>
-
+      <UserContext.Provider
+      user={user}
+    > 
         <Route path='/' element={<HomePage equipmentArray={equipmentArray} setFeaturedRental={setFeaturedRental} />} />
 
         <Route path='/equipment' element={<ProductCollection equipmentArray={filteredEquipmentArray} handleEquipmentDelete={handleEquipmentDelete} handleEditEquipment={handleEditEquipment} />} />
@@ -241,6 +245,7 @@ function App() {
         <Route path='/equipment/:id/edit' element={<ProductEditForm equipmentToEdit={equipmentToEdit} updateEquipment={updateEquipment} />} />
 
         <Route path='/login' element={<UserLogin user={user} setUser={setUser}/>}/>
+      </UserContext.Provider>
       </Routes>
 
 
