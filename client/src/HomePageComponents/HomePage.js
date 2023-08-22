@@ -180,31 +180,65 @@ function HomePage({ equipmentArray, setFeaturedRental }) {
         </div>
 
 
+    const heroPart = 
+<div class="bg-white pb-6 sm:pb-8 lg:pb-12">
+    <br/>
+  <section class="mx-auto max-w-screen-2xl px-4 md:px-8">
+    <div class="mb-8 flex flex-wrap justify-between md:mb-16">
+      <div class="mb-6 flex w-full flex-col justify-center sm:mb-12 lg:mb-0 lg:w-1/3 lg:pb-24 lg:pt-48">
+        <h1 class="mb-4 text-4xl font-bold text-black sm:text-5xl md:mb-8 md:text-6xl">Find your<br />style online</h1>
+
+        <p class="max-w-md leading-relaxed text-gray-500 xl:text-lg">This is a section of some simple filler text, also known as placeholder text. It shares characteristics of real text.</p>
+      </div>
+
+      <div class="mb-12 flex w-full md:mb-16 lg:w-2/3">
+        <div class="relative left-12 top-12 z-10 -ml-12 overflow-hidden rounded-lg bg-gray-100 shadow-lg md:left-16 md:top-16 lg:ml-0">
+          <img src="https://images.unsplash.com/photo-1542340916-951bb72c8f74?auto=format&q=75&fit=crop&w=550&h=550" loading="lazy" alt="Photo by Kaung Htet" class="h-full w-full object-cover object-center" />
+        </div>
+
+        <div class="overflow-hidden rounded-lg bg-gray-100 shadow-lg">
+          <img src="https://images.unsplash.com/photo-1586295166487-b265f7e83a7f?auto=format&q=75&fit=crop&w=550&h=550" loading="lazy" alt="Photo by Manny Moreno" class="h-full w-full object-cover object-center" />
+        </div>
+      </div>
+    </div>
+
+  </section>
+</div>
+
+
 
 
 
     return (
-        <div>
-            <section className="">
-                <div className="gap-16 items-center py-8 px-4 mx-auto max-w-screen-xl lg:grid lg:grid-cols-2 lg:py-16 lg:px-6">
-                    <div className="font-light  text-black dark:text-black-900">
-                        <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-black dark:text-black-900">We didn't reinvent the wheel</h2>
-                        <p className="mb-4">Unleash Your Potential with EquipMe Rentals!</p>
-                        <p>Get ready to conquer any project with our vast range of equipment and tools. From excavators to power tools, we've got it all! Find what you need, when you need it, and at unbeatable prices. Say goodbye to expensive purchases and hello to affordable rentals. Start exploring now and experience the ease and convenience of our rental services. Your next big project starts here!</p>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4 mt-8">
-                        <img className="w-full rounded-lg" src="https://t3.ftcdn.net/jpg/01/59/19/32/240_F_159193220_m3b64OVIdlWiQrggEf6OqFRVOrEMAY4m.jpg" alt="excavator content 1" />
-                        <img className="mt-4 w-full lg:mt-10 rounded-lg" src="https://t4.ftcdn.net/jpg/03/13/91/39/240_F_313913951_YNI9FAsXnOwbk3ZftOFy8PveFlnpnl4B.jpg" alt="excavator and dump truck" />
-                    </div>
-                </div>
-            </section>
-
+        <>
+            {heroPart}
             {featuredThing}
             {threeItems}
             {tutorial}
-        </div>
+        </>
 
     );
 }
 
 export default HomePage;
+
+
+
+
+
+
+
+
+// <section className="">
+//                 <div className="gap-16 items-center py-8 px-4 mx-auto max-w-screen-xl lg:grid lg:grid-cols-2 lg:py-16 lg:px-6">
+//                     <div className="font-light  text-black dark:text-black-900">
+//                         <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-black dark:text-black-900">We didn't reinvent the wheel</h2>
+//                         <p className="mb-4">Unleash Your Potential with EquipMe Rentals!</p>
+//                         <p>Get ready to conquer any project with our vast range of equipment and tools. From excavators to power tools, we've got it all! Find what you need, when you need it, and at unbeatable prices. Say goodbye to expensive purchases and hello to affordable rentals. Start exploring now and experience the ease and convenience of our rental services. Your next big project starts here!</p>
+//                     </div>
+//                     <div className="grid grid-cols-2 gap-4 mt-8">
+//                         <img className="w-full rounded-lg" src="https://t3.ftcdn.net/jpg/01/59/19/32/240_F_159193220_m3b64OVIdlWiQrggEf6OqFRVOrEMAY4m.jpg" alt="excavator content 1" />
+//                         <img className="mt-4 w-full lg:mt-10 rounded-lg" src="https://t4.ftcdn.net/jpg/03/13/91/39/240_F_313913951_YNI9FAsXnOwbk3ZftOFy8PveFlnpnl4B.jpg" alt="excavator and dump truck" />
+//                     </div>
+//                 </div>     
+// </section>
