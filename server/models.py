@@ -193,6 +193,9 @@ class RentalAgreement(db.Model, SerializerMixin):
     # legal_doc = db.Column(db.String) # need a way to upload documentation 
     #need a way to grab the equipment
 
+
+    # Include a created at date, updated at.
+
     #relationships
     #do a cascade to make life easier
     owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'))
