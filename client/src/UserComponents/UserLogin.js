@@ -1,8 +1,11 @@
 import React, { createContext, useState, useEffect } from 'react';
+import { useUser } from './UserContext';
+
 function UserLogin(){
 
-    const [user, setUser] = useState(null); // stores user on client-side
-
+    // const [user, setUser] = useState(null); // stores user on client-side
+    const { user, setUser } = useUser();
+    
     console.log(user);
 
     // grabs current session from server-side and sets state
