@@ -216,6 +216,7 @@ function App() {
   //-----------------------------------------------------
 
   return (
+    // UseContext gets called here, allowing the entirety of my app access to the User information!
     <UserProvider> 
     <>
       <NavBar setSearchTerm={setSearchTerm} />
