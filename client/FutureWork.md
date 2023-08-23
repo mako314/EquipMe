@@ -41,12 +41,37 @@ Sometimes text color is bugging on navbar if you move too quickly, need to find 
 3. Incorporate their rental agreements in a drop down menu, allow them to select from existing, previous, and possibly future ones.
 Individuals should be able to view their rental agreements based on a date format 30-60-90-180-360
 
+4. Users should have a way to favorite equipment and owners of said equipment. 
+That being said, how should this be accounted for? a new model that indicates a user has favorited the piece of equipment or the owner? 
+
+Cause ideally the user can favorite many equipments but there's 1 piece of equipment they favorite for that instance;
+
+user - > favorite action < - item being favorited?
+This would be similar for favoriting the owner. 
+
+The user should not have only one person and one equipment favorited so there needs to be a way to favorite multiple.
+
+Possibly allow the user to upload a worksite? Might be too extra tbh.
+
+
+
+
+
+FIN----
+
+1. Incorporated useContext for User login authentication. Making sure that I have the user info everywhere with the way it's wrapped within my app! 
+Lets go!!!
+
+2. 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------NAVBAR ITSELF--------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 1. Reinvented the navbar to actually look nice, included the search bar, added a mobile view and such.
+
 2. So ideally, I want the search to not only be on change, but also an on submit if possible. When the search is submitted it takes one to a search result page that can show them what they're looking for, be it partners, or be it specific equipment.
+
+Still need a possible location to have the search be sent to, so a search result page is in order.
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------Rental Agreements ITSELF------------------------------------------------------------------------------------------
@@ -69,3 +94,19 @@ Proof of Owners equipment insurance (Owner)
 Proof of Ownership (Owner) <--This should likely not be visible to the renter, but to a site admin-->
 
 5. Include a created at date, updated at.
+
+
+
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Things I'd like to do: Week of 8/21/23 - 8/28/23
+
+1. Implement search result page, 
+
+2. Design the website to have user logged in displays and user logged out displays
+
+3. Research what more cool things I can incorporate with React!
+
+4. Read the notes I've written above to see how I will go about editing my backend, specifically what will need to be included inside my models.
