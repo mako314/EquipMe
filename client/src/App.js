@@ -255,7 +255,7 @@ function App() {
         <Route path='/owner/:id/edit' element={<OwnerEditForm ownerToEdit={ownerToEdit} updateOwner={updateOwner} />} />
         <Route path='/equipment/:id/edit' element={<ProductEditForm equipmentToEdit={equipmentToEdit} updateEquipment={updateEquipment} />} />
 
-        <Route path='/login' element={<UserLogin user={user} setUser={setUser}/>}/>
+        <Route path='/login' element={<UserLogin/>}/>
         
         {/* User Profile Page*/}
         <Route path='/user/profile/:id' element={<UserProfile/>}/>

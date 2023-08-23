@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useContext, useState, useEffect } from 'react';
+import  UserContext  from './UserContext';
 
 function UserProfile(){
     
-    
-    
+
+const [user, setUser] = useContext(UserContext)
     
 //     <div
 //     className="absolute top-0 w-full h-full bg-center bg-cover"
@@ -17,8 +18,17 @@ function UserProfile(){
 //       className="w-full h-full absolute opacity-50 bg-black"
 //     ></span>
 //   </div>
-    
-    
+
+console.log(user)
+
+useEffect(() => {
+    fetch("/check_session").then((response) => {
+      if (response.ok) {
+        response.json().then((user) => setUser(user));
+      }
+    });
+  }, []);
+
     
 return (
     <> 
