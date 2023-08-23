@@ -54,6 +54,10 @@ The user should not have only one person and one equipment favorited so there ne
 Possibly allow the user to upload a worksite? Might be too extra tbh.
 
 
+5. https://tailwindui.com/components/application-ui/page-examples/detail-screens
+This page above looks amazing in terms of keeping track of their rentals and such
+
+We can measure the rentals they currently have, documents that were uploaded for the rental, and the delivery progress if applicable.
 
 
 
@@ -96,16 +100,55 @@ Proof of Ownership (Owner) <--This should likely not be visible to the renter, b
 5. Include a created at date, updated at.
 
 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------Owner IN ITSELF--------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+1. Need to make a display page for the owners, likely make their own profile that they can view? That's something I have to consider. I don't know if a display page is better or basically the same thing .
+
+2. Need to consider a dashboard for when owners log in, so maybe this can take the place of having their own profile. Somewhere to manage their rentals and such.
+
+3. Will write more as it comes. Coded out today 8/23/23
 
 
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Things I'd like to do: Week of 8/21/23 - 8/28/23
 
-1. Implement search result page, 
+1. Implement search result page, I keep thinking, this may not really be needed...
 
 2. Design the website to have user logged in displays and user logged out displays
+
+
+   Working on | Completed |       Logged in Display         |             Logged out display
+--------------|-----------|---------------------------------|------------------------------------------------------------------------
+Navbar          ✅             Req                             Req
+--------------|-----------|---------------------------------|------------------------------------------------------------------------
+User/Renter SU              NEEDED. Logged in cant sign up      If logged out, allow sign up
+--------------|-----------|---------------------------------|------------------------------------------------------------------------
+Collections                 Not needed, rentals private req    If logged out, can still view owner /products
+--------------|-----------|---------------------------------|------------------------------------------------------------------------
+Display Pages               Not needed, should be public      if logged out OKAY
+--------------|-----------|---------------------------------|------------------------------------------------------------------------
+Owner form                 Req. Users != owner, owner signed up, can't sign up again.           If logged out allow signup
+--------------|-----------|---------------------------------|------------------------------------------------------------------------
+Owner Edit                  REQ. must be owner match to edit    If not logged in, simply can't edit
+--------------|-----------|---------------------------------|------------------------------------------------------------------------
+Product Form                Should I allow user to post products? owners can post for sure. NO anonymous posting. logged in to post
+--------------|-----------|---------------------------------|------------------------------------------------------------------------
+Product Edit Form           MUST be your product              Cannot edit a product you did not list
+--------------|-----------|---------------------------------|------------------------------------------------------------------------
+Rental form                 MUST be logged in to to rent        CANNOT be logged out to rent 
+<- this form and the one below, I may only need 1- >
+--------------|-----------|---------------------------------|------------------------------------------------------------------------
+Prepop Rental               While logged in,  prepopulates      Cannot be logged out to rent
+--------------|-----------|---------------------------------|------------------------------------------------------------------------
+User Login                user logged in,to profile or home     if logged out, allow for login.
+--------------|-----------|---------------------------------|------------------------------------------------------------------------
+Footer                     Should remain the same for both
+--------------|-----------|---------------------------------|------------------------------------------------------------------------
+HomePage                    Should it be different if they're signed in?
+--------------|-----------|---------------------------------|-------------------------------------------------------------------------
 
 3. Research what more cool things I can incorporate with React!
 
