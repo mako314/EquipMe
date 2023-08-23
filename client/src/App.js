@@ -2,21 +2,27 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Route, Routes } from 'react-router-dom';
 
 import './App.css';
-//---------------------Homepage and Navbar-------------
+//---------------------Homepage / Navbar / Footer-------------
 import HomePage from './HomePageComponents/HomePage';
 import NavBar from './HeaderFooterComponents/NavBar';
+import Footer from './HeaderFooterComponents/Footer'
+
 //---------------------Collections--------------------
 import ProductCollection from './EquipmentComponents/ProductCollection';
 import OwnerCollection from './OwnerComponents/OwnerCollection';
 import RentalCollection from './RentalComponents/RentalCollection'
+
 //-------------------------Display Pages-----------------------------------
 import ProductDisplay from './EquipmentComponents/ProductDisplay';
 import OwnerDisplay from './OwnerComponents/OwnerDisplay';
+
 //-------------------------Forms----------------------------------------
 import UserForm from './UserComponents/UserForm';
+
 //-------------------------OwnerForms---------------------------------------
 import OwnerForm from './OwnerComponents/OwnerForm';
 import OwnerEditForm from './OwnerComponents/OwnerEditForm'
+
 //------------------------ProductForm-------------------------------------
 import ProductForm from './EquipmentComponents/ProductForm';
 import ProductEditForm from './EquipmentComponents/ProductEditForm';
@@ -248,6 +254,8 @@ function App() {
         <Route path='/login' element={<UserLogin user={user} setUser={setUser}/>}/>
       
       </Routes>
+
+      <Footer/>
     </>
     </UserProvider>
   );
