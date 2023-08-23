@@ -252,7 +252,10 @@ function App() {
         <Route path='/equipment/:id/edit' element={<ProductEditForm equipmentToEdit={equipmentToEdit} updateEquipment={updateEquipment} />} />
 
         <Route path='/login' element={<UserLogin user={user} setUser={setUser}/>}/>
-      
+        
+        {/* User Profile Page*/}
+        
+
       </Routes>
 
       <Footer/>
