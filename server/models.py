@@ -24,6 +24,12 @@ class User(db.Model, SerializerMixin):
     
     profileImg = db.Column(db.String)
     bannerImg = db.Column(db.String)
+    # I don't think I'll be requiring / asking for banner images IMO
+
+
+
+    #Position and or profession? 
+    #Bio ? Don't think needed tbh.
 
     #Would I need a document attribute here? To hold a users document such as insurance and such?
 
