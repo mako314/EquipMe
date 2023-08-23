@@ -229,7 +229,7 @@ function App() {
         <Route path='/equipment_owners' element={<OwnerCollection searchTerm={searchTerm} handleEditOwner={handleEditOwner} handleOwnerDelete={handleOwnerDelete} equipmentOwnerArray={owners} />} />
         <Route path='/rental_agreements' element={<RentalCollection />} />
 
-        {/* ID ROUTES */}
+        {/* ID / INDIVIDUAL / DISPLAY ROUTES */}
         <Route path='/equipment/:id' element={<ProductDisplay />} />
         <Route path='/equipment_owners/:id' element={<OwnerDisplay />} />
 
