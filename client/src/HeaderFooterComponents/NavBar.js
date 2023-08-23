@@ -137,24 +137,11 @@ function NavBar({ setSearchTerm }) {
                         isToggleOpen ? "black" : "white"
                     } transition-colors duration-300 hover:text-amber-500 lg:px-8`}
                     >
-                    Our Partners
+                    Rent from our Partners
                     </Link>
             </li>
               
-            <li role="none" className="flex items-stretch">
-                    <Link
-                    to="/owner_signup" 
-                    role="menuitem"
-                    aria-haspopup="false"
-                    tabIndex="0"
-                    onClick={closeMobileView} // Close the mobile view when link is clicked
-                    className={`flex items-center gap-2 py-4 text-${
-                        isToggleOpen ? "black" : "white"
-                    } transition-colors duration-300 hover:text-amber-500 lg:px-8`}
-                    >
-                    Become a Partner
-                    </Link>
-            </li>
+
 
             </ul>
             
