@@ -1,7 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom"
 import  UserContext  from './UserContext';
 
 function UserLogin(){
+
+    //Take me to my page scotty,
+    const navigate = useNavigate();
 
     // const [user, setUser] = useState(null); // stores user on client-side
     const [user, setUser] = useContext(UserContext)
@@ -32,7 +36,10 @@ function UserLogin(){
             body: JSON.stringify( { email, password } ),
           }).then((resp) => {
             if (resp.ok) {
-              resp.json().then((user) => setUser(user));
+              resp.json().then((user) => {
+                setUser(user)
+                navigate(`/user/profile/${user.id}`); // <-------- navigates to the profile
+              });
             }
           });
     }
