@@ -22,8 +22,8 @@ function ProductCollection({ equipmentArray, handleEquipmentDelete, handleEditEq
     };
 
     return (
-        <div>
-            <div className="cards">
+        <div className="p-4"> {/* Add padding to the container */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {currCards}
             </div>
             <Pagination
