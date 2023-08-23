@@ -33,6 +33,10 @@ import RentalFormPrepop from './RentalComponents/RentalFormPrepop'
 import UserLogin from './UserComponents/UserLogin';
 import  {UserProvider}  from './UserComponents/UserContext';
 
+
+//----------------------User Functionality-----------------------------
+import UserProfile from './UserComponents/UserProfile';
+
 function App() {
 
   //forgot to const navigate = useNavigate()
@@ -254,6 +258,8 @@ function App() {
         <Route path='/login' element={<UserLogin user={user} setUser={setUser}/>}/>
         
         {/* User Profile Page*/}
+        <Route path='/user/profile/:id' element={<UserProfile/>}/>
+
         
 
       </Routes>
