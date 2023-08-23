@@ -85,19 +85,19 @@ return (
                   <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
                     22
                   </span>
-                  <span className="text-sm text-gray-500">Friends</span>
+                  <span className="text-sm text-gray-500">Rentals</span>
                 </div>
                 <div className="mr-4 p-3 text-center">
                   <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
                     10
                   </span>
-                  <span className="text-sm text-gray-500">Photos</span>
+                  <span className="text-sm text-gray-500">Connections</span>
                 </div>
                 <div className="lg:mr-4 p-3 text-center">
                   <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
                     89
                   </span>
-                  <span className="text-sm text-gray-500">Comments</span>
+                  <span className="text-sm text-gray-500">Reviews</span>
                 </div>
               </div>
             </div>
