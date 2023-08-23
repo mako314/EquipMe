@@ -100,7 +100,15 @@ Proof of Ownership (Owner) <--This should likely not be visible to the renter, b
 5. Include a created at date, updated at.
 
 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------Owner IN ITSELF--------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+1. Need to make a display page for the owners, likely make their own profile that they can view? That's something I have to consider. I don't know if a display page is better or basically the same thing .
+
+2. Need to consider a dashboard for when owners log in, so maybe this can take the place of having their own profile. Somewhere to manage their rentals and such.
+
+3. Will write more as it comes. Coded out today 8/23/23
 
 
 
