@@ -11,16 +11,16 @@ function ProductCard({ id, name, model, make, location }) {
     }
 
     return (
-        <div className="min-h-screen bg-gray-100 flex items-center">
-            <div className="container mx-auto p-9 bg-white max-w-sm rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition duration-300">
+        <div className=" flex items-center">
+            <div className="container mx-auto p-9 bg-white max-w-sm rounded-2xl border-2 border-solid border-gray-900 overflow-hidden shadow-outline hover:shadow-2xl transition duration-300">
                 <img className="rounded-xl" src="https://t4.ftcdn.net/jpg/00/93/18/45/360_F_93184515_pMvi6Fz6o1Qu32kM6lXycawPq8igxjIc.jpg" alt="" />
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center p-4">
                     <div>
                         <h1 className="mt-5 text-2xl font-semibold">{model}</h1>
                         <p className="mt-2">{name} <br /> {make} <br /> {location} </p>
                     </div>
                     <div>
-                        <button className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700" onClick={handleClick}>More Info</button>
+                        <button className="text-white bg-gray-800 hover:bg-amber-500 focus:outline-none focus:ring-4 focus:ring-amber-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-amber-500 dark:hover:bg-amber-500 dark:focus:ring-amber-500 dark:border-amber-500" onClick={handleClick}>More Info</button>
                     </div>
                 </div>
             </div>
