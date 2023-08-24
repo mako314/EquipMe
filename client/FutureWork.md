@@ -59,7 +59,7 @@ This page above looks amazing in terms of keeping track of their rentals and suc
 
 We can measure the rentals they currently have, documents that were uploaded for the rental, and the delivery progress if applicable.
 
-
+6. I thought about something for users while in the shower but forgot... pain
 
 FIN----
 
