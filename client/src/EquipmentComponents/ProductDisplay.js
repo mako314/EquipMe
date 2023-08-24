@@ -72,7 +72,7 @@ function EquipmentDisplay() {
     <>
     {loggedOutDisplay}
     <div>
-    <EquipmentMap/>
+    <EquipmentMap location={location}/>
     </div>
     </>
   )
