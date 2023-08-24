@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@googlemaps/js-api-loader": "^1.16.2",
     "react-input-placeholder": "^1.2.0"
   }
 }
