@@ -23,7 +23,7 @@ class User(db.Model, SerializerMixin):
     profession = db.Column(db.String)
     
     profileImg = db.Column(db.String)
-    bannerImg = db.Column(db.String)
+    # bannerImg = db.Column(db.String)
     # I don't think I'll be requiring / asking for banner images IMO
 
 

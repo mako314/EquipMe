@@ -17,11 +17,15 @@ function UserForm({ addUser }){
     //user POST
     const formik = useFormik({
         initialValues: {
-            name: '',
+            firstName: '',
+            lastName: '',
             age: '',
+            email: '',
+            password: '',
+            phone: '',
             location: '',
             profession: '',
-            phone: '',
+            profileImg: ' ',
             email: ''
         },
         validationSchema: formSchema,
@@ -54,7 +58,7 @@ function UserForm({ addUser }){
 
 
     return (
-        <div className="bg-white py-6 sm:py-8 lg:py-12">
+    <div className="bg-white py-6 sm:py-8 lg:py-12">
   <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
 
     <div className="mb-10 md:mb-16">
@@ -70,7 +74,7 @@ function UserForm({ addUser }){
           {/* display errors from backend */}
           {error && <p>{error}</p>}
       
-      <div className="sm:col-span-2">
+      <div className="">
         <label htmlFor="name" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Name </label>
         <input type="text" name="name" value={formik.values.name} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
       </div>
@@ -105,8 +109,8 @@ function UserForm({ addUser }){
       </div>
     </form>
 
-  </div>
-</div>
+        </div>
+    </div>
         
     )
 }
