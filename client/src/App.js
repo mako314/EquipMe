@@ -97,7 +97,7 @@ function App() {
 
   //These will be the Post useEffects - USERS
   useEffect(() => {
-    fetch("/renters")
+    fetch("/users")
       .then((resp) => resp.json())
       .then((data) => {
         setNewUsers(data)

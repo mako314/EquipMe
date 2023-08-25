@@ -12,7 +12,7 @@ function ProductCollection({ equipmentArray, handleEquipmentDelete, handleEditEq
     const equipmentCards = equipmentArray?.map((item) => {
         return <ProductCard key={item.id} id={item.id} name={item.name} model={item.model} make={item.make} location={item.location} item={item} handleEquipmentDelete={handleEquipmentDelete} handleEditEquipment={handleEditEquipment} />
     })
-    console.log(equipmentCards)
+    // console.log(equipmentCards)
     const currCards = equipmentCards?.slice(cardOffset, endOffset);
     const pageCount = Math.ceil(equipmentArray.length / cardsPerPage);
 

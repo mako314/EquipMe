@@ -9,3 +9,8 @@
 #searchBar::placeholder {
   color: white;
 }
+
+.map-container {
+  width: 50%;
+  float: right; /* This will move the map to the right */
+}

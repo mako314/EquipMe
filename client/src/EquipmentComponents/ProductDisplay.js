@@ -1,6 +1,7 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import EquipmentMap from '../MapComponents/EquipmentMap'
 
 function EquipmentDisplay() {
   const [oneEquipment, setOneEquipment] = useState([])
@@ -70,6 +71,9 @@ function EquipmentDisplay() {
   return (
     <>
     {loggedOutDisplay}
+    <div>
+    <EquipmentMap location={location}/>
+    </div>
     </>
   )
 }
