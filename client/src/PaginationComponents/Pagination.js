@@ -2,6 +2,9 @@ import React from "react";
 import ReactPaginate from "react-paginate";
 
 function Pagination({ paginate, array, cardsPerPage, pageCount }) {
+
+    // Likely do not need className here
+    
     return (
         <ReactPaginate
             className="pagination"

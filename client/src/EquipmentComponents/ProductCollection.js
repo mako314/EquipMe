@@ -26,6 +26,8 @@ function ProductCollection({ equipmentArray, handleEquipmentDelete, handleEditEq
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {currCards}
             </div>
+
+            {/* <div className="w-full flex justify-center mt-4"> */}
             <Pagination
                 paginate={paginate}
                 array={currCards}
@@ -33,6 +35,8 @@ function ProductCollection({ equipmentArray, handleEquipmentDelete, handleEditEq
                 pageCount={pageCount}
 
             />
+            {/* </div> */}
+
         </div>)
 }
 
