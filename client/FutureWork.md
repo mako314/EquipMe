@@ -107,6 +107,9 @@ Proof of Ownership (Owner) <--This should likely not be visible to the renter, b
 1. Need to make a display page for the owners, likely make their own profile that they can view? That's something I have to consider. I don't know if a display page is better or basically the same thing .
 
 2. Need to consider a dashboard for when owners log in, so maybe this can take the place of having their own profile. Somewhere to manage their rentals and such.
+2.1 Owners now have a nice resume display page when clicked by anyone, should this be equal to their page they're able to edit and such?
+2.2 I need to make an actual owner profile page ^ so refer to this, I'd like the dashboard to be a part of both users and owners interaction. Will have to see how to structure it
+2.3 There's a connect button, I'd love to make a messaging / inbox system.
 
 3. Will write more as it comes. Coded out today 8/23/23
 

@@ -62,10 +62,19 @@ function EquipmentDisplay() {
               </button>
             </div>
           </div>
+
           <img alt="ecommerce" class="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded" src="https://dummyimage.com/400x400"/>
-          <div className="map-container w-full lg:h-auto h-64 object-cover object-center rounded mt-8"> 
-          <EquipmentMap location={location}/> 
+          
+          <div className="w-full lg:h-auto h-64 object-cover object-center rounded mt-8">
+
+          {/* I may like to have this take up the full width still I won't lie, and then find a place to put reviews / comments / etc */}
+          
+          <div className="map-container">
+          <EquipmentMap location={location}/>
           </div>
+          
+          </div>
+
         </div>
       </div>
     </section>

@@ -98,10 +98,11 @@ class EquipmentOwner(db.Model, SerializerMixin):
     phone = db.Column(db.String)
     email = db.Column(db.String)
 
-    #STUFF BELOW IS DONE
-    #may need to include a profession, i.e Heavy Machinery, Painting
-    #Also may need to include contact information, this could be a string? Maybe email + phone #
-    #reviews also?
+    #Need to add a password, and have them sign in with email + password. Would like to have a password verification field. + Email confirmation
+
+    #Likely not a bad idea to both privatize the Owners agreements, as long as they are the owner they are the only ones who can view it.
+    # Add a website link for them? Maybe socials?
+    
     
     #relationships
     # agreements = db.relationship('RentalAgreement', back_populates="owner", overlaps="users,owners")
