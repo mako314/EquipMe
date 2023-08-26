@@ -1,31 +1,23 @@
 import React from "react";
-import { useState, useContext, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik"
 import { object, string, number } from 'yup'
-import UserContext from "../UserComponents/UserContext";
 
 function RentalForm({ addRentalAgreement, owners, equipmentArray, featuredRental }) {
+
+
+
+// ------------------------------------------THIS CODE IS FOR RENTALFORMPREPOP , RentalForm IS FOR RENTING OUT EQUIPMENT-----------------------------------------------------
+
     const [error, setError] = useState()
     const [rentFrom, setRentFrom] = useState("")
     const [locRent, setLocRent] = useState("")
     const [selectFrom, setSelectFrom] = useState([])
 
-
-    const [user, setUser] = useContext(UserContext)
-
     const navigate = useNavigate()
 
     console.log(featuredRental[0].location)
-
-    useEffect(() => {
-        fetch("/check_session").then((response) => {
-          if (response.ok) {
-            response.json().then((user) => setUser(user));
-          }
-        });
-      }, []);
-    
 
     const formSchema = object({
         location: string().required('We need your coordinates Masterchief'),
@@ -40,7 +32,7 @@ function RentalForm({ addRentalAgreement, owners, equipmentArray, featuredRental
             total_price: '',
             rental_dates: '',
             owner_id: featuredRental[0].owner_name,
-            user_id: user.id,
+            user_id: '',
             equipment_id: featuredRental[0].id
         },
         validationSchema: formSchema,

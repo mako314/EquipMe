@@ -70,6 +70,8 @@ We can measure the rentals they currently have, documents that were uploaded for
 
 6. I thought about something for users while in the shower but forgot... pain
 
+7. Conversion rates, like how often a user actually goes through the rental agreement, then need to inquire about how often a user rents, so we can produce leads for owners to reach out.
+
 FIN----
 
 1. Incorporated useContext for User login authentication. Making sure that I have the user info everywhere with the way it's wrapped within my app! 

@@ -10,6 +10,12 @@ function RentalForm({ addRentalAgreement, owners, equipmentArray }){
     const [locRent, setLocRent] = useState("")
     const [selectFrom, setSelectFrom] = useState([])
 
+
+// ------------------------------------------THIS CODE IS FOR RENTAL AGREEMENTS, RENTALFORMPREPOP IS FOR LISTING EQUIPMENT-----------------------------------------------------
+//---------------------------------This is going to need to be re-written, this at the moment, lets you just do a general form that you can select from owner, however in theory it's too general. I want an individual to click the equipment and this be pre-populated with the EQUIPMENT OWNER and logged in USER information.--------------------
+//---------------------------------For example, the equipment Owners location, equipment, their name, etc. 
+//--------------------------------- The users ID, their name, their contact information, it should almost be just a confirmation window in a sense
+
     //Going to need to edit this with useEffect like I did prior in the hobbyWars code, waiting for stuff to set and then using setFormikValues
     
 
