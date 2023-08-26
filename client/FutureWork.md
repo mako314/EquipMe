@@ -34,9 +34,13 @@ Want to add:
 
 Sometimes text color is bugging on navbar if you move too quickly, need to find a solution for this.
 
-13. Need a way to favorite, and possibly have reviews displayed on the Equipment?
+13. Need a way to favorite, and possibly have reviews displayed on the Equipment? 
+
+As far as favoriting, how should I select featured equipment? What would be the criteria for something of this sort? Should it be by favorites? By clicks? We will have to see which one makes more sense, it can definitely be by views, but then i'd have to incorporate a VIEWS feature that goes up +=1 everytime it is clicked.
 
 14. Make rent now take you to rental prepop if signed in, additionally have that be really the only way you can get there, otherwise the flow doesn't make much sense
+
+
 
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -89,6 +93,8 @@ Lets go!!!
 Still need a possible location to have the search be sent to, so a search result page is in order.
 
 3. Navbar is looking nice, still on the fence for a result page, will shelf it for now
+
+4. Maybe I make the footer a little smaller?
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------Rental Agreements ITSELF------------------------------------------------------------------------------------------
@@ -161,8 +167,8 @@ fin ---
 
 5. Upon owner login, also wrote that I need to edit the ownerEquipmentListing to be prepopulated for when they want to list equipment. (Need something for documentation upload that allows also posting to the owners equipment database.)
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Things I'd like to do: Week of 8/21/23 - 8/28/23
+----------------------------------------------------------------Things I'd like to do: Week of 8/21/23 - 8/28/23-------------------------------------------------------------------------------
+
 
 1. Implement search result page, I keep thinking, this may not really be needed...
 
@@ -202,13 +208,3 @@ HomePage                    Should it be different if they're signed in?
 3. Research what more cool things I can incorporate with React!
 
 4. Read the notes I've written above to see how I will go about editing my backend, specifically what will need to be included inside my models.
-
-
-5. Make this into UseContext ?  
-useEffect(() => {
-    fetch("/check_session").then((response) => {
-      if (response.ok) {
-        response.json().then((user) => setUser(user));
-      }
-    });
-  }, []);

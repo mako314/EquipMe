@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import EquipmentMap from "../MapComponents/EquipmentMap";
+// import EquipmentMap from "../MapComponents/EquipmentMap";
 
 function ProductCard({ id, name, model, make, location }) {
 
