@@ -20,9 +20,11 @@ function RentalCollection({ }) {
         }
     })
 
-    return (<div className="cards">
+    return (
+    <div className="">
         {rentalCards}
-    </div>)
+    </div>
+    )
 }
 
 export default RentalCollection;

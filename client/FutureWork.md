@@ -34,7 +34,9 @@ Want to add:
 
 Sometimes text color is bugging on navbar if you move too quickly, need to find a solution for this.
 
-13. Need a way to favorite, and possibly have reviews displayed on the Equipment?
+13. Need a way to favorite, and possibly have reviews displayed on the Equipment? 
+
+As far as favoriting, how should I select featured equipment? What would be the criteria for something of this sort? Should it be by favorites? By clicks? We will have to see which one makes more sense, it can definitely be by views, but then i'd have to incorporate a VIEWS feature that goes up +=1 everytime it is clicked.
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------USER IN ITSELF---------------------------------------------------------------------------------------------------
@@ -84,6 +86,8 @@ Lets go!!!
 Still need a possible location to have the search be sent to, so a search result page is in order.
 
 3. Navbar is looking nice, still on the fence for a result page, will shelf it for now
+
+4. Maybe I make the footer a little smaller?
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------Rental Agreements ITSELF------------------------------------------------------------------------------------------
@@ -144,8 +148,8 @@ Regardless, terms and conditions will have to be built that both parties are req
 
 4. 
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Things I'd like to do: Week of 8/21/23 - 8/28/23
+----------------------------------------------------------------Things I'd like to do: Week of 8/21/23 - 8/28/23-------------------------------------------------------------------------------
+
 
 1. Implement search result page, I keep thinking, this may not really be needed...
 
@@ -185,3 +189,13 @@ HomePage                    Should it be different if they're signed in?
 3. Research what more cool things I can incorporate with React!
 
 4. Read the notes I've written above to see how I will go about editing my backend, specifically what will need to be included inside my models.
+
+
+----------------------------------------------------------------Things I'd like to do: Week of 8/28/23 - 9/4/23-------------------------------------------------------------------------------
+1. I should probably deploy earlier than later, just so the site is up. 
+
+2. I may also take a break to start working on my portfolio.
+
+3. Need to research COLOR UI, and accessilibity. 
+
+4. Write out an actual sprint.

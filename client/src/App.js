@@ -232,8 +232,9 @@ function App() {
       <NavBar setSearchTerm={setSearchTerm} />
       
       <Routes>
-      
+        {/* Home Page */}
         <Route path='/' element={<HomePage equipmentArray={equipmentArray} setFeaturedRental={setFeaturedRental} />} />
+       
         {/* COLLECTION ROUTES */}
         <Route path='/equipment' element={<ProductCollection equipmentArray={filteredEquipmentArray} handleEquipmentDelete={handleEquipmentDelete} handleEditEquipment={handleEditEquipment} />} />
         <Route path='/equipment_owners' element={<OwnerCollection searchTerm={searchTerm} handleEditOwner={handleEditOwner} handleOwnerDelete={handleOwnerDelete} equipmentOwnerArray={owners} />} />
@@ -255,6 +256,7 @@ function App() {
         <Route path='/owner/:id/edit' element={<OwnerEditForm ownerToEdit={ownerToEdit} updateOwner={updateOwner} />} />
         <Route path='/equipment/:id/edit' element={<ProductEditForm equipmentToEdit={equipmentToEdit} updateEquipment={updateEquipment} />} />
 
+        {/* Login Page Route */}
         <Route path='/login' element={<UserLogin/>}/>
         
         {/* User Profile Page*/}

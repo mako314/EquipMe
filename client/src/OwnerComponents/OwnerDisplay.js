@@ -26,7 +26,7 @@ function OwnerDisplay() {
 
   console.log(owner)
 
-
+  // not a bad idea to change these <a></a> tags to like spans or buttons.
 
   return (
 
