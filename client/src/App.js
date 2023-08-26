@@ -27,7 +27,7 @@ import OwnerEditForm from './OwnerComponents/OwnerEditForm'
 import ProductForm from './EquipmentComponents/ProductForm';
 import ProductEditForm from './EquipmentComponents/ProductEditForm';
 import RentalForm from './RentalComponents/RentalForm';
-import RentalFormPrepop from './RentalComponents/RentalFormPrepop'
+import OwnerEquipmentListing from './RentalComponents/OwnerEquipmentListing'
 
 //----------------------Login Functionality-----------------------------
 import UserLogin from './UserComponents/UserLogin';
@@ -249,7 +249,7 @@ function App() {
         <Route path='/owner_signup' element={<OwnerForm addOwner={addOwner} />} />
         <Route path='/equipment_signup' element={<ProductForm addEquipment={addEquipment} />} />
         <Route path='/rental_signup' element={<RentalForm addRentalAgreement={addRentalAgreement} owners={owners} equipmentArray={equipmentArray} />} />
-        <Route path='/rental_signup_prepop' element={<RentalFormPrepop addRentalAgreement={addRentalAgreement} owners={owners} equipmentArray={equipmentArray} featuredRental={featuredRental} />} />
+        <Route path='/rental_signup_prepop' element={<OwnerEquipmentListing addRentalAgreement={addRentalAgreement} owners={owners} equipmentArray={equipmentArray} featuredRental={featuredRental} />} />
 
 
         {/* Respective Edit Routes */}

@@ -6,6 +6,8 @@ import { object, string, number} from 'yup'
 
 function OwnerEditForm({ownerToEdit, updateOwner}){
 
+    //Need a place in the ownerProfile / Display page to allocate for this, still need to build owner signup.
+
     const [error, setError] = useState()
     const navigate = useNavigate()
 

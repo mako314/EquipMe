@@ -38,6 +38,11 @@ Sometimes text color is bugging on navbar if you move too quickly, need to find 
 
 As far as favoriting, how should I select featured equipment? What would be the criteria for something of this sort? Should it be by favorites? By clicks? We will have to see which one makes more sense, it can definitely be by views, but then i'd have to incorporate a VIEWS feature that goes up +=1 everytime it is clicked.
 
+14. Make rent now take you to rental prepop if signed in, additionally have that be really the only way you can get there, otherwise the flow doesn't make much sense
+
+
+
+
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------USER IN ITSELF---------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -68,6 +73,8 @@ This page above looks amazing in terms of keeping track of their rentals and suc
 We can measure the rentals they currently have, documents that were uploaded for the rental, and the delivery progress if applicable.
 
 6. I thought about something for users while in the shower but forgot... pain
+
+7. Conversion rates, like how often a user actually goes through the rental agreement, then need to inquire about how often a user rents, so we can produce leads for owners to reach out.
 
 FIN----
 
@@ -133,6 +140,16 @@ Regardless, terms and conditions will have to be built that both parties are req
 8. Make this all into a presentable document, a short card that can be expanded to the dashboard for that individual rental agreement.
 8.1 Remember, it will have to track delivery, be available for edits, host comments, and have a check for delivered, received, in progress of using?, and returned.
 
+
+9. Need to fix rentalForm so that when a piece of equipment is clicked, the owner can be taken there with the form prepopulated. 
+May incoroporate a way to just filter the way I currently have it also, meaning they can select an owner and or select a type of Equipment and see available rentals from there. 
+
+10. Need preferences for the above. Say a user from Orlando wants to rent a drill, we can show them which ones are available to do delivery, and which ones are local to their area so they can better optimize their rentals.
+
+
+fin --- 
+1. Created a rental agreement card that will be hosted on the users page and the owners page, so they can keep track of their rentals
+
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------Owner IN ITSELF--------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -146,7 +163,9 @@ Regardless, terms and conditions will have to be built that both parties are req
 
 3. Will write more as it comes. Coded out today 8/23/23
 
-4. 
+4.  NEED to create an owner login still, this will be done soon enough. 
+
+5. Upon owner login, also wrote that I need to edit the ownerEquipmentListing to be prepopulated for when they want to list equipment. (Need something for documentation upload that allows also posting to the owners equipment database.)
 
 ----------------------------------------------------------------Things I'd like to do: Week of 8/21/23 - 8/28/23-------------------------------------------------------------------------------
 
@@ -191,11 +210,11 @@ HomePage                    Should it be different if they're signed in?
 4. Read the notes I've written above to see how I will go about editing my backend, specifically what will need to be included inside my models.
 
 
-----------------------------------------------------------------Things I'd like to do: Week of 8/28/23 - 9/4/23-------------------------------------------------------------------------------
-1. I should probably deploy earlier than later, just so the site is up. 
-
-2. I may also take a break to start working on my portfolio.
-
-3. Need to research COLOR UI, and accessilibity. 
-
-4. Write out an actual sprint.
+5. Make this into UseContext ?  
+useEffect(() => {
+    fetch("/check_session").then((response) => {
+      if (response.ok) {
+        response.json().then((user) => setUser(user));
+      }
+    });
+  }, []);

@@ -150,6 +150,8 @@ class Equipment(db.Model, SerializerMixin):
     phone = db.Column(db.String) #this and the one below are recently added.
     email = db.Column(db.String) #This is already included via the owner relationship.
 
+    # I should probably just make the phone, email, and owner_name into an owner relationship. 
+
     location = db.Column(db.String)
     availability = db.Column(db.String)
     delivery = db.Column(db.String)

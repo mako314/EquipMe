@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import  UserContext  from './UserContext';
+import RentalCollection from '../RentalComponents/RentalCollection';
 
 function UserProfile(){
 
@@ -7,6 +8,7 @@ const [user, setUser] = useContext(UserContext)
 
 console.log(user)
 
+//Check if user is logged in, I may just make this context and wrap it around my whole app too.
 useEffect(() => {
     fetch("/check_session").then((response) => {
       if (response.ok) {
@@ -124,11 +126,7 @@ return (
             <div className="flex flex-wrap justify-center">
               <div className="w-full lg:w-9/12 px-4">
                 <p className="mb-4 text-lg leading-relaxed text-gray-800">
-                  An artist of considerable range, Jenna the name taken by
-                  Melbourne-raised, Brooklyn-based Nick Murphy writes,
-                  performs and records all of his own music, giving it a
-                  warm, intimate feel with a solid groove structure. An
-                  artist of considerable range.
+                  Possible interests relating to renting
                 </p>
                 <a
                   href="#pablo"
@@ -138,7 +136,9 @@ return (
                   Show more
                 </a>
               </div>
+              
             </div>
+            <RentalCollection/>
           </div>
         </div>
       </div>
