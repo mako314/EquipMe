@@ -134,6 +134,16 @@ Regardless, terms and conditions will have to be built that both parties are req
 8. Make this all into a presentable document, a short card that can be expanded to the dashboard for that individual rental agreement.
 8.1 Remember, it will have to track delivery, be available for edits, host comments, and have a check for delivered, received, in progress of using?, and returned.
 
+
+9. Need to fix rentalForm so that when a piece of equipment is clicked, the owner can be taken there with the form prepopulated. 
+May incoroporate a way to just filter the way I currently have it also, meaning they can select an owner and or select a type of Equipment and see available rentals from there. 
+
+10. Need preferences for the above. Say a user from Orlando wants to rent a drill, we can show them which ones are available to do delivery, and which ones are local to their area so they can better optimize their rentals.
+
+
+fin --- 
+1. Created a rental agreement card that will be hosted on the users page and the owners page, so they can keep track of their rentals
+
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------Owner IN ITSELF--------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -147,7 +157,9 @@ Regardless, terms and conditions will have to be built that both parties are req
 
 3. Will write more as it comes. Coded out today 8/23/23
 
-4. 
+4.  NEED to create an owner login still, this will be done soon enough. 
+
+5. Upon owner login, also wrote that I need to edit the ownerEquipmentListing to be prepopulated for when they want to list equipment. (Need something for documentation upload that allows also posting to the owners equipment database.)
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Things I'd like to do: Week of 8/21/23 - 8/28/23
