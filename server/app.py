@@ -103,7 +103,7 @@ class Users(Resource):
                 location = data['location'],
                 profession = data['profession'],
                 profileImg = data['profileImg'],
-                bannerImg = data['bannerImg'],    
+                # bannerImg = data['bannerImg'],    
             )
 
             db.session.add(new_user)

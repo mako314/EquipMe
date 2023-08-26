@@ -23,7 +23,7 @@ class User(db.Model, SerializerMixin):
     profession = db.Column(db.String)
     
     profileImg = db.Column(db.String)
-    bannerImg = db.Column(db.String)
+    # bannerImg = db.Column(db.String)
     # I don't think I'll be requiring / asking for banner images IMO
 
 
@@ -80,6 +80,7 @@ class User(db.Model, SerializerMixin):
 
     @validates("age")
     def validates_age(self, key, age):
+        age = int(age)
         if age >= 18:
             return age
         else:

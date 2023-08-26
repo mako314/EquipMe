@@ -110,7 +110,7 @@ Proof of Ownership (Owner) <--This should likely not be visible to the renter, b
 
 3. Will write more as it comes. Coded out today 8/23/23
 
-
+4. 
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Things I'd like to do: Week of 8/21/23 - 8/28/23
