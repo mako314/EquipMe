@@ -208,3 +208,13 @@ HomePage                    Should it be different if they're signed in?
 3. Research what more cool things I can incorporate with React!
 
 4. Read the notes I've written above to see how I will go about editing my backend, specifically what will need to be included inside my models.
+
+
+5. Make this into UseContext ?  
+useEffect(() => {
+    fetch("/check_session").then((response) => {
+      if (response.ok) {
+        response.json().then((user) => setUser(user));
+      }
+    });
+  }, []);
