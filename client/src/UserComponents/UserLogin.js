@@ -13,13 +13,13 @@ function UserLogin(){
     console.log(user);
 
     // grabs current session from server-side and sets state
-    function handleCheckSession() {
-        fetch("/check_session").then((resp) => {
-          if (resp.ok) {
-            resp.json().then((user) => setUser(user));
-          }
-        });
-    }
+    // function handleCheckSession() {
+    //     fetch("/check_session").then((resp) => {
+    //       if (resp.ok) {
+    //         resp.json().then((user) => setUser(user));
+    //       }
+    //     });
+    // }
 
     // sends information to server-side, sets session, and sets state
     function handleLogin(e) {

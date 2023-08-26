@@ -17,7 +17,6 @@ useEffect(() => {
 
   //Destructure for props
   const {
-    bannerImg,
     email,
     firstName,
     id,
@@ -27,6 +26,8 @@ useEffect(() => {
     profession,
     profileImg,
 } = user
+
+//May actually want to include a banner image so it looks nicer
 
     
 return (

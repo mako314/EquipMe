@@ -80,6 +80,7 @@ class User(db.Model, SerializerMixin):
 
     @validates("age")
     def validates_age(self, key, age):
+        age = int(age)
         if age >= 18:
             return age
         else:

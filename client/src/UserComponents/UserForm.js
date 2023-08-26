@@ -1,15 +1,41 @@
 import React from "react";
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { useNavigate } from "react-router-dom";
 import {useFormik} from "formik"
 import { object, string, number} from 'yup'
+import  UserContext  from './UserContext';
 
 function UserForm({ addUser }){
     const [error, setError] = useState()
     const navigate = useNavigate()
 
+    const [user, setUser] = useContext(UserContext)
+
+
+    //Going to bring handleLogin so you're logged in when this fires off
+    function handleLogin() {
+        
+        let email = formik.values.email;
+        let password = formik.values.password;
+
+        fetch('/login', {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify( { email, password } ),
+          }).then((resp) => {
+            if (resp.ok) {
+              resp.json().then((user) => {
+                setUser(user)
+                navigate(`/user/profile/${user.id}`); // <-------- navigates to the profile
+              });
+            }
+          });
+    }
+
     const formSchema = object({
-        name: string().required('Please enter a name'),
+        firstName: string().required('Please enter a name'),
         age: number().positive().required('You must be 18 years or older to sign up'),
         email: string().required('Please enter an email address')
     })
@@ -40,7 +66,7 @@ function UserForm({ addUser }){
                     if (res.ok){
                         res.json().then(user => {
                             addUser(user)
-                            navigate('/equipment')
+                            handleLogin()
                         })
                     } else {
                         res.json().then(error => setError(error)) //for backend errors
@@ -67,11 +93,12 @@ function UserForm({ addUser }){
     </div>
 
     <form onSubmit={formik.handleSubmit} className="mx-auto grid max-w-screen-md gap-4 sm:grid-cols-2">
-      
+        <div className="sm:col-span-2">
           {/* display errors from formik/yup */}
           { formik.errors && Object.values(formik.errors).map(e => <p>{e}</p>) }
           {/* display errors from backend */}
           {error && <p>{error}</p>}
+        </div>
       
       <div className="">
         <label htmlFor="firstName" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> First Name </label>
@@ -95,7 +122,7 @@ function UserForm({ addUser }){
 
       <div className="sm:col-span-2">
         <label htmlFor="password" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Password </label>
-        <input type="text" name="password" value={formik.values.phone} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+        <input type="text" name="password" value={formik.values.password} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
       </div>
 
       <div className="sm:col-span-2">
@@ -125,6 +152,7 @@ function UserForm({ addUser }){
         <button type="submit" className="inline-block rounded-lg bg-orange-500 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 md:text-base"> Sign Up!</button>
 
         <span className="text-sm text-gray-500">*Required</span>
+
       </div>
     </form>
 
@@ -135,82 +163,3 @@ function UserForm({ addUser }){
 }
 
 export default UserForm;
-
-
-
-
-
-
-{/* <div className = "form-container">
-            <form className="form" onSubmit={formik.handleSubmit}>
-                <div className="signup-form">
-
-                    {/* display errors from formik/yup */}
-                    // { formik.errors && Object.values(formik.errors).map(e => <p>{e}</p>) }
-
-                    {/* display errors from backend */}
-                    // {error && <p>{error}</p>}
-
-            //         <div className="submit-form"> 
-            //         <label>Name</label>
-            //         <input
-            //             type="text"
-            //             name="name"
-            //             value={formik.values.name}
-            //             onChange={formik.handleChange}
-            //         />
-            //         </div>
-
-            //         <div className="submit-form"> 
-            //         <label>Age</label>
-            //         <input
-            //             type="text"
-            //             name="age"
-            //             value={formik.values.age}
-            //             onChange={formik.handleChange}
-            //         />
-            //         </div>
-
-            //         <div className="submit-form"> 
-            //         <label>Location</label>
-            //         <input
-            //             type="text"
-            //             name="location"
-            //             value={formik.values.location}
-            //             onChange={formik.handleChange}
-            //         />
-            //         </div>
-                    
-            //         <div className="submit-form"> 
-            //         <label>Profession</label>
-            //         <input
-            //             type="text"
-            //             name="profession"
-            //             value={formik.values.profession}
-            //             onChange={formik.handleChange}
-            //         />
-            //         </div>
-                    
-            //         <div className="submit-form"> 
-            //         <label>Phone</label>
-            //         <input
-            //             type="text"
-            //             name="phone"
-            //             value={formik.values.phone}
-            //             onChange={formik.handleChange}
-            //         />
-            //         </div>
-                    
-            //         <div className="submit-form"> 
-            //         <label>Email</label>
-            //         <input
-            //             type="text"
-            //             name="email"
-            //             value={formik.values.email}
-            //             onChange={formik.handleChange}
-            //         />
-            //         </div>
-            //     </div>
-            //     <input type='submit' className="submit-btn"/>
-            // </form>
-        // </div> */}
