@@ -36,6 +36,9 @@ Sometimes text color is bugging on navbar if you move too quickly, need to find 
 
 13. Need a way to favorite, and possibly have reviews displayed on the Equipment?
 
+14. Make rent now take you to rental prepop if signed in, additionally have that be really the only way you can get there, otherwise the flow doesn't make much sense
+
+
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------USER IN ITSELF---------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -185,3 +188,13 @@ HomePage                    Should it be different if they're signed in?
 3. Research what more cool things I can incorporate with React!
 
 4. Read the notes I've written above to see how I will go about editing my backend, specifically what will need to be included inside my models.
+
+
+5. Make this into UseContext ?  
+useEffect(() => {
+    fetch("/check_session").then((response) => {
+      if (response.ok) {
+        response.json().then((user) => setUser(user));
+      }
+    });
+  }, []);
