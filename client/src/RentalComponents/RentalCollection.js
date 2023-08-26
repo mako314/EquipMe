@@ -11,18 +11,31 @@ function RentalCollection({ }) {
                 setRentalAgreementArray(data)
             })
     }, [])
-    console.log(rentalAgreementArray)
+    
 
     const rentalCards = rentalAgreementArray?.map((item) => {
         console.log(item)
-        if(item && item.equipment && item.renter){
-        return <RentalCard key={item.id} equipmentName={item.equipment.name} rentalDates={item.rental_dates} renterName={item.renter.name} />
+        if(item && item.equipment && item.user){
+        return (<RentalCard key={item.id} equipmentName={item.equipment.name} rentalDates={item.rental_dates} renterFirstName={item.user.firstName} renterLastName={item.user.lastName}/> )
         }
     })
 
-    return (<div className="cards">
+    // let rentalCards
+
+    // rentalCards = rentalAgreementArray.map((item) => {
+    //     console.log(item)
+    //     // return(item.equipment.name)
+    //     return (<RentalCard key={item.id} equipmentName={item.equipment.name} rentalDates={item.rental_dates} renterFirstName={item.user.firstName} renterLastName={item.user.lastName} />)
+    // })
+
+    console.log(rentalCards)
+
+    return (
+    <div>
+        TESTING TESTING
         {rentalCards}
-    </div>)
+    </div>
+    )
 }
 
 export default RentalCollection;
