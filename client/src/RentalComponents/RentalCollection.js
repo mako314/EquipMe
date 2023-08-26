@@ -46,6 +46,9 @@ function RentalCollection({ }) {
       rentalDates={item.rental_dates}
       renterFirstName={item.user.firstName}
       renterLastName={item.user.lastName}
+      location={item.equipment.location}
+      ownerEmail ={item.equipment.email}
+      ownerName = {item.equipment.owner_name}
     />
   ))}
     
@@ -64,7 +67,6 @@ function RentalCollection({ }) {
 
     return (
     <div>
-        TESTING TESTING
         {UserRentalCards}
     </div>
     )
