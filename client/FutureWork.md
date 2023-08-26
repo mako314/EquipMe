@@ -14,6 +14,10 @@ Want to add:
 5. Show a rental based on if the Equipment is available or not, meaning everytime a rental agreement gets signed -1 or -x amount of equipment. Have a way to rent more than one piece of equipment, like check the available equipment to the input of how many one would like to rent.
 (Basically allowing renting of multiple pieces of equipment, if you need two forklifts, you can rent two forklifts) (THIS MATH MAY NEED TO BE DONE IN FRONT END, EXPERIMENT.)
 
+<!-- ^^^ Once rental agreements are done, I'll get more into this type of functionality 
+         So make the rental agreements display, dashboard, etc, and then worry about this.
+-->
+
 6. Rental costs, can be per hour, by day, by week, month. Think I will cap it per month
 (promotional offers allocation?) (IN MODELS?)
 
@@ -29,6 +33,8 @@ Want to add:
 
 
 Sometimes text color is bugging on navbar if you move too quickly, need to find a solution for this.
+
+13. Need a way to favorite, and possibly have reviews displayed on the Equipment?
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------USER IN ITSELF---------------------------------------------------------------------------------------------------
@@ -77,6 +83,8 @@ Lets go!!!
 
 Still need a possible location to have the search be sent to, so a search result page is in order.
 
+3. Navbar is looking nice, still on the fence for a result page, will shelf it for now
+
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------Rental Agreements ITSELF------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -100,6 +108,27 @@ Proof of Ownership (Owner) <--This should likely not be visible to the renter, b
 5. Include a created at date, updated at.
 
 
+6. Need a (formik setvalues like done in hobby wars), to pre-populate information for a user trying to rent an equipment.
+
+7. Need to make nice rental agreement cards, that way they are legible to read and indivdiuals can edit.
+7.1 How should editing the agreement work? 
+User requests to edit -> submits edits for review to owner 
+Owner can approve or deny edits -> user informed, from there they can discuss where to go. So will likely need to add comments to the agreement form.
+
+Owner requests to edit -> (Why would they? Maybe piece broke from previous use?) -> send to user, user has options to receive deposit back, or accept the changes
+Sent to owner as confirmation, from there the agreement continues
+
+7.2 Deleting the agreement
+Will have to implement a date function that takes into account how soon the renter can cancel, for example, if the renter wants to rent a piece of equipment the next day, how early would they have to cancel? Do they forfeit the deposit? 
+
+Owner, have to find a way to safeguard users so the owner cannot just collect deposits, after Owners have done too many cancellations / deletions, send a flag basically. If the equipment has been completely removed, maybe submit an inquiry? 
+
+Regardless, terms and conditions will have to be built that both parties are required to comply to.
+
+
+8. Make this all into a presentable document, a short card that can be expanded to the dashboard for that individual rental agreement.
+8.1 Remember, it will have to track delivery, be available for edits, host comments, and have a check for delivered, received, in progress of using?, and returned.
+
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------Owner IN ITSELF--------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -107,6 +136,9 @@ Proof of Ownership (Owner) <--This should likely not be visible to the renter, b
 1. Need to make a display page for the owners, likely make their own profile that they can view? That's something I have to consider. I don't know if a display page is better or basically the same thing .
 
 2. Need to consider a dashboard for when owners log in, so maybe this can take the place of having their own profile. Somewhere to manage their rentals and such.
+2.1 Owners now have a nice resume display page when clicked by anyone, should this be equal to their page they're able to edit and such?
+2.2 I need to make an actual owner profile page ^ so refer to this, I'd like the dashboard to be a part of both users and owners interaction. Will have to see how to structure it
+2.3 There's a connect button, I'd love to make a messaging / inbox system.
 
 3. Will write more as it comes. Coded out today 8/23/23
 
