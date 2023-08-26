@@ -1,6 +1,7 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import EquipmentMap from '../MapComponents/EquipmentMap'
 
 function OwnerDisplay() {
   const [owner, setOwner] = useState([])
@@ -39,25 +40,31 @@ function OwnerDisplay() {
 
                             </img>
                             <h1 class="text-xl font-bold">{name}</h1>
-                            <p class="text-gray-600">Software Developer</p>
+                            <p class="text-gray-600">{profession}</p>
                             <div class="mt-6 flex flex-wrap gap-4 justify-center">
                                 <a href="#" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">Contact</a>
-                                <a href="#" class="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded">Resume</a>
+                                <a href="#" class="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded"> Company website? If they have one</a>
                             </div>
                         </div>
                         <hr class="my-6 border-t border-gray-300"/>
                         <div class="flex flex-col">
-                            <span class="text-gray-600 uppercase font-bold tracking-wider mb-2">Skills</span>
-                            <ul>
+                            <span class="text-gray-600 text-center uppercase font-bold tracking-wider mb-2"> You can find me at</span>
+                            {/* <ul>
                                 <li class="mb-2">JavaScript</li>
                                 <li class="mb-2">React</li>
                                 <li class="mb-2">Node.js</li>
                                 <li class="mb-2">HTML/CSS</li>
                                 <li class="mb-2">Tailwind Css</li>
-                            </ul>
+                            </ul> */}
+                            {/* although it says equipmentMap, this map is really universal, so name may be prone to CHANGE */}
+
+                            <EquipmentMap location={location}/> 
+
                         </div>
                     </div>
                 </div>
+
+                {/* --- right hand side content --- */}
                 <div class="col-span-4 sm:col-span-9">
                     <div class="bg-white shadow rounded-lg p-6">
                         <h2 class="text-xl font-bold mb-4">About Me</h2>
@@ -67,6 +74,9 @@ function OwnerDisplay() {
                         <h3 class="font-semibold text-center mt-3 -mb-2">
                             Find me on
                         </h3>
+
+                        {/* social media links  */}
+
                         <div class="flex justify-center items-center gap-6 my-6">
                             <a class="text-gray-700 hover:text-orange-600" aria-label="Visit TrendyMinds LinkedIn" href=""
                                 target="_blank"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="h-6">
@@ -105,7 +115,7 @@ function OwnerDisplay() {
                             </a>
                         </div>
 
-
+                        {/* can possibly include the individuals featured equipment here, replacing the resume styled format */}
                         <h2 class="text-xl font-bold mt-6 mb-4">Experience</h2>
                         <div class="mb-6">
                             <div class="flex justify-between">
@@ -142,6 +152,10 @@ function OwnerDisplay() {
                         </div>
                     </div>
                 </div>
+
+                {/* --- right hand side content --- */}
+
+
             </div>
         </div>
     </div>

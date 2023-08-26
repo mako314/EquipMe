@@ -63,10 +63,9 @@ function EquipmentDisplay() {
             </div>
           </div>
           <img alt="ecommerce" class="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded" src="https://dummyimage.com/400x400"/>
-          <div class=" w-full lg:h-auto h-64 object-cover object-center rounded mt-8"> 
+          <div className="map-container w-full lg:h-auto h-64 object-cover object-center rounded mt-8"> 
           <EquipmentMap location={location}/> 
           </div>
-          
         </div>
       </div>
     </section>
