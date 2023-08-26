@@ -4,11 +4,14 @@ import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik"
 import { object, string, number } from 'yup'
 
-function RentalForm({ addRentalAgreement, owners, equipmentArray, featuredRental }) {
+function OwnerEquipmentListing({ addRentalAgreement, owners, equipmentArray, featuredRental }) {
 
 
 
 // ------------------------------------------THIS CODE IS FOR RENTALFORMPREPOP , RentalForm IS FOR RENTING OUT EQUIPMENT-----------------------------------------------------
+//---------------------------------This is going to need to be re-written, this at the moment, lets you post equipment, but it takes into account owner information, but I'd like to also make an owner sign in, that way this can just be pre-populated and they can change the type of equipment, and or equipment name and other information.
+//--------------------------------when an owner is listing equipment, this should prepopulate, additionally, I need something to account for when the form was created at, when the form is adjusted. 
+//-------------------------------- I may just completely change the name of this file to something like "OwnerEquipmentListing", this is meaning
 
     const [error, setError] = useState()
     const [rentFrom, setRentFrom] = useState("")
@@ -152,6 +155,6 @@ function RentalForm({ addRentalAgreement, owners, equipmentArray, featuredRental
     )
 }
 
-export default RentalForm;
+export default OwnerEquipmentListing;
 
 
