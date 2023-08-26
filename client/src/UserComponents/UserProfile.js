@@ -7,6 +7,7 @@ const [user, setUser] = useContext(UserContext)
 
 console.log(user)
 
+//Check if user is logged in, I may just make this context and wrap it around my whole app too.
 useEffect(() => {
     fetch("/check_session").then((response) => {
       if (response.ok) {
