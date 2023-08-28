@@ -15,64 +15,6 @@ if __name__ == '__main__':
 #----------------------------------------------------------------------
 #Seed Renters
         print("Seeding potential renters...")
-        # renters = [
-        # User(
-        #     name="Benjamin Davis", #Rents construction equipment from Amy Wilson (6)
-        #     age=42,
-        #     location="Chicago, Illinois",
-        #     profession="Construction Equipment Operator",
-        #     phone="312-555-1122",
-        #     email="benjamin.davis23@gmail.com"
-        # ),
-        # User(
-        #     name="Ethan Martinez", #Rents Heavy Machinery from David Rodriguez (5)
-        #     age=39,
-        #     location="Miami, Florida",
-        #     profession="Heavy Machine Operator",
-        #     phone="305-555-2233",
-        #     email="ethan.martinez77@yahoo.com" 
-        # ),
-        # User(
-        #     name="William Anderson", #Rents Cleaning Equipment from Daniel Lee (7)
-        #     age=32,
-        #     location="Houston, Texas",
-        #     profession="Industrial Cleaning Specialist",
-        #     phone="713-555-3344",
-        #     email="william.anderson89@gmail.com"
-        # ),
-        # User(
-        #     name="Sofia Rodriguez", # Rents Party Equipment from Emily Johnson (2)
-        #     age=29,
-        #     location="Phoenix, Arizona",
-        #     profession="Party and Event Equipment Organizer",
-        #     phone="602-555-4455",
-        #     email="sofia.rodriguez12@hotmail.com"
-        # ),
-        # User(
-        #     name="Christian Domingues", #Rents Painting Equipment from Mark Davis (1)
-        #     age=42,
-        #     location="Chicago, Illinois",
-        #     profession="Painting Contractor",
-        #     phone="312-555-5566",
-        #     email="christian.domingues55@yahoo.com" 
-        # ),
-        # User(
-        #     name="Sarah Thompson", #Rents Gardening Equipment from Henry Cavill (4)
-        #     age=30,
-        #     location="Seattle, Washington",
-        #     profession="Landscape Designer",
-        #     phone="206-555-6677",
-        #     email="sarah.thompson99@gmail.com"
-        # ),
-        # User(
-        #     name="Thomas Brady", #Rents Automotive Equipment from Andrew Jacons (3)
-        #     age=25,
-        #     location="Houston, Texas",
-        #     profession="Automotive Mechanic",
-        #     phone="713-555-7788",
-        #     email="thomas.brady21@yahoo.com"
-        # ),]
-
     #Seed Renters
         user_1 =  User(
         firstName="Benjamin",
@@ -212,70 +154,80 @@ if __name__ == '__main__':
             location="Chicago, Illinois",
             profession="Plumbing",
             phone="312-555-6789",
-            email="markdavis82@yahoo.com"
+            email="markdavis82@yahoo.com",
+            website = " "
         ),
         EquipmentOwner(
             name="Emily Johnson", # Party Equipment
             location="Phoenix, Arizona",
             profession="Party",
             phone="602-555-7891",
-            email="ejohnson@live.com"
+            email="ejohnson@live.com",
+            website = " "
         ),
         EquipmentOwner(
             name="Andrew Jacobs", #Automotive Equipment
             location="Houston, Texas",
             profession="Automotive",
             phone="713-555-0123",
-            email="andrewjacobs93@gmail.com"
+            email="andrewjacobs93@gmail.com",
+            website = " "
         ),
         EquipmentOwner(
             name="Henry Cavill", #Garden Equipment
             location="Seattle, Washington",
             profession="Garden",
             phone="206-555-3456",
-            email="hcavill34@hotmail.com"
+            email="hcavill34@hotmail.com",
+            website = " "
         ),
         EquipmentOwner(
             name="David Rodriguez", #Heavy Machinery
             location="Miami, Florida",
             profession="Heavy Machinery",
             phone="305-555-1234",
-            email="davidr83@gmail.com"
+            email="davidr83@gmail.com",
+            website = " "
         ),
         EquipmentOwner(
             name="Amy Wilson", #Construction Equipment
             location="Chicago, Illinois",
             profession="Construction",
             phone="312-555-5678",
-            email="amywilson22@yahoo.com"
+            email="amywilson22@yahoo.com",
+            website = " "
         ),
         EquipmentOwner(
             name="Daniel Lee", # Cleaning Equipment
             location="Houston, Texas",
             profession="Cleaning",
             phone="713-555-4567",
-            email="daniel.lee78@yahoo.com"
+            email="daniel.lee78@yahoo.com",
+            website = " "
         ),
         EquipmentOwner(
             name="Jessica Sanchez", # Plumbing Equipment
             location="New York City, New York",
             profession="Plumbing",
             phone ="212-555-2345",
-            email="jess.sanchez22@gmail.com"
+            email="jess.sanchez22@gmail.com",
+            website = " "
         ),
         EquipmentOwner(
             name="Ryan Phillips", #Power-tool and hand-tool Equipment
             location="Orlando, Florida",
             profession="Power tools and Hand tools",
             phone="407-555-9012",
-            email="ryan.phillips87@gmail.com"
+            email="ryan.phillips87@gmail.com",
+            website = " "
         ),
         EquipmentOwner(
             name="Michelle Adams", #Woodwork
             location="New Orleans, Louisiana",
             profession="Woodworking",
             phone="504-555-7890",
-            email="madams90@gmail.com"
+            email="madams90@gmail.com",
+            website = " "
         )]
         db.session.add_all(equipment_owners)
 #---------------------------------------------------------

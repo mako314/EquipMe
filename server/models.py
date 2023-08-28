@@ -152,12 +152,13 @@ class Equipment(db.Model, SerializerMixin):
     phone = db.Column(db.String) #this and the one below are recently added.
     email = db.Column(db.String) #This is already included via the owner relationship.
 
-    # I should probably just make the phone, email, and owner_name into an owner relationship. 
-
     location = db.Column(db.String)
     availability = db.Column(db.String)
     delivery = db.Column(db.String)
     quantity = db.Column(db.Integer)
+
+
+    #Going to have to change my seeds file, to incorporate some of this, I may just do 6 pieces of equipment to start.
 
     # cost_per_day = db.Column(db.Integer)
     # cost_per_week = db.Column(db.Integer)
@@ -168,6 +169,8 @@ class Equipment(db.Model, SerializerMixin):
 
     #relationship
     #do a cascade to make life easier
+
+    #Do I need owner ID? I likely do, I also need to do cascades still for a cleaner delete
 
     owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'))
 
@@ -209,7 +212,9 @@ class RentalAgreement(db.Model, SerializerMixin):
     # Include a created at date, updated at.
 
     #relationships
-    #do a cascade to make life easier
+    #do a cascade to make life easier 
+    # this is how everything gets linked up
+    # So I likely still need to do the rental agreement form
     owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
