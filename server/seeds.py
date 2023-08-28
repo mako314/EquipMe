@@ -148,8 +148,10 @@ if __name__ == '__main__':
 #----------------------------------------------------------------
 # Seed Equipment Owners
         print("Seeding equipment owners...")
-        equipment_owners = [
-        EquipmentOwner(
+        # equipment_owners = [
+
+# Seed Equipment Owners individually,
+        owner_1 = EquipmentOwner(
             name="Mark Davis", # Painting Equipment
             location="Chicago, Illinois",
             profession="Plumbing",
@@ -157,8 +159,8 @@ if __name__ == '__main__':
             email="markdavis82@yahoo.com",
             profileImage = " ",
             website = " "
-        ),
-        EquipmentOwner(
+        )
+        owner_2 = EquipmentOwner(
             name="Emily Johnson", # Party Equipment
             location="Phoenix, Arizona",
             profession="Party",
@@ -166,8 +168,8 @@ if __name__ == '__main__':
             email="ejohnson@live.com",
             profileImage = " ",
             website = " "
-        ),
-        EquipmentOwner(
+        )
+        owner_3 = EquipmentOwner(
             name="Andrew Jacobs", #Automotive Equipment
             location="Houston, Texas",
             profession="Automotive",
@@ -175,8 +177,8 @@ if __name__ == '__main__':
             email="andrewjacobs93@gmail.com",
             profileImage = " ",
             website = " "
-        ),
-        EquipmentOwner(
+        )
+        owner_4 = EquipmentOwner(
             name="Henry Cavill", #Garden Equipment
             location="Seattle, Washington",
             profession="Garden",
@@ -184,8 +186,8 @@ if __name__ == '__main__':
             email="hcavill34@hotmail.com",
             profileImage = " ",
             website = " "
-        ),
-        EquipmentOwner(
+        )
+        owner_5 = EquipmentOwner(
             name="David Rodriguez", #Heavy Machinery
             location="Miami, Florida",
             profession="Heavy Machinery",
@@ -193,8 +195,8 @@ if __name__ == '__main__':
             email="davidr83@gmail.com",
             profileImage = " ",
             website = " "
-        ),
-        EquipmentOwner(
+        )
+        owner_6 = EquipmentOwner(
             name="Amy Wilson", #Construction Equipment
             location="Chicago, Illinois",
             profession="Construction",
@@ -202,8 +204,8 @@ if __name__ == '__main__':
             email="amywilson22@yahoo.com",
             profileImage = " ",
             website = " "
-        ),
-        EquipmentOwner(
+        )
+        owner_7 = EquipmentOwner(
             name="Daniel Lee", # Cleaning Equipment
             location="Houston, Texas",
             profession="Cleaning",
@@ -211,8 +213,8 @@ if __name__ == '__main__':
             email="daniel.lee78@yahoo.com",
             profileImage = " ",
             website = " "
-        ),
-        EquipmentOwner(
+        )
+        owner_8 = EquipmentOwner(
             name="Jessica Sanchez", # Plumbing Equipment
             location="New York City, New York",
             profession="Plumbing",
@@ -220,8 +222,8 @@ if __name__ == '__main__':
             email="jess.sanchez22@gmail.com",
             profileImage = " ",
             website = " "
-        ),
-        EquipmentOwner(
+        )
+        owner_9 = EquipmentOwner(
             name="Ryan Phillips", #Power-tool and hand-tool Equipment
             location="Orlando, Florida",
             profession="Power tools and Hand tools",
@@ -229,8 +231,8 @@ if __name__ == '__main__':
             email="ryan.phillips87@gmail.com",
             profileImage = " ",
             website = " "
-        ),
-        EquipmentOwner(
+        )
+        owner_10 = EquipmentOwner(
             name="Michelle Adams", #Woodwork
             location="New Orleans, Louisiana",
             profession="Woodworking",
@@ -238,8 +240,22 @@ if __name__ == '__main__':
             email="madams90@gmail.com",
             profileImage = " ",
             website = " "
-        )]
-        db.session.add_all(equipment_owners)
+        )
+        
+        #Add all owners
+        db.session.add(owner_1)
+        db.session.add(owner_2)
+        db.session.add(owner_3)
+        db.session.add(owner_4)
+        db.session.add(owner_5)
+        db.session.add(owner_6)
+        db.session.add(owner_7)
+        db.session.add(owner_8)
+        db.session.add(owner_9)
+        db.session.add(owner_10)
+
+        db.session.commit()
+
 #---------------------------------------------------------
 #Seed rental agreements
 #Rental agreements 
