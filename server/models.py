@@ -98,6 +98,8 @@ class EquipmentOwner(db.Model, SerializerMixin):
     phone = db.Column(db.String)
     email = db.Column(db.String)
 
+    # website = db.Column(db.String)
+
     #Need to add a password, and have them sign in with email + password. Would like to have a password verification field. + Email confirmation
 
     #Likely not a bad idea to both privatize the Owners agreements, as long as they are the owner they are the only ones who can view it.
@@ -116,7 +118,7 @@ class EquipmentOwner(db.Model, SerializerMixin):
     #you can just do a query EquipmentOwner.query.get(1), or equipment = owner.equipment. Then you can do for equipment in owner.equipment print(equipment) for example
 
     #Serialization rules
-    serialize_rules = ('-equipment.owner', '-agreements.owner' )
+    serialize_rules = ('-equipment.owner', '-agreements.owner', )
 
     #VALIDATIONS HERE
     @validates("email")
@@ -174,7 +176,7 @@ class Equipment(db.Model, SerializerMixin):
     agreements = db.relationship('RentalAgreement', back_populates="equipment", overlaps="users,equipments")
 
     #Serialization rules
-    serialize_rules = ('-owner.equipment', '-agreements.equipment' )
+    serialize_rules = ('-owner.equipment', '-agreements.equipment', '-owner.agreements')
 
     #VALIDATIONS BEGIN HERE
     @validates("email")
