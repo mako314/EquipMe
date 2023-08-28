@@ -9,7 +9,7 @@ function OwnerLogin(){
 
     const [owner, setOwner] = useContext(OwnerContext)
 
-    console.log(user);
+    console.log(owner);
 
     // grabs current session from server-side and sets state
     // function handleCheckSession() {

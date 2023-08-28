@@ -57,7 +57,7 @@ class OwnerLogin(Resource):
         # print(user)
         #Test to see if password matches
         if owner:
-            if EquipmentOwner.authenticate(password):
+            if owner.authenticate(password):
                 session['owner_id'] = owner.id
                 return owner.to_dict(), 200
         #Do I need to JSONIFY^ ?
