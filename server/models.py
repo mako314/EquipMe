@@ -98,7 +98,7 @@ class EquipmentOwner(db.Model, SerializerMixin):
     phone = db.Column(db.String)
     email = db.Column(db.String)
 
-    # website = db.Column(db.String)
+    website = db.Column(db.String)
 
     #Need to add a password, and have them sign in with email + password. Would like to have a password verification field. + Email confirmation
 

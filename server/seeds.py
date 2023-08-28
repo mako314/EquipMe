@@ -26,7 +26,7 @@ if __name__ == '__main__':
         location="Chicago, Illinois",
         profession="Construction Equipment Operator",
         profileImg="profile_benjamin.png",
-        bannerImg="banner_benjamin.png"
+        # bannerImg="banner_benjamin.png"
     )
 
         user_2 = User(
@@ -39,7 +39,7 @@ if __name__ == '__main__':
         location="Miami, Florida",
         profession="Heavy Machine Operator",
         profileImg="profile_ethan.png",
-        bannerImg="banner_ethan.png"
+        # bannerImg="banner_ethan.png"
     )
         
         user_3 = User(
@@ -52,7 +52,7 @@ if __name__ == '__main__':
         location="Houston, Texas",
         profession="Industrial Cleaning Specialist",
         profileImg="profile_william.png",
-        bannerImg="banner_william.png"
+        # bannerImg="banner_william.png"
     )
 
         user_4 =User(
@@ -65,7 +65,7 @@ if __name__ == '__main__':
         location="Phoenix, Arizona",
         profession="Party and Event Equipment Organizer",
         profileImg="profile_sofia.png",
-        bannerImg="banner_sofia.png"
+        # bannerImg="banner_sofia.png"
     )
         
         user_4 = User(
@@ -78,7 +78,7 @@ if __name__ == '__main__':
         location="Chicago, Illinois",
         profession="Painting Contractor",
         profileImg="profile_christian.png",
-        bannerImg="banner_christian.png"
+        # bannerImg="banner_christian.png"
     )
 
         user_5 = User(
@@ -91,7 +91,7 @@ if __name__ == '__main__':
         location="Seattle, Washington",
         profession="Landscape Designer",
         profileImg="profile_sarah.png",
-        bannerImg="banner_sarah.png"
+        # bannerImg="banner_sarah.png"
     )
         user_6 = User(
         firstName="Thomas",
@@ -103,7 +103,7 @@ if __name__ == '__main__':
         location="Houston, Texas",
         profession="Automotive Mechanic",
         profileImg="profile_thomas.png",
-        bannerImg="banner_thomas.png"
+        # bannerImg="banner_thomas.png"
     )
         #Add all users
         db.session.add(user_1)
