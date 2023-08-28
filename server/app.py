@@ -199,6 +199,7 @@ class EquipmentOwners(Resource):
                 profession = data['profession'],
                 phone = data['phone'],
                 email = data['email'],
+                profileImage = data['profileImage'],
                 website = data['website']
             )
             db.session.add(new_owner)
