@@ -167,6 +167,12 @@ fin ---
 
 5. Upon owner login, also wrote that I need to edit the ownerEquipmentListing to be prepopulated for when they want to list equipment. (Need something for documentation upload that allows also posting to the owners equipment database.)
 
+6. Need to add owner page soon, so they can edit their information also. 
+
+7. A way for owner to select equipment they'd like to feature.
+
+
+
 ----------------------------------------------------------------Things I'd like to do: Week of 8/21/23 - 8/28/23-------------------------------------------------------------------------------
 
 
