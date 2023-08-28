@@ -97,6 +97,7 @@ class EquipmentOwner(db.Model, SerializerMixin):
     profession = db.Column(db.String)
     phone = db.Column(db.String)
     email = db.Column(db.String)
+    _password_hash = db.Column(db.String, nullable=False)
     profileImage = db.Column(db.String)
     website = db.Column(db.String)
 
@@ -119,6 +120,22 @@ class EquipmentOwner(db.Model, SerializerMixin):
 
     #Serialization rules
     serialize_rules = ('-equipment.owner', '-agreements.owner', )
+
+    #PROPERTIES
+    @hybrid_property
+    def password_hash(self):
+        return self._password_hash
+
+    @password_hash.setter
+    def password_hash(self, password):
+        # utf-8 encoding and decoding is required in python 3
+        password_hash = bcrypt.generate_password_hash(
+            password.encode('utf-8'))
+        self._password_hash = password_hash.decode('utf-8')
+
+    def authenticate(self, password):
+        return bcrypt.check_password_hash(
+            self._password_hash, password.encode('utf-8'))
 
     #VALIDATIONS HERE
     @validates("email")
