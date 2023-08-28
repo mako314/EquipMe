@@ -39,6 +39,33 @@ class Login(Resource):
 api.add_resource(Login, '/login')
 #------------------------------------------------------------------------------------------------------------------------------
 
+#------------------------------------Owner LOGIN------------------------------------------------------------------------------
+
+class Login(Resource):
+
+    def get(self):
+        pass
+
+    def post(self):
+        data = request.get_json()
+        #Test to find username,
+        email = data['email']
+        print(email)
+        owner = EquipmentOwner.query.filter(EquipmentOwner.email == email).first()
+        #Grab password
+        password = data['password']
+        # print(user)
+        #Test to see if password matches
+        if owner:
+            if EquipmentOwner.authenticate(password):
+                session['owner_id'] = owner.id
+                return owner.to_dict(), 200
+        #Do I need to JSONIFY^ ?
+
+        return make_response({'error': 'Invalid email or password'}, 401)
+
+api.add_resource(Login, '/owner/login')
+
 #------------------------------------User LOGOUT------------------------------------------------------------------------------
 
 class Logout(Resource):
