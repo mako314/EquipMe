@@ -5,7 +5,7 @@ import EquipmentMap from '../MapComponents/EquipmentMap'
 
 function OwnerDisplay() {
   const [owner, setOwner] = useState([])
-  const { name, location, email, phone, equipment, profession } = owner
+  const { name, location, email, phone, equipment, profession, profileImage, website } = owner
 
   const { id } = useParams()
   // const navigate = useNavigate()
@@ -36,14 +36,14 @@ function OwnerDisplay() {
                 <div class="col-span-4 sm:col-span-3">
                     <div class="bg-white shadow rounded-lg p-6">
                         <div class="flex flex-col items-center">
-                            <img src="https://randomuser.me/api/portraits/men/94.jpg" class="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0">
+                            <img src={profileImage} class="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0">
 
                             </img>
                             <h1 class="text-xl font-bold">{name}</h1>
                             <p class="text-gray-600">{profession}</p>
                             <div class="mt-6 flex flex-wrap gap-4 justify-center">
                                 <a href="#" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">Contact</a>
-                                <a href="#" class="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded"> Company website? If they have one</a>
+                                <a href="#" class="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded"> {website}</a>
                             </div>
                         </div>
                         <hr class="my-6 border-t border-gray-300"/>
