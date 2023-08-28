@@ -11,7 +11,7 @@ from config import db, app, api
 from sqlalchemy import asc
 
 
-#------------------------------------User LOGIN------------------------------------------------------------------------------
+#------------------------------------USER LOGIN------------------------------------------------------------------------------
 
 class Login(Resource):
 
@@ -39,7 +39,35 @@ class Login(Resource):
 api.add_resource(Login, '/login')
 #------------------------------------------------------------------------------------------------------------------------------
 
-#------------------------------------User LOGOUT------------------------------------------------------------------------------
+#------------------------------------OWNER LOGIN------------------------------------------------------------------------------
+
+class OwnerLogin(Resource):
+
+    def get(self):
+        pass
+
+    def post(self):
+        data = request.get_json()
+        #Test to find username,
+        email = data['email']
+        print(email)
+        owner = EquipmentOwner.query.filter(EquipmentOwner.email == email).first()
+        #Grab password
+        password = data['password']
+        # print(user)
+        #Test to see if password matches
+        if owner:
+            if owner.authenticate(password):
+                session['owner_id'] = owner.id
+                return owner.to_dict(), 200
+        #Do I need to JSONIFY^ ?
+
+        return make_response({'error': 'Invalid email or password'}, 401)
+
+api.add_resource(OwnerLogin, '/owner/login')
+#------------------------------------------------------------------------------------------------------------------------------
+
+#------------------------------------USER LOGOUT------------------------------------------------------------------------------
 
 class Logout(Resource):
 
@@ -49,8 +77,18 @@ class Logout(Resource):
 
 api.add_resource(Logout, '/logout')
 #------------------------------------------------------------------------------------------------------------------------------
+#------------------------------------OWNER LOGOUT------------------------------------------------------------------------------
 
-#------------------------------------Check Session------------------------------------------------------------------------------
+class OwnerLogout(Resource):
+
+    def delete(self): # just add this line!
+        session['owner_id'] = None
+        return {'message': '204: No Content'}, 204
+
+api.add_resource(OwnerLogout, '/owner/logout')
+#------------------------------------------------------------------------------------------------------------------------------
+
+#------------------------------------ USER Check Session------------------------------------------------------------------------------
 
 class CheckSession(Resource):
 
@@ -74,6 +112,34 @@ class CheckSession(Resource):
 
 api.add_resource(CheckSession, '/check_session')
 #------------------------------------------------------------------------------------------------------------------------------
+
+#------------------------------------ OWNER Check Session------------------------------------------------------------------------------
+
+class OwnerCheckSession(Resource):
+
+    def get(self):
+
+        # user_id = session.get('user_id')
+
+        # if user_id:
+
+        #     user_row = User.query.filter(User.id == user_id).first()
+
+        #     response = make_response(jsonify(user_row.to_dict()), 200)
+
+
+
+        owner = EquipmentOwner.query.filter(EquipmentOwner.id == session.get('owner_id')).first()
+        if owner:
+            return owner.to_dict()
+        else:
+            return {'message': '401: Not Authorized'}, 401
+
+api.add_resource(OwnerCheckSession, '/owner/check_session')
+#------------------------------------------------------------------------------------------------------------------------------
+
+
+#-------------------------------------------------ROUTING FOR THE APP, NO LOG IN STUFF, NO LOG OUT, NO SESSION CHECK BEYOND HERE.---------------------------------------------------
 
 
 
@@ -198,7 +264,9 @@ class EquipmentOwners(Resource):
                 location = data['location'],
                 profession = data['profession'],
                 phone = data['phone'],
-                email = data['email']
+                email = data['email'],
+                profileImage = data['profileImage'],
+                website = data['website']
             )
             db.session.add(new_owner)
             db.session.commit()

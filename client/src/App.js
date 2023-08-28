@@ -29,13 +29,17 @@ import ProductEditForm from './EquipmentComponents/ProductEditForm';
 import RentalForm from './RentalComponents/RentalForm';
 import OwnerEquipmentListing from './RentalComponents/OwnerEquipmentListing'
 
-//----------------------Login Functionality-----------------------------
+//----------------------User Login Functionality-----------------------------
 import UserLogin from './UserComponents/UserLogin';
 import  {UserProvider}  from './UserComponents/UserContext';
 
+//----------------------Owner Login Functionality-----------------------------
+import OwnerLogin from './OwnerComponents/OwnerLogin';
+import { OwnerProvider } from './OwnerComponents/OwnerContext';
 
 //----------------------User Functionality-----------------------------
 import UserProfile from './UserComponents/UserProfile';
+
 
 function App() {
 
@@ -46,6 +50,8 @@ function App() {
   //Grab user and have it throughout the whole app
   const [user, setUser] = useState(null)
 
+  //Grab Owner and have it throughout the whole app
+  const [owner, setOwner] = useState(null)
   
   //These useStates will handle POST. Grabbing and ...spreading so it updates accordingly. Set Search Term & Grab Equipment Array
   const [equipmentArray, setEquipmentArray] = useState([])
@@ -63,7 +69,7 @@ function App() {
 
   //Do I even need two state variables to do this ? Turns out all original fetches work
 
-  //-------------------------------------------- CHECK SESSION TO STAY LOGGED IN ON REFRESH--------------------------
+//-------------------------------------------- FOR USER - CHECK SESSION TO STAY LOGGED IN ON REFRESH--------------------------
     
   useEffect(() => {
     fetch("/check_session").then((response) => {
@@ -75,8 +81,22 @@ function App() {
 
   console.log(user)
 
- //------------------------------------------------------------------------------------------------------------------
-  //---------------------------------Fetches -----------------------
+//------------------------------------------------------------------------------------------------------------------
+
+//-------------------------------------------- FOR OWNER - CHECK SESSION TO STAY LOGGED IN ON REFRESH--------------------------
+    
+   useEffect(() => {
+    fetch("/owner/check_session").then((response) => {
+      if (response.ok) {
+        response.json().then((owner) => setOwner(owner));
+      }
+    });
+  }, []);
+
+  console.log(owner)
+
+//------------------------------------------------------------------------------------------------------------------
+//---------------------------------Fetches -----------------------
 
 
   //---------------------------------Posts and general Fetches -----------------------
@@ -226,7 +246,8 @@ function App() {
   //-----------------------------------------------------
 
   return (
-    // UseContext gets called here, allowing the entirety of my app access to the User information!
+    // UseContext gets called here, allowing the entirety of my app access to the USER and OWNER information!
+    <OwnerProvider>
     <UserProvider> 
     <>
       <NavBar setSearchTerm={setSearchTerm} />
@@ -258,6 +279,7 @@ function App() {
 
         {/* Login Page Route */}
         <Route path='/login' element={<UserLogin/>}/>
+        <Route path='/owner/login' element={<OwnerLogin/>}/>
         
         {/* User Profile Page*/}
         <Route path='/user/profile/:id' element={<UserProfile/>}/>
@@ -269,6 +291,7 @@ function App() {
       <Footer/>
     </>
     </UserProvider>
+    </OwnerProvider>
   );
 }
 

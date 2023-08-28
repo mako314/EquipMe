@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-function OwnerCard({ id, email, name, location, phone, equipmentArray, handleEditOwner, item, handleOwnerDelete }) {
+function OwnerCard({ id, email, name, location, phone, profileImage, equipmentArray, handleEditOwner, item, handleOwnerDelete }) {
 
 
     //test can likely delete below
@@ -21,7 +21,7 @@ function OwnerCard({ id, email, name, location, phone, equipmentArray, handleEdi
 
         <div className="flex items-center">
                 <div className="container mx-auto p-9 bg-white max-w-sm rounded-2xl border-2 border-solid border-gray-900 overflow-hidden shadow-outline hover:shadow-2xl transition duration-300">
-                <img className="rounded-xl" src="https://static.vecteezy.com/system/resources/previews/007/335/692/original/account-icon-template-vector.jpg" alt="" />
+                <img className="rounded-xl" src={profileImage} alt="" />
                 <div className="flex flex-col justify-between items-start mt-4"> {/* Use flex-col and items-start */}
                     <div>
                         <h1 className="text-2xl font-semibold">{name}</h1>

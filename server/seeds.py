@@ -26,7 +26,7 @@ if __name__ == '__main__':
         location="Chicago, Illinois",
         profession="Construction Equipment Operator",
         profileImg="profile_benjamin.png",
-        bannerImg="banner_benjamin.png"
+        # bannerImg="banner_benjamin.png"
     )
 
         user_2 = User(
@@ -39,7 +39,7 @@ if __name__ == '__main__':
         location="Miami, Florida",
         profession="Heavy Machine Operator",
         profileImg="profile_ethan.png",
-        bannerImg="banner_ethan.png"
+        # bannerImg="banner_ethan.png"
     )
         
         user_3 = User(
@@ -52,7 +52,7 @@ if __name__ == '__main__':
         location="Houston, Texas",
         profession="Industrial Cleaning Specialist",
         profileImg="profile_william.png",
-        bannerImg="banner_william.png"
+        # bannerImg="banner_william.png"
     )
 
         user_4 =User(
@@ -65,7 +65,7 @@ if __name__ == '__main__':
         location="Phoenix, Arizona",
         profession="Party and Event Equipment Organizer",
         profileImg="profile_sofia.png",
-        bannerImg="banner_sofia.png"
+        # bannerImg="banner_sofia.png"
     )
         
         user_4 = User(
@@ -78,7 +78,7 @@ if __name__ == '__main__':
         location="Chicago, Illinois",
         profession="Painting Contractor",
         profileImg="profile_christian.png",
-        bannerImg="banner_christian.png"
+        # bannerImg="banner_christian.png"
     )
 
         user_5 = User(
@@ -91,7 +91,7 @@ if __name__ == '__main__':
         location="Seattle, Washington",
         profession="Landscape Designer",
         profileImg="profile_sarah.png",
-        bannerImg="banner_sarah.png"
+        # bannerImg="banner_sarah.png"
     )
         user_6 = User(
         firstName="Thomas",
@@ -103,7 +103,7 @@ if __name__ == '__main__':
         location="Houston, Texas",
         profession="Automotive Mechanic",
         profileImg="profile_thomas.png",
-        bannerImg="banner_thomas.png"
+        # bannerImg="banner_thomas.png"
     )
         #Add all users
         db.session.add(user_1)
@@ -148,88 +148,164 @@ if __name__ == '__main__':
 #----------------------------------------------------------------
 # Seed Equipment Owners
         print("Seeding equipment owners...")
-        equipment_owners = [
-        EquipmentOwner(
+        # equipment_owners = [
+
+# Seed Equipment Owners individually,
+        owner_1 = EquipmentOwner(
             name="Mark Davis", # Painting Equipment
             location="Chicago, Illinois",
             profession="Plumbing",
             phone="312-555-6789",
             email="markdavis82@yahoo.com",
+            _password_hash="", 
+            profileImage = " ",
             website = " "
-        ),
-        EquipmentOwner(
+        )
+        owner_2 = EquipmentOwner(
             name="Emily Johnson", # Party Equipment
             location="Phoenix, Arizona",
             profession="Party",
             phone="602-555-7891",
             email="ejohnson@live.com",
+            _password_hash="",
+            profileImage = " ",
             website = " "
-        ),
-        EquipmentOwner(
+        )
+        owner_3 = EquipmentOwner(
             name="Andrew Jacobs", #Automotive Equipment
             location="Houston, Texas",
             profession="Automotive",
             phone="713-555-0123",
             email="andrewjacobs93@gmail.com",
+            _password_hash="",
+            profileImage = " ",
             website = " "
-        ),
-        EquipmentOwner(
+        )
+        owner_4 = EquipmentOwner(
             name="Henry Cavill", #Garden Equipment
             location="Seattle, Washington",
             profession="Garden",
             phone="206-555-3456",
             email="hcavill34@hotmail.com",
+            _password_hash="",
+            profileImage = " ",
             website = " "
-        ),
-        EquipmentOwner(
+        )
+        owner_5 = EquipmentOwner(
             name="David Rodriguez", #Heavy Machinery
             location="Miami, Florida",
             profession="Heavy Machinery",
             phone="305-555-1234",
             email="davidr83@gmail.com",
+            _password_hash="",
+            profileImage = " ",
             website = " "
-        ),
-        EquipmentOwner(
+        )
+        owner_6 = EquipmentOwner(
             name="Amy Wilson", #Construction Equipment
             location="Chicago, Illinois",
             profession="Construction",
             phone="312-555-5678",
             email="amywilson22@yahoo.com",
+            _password_hash="",
+            profileImage = " ",
             website = " "
-        ),
-        EquipmentOwner(
+        )
+        owner_7 = EquipmentOwner(
             name="Daniel Lee", # Cleaning Equipment
             location="Houston, Texas",
             profession="Cleaning",
             phone="713-555-4567",
             email="daniel.lee78@yahoo.com",
+            _password_hash="",
+            profileImage = " ",
             website = " "
-        ),
-        EquipmentOwner(
+        )
+        owner_8 = EquipmentOwner(
             name="Jessica Sanchez", # Plumbing Equipment
             location="New York City, New York",
             profession="Plumbing",
             phone ="212-555-2345",
             email="jess.sanchez22@gmail.com",
+            _password_hash="",
+            profileImage = " ",
             website = " "
-        ),
-        EquipmentOwner(
+        )
+        owner_9 = EquipmentOwner(
             name="Ryan Phillips", #Power-tool and hand-tool Equipment
             location="Orlando, Florida",
             profession="Power tools and Hand tools",
             phone="407-555-9012",
             email="ryan.phillips87@gmail.com",
+            _password_hash="",
+            profileImage = " ",
             website = " "
-        ),
-        EquipmentOwner(
+        )
+        owner_10 = EquipmentOwner(
             name="Michelle Adams", #Woodwork
             location="New Orleans, Louisiana",
             profession="Woodworking",
             phone="504-555-7890",
             email="madams90@gmail.com",
+            _password_hash="",
+            profileImage = " ",
             website = " "
-        )]
-        db.session.add_all(equipment_owners)
+        )
+        
+        #Add all owners
+        db.session.add(owner_1)
+        db.session.add(owner_2)
+        db.session.add(owner_3)
+        db.session.add(owner_4)
+        db.session.add(owner_5)
+        db.session.add(owner_6)
+        db.session.add(owner_7)
+        db.session.add(owner_8)
+        db.session.add(owner_9)
+        db.session.add(owner_10)
+
+        db.session.commit()
+        #This commit handles adding the owners without their passwords for the time being.
+
+        # add owner passwords
+        owner_1_password = '123'
+        owner_2_password = '123'
+        owner_3_password = '123'
+        owner_4_password = '123'
+        owner_5_password = '123'
+        owner_6_password = '123'
+        owner_7_password = '123'
+        owner_8_password = '123'
+        owner_9_password = '123'
+        owner_10_password = '123'
+
+        #hash owner passwords
+        owner_1.password_hash = owner_1_password
+        owner_2.password_hash = owner_2_password
+        owner_3.password_hash = owner_3_password
+        owner_4.password_hash = owner_4_password
+        owner_5.password_hash = owner_5_password
+        owner_6.password_hash = owner_6_password
+        owner_7.password_hash = owner_7_password
+        owner_8.password_hash = owner_8_password
+        owner_9.password_hash = owner_9_password
+        owner_10.password_hash = owner_10_password
+
+        #Re-add all owners
+        db.session.add(owner_1)
+        db.session.add(owner_2)
+        db.session.add(owner_3)
+        db.session.add(owner_4)
+        db.session.add(owner_5)
+        db.session.add(owner_6)
+        db.session.add(owner_7)
+        db.session.add(owner_8)
+        db.session.add(owner_9)
+        db.session.add(owner_10)
+
+        db.session.commit()
+        #Adds owners with their passwords hashed. 
+
 #---------------------------------------------------------
 #Seed rental agreements
 #Rental agreements 
