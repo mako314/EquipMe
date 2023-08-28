@@ -38,7 +38,7 @@ function SearchBar({ setSearchTerm, isToggleOpen}) {
             id = 'searchBar'
             type="text"
             placeholder= "   Looking for something?"
-            placeholderColor={isToggleOpen ? 'black' : 'white'}
+            placeholdercolor={isToggleOpen ? 'black' : 'white'}
             className={`searchTerm bg-transparent border-none focus:outline-none ${
                 isToggleOpen ? "text-black" : "text-white"
               } flex-1`}
