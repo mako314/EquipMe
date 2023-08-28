@@ -9,7 +9,7 @@ export const OwnerProvider = ({ children }) =>{
 
     return (
         //Establishes the context, allows me to move my owner around the entirety of my app now!
-        <OwnerContext.Provider value={[user, setUser]}> 
+        <OwnerContext.Provider value={[owner, setOwner]}> 
             {children}
         </OwnerContext.Provider>
     );

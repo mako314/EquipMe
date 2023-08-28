@@ -41,7 +41,7 @@ api.add_resource(Login, '/login')
 
 #------------------------------------OWNER LOGIN------------------------------------------------------------------------------
 
-class Login(Resource):
+class OwnerLogin(Resource):
 
     def get(self):
         pass
@@ -64,7 +64,7 @@ class Login(Resource):
 
         return make_response({'error': 'Invalid email or password'}, 401)
 
-api.add_resource(Login, '/owner/login')
+api.add_resource(OwnerLogin, '/owner/login')
 #------------------------------------------------------------------------------------------------------------------------------
 
 #------------------------------------USER LOGOUT------------------------------------------------------------------------------
@@ -79,13 +79,13 @@ api.add_resource(Logout, '/logout')
 #------------------------------------------------------------------------------------------------------------------------------
 #------------------------------------OWNER LOGOUT------------------------------------------------------------------------------
 
-class Logout(Resource):
+class OwnerLogout(Resource):
 
     def delete(self): # just add this line!
         session['owner_id'] = None
         return {'message': '204: No Content'}, 204
 
-api.add_resource(Logout, '/owner/logout')
+api.add_resource(OwnerLogout, '/owner/logout')
 #------------------------------------------------------------------------------------------------------------------------------
 
 #------------------------------------ USER Check Session------------------------------------------------------------------------------
@@ -115,7 +115,7 @@ api.add_resource(CheckSession, '/check_session')
 
 #------------------------------------ OWNER Check Session------------------------------------------------------------------------------
 
-class CheckSession(Resource):
+class OwnerCheckSession(Resource):
 
     def get(self):
 
@@ -135,7 +135,7 @@ class CheckSession(Resource):
         else:
             return {'message': '401: Not Authorized'}, 401
 
-api.add_resource(CheckSession, '/check_session')
+api.add_resource(OwnerCheckSession, '/owner/check_session')
 #------------------------------------------------------------------------------------------------------------------------------
 
 

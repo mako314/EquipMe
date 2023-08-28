@@ -50,6 +50,8 @@ function App() {
   //Grab user and have it throughout the whole app
   const [user, setUser] = useState(null)
 
+  //Grab Owner and have it throughout the whole app
+  const [owner, setOwner] = useState(null)
   
   //These useStates will handle POST. Grabbing and ...spreading so it updates accordingly. Set Search Term & Grab Equipment Array
   const [equipmentArray, setEquipmentArray] = useState([])
@@ -67,7 +69,7 @@ function App() {
 
   //Do I even need two state variables to do this ? Turns out all original fetches work
 
-  //-------------------------------------------- CHECK SESSION TO STAY LOGGED IN ON REFRESH--------------------------
+//-------------------------------------------- FOR USER - CHECK SESSION TO STAY LOGGED IN ON REFRESH--------------------------
     
   useEffect(() => {
     fetch("/check_session").then((response) => {
@@ -79,8 +81,22 @@ function App() {
 
   console.log(user)
 
- //------------------------------------------------------------------------------------------------------------------
-  //---------------------------------Fetches -----------------------
+//------------------------------------------------------------------------------------------------------------------
+
+//-------------------------------------------- FOR OWNER - CHECK SESSION TO STAY LOGGED IN ON REFRESH--------------------------
+    
+   useEffect(() => {
+    fetch("/owner/check_session").then((response) => {
+      if (response.ok) {
+        response.json().then((owner) => setOwner(owner));
+      }
+    });
+  }, []);
+
+  console.log(owner)
+
+//------------------------------------------------------------------------------------------------------------------
+//---------------------------------Fetches -----------------------
 
 
   //---------------------------------Posts and general Fetches -----------------------
