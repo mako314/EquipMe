@@ -157,6 +157,7 @@ if __name__ == '__main__':
             profession="Plumbing",
             phone="312-555-6789",
             email="markdavis82@yahoo.com",
+            _password_hash="", 
             profileImage = " ",
             website = " "
         )
@@ -166,6 +167,7 @@ if __name__ == '__main__':
             profession="Party",
             phone="602-555-7891",
             email="ejohnson@live.com",
+            _password_hash="",
             profileImage = " ",
             website = " "
         )
@@ -175,6 +177,7 @@ if __name__ == '__main__':
             profession="Automotive",
             phone="713-555-0123",
             email="andrewjacobs93@gmail.com",
+            _password_hash="",
             profileImage = " ",
             website = " "
         )
@@ -184,6 +187,7 @@ if __name__ == '__main__':
             profession="Garden",
             phone="206-555-3456",
             email="hcavill34@hotmail.com",
+            _password_hash="",
             profileImage = " ",
             website = " "
         )
@@ -193,6 +197,7 @@ if __name__ == '__main__':
             profession="Heavy Machinery",
             phone="305-555-1234",
             email="davidr83@gmail.com",
+            _password_hash="",
             profileImage = " ",
             website = " "
         )
@@ -202,6 +207,7 @@ if __name__ == '__main__':
             profession="Construction",
             phone="312-555-5678",
             email="amywilson22@yahoo.com",
+            _password_hash="",
             profileImage = " ",
             website = " "
         )
@@ -211,6 +217,7 @@ if __name__ == '__main__':
             profession="Cleaning",
             phone="713-555-4567",
             email="daniel.lee78@yahoo.com",
+            _password_hash="",
             profileImage = " ",
             website = " "
         )
@@ -220,6 +227,7 @@ if __name__ == '__main__':
             profession="Plumbing",
             phone ="212-555-2345",
             email="jess.sanchez22@gmail.com",
+            _password_hash="",
             profileImage = " ",
             website = " "
         )
@@ -229,6 +237,7 @@ if __name__ == '__main__':
             profession="Power tools and Hand tools",
             phone="407-555-9012",
             email="ryan.phillips87@gmail.com",
+            _password_hash="",
             profileImage = " ",
             website = " "
         )
@@ -238,6 +247,7 @@ if __name__ == '__main__':
             profession="Woodworking",
             phone="504-555-7890",
             email="madams90@gmail.com",
+            _password_hash="",
             profileImage = " ",
             website = " "
         )
@@ -255,6 +265,46 @@ if __name__ == '__main__':
         db.session.add(owner_10)
 
         db.session.commit()
+        #This commit handles adding the owners without their passwords for the time being.
+
+        # add owner passwords
+        owner_1_password = '123'
+        owner_2_password = '123'
+        owner_3_password = '123'
+        owner_4_password = '123'
+        owner_5_password = '123'
+        owner_6_password = '123'
+        owner_7_password = '123'
+        owner_8_password = '123'
+        owner_9_password = '123'
+        owner_10_password = '123'
+
+        #hash owner passwords
+        owner_1.password_hash = owner_1_password
+        owner_2.password_hash = owner_2_password
+        owner_3.password_hash = owner_3_password
+        owner_4.password_hash = owner_4_password
+        owner_5.password_hash = owner_5_password
+        owner_6.password_hash = owner_6_password
+        owner_7.password_hash = owner_7_password
+        owner_8.password_hash = owner_8_password
+        owner_9.password_hash = owner_9_password
+        owner_10.password_hash = owner_10_password
+
+        #Re-add all owners
+        db.session.add(owner_1)
+        db.session.add(owner_2)
+        db.session.add(owner_3)
+        db.session.add(owner_4)
+        db.session.add(owner_5)
+        db.session.add(owner_6)
+        db.session.add(owner_7)
+        db.session.add(owner_8)
+        db.session.add(owner_9)
+        db.session.add(owner_10)
+
+        db.session.commit()
+        #Adds owners with their passwords hashed. 
 
 #---------------------------------------------------------
 #Seed rental agreements
