@@ -59,10 +59,12 @@ function UserForm({addOwner}){
 
     <form onSubmit={formik.handleSubmit} className="mx-auto grid max-w-screen-md gap-4 sm:grid-cols-2">
         
+        <div className="sm:col-span-2">
           {/* display errors from formik/yup */}
           { formik.errors && Object.values(formik.errors).map(e => <p>{e}</p>) }
           {/* display errors from backend */}
           {error && <p>{error}</p>}
+        </div>
       
       <div>
         <label htmlFor="name" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Name </label>
