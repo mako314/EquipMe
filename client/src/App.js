@@ -29,13 +29,17 @@ import ProductEditForm from './EquipmentComponents/ProductEditForm';
 import RentalForm from './RentalComponents/RentalForm';
 import OwnerEquipmentListing from './RentalComponents/OwnerEquipmentListing'
 
-//----------------------Login Functionality-----------------------------
+//----------------------User Login Functionality-----------------------------
 import UserLogin from './UserComponents/UserLogin';
 import  {UserProvider}  from './UserComponents/UserContext';
 
+//----------------------Owner Login Functionality-----------------------------
+import OwnerLogin from './OwnerComponents/OwnerLogin';
+import { OwnerProvider } from './OwnerComponents/OwnerContext';
 
 //----------------------User Functionality-----------------------------
 import UserProfile from './UserComponents/UserProfile';
+
 
 function App() {
 
@@ -226,7 +230,8 @@ function App() {
   //-----------------------------------------------------
 
   return (
-    // UseContext gets called here, allowing the entirety of my app access to the User information!
+    // UseContext gets called here, allowing the entirety of my app access to the USER and OWNER information!
+    <OwnerProvider>
     <UserProvider> 
     <>
       <NavBar setSearchTerm={setSearchTerm} />
@@ -269,6 +274,7 @@ function App() {
       <Footer/>
     </>
     </UserProvider>
+    </OwnerProvider>
   );
 }
 

@@ -27,7 +27,7 @@ function OwnerLogin(){
         let email = e.target.email.value;
         let password = e.target.password.value;
 
-        fetch('/login', {
+        fetch('/owner/login', {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -35,9 +35,9 @@ function OwnerLogin(){
             body: JSON.stringify( { email, password } ),
           }).then((resp) => {
             if (resp.ok) {
-              resp.json().then((user) => {
-                setUser(user)
-                navigate(`/user/profile/${user.id}`); // <-------- navigates to the profile
+              resp.json().then((owner) => {
+                setOwner(owner)
+                navigate(`/`); // <-------- navigates to the home page
               });
             }
           });
@@ -47,7 +47,7 @@ function OwnerLogin(){
     function handleLogout() {
         fetch("/logout", {
             method: "DELETE"
-        }).then(setUser(null))
+        }).then(setOwner(null))
     }
 
 
