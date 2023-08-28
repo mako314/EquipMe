@@ -198,7 +198,8 @@ class EquipmentOwners(Resource):
                 location = data['location'],
                 profession = data['profession'],
                 phone = data['phone'],
-                email = data['email']
+                email = data['email'],
+                website = data['website']
             )
             db.session.add(new_owner)
             db.session.commit()
