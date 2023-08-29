@@ -211,6 +211,7 @@ class Equipment(db.Model, SerializerMixin):
         
     @validates("quantity")
     def validates_quanity(self, key, quantity):
+        quantity = int(quantity)
         if quantity > 0:
             return quantity
         else:

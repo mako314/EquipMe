@@ -40,7 +40,7 @@ As far as favoriting, how should I select featured equipment? What would be the 
 
 14. Make rent now take you to rental prepop if signed in, additionally have that be really the only way you can get there, otherwise the flow doesn't make much sense
 
-
+15. Need to make a picture attribute for the table, basically allow multiple picture uploads
 
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
