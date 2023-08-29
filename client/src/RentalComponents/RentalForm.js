@@ -19,6 +19,7 @@ function RentalForm({ addRentalAgreement, owners, equipmentArray }){
 
     //Going to need to edit this with useEffect like I did prior in the hobbyWars code, waiting for stuff to set and then using setFormikValues
     // Just need to remember that I do not want this form to be blanket, they will have to click rent from somewhere, (product display, product cards, etc)
+    // Remember I want to filter by location /equipment type is fine
 
     const navigate = useNavigate()
 
