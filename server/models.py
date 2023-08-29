@@ -177,6 +177,9 @@ class Equipment(db.Model, SerializerMixin):
 
     #Going to have to change my seeds file, to incorporate some of this, I may just do 6 pieces of equipment to start.
 
+
+    # I need to think about how to do the rates better. I know I'd like to use an hourly rate, a daily, weekly, monthly, maybe even one for a year. I'd likely calculate it with a property so I need to think about how i'd write it and the flow.
+    
     # cost_per_day = db.Column(db.Integer)
     # cost_per_week = db.Column(db.Integer)
     # cost_per_month = db.Column(db.Integer)

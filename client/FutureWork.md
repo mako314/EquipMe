@@ -163,7 +163,7 @@ fin ---
 
 3. Will write more as it comes. Coded out today 8/23/23
 
-4.  NEED to create an owner login still, this will be done soon enough. 
+
 
 5. Upon owner login, also wrote that I need to edit the ownerEquipmentListing to be prepopulated for when they want to list equipment. (Need something for documentation upload that allows also posting to the owners equipment database.)
 
@@ -171,7 +171,8 @@ fin ---
 
 7. A way for owner to select equipment they'd like to feature.
 
-
+fin - - - - -- - - - - - 
+4.  DONE [NEED to create an owner login still, this will be done soon enough.]
 
 ----------------------------------------------------------------Things I'd like to do: Week of 8/21/23 - 8/28/23-------------------------------------------------------------------------------
 
