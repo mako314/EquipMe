@@ -83,33 +83,57 @@ function ProductForm({ addEquipment }){
        </div>
 
        <div className="sm:col-span-2">
-         <label htmlFor="location" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">Location</label>
-         <input type="text" name="location" value={formik.values.location} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+         <label htmlFor="type" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">What type of Equipment is this?</label>
+         <input type="text" name="type" value={formik.values.type} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
        </div>
 
        <div className="sm:col-span-2">
-         <label htmlFor="email" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">Email</label>
-         <input type="text" name="email" value={formik.values.email} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+         <label htmlFor="make" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">What's the Make of this Equipment?</label>
+         <input type="text" name="make" value={formik.values.make} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
        </div>
 
        <div className="sm:col-span-2">
-         <label htmlFor="phone" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">Phone</label>
+         <label htmlFor="model" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">What's the Model of this Equipment? </label>
+         <input type="text" name="model" value={formik.values.model} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+       </div>
+
+       <div className="sm:col-span-2">
+         <label htmlFor="owner_name" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">Owner Name Placeholder (USE FORMIK SETVALUES) </label>
+         <input type="text" name="owner_name" value={formik.values.owner_name} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+       </div>
+
+       <div className="sm:col-span-2">
+         <label htmlFor="phone" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">Phone Placeholder (USE FORMIK SETVALUES)</label>
          <input type="text" name="phone" value={formik.values.phone} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
        </div>
 
        <div className="sm:col-span-2">
-         <label htmlFor="profession" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">Profession</label>
-         <input type="text" name="profession" value={formik.values.profession} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+         <label htmlFor="email" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">Email (placeholder) </label>
+         <input type="text" name="email" value={formik.values.email} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
        </div>
 
        <div className="sm:col-span-2">
-         <label htmlFor="profileImage" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Profile Image</label>
-         <input type="text" name="profileImage" value={formik.values.profileImage} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+         <label htmlFor="location" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">location, I should give them option to select other locations
+          (placeholder) </label>
+         <input type="text" name="location" value={formik.values.location} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
        </div>
 
        <div className="sm:col-span-2">
-         <label htmlFor="website" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">Website</label>
-         <input type="text" name="website" value={formik.values.website} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+         <label htmlFor="availability" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Is this Equipment available to rent now?
+          (placeholder) </label>
+         <input type="text" name="availability" value={formik.values.availability} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+       </div>
+
+       <div className="sm:col-span-2">
+         <label htmlFor="delivery" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Is this Equipment capable of being delivered??
+          (placeholder) </label>
+         <input type="text" name="delivery" value={formik.values.delivery} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+       </div>
+
+       <div className="sm:col-span-2">
+         <label htmlFor="quantity" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Quantity of Equipment
+          (placeholder) </label>
+         <input type="text" name="quantity" value={formik.values.quantity} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
        </div>
 
 
