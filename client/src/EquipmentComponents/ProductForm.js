@@ -8,6 +8,10 @@ function ProductForm({ addEquipment }){
     const [error, setError] = useState()
     const navigate = useNavigate()
 
+
+    // Going to need to pass owner and setOwner context here, and apply some ifs to prepopulate this form. 
+    // Will also need to hide this link in a good spot and make it a OWNER logged in display. Users should not be able to list equipment as they should be vetted.
+
     const formSchema = object({
         name: string().required('Please enter a name'),
         quantity: number().positive().required('You cannot list less than 0 items.'),

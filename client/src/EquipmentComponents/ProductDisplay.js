@@ -24,6 +24,8 @@ function EquipmentDisplay() {
 
   //What can I include in details? Possibly whether or not the vehicle is available for delivery? Deposit ? ETC?
 
+  // Need a rental button, basically allowing the user to rent from this page
+
 
 
   let loggedOutDisplay
