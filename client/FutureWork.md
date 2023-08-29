@@ -225,3 +225,16 @@ useEffect(() => {
       }
     });
   }, []);
+
+
+
+
+6. 8/29/23 
+Need to make favorites and reviews table
+
+3 Tables
+
+OwnerReviewingUser
+UserReviewingOwner
+UserEquipmentFavorite
+

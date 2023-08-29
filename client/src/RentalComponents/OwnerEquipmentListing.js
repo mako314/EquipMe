@@ -13,6 +13,9 @@ function OwnerEquipmentListing({ addRentalAgreement, owners, equipmentArray, fea
 //--------------------------------when an owner is listing equipment, this should prepopulate, additionally, I need something to account for when the form was created at, when the form is adjusted. 
 //-------------------------------- I may just completely change the name of this file to something like "OwnerEquipmentListing", this is meaning
 
+    //Going to need to edit this with useEffect like I did prior in the hobbyWars code, waiting for stuff to set and then using setFormikValues
+    // Just need to remember that I do not want this form to be blanket, they will have to click rent from somewhere, (product display, product cards, etc)
+
     const [error, setError] = useState()
     const [rentFrom, setRentFrom] = useState("")
     const [locRent, setLocRent] = useState("")
