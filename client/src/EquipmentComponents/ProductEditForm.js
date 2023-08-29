@@ -5,8 +5,13 @@ import {useFormik} from "formik"
 import { object, string, number} from 'yup'
 
 function ProductEditForm({equipmentToEdit, updateEquipment}){
+    
     const [error, setError] = useState()
     const navigate = useNavigate()
+
+    // Going to need to pass owner and setOwner context here, and apply some ifs comparing the owner id to the equipment owner_id. If matching, it's the owners equipment and they'll be allowed to edit the equipment. IF the equipment is out for rent, I will have to not allow adjustment of certain things I believe? 
+    // Will also need to hide this link in a good spot and make it a OWNER logged in display. Users should not be able to list equipment as they should be vetted.
+
 
     const formSchema = object({
         name: string().required('Please enter a name'),

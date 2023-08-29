@@ -7,30 +7,32 @@ import  UserContext  from '../UserComponents/UserContext';
 
 function NavBar({ setSearchTerm }) {
 
-    const [isToggleOpen, setIsToggleOpen] = useState(false)
+  const [isToggleOpen, setIsToggleOpen] = useState(false)
 
-    const navigate = useNavigate();
-    
-    const [user, setUser] = useContext(UserContext)
+  const navigate = useNavigate();
+  
+  const [user, setUser] = useContext(UserContext)
 
-    const closeMobileView = () => {
-      setIsToggleOpen(false);
-    }
-
-    function handleLogout() {
-      fetch("/logout", {
-          method: "DELETE"
-      }).then( () => {
-        setUser(null)
-        closeMobileView()
-      })
-    }
-
-    // onClick = {handleLogout}
-
-    function UserProfileClick() {
-      navigate(`/user/profile/${user.id}`)
+  const closeMobileView = () => {
+    setIsToggleOpen(false);
   }
+
+  function handleLogout() {
+    fetch("/logout", {
+        method: "DELETE"
+    }).then( () => {
+      setUser(null)
+      closeMobileView()
+    })
+  }
+
+  // onClick = {handleLogout}
+
+  function UserProfileClick() {
+    navigate(`/user/profile/${user.id}`)
+}
+
+  //Need to incorporate the links here in the footer
 
 
 

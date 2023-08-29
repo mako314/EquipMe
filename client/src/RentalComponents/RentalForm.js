@@ -18,7 +18,7 @@ function RentalForm({ addRentalAgreement, owners, equipmentArray }){
 //--------------------------------- Form worked for my project, but ideally I'd like to reflect how I did it in hobby wars more
 
     //Going to need to edit this with useEffect like I did prior in the hobbyWars code, waiting for stuff to set and then using setFormikValues
-    
+    // Just need to remember that I do not want this form to be blanket, they will have to click rent from somewhere, (product display, product cards, etc)
 
     const navigate = useNavigate()
 
@@ -76,7 +76,7 @@ function RentalForm({ addRentalAgreement, owners, equipmentArray }){
     //     setLocRent(event.target.value);
     // }
 
-    //it's not fucked, but I don't think it matters what you put as your company name or actual name, you'll always get benjamin davis. hopefully we can work out the quirks
+    //it's not , but I don't think it matters what you put as your company name or actual name, you'll always get benjamin davis. hopefully we can work out the quirks
     
     
     
