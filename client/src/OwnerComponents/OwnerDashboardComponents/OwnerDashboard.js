@@ -1,7 +1,20 @@
-import React, { useState } from 'react';
-
+import React, { useContext, useState, useEffect } from 'react';
+import OwnerContext from '../OwnerContext';
 
 function OwnerDashboard() {
+
+    const [owner, setOwner] = useContext(OwnerContext)
+
+    useEffect(() => {
+        fetch("/owner/check_session").then((response) => {
+          if (response.ok) {
+            response.json().then((owner) => setOwner(owner));
+          }
+        });
+      }, []);
+    
+      console.log(owner)
+
   
     return (
         <>
@@ -114,7 +127,7 @@ function OwnerDashboard() {
                         </div>
                         <div class="flex-grow p-6 overflow-auto bg-gray-200">
                             <div class="grid grid-cols-3 gap-6">
-                                <div class="h-24 col-span-3 bg-white border border-gray-300"></div>
+                                <div class="h-24 col-span-3 bg-white border border-gray-300 text-center"> Welcome {owner.name} </div>
                                 <div class="h-96 col-span-1 bg-white border border-gray-300"></div>
                                 <div class="h-96 col-span-1 bg-white border border-gray-300"></div>
                                 <div class="h-96 col-span-1 bg-white border border-gray-300"></div>

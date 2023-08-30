@@ -87,9 +87,12 @@ IN PROGRESS --- -- - -
 5. https://tailwindui.com/components/application-ui/page-examples/detail-screens
 This page above looks amazing in terms of keeping track of their rentals and such
 
-https://www.tailwindawesome.com/resources/mosaic-lite
-
 swapped to this!
+https://freefrontend.com/tailwind-dashboards/
+https://codepen.io/robstinson/pen/zYBGNQB
+
+Author
+Rob Stinson
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------NAVBAR ITSELF--------------------------------------------------------------------------------------------------
