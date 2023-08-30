@@ -67,8 +67,7 @@ The user should not have only one person and one equipment favorited so there ne
 Possibly allow the user to upload a worksite? Might be too extra tbh.
 
 
-5. https://tailwindui.com/components/application-ui/page-examples/detail-screens
-This page above looks amazing in terms of keeping track of their rentals and such
+
 
 We can measure the rentals they currently have, documents that were uploaded for the rental, and the delivery progress if applicable.
 
@@ -82,6 +81,16 @@ FIN----
 Lets go!!!
 
 2. 
+
+
+IN PROGRESS --- -- - - 
+5. https://tailwindui.com/components/application-ui/page-examples/detail-screens
+This page above looks amazing in terms of keeping track of their rentals and such
+
+https://www.tailwindawesome.com/resources/mosaic-lite
+
+swapped to this!
+
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --------------------------------------------------------------------------------NAVBAR ITSELF--------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
