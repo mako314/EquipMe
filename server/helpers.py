@@ -8,3 +8,4 @@ def is_available_for_date_range(equipment, start_date, end_date):
     ).all()
     
     return len(existing_agreements) == 0
+

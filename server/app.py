@@ -593,14 +593,45 @@ class AvailabilityChecker(Resource):
             # Deduct quantity
             equipment.quantity -= 1
             db.session.commit()
+            return {"available": True, "available_quantity": equipment.quantity}
+        else:
+            return {"available": False, "available_quantity": equipment.quantity}
 
 
 
+api.add_resource(AvailabilityChecker, "/availability/<int:equipment_id>/<string:start_date>/<string:end_date>")
 
 
 
+class BookingRental(Resource):
+    def post(self):
+        data = request.get_json()
+
+        equipment_id = data['equipment_id'],
+        start_date = data['start_date'],
+        end_date = data['end_date'],
 
 
+
+        equipment = Equipment.query.filter(Equipment.id == equipment_id).first()
+        
+        if not equipment:
+            return {"error": "Equipment not found"}, 404
+        
+        if is_available_for_date_range(equipment, start_date, end_date) and equipment.quantity > 0:
+            # Deduct quantity and create rental agreement
+            equipment.quantity -= 1
+            db.session.add(RentalAgreement(
+                equipment=equipment,
+                location=data.get("location"),
+                total_price=data.get("total_price"),
+                rental_dates=f"{start_date} to {end_date}",
+                # Other fields
+            ))
+            db.session.commit()
+            return {"message": "Booking successful"}
+        else:
+            return {"error": "Equipment not available for the requested date range or insufficient quantity"}, 400
 
 
 
