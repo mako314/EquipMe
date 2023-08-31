@@ -3,6 +3,10 @@ import pandas as pd
 from app import app
 from random import randint, choice as rc
 
+
+from datetime import datetime
+
+
 if __name__ == '__main__':
     with app.app_context():
         #Clear dbs
@@ -307,6 +311,74 @@ if __name__ == '__main__':
         #Adds owners with their passwords hashed. 
 
 #---------------------------------------------------------
+
+#-------------------------------------------------------------------------------------------------------------------------------------------------
+#Seed Equipment - Going to do less equipment since I know the pandas works.
+        print("Uploading the current equipment list...")
+        equipment_list = [
+            Equipment(
+                name = 'Excavator',
+                type = 'Heavy Machinery',
+                make = 'Caterpillar',
+                model = '336E L',
+                # owner_name = ,
+                # phone = ,
+                # email = ,
+                location = 'Miami, Florida',
+                availability = 'True',
+                delivery = 'False',
+                quantity = 3,
+                owner_id = 5
+            ),
+            Equipment(
+                name = 'Forklift',
+                type = 'Industrial Vehicle',
+                make = 'Toyota Material Handling',
+                model = '8FGCU25',
+                # owner_name = ,
+                # phone = ,
+                # email = ,
+                location = 'Chicago, Illinois',
+                availability = 'True',
+                delivery = 'False',
+                quantity = 2,
+                owner_id = 6
+            ),
+            Equipment(
+                name = 'Lawnmower',
+                type = 'Garden Lawnmower',
+                make = 'Honda',
+                model = 'HRX217VKA',
+                # owner_name = ,
+                # phone = ,
+                # email = ,
+                location = 'Seattle, Washington',
+                availability = 'True',
+                delivery = 'False',
+                quantity = 5,
+                owner_id = 4
+            ),
+            Equipment(
+                name = 'Pipe Cutters',
+                type = 'Plumbing Equipment',
+                make = 'Lenox',
+                model = '21011TC138',
+                # owner_name = ,
+                # phone = ,
+                # email = ,
+                location = 'New York City, New York',
+                availability = 'True',
+                delivery = 'True',
+                quantity = 4,
+                owner_id = 8
+            ),
+        ]
+
+        db.session.add_all(equipment_list)
+        db.session.commit()
+#-------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 #Seed rental agreements
 #Rental agreements 
         print("Configuring our current rental agreements...")
@@ -317,7 +389,9 @@ if __name__ == '__main__':
             rental_dates="2023-07-15 to 2023-07-18",
             owner_id = 6, # Amy Wilson
             user_id=1,  # Benjamin Davis
-            equipment_id=38  # Amy Wilson #Available
+            equipment_id=2,  # Amy Wilson #Available
+            created_on = datetime.utcnow(),
+            modified_on = datetime.utcnow()
         ),
         RentalAgreement(
             location="Miami, Florida",
@@ -325,67 +399,24 @@ if __name__ == '__main__':
             rental_dates="2023-07-19 to 2023-07-23",
             owner_id = 5, # David Rodriguez
             user_id=2,  # Ethan Martinez
-            equipment_id=8  # David Rodriguez #Available
-        ),
-        RentalAgreement(
-            location="Houston, Texas",
-            total_price=100,
-            rental_dates="2023-07-17 to 2023-07-20",
-            owner_id = 7, # Daniel Lee
-            user_id=3,  # William Anderson
-            equipment_id=317  # Daniel Lee #Available
-        ),
-        RentalAgreement(
-            location="Phoenix, Arizona",
-            total_price=80,
-            rental_dates="2023-07-16 to 2023-07-19",
-            owner_id = 2, # Emily Johnson
-            user_id=4,  # Sofia Rodriguez
-            equipment_id=361  # Emily Johnson #Available
+            equipment_id=1,  # David Rodriguez #Available
+            created_on = datetime.utcnow(),
+            modified_on = datetime.utcnow()
         ),
         RentalAgreement(
             location="Seattle, Washington",
-            total_price=180,
-            rental_dates="2023-07-18 to 2023-07-21",
+            total_price=100,
+            rental_dates="2023-07-17 to 2023-07-20",
             owner_id = 4, # Henry Cavill
-            user_id=6,  # Sarah Thompson
-            equipment_id=121  # Henry Cavill #Available
-        ),
-        RentalAgreement(
-            location="Houston, Texas",
-            total_price=120,
-            rental_dates="2023-07-22 to 2023-07-24",
-            owner_id = 3, # Andrew Jacobs
-            user_id=7,  # Thomas Brady
-            equipment_id=311  # Andrew Jacobs #Available
-        ),
-        RentalAgreement(
-            location="Chicago, Illinois",
-            total_price=80,
-            rental_dates="2023-07-23 to 2023-07-24",
-            owner_id = 1, # Mark Davis
-            user_id=5,  # Christian Domingues
-            equipment_id=238  # Mark Davis #Available
-        ),
-        RentalAgreement(
-            location="Phoenix, Arizona",
-            total_price=120,
-            rental_dates="2023-07-22 to 2023-07-23",
-            owner_id = 2, # Emily Johnson
-            user_id=4,  # Sofia Rodriguez
-            equipment_id=355  # Emily Johnson #Available
-        ),
-        RentalAgreement(
-            location="Dallas, Texas",
-            total_price=150,
-            rental_dates="2023-07-19 to 2023-07-22",
-            owner_id = 7,
-            user_id=3,  # William Anderson
-            equipment_id=318  # Daniel Lee #Available
+            user_id=5,  # Sarah Thompson
+            equipment_id=3,  # Daniel Lee #Available
+            created_on = datetime.utcnow(),
+            modified_on = datetime.utcnow()
         )]
 
         db.session.add_all(rental_agreements)
-
+        db.session.commit()
+#----------------- OLD RENTAL AGREEMENTS
         #     RentalAgreement(
         #     location="Orlando, Florida",
         #     total_price=300,
@@ -393,44 +424,136 @@ if __name__ == '__main__':
         #     user_id=2,  # Ethan Martinez
         #     owner_id=9  # Ryan Phillips
         # ),
+
+        # RentalAgreement(
+        #     location="Chicago, Illinois",
+        #     total_price=150,
+        #     rental_dates="2023-07-15 to 2023-07-18",
+        #     owner_id = 6, # Amy Wilson
+        #     user_id=1,  # Benjamin Davis
+        #     equipment_id=38,  # Amy Wilson #Available
+        #     created_on = datetime.utcnow(),
+        #     modified_on = datetime.utcnow()
+        # ),
+        # RentalAgreement(
+        #     location="Miami, Florida",
+        #     total_price=200,
+        #     rental_dates="2023-07-19 to 2023-07-23",
+        #     owner_id = 5, # David Rodriguez
+        #     user_id=2,  # Ethan Martinez
+        #     equipment_id=8,  # David Rodriguez #Available
+        #     created_on = datetime.utcnow(),
+        #     modified_on = datetime.utcnow()
+        # ),
+        # RentalAgreement(
+        #     location="Houston, Texas",
+        #     total_price=100,
+        #     rental_dates="2023-07-17 to 2023-07-20",
+        #     owner_id = 7, # Daniel Lee
+        #     user_id=3,  # William Anderson
+        #     equipment_id=317,  # Daniel Lee #Available
+        #     created_on = datetime.utcnow(),
+        #     modified_on = datetime.utcnow()
+        # ),
+        # RentalAgreement(
+        #     location="Phoenix, Arizona",
+        #     total_price=80,
+        #     rental_dates="2023-07-16 to 2023-07-19",
+        #     owner_id = 2, # Emily Johnson
+        #     user_id=4,  # Sofia Rodriguez
+        #     equipment_id=361,  # Emily Johnson #Available
+        #     created_on = datetime.utcnow(),
+        #     modified_on = datetime.utcnow()
+        # ),
+        # RentalAgreement(
+        #     location="Seattle, Washington",
+        #     total_price=180,
+        #     rental_dates="2023-07-18 to 2023-07-21",
+        #     owner_id = 4, # Henry Cavill
+        #     user_id=6,  # Sarah Thompson
+        #     equipment_id=121,  # Henry Cavill #Available
+        #     created_on = datetime.utcnow(),
+        #     modified_on = datetime.utcnow()
+        # ),
+        # RentalAgreement(
+        #     location="Houston, Texas",
+        #     total_price=120,
+        #     rental_dates="2023-07-22 to 2023-07-24",
+        #     owner_id = 3, # Andrew Jacobs
+        #     user_id=7,  # Thomas Brady
+        #     equipment_id=311,  # Andrew Jacobs #Available
+        #     created_on = datetime.utcnow(),
+        #     modified_on = datetime.utcnow()
+        # ),
+        # RentalAgreement(
+        #     location="Chicago, Illinois",
+        #     total_price=80,
+        #     rental_dates="2023-07-23 to 2023-07-24",
+        #     owner_id = 1, # Mark Davis
+        #     user_id=5,  # Christian Domingues
+        #     equipment_id=238,  # Mark Davis #Available
+        #     created_on = datetime.utcnow(),
+        #     modified_on = datetime.utcnow()
+        # ),
+        # RentalAgreement(
+        #     location="Phoenix, Arizona",
+        #     total_price=120,
+        #     rental_dates="2023-07-22 to 2023-07-23",
+        #     owner_id = 2, # Emily Johnson
+        #     user_id=4,  # Sofia Rodriguez
+        #     equipment_id=355,  # Emily Johnson #Available
+        #     created_on = datetime.utcnow(),
+        #     modified_on = datetime.utcnow()
+        # ),
+        # RentalAgreement(
+        #     location="Dallas, Texas",
+        #     total_price=150,
+        #     rental_dates="2023-07-19 to 2023-07-22",
+        #     owner_id = 7,
+        #     user_id=3,  # William Anderson
+        #     equipment_id=318,  # Daniel Lee #Available
+        #     created_on = datetime.utcnow(),
+        #     modified_on = datetime.utcnow()
+        # )
 #-------------------------------------------------------------------------------------------------------------------------------------------------
+
 #Seed Equipment with panda. 
 #Seed Equipment
-        print("Uploading the current equipment list...")
-        data = pd.read_csv('/home/mako77/code/Flatiron/Projects/EquipMe/extrafiles/equipment_list_with_contact - equipment_data.csv')
+        # print("Uploading the current equipment list...")
+        # data = pd.read_csv('/home/mako77/code/Flatiron/Projects/EquipMe/extrafiles/equipment_list_with_contact - equipment_data.csv')
 
-        data.columns = ['Equipment_name', 'Equipment_type', 'Make', 'Model', 'Owner', 'Phone', 'Email', 'Location', 'Availability', 'Delivery', 'Quantity']
-        equipment_list = []
+        # data.columns = ['Equipment_name', 'Equipment_type', 'Make', 'Model', 'Owner', 'Phone', 'Email', 'Location', 'Availability', 'Delivery', 'Quantity']
+        # equipment_list = []
 
-        for index, row in data.iterrows():
-            owner_name = row['Owner']
-            equipment_owner = EquipmentOwner.query.filter(EquipmentOwner.name == owner_name).first()
-            equipment = Equipment(
-                name = row['Equipment_name'],
-                type = row['Equipment_type'],
-                make = row['Make'],
-                model = row['Model'],
-                owner_name = equipment_owner.name,
-                phone = equipment_owner.phone,
-                email = equipment_owner.email,
-                location = row['Location'],
-                availability = row['Availability'],
-                delivery = row['Delivery'],
-                quantity = row['Quantity'],
-                owner_id = equipment_owner.id
-            )
+        # for index, row in data.iterrows():
+        #     owner_name = row['Owner']
+        #     equipment_owner = EquipmentOwner.query.filter(EquipmentOwner.name == owner_name).first()
+        #     equipment = Equipment(
+        #         name = row['Equipment_name'],
+        #         type = row['Equipment_type'],
+        #         make = row['Make'],
+        #         model = row['Model'],
+        #         owner_name = equipment_owner.name,
+        #         phone = equipment_owner.phone,
+        #         email = equipment_owner.email,
+        #         location = row['Location'],
+        #         availability = row['Availability'],
+        #         delivery = row['Delivery'],
+        #         quantity = row['Quantity'],
+        #         owner_id = equipment_owner.id
+        #     )
 
             # print(equipment_owner.name)
-            equipment_list.append(equipment) # this works, just appending to list
+            # equipment_list.append(equipment) # this works, just appending to list
 
-        print("Commiting all the equipment to your database...")
-        db.session.add_all(equipment_list)
+        # print("Commiting all the equipment to your database...")
+        # db.session.add_all(equipment_list)
 
-        print("Matching Equipment to Appropriate Owner...")
+        # print("Matching Equipment to Appropriate Owner...")
         # owner = EquipmentOwner.query.filter(EquipmentOwner.name == owner_name).first()
         # owner.equipment.append(equipment)
         
-        db.session.commit()
+        # db.session.commit()
 
     # name = db.Column(db.String)
     # type = db.Column(db.String)

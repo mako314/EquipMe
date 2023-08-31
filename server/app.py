@@ -10,6 +10,11 @@ from flask_restful import Resource
 from config import db, app, api
 from sqlalchemy import asc
 
+#------------------------------------HELPERS----------------------------------
+from datetime import datetime
+from helpers import is_available_for_date_range
+
+
 
 #------------------------------------USER LOGIN------------------------------------------------------------------------------
 
@@ -456,7 +461,6 @@ class EquipmentByID(Resource):
             db.session.delete(equipment)
 
             db.session.commit()
-            #how do I input succesfully delete into the {}?
             response = make_response({"message":"Succesfully deleted!"}, 204)
             return response
         else:
@@ -501,21 +505,42 @@ class RentalAgreements(Resource):
         # load category and then from there display 
         #take the input
 
-        #may need a way to write in validations
-        new_rental_agreement = RentalAgreement(
-            location = data['location'],
-            total_price = data['total_price'],
-            rental_dates = data['rental_dates'],
-            owner_id = data['owner_id'],
-            user_id = data['user_id'],
-            equipment_id = data['equipment_id']
-        )
+        equipment_id = data['equipment_id']
+        start_date = data['start_date']
+        end_date = data['end_date']
 
-        db.session.add(new_rental_agreement)
-        db.session.commit()
+        equipment = Equipment.query.filter(Equipment.id == equipment_id).first()
+        
+        if not equipment:
+            return {"error": "Equipment not found"}, 404
+        
+        if is_available_for_date_range(equipment, start_date, end_date) and equipment.quantity > 0:
+            equipment.quantity -= 1
 
-        response = make_response(new_rental_agreement.to_dict(), 201)
-        return response
+            #may need a way to write in validations
+            new_rental_agreement = RentalAgreement(
+                location = data['location'],
+                total_price = data['total_price'],
+                rental_dates = data[f"{start_date} to {end_date}"],
+                owner_id = data['owner_id'],
+                user_id = data['user_id'],
+                equipment_id = data['equipment_id'],
+                created_on = datetime.utcnow(),
+                modified_on = datetime.utcnow(),
+
+            )
+            db.session.add(new_rental_agreement)
+            db.session.commit()
+
+            response = make_response(new_rental_agreement.to_dict(), 201)
+            return response
+        else:
+            return {"error": "Equipment not available for the requested date range or quantity depleted"}, 400
+        # db.session.add(new_rental_agreement)
+        # db.session.commit()
+
+        # response = make_response(new_rental_agreement.to_dict(), 201)
+        # return response
 
 
 api.add_resource(RentalAgreements, '/rental_agreements')
@@ -574,7 +599,37 @@ if __name__ == '__main__':
     app.run(port=5555, debug=True)
 
 
-    #holy cow stop coding on main u gOOFY 
+
+#-----------------------------------------------Rental Agreement Classes - CHECKING FOR AVAILABILITY AND SUCH -----------------------------------------------------------------------------
+
+# Will need to make a call to this route I believe, to check whether or not the date and end date will be available for using the equipment. Need to find a way to also match the time. If someone's only renting a piece out for two hours, they have another 10 hours ahead in which the equipment can be rented.
+class AvailabilityChecker(Resource):
+    def get(self, equipment_id, start_date, end_date):
+        #Grab equipment with the equipment ID, declare an available quantity
+        equipment = Equipment.query.filter(Equipment.id == equipment_id).first()
+        available_quantity = equipment.quantity
+
+        # Check if the equipment is available and if there's enough quantity
+        if is_available_for_date_range(equipment, start_date, end_date) and available_quantity > 0:
+            # Deduct quantity
+            equipment.quantity -= 1
+            db.session.commit()
+            return {"available": True, "available_quantity": equipment.quantity}
+        else:
+            return {"available": False, "available_quantity": equipment.quantity}
+
+
+
+api.add_resource(AvailabilityChecker, "/availability/<int:equipment_id>/<string:start_date>/<string:end_date>")
+
+
+
+
+
+
+
+
+#holy cow stop coding on main u gOOFY 
 
 #Routes needed -
 # INDEX
