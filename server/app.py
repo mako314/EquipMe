@@ -574,7 +574,31 @@ if __name__ == '__main__':
     app.run(port=5555, debug=True)
 
 
-    #holy cow stop coding on main u gOOFY 
+
+#-----------------------------------------------Rental Agreement Classes - CHECKING FOR AVAILABILITY AND SUCH -----------------------------------------------------------------------------
+
+class AvailabilityChecker(Resource):
+    def get(self, equipment_id, start_date, end_date):
+        #Grab equipment with the equipment ID, declare an available quantity
+        equipment = Equipment.query.filter(Equipment.id == equipment_id).first()
+        available_quantity = equipment.quantity
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#holy cow stop coding on main u gOOFY 
 
 #Routes needed -
 # INDEX
