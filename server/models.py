@@ -8,6 +8,10 @@ from config import db, bcrypt
 from datetime import datetime
 
 
+#---------------HELPER IMPORTS----------------
+from helpers import is_available_for_date_range
+
+
 
 class User(db.Model, SerializerMixin):
     __tablename__ = "users"

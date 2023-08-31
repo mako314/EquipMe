@@ -10,6 +10,11 @@ from flask_restful import Resource
 from config import db, app, api
 from sqlalchemy import asc
 
+#------------------------------------HELPERS----------------------------------
+
+from helpers import is_available_for_date_range
+
+
 
 #------------------------------------USER LOGIN------------------------------------------------------------------------------
 
@@ -582,6 +587,12 @@ class AvailabilityChecker(Resource):
         #Grab equipment with the equipment ID, declare an available quantity
         equipment = Equipment.query.filter(Equipment.id == equipment_id).first()
         available_quantity = equipment.quantity
+
+        # Check if the equipment is available and if there's enough quantity
+        if is_available_for_date_range(equipment, start_date, end_date) and available_quantity > 0:
+            # Deduct quantity
+            equipment.quantity -= 1
+            db.session.commit()
 
 
 
