@@ -41,6 +41,10 @@ import { OwnerProvider } from './OwnerComponents/OwnerContext';
 import UserProfile from './UserComponents/UserProfile';
 
 
+//----------------------Owner Dashboard-----------------------------
+import OwnerDashboard from './OwnerComponents/OwnerDashboardComponents/OwnerDashboard';
+
+
 function App() {
 
   //forgot to const navigate = useNavigate()
@@ -287,6 +291,10 @@ function App() {
         
         {/* User Profile Page*/}
         <Route path='/user/profile/:id' element={<UserProfile/>}/>
+
+
+        {/* Owner Dashboard Page*/}
+        <Route path='/owner/dashboard' element={<OwnerDashboard/>}/>
 
         
 
