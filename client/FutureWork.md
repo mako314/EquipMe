@@ -163,6 +163,8 @@ May incoroporate a way to just filter the way I currently have it also, meaning 
 
 10. Need preferences for the above. Say a user from Orlando wants to rent a drill, we can show them which ones are available to do delivery, and which ones are local to their area so they can better optimize their rentals.
 
+11. Added a route to check for availability and quantity to see whether or not a piece of equipment is rentable. 8/31/23
+12. Tomorrow I will test out incorporating the calendar in, and getting dates from the DateFn library, should be challenging enough. 8/31/23
 
 fin --- 
 1. Created a rental agreement card that will be hosted on the users page and the owners page, so they can keep track of their rentals
