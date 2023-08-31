@@ -311,113 +311,10 @@ if __name__ == '__main__':
         #Adds owners with their passwords hashed. 
 
 #---------------------------------------------------------
-#Seed rental agreements
-#Rental agreements 
-        print("Configuring our current rental agreements...")
-        rental_agreements = [
-        RentalAgreement(
-            location="Chicago, Illinois",
-            total_price=150,
-            rental_dates="2023-07-15 to 2023-07-18",
-            owner_id = 6, # Amy Wilson
-            user_id=1,  # Benjamin Davis
-            equipment_id=38,  # Amy Wilson #Available
-            created_on = datetime.utcnow(),
-            modified_on = datetime.utcnow()
-        ),
-        RentalAgreement(
-            location="Miami, Florida",
-            total_price=200,
-            rental_dates="2023-07-19 to 2023-07-23",
-            owner_id = 5, # David Rodriguez
-            user_id=2,  # Ethan Martinez
-            equipment_id=8,  # David Rodriguez #Available
-            created_on = datetime.utcnow(),
-            modified_on = datetime.utcnow()
-        ),
-        RentalAgreement(
-            location="Houston, Texas",
-            total_price=100,
-            rental_dates="2023-07-17 to 2023-07-20",
-            owner_id = 7, # Daniel Lee
-            user_id=3,  # William Anderson
-            equipment_id=317,  # Daniel Lee #Available
-            created_on = datetime.utcnow(),
-            modified_on = datetime.utcnow()
-        ),
-        RentalAgreement(
-            location="Phoenix, Arizona",
-            total_price=80,
-            rental_dates="2023-07-16 to 2023-07-19",
-            owner_id = 2, # Emily Johnson
-            user_id=4,  # Sofia Rodriguez
-            equipment_id=361,  # Emily Johnson #Available
-            created_on = datetime.utcnow(),
-            modified_on = datetime.utcnow()
-        ),
-        RentalAgreement(
-            location="Seattle, Washington",
-            total_price=180,
-            rental_dates="2023-07-18 to 2023-07-21",
-            owner_id = 4, # Henry Cavill
-            user_id=6,  # Sarah Thompson
-            equipment_id=121,  # Henry Cavill #Available
-            created_on = datetime.utcnow(),
-            modified_on = datetime.utcnow()
-        ),
-        RentalAgreement(
-            location="Houston, Texas",
-            total_price=120,
-            rental_dates="2023-07-22 to 2023-07-24",
-            owner_id = 3, # Andrew Jacobs
-            user_id=7,  # Thomas Brady
-            equipment_id=311,  # Andrew Jacobs #Available
-            created_on = datetime.utcnow(),
-            modified_on = datetime.utcnow()
-        ),
-        RentalAgreement(
-            location="Chicago, Illinois",
-            total_price=80,
-            rental_dates="2023-07-23 to 2023-07-24",
-            owner_id = 1, # Mark Davis
-            user_id=5,  # Christian Domingues
-            equipment_id=238,  # Mark Davis #Available
-            created_on = datetime.utcnow(),
-            modified_on = datetime.utcnow()
-        ),
-        RentalAgreement(
-            location="Phoenix, Arizona",
-            total_price=120,
-            rental_dates="2023-07-22 to 2023-07-23",
-            owner_id = 2, # Emily Johnson
-            user_id=4,  # Sofia Rodriguez
-            equipment_id=355,  # Emily Johnson #Available
-            created_on = datetime.utcnow(),
-            modified_on = datetime.utcnow()
-        ),
-        RentalAgreement(
-            location="Dallas, Texas",
-            total_price=150,
-            rental_dates="2023-07-19 to 2023-07-22",
-            owner_id = 7,
-            user_id=3,  # William Anderson
-            equipment_id=318,  # Daniel Lee #Available
-            created_on = datetime.utcnow(),
-            modified_on = datetime.utcnow()
-        )]
 
-        db.session.add_all(rental_agreements)
-
-        #     RentalAgreement(
-        #     location="Orlando, Florida",
-        #     total_price=300,
-        #     rental_dates="2023-07-20 to 2023-07-25",
-        #     user_id=2,  # Ethan Martinez
-        #     owner_id=9  # Ryan Phillips
-        # ),
 #-------------------------------------------------------------------------------------------------------------------------------------------------
 #Seed Equipment - Going to do less equipment since I know the pandas works.
-
+        print("Uploading the current equipment list...")
         equipment_list = [
             Equipment(
                 name = 'Excavator',
@@ -477,9 +374,148 @@ if __name__ == '__main__':
             ),
         ]
 
-
+        db.session.add_all(equipment_list)
+        db.session.commit()
 #-------------------------------------------------------------------------------------------------------------------------------------------------
 
+
+#Seed rental agreements
+#Rental agreements 
+        print("Configuring our current rental agreements...")
+        rental_agreements = [
+        RentalAgreement(
+            location="Chicago, Illinois",
+            total_price=150,
+            rental_dates="2023-07-15 to 2023-07-18",
+            owner_id = 6, # Amy Wilson
+            user_id=1,  # Benjamin Davis
+            equipment_id=2,  # Amy Wilson #Available
+            created_on = datetime.utcnow(),
+            modified_on = datetime.utcnow()
+        ),
+        RentalAgreement(
+            location="Miami, Florida",
+            total_price=200,
+            rental_dates="2023-07-19 to 2023-07-23",
+            owner_id = 5, # David Rodriguez
+            user_id=2,  # Ethan Martinez
+            equipment_id=1,  # David Rodriguez #Available
+            created_on = datetime.utcnow(),
+            modified_on = datetime.utcnow()
+        ),
+        RentalAgreement(
+            location="Seattle, Washington",
+            total_price=100,
+            rental_dates="2023-07-17 to 2023-07-20",
+            owner_id = 4, # Henry Cavill
+            user_id=5,  # Sarah Thompson
+            equipment_id=3,  # Daniel Lee #Available
+            created_on = datetime.utcnow(),
+            modified_on = datetime.utcnow()
+        )]
+
+        db.session.add_all(rental_agreements)
+        db.session.commit()
+#----------------- OLD RENTAL AGREEMENTS
+        #     RentalAgreement(
+        #     location="Orlando, Florida",
+        #     total_price=300,
+        #     rental_dates="2023-07-20 to 2023-07-25",
+        #     user_id=2,  # Ethan Martinez
+        #     owner_id=9  # Ryan Phillips
+        # ),
+
+        # RentalAgreement(
+        #     location="Chicago, Illinois",
+        #     total_price=150,
+        #     rental_dates="2023-07-15 to 2023-07-18",
+        #     owner_id = 6, # Amy Wilson
+        #     user_id=1,  # Benjamin Davis
+        #     equipment_id=38,  # Amy Wilson #Available
+        #     created_on = datetime.utcnow(),
+        #     modified_on = datetime.utcnow()
+        # ),
+        # RentalAgreement(
+        #     location="Miami, Florida",
+        #     total_price=200,
+        #     rental_dates="2023-07-19 to 2023-07-23",
+        #     owner_id = 5, # David Rodriguez
+        #     user_id=2,  # Ethan Martinez
+        #     equipment_id=8,  # David Rodriguez #Available
+        #     created_on = datetime.utcnow(),
+        #     modified_on = datetime.utcnow()
+        # ),
+        # RentalAgreement(
+        #     location="Houston, Texas",
+        #     total_price=100,
+        #     rental_dates="2023-07-17 to 2023-07-20",
+        #     owner_id = 7, # Daniel Lee
+        #     user_id=3,  # William Anderson
+        #     equipment_id=317,  # Daniel Lee #Available
+        #     created_on = datetime.utcnow(),
+        #     modified_on = datetime.utcnow()
+        # ),
+        # RentalAgreement(
+        #     location="Phoenix, Arizona",
+        #     total_price=80,
+        #     rental_dates="2023-07-16 to 2023-07-19",
+        #     owner_id = 2, # Emily Johnson
+        #     user_id=4,  # Sofia Rodriguez
+        #     equipment_id=361,  # Emily Johnson #Available
+        #     created_on = datetime.utcnow(),
+        #     modified_on = datetime.utcnow()
+        # ),
+        # RentalAgreement(
+        #     location="Seattle, Washington",
+        #     total_price=180,
+        #     rental_dates="2023-07-18 to 2023-07-21",
+        #     owner_id = 4, # Henry Cavill
+        #     user_id=6,  # Sarah Thompson
+        #     equipment_id=121,  # Henry Cavill #Available
+        #     created_on = datetime.utcnow(),
+        #     modified_on = datetime.utcnow()
+        # ),
+        # RentalAgreement(
+        #     location="Houston, Texas",
+        #     total_price=120,
+        #     rental_dates="2023-07-22 to 2023-07-24",
+        #     owner_id = 3, # Andrew Jacobs
+        #     user_id=7,  # Thomas Brady
+        #     equipment_id=311,  # Andrew Jacobs #Available
+        #     created_on = datetime.utcnow(),
+        #     modified_on = datetime.utcnow()
+        # ),
+        # RentalAgreement(
+        #     location="Chicago, Illinois",
+        #     total_price=80,
+        #     rental_dates="2023-07-23 to 2023-07-24",
+        #     owner_id = 1, # Mark Davis
+        #     user_id=5,  # Christian Domingues
+        #     equipment_id=238,  # Mark Davis #Available
+        #     created_on = datetime.utcnow(),
+        #     modified_on = datetime.utcnow()
+        # ),
+        # RentalAgreement(
+        #     location="Phoenix, Arizona",
+        #     total_price=120,
+        #     rental_dates="2023-07-22 to 2023-07-23",
+        #     owner_id = 2, # Emily Johnson
+        #     user_id=4,  # Sofia Rodriguez
+        #     equipment_id=355,  # Emily Johnson #Available
+        #     created_on = datetime.utcnow(),
+        #     modified_on = datetime.utcnow()
+        # ),
+        # RentalAgreement(
+        #     location="Dallas, Texas",
+        #     total_price=150,
+        #     rental_dates="2023-07-19 to 2023-07-22",
+        #     owner_id = 7,
+        #     user_id=3,  # William Anderson
+        #     equipment_id=318,  # Daniel Lee #Available
+        #     created_on = datetime.utcnow(),
+        #     modified_on = datetime.utcnow()
+        # )
+#-------------------------------------------------------------------------------------------------------------------------------------------------
 
 #Seed Equipment with panda. 
 #Seed Equipment

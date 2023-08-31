@@ -1,8 +1,8 @@
-"""<table 1.2>
+"""<created and modified at, less owner data in equipment>
 
-Revision ID: e915cd0bc380
+Revision ID: b31fdcc5f252
 Revises: 
-Create Date: 2023-08-28 18:58:54.794260
+Create Date: 2023-08-31 16:56:57.739227
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'e915cd0bc380'
+revision = 'b31fdcc5f252'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -49,9 +49,6 @@ def upgrade():
     sa.Column('type', sa.String(), nullable=True),
     sa.Column('make', sa.String(), nullable=True),
     sa.Column('model', sa.String(), nullable=True),
-    sa.Column('owner_name', sa.String(), nullable=True),
-    sa.Column('phone', sa.String(), nullable=True),
-    sa.Column('email', sa.String(), nullable=True),
     sa.Column('location', sa.String(), nullable=True),
     sa.Column('availability', sa.String(), nullable=True),
     sa.Column('delivery', sa.String(), nullable=True),
@@ -68,6 +65,8 @@ def upgrade():
     sa.Column('owner_id', sa.Integer(), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.Column('equipment_id', sa.Integer(), nullable=True),
+    sa.Column('created_on', sa.DateTime(), nullable=False),
+    sa.Column('modified_on', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['equipment_id'], ['equipments.id'], name=op.f('fk_agreements_equipment_id_equipments')),
     sa.ForeignKeyConstraint(['owner_id'], ['owners.id'], name=op.f('fk_agreements_owner_id_owners')),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], name=op.f('fk_agreements_user_id_users')),
