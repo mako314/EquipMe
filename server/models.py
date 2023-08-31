@@ -231,22 +231,11 @@ class RentalAgreement(db.Model, SerializerMixin):
     total_price = db.Column(db.Integer) # Maybe find a way to find the daily cost / hourly cost?
     
 #----------------------------------------------------------------
-    rental_dates = db.Column(db.String) #maybe integer?
+    rental_dates = db.Column(db.String) #maybe integer? will need to do this in routing
+
     # legal_doc = db.Column(db.String) # need a way to upload documentation 
     #need a way to grab the equipment
-#----------------------------------------------------------------
-    
-    # Include a created at date, updated at.
-    created_on = db.Column(
-    db.DateTime, nullable=False,
-    default=datetime.utcnow,
-    )
-    
-    modified_on = db.Column(
-    db.DateTime, nullable=False,
-    default=datetime.utcnow,
-    onupdate=datetime.utcnow
-    )
+
 #----------------------------------------------------------------
 
     #relationships
@@ -256,6 +245,21 @@ class RentalAgreement(db.Model, SerializerMixin):
     owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
+
+#----------------------------------------------------------------
+    
+    # Include a created at date, updated at.
+    created_on = db.Column(
+    db.DateTime, nullable=False,
+    default=datetime.utcnow,
+    )
+
+    modified_on = db.Column(
+    db.DateTime, nullable=False,
+    default=datetime.utcnow,
+    onupdate=datetime.utcnow
+    )
+#----------------------------------------------------------------
 
     #this hopefully connects it
     user = db.relationship(
