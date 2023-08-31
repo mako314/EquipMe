@@ -394,6 +394,17 @@ if __name__ == '__main__':
         #     owner_id=9  # Ryan Phillips
         # ),
 #-------------------------------------------------------------------------------------------------------------------------------------------------
+#Seed Equipment - Going to do less equipment since I know the pandas works.
+
+
+
+
+
+
+
+
+
+#-------------------------------------------------------------------------------------------------------------------------------------------------
 #Seed Equipment with panda. 
 #Seed Equipment
         print("Uploading the current equipment list...")

@@ -5,6 +5,9 @@ from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.hybrid import hybrid_property
 from config import db, bcrypt
 
+from datetime import datetime
+
+
 
 class User(db.Model, SerializerMixin):
     __tablename__ = "users"
@@ -164,11 +167,12 @@ class Equipment(db.Model, SerializerMixin):
     type = db.Column(db.String)
     make = db.Column(db.String)
     model = db.Column(db.String)
-    owner_name = db.Column(db.String)
-
-    phone = db.Column(db.String) #this and the one below are recently added.
-    email = db.Column(db.String) #This is already included via the owner relationship.
-
+#----------------------------------------------------------------
+    #Removed due to incorporating a relationship
+    # owner_name = db.Column(db.String)
+    # phone = db.Column(db.String) #this and the one below are recently added.
+    # email = db.Column(db.String) #This is already included via the owner relationship.
+#----------------------------------------------------------------
     location = db.Column(db.String)
     availability = db.Column(db.String)
     delivery = db.Column(db.String)
@@ -225,12 +229,25 @@ class RentalAgreement(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     location = db.Column(db.String)
     total_price = db.Column(db.Integer) # Maybe find a way to find the daily cost / hourly cost?
+    
+#----------------------------------------------------------------
     rental_dates = db.Column(db.String) #maybe integer?
     # legal_doc = db.Column(db.String) # need a way to upload documentation 
     #need a way to grab the equipment
-
-
+#----------------------------------------------------------------
+    
     # Include a created at date, updated at.
+    created_on = db.Column(
+    db.DateTime, nullable=False,
+    default=datetime.utcnow,
+    )
+    
+    modified_on = db.Column(
+    db.DateTime, nullable=False,
+    default=datetime.utcnow,
+    onupdate=datetime.utcnow
+    )
+#----------------------------------------------------------------
 
     #relationships
     #do a cascade to make life easier 
