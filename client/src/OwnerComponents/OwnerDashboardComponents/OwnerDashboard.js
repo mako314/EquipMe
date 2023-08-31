@@ -96,29 +96,29 @@ function OwnerDashboard() {
                           </svg>
                       </div>
                       <div className="absolute z-10 flex-col items-start hidden w-full pb-1 bg-white shadow-lg group-focus:flex">
-                          <a className="w-full px-4 py-2 text-left hover:bg-gray-300" href="#">Menu Item 1</a>
-                          <a className="w-full px-4 py-2 text-left hover:bg-gray-300" href="#">Menu Item 1</a>
-                          <a className="w-full px-4 py-2 text-left hover:bg-gray-300" href="#">Menu Item 1</a>
+                          <a className="w-full px-4 py-2 text-left hover:bg-gray-300" href="#"> My Listings? </a>
+                          <a className="w-full px-4 py-2 text-left hover:bg-gray-300" href="#"> Possible Conversions </a>
+                          <a className="w-full px-4 py-2 text-left hover:bg-gray-300" href="#"> Graphs </a>
                       </div>
                   </button>
                   <div className="flex flex-col flex-grow p-4 overflow-auto">
                       <a className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300" href="#">
-                          <span className="leading-none">Item 1</span>
+                          <span className="leading-none"> Active listings </span>
                       </a>
                       <a className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300" href="#">
-                          <span className="leading-none">Item 2</span>
+                          <span className="leading-none"> Planned Deals </span>
                       </a>
                       <a className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300" href="#">
-                          <span className="leading-none">Item 3</span>
+                          <span className="leading-none">Potential Renters</span>
                       </a>
                       <a className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300" href="#">
-                          <span className="leading-none">Item 4</span>
+                          <span className="leading-none"> What do I need here </span>
                       </a>
                       <a className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300" href="#">
-                          <span className="leading-none">Item 5</span>
+                          <span className="leading-none"> extra </span>
                       </a>
                       <a className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300" href="#">
-                          <span className="leading-none">Item 6</span>
+                          <span className="leading-none"> extra </span>
                       </a>
                       <a className="flex items-center flex-shrink-0 h-10 px-3 mt-auto text-sm font-medium bg-gray-200 rounded hover:bg-gray-300"
                           href="#">
