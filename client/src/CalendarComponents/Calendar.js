@@ -2,7 +2,7 @@
 // import { DotsVerticalIcon } from '@heroicons/react/outline'
 // import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { Fragment, useState, useEffect, useRef } from 'react';
 
 
 import {
@@ -19,7 +19,7 @@ import {
   parseISO,
   startOfToday,
 } from 'date-fns'
-import { Fragment, useState } from 'react'
+
 
 const meetings = [
   {
@@ -103,6 +103,27 @@ export default function Calendar() {
   const handleMouseUp = () => {
     setSelecting(false);
   };
+  let firstDayCurrentMonth = parse(currentMonth, 'MMM-yyyy', new Date())
+
+  let days = eachDayOfInterval({
+    start: firstDayCurrentMonth,
+    end: endOfMonth(firstDayCurrentMonth),
+  })
+
+  function previousMonth() {
+    let firstDayNextMonth = add(firstDayCurrentMonth, { months: -1 })
+    setCurrentMonth(format(firstDayNextMonth, 'MMM-yyyy'))
+  }
+
+  function nextMonth() {
+    let firstDayNextMonth = add(firstDayCurrentMonth, { months: 1 })
+    setCurrentMonth(format(firstDayNextMonth, 'MMM-yyyy'))
+  }
+
+  let selectedDayMeetings = meetings.filter((meeting) =>
+    isSameDay(parseISO(meeting.startDatetime), selectedDay)
+  )
+
 
   // Effect to attach and remove mousemove and mouseup event listeners
   useEffect(() => {
@@ -130,26 +151,6 @@ export default function Calendar() {
   }, [selecting, days]);
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  let firstDayCurrentMonth = parse(currentMonth, 'MMM-yyyy', new Date())
-
-  let days = eachDayOfInterval({
-    start: firstDayCurrentMonth,
-    end: endOfMonth(firstDayCurrentMonth),
-  })
-
-  function previousMonth() {
-    let firstDayNextMonth = add(firstDayCurrentMonth, { months: -1 })
-    setCurrentMonth(format(firstDayNextMonth, 'MMM-yyyy'))
-  }
-
-  function nextMonth() {
-    let firstDayNextMonth = add(firstDayCurrentMonth, { months: 1 })
-    setCurrentMonth(format(firstDayNextMonth, 'MMM-yyyy'))
-  }
-
-  let selectedDayMeetings = meetings.filter((meeting) =>
-    isSameDay(parseISO(meeting.startDatetime), selectedDay)
-  )
 
   return (
     <div className="pt-16 ">
@@ -188,14 +189,23 @@ export default function Calendar() {
               <div>F</div>
               <div>S</div>
             </div>
-            <div className="grid grid-cols-7 mt-2 text-sm">
-              {days.map((day, dayIdx) => (
+            <div className="grid grid-cols-7 mt-2 text-sm" ref={containerRef}>
+                {days.map((day, dayIdx) => (
                 <div
-                  key={day.toString()}
-                  className={classNames(
+                    key={day.toString()}
+                    className={classNames(
                     dayIdx === 0 && colStartClasses[getDay(day)],
-                    'py-1.5'
-                  )}
+                    'py-1.5',
+                    // Apply selected styles for the selected range
+                    selectedRange.start &&
+                        selectedRange.end &&
+                        day >= selectedRange.start &&
+                        day <= selectedRange.end &&
+                        'bg-amber-300 rounded-full', // You can customize the selected range style
+                    )}
+                    onMouseDown={() => handleMouseDown(day)}
+                    onMouseEnter={() => handleMouseMove(day)}
+                    onMouseUp={handleMouseUp}
                 >
                   <button
                     type="button"
