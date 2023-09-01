@@ -2,6 +2,8 @@
 // import { DotsVerticalIcon } from '@heroicons/react/outline'
 // import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
 
+import React, { useState, useEffect, useRef } from 'react';
+
 
 import {
   add,
@@ -65,9 +67,69 @@ function classNames(...classes) {
 }
 
 export default function Calendar() {
+
+
   let today = startOfToday()
-  let [selectedDay, setSelectedDay] = useState(today)
-  let [currentMonth, setCurrentMonth] = useState(format(today, 'MMM-yyyy'))
+
+  //State Variables
+  const [selectedDay, setSelectedDay] = useState(today)
+  const [currentMonth, setCurrentMonth] = useState(format(today, 'MMM-yyyy'))
+
+//----------------------------------------------------Selecting multiple dates--------------------------------------------------------------------------------------------
+  // State to track the selected range
+  const [selecting, setSelecting] = useState(false);
+  const [selectedRange, setSelectedRange] = useState({ start: null, end: null });
+
+
+  // Ref for the container to measure dimensions
+  const containerRef = useRef(null);
+
+
+   // Event handlers for drag selection
+   const handleMouseDown = (day) => {
+    setSelecting(true);
+    setSelectedRange({ start: day, end: day });
+  };
+
+  const handleMouseMove = (day) => {
+    if (selecting) {
+      setSelectedRange((prevRange) => ({
+        start: prevRange.start,
+        end: day,
+      }));
+    }
+  };
+
+  const handleMouseUp = () => {
+    setSelecting(false);
+  };
+
+  // Effect to attach and remove mousemove and mouseup event listeners
+  useEffect(() => {
+    if (selecting) {
+      const handleGlobalMouseUp = () => {
+        handleMouseUp();
+        document.removeEventListener('mousemove', handleGlobalMouseMove);
+        document.removeEventListener('mouseup', handleGlobalMouseUp);
+      };
+
+      const handleGlobalMouseMove = (e) => {
+        e.preventDefault();
+        const { left } = containerRef.current.getBoundingClientRect();
+        const mouseX = e.clientX - left;
+        const cellWidth = containerRef.current.offsetWidth / 7;
+        const dayIndex = Math.floor(mouseX / cellWidth);
+        if (dayIndex >= 0 && dayIndex < days.length) {
+          handleMouseMove(days[dayIndex]);
+        }
+      };
+
+      document.addEventListener('mousemove', handleGlobalMouseMove);
+      document.addEventListener('mouseup', handleGlobalMouseUp);
+    }
+  }, [selecting, days]);
+
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   let firstDayCurrentMonth = parse(currentMonth, 'MMM-yyyy', new Date())
 
   let days = eachDayOfInterval({
