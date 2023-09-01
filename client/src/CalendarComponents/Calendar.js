@@ -1,6 +1,8 @@
-import { Menu, Transition } from '@headlessui/react'
+// import { Menu, Transition } from '@headlessui/react'
 // import { DotsVerticalIcon } from '@heroicons/react/outline'
 // import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
+
+
 import {
   add,
   eachDayOfInterval,
@@ -23,42 +25,40 @@ const meetings = [
     name: 'Leslie Alexander',
     imageUrl:
       'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    startDatetime: '2022-05-11T13:00',
-    endDatetime: '2022-05-11T14:30',
+    startDatetime: '2023-09-05T14:00',
+    endDatetime: '2023-09-05T15:00',
   },
   {
     id: 2,
     name: 'Michael Foster',
     imageUrl:
       'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    startDatetime: '2022-05-20T09:00',
-    endDatetime: '2022-05-20T11:30',
+    startDatetime: '2023-09-02T14:00',
+    endDatetime: '2023-09-02T16:00',
   },
   {
     id: 3,
     name: 'Dries Vincent',
     imageUrl:
       'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    startDatetime: '2022-05-20T17:00',
-    endDatetime: '2022-05-20T18:30',
-  },
-  {
-    id: 4,
-    name: 'Leslie Alexander',
-    imageUrl:
-      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    startDatetime: '2022-06-09T13:00',
-    endDatetime: '2022-06-09T14:30',
-  },
-  {
-    id: 5,
-    name: 'Michael Foster',
-    imageUrl:
-      'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    startDatetime: '2022-05-13T14:00',
-    endDatetime: '2022-05-13T14:30',
-  },
+    startDatetime: '2023-09-02T14:00',
+    endDatetime: '2023-09-01T14:00',
+  }
 ]
+
+
+
+let arrowRight = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
+<path fillRule="evenodd" d="M5 10a.75.75 0 01.75-.75h6.638L10.23 7.29a.75.75 0 111.04-1.08l3.5 3.25a.75.75 0 010 1.08l-3.5 3.25a.75.75 0 11-1.04-1.08l2.158-1.96H5.75A.75.75 0 015 10z" clipRule="evenodd" />
+</svg>
+
+
+let arrowLeft = <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
+<path fillRule="evenodd" d="M15 10a.75.75 0 01-.75.75H7.612l2.158 1.96a.75.75 0 11-1.04 1.08l-3.5-3.25a.75.75 0 010-1.08l3.5-3.25a.75.75 0 111.04 1.08L7.612 9.25h6.638A.75.75 0 0115 10z" clipRule="evenodd" />
+</svg>
+
+
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -90,8 +90,8 @@ export default function Calendar() {
   )
 
   return (
-    <div className="pt-16">
-      <div className="max-w-md px-4 mx-auto sm:px-7 md:max-w-4xl md:px-6">
+    <div className="pt-16 ">
+      <div className="max-w-md px-4 mx-auto sm:px-7 md:max-w-4xl md:px-6 border-solid border-2 border-black my-12">
         <div className="md:grid md:grid-cols-2 md:divide-x md:divide-gray-200">
           <div className="md:pr-14">
             <div className="flex items-center">
@@ -104,7 +104,8 @@ export default function Calendar() {
                 className="-my-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
               >
                 <span className="sr-only">Previous month</span>
-                <ChevronLeftIcon className="w-5 h-5" aria-hidden="true" />
+                {/* <ChevronLeftIcon className="w-5 h-5" aria-hidden="true" /> */}
+                {arrowLeft}
               </button>
               <button
                 onClick={nextMonth}
@@ -112,7 +113,8 @@ export default function Calendar() {
                 className="-my-1.5 -mr-1.5 ml-2 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
               >
                 <span className="sr-only">Next month</span>
-                <ChevronRightIcon className="w-5 h-5" aria-hidden="true" />
+                {/* <ChevronRightIcon className="w-5 h-5" aria-hidden="true" /> */}
+                {arrowRight}
               </button>
             </div>
             <div className="grid grid-cols-7 mt-10 text-xs leading-6 text-center text-gray-500">
@@ -232,7 +234,7 @@ function Meeting({ meeting }) {
           {/* </Menu.Button> */}
         </div>
 
-        <Transition
+        {/* <Transition
           as={Fragment}
           enter="transition ease-out duration-100"
           enterFrom="transform opacity-0 scale-95"
@@ -240,7 +242,7 @@ function Meeting({ meeting }) {
           leave="transition ease-in duration-75"
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
-        >
+        > */}
           {/* <Menu.Items className="absolute right-0 z-10 mt-2 origin-top-right bg-white rounded-md shadow-lg w-36 ring-1 ring-black ring-opacity-5 focus:outline-none"> */}
             <div className="py-1">
               {/* <Menu.Item> */}
@@ -271,7 +273,7 @@ function Meeting({ meeting }) {
               {/* </Menu.Item> */}
             </div>
           {/* </Menu.Items> */}
-        </Transition>
+        {/* </Transition> */}
       {/* </Menu> */}
     </li>
   )

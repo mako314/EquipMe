@@ -301,7 +301,7 @@ function App() {
         <Route path='/owner/dashboard' element={<OwnerDashboard/>}/>
 
         {/* Temporary calendar routing */}
-        <Route path='/calendar/temp'element={<OwnerDashboard/>}/>
+        <Route path='/calendar/temp'element={<Calendar/>}/>
 
         
 
