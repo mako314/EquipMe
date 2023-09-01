@@ -45,6 +45,10 @@ import UserProfile from './UserComponents/UserProfile';
 import OwnerDashboard from './OwnerComponents/OwnerDashboardComponents/OwnerDashboard';
 
 
+//----------------------Temporary Calendar-----------------------------
+import Calendar from './CalendarComponents/Calendar';
+
+
 function App() {
 
   //forgot to const navigate = useNavigate()
@@ -295,6 +299,9 @@ function App() {
 
         {/* Owner Dashboard Page*/}
         <Route path='/owner/dashboard' element={<OwnerDashboard/>}/>
+
+        {/* Temporary calendar routing */}
+        <Route path='/calendar/temp'element={<OwnerDashboard/>}/>
 
         
 
