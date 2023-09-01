@@ -1,6 +1,6 @@
 import { Menu, Transition } from '@headlessui/react'
-import { DotsVerticalIcon } from '@heroicons/react/outline'
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
+// import { DotsVerticalIcon } from '@heroicons/react/outline'
+// import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
 import {
   add,
   eachDayOfInterval,
@@ -221,15 +221,15 @@ function Meeting({ meeting }) {
           </time>
         </p>
       </div>
-      <Menu
+      {/* <Menu */}
         as="div"
         className="relative opacity-0 focus-within:opacity-100 group-hover:opacity-100"
-      >
+      {/* > */}
         <div>
-          <Menu.Button className="-m-2 flex items-center rounded-full p-1.5 text-gray-500 hover:text-gray-600">
+          {/* <Menu.Button className="-m-2 flex items-center rounded-full p-1.5 text-gray-500 hover:text-gray-600"> */}
             <span className="sr-only">Open options</span>
-            <DotsVerticalIcon className="w-6 h-6" aria-hidden="true" />
-          </Menu.Button>
+            {/* <DotsVerticalIcon className="w-6 h-6" aria-hidden="true" /> */}
+          {/* </Menu.Button> */}
         </div>
 
         <Transition
@@ -241,9 +241,9 @@ function Meeting({ meeting }) {
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="absolute right-0 z-10 mt-2 origin-top-right bg-white rounded-md shadow-lg w-36 ring-1 ring-black ring-opacity-5 focus:outline-none">
+          {/* <Menu.Items className="absolute right-0 z-10 mt-2 origin-top-right bg-white rounded-md shadow-lg w-36 ring-1 ring-black ring-opacity-5 focus:outline-none"> */}
             <div className="py-1">
-              <Menu.Item>
+              {/* <Menu.Item> */}
                 {({ active }) => (
                   <a
                     href="#"
@@ -255,8 +255,8 @@ function Meeting({ meeting }) {
                     Edit
                   </a>
                 )}
-              </Menu.Item>
-              <Menu.Item>
+              {/* </Menu.Item> */}
+              {/* <Menu.Item> */}
                 {({ active }) => (
                   <a
                     href="#"
@@ -268,11 +268,11 @@ function Meeting({ meeting }) {
                     Cancel
                   </a>
                 )}
-              </Menu.Item>
+              {/* </Menu.Item> */}
             </div>
-          </Menu.Items>
+          {/* </Menu.Items> */}
         </Transition>
-      </Menu>
+      {/* </Menu> */}
     </li>
   )
 }
