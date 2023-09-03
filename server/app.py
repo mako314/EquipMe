@@ -350,7 +350,7 @@ class Equipments(Resource):
     #get ALL equipment -- DONE
     def get(self):
         equipment = [equipment.to_dict(
-            only =('id','model','name','make','location', 'type','phone','email','location','availability','delivery','quantity', 'owner_name', 'owner', ) #needed to include all of this for when one patches
+            only =('id','model','name','make','location', 'type','location','availability','delivery','quantity', 'owner', ) #needed to include all of this for when one patches
         ) for equipment in Equipment.query.all()]                                       # no longer need phone, email, and owner_name
 
         response = make_response(equipment, 200)
@@ -368,13 +368,11 @@ class Equipments(Resource):
                 type = data['type'],
                 make = data['make'],
                 model = data['model'],
-                owner_name = data['owner_name'],
-                phone = data['phone'],
-                email = data['email'],
                 location = data['location'],
                 availability = data['availability'],
                 delivery = data['delivery'],
-                quantity = data['quantity']
+                quantity = data['quantity'],
+                owner_id= data['owner_id']
             )
             db.session.add(new_equipment)
             db.session.commit()

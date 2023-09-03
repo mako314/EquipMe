@@ -209,12 +209,12 @@ class Equipment(db.Model, SerializerMixin):
     serialize_rules = ('-owner.equipment', '-agreements.equipment', '-owner.agreements')
 
     #VALIDATIONS BEGIN HERE
-    @validates("email")
-    def validates_email(self, key, email):
-        if len(email) > 0 and "@"  in email:
-            return email
-        else:
-            raise ValueError("Please check that you entered your email correctly")
+    # @validates("email")
+    # def validates_email(self, key, email):
+    #     if len(email) > 0 and "@"  in email:
+    #         return email
+    #     else:
+    #         raise ValueError("Please check that you entered your email correctly")
         
     @validates("quantity")
     def validates_quanity(self, key, quantity):

@@ -277,7 +277,7 @@ function App() {
         <Route path='/renter_signup' element={<UserForm addUser={addUser} />} />
         <Route path='/owner_signup' element={<OwnerForm addOwner={addOwner} />} />
         {/* need to rename the below to equipment_post */}
-        <Route path='/equipment_signup' element={<ProductForm addEquipment={addEquipment} />} />
+        <Route path='/list_equipment' element={<ProductForm addEquipment={addEquipment} />} />
 
         {/* Starting rentals, likely just going to use the prepop as it makes more sense than to do a "rental signup", in which a user sifts through all of the owners lol. This might not be the worst idea to incorporate into a search though. For example, filter by location, and then equipment type. The owner shouldn't really matter. But we can take into consideration the owners reviews / ratings and filter by lets say 3+ star renters. */}
         {/* I definitely don't need both of these. Likely going to remove OwnerEquipMentListing */}
