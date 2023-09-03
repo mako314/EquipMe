@@ -80,35 +80,39 @@ export default function Calendar() {
   const [selecting, setSelecting] = useState(false);
   const [selectedRange, setSelectedRange] = useState({ start: null, end: null });
 
-
+  
   // Ref for the container to measure dimensions
   const containerRef = useRef(null);
 
 
    // Event handlers for drag selection
-   const handleMouseDown = (day) => {
-    setSelecting(true);
-    setSelectedRange({ start: day, end: day });
-  };
+  //  const handleMouseDown = (day) => {
+  //   setSelecting(true);
+  //   setSelectedRange({ start: day, end: day });
+  // };
 
-  const handleMouseMove = (day) => {
-    if (selecting) {
-      setSelectedRange((prevRange) => ({
-        start: prevRange.start,
-        end: day,
-      }));
-    }
-  };
+  // const handleMouseMove = (day) => {
+  //   if (selecting) {
+  //     setSelectedRange((prevRange) => ({
+  //       start: prevRange.start,
+  //       end: day,
+  //     }));
+  //   }
+  // };
 
-  const handleMouseUp = () => {
-    setSelecting(false);
-  };
+  // const handleMouseUp = () => {
+  //   setSelecting(false);
+  // };
+  
   let firstDayCurrentMonth = parse(currentMonth, 'MMM-yyyy', new Date())
+
+
 
   let days = eachDayOfInterval({
     start: firstDayCurrentMonth,
     end: endOfMonth(firstDayCurrentMonth),
   })
+//----------------------------------------------------Clicking through months--------------------------------------------------------------------------------------------
 
   function previousMonth() {
     let firstDayNextMonth = add(firstDayCurrentMonth, { months: -1 })
@@ -119,36 +123,31 @@ export default function Calendar() {
     let firstDayNextMonth = add(firstDayCurrentMonth, { months: 1 })
     setCurrentMonth(format(firstDayNextMonth, 'MMM-yyyy'))
   }
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
   let selectedDayMeetings = meetings.filter((meeting) =>
     isSameDay(parseISO(meeting.startDatetime), selectedDay)
   )
 
-
-  // Effect to attach and remove mousemove and mouseup event listeners
-  useEffect(() => {
-    if (selecting) {
-      const handleGlobalMouseUp = () => {
-        handleMouseUp();
-        document.removeEventListener('mousemove', handleGlobalMouseMove);
-        document.removeEventListener('mouseup', handleGlobalMouseUp);
-      };
-
-      const handleGlobalMouseMove = (e) => {
-        e.preventDefault();
-        const { left } = containerRef.current.getBoundingClientRect();
-        const mouseX = e.clientX - left;
-        const cellWidth = containerRef.current.offsetWidth / 7;
-        const dayIndex = Math.floor(mouseX / cellWidth);
-        if (dayIndex >= 0 && dayIndex < days.length) {
-          handleMouseMove(days[dayIndex]);
-        }
-      };
-
-      document.addEventListener('mousemove', handleGlobalMouseMove);
-      document.addEventListener('mouseup', handleGlobalMouseUp);
+  const handleDateClick = (day) => {
+    if (!selectedRange.start) {
+      // If start date is not set, set it
+      setSelectedRange({ start: day, end: null });
+    } else if (!selectedRange.end) {
+      // If end date is not set, extend the range or reset if clicking the same date
+      if (isSameDay(selectedRange.start, day)) {
+        setSelectedRange({ start: day, end: null }); // Reset selection if clicking the same date
+      } else {
+        setSelectedRange((prevRange) => ({
+          start: prevRange.start,
+          end: day,
+        }));
+      }
+    } else {
+      // If both start and end dates are set, reset the selection
+      setSelectedRange({ start: day, end: null });
     }
-  }, [selecting, days]);
+  };
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -192,47 +191,50 @@ export default function Calendar() {
             <div className="grid grid-cols-7 mt-2 text-sm" ref={containerRef}>
                 {days.map((day, dayIdx) => (
                 <div
-                    key={day.toString()}
-                    className={classNames(
-                    dayIdx === 0 && colStartClasses[getDay(day)],
-                    'py-1.5',
-                    // Apply selected styles for the selected range
-                    selectedRange.start &&
-                        selectedRange.end &&
-                        day >= selectedRange.start &&
-                        day <= selectedRange.end &&
-                        'bg-amber-300 rounded-full', // You can customize the selected range style
-                    )}
-                    onMouseDown={() => handleMouseDown(day)}
-                    onMouseEnter={() => handleMouseMove(day)}
-                    onMouseUp={handleMouseUp}
-                >
+                key={day.toString()}
+                className={classNames(
+                  dayIdx === 0 && colStartClasses[getDay(day)],
+                  'py-1.5',
+                  // Apply selected styles for the selected range
+                  selectedRange.start &&
+                    selectedRange.end &&
+                    day >= selectedRange.start &&
+                    day <= selectedRange.end &&
+                    'bg-amber-300 rounded-full', // You can customize the selected range style
+                  )}
+                  onClick={() => handleDateClick(day)} // Handle date click to set the range
+              >
                   <button
-                    type="button"
-                    onClick={() => setSelectedDay(day)}
-                    className={classNames(
-                      isEqual(day, selectedDay) && 'text-white',
-                      !isEqual(day, selectedDay) &&
-                        isToday(day) &&
-                        'text-red-500',
-                      !isEqual(day, selectedDay) &&
-                        !isToday(day) &&
-                        isSameMonth(day, firstDayCurrentMonth) &&
-                        'text-gray-900',
-                      !isEqual(day, selectedDay) &&
-                        !isToday(day) &&
-                        !isSameMonth(day, firstDayCurrentMonth) &&
-                        'text-gray-400',
-                      isEqual(day, selectedDay) && isToday(day) && 'bg-red-500',
-                      isEqual(day, selectedDay) &&
-                        !isToday(day) &&
-                        'bg-gray-900',
-                      !isEqual(day, selectedDay) && 'hover:bg-gray-200',
-                      (isEqual(day, selectedDay) || isToday(day)) &&
-                        'font-semibold',
-                      'mx-auto flex h-8 w-8 items-center justify-center rounded-full'
-                    )}
-                  >
+              type="button"
+              className={classNames(
+                isEqual(day, selectedRange.start) ||
+                  isEqual(day, selectedRange.end)
+                  ? ''
+                  : !isEqual(day, selectedRange.start) &&
+                    isToday(day) &&
+                    'text-red-500',
+                !isEqual(day, selectedRange.start) &&
+                  !isEqual(day, selectedRange.end) &&
+                  isSameMonth(day, firstDayCurrentMonth) &&
+                  'text-gray-900',
+                !isEqual(day, selectedRange.start) &&
+                  !isEqual(day, selectedRange.end) &&
+                  !isSameMonth(day, firstDayCurrentMonth) &&
+                  'text-gray-400',
+                // Remove the 'bg-gray-900' class for selected dates
+                (isEqual(day, selectedRange.start) ||
+                  isEqual(day, selectedRange.end)) &&
+                  'bg-opacity-0',
+                !isEqual(day, selectedRange.start) &&
+                  !isEqual(day, selectedRange.end) &&
+                  'hover:bg-gray-200',
+                (isEqual(day, selectedRange.start) ||
+                  isEqual(day, selectedRange.end) ||
+                  isToday(day)) &&
+                  'font-semibold',
+                'mx-auto flex h-8 w-8 items-center justify-center rounded-full'
+              )}
+            >
                     <time dateTime={format(day, 'yyyy-MM-dd')}>
                       {format(day, 'd')}
                     </time>
