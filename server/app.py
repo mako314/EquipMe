@@ -368,13 +368,11 @@ class Equipments(Resource):
                 type = data['type'],
                 make = data['make'],
                 model = data['model'],
-                owner_name = data['owner_name'],
-                phone = data['phone'],
-                email = data['email'],
                 location = data['location'],
                 availability = data['availability'],
                 delivery = data['delivery'],
-                quantity = data['quantity']
+                quantity = data['quantity'],
+                owner_id= data['owner_id']
             )
             db.session.add(new_equipment)
             db.session.commit()

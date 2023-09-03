@@ -44,13 +44,11 @@ function ProductForm({ addEquipment }){
             type: '',
             make: '',
             model: '',
-            owner_name: '',
-            phone: '',
-            email: '',
             location: '',
             availability: '',
             delivery: '',
-            quantity: ''
+            quantity: '',
+            owner_id: ' '
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
