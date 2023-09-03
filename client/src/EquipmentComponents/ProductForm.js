@@ -32,7 +32,7 @@ function ProductForm({ addEquipment }){
     const formSchema = object({
         name: string().required('Please enter a name'),
         quantity: number().positive().required('You cannot list less than 0 items.'),
-        email: string().required('Please enter an email address')
+        // email: string().required('Please enter an email address')
     })
 
 
@@ -62,6 +62,7 @@ function ProductForm({ addEquipment }){
                 .then(res => {
                     if (res.ok){
                         res.json().then(equipment => {
+                            console.log(equipment)
                             addEquipment(equipment)
                             navigate('/equipment')
                         })
@@ -106,7 +107,7 @@ function ProductForm({ addEquipment }){
           </div>
        
         <div>
-          <label htmlFor="name" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Name </label>
+          <label htmlFor="name" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Name of the Equipment </label>
           <input type="text" name="name" value={formik.values.name} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
         </div>
  
