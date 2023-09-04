@@ -507,12 +507,22 @@ class EquipmentImages(Resource):
         db.session.commit()
 
         response = make_response(new_equipment_image.to_dict(), 201)
-        
+
         return response
 
         #except ValueError ()
 
+class EquipmentImagesByID(Resource):
+    def get(self, id):
+        equipment_image = EquipmentImage.query.filter(EquipmentImage.id == id).first()
 
+        if equipment_image:
+            return make_response(equipment_image.to_dict(), 200)
+        else:
+            response = make_response({
+            "error": "Equipment image not found"
+            }, 404)
+            return response
 #-----------------------------------------------Rental Agreement Classes-----------------------------------------------------------------------------
 #Rental agreements, need a post and a patch
 class RentalAgreements(Resource):
