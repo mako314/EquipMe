@@ -170,6 +170,7 @@ class Equipment(db.Model, SerializerMixin):
     type = db.Column(db.String)
     make = db.Column(db.String)
     model = db.Column(db.String)
+
 #----------------------------------------------------------------
     #Removed due to incorporating a relationship
     # owner_name = db.Column(db.String)
@@ -205,6 +206,8 @@ class Equipment(db.Model, SerializerMixin):
 
     agreements = db.relationship('RentalAgreement', back_populates="equipment", overlaps="users,equipments")
 
+    images = db.relationship('EquipmentImage', back_populates='equipment')
+
     #Serialization rules
     serialize_rules = ('-owner.equipment', '-agreements.equipment', '-owner.agreements')
 
@@ -223,6 +226,18 @@ class Equipment(db.Model, SerializerMixin):
             return quantity
         else:
             raise ValueError("You cannot list nothing, please enter a quantity greater than 0.")
+
+class EquipmentImage(db.Model, SerializerMixin):
+    __tablename__= "equipment_images"
+
+    id = db.Column(db.Integer, primary_key = True)
+    imageURL = db.Column(db.String)
+    equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
+    
+    #relationship
+
+    equipment = db.relationship('Equipment', back_populates='images')
+
 
 
 
