@@ -1,4 +1,4 @@
-from models import db, User, EquipmentOwner, Equipment, RentalAgreement
+from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement
 # from flask_cors import CORS
 # from flask_migrate import Migrate
 # from flask import Flask, request, make_response, jsonify
@@ -481,6 +481,37 @@ class AllEquipmentByID(Resource):
         return response
 
 api.add_resource(AllEquipmentByID, '/all_equipment/<int:id>')
+
+#-----------------------------------------------------EQUIPMENT IMAGE Classes------------------------------------------------------------------
+
+class EquipmentImages(Resource):
+
+    def get(self):
+        equipment_images = [equipment_image.to_dict() for equipment_image in EquipmentImage.query.all()]
+
+        response = make_response(equipment_images, 200)
+
+        return response
+    
+    def post(self):
+        data = request.get_json()
+        #try:
+
+        new_equipment_image = EquipmentImage(
+            imageURL = data['imageURL'],
+            equipment_id = data['equipment_id']
+        )
+
+        db.session.add(new_equipment_image)
+
+        db.session.commit()
+
+        response = make_response(new_equipment_image.to_dict(), 201)
+        
+        return response
+
+        #except ValueError ()
+
 
 #-----------------------------------------------Rental Agreement Classes-----------------------------------------------------------------------------
 #Rental agreements, need a post and a patch
