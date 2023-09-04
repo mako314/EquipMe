@@ -485,17 +485,17 @@ api.add_resource(AllEquipmentByID, '/all_equipment/<int:id>')
 #-----------------------------------------------------EQUIPMENT IMAGE Classes------------------------------------------------------------------
 
 class EquipmentImages(Resource):
-
+    #Get ALL Equipment IMAGES
     def get(self):
         equipment_images = [equipment_image.to_dict() for equipment_image in EquipmentImage.query.all()]
 
         response = make_response(equipment_images, 200)
 
         return response
-    
+    #Post an Equipment IMAGE
     def post(self):
         data = request.get_json()
-        #try:
+        #try VALIDATIONS:
 
         new_equipment_image = EquipmentImage(
             imageURL = data['imageURL'],
@@ -513,6 +513,7 @@ class EquipmentImages(Resource):
         #except ValueError ()
 
 class EquipmentImagesByID(Resource):
+    #Get ONE Equipment IMAGE
     def get(self, id):
         equipment_image = EquipmentImage.query.filter(EquipmentImage.id == id).first()
 
@@ -523,6 +524,26 @@ class EquipmentImagesByID(Resource):
             "error": "Equipment image not found"
             }, 404)
             return response
+        
+    def patch(self, id):
+        equipment_image = EquipmentImage.query.filter(EquipmentImage.id == id).first()
+        if equipment_image:
+            #try VALIDATIONS:
+            data = request.get_json()
+            for key in data:
+                setattr(equipment_image, key, data[key])
+                db.session.add(equipment_image)
+                db.session.commit()
+                response = make_response(equipment_image.to_dict(), 202)
+                return response
+            #except ValueError:
+        else:
+            response = make_response({
+            "error": "Equipment image not found"
+            }, 404)
+            return response
+
+
 #-----------------------------------------------Rental Agreement Classes-----------------------------------------------------------------------------
 #Rental agreements, need a post and a patch
 class RentalAgreements(Resource):
