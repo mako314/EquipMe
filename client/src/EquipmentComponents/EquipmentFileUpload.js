@@ -5,11 +5,15 @@ function EquipmentFileUpload() {
 
     const navigate = useNavigate();
 
+    const uploadImage = () => {
+
+    }
+
     return (
 
         <div className="">
             <input type="file"/>
-             
+             <button onClick={uploadImage}> Upload Image </button>
         </div>
 
 
