@@ -2,6 +2,8 @@
   "dependencies": {
     "@googlemaps/js-api-loader": "^1.16.2",
     "date-fns": "^2.30.0",
-    "react-input-placeholder": "^1.2.0"
+    "firebase": "^10.3.1",
+    "react-input-placeholder": "^1.2.0",
+    "uuid": "^9.0.0"
   }
 }
