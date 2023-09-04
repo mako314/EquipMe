@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { storage } from "../CloudComponents/Firebase";
-import { ref, uploadBytes } from 'firebase/storage';
+import { ref, uploadBytes, listAll, getDownloadURL} from 'firebase/storage';
 import {v4} from 'uuid';
 
 function EquipmentFileUpload() {
@@ -9,6 +9,10 @@ function EquipmentFileUpload() {
     const navigate = useNavigate();
     
     const [imageUpload, setImageUpload] = useState(null)
+    const [imageList, setImageList] = useState([])
+
+    const imageListRef = ref(storage, "equipmentImages/")
+
     const uploadImage = () => {
         if (imageUpload == null) return;
         const imageRef = ref(storage, `equipmentImages/${imageUpload.name + v4()}`);
@@ -17,6 +21,17 @@ function EquipmentFileUpload() {
         })
     }
 
+    useEffect(() => {
+        listAll(imageListRef).then((resp) => {
+            // console.log(resp)
+            resp.items.map((item) => {
+                getDownloadURL(item).then((url) => {
+                    setImageList((prev) => [...prev, url])
+                })
+            })
+        });
+    }, [])
+
     return (
 
         <div className="">
@@ -24,6 +39,10 @@ function EquipmentFileUpload() {
                 (event) => {setImageUpload(event.target.files[0])
                 }}/>
              <button onClick={uploadImage}> Upload Image </button>
+
+             {imageList.map((url) => {
+                return <img src={url}/>
+             })}
         </div>
 
 
