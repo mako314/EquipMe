@@ -49,6 +49,10 @@ import OwnerDashboard from './OwnerComponents/OwnerDashboardComponents/OwnerDash
 import Calendar from './CalendarComponents/Calendar';
 
 
+//----------------------Temporary File Uploader for Equipment Images-----------------------------
+import EquipmentFileUpload from './EquipmentComponents/EquipmentFileUpload';
+
+
 function App() {
 
   //forgot to const navigate = useNavigate()
@@ -301,8 +305,10 @@ function App() {
         <Route path='/owner/dashboard' element={<OwnerDashboard/>}/>
 
         {/* Temporary calendar routing */}
-        <Route path='/calendar/temp'element={<Calendar/>}/>
+        <Route path='/temp/calendar'element={<Calendar/>}/>
 
+        {/* Temporary file upload routing */}
+        <Route path='/temp/upload' element={<EquipmentFileUpload/>}/>
         
 
       </Routes>

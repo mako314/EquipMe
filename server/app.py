@@ -1,4 +1,4 @@
-from models import db, User, EquipmentOwner, Equipment, RentalAgreement
+from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement
 # from flask_cors import CORS
 # from flask_migrate import Migrate
 # from flask import Flask, request, make_response, jsonify
@@ -481,6 +481,68 @@ class AllEquipmentByID(Resource):
         return response
 
 api.add_resource(AllEquipmentByID, '/all_equipment/<int:id>')
+
+#-----------------------------------------------------EQUIPMENT IMAGE Classes------------------------------------------------------------------
+
+class EquipmentImages(Resource):
+    #Get ALL Equipment IMAGES
+    def get(self):
+        equipment_images = [equipment_image.to_dict() for equipment_image in EquipmentImage.query.all()]
+
+        response = make_response(equipment_images, 200)
+
+        return response
+    #Post an Equipment IMAGE
+    def post(self):
+        data = request.get_json()
+        #try VALIDATIONS:
+
+        new_equipment_image = EquipmentImage(
+            imageURL = data['imageURL'],
+            equipment_id = data['equipment_id']
+        )
+
+        db.session.add(new_equipment_image)
+
+        db.session.commit()
+
+        response = make_response(new_equipment_image.to_dict(), 201)
+
+        return response
+
+        #except ValueError ()
+
+class EquipmentImagesByID(Resource):
+    #Get ONE Equipment IMAGE
+    def get(self, id):
+        equipment_image = EquipmentImage.query.filter(EquipmentImage.id == id).first()
+
+        if equipment_image:
+            return make_response(equipment_image.to_dict(), 200)
+        else:
+            response = make_response({
+            "error": "Equipment image not found"
+            }, 404)
+            return response
+        
+    def patch(self, id):
+        equipment_image = EquipmentImage.query.filter(EquipmentImage.id == id).first()
+        if equipment_image:
+            #try VALIDATIONS:
+            data = request.get_json()
+            for key in data:
+                setattr(equipment_image, key, data[key])
+                db.session.add(equipment_image)
+                db.session.commit()
+                response = make_response(equipment_image.to_dict(), 202)
+                return response
+            #except ValueError:
+        else:
+            response = make_response({
+            "error": "Equipment image not found"
+            }, 404)
+            return response
+
 
 #-----------------------------------------------Rental Agreement Classes-----------------------------------------------------------------------------
 #Rental agreements, need a post and a patch
