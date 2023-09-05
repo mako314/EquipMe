@@ -512,6 +512,10 @@ class EquipmentImages(Resource):
 
         #except ValueError ()
 
+api.add_resource(EquipmentImages, '/equipment/images')
+
+#-----------------------------------------------------EQUIPMENT IMAGE  BY ID Classes------------------------------------------------------------------
+
 class EquipmentImagesByID(Resource):
     #Get ONE Equipment IMAGE
     def get(self, id):
@@ -543,6 +547,7 @@ class EquipmentImagesByID(Resource):
             }, 404)
             return response
 
+api.add_resource(EquipmentImagesByID, '/equipment/image/<int:id>')
 
 #-----------------------------------------------Rental Agreement Classes-----------------------------------------------------------------------------
 #Rental agreements, need a post and a patch

@@ -40,15 +40,8 @@ function ProductImageForm({ addEquipment }){
     //Equipment POST
     const formik = useFormik({
         initialValues: {
-            name: '',
-            type: '',
-            make: '',
-            model: '',
-            location: '',
-            availability: '',
-            delivery: '',
-            quantity: '',
-            owner_id: ' '
+            imageURL: '',
+            equipment_id: '',
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
@@ -61,10 +54,10 @@ function ProductImageForm({ addEquipment }){
             })
                 .then(res => {
                     if (res.ok){
-                        res.json().then(equipment => {
-                            console.log(equipment)
-                            addEquipment(equipment)
-                            navigate('/equipment')
+                        res.json().then(equipmentImage => {
+                            console.log(equipmentImage)
+                            // addEquipment(equipment)
+                            // navigate('/equipment')
                         })
                     } else {
                         res.json().then(error => setError(error)) //for backend errors
@@ -74,13 +67,13 @@ function ProductImageForm({ addEquipment }){
         }
     })
 
-    useEffect(() => {
-      if (owner && owner.id){
-      formik.setValues({
-        owner_id: owner.id,
-      })
-  }
-    }, [owner])
+//     useEffect(() => {
+//       if (owner && owner.id){
+//       formik.setValues({
+//         owner_id: owner.id,
+//       })
+//   }
+//     }, [owner])
 
 
 
