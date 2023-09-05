@@ -209,7 +209,7 @@ class Equipment(db.Model, SerializerMixin):
     images = db.relationship('EquipmentImage', back_populates='equipment')
 
     #Serialization rules
-    serialize_rules = ('-owner.equipment', '-agreements.equipment', '-owner.agreements')
+    serialize_rules = ('-owner.equipment', '-agreements.equipment', '-owner.agreements', '-images.equipment')
 
     #VALIDATIONS BEGIN HERE
     # @validates("email")
@@ -237,6 +237,9 @@ class EquipmentImage(db.Model, SerializerMixin):
     #relationship
 
     equipment = db.relationship('Equipment', back_populates='images')
+
+    #Serialization rules
+    serialize_rules = ('-equipment.images', )
 
 
 
