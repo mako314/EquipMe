@@ -1,9 +1,19 @@
 import React from "react";
 import { useContext, useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
+
 import {useFormik} from "formik"
 import { object, string, number} from 'yup'
+
+//-----------------Imports from Components-----------------
 import OwnerContext from "../OwnerComponents/OwnerContext";
+import { storage } from "../CloudComponents/Firebase";
+
+//-----------------Imports from Firebase-------------------
+import { ref, uploadBytes, listAll, getDownloadURL} from 'firebase/storage';
+import {v4} from 'uuid';
+
+
 
 function ProductImageForm({ addEquipment }){
     const [error, setError] = useState()
@@ -11,11 +21,19 @@ function ProductImageForm({ addEquipment }){
 
     
     const [owner, setOwner] = useContext(OwnerContext)
+
+//-----------------------Upload Portion-------------------------------
+    const [imageUpload, setImageUpload] = useState(null)
+    const [imageList, setImageList] = useState([])
+
+    const imageListRef = ref(storage, "equipmentImages/")
+
+//--------------------------------------------------------------------
     // Going to need to pass owner and setOwner context here, and apply some ifs to prepopulate this form. 
     // Will also need to hide this link in a good spot and make it a OWNER logged in display. Users should not be able to list equipment as they should be vetted.
     // LIST EQUIPMENT 
 
-    //useEffect to check whether or not an owner is logged in! Succesfuly conditional rendering
+    // useEffect to check whether or not an owner is logged in! Succesfuly conditional rendering
     useEffect(() => {
         fetch("/owner/check_session").then((response) => {
           if (response.ok) {
@@ -30,7 +48,7 @@ function ProductImageForm({ addEquipment }){
 
 
     const formSchema = object({
-        name: string().required('Please enter a name'),
+        // name: string().required('Please enter a name'),
         // quantity: number().positive().required('You cannot list less than 0 items.'),
         // email: string().required('Please enter an email address')
     })
@@ -45,7 +63,7 @@ function ProductImageForm({ addEquipment }){
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
-            fetch('/equipment' , {
+            fetch('/equipment/images' , {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -67,6 +85,21 @@ function ProductImageForm({ addEquipment }){
         }
     })
 
+
+    //This has to fire off first, so I need to upload the image, or tie in the button to the submit of the button for the form
+    const uploadImage = () => {
+        if (imageUpload == null) return;
+        const imageRef = ref(storage, `equipmentImages/${imageUpload.name + v4()}`);
+        uploadBytes(imageRef, imageUpload).then((snapshot) =>{
+            getDownloadURL(snapshot.ref).then((url) => {
+                alert("Image Uploaded!")
+                // formik.handleChange()
+                formik.values.imageURL = url
+            })
+            
+        })
+    }
+
 //     useEffect(() => {
 //       if (owner && owner.id){
 //       formik.setValues({
@@ -85,9 +118,9 @@ function ProductImageForm({ addEquipment }){
     <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
  
       <div className="mb-10 md:mb-16">
-        <h2 className="mb-4 text-center text-2xl font-bold text-gray-800 md:mb-6 lg:text-3xl">Ready to List?</h2>
+        <h2 className="mb-4 text-center text-2xl font-bold text-gray-800 md:mb-6 lg:text-3xl"> Attempting File upload </h2>
  
-        <p className="mx-auto max-w-screen-md text-center text-gray-500 md:text-lg"> Get listing in a few simple steps!</p>
+        <p className="mx-auto max-w-screen-md text-center text-gray-500 md:text-lg"> Picture upload!</p>
       </div>
  
       <form onSubmit={formik.handleSubmit} className="mx-auto grid max-w-screen-md gap-4 sm:grid-cols-2">
@@ -100,13 +133,21 @@ function ProductImageForm({ addEquipment }){
           </div>
        
         <div>
-          <label htmlFor="name" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Name of the Equipment </label>
-          <input type="text" name="name" value={formik.values.name} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+          <label htmlFor="equipment_id" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Equipment ID (Will fix this later) </label>
+          <input type="text" name="equipment_id" value={formik.values.equipment_id} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
         </div>
- 
-       
- 
- 
+
+        <div>
+          <label htmlFor="imageURL" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Picture </label>
+          <input type="file" onChange={
+                (event) => { setImageUpload(event.target.files[0])
+                }}
+                name="imageURL"
+                className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring"
+                />
+            <button onClick={uploadImage}> Upload Image </button>
+        </div>
+
         <div className="flex items-center justify-between sm:col-span-2">
  
           {/* NEED TO CHANGE COLOR */}

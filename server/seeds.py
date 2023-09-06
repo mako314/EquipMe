@@ -1,4 +1,4 @@
-from models import db, User, EquipmentOwner, Equipment, RentalAgreement
+from models import db, User, EquipmentOwner, Equipment, RentalAgreement, EquipmentImage
 import pandas as pd
 from app import app
 from random import randint, choice as rc
@@ -15,6 +15,7 @@ if __name__ == '__main__':
         Equipment.query.delete()
         EquipmentOwner.query.delete()
         User.query.delete()
+        EquipmentImage.query.delete()
 
 #----------------------------------------------------------------------
 #Seed Renters
@@ -416,6 +417,8 @@ if __name__ == '__main__':
 
         db.session.add_all(rental_agreements)
         db.session.commit()
+
+        print("Reseting EQUIPMENT pictures **TEMPORARILY**")
 #----------------- OLD RENTAL AGREEMENTS
         #     RentalAgreement(
         #     location="Orlando, Florida",
