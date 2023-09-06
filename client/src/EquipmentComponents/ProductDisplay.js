@@ -5,7 +5,7 @@ import EquipmentMap from '../MapComponents/EquipmentMap'
 
 function EquipmentDisplay() {
   const [oneEquipment, setOneEquipment] = useState([])
-  const { model, name, make, location, email, phone, quantity } = oneEquipment
+  const { model, name, make, location, email, phone, quantity, images } = oneEquipment
 
   const { id } = useParams()
   const navigate = useNavigate()
@@ -65,7 +65,7 @@ function EquipmentDisplay() {
             </div>
           </div>
 
-          <img alt="ecommerce" class="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded" src="https://dummyimage.com/400x400"/>
+          {}
           
           <div className="w-full lg:h-auto h-64 object-cover object-center rounded mt-8">
 

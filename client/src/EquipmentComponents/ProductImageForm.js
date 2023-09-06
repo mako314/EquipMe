@@ -120,7 +120,7 @@ function ProductImageForm({ addEquipment }){
       <div className="mb-10 md:mb-16">
         <h2 className="mb-4 text-center text-2xl font-bold text-gray-800 md:mb-6 lg:text-3xl"> Attempting File upload </h2>
  
-        <p className="mx-auto max-w-screen-md text-center text-gray-500 md:text-lg"> Get listing in a few simple steps!</p>
+        <p className="mx-auto max-w-screen-md text-center text-gray-500 md:text-lg"> Picture upload!</p>
       </div>
  
       <form onSubmit={formik.handleSubmit} className="mx-auto grid max-w-screen-md gap-4 sm:grid-cols-2">
