@@ -5,12 +5,30 @@ import {useFormik} from "formik"
 import { object, string, number} from 'yup'
 import OwnerContext from "../OwnerComponents/OwnerContext";
 
+//----------------------------IMAGE UPLOAD----------------------------
+import { ref, uploadBytes, listAll, getDownloadURL} from 'firebase/storage';
+import { storage } from "../CloudComponents/Firebase";
+import {v4} from 'uuid';
+//--------------------------------------------------------------------
+
+
 function ProductForm({ addEquipment }){
     const [error, setError] = useState()
     const navigate = useNavigate()
 
     
     const [owner, setOwner] = useContext(OwnerContext)
+
+
+//----------------------------IMAGE UPLOAD----------------------------
+    const [imageUpload, setImageUpload] = useState(null)
+    const [imageList, setImageList] = useState([])
+
+
+    //This is in case I need to start displaying the image previews (I intend to)
+    const imageListRef = ref(storage, "equipmentImages/")
+//--------------------------------------------------------------------
+
     // Going to need to pass owner and setOwner context here, and apply some ifs to prepopulate this form. 
     // Will also need to hide this link in a good spot and make it a OWNER logged in display. Users should not be able to list equipment as they should be vetted.
     // LIST EQUIPMENT 
@@ -49,7 +67,7 @@ function ProductForm({ addEquipment }){
             delivery: '',
             quantity: '',
             owner_id: ' ',
-            equipment_id: '',
+            // equipment_id: '',
             imageURL: '',
         },
         validationSchema: formSchema,
@@ -68,7 +86,7 @@ function ProductForm({ addEquipment }){
                             addEquipment(equipment)
                             // navigate('/equipment')
                             const equipmentImage = {
-                              equipment_id: values.equipment_id,
+                              equipment_id: equipment.id,
                               imageURL: values.imageURL,
                           };
 
@@ -102,6 +120,19 @@ function ProductForm({ addEquipment }){
       })
   }
     }, [owner])
+
+    const uploadImage = () => {
+      if (imageUpload == null) return;
+      const imageRef = ref(storage, `equipmentImages/${imageUpload.name + v4()}`);
+      uploadBytes(imageRef, imageUpload).then((snapshot) =>{
+          getDownloadURL(snapshot.ref).then((url) => {
+              alert("Image Uploaded!")
+              // formik.handleChange()
+              formik.values.imageURL = url
+          })
+          
+      })
+  }
 
 
 
