@@ -64,7 +64,23 @@ function ProductForm({ addEquipment }){
                         res.json().then(equipment => {
                             console.log(equipment)
                             addEquipment(equipment)
-                            navigate('/equipment')
+                            // navigate('/equipment')
+
+                            fetch('/equipment/images') , {
+                              method: "POST",
+                              headers: {
+                                "Content-Type": "application/json"
+                              },
+                              body: JSON.stringify(values)
+                              .then(res => {
+                                if (res.ok){
+                                  res.json().then(equipmentImage => {
+                                    console.log(equipmentImage)
+                                  })
+                                }
+                              })
+
+                            }
                         })
                     } else {
                         res.json().then(error => setError(error)) //for backend errors
