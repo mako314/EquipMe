@@ -25,8 +25,11 @@ function EquipmentDisplay() {
   //What can I include in details? Possibly whether or not the vehicle is available for delivery? Deposit ? ETC?
 
   // Need a rental button, basically allowing the user to rent from this page
+  let equipment_pictures
+  if (images){
+    equipment_pictures =   <img alt="ecommerce" class="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded" src={images[1].imageURL}/>
 
-
+  }
 
   let loggedOutDisplay
   loggedOutDisplay=(
@@ -65,7 +68,7 @@ function EquipmentDisplay() {
             </div>
           </div>
 
-          {}
+          {equipment_pictures}
           
           <div className="w-full lg:h-auto h-64 object-cover object-center rounded mt-8">
 
