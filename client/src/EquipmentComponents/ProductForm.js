@@ -48,7 +48,9 @@ function ProductForm({ addEquipment }){
             availability: '',
             delivery: '',
             quantity: '',
-            owner_id: ' '
+            owner_id: ' ',
+            equipment_id: '',
+            imageURL: '',
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
@@ -65,23 +67,26 @@ function ProductForm({ addEquipment }){
                             console.log(equipment)
                             addEquipment(equipment)
                             // navigate('/equipment')
+                            const equipmentImage = {
+                              equipment_id: values.equipment_id,
+                              imageURL: values.imageURL,
+                          };
 
-                            fetch('/equipment/images') , {
+                            fetch ('/equipment/images' , {
                               method: "POST",
                               headers: {
                                 "Content-Type": "application/json"
                               },
-                              body: JSON.stringify(values)
-                              .then(res => {
-                                if (res.ok){
-                                  res.json().then(equipmentImage => {
-                                    console.log(equipmentImage)
-                                  })
-                                }
-                              })
-
-                            }
-                        })
+                              body: JSON.stringify(equipmentImage)
+                            })
+                            .then(res => {
+                              if (res.ok){
+                                res.json().then(equipmentImage =>{
+                                  console.log(equipmentImage)
+                                })
+                              }
+                            })
+                          })
                     } else {
                         res.json().then(error => setError(error)) //for backend errors
                     }
