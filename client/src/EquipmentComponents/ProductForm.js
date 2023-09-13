@@ -89,7 +89,7 @@ function ProductForm({ addEquipment }){
                               equipment_id: equipment.id,
                               imageURL: values.imageURL,
                           };
-
+                          
                             fetch ('/equipment/images' , {
                               method: "POST",
                               headers: {
@@ -200,6 +200,17 @@ function ProductForm({ addEquipment }){
           <label htmlFor="quantity" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Quantity of Equipment
            (placeholder) </label>
           <input type="text" name="quantity" value={formik.values.quantity} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+        </div>
+
+        <div>
+          <label htmlFor="imageURL" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Picture </label>
+          <input type="file" onChange={
+                (event) => { setImageUpload(event.target.files[0])
+                }}
+                name="imageURL"
+                className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring"
+                />
+            <button onClick={uploadImage}> Upload Image </button>
         </div>
  
  
