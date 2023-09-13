@@ -28,7 +28,7 @@ function OwnerLogin(){
             if (resp.ok) {
               resp.json().then((owner) => {
                 setOwner(owner)
-                navigate(`/`); // <-------- navigates to the home page
+                navigate(`/owner/dashboard`); // <-------- navigates to the home page
               });
             }
           });

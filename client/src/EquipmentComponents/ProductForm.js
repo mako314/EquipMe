@@ -5,12 +5,30 @@ import {useFormik} from "formik"
 import { object, string, number} from 'yup'
 import OwnerContext from "../OwnerComponents/OwnerContext";
 
+//----------------------------IMAGE UPLOAD----------------------------
+import { ref, uploadBytes, listAll, getDownloadURL} from 'firebase/storage';
+import { storage } from "../CloudComponents/Firebase";
+import {v4} from 'uuid';
+//--------------------------------------------------------------------
+
+
 function ProductForm({ addEquipment }){
     const [error, setError] = useState()
     const navigate = useNavigate()
 
     
     const [owner, setOwner] = useContext(OwnerContext)
+
+
+//----------------------------IMAGE UPLOAD----------------------------
+    const [imageUpload, setImageUpload] = useState(null)
+    const [imageList, setImageList] = useState([])
+
+
+    //This is in case I need to start displaying the image previews (I intend to)
+    const imageListRef = ref(storage, "equipmentImages/")
+//--------------------------------------------------------------------
+
     // Going to need to pass owner and setOwner context here, and apply some ifs to prepopulate this form. 
     // Will also need to hide this link in a good spot and make it a OWNER logged in display. Users should not be able to list equipment as they should be vetted.
     // LIST EQUIPMENT 
@@ -48,7 +66,9 @@ function ProductForm({ addEquipment }){
             availability: '',
             delivery: '',
             quantity: '',
-            owner_id: ' '
+            owner_id: ' ',
+            // equipment_id: '',
+            imageURL: '',
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
@@ -64,8 +84,27 @@ function ProductForm({ addEquipment }){
                         res.json().then(equipment => {
                             console.log(equipment)
                             addEquipment(equipment)
-                            navigate('/equipment')
-                        })
+                            // navigate('/equipment')
+                            const equipmentImage = {
+                              equipment_id: equipment.id,
+                              imageURL: values.imageURL,
+                          };
+                          
+                            fetch ('/equipment/images' , {
+                              method: "POST",
+                              headers: {
+                                "Content-Type": "application/json"
+                              },
+                              body: JSON.stringify(equipmentImage)
+                            })
+                            .then(res => {
+                              if (res.ok){
+                                res.json().then(equipmentImage =>{
+                                  console.log(equipmentImage)
+                                })
+                              }
+                            })
+                          })
                     } else {
                         res.json().then(error => setError(error)) //for backend errors
                     }
@@ -81,6 +120,19 @@ function ProductForm({ addEquipment }){
       })
   }
     }, [owner])
+
+    const uploadImage = () => {
+      if (imageUpload == null) return;
+      const imageRef = ref(storage, `equipmentImages/${imageUpload.name + v4()}`);
+      uploadBytes(imageRef, imageUpload).then((snapshot) =>{
+          getDownloadURL(snapshot.ref).then((url) => {
+              alert("Image Uploaded!")
+              // formik.handleChange()
+              formik.values.imageURL = url
+          })
+          
+      })
+  }
 
 
 
@@ -148,6 +200,17 @@ function ProductForm({ addEquipment }){
           <label htmlFor="quantity" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Quantity of Equipment
            (placeholder) </label>
           <input type="text" name="quantity" value={formik.values.quantity} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+        </div>
+
+        <div>
+          <label htmlFor="imageURL" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Picture </label>
+          <input type="file" onChange={
+                (event) => { setImageUpload(event.target.files[0])
+                }}
+                name="imageURL"
+                className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring"
+                />
+            <button onClick={uploadImage}> Upload Image </button>
         </div>
  
  
