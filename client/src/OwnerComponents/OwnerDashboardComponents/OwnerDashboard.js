@@ -152,10 +152,21 @@ function OwnerDashboard() {
                           </div>
                       </button>
                   </div>
+
+
+                  {/* CENTER OF PAGE , BLOCKS AND SUCH  */}
                   <div className="flex-grow p-6 overflow-auto bg-gray-200">
                       <div className="grid grid-cols-3 gap-6">
                           <div className="h-24 col-span-3 bg-white border border-gray-300 text-center"> Welcome {name} </div>
-                          <div className="h-96 col-span-1 bg-white border border-gray-300"></div>
+                          <div className="h-96 col-span-1 bg-white border border-gray-300">
+                          
+                          <Link to='/list_equipment'>
+
+                          <button type="submit" className="inline-block rounded-lg bg-orange-500 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 md:text-base"> List an Item</button>
+                          
+                          </Link>
+
+                          </div>
                           <div className="h-96 col-span-1 bg-white border border-gray-300"></div>
                           <div className="h-96 col-span-1 bg-white border border-gray-300"></div>
                           <div className="h-96 col-span-2 bg-white border border-gray-300"></div>
