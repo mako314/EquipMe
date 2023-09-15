@@ -546,8 +546,8 @@ if __name__ == '__main__':
         #         owner_id = equipment_owner.id
         #     )
 
-            # print(equipment_owner.name)
-            # equipment_list.append(equipment) # this works, just appending to list
+(            # print(equipment_owner.name)
+)            # equipment_list.append(equipment) # this works, just appending to list
 
         # print("Commiting all the equipment to your database...")
         # db.session.add_all(equipment_list)

@@ -31,7 +31,7 @@ import OwnerEquipmentListing from './RentalComponents/OwnerEquipmentListing'
 
 //----------------------User Login Functionality-----------------------------
 import UserLogin from './UserComponents/UserLogin';
-import  {UserProvider}  from './UserComponents/UserContext';
+import { UserProvider } from './UserComponents/UserContext';
 
 //----------------------Owner Login Functionality-----------------------------
 import OwnerLogin from './OwnerComponents/OwnerLogin';
@@ -52,6 +52,7 @@ import Calendar from './CalendarComponents/Calendar';
 //----------------------Temporary File Uploader for Equipment Images-----------------------------
 import EquipmentFileUpload from './EquipmentComponents/EquipmentFileUpload';
 import ProductImageForm from './EquipmentComponents/ProductImageForm';
+import BulkEquipmentUpload from './EquipmentComponents/BulkEquipmentUpload';
 
 function App() {
 
@@ -64,7 +65,7 @@ function App() {
 
   //Grab Owner and have it throughout the whole app
   const [owner, setOwner] = useState(null)
-  
+
   //These useStates will handle POST. Grabbing and ...spreading so it updates accordingly. Set Search Term & Grab Equipment Array
   const [equipmentArray, setEquipmentArray] = useState([])
   const [searchTerm, setSearchTerm] = useState("")
@@ -81,8 +82,8 @@ function App() {
 
   //Do I even need two state variables to do this ? Turns out all original fetches work
 
-//-------------------------------------------- FOR USER - CHECK SESSION TO STAY LOGGED IN ON REFRESH--------------------------
-    
+  //-------------------------------------------- FOR USER - CHECK SESSION TO STAY LOGGED IN ON REFRESH--------------------------
+
   useEffect(() => {
     fetch("/check_session").then((response) => {
       if (response.ok) {
@@ -93,11 +94,11 @@ function App() {
 
   console.log(user)
 
-//------------------------------------------------------------------------------------------------------------------
+  //------------------------------------------------------------------------------------------------------------------
 
-//-------------------------------------------- FOR OWNER - CHECK SESSION TO STAY LOGGED IN ON REFRESH--------------------------
-    
-   useEffect(() => {
+  //-------------------------------------------- FOR OWNER - CHECK SESSION TO STAY LOGGED IN ON REFRESH--------------------------
+
+  useEffect(() => {
     fetch("/owner/check_session").then((response) => {
       if (response.ok) {
         response.json().then((owner) => setOwner(owner));
@@ -107,8 +108,8 @@ function App() {
 
   console.log(owner)
 
-//------------------------------------------------------------------------------------------------------------------
-//---------------------------------Fetches -----------------------
+  //------------------------------------------------------------------------------------------------------------------
+  //---------------------------------Fetches -----------------------
 
 
   //---------------------------------Posts and general Fetches -----------------------
@@ -260,64 +261,66 @@ function App() {
   return (
     // UseContext gets called here, allowing the entirety of my app access to the USER and OWNER information!
     <OwnerProvider>
-    <UserProvider> 
-    <>
-      <NavBar setSearchTerm={setSearchTerm} />
-      
-      <Routes>
-        {/* Home Page */}
-        <Route path='/' element={<HomePage equipmentArray={equipmentArray} setFeaturedRental={setFeaturedRental} />} />
-       
-        {/* COLLECTION ROUTES */}
-        <Route path='/equipment' element={<ProductCollection equipmentArray={filteredEquipmentArray} handleEquipmentDelete={handleEquipmentDelete} handleEditEquipment={handleEditEquipment} />} />
-        <Route path='/equipment_owners' element={<OwnerCollection searchTerm={searchTerm} handleEditOwner={handleEditOwner} handleOwnerDelete={handleOwnerDelete} equipmentOwnerArray={owners} />} />
-        <Route path='/rental_agreements' element={<RentalCollection />} />
+      <UserProvider>
+        <>
+          <NavBar setSearchTerm={setSearchTerm} />
 
-        {/* ID / INDIVIDUAL / DISPLAY ROUTES */}
-        <Route path='/equipment/:id' element={<ProductDisplay />} />
-        <Route path='/equipment_owners/:id' element={<OwnerDisplay />} />
+          <Routes>
+            {/* Home Page */}
+            <Route path='/' element={<HomePage equipmentArray={equipmentArray} setFeaturedRental={setFeaturedRental} />} />
 
-        {/* Respective Posts */}
-        <Route path='/renter_signup' element={<UserForm addUser={addUser} />} />
-        <Route path='/owner_signup' element={<OwnerForm addOwner={addOwner} />} />
-        {/* need to rename the below to equipment_post */}
-        <Route path='/list_equipment' element={<ProductForm addEquipment={addEquipment} />} />
+            {/* COLLECTION ROUTES */}
+            <Route path='/equipment' element={<ProductCollection equipmentArray={filteredEquipmentArray} handleEquipmentDelete={handleEquipmentDelete} handleEditEquipment={handleEditEquipment} />} />
+            <Route path='/equipment_owners' element={<OwnerCollection searchTerm={searchTerm} handleEditOwner={handleEditOwner} handleOwnerDelete={handleOwnerDelete} equipmentOwnerArray={owners} />} />
+            <Route path='/rental_agreements' element={<RentalCollection />} />
 
-        {/* Starting rentals, likely just going to use the prepop as it makes more sense than to do a "rental signup", in which a user sifts through all of the owners lol. This might not be the worst idea to incorporate into a search though. For example, filter by location, and then equipment type. The owner shouldn't really matter. But we can take into consideration the owners reviews / ratings and filter by lets say 3+ star renters. */}
-        {/* I definitely don't need both of these. Likely going to remove OwnerEquipMentListing */}
-        <Route path='/rental_signup' element={<RentalForm addRentalAgreement={addRentalAgreement} owners={owners} equipmentArray={equipmentArray} />} />
-        <Route path='/rental_signup_prepop' element={<OwnerEquipmentListing addRentalAgreement={addRentalAgreement} owners={owners} equipmentArray={equipmentArray} featuredRental={featuredRental} />} />
-        {/* Rename this too ^^^ */}
+            {/* ID / INDIVIDUAL / DISPLAY ROUTES */}
+            <Route path='/equipment/:id' element={<ProductDisplay />} />
+            <Route path='/equipment_owners/:id' element={<OwnerDisplay />} />
 
-        {/* Respective Edit Routes */}
-        <Route path='/owner/:id/edit' element={<OwnerEditForm ownerToEdit={ownerToEdit} updateOwner={updateOwner} />} />
-        <Route path='/equipment/:id/edit' element={<ProductEditForm equipmentToEdit={equipmentToEdit} updateEquipment={updateEquipment} />} />
+            {/* Respective Posts */}
+            <Route path='/renter_signup' element={<UserForm addUser={addUser} />} />
+            <Route path='/owner_signup' element={<OwnerForm addOwner={addOwner} />} />
+            {/* need to rename the below to equipment_post */}
+            <Route path='/list_equipment' element={<ProductForm addEquipment={addEquipment} />} />
 
-        {/* Login Page Route */}
-        <Route path='/login' element={<UserLogin/>}/>
-        <Route path='/owner/login' element={<OwnerLogin/>}/>
-        
-        {/* User Profile Page*/}
-        <Route path='/user/profile/:id' element={<UserProfile/>}/>
+            {/* Starting rentals, likely just going to use the prepop as it makes more sense than to do a "rental signup", in which a user sifts through all of the owners lol. This might not be the worst idea to incorporate into a search though. For example, filter by location, and then equipment type. The owner shouldn't really matter. But we can take into consideration the owners reviews / ratings and filter by lets say 3+ star renters. */}
+            {/* I definitely don't need both of these. Likely going to remove OwnerEquipMentListing */}
+            <Route path='/rental_signup' element={<RentalForm addRentalAgreement={addRentalAgreement} owners={owners} equipmentArray={equipmentArray} />} />
+            <Route path='/rental_signup_prepop' element={<OwnerEquipmentListing addRentalAgreement={addRentalAgreement} owners={owners} equipmentArray={equipmentArray} featuredRental={featuredRental} />} />
+            {/* Rename this too ^^^ */}
+
+            {/* Respective Edit Routes */}
+            <Route path='/owner/:id/edit' element={<OwnerEditForm ownerToEdit={ownerToEdit} updateOwner={updateOwner} />} />
+            <Route path='/equipment/:id/edit' element={<ProductEditForm equipmentToEdit={equipmentToEdit} updateEquipment={updateEquipment} />} />
+
+            {/* Login Page Route */}
+            <Route path='/login' element={<UserLogin />} />
+            <Route path='/owner/login' element={<OwnerLogin />} />
+
+            {/* User Profile Page*/}
+            <Route path='/user/profile/:id' element={<UserProfile navigate={navigate} />} />
+
+            {/* Temp Route for CSV File Upload*/}
+            <Route path='/temp/bulk_equipment_upload' element={<BulkEquipmentUpload />} />
+
+            {/* Owner Dashboard Page*/}
+            <Route path='/owner/dashboard' element={<OwnerDashboard />} />
+
+            {/* Temporary calendar routing */}
+            <Route path='/temp/calendar' element={<Calendar />} />
+
+            {/* Temporary file upload routing */}
+            <Route path='/temp/upload' element={<EquipmentFileUpload />} />
 
 
-        {/* Owner Dashboard Page*/}
-        <Route path='/owner/dashboard' element={<OwnerDashboard/>}/>
+            <Route path='/temp/equipment/upload' element={<ProductImageForm />} />
 
-        {/* Temporary calendar routing */}
-        <Route path='/temp/calendar'element={<Calendar/>}/>
+          </Routes>
 
-        {/* Temporary file upload routing */}
-        <Route path='/temp/upload' element={<EquipmentFileUpload/>}/>
-        
-
-        <Route path='/temp/equipment/upload' element={<ProductImageForm/>}/>
-
-      </Routes>
-
-      <Footer/>
-    </>
-    </UserProvider>
+          <Footer />
+        </>
+      </UserProvider>
     </OwnerProvider>
   );
 }
