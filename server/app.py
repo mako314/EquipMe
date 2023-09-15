@@ -9,6 +9,7 @@ from flask import Flask, request, make_response, jsonify, session
 from flask_restful import Resource
 from config import db, app, api
 from sqlalchemy import asc
+import pandas as pd
 
 #------------------------------------HELPERS----------------------------------
 from datetime import datetime
@@ -660,6 +661,49 @@ class RentalAgreementsByID(Resource):
             return response
 api.add_resource(RentalAgreementsByID, '/rental_agreements/<int:id>')
 
+#-----------------------------------------------Bulk Equipment Upload Route-----------------------------------------------------------------------------#
+
+class BulkEquipmentUpload(Resource):
+    # Only POST method written now
+    def post(self):
+        # Get requested file sent from frontend
+        equipmentFile = request.files['file']
+        # If not received, throw error
+        if not equipmentFile:
+            return jsonify({'error': 'No file provided'}), 400
+        
+        # Read the CSV document, adding equipment row by row, appending to the owner's equipment list, and commit
+        try:
+            allCsvEquipment = pd.read_csv(equipmentFile)
+            allCsvEquipment.columns = ['Equipment_name', 'Equipment_type', 'Make', 'Model', 'Owner', 'Phone', 'Email', 'Location', 'Availability', 'Delivery', 'Quantity']
+            equipment_list = []
+
+            for index, row in allCsvEquipment.iterrows():
+                owner_name = row['Owner']
+                equipment_owner = EquipmentOwner.query.filter(EquipmentOwner.name == owner_name).first()
+                equipment = Equipment(
+                    name = row['Equipment_name'],
+                    type = row['Equipment_type'],
+                    make = row['Make'],
+                    model = row['Model'],
+                    location = row['Location'],
+                    availability = row['Availability'],
+                    delivery = row['Delivery'],
+                    quantity = row['Quantity'],
+                    owner_id = equipment_owner.id
+                )
+
+                equipment_list.append(equipment)
+                equipment_owner.equipment.append(equipment)
+
+            db.session.add_all(equipment_list)
+            db.session.commit()
+
+        except ValueError:
+            return jsonify({'error': 'Value Error when reading file'}), 500
+
+api.add_resource(BulkEquipmentUpload, '/bulk_file_upload')
+
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
 
@@ -686,10 +730,6 @@ class AvailabilityChecker(Resource):
 
 
 api.add_resource(AvailabilityChecker, "/availability/<int:equipment_id>/<string:start_date>/<string:end_date>")
-
-
-
-
 
 
 
