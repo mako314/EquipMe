@@ -7,6 +7,7 @@ import { ReactComponent as EquipMeLogo } from '../../Content/EquipMeLogo.svg'
 function OwnerDashboard() {
 
     const [owner, setOwner] = useContext(OwnerContext)
+    const [toggleHomeDash, setToggleHomeDash] = useState(null)
 
     useEffect(() => {
         fetch("/owner/check_session").then((response) => {
@@ -28,6 +29,13 @@ function OwnerDashboard() {
     //----- Variables in the order they appear -----
     let dashHome
     let loggedInDisplay
+
+    let plannedDeals =<>
+    <div> I EXIST </div>
+    </> 
+
+
+
 
 
     if (owner) {

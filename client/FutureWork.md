@@ -187,6 +187,10 @@ fin ---
 
 7. A way for owner to select equipment they'd like to feature.
 
+8. Edit owner views, such as navbar and stuff.
+example, don't need renter signup and become a partner when an owner is logged in
+
+
 fin - - - - -- - - - - - 
 4.  DONE [NEED to create an owner login still, this will be done soon enough.]
 2.1 Owners now have a nice resume display page when clicked by anyone, should this be equal to their page they're able to edit and such?
