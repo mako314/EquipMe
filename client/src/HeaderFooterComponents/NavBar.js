@@ -343,6 +343,8 @@ function NavBar({ setSearchTerm }) {
     return (
         <>
         {user ? loggedInDisplay : loggedOutDisplay}
+
+        
         </>
     )
 }

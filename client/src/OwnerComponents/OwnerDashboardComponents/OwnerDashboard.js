@@ -7,6 +7,7 @@ import { ReactComponent as EquipMeLogo } from '../../Content/EquipMeLogo.svg'
 function OwnerDashboard() {
 
     const [owner, setOwner] = useContext(OwnerContext)
+    const [toggleHomeDash, setToggleHomeDash] = useState(null)
 
     useEffect(() => {
         fetch("/owner/check_session").then((response) => {
@@ -16,7 +17,7 @@ function OwnerDashboard() {
         });
     }, []);
 
-    console.log(owner)
+    // console.log(owner)
 
     const navigate = useNavigate()
 
@@ -29,6 +30,20 @@ function OwnerDashboard() {
     let dashHome
     let loggedInDisplay
 
+    let plannedDeals =
+    <div> Planned Deals </div>
+
+    let activeListings =
+    <div>
+        This will be a list of active listings this owner currently holds
+    </div>
+    
+
+    console.log(toggleHomeDash)
+
+
+
+
 
     if (owner) {
         const { name } = owner
@@ -36,7 +51,7 @@ function OwnerDashboard() {
 
 
         dashHome =
-            <>
+            <div>
                 {/* CENTER OF PAGE , BLOCKS AND SUCH  */}
                 <div className="flex-grow p-6 overflow-auto bg-gray-200">
                     <div className="grid grid-cols-3 gap-6">
@@ -59,7 +74,7 @@ function OwnerDashboard() {
 
                     </div>
                 </div>
-            </>
+            </div>
 
 
         // ----------- Display, in the process of inputting variables into it--------------
@@ -137,24 +152,19 @@ function OwnerDashboard() {
                             </div>
                         </button>
                         <div className="flex flex-col flex-grow p-4 overflow-auto">
-                            <a className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300" href="#">
-                                <span className="leading-none"> Active listings </span>
-                            </a>
-                            <a className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300" href="#">
-                                <span className="leading-none"> Planned Deals </span>
-                            </a>
-                            <a className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300" href="#">
-                                <span className="leading-none">Potential Renters</span>
-                            </a>
-                            <a className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300" href="#">
-                                <span className="leading-none"> What do I need here </span>
-                            </a>
-                            <a className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300" href="#">
-                                <span className="leading-none"> extra </span>
-                            </a>
-                            <a className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300" href="#">
-                                <span className="leading-none"> extra </span>
-                            </a>
+                            
+                                <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={ () => setToggleHomeDash(dashHome)}> home </span>
+                             
+                                <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={ () => setToggleHomeDash(plannedDeals)}> Planned Deals </span>
+                              
+                                <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" >Potential Renters</span>
+                                                  
+                                <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none"> What do I need here </span>
+                            
+                                <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none"onClick={ () => setToggleHomeDash(activeListings)}> Active listings </span>
+                            
+                                <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none"> extra </span>
+                            
                             <a className="flex items-center flex-shrink-0 h-10 px-3 mt-auto text-sm font-medium bg-gray-200 rounded hover:bg-gray-300"
                                 href="#">
                                 <svg className="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -187,7 +197,7 @@ function OwnerDashboard() {
                                 </div>
                             </button>
                         </div>
-                        {dashHome}
+                        {toggleHomeDash}
                     </div>
                     {/* <!-- Component End  --> */}
 
