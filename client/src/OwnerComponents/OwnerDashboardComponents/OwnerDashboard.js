@@ -146,10 +146,10 @@ function OwnerDashboard() {
                         </button>
                         <div className="flex flex-col flex-grow p-4 overflow-auto">
                             <a className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300" href="#">
-                                <span className="leading-none"> Active listings </span>
+                                <span className="leading-none"> home </span>
                             </a>
                             <a className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300" href="#">
-                                <span className="leading-none"> Planned Deals </span>
+                                <span className="leading-none" onClick={ () => setToggleHomeDash(plannedDeals)}> Planned Deals </span>
                             </a>
                             <a className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300" href="#">
                                 <span className="leading-none">Potential Renters</span>
@@ -158,7 +158,7 @@ function OwnerDashboard() {
                                 <span className="leading-none"> What do I need here </span>
                             </a>
                             <a className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300" href="#">
-                                <span className="leading-none"> extra </span>
+                                <span className="leading-none"> Active listings </span>
                             </a>
                             <a className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300" href="#">
                                 <span className="leading-none"> extra </span>
