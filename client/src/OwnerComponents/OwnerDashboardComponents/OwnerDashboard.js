@@ -37,6 +37,11 @@ function OwnerDashboard() {
     <div>
         This will be a list of active listings this owner currently holds
     </div>
+
+    let potentialRenters =
+    <div>
+        Here I'd like to include potential renters that could be interested in this owners equipment. For example if someone has rented a heavy machinery 8 days out of every month?
+    </div>
     
 
     console.log(toggleHomeDash)
@@ -153,16 +158,16 @@ function OwnerDashboard() {
                         </button>
                         <div className="flex flex-col flex-grow p-4 overflow-auto">
                             
-                                <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={ () => setToggleHomeDash(dashHome)}> home </span>
-                             
+                                <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={ () => setToggleHomeDash(dashHome)}> Home </span>
+
+                                <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none"onClick={ () => setToggleHomeDash(activeListings)}> Active listings </span>
+
                                 <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={ () => setToggleHomeDash(plannedDeals)}> Planned Deals </span>
                               
-                                <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" >Potential Renters</span>
+                                <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={ () => setToggleHomeDash(potentialRenters)}>Potential Renters</span>
                                                   
                                 <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none"> What do I need here </span>
-                            
-                                <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none"onClick={ () => setToggleHomeDash(activeListings)}> Active listings </span>
-                            
+
                                 <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none"> extra </span>
                             
                             <a className="flex items-center flex-shrink-0 h-10 px-3 mt-auto text-sm font-medium bg-gray-200 rounded hover:bg-gray-300"
