@@ -31,7 +31,12 @@ function OwnerDashboard() {
     let loggedInDisplay
 
     let plannedDeals =
-    <div> I EXIST </div>
+    <div> Planned Deals </div>
+
+    let activeListings =
+    <div>
+        This will be a list of active listings this owner currently holds
+    </div>
     
 
     console.log(toggleHomeDash)
@@ -152,11 +157,11 @@ function OwnerDashboard() {
                              
                                 <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={ () => setToggleHomeDash(plannedDeals)}> Planned Deals </span>
                               
-                                <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none">Potential Renters</span>
+                                <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" >Potential Renters</span>
                                                   
                                 <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none"> What do I need here </span>
                             
-                                <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none"> Active listings </span>
+                                <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none"onClick={ () => setToggleHomeDash(activeListings)}> Active listings </span>
                             
                                 <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none"> extra </span>
                             
