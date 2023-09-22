@@ -3,7 +3,10 @@ import { Link, useNavigate} from 'react-router-dom';
 import {ReactComponent as EquipMeLogo } from '../Content/EquipMeLogo.svg'
 import SearchBar from "./SearchBar";
 // import Header from "./Header";
+
+//Context imports
 import  UserContext  from '../UserComponents/UserContext';
+import OwnerContext from "../OwnerComponents/OwnerContext";
 
 function NavBar({ setSearchTerm }) {
 
@@ -11,7 +14,12 @@ function NavBar({ setSearchTerm }) {
 
   const navigate = useNavigate();
   
+  //state for user
   const [user, setUser] = useContext(UserContext)
+
+  //state for owners
+  const [owner, setOwner] = useContext(OwnerContext)
+
 
   const closeMobileView = () => {
     setIsToggleOpen(false);
@@ -167,7 +175,7 @@ function NavBar({ setSearchTerm }) {
     </>
     )
 
-    let OwnerloggedInDisplay = (
+    let ownerLoggedInDisplay = (
       <>
       {/*<!-- Component: Navbar with CTA --> */}
       <header className="border-b-1 relative z-20 w-full bg-gray-900 dark:bg-gray-900 shadow-lg shadow-slate-700/5 after:absolute after:top-full after:left-0 after:z-10 after:block after:h-px after:w-full after:bg-slate-200 lg:border-slate-200 lg:backdrop-blur-sm lg:after:hidden">
@@ -284,19 +292,13 @@ function NavBar({ setSearchTerm }) {
               </button>
             </div>
 
-            <div className="ml-auto flex items-center px-6 lg:ml-0 lg:p-0">
-              <button className="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded bg-amber-500 px-5 text-sm font-medium tracking-wide text-white shadow-md shadow-amber-200 transition duration-300 hover:bg-emerald-600 hover:shadow-sm hover:shadow-emerald-200 focus:bg-emerald-700 focus:shadow-sm focus:shadow-emerald-200 focus-visible:outline-none disabled:cursor-not-allowed disabled:border-emerald-300 disabled:bg-emerald-300 disabled:shadow-none"  onClick={UserProfileClick}>
-               Profile
-              </button>
-            </div>
-
 
           </nav>
         </div>
 
         <div className="ml-auto flex items-center px-6 lg:ml-0 lg:p-0">
               <button className="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded bg-amber-500 px-5 text-sm font-medium tracking-wide text-white shadow-md shadow-amber-200 transition duration-300 hover:bg-emerald-600 hover:shadow-sm hover:shadow-emerald-200 focus:bg-emerald-700 focus:shadow-sm focus:shadow-emerald-200 focus-visible:outline-none disabled:cursor-not-allowed disabled:border-emerald-300 disabled:bg-emerald-300 disabled:shadow-none">
-                <Link to='/owner/login'
+                <Link to='/owner/dashboard'
                 onClick={closeMobileView} // Close the mobile view when link is clicked
                 >
                 <span> Dashboard </span>
@@ -484,7 +486,14 @@ function NavBar({ setSearchTerm }) {
     
     return (
         <>
-        {user ? userLoggedInDisplay : loggedOutDisplay}
+        {
+        user ? 
+        (userLoggedInDisplay) : 
+        owner ? 
+        (ownerLoggedInDisplay) : 
+        
+        (loggedOutDisplay)
+        }
 
         
         </>
