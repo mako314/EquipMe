@@ -49,7 +49,7 @@ function BulkEquipmentUpload() {
                         type="file"
                         id="file"
                         name="file"
-                        accept=".csv"
+                        accept=".csv, .xml, .xlsx"
                         onChange={handleFileUpload}
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     />
