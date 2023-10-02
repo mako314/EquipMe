@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { GoogleMap, useJsApiLoader, Marker, Circle } from "@react-google-maps/api";
 
 const google = console.google;
-const GOOGLE_MAPS_API_KEY = "AIzaSyBpgi-Q6wHnBjBNODIfwCSduegrs3BKGko";
+const GOOGLE_MAPS_API_KEY = "INSERT KEY HERE";
 
 function EquipmentMap({ location }) {
   const [coords, setCoords] = useState({ lat: 0, lng: 0 })
