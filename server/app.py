@@ -10,6 +10,7 @@ from flask_restful import Resource
 from config import db, app, api
 from sqlalchemy import asc
 import pandas as pd
+import xml.etree.ElementTree as ET
 
 #------------------------------------HELPERS----------------------------------
 from datetime import datetime
@@ -672,13 +673,32 @@ class BulkEquipmentUpload(Resource):
         if not equipmentFile:
             return jsonify({'error': 'No file provided'}), 400
         
-        # Read the CSV document, adding equipment row by row, appending to the owner's equipment list, and commit
+        # Read CSV, XML, and XLSX documents to rapidly add equipment row by row, appending to the owner's equipment list, and commit
         try:
-            allCsvEquipment = pd.read_csv(equipmentFile)
-            allCsvEquipment.columns = ['Equipment_name', 'Equipment_type', 'Make', 'Model', 'Owner', 'Phone', 'Email', 'Location', 'Availability', 'Delivery', 'Quantity']
+            file_extension_type = equipmentFile.filename.split('.')[-1].lower()
+
+            if file_extension_type == '.csv':
+                allEquipment = pd.read_csv(equipmentFile)
+
+            # Conditional for XML file types
+            elif file_extension_type == 'xml':
+                root = ET.fromstring(equipmentFile.read())
+                allEquipment = []
+
+                for equipment_element in root:
+                    equipment_data = {}
+                    for element_data in equipment_element:
+                        equipment_data[element_data.tag] = element_data.text
+                    allEquipment.append(equipment_data)
+
+            # Conditional for Microsoft Excel files
+            elif file_extension_type == 'xlsx':
+                allEquipment = pd.read_excel(equipmentFile)
+
+            allEquipment.columns = ['Equipment_name', 'Equipment_type', 'Make', 'Model', 'Owner', 'Phone', 'Email', 'Location', 'Availability', 'Delivery', 'Quantity']
             equipment_list = []
 
-            for index, row in allCsvEquipment.iterrows():
+            for index, row in allEquipment.iterrows():
                 owner_name = row['Owner']
                 equipment_owner = EquipmentOwner.query.filter(EquipmentOwner.name == owner_name).first()
                 equipment = Equipment(
