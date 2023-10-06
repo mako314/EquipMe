@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
-
 import OwnerContext from '../OwnerContext';
+import ProductCollection from '../../EquipmentComponents/ProductCollection'
 import { ReactComponent as EquipMeLogo } from '../../Content/EquipMeLogo.svg'
 
 function OwnerDashboard() {
@@ -19,6 +19,8 @@ function OwnerDashboard() {
 
     // console.log(owner)
 
+
+
     const navigate = useNavigate()
 
     const handleCsvClick = (e) => {
@@ -33,9 +35,11 @@ function OwnerDashboard() {
         <div> Planned Deals </div>
 
     let activeListings =
-        <div>
-            This will be a list of active listings this owner currently holds
-        </div>
+
+    <div>
+        {/* <ProductCollection/> */}
+    </div>
+
 
     let potentialRenters =
         <div>
@@ -62,11 +66,7 @@ function OwnerDashboard() {
                         <div className="h-24 col-span-3 bg-white border border-gray-300 text-center"> Welcome {name} </div>
                         <div className="h-96 col-span-1 bg-white border border-gray-300">
 
-                            <Link to='/list_equipment'>
-
-                                <button type="submit" className="inline-block rounded-lg bg-orange-500 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 md:text-base"> List an Item</button>
-
-                            </Link>
+                            
 
                         </div>
                         <div className="h-96 col-span-1 bg-white border border-gray-300"></div>
@@ -87,58 +87,7 @@ function OwnerDashboard() {
                 <div className="flex w-screen h-screen text-gray-700">
 
                     {/* <!-- Component Start --> */}
-                    <div className="flex flex-col items-center w-16 pb-4 overflow-auto border-r border-gray-300">
-
-                        {/* Links to homepage */}
-                        <Link to='/'>
-                            <span className="flex items-center justify-center flex-shrink-0 w-full h-16 bg-gray-300">
-                                <EquipMeLogo />
-                            </span>
-                        </Link>
-
-                        {/* {Need to click and maybe takes them where? Could be something that opens their profile for example along with allowing for editing of said profile} */}
-                        <a className="flex items-center justify-center flex-shrink-0 w-10 h-10 mt-4 rounded hover:bg-gray-300" href="#">
-                            <svg className="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                            </svg>
-                        </a>
-
-                        {/* Click to display all equipment, with filtering abilities, search, etc */}
-                        <a className="flex items-center justify-center flex-shrink-0 w-10 h-10 mt-4 rounded hover:bg-gray-300" href="#">
-                            <svg className="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                            </svg>
-                        </a>
-
-                        {/* Click to bring up user / owner messaging system */}
-                        <a className="flex items-center justify-center flex-shrink-0 w-10 h-10 mt-4 rounded hover:bg-gray-300" href="#">
-                            <svg className="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
-                            </svg>
-                        </a>
-
-                        {/* Track rentals and extra tidbits of it  https://tailwindui.com/components/application-ui/page-examples/detail-screens - STACKED -*/}
-                        <a className="flex items-center justify-center flex-shrink-0 w-10 h-10 mt-4 rounded hover:bg-gray-300" href="#">
-                            <svg className="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                        </a>
-
-                        {/* Maybe a button to list new rentals here? */}
-                        <a className="flex items-center justify-center flex-shrink-0 w-10 h-10 mt-4 rounded hover:bg-gray-300" href="#">
-                            <svg className="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-                            </svg>
-                        </a>
-
-                        {/* back to top or something? */}
-                        <a className="flex items-center justify-center flex-shrink-0 w-10 h-10 mt-4 mt-auto rounded hover:bg-gray-300" href="#">
-                            <svg className="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </a>
-
-                    </div>
+                    
                     <div className="flex flex-col w-56 border-r border-gray-300">
                         <button className="relative text-sm focus:outline-none group">
                             <div className="flex items-center justify-between w-full h-16 px-4 border-b border-gray-300 hover:bg-gray-300">
@@ -179,15 +128,22 @@ function OwnerDashboard() {
                         </div>
 
                     </div>
-                    <div className="flex flex-col flex-grow">
+                    <div className="flex flex-col overflow-auto flex-grow">
                         <div className="flex items-center flex-shrink-0 h-16 px-8 border-b border-gray-300">
+
                             <h1 className="text-lg font-medium">Page Title</h1>
                             <button className="flex items-center justify-center h-10 px-4 ml-auto text-sm font-medium rounded hover:bg-gray-300" onClick={handleCsvClick}>
                                 Upload Equipment File
+
                             </button>
-                            <button className="flex items-center justify-center h-10 px-4 ml-2 text-sm font-medium bg-gray-200 rounded hover:bg-gray-300">
+                            {/* <button className="flex items-center justify-center h-10 px-4 ml-auto text-sm font-medium bg-gray-200 rounded hover:bg-gray-300">
                                 Action 2
-                            </button>
+                            </button> */}
+                            <Link to='/list_equipment'>
+
+                                <button type="submit" className="flex items-center justify-center h-10 px-4 ml-auto mr-2 rounded-lg bg-orange-500 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700"> List an Item</button>
+
+                            </Link>
                             <button className="relative ml-2 text-sm focus:outline-none group">
                                 <div className="flex items-center justify-between w-10 h-10 rounded hover:bg-gray-300">
                                     <svg className="w-5 h-5 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -203,6 +159,7 @@ function OwnerDashboard() {
                         </div>
                         {toggleHomeDash}
                     </div>
+                    
                     {/* <!-- Component End  --> */}
 
                 </div>
