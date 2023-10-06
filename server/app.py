@@ -704,8 +704,7 @@ class BulkEquipmentUpload(Resource):
 
 api.add_resource(BulkEquipmentUpload, '/bulk_file_upload')
 
-if __name__ == '__main__':
-    app.run(port=5555, debug=True)
+
 
 
 
@@ -732,7 +731,8 @@ class AvailabilityChecker(Resource):
 api.add_resource(AvailabilityChecker, "/availability/<int:equipment_id>/<string:start_date>/<string:end_date>")
 
 
-
+if __name__ == '__main__':
+    app.run(port=5555, debug=True)
 
 #holy cow stop coding on main u gOOFY 
 
