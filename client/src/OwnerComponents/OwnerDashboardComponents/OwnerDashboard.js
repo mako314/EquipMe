@@ -127,7 +127,7 @@ function OwnerDashboard() {
                         </div>
 
                     </div>
-                    <div className="flex flex-col flex-grow">
+                    <div className="flex flex-col overflow-auto flex-grow">
                         <div className="flex items-center flex-shrink-0 h-16 px-8 border-b border-gray-300">
                             <h1 className=" text-lg font-medium">Page Title</h1>
                             <button className="flex items-center justify-center h-10 px-4 ml-auto mr-2 rounded-lg bg-orange-500 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700" onClick={handleCsvClick}>
@@ -156,6 +156,7 @@ function OwnerDashboard() {
                         </div>
                         {toggleHomeDash}
                     </div>
+                    
                     {/* <!-- Component End  --> */}
 
                 </div>
