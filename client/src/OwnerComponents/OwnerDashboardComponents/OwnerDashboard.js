@@ -65,11 +65,7 @@ function OwnerDashboard() {
                         <div className="h-24 col-span-3 bg-white border border-gray-300 text-center"> Welcome {name} </div>
                         <div className="h-96 col-span-1 bg-white border border-gray-300">
 
-                            <Link to='/list_equipment'>
-
-                                <button type="submit" className="inline-block rounded-lg bg-orange-500 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 md:text-base"> List an Item</button>
-
-                            </Link>
+                            
 
                         </div>
                         <div className="h-96 col-span-1 bg-white border border-gray-300"></div>
@@ -140,6 +136,11 @@ function OwnerDashboard() {
                             <button className="flex items-center justify-center h-10 px-4 ml-2 text-sm font-medium bg-gray-200 rounded hover:bg-gray-300">
                                 Action 2
                             </button>
+                            <Link to='/list_equipment'>
+
+                                <button type="submit" className="flex items-center justify-center h-10 px-4 ml-2 rounded-lg bg-orange-500 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700"> List an Item</button>
+
+                            </Link>
                             <button className="relative ml-2 text-sm focus:outline-none group">
                                 <div className="flex items-center justify-between w-10 h-10 rounded hover:bg-gray-300">
                                     <svg className="w-5 h-5 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
