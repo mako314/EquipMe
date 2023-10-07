@@ -298,3 +298,12 @@ class RentalAgreement(db.Model, SerializerMixin):
 
     def __repr__(self):
         return f"<Rental Agreement: Equipment in {self.location}, Total Price: {self.total_price}, Rental Dates: {self.rental_dates}>"
+    
+
+class Inbox(db.Model, SerializerMixin):
+    __tablename__ = "inboxes"
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    message_id = db.Column(db.Integer, db.ForeignKey())
+
+
