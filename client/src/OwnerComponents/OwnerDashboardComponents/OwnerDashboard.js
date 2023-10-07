@@ -17,7 +17,7 @@ function OwnerDashboard() {
         });
     }, []);
 
-    // console.log(owner)
+    console.log(owner)
 
 
 
@@ -37,7 +37,7 @@ function OwnerDashboard() {
 
     let activeListings =
     <div>
-        {/* <ProductCollection/> */}
+        <ProductCollection equipmentArray={owner.equipment}/>
     </div>
 
     let potentialRenters =
