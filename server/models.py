@@ -300,10 +300,30 @@ class RentalAgreement(db.Model, SerializerMixin):
         return f"<Rental Agreement: Equipment in {self.location}, Total Price: {self.total_price}, Rental Dates: {self.rental_dates}>"
     
 
+
+#-------------------------Message System---------------
+
+class Message(db.Model, SerializerMixin):
+    __tablename__ = "messages"
+
+    recepient_id = db.Column(db.Integer)
+    sender_id = db.Column(db.Integer)
+
+    content = db.Column(db.String)
+    message_status = db.Column(db.String)
+
+    created_on = db.Column(
+    db.DateTime, nullable=False,
+    default=datetime.utcnow,
+    )
+
+
 class Inbox(db.Model, SerializerMixin):
     __tablename__ = "inboxes"
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    message_id = db.Column(db.Integer, db.ForeignKey())
+    message_id = db.Column(db.Integer, db.ForeignKey('messages.id'))
+
+
 
 
