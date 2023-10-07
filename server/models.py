@@ -47,10 +47,13 @@ class User(db.Model, SerializerMixin):
 
     #relationships 
     #do a cascade to make life easier
-    agreements = db.relationship('RentalAgreement', back_populates="user", overlaps="users,owners")
+    agreements = db.relationship('RentalAgreement', back_populates="user")
+
+    inboxes = db.relationship(
+        "User", back_populates="user")
 
     #Serialization rules
-    serialize_rules = ('-agreements.user', )
+    serialize_rules = ('-agreements.user', '-inboxes.user')
 
 
     #PROPERTIES
@@ -117,9 +120,9 @@ class EquipmentOwner(db.Model, SerializerMixin):
     # agreements = db.relationship('RentalAgreement', back_populates="owner", overlaps="users,owners")
 
     #do a cascade to make life easier
-    equipment = db.relationship('Equipment', back_populates='owner', overlaps="owners,equipments")
+    equipment = db.relationship('Equipment', back_populates='owner')
 
-    agreements = db.relationship('RentalAgreement', back_populates ='owner', overlaps="owners,agreements")
+    agreements = db.relationship('RentalAgreement', back_populates ='owner')
     #overlaps="owners,equipments" #This is a way to access the equipment that an owner has, 
     
     #you can just do a query EquipmentOwner.query.get(1), or equipment = owner.equipment. Then you can do for equipment in owner.equipment print(equipment) for example
@@ -202,9 +205,9 @@ class Equipment(db.Model, SerializerMixin):
 
     owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'))
 
-    owner = db.relationship("EquipmentOwner", back_populates="equipment", overlaps="owners,equipments" )
+    owner = db.relationship("EquipmentOwner", back_populates="equipment")
 
-    agreements = db.relationship('RentalAgreement', back_populates="equipment", overlaps="users,equipments")
+    agreements = db.relationship('RentalAgreement', back_populates="equipment")
 
     images = db.relationship('EquipmentImage', back_populates='equipment')
 
@@ -284,13 +287,13 @@ class RentalAgreement(db.Model, SerializerMixin):
 
     #this hopefully connects it
     user = db.relationship(
-        "User", back_populates="agreements", overlaps="users,owners"
+        "User", back_populates="agreements"
     )
     equipment = db.relationship(
-        "Equipment", back_populates="agreements", overlaps="users,equipment")
+        "Equipment", back_populates="agreements")
     
     owner = db.relationship(
-        "EquipmentOwner", back_populates="agreements", overlaps="users,agreements"
+        "EquipmentOwner", back_populates="agreements"
     )
     
     #Serialization rules
@@ -323,6 +326,12 @@ class Inbox(db.Model, SerializerMixin):
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     message_id = db.Column(db.Integer, db.ForeignKey('messages.id'))
+
+    user = db.relationship(
+        "User", back_populates="inboxes")
+    
+    owner = db.relationship(
+        "User", back_populates="inboxes")
 
 
 
