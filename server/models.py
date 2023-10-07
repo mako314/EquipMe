@@ -50,7 +50,7 @@ class User(db.Model, SerializerMixin):
     agreements = db.relationship('RentalAgreement', back_populates="user")
 
     inboxes = db.relationship(
-        "User", back_populates="user")
+        "Inbox", back_populates="user")
 
     #Serialization rules
     serialize_rules = ('-agreements.user', '-inboxes.user')
@@ -109,12 +109,6 @@ class EquipmentOwner(db.Model, SerializerMixin):
     _password_hash = db.Column(db.String, nullable=False)
     profileImage = db.Column(db.String)
     website = db.Column(db.String)
-
-    #Need to add a password, and have them sign in with email + password. Would like to have a password verification field. + Email confirmation
-
-    #Likely not a bad idea to both privatize the Owners agreements, as long as they are the owner they are the only ones who can view it.
-    # Add a website link for them? Maybe socials?
-    
     
     #relationships
     # agreements = db.relationship('RentalAgreement', back_populates="owner", overlaps="users,owners")
@@ -123,12 +117,12 @@ class EquipmentOwner(db.Model, SerializerMixin):
     equipment = db.relationship('Equipment', back_populates='owner')
 
     agreements = db.relationship('RentalAgreement', back_populates ='owner')
-    #overlaps="owners,equipments" #This is a way to access the equipment that an owner has, 
-    
+
+    inboxes = db.relationship('Inbox', back_populates='owner')
     #you can just do a query EquipmentOwner.query.get(1), or equipment = owner.equipment. Then you can do for equipment in owner.equipment print(equipment) for example
 
     #Serialization rules
-    serialize_rules = ('-equipment.owner', '-agreements.owner', )
+    serialize_rules = ('-equipment.owner', '-agreements.owner', '-inbox.owner' )
 
     #PROPERTIES
     @hybrid_property
