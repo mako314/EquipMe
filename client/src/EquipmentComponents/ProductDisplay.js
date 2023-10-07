@@ -10,6 +10,7 @@ function EquipmentDisplay() {
   const { id } = useParams()
   const navigate = useNavigate()
 
+
   useEffect(() => {
     fetch(`/equipment/${id}`)
       .then((resp) => resp.json())
@@ -26,16 +27,16 @@ function EquipmentDisplay() {
 
   // Need a rental button, basically allowing the user to rent from this page
   let equipment_pictures
-  if (images){
-    equipment_pictures =   <img alt="ecommerce" class="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded" src={images[0].imageURL}/>
+  // if (images) {
+  //   equipment_pictures = <img alt="ecommerce" class="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded" src={images[0].imageURL} />
 
-  }
+  // }
 
   let loggedOutDisplay
-  loggedOutDisplay=(
+  loggedOutDisplay = (
     <section className="text-gray-400 bg-gray-900 body-font overflow-hidden ">
       <div className="container px-5 py-24 mx-auto">
-        <div className="lg:w-4/5 mx-auto flex flex-wrap">
+        <div className="lg:w-4/5 flex flex-wrap">
           <div className="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">
             <h2 className="text-sm title-font text-gray-500 tracking-widest">{name}</h2>
             <h1 className="text-white text-3xl title-font font-medium mb-4">{make + model}</h1>
@@ -65,32 +66,29 @@ function EquipmentDisplay() {
                   <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
                 </svg>
               </button>
+
             </div>
+
           </div>
 
-          {equipment_pictures}
-          
-          <div className="w-full lg:h-auto h-64 object-cover object-center rounded mt-8">
 
-          {/* I may like to have this take up the full width still I won't lie, and then find a place to put reviews / comments / etc */}
-          
-          <div className="map-container">
-          <EquipmentMap location={location}/>
-          </div>
-          
-          </div>
+
+          {/* {equipment_pictures} */}
+
 
         </div>
+
+        {/* The Google Map for the equipment is included below the information and leaves room for 
+        product images to be included to the right of the equipment information */}
+        <EquipmentMap location={location} />
       </div>
+
     </section>
-)
+  )
 
   return (
     <>
-    {loggedOutDisplay}
-    <div>
-    {/* <EquipmentMap location={location}/> */}
-    </div>
+      {loggedOutDisplay}
     </>
   )
 }
@@ -129,12 +127,13 @@ export default EquipmentDisplay;
               <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
                 <path d="M5 12h14M12 5l7 7-7 7"></path>
               </svg>
-            </a> */}
-  //         </div>
-  //       </div>
-  //     </div>
-  //   </div>
-  // </section>
+</a> */}
+//         </div>
+//       </div>
+//     </div>
+//   </div>
+// </section>
 // </div> */}
 
 // {tailwindProductDisplay}
+

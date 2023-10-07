@@ -24,7 +24,6 @@ function OwnerDashboard() {
     const navigate = useNavigate()
 
     const handleCsvClick = (e) => {
-        console.log("Registered Click")
         navigate('/temp/bulk_equipment_upload')
     }
 
@@ -33,18 +32,20 @@ function OwnerDashboard() {
     let loggedInDisplay
 
     let plannedDeals =
-    <div> Planned Deals </div>
+        <div> Planned Deals </div>
 
     let activeListings =
+
     <div>
         <ProductCollection equipmentArray={owner.equipment}/>
     </div>
 
+
     let potentialRenters =
-    <div>
-        Here I'd like to include potential renters that could be interested in this owners equipment. For example if someone has rented a heavy machinery 8 days out of every month?
-    </div>
-    
+        <div>
+            Here I'd like to include potential renters that could be interested in this owners equipment. For example if someone has rented a heavy machinery 8 days out of every month?
+        </div>
+
 
     console.log(toggleHomeDash)
 
@@ -104,19 +105,19 @@ function OwnerDashboard() {
                             </div>
                         </button>
                         <div className="flex flex-col flex-grow p-4 overflow-auto">
-                            
-                                <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={ () => setToggleHomeDash(dashHome)}> Home </span>
 
-                                <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none"onClick={ () => setToggleHomeDash(activeListings)}> Active listings </span>
+                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(dashHome)}> Home </span>
 
-                                <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={ () => setToggleHomeDash(plannedDeals)}> Planned Deals </span>
-                              
-                                <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={ () => setToggleHomeDash(potentialRenters)}>Potential Renters</span>
-                                                  
-                                <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none"> What do I need here </span>
+                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(activeListings)}> Active listings </span>
 
-                                <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none"> extra </span>
-                            
+                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(plannedDeals)}> Planned Deals </span>
+
+                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(potentialRenters)}>Potential Renters</span>
+
+                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none"> What do I need here </span>
+
+                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none"> extra </span>
+
                             <a className="flex items-center flex-shrink-0 h-10 px-3 mt-auto text-sm font-medium bg-gray-200 rounded hover:bg-gray-300"
                                 href="#">
                                 <svg className="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -129,9 +130,11 @@ function OwnerDashboard() {
                     </div>
                     <div className="flex flex-col overflow-auto flex-grow">
                         <div className="flex items-center flex-shrink-0 h-16 px-8 border-b border-gray-300">
-                            <h1 className=" text-lg font-medium">Page Title</h1>
-                            <button className="flex items-center justify-center h-10 px-4 ml-auto mr-2 rounded-lg bg-orange-500 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700" onClick={handleCsvClick}>
-                                Upload Equipment CSV
+
+                            <h1 className="text-lg font-medium">Page Title</h1>
+                            <button className="flex items-center justify-center h-10 px-4 ml-auto text-sm font-medium rounded hover:bg-gray-300" onClick={handleCsvClick}>
+                                Upload Equipment File
+
                             </button>
                             {/* <button className="flex items-center justify-center h-10 px-4 ml-auto text-sm font-medium bg-gray-200 rounded hover:bg-gray-300">
                                 Action 2
