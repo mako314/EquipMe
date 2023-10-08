@@ -1,4 +1,4 @@
-from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement
+from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement, Message, Inbox
 # from flask_cors import CORS
 # from flask_migrate import Migrate
 # from flask import Flask, request, make_response, jsonify
@@ -297,7 +297,7 @@ class EquipmentOwnerById(Resource):
         equip_owner = EquipmentOwner.query.filter(EquipmentOwner.id == id).first()
 
         if equip_owner:
-            return make_response(equip_owner.to_dict(),200)
+            return make_response(equip_owner.to_dict(rules=('-inboxes.owner','-inboxes.user' )),200)
         else:
             response = make_response({
             "error": "Owner not found"
@@ -724,10 +724,6 @@ class BulkEquipmentUpload(Resource):
 
 api.add_resource(BulkEquipmentUpload, '/bulk_file_upload')
 
-
-
-
-
 #-----------------------------------------------Rental Agreement Classes - CHECKING FOR AVAILABILITY AND SUCH -----------------------------------------------------------------------------
 
 # Will need to make a call to this route I believe, to check whether or not the date and end date will be available for using the equipment. Need to find a way to also match the time. If someone's only renting a piece out for two hours, they have another 10 hours ahead in which the equipment can be rented.
@@ -749,6 +745,40 @@ class AvailabilityChecker(Resource):
 
 
 api.add_resource(AvailabilityChecker, "/availability/<int:equipment_id>/<string:start_date>/<string:end_date>")
+
+
+#----------------------------------------------- Messaging Routes -----------------------------------------------------------------------------
+
+class OwnerMessages(Resource):
+    def get(self, owner_id):
+        owner_message_threads = Inbox.query.filter_by(owner_id=owner_id).all()
+        message_threads = []
+
+        for thread in owner_message_threads:
+            message_id = thread.message_id
+            # Use message_id to retrieve the content of the message, sender, and recipient
+            message = Message.query.get(message_id)
+            sender_id = message.sender_id
+            recipient_id = message.recepient_id
+            content = message.content
+            
+            # Append the message details to the message_threads list
+            message_threads.append({
+                "message_id": message_id,
+                "sender_id": sender_id,
+                "recipient_id": recipient_id,
+                "content": content
+            })
+
+        if message_threads:
+            return make_response(message_threads, 200)
+        else:
+            response = make_response({
+            "error": "Message thread not found"
+            }, 404)
+            return response
+
+api.add_resource(OwnerMessages, "/messages/<int:owner_id>/")
 
 
 if __name__ == '__main__':

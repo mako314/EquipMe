@@ -17,7 +17,11 @@ function OwnerDashboard() {
         });
     }, []);
 
-    // console.log(owner)
+    // const 
+    // { equipment,
+    //  } = owner
+
+    console.log(owner)
 
 
 
@@ -30,15 +34,19 @@ function OwnerDashboard() {
     //----- Variables in the order they appear -----
     let dashHome
     let loggedInDisplay
+    let activeListings
+    useEffect(() => {
+        activeListings =
+    <div>
+        <ProductCollection equipmentArray={owner.equipment}/>
+    </div>
+    }, [owner])
 
     let plannedDeals =
         <div> Planned Deals </div>
 
-    let activeListings =
 
-    <div>
-        {/* <ProductCollection/> */}
-    </div>
+    
 
 
     let potentialRenters =

@@ -47,10 +47,13 @@ class User(db.Model, SerializerMixin):
 
     #relationships 
     #do a cascade to make life easier
-    agreements = db.relationship('RentalAgreement', back_populates="user", overlaps="users,owners")
+    agreements = db.relationship('RentalAgreement', back_populates="user")
+
+    inboxes = db.relationship(
+        "Inbox", back_populates="user")
 
     #Serialization rules
-    serialize_rules = ('-agreements.user', )
+    serialize_rules = ('-agreements.user', '-inboxes.user')
 
 
     #PROPERTIES
@@ -106,26 +109,20 @@ class EquipmentOwner(db.Model, SerializerMixin):
     _password_hash = db.Column(db.String, nullable=False)
     profileImage = db.Column(db.String)
     website = db.Column(db.String)
-
-    #Need to add a password, and have them sign in with email + password. Would like to have a password verification field. + Email confirmation
-
-    #Likely not a bad idea to both privatize the Owners agreements, as long as they are the owner they are the only ones who can view it.
-    # Add a website link for them? Maybe socials?
-    
     
     #relationships
     # agreements = db.relationship('RentalAgreement', back_populates="owner", overlaps="users,owners")
 
     #do a cascade to make life easier
-    equipment = db.relationship('Equipment', back_populates='owner', overlaps="owners,equipments")
+    equipment = db.relationship('Equipment', back_populates='owner')
 
-    agreements = db.relationship('RentalAgreement', back_populates ='owner', overlaps="owners,agreements")
-    #overlaps="owners,equipments" #This is a way to access the equipment that an owner has, 
-    
+    agreements = db.relationship('RentalAgreement', back_populates ='owner')
+
+    inboxes = db.relationship('Inbox', back_populates='owner')
     #you can just do a query EquipmentOwner.query.get(1), or equipment = owner.equipment. Then you can do for equipment in owner.equipment print(equipment) for example
 
     #Serialization rules
-    serialize_rules = ('-equipment.owner', '-agreements.owner', )
+    serialize_rules = ('-equipment.owner', '-agreements.owner', '-inbox.owner','-inbox.user' )
 
     #PROPERTIES
     @hybrid_property
@@ -202,9 +199,9 @@ class Equipment(db.Model, SerializerMixin):
 
     owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'))
 
-    owner = db.relationship("EquipmentOwner", back_populates="equipment", overlaps="owners,equipments" )
+    owner = db.relationship("EquipmentOwner", back_populates="equipment")
 
-    agreements = db.relationship('RentalAgreement', back_populates="equipment", overlaps="users,equipments")
+    agreements = db.relationship('RentalAgreement', back_populates="equipment")
 
     images = db.relationship('EquipmentImage', back_populates='equipment')
 
@@ -284,13 +281,13 @@ class RentalAgreement(db.Model, SerializerMixin):
 
     #this hopefully connects it
     user = db.relationship(
-        "User", back_populates="agreements", overlaps="users,owners"
+        "User", back_populates="agreements"
     )
     equipment = db.relationship(
-        "Equipment", back_populates="agreements", overlaps="users,equipment")
+        "Equipment", back_populates="agreements")
     
     owner = db.relationship(
-        "EquipmentOwner", back_populates="agreements", overlaps="users,agreements"
+        "EquipmentOwner", back_populates="agreements"
     )
     
     #Serialization rules
@@ -298,3 +295,48 @@ class RentalAgreement(db.Model, SerializerMixin):
 
     def __repr__(self):
         return f"<Rental Agreement: Equipment in {self.location}, Total Price: {self.total_price}, Rental Dates: {self.rental_dates}>"
+    
+
+
+#-------------------------Message System---------------
+
+class Message(db.Model, SerializerMixin):
+    __tablename__ = "messages"
+
+    id = db.Column(db.Integer, primary_key=True)
+    recepient_id = db.Column(db.Integer)
+    sender_id = db.Column(db.Integer)
+    # context_id = db.Column(db.Integer)
+
+    content = db.Column(db.String)
+    message_status = db.Column(db.String, nullable = True)
+
+    created_on = db.Column(
+    db.DateTime, nullable=False,
+    default=datetime.utcnow,
+    )
+
+    # I also have to consider attaching an equipment ID. Maybe equipment quotes can be a table also?
+
+
+
+class Inbox(db.Model, SerializerMixin):
+    __tablename__ = "inboxes"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'))
+    message_id = db.Column(db.Integer, db.ForeignKey('messages.id'))
+    
+
+    user = db.relationship(
+        "User", back_populates="inboxes", foreign_keys=[user_id])
+    
+    owner = db.relationship(
+        "EquipmentOwner", back_populates="inboxes", foreign_keys=[owner_id])
+    
+    serialize_rules = ('-user.inboxes', '-owner.inboxes')
+
+
+
+

@@ -1,4 +1,4 @@
-from models import db, User, EquipmentOwner, Equipment, RentalAgreement, EquipmentImage
+from models import db, User, EquipmentOwner, Equipment, RentalAgreement, EquipmentImage, Inbox, Message
 import pandas as pd
 from app import app
 from random import randint, choice as rc
@@ -16,6 +16,8 @@ if __name__ == '__main__':
         EquipmentOwner.query.delete()
         User.query.delete()
         EquipmentImage.query.delete()
+        Message.query.delete()
+        Inbox.query.delete()
 
 #----------------------------------------------------------------------
 #Seed Renters
@@ -419,7 +421,68 @@ if __name__ == '__main__':
         db.session.commit()
 
         print("Reseting EQUIPMENT pictures **TEMPORARILY**")
-#----------------- OLD RENTAL AGREEMENTS
+
+#---------------------Message and Inbox testing----------------
+        print("Generating example messages...")
+        messages = [
+            Message(
+                recepient_id = 2, # Owner
+                sender_id = 1, # User
+                content = "Hey, hope this message finds you well, I'd like to rent this equipment. What would the cost be?",
+            ),
+            Message(
+                recepient_id = 1,
+                sender_id = 2, # Owner
+                content = "Yes it is still available, we offer rate discounts depending on how long you are trying to rent for, what is the time frame?",
+            ),
+            Message(
+                recepient_id = 2, # Owner
+                sender_id = 1,
+                content = "Lets try for three weeks if you can send me a quote?",
+            ),
+            Message(
+                recepient_id = 1, 
+                sender_id = 2, # Owner
+                content = "Attached is a quote, thank you!",
+            ),
+        ]
+
+        db.session.add_all(messages)
+        db.session.commit()
+
+
+#---------------------Inbox testing----------------
+        print("Creating test Inbox...")
+        inbox = [
+            Inbox(
+                user_id=1,  # User 1 (sender of message 1)
+                owner_id=2,  # Owner 2 (recipient of message 1)
+                message_id=1,  # Message 1
+            ),
+            Inbox(
+                user_id=1,  # User 2 (sender of message 2)
+                owner_id=2,  # Owner 1 (recipient of message 2)
+                message_id=2,  # Message 2
+            ),
+            Inbox(
+                user_id=1,  # User 1 (sender of message 3)
+                owner_id=2,  # Owner 2 (recipient of message 3)
+                message_id=3,  # Message 3
+            ),
+            Inbox(
+                user_id=1,  # User 2 (sender of message 4)
+                owner_id=2,  # Owner 1 (recipient of message 4)
+                message_id=4,  # Message 4
+            ),
+        ]
+
+        db.session.add_all(inbox)
+        db.session.commit()
+
+
+
+
+#----------------- OLD RENTAL AGREEMENTS 
         #     RentalAgreement(
         #     location="Orlando, Florida",
         #     total_price=300,
