@@ -297,7 +297,7 @@ class EquipmentOwnerById(Resource):
         equip_owner = EquipmentOwner.query.filter(EquipmentOwner.id == id).first()
 
         if equip_owner:
-            return make_response(equip_owner.to_dict(),200)
+            return make_response(equip_owner.to_dict(rules=('-inboxes.owner','-inboxes.user' )),200)
         else:
             response = make_response({
             "error": "Owner not found"

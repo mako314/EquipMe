@@ -122,7 +122,7 @@ class EquipmentOwner(db.Model, SerializerMixin):
     #you can just do a query EquipmentOwner.query.get(1), or equipment = owner.equipment. Then you can do for equipment in owner.equipment print(equipment) for example
 
     #Serialization rules
-    serialize_rules = ('-equipment.owner', '-agreements.owner', '-inbox.owner' )
+    serialize_rules = ('-equipment.owner', '-agreements.owner', '-inbox.owner','-inbox.user' )
 
     #PROPERTIES
     @hybrid_property
@@ -303,6 +303,7 @@ class RentalAgreement(db.Model, SerializerMixin):
 class Message(db.Model, SerializerMixin):
     __tablename__ = "messages"
 
+    id = db.Column(db.Integer, primary_key=True)
     recepient_id = db.Column(db.Integer)
     sender_id = db.Column(db.Integer)
 
@@ -314,10 +315,14 @@ class Message(db.Model, SerializerMixin):
     default=datetime.utcnow,
     )
 
+    # I also have to consider attaching an equipment ID. Maybe equipment quotes can be a table also?
+    
+
 
 class Inbox(db.Model, SerializerMixin):
     __tablename__ = "inboxes"
 
+    id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'))
     message_id = db.Column(db.Integer, db.ForeignKey('messages.id'))
@@ -327,7 +332,7 @@ class Inbox(db.Model, SerializerMixin):
         "User", back_populates="inboxes", foreign_keys=[user_id])
     
     owner = db.relationship(
-        "User", back_populates="inboxes", foreign_keys=[owner_id])
+        "EquipmentOwner", back_populates="inboxes", foreign_keys=[owner_id])
     
     serialize_rules = ('-user.inboxes', '-owner.inboxes')
 
