@@ -460,8 +460,8 @@ if __name__ == '__main__':
                 message_id=1,  # Message 1
             ),
             Inbox(
-                user_id=2,  # User 2 (sender of message 2)
-                owner_id=1,  # Owner 1 (recipient of message 2)
+                user_id=1,  # User 2 (sender of message 2)
+                owner_id=2,  # Owner 1 (recipient of message 2)
                 message_id=2,  # Message 2
             ),
             Inbox(
@@ -470,8 +470,8 @@ if __name__ == '__main__':
                 message_id=3,  # Message 3
             ),
             Inbox(
-                user_id=2,  # User 2 (sender of message 4)
-                owner_id=1,  # Owner 1 (recipient of message 4)
+                user_id=1,  # User 2 (sender of message 4)
+                owner_id=2,  # Owner 1 (recipient of message 4)
                 message_id=4,  # Message 4
             ),
         ]
