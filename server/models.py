@@ -307,7 +307,7 @@ class Message(db.Model, SerializerMixin):
     sender_id = db.Column(db.Integer)
 
     content = db.Column(db.String)
-    message_status = db.Column(db.String)
+    message_status = db.Column(db.String, nullable = True)
 
     created_on = db.Column(
     db.DateTime, nullable=False,
@@ -319,13 +319,17 @@ class Inbox(db.Model, SerializerMixin):
     __tablename__ = "inboxes"
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'))
     message_id = db.Column(db.Integer, db.ForeignKey('messages.id'))
+    
 
     user = db.relationship(
-        "User", back_populates="inboxes")
+        "User", back_populates="inboxes", foreign_keys=[user_id])
     
     owner = db.relationship(
-        "User", back_populates="inboxes")
+        "User", back_populates="inboxes", foreign_keys=[owner_id])
+    
+    serialize_rules = ('-user.inboxes', '-owner.inboxes')
 
 
 
