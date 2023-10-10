@@ -765,6 +765,7 @@ class OwnerMessages(Resource):
             
             # Append the message details to the message_threads list
             message_threads.append({
+                "id": message_id,
                 "message_id": message_id,
                 "sender_id": sender_id,
                 "recipient_id": recipient_id,
