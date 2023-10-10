@@ -759,6 +759,7 @@ class OwnerMessages(Resource):
             # Use message_id to retrieve the content of the message, sender, and recipient
             message = Message.query.get(message_id)
             sender_id = message.sender_id
+            context_id = message.context_id
             recipient_id = message.recepient_id
             subject = message.subject
             content = message.content
@@ -769,6 +770,7 @@ class OwnerMessages(Resource):
                 "message_id": message_id,
                 "sender_id": sender_id,
                 "recipient_id": recipient_id,
+                "context_id": context_id,
                 "subject": subject,
                 "content": content
             })
