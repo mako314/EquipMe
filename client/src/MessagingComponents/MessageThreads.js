@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 function MessageThreads() {
   const [threads, setThreads] = useState([]);
   const [selectedContextId, setSelectedContextId] = useState(null);
+  const [newMessage, setNewMessage] = useState(''); // State for the new message input
 
   useEffect(() => {
     // Fetch message threads from API
@@ -37,6 +38,13 @@ function MessageThreads() {
     }, {})
   : {};
 
+  const handleSendMessage = () => {
+    
+    console.log('Sending message:', newMessage);
+
+    // Clear the input field after sending the message
+    setNewMessage('');
+  };
   
   return (
     <div className="flex bg-gray-100 min-h-screen">
@@ -44,7 +52,7 @@ function MessageThreads() {
       <div className="w-1/4 bg-gray-200 p-4">
         <h2 className="text-2xl font-bold mb-4">Message Threads</h2>
         <ul>
-          {filteredThreads && Object.entries(filteredThreads).map(([contextId, contextThreads]) => (
+          {filteredThreads && Object.entries(filteredThreads).map(([contextId]) => (
             <li
               key={contextId}
               className={`cursor-pointer ${
@@ -76,6 +84,21 @@ function MessageThreads() {
             </ul>
           </div>
         )}
+          <div className="mt-4 flex items-end">
+          <input
+            type="text"
+            placeholder="Type your message..."
+            className="flex-grow border rounded py-2 px-3"
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+          />
+          <button
+            onClick={handleSendMessage}
+            className="bg-blue-500 text-white rounded px-6 py-2 ml-2"
+          >
+            Send
+          </button>
+        </div>
       </div>
     </div>
   );
