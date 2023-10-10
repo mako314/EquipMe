@@ -760,6 +760,7 @@ class OwnerMessages(Resource):
             message = Message.query.get(message_id)
             sender_id = message.sender_id
             recipient_id = message.recepient_id
+            subject = message.subject
             content = message.content
             
             # Append the message details to the message_threads list
@@ -767,6 +768,7 @@ class OwnerMessages(Resource):
                 "message_id": message_id,
                 "sender_id": sender_id,
                 "recipient_id": recipient_id,
+                "subject": subject,
                 "content": content
             })
 
