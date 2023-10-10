@@ -427,7 +427,8 @@ if __name__ == '__main__':
         messages = [
             Message(
                 recepient_id = 2, # Owner
-                sender_id = 1, # User
+                sender_id = 1, # User,
+                subject = "Equipment Inquiry",
                 content = "Hey, hope this message finds you well, I'd like to rent this equipment. What would the cost be?",
             ),
             Message(

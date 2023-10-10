@@ -54,6 +54,10 @@ import EquipmentFileUpload from './EquipmentComponents/EquipmentFileUpload';
 import ProductImageForm from './EquipmentComponents/ProductImageForm';
 import BulkEquipmentUpload from './EquipmentComponents/BulkEquipmentUpload';
 
+//---------------------- Messaging Component-----------------------------
+import MessageThreads from './MessagingComponents/MessageThreads'
+
+
 function App() {
 
   //forgot to const navigate = useNavigate()
@@ -313,9 +317,9 @@ function App() {
             {/* Temporary file upload routing */}
             <Route path='/temp/upload' element={<EquipmentFileUpload />} />
 
-
             <Route path='/temp/equipment/upload' element={<ProductImageForm />} />
 
+            <Route path='/messaging' element={<MessageThreads />} />
           </Routes>
 
           <Footer />
