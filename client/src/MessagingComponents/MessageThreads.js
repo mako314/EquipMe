@@ -28,8 +28,6 @@ function MessageThreads() {
     console.log(threadId)
   };
   
-  let test2 = 2
-
   return (
     <div className="flex bg-gray-100 min-h-screen">
       {/* Left Sidebar */}
@@ -45,7 +43,6 @@ function MessageThreads() {
               onClick={() => handleThreadSelect(thread.id)}
             >
               {thread.subject}
-              {test2}
             </li>
           ))}
         </ul>
