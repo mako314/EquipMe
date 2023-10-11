@@ -785,6 +785,30 @@ class OwnerMessages(Resource):
 
 api.add_resource(OwnerMessages, "/messages/<int:owner_id>/")
 
+class SendMessage(Resource):
+    def post(self):
+        data = request.get_json()
+        #try Validations:
+
+        new_message = Message(
+            recepient_id = data['recepient_id'],
+            sender_id = data['sender_id'],
+            context_id = data['context_id'],
+            subject = data['subject'],
+            content = data['content'],
+            message_status = data['message_status'],
+            created_on = data['created_on']
+        )
+
+        db.session.add(new_message)
+
+        db.session.commit()
+
+        response = make_response(new_message.to_dict(), 201)
+
+        return response
+
+        #except ValueError ()
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

@@ -39,8 +39,30 @@ function MessageThreads() {
   : {};
 
   const handleSendMessage = () => {
+    message = {
+      recepient_id: "Placeholder",
+      sender_id: 2,
+      content: "Placeholder content",
+      message_status: "sent",
+      context_id: 1,
+      subject: null,
+      
+    }
     
     console.log('Sending message:', newMessage);
+    fetch("https://jsonplaceholder.typicode.com/todos", {
+      method: "POST",
+      body: JSON.stringify({
+        userId: 1,
+        title: "Fix my bugs",
+        completed: false
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8"
+      }
+    })
+    .then((response) => response.json())
+    .then((json) => console.log(json));
 
     // Clear the input field after sending the message
     setNewMessage('');
