@@ -760,7 +760,7 @@ class OwnerMessages(Resource):
             message = Message.query.get(message_id)
             sender_id = message.sender_id
             context_id = message.context_id
-            recipient_id = message.recepient_id
+            recipient_id = message.recipient_id
             subject = message.subject
             content = message.content
             
@@ -791,13 +791,13 @@ class SendMessage(Resource):
         #try Validations:
 
         new_message = Message(
-            recepient_id = data['recepient_id'],
+            recipient_id = data['recipient_id'],
             sender_id = data['sender_id'],
             context_id = data['context_id'],
             subject = data['subject'],
             content = data['content'],
             message_status = data['message_status'],
-            created_on = data['created_on']
+            created_on = datetime.utcnow()
         )
 
         db.session.add(new_message)
@@ -809,6 +809,8 @@ class SendMessage(Resource):
         return response
 
         #except ValueError ()
+
+api.add_resource(SendMessage, "/messages")
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

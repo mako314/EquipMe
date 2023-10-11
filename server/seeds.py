@@ -426,51 +426,51 @@ if __name__ == '__main__':
         print("Generating example messages...")
         messages = [
             Message(
-                recepient_id = 2, # Owner
+                recipient_id = 2, # Owner
                 sender_id = 1, # User,
                 context_id = 1,
                 subject = "Equipment Inquiry",
                 content = "Hey, hope this message finds you well, I'd like to rent this equipment. What would the cost be?",
             ),
             Message(
-                recepient_id = 1,
+                recipient_id = 1,
                 sender_id = 2, # Owner
                 context_id = 1,
                 content = "Yes it is still available, we offer rate discounts depending on how long you are trying to rent for, what is the time frame?",
             ),
             Message(
-                recepient_id = 2, # Owner
+                recipient_id = 2, # Owner
                 sender_id = 1,
                 context_id = 1,
                 content = "Lets try for three weeks if you can send me a quote?",
             ),
             Message(
-                recepient_id = 1, 
+                recipient_id = 1, 
                 sender_id = 2, # Owner
                 context_id = 1,
                 content = "Attached is a quote, thank you!",
             ),
             Message(
-                recepient_id = 2, # Owner
+                recipient_id = 2, # Owner
                 sender_id = 3, # User,
                 context_id = 2,
                 subject = "Still got that lawnmower?",
                 content = "Hey, hope this message finds you well, I'd like to rent this equipment. What would the cost be?",
             ),
             Message(
-                recepient_id = 3,
+                recipient_id = 3,
                 sender_id = 2, # Owner
                 context_id = 2,
                 content = "tetseroni?",
             ),
             Message(
-                recepient_id = 3, # Owner
+                recipient_id = 3, # Owner
                 sender_id = 1,
                 context_id = 2,
                 content = "Lets try for three weeks ON THAT LAWNMoWER if you can send me a quote?",
             ),
             Message(
-                recepient_id = 3, 
+                recipient_id = 3, 
                 sender_id = 2, # Owner
                 context_id = 2,
                 content = "Attached is a quote, thank you!",
