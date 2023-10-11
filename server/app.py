@@ -759,7 +759,8 @@ class OwnerMessages(Resource):
             # Use message_id to retrieve the content of the message, sender, and recipient
             message = Message.query.get(message_id)
             sender_id = message.sender_id
-            recipient_id = message.recepient_id
+            context_id = message.context_id
+            recipient_id = message.recipient_id
             subject = message.subject
             content = message.content
             
@@ -769,6 +770,7 @@ class OwnerMessages(Resource):
                 "message_id": message_id,
                 "sender_id": sender_id,
                 "recipient_id": recipient_id,
+                "context_id": context_id,
                 "subject": subject,
                 "content": content
             })
@@ -783,6 +785,32 @@ class OwnerMessages(Resource):
 
 api.add_resource(OwnerMessages, "/messages/<int:owner_id>/")
 
+class SendMessage(Resource):
+    def post(self):
+        data = request.get_json()
+        #try Validations:
+
+        new_message = Message(
+            recipient_id = data['recipient_id'],
+            sender_id = data['sender_id'],
+            context_id = data['context_id'],
+            subject = data['subject'],
+            content = data['content'],
+            message_status = data['message_status'],
+            created_on = datetime.utcnow()
+        )
+
+        db.session.add(new_message)
+
+        db.session.commit()
+
+        response = make_response(new_message.to_dict(), 201)
+
+        return response
+
+        #except ValueError ()
+
+api.add_resource(SendMessage, "/messages")
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

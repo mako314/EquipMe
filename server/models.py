@@ -304,7 +304,7 @@ class Message(db.Model, SerializerMixin):
     __tablename__ = "messages"
 
     id = db.Column(db.Integer, primary_key=True)
-    recepient_id = db.Column(db.Integer)
+    recipient_id = db.Column(db.Integer)
     sender_id = db.Column(db.Integer)
 
     context_id = db.Column(db.Integer, nullable = True)

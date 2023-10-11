@@ -426,24 +426,53 @@ if __name__ == '__main__':
         print("Generating example messages...")
         messages = [
             Message(
-                recepient_id = 2, # Owner
+                recipient_id = 2, # Owner
                 sender_id = 1, # User,
+                context_id = 1,
                 subject = "Equipment Inquiry",
                 content = "Hey, hope this message finds you well, I'd like to rent this equipment. What would the cost be?",
             ),
             Message(
-                recepient_id = 1,
+                recipient_id = 1,
                 sender_id = 2, # Owner
+                context_id = 1,
                 content = "Yes it is still available, we offer rate discounts depending on how long you are trying to rent for, what is the time frame?",
             ),
             Message(
-                recepient_id = 2, # Owner
+                recipient_id = 2, # Owner
                 sender_id = 1,
+                context_id = 1,
                 content = "Lets try for three weeks if you can send me a quote?",
             ),
             Message(
-                recepient_id = 1, 
+                recipient_id = 1, 
                 sender_id = 2, # Owner
+                context_id = 1,
+                content = "Attached is a quote, thank you!",
+            ),
+            Message(
+                recipient_id = 2, # Owner
+                sender_id = 3, # User,
+                context_id = 2,
+                subject = "Still got that lawnmower?",
+                content = "Hey, hope this message finds you well, I'd like to rent this equipment. What would the cost be?",
+            ),
+            Message(
+                recipient_id = 3,
+                sender_id = 2, # Owner
+                context_id = 2,
+                content = "tetseroni?",
+            ),
+            Message(
+                recipient_id = 3, # Owner
+                sender_id = 1,
+                context_id = 2,
+                content = "Lets try for three weeks ON THAT LAWNMoWER if you can send me a quote?",
+            ),
+            Message(
+                recipient_id = 3, 
+                sender_id = 2, # Owner
+                context_id = 2,
                 content = "Attached is a quote, thank you!",
             ),
         ]
@@ -472,8 +501,28 @@ if __name__ == '__main__':
             ),
             Inbox(
                 user_id=1,  # User 2 (sender of message 4)
-                owner_id=2,  # Owner 1 (recipient of message 4)
+                owner_id=2,  # Owner 2 (recipient of message 4)
                 message_id=4,  # Message 4
+            ),
+            Inbox(
+                user_id=3,  # User 3 (sender of message 1)
+                owner_id=2,  # Owner 2 (recipient of message 1)
+                message_id=5,  # Message 5
+            ),
+            Inbox(
+                user_id=3,  # User 2 (sender of message 2)
+                owner_id=2,  # Owner 2 (recipient of message 2)
+                message_id=6,  # Message 6
+            ),
+            Inbox(
+                user_id=3,  # User 3 (sender of message 3)
+                owner_id=2,  # Owner 2 (recipient of message 3)
+                message_id=7,  # Message 7
+            ),
+            Inbox(
+                user_id=3,  # User 3 (sender of message 4)
+                owner_id=2,  # Owner 2 (recipient of message 4)
+                message_id=8,  # Message 8
             ),
         ]
 
