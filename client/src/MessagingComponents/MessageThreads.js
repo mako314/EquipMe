@@ -1,42 +1,42 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'
 
 function MessageThreads() {
-  const [threads, setThreads] = useState([]);
-  const [selectedContextId, setSelectedContextId] = useState(null);
-  const [newMessage, setNewMessage] = useState(''); // State for the new message input
+  const [threads, setThreads] = useState([])
+  const [selectedContextId, setSelectedContextId] = useState(null)
+  const [newMessage, setNewMessage] = useState('') // State for the new message input
 
   useEffect(() => {
     // Fetch message threads from API
     fetch('/messages/2')
       .then((response) => response.json())
       .then((data) => {
-        setThreads(data);
-        console.log(data);
+        setThreads(data)
+        console.log(data)
 
         // Automatically select the context ID of the first thread when threads are loaded
         if (data.length > 0) {
-          setSelectedContextId(data[0].context_id);
+          setSelectedContextId(data[0].context_id)
         }
       })
       .catch((error) => {
-        console.error('Error fetching message threads:', error);
-      });
-  }, []);
+        console.error('Error fetching message threads:', error)
+      })
+  }, [])
 
   const handleContextSelect = (contextId) => {
-    setSelectedContextId(contextId);
-    console.log("Selected context ID:", contextId);
-  };
+    setSelectedContextId(contextId)
+    console.log("Selected context ID:", contextId)
+  }
   
   const filteredThreads = threads.length > 0
   ? threads.reduce((acc, thread) => {
       if (!acc[thread.context_id]) {
-        acc[thread.context_id] = [];
+        acc[thread.context_id] = []
       }
-      acc[thread.context_id].push(thread);
-      return acc;
+      acc[thread.context_id].push(thread)
+      return acc
     }, {})
-  : {};
+  : {}
 
   const handleSendMessage = () => {
     let message = {
@@ -48,20 +48,39 @@ function MessageThreads() {
       "subject": null,
     }
     
-    console.log('Sending message:', message);
+    console.log('Sending message:', message)
     fetch("/messages", {
       method: "POST",
       body: JSON.stringify(message),
       headers: {
-        "Content-type": "application/json; charset=UTF-8"
+        "Content-type": "application/json charset=UTF-8"
       }
     })
     .then((response) => response.json())
-    .then((message) => console.log(message));
+    .then((message) => console.log(message))
+    // fetchUpdatedMessageThreads()
 
     // Clear the input field after sending the message
-    setNewMessage('');
-  };
+    setNewMessage('')
+
+  }
+
+  // Need to write a function to handle updating the messages
+  
+  // const fetchUpdatedMessageThreads = () => {
+  //   fetch('/messages/2')
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setThreads(data)
+  //       console.log(data)
+  
+  //       // Automatically select the context ID of the newly added message
+  //       setSelectedContextId(data[0].context_id)
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error fetching message threads:', error)
+  //     })
+  // }
   
   return (
     <div className="flex bg-gray-100 min-h-screen">
@@ -118,7 +137,7 @@ function MessageThreads() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default MessageThreads;
+export default MessageThreads
