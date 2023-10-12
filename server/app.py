@@ -814,7 +814,7 @@ api.add_resource(SendMessage, "/messages")
 
 class EditMessage(Resource):
     def patch(self, id):
-        message = RentalAgreement.query.filter(RentalAgreement.id == id).first()
+        message = Message.query.filter(Message.id == id).first()
 
         if message:
             data = request.get_json()
@@ -829,6 +829,22 @@ class EditMessage(Resource):
             "error": "Message not found"
             }, 404)
             return response
+        
+    def delete(self, id):
+        message = Message.query.filter(Message.id == id).first()
+
+        if message:
+            #may need to delete the renter id and equipment id
+            db.session.delete(message)
+            db.session.commit()
+            response = make_response({"message":"Succesfully deleted!"}, 204)
+            return response
+        else:
+            response = make_response({
+            "error": "Message not found"
+            }, 404)
+            return response
+        
 api.add_resource(EditMessage, '/message/<int:id>')
 
 class NewThread(Resource):
@@ -852,6 +868,24 @@ class NewThread(Resource):
         #except ValueError ()
 
 api.add_resource(NewThread, '/inbox')
+
+class InboxDeletion(Resource):
+    def delete(self, id):
+        inbox_thread = Inbox.query.filter(Inbox.id == id).first()
+
+        if inbox_thread:
+            #may need to delete the renter id and equipment id
+            db.session.delete(inbox_thread)
+            db.session.commit()
+            response = make_response({"message":"Succesfully deleted!"}, 204)
+            return response
+        else:
+            response = make_response({
+            "error": "Thread not found"
+            }, 404)
+            return response
+
+api.add_resource(InboxDeletion, '/inbox/<int:id>')
 
 
 if __name__ == '__main__':
