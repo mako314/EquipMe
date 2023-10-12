@@ -812,6 +812,25 @@ class SendMessage(Resource):
 
 api.add_resource(SendMessage, "/messages")
 
+class EditMessage(Resource):
+    def patch(self, id):
+        message = RentalAgreement.query.filter(RentalAgreement.id == id).first()
+
+        if message:
+            data = request.get_json()
+            for key in data:
+                setattr(message, key, data[key])
+            db.session.add(message)
+            db.session.commit()
+            response = make_response(message.to_dict(), 202)
+            return response
+        else:
+            response = make_response({
+            "error": "Message not found"
+            }, 404)
+            return response
+api.add_resource(EditMessage, '/message/<int:id>')
+
 class NewThread(Resource):
     def post(self):
         data = request.getjson()
@@ -831,6 +850,8 @@ class NewThread(Resource):
 
         return response
         #except ValueError ()
+
+api.add_resource(NewThread, '/inbox')
 
 
 if __name__ == '__main__':
