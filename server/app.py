@@ -812,6 +812,27 @@ class SendMessage(Resource):
 
 api.add_resource(SendMessage, "/messages")
 
+class NewThread(Resource):
+    def post(self):
+        data = request.getjson()
+
+        #try Validations:
+        new_inbox = Inbox(
+            user_id = data['user_id'],
+            owner_id = data['owner_id'],
+            message_id = data['message_id'],
+        )
+
+        db.session.add(new_inbox)
+
+        db.session.commit()
+
+        response = make_response(new_inbox.to_dict(), 201)
+
+        return response
+        #except ValueError ()
+
+
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
 
