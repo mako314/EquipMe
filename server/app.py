@@ -812,6 +812,82 @@ class SendMessage(Resource):
 
 api.add_resource(SendMessage, "/messages")
 
+class EditMessage(Resource):
+    def patch(self, id):
+        message = Message.query.filter(Message.id == id).first()
+
+        if message:
+            data = request.get_json()
+            for key in data:
+                setattr(message, key, data[key])
+            db.session.add(message)
+            db.session.commit()
+            response = make_response(message.to_dict(), 202)
+            return response
+        else:
+            response = make_response({
+            "error": "Message not found"
+            }, 404)
+            return response
+        
+    def delete(self, id):
+        message = Message.query.filter(Message.id == id).first()
+
+        if message:
+            #may need to delete the renter id and equipment id
+            db.session.delete(message)
+            db.session.commit()
+            response = make_response({"message":"Succesfully deleted!"}, 204)
+            return response
+        else:
+            response = make_response({
+            "error": "Message not found"
+            }, 404)
+            return response
+        
+api.add_resource(EditMessage, '/message/<int:id>')
+
+class NewThread(Resource):
+    def post(self):
+        data = request.getjson()
+
+        #try Validations:
+        new_inbox = Inbox(
+            user_id = data['user_id'],
+            owner_id = data['owner_id'],
+            message_id = data['message_id'],
+        )
+
+        db.session.add(new_inbox)
+
+        db.session.commit()
+
+        response = make_response(new_inbox.to_dict(), 201)
+
+        return response
+        #except ValueError ()
+
+api.add_resource(NewThread, '/inbox')
+
+class InboxDeletion(Resource):
+    def delete(self, id):
+        inbox_thread = Inbox.query.filter(Inbox.id == id).first()
+
+        if inbox_thread:
+            #may need to delete the renter id and equipment id
+            db.session.delete(inbox_thread)
+            db.session.commit()
+            response = make_response({"message":"Succesfully deleted!"}, 204)
+            return response
+        else:
+            response = make_response({
+            "error": "Thread not found"
+            }, 404)
+            return response
+
+api.add_resource(InboxDeletion, '/inbox/<int:id>')
+
+
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
 
