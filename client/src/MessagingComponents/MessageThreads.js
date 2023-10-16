@@ -39,6 +39,28 @@ function MessageThreads() {
     }, {})
   : {}
 
+  const addMessageToInbox = (messageId, ownerId, userId) => {
+    const inboxData = {
+      "user_id": userId,
+      "owner_id": ownerId,
+      "message_id": messageId,
+    };
+  
+    fetch("/messages", {
+      method: "POST",
+      body: JSON.stringify(inboxData),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((inbox) => console.log("Added to inbox:", inbox))
+      .catch((error) => {
+        console.error("Error adding to inbox:", error);
+      });
+  };
+  
+
   const handleSendMessage = () => {
     let message = {
       "recipient_id": 2,
@@ -49,6 +71,9 @@ function MessageThreads() {
       "message_status": "sent",
       "created_on": new Date().toISOString(),
     }
+
+    const randomMessageId = Math.floor(Math.random() * 1000000)
+
     
     console.log('Sending message:', message)
     fetch("/messages", {
@@ -60,7 +85,9 @@ function MessageThreads() {
     })
     .then((response) => response.json())
     .then((message) => console.log(message))
-    // fetchUpdatedMessageThreads()
+    
+
+    addMessageToInbox(randomMessageId, message.recipient_id, message.sender_id)
 
     // Clear the input field after sending the message
     setNewMessageSent(!newMessageSent)

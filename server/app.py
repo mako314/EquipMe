@@ -800,13 +800,7 @@ class SendMessage(Resource):
             created_on = datetime.utcnow()
         )
 
-        add_to_inbox = Inbox(
-            user_id=data['user_id'],
-            owner_id=data['owner_id'],
-            message_id=['message_id'],
-        )
-
-        db.session.add(new_message, add_to_inbox)
+        db.session.add(new_message)
 
         db.session.commit()
 
@@ -817,6 +811,28 @@ class SendMessage(Resource):
         #except ValueError ()
 
 api.add_resource(SendMessage, "/messages")
+
+class MessageToInbox(Resource):
+    def post(self):
+        data = request.get_json()
+        #try Validations:
+        add_to_inbox = Inbox(
+            user_id=data['user_id'],
+            owner_id=data['owner_id'],
+            message_id=['message_id'],
+        )
+
+        db.session.add(add_to_inbox)
+
+        db.session.commit()
+
+        response = make_response(add_to_inbox.to_dict(), 201)
+
+        return response
+
+        #except ValueError ()
+
+api.add_resource(MessageToInbox, "/message/to/inbox")
 
 class EditMessage(Resource):
     def patch(self, id):
