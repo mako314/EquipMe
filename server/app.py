@@ -753,9 +753,11 @@ class OwnerMessages(Resource):
     def get(self, owner_id):
         owner_message_threads = Inbox.query.filter_by(owner_id=owner_id).all()
         message_threads = []
+        print(owner_message_threads)
 
         for thread in owner_message_threads:
-            message_id = thread.message_id
+            # Needed to change this to just ID as opposed to message_id
+            message_id = thread.id
             # Use message_id to retrieve the content of the message, sender, and recipient
             message = Message.query.get(message_id)
             sender_id = message.sender_id
@@ -811,6 +813,28 @@ class SendMessage(Resource):
         #except ValueError ()
 
 api.add_resource(SendMessage, "/messages")
+
+class MessageToInbox(Resource):
+    def post(self):
+        data = request.get_json()
+        #try Validations:
+        add_to_inbox = Inbox(
+            user_id=data['user_id'],
+            owner_id=data['owner_id'],
+            message_id=data['message_id']
+        )
+
+        db.session.add(add_to_inbox)
+
+        db.session.commit()
+
+        response = make_response(add_to_inbox.to_dict(), 201)
+
+        return response
+
+        #except ValueError ()
+
+api.add_resource(MessageToInbox, "/message/to/inbox")
 
 class EditMessage(Resource):
     def patch(self, id):

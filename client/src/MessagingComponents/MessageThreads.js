@@ -4,6 +4,7 @@ function MessageThreads() {
   const [threads, setThreads] = useState([])
   const [selectedContextId, setSelectedContextId] = useState(null)
   const [newMessage, setNewMessage] = useState('') // State for the new message input
+  const [newMessageSent, setNewMessageSent] = useState(true);
 
   useEffect(() => {
     // Fetch message threads from API
@@ -21,7 +22,7 @@ function MessageThreads() {
       .catch((error) => {
         console.error('Error fetching message threads:', error)
       })
-  }, [])
+  }, [newMessageSent])
 
   const handleContextSelect = (contextId) => {
     setSelectedContextId(contextId)
@@ -38,14 +39,40 @@ function MessageThreads() {
     }, {})
   : {}
 
+  
+  const addMessageToInbox = (ownerId, userId) => {
+    const randomMessageId = Math.floor(Math.random() * 1000000)
+
+    const inboxData = {
+      "user_id": userId,
+      "owner_id": ownerId,
+      "message_id": randomMessageId,
+    };
+  
+    fetch("/message/to/inbox", {
+      method: "POST",
+      body: JSON.stringify(inboxData),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((inbox) => console.log("Added to inbox:", inbox))
+      .catch((error) => {
+        console.error("Error adding to inbox:", error);
+      });
+  };
+  
+
   const handleSendMessage = () => {
     let message = {
-      "recipient_id": 2,
+      "recipient_id": 1,
       "sender_id": 2,
+      "context_id": selectedContextId,
+      "subject": null,
       "content": newMessage,
       "message_status": "sent",
-      "context_id": 1,
-      "subject": null,
+      "created_on": new Date().toISOString(),
     }
     
     console.log('Sending message:', message)
@@ -53,34 +80,20 @@ function MessageThreads() {
       method: "POST",
       body: JSON.stringify(message),
       headers: {
-        "Content-type": "application/json charset=UTF-8"
+        "Content-Type": "application/json"
       }
     })
     .then((response) => response.json())
     .then((message) => console.log(message))
-    // fetchUpdatedMessageThreads()
-
+    
+    if (message){
+    addMessageToInbox(message.recipient_id, message.sender_id)
+    }
     // Clear the input field after sending the message
+    setNewMessageSent(!newMessageSent)
     setNewMessage('')
 
   }
-
-  // Need to write a function to handle updating the messages
-  
-  // const fetchUpdatedMessageThreads = () => {
-  //   fetch('/messages/2')
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       setThreads(data)
-  //       console.log(data)
-  
-  //       // Automatically select the context ID of the newly added message
-  //       setSelectedContextId(data[0].context_id)
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error fetching message threads:', error)
-  //     })
-  // }
   
   return (
     <div className="flex bg-gray-100 min-h-screen">
