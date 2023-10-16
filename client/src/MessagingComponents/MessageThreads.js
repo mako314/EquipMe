@@ -39,6 +39,7 @@ function MessageThreads() {
     }, {})
   : {}
 
+  
   const addMessageToInbox = (ownerId, userId) => {
     const randomMessageId = Math.floor(Math.random() * 1000000)
 
@@ -85,9 +86,9 @@ function MessageThreads() {
     .then((response) => response.json())
     .then((message) => console.log(message))
     
-
+    if (message){
     addMessageToInbox(message.recipient_id, message.sender_id)
-
+    }
     // Clear the input field after sending the message
     setNewMessageSent(!newMessageSent)
     setNewMessage('')

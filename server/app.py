@@ -753,9 +753,10 @@ class OwnerMessages(Resource):
     def get(self, owner_id):
         owner_message_threads = Inbox.query.filter_by(owner_id=owner_id).all()
         message_threads = []
+        print(owner_message_threads)
 
         for thread in owner_message_threads:
-            message_id = thread.message_id
+            message_id = thread.id
             # Use message_id to retrieve the content of the message, sender, and recipient
             message = Message.query.get(message_id)
             sender_id = message.sender_id
