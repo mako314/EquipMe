@@ -66,7 +66,7 @@ function MessageThreads() {
 
   const handleSendMessage = () => {
     let message = {
-      "recipient_id": 2,
+      "recipient_id": 1,
       "sender_id": 2,
       "context_id": selectedContextId,
       "subject": null,

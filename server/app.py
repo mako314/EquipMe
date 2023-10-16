@@ -756,6 +756,7 @@ class OwnerMessages(Resource):
         print(owner_message_threads)
 
         for thread in owner_message_threads:
+            # Needed to change this to just ID as opposed to message_id
             message_id = thread.id
             # Use message_id to retrieve the content of the message, sender, and recipient
             message = Message.query.get(message_id)
