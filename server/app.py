@@ -800,7 +800,13 @@ class SendMessage(Resource):
             created_on = datetime.utcnow()
         )
 
-        db.session.add(new_message)
+        add_to_inbox = Inbox(
+            user_id=data['user_id'],
+            owner_id=data['owner_id'],
+            message_id=['message_id'],
+        )
+
+        db.session.add(new_message, add_to_inbox)
 
         db.session.commit()
 

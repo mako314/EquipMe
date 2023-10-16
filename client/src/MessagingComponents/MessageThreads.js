@@ -4,6 +4,7 @@ function MessageThreads() {
   const [threads, setThreads] = useState([])
   const [selectedContextId, setSelectedContextId] = useState(null)
   const [newMessage, setNewMessage] = useState('') // State for the new message input
+  const [newMessageSent, setNewMessageSent] = useState(true);
 
   useEffect(() => {
     // Fetch message threads from API
@@ -21,7 +22,7 @@ function MessageThreads() {
       .catch((error) => {
         console.error('Error fetching message threads:', error)
       })
-  }, [])
+  }, [newMessageSent])
 
   const handleContextSelect = (contextId) => {
     setSelectedContextId(contextId)
@@ -62,26 +63,10 @@ function MessageThreads() {
     // fetchUpdatedMessageThreads()
 
     // Clear the input field after sending the message
+    setNewMessageSent(!newMessageSent)
     setNewMessage('')
 
   }
-
-  // Need to write a function to handle updating the messages
-  
-  // const fetchUpdatedMessageThreads = () => {
-  //   fetch('/messages/2')
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       setThreads(data)
-  //       console.log(data)
-  
-  //       // Automatically select the context ID of the newly added message
-  //       setSelectedContextId(data[0].context_id)
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error fetching message threads:', error)
-  //     })
-  // }
   
   return (
     <div className="flex bg-gray-100 min-h-screen">
