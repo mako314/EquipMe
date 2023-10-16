@@ -42,10 +42,11 @@ function MessageThreads() {
     let message = {
       "recipient_id": 2,
       "sender_id": 2,
+      "context_id": selectedContextId,
+      "subject": null,
       "content": newMessage,
       "message_status": "sent",
-      "context_id": 1,
-      "subject": null,
+      "created_on": new Date().toISOString(),
     }
     
     console.log('Sending message:', message)
@@ -53,7 +54,7 @@ function MessageThreads() {
       method: "POST",
       body: JSON.stringify(message),
       headers: {
-        "Content-type": "application/json charset=UTF-8"
+        "Content-Type": "application/json"
       }
     })
     .then((response) => response.json())
