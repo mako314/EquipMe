@@ -819,7 +819,7 @@ class MessageToInbox(Resource):
         add_to_inbox = Inbox(
             user_id=data['user_id'],
             owner_id=data['owner_id'],
-            message_id=['message_id'],
+            message_id=data['message_id']
         )
 
         db.session.add(add_to_inbox)

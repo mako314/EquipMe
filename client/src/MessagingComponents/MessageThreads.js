@@ -39,14 +39,16 @@ function MessageThreads() {
     }, {})
   : {}
 
-  const addMessageToInbox = (messageId, ownerId, userId) => {
+  const addMessageToInbox = (ownerId, userId) => {
+    const randomMessageId = Math.floor(Math.random() * 1000000)
+
     const inboxData = {
       "user_id": userId,
       "owner_id": ownerId,
-      "message_id": messageId,
+      "message_id": randomMessageId,
     };
   
-    fetch("/messages", {
+    fetch("/message/to/inbox", {
       method: "POST",
       body: JSON.stringify(inboxData),
       headers: {
@@ -71,9 +73,6 @@ function MessageThreads() {
       "message_status": "sent",
       "created_on": new Date().toISOString(),
     }
-
-    const randomMessageId = Math.floor(Math.random() * 1000000)
-
     
     console.log('Sending message:', message)
     fetch("/messages", {
@@ -87,7 +86,7 @@ function MessageThreads() {
     .then((message) => console.log(message))
     
 
-    addMessageToInbox(randomMessageId, message.recipient_id, message.sender_id)
+    addMessageToInbox(message.recipient_id, message.sender_id)
 
     // Clear the input field after sending the message
     setNewMessageSent(!newMessageSent)
