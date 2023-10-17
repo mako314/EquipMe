@@ -13,7 +13,7 @@ function MessageThreads() {
     });
   }, []);
 
-  console.log(owner)
+  // console.log(owner)
 
   // ---------------Detect whether or not an owner is logged in-------------------
 
@@ -94,16 +94,31 @@ function MessageThreads() {
   
   // Handles actually sending the message with the text area, using formik seemed to complicated in this sense, so I will have to see what I can do about 
   const handleSendMessage = () => {
-    let message = {
-      "recipient_id": 2,
-      "sender_id": 1,
-      "context_id": selectedContextId,
-      "subject": null,
-      "content": newMessage,
-      "message_status": "sent",
-      "created_on": new Date().toISOString(),
-    }
-    
+
+    let message
+
+    if (owner && owner.id){
+      message = {
+        "recipient_id": 2,
+        "sender_id": 1,
+        "context_id": selectedContextId,
+        "subject": null,
+        "content": newMessage,
+        "message_status": "sent",
+        "created_on": new Date().toISOString(),
+      }
+    } else {
+      message = {
+        "recipient_id": 2,
+        "sender_id": 1,
+        "context_id": selectedContextId,
+        "subject": null,
+        "content": newMessage,
+        "message_status": "sent",
+        "created_on": new Date().toISOString(),
+      }
+  }
+
     console.log('Sending message:', message)
     fetch("/messages", {
       method: "POST",
