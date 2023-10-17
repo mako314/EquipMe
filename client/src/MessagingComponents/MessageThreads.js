@@ -1,12 +1,28 @@
-import React, { useEffect, useState } from 'react'
-
+import React, { useContext, useEffect, useState} from 'react'
+import OwnerContext from '../OwnerComponents/OwnerContext';
 function MessageThreads() {
+
+  const [owner, setOwner] = useContext(OwnerContext)
+
+  
+  useEffect(() => {
+    fetch("/owner/check_session").then((response) => {
+        if (response.ok) {
+            response.json().then((owner) => setOwner(owner));
+        }
+    });
+  }, []);
+
+  console.log(owner)
+
+  // ---------------Detect whether or not an owner is logged in-------------------
 
   //State to manage detection of threads, selecting a thread by context id, and sending a new message.
   const [threads, setThreads] = useState([])
   const [selectedContextId, setSelectedContextId] = useState(null)
   const [newMessage, setNewMessage] = useState('') // State for the new message input
   const [newMessageSent, setNewMessageSent] = useState(true);
+
 
   useEffect(() => {
     // Fetch message threads from API
@@ -46,12 +62,21 @@ function MessageThreads() {
   
   const addMessageToInbox = (messageId, ownerId, userId) => {
     // const randomMessageId = Math.floor(Math.random() * 1000000)
+    let inboxData
 
-    const inboxData = {
+    if (owner && owner.id){
+      inboxData = {
+        "user_id": userId,
+        "owner_id": owner.id,
+        "message_id": messageId,
+      }
+    } else {
+     inboxData = {
       "user_id": userId,
       "owner_id": ownerId,
       "message_id": messageId,
-    };
+    }
+  }
   
     fetch("/message/to/inbox", {
       method: "POST",
@@ -64,8 +89,8 @@ function MessageThreads() {
       .then((inbox) => console.log("Added to inbox:", inbox))
       .catch((error) => {
         console.error("Error adding to inbox:", error);
-      });
-  };
+      })
+  }
   
   // Handles actually sending the message with the text area, using formik seemed to complicated in this sense, so I will have to see what I can do about 
   const handleSendMessage = () => {
