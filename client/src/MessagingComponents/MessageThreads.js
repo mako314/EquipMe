@@ -40,13 +40,13 @@ function MessageThreads() {
   : {}
 
   
-  const addMessageToInbox = (ownerId, userId) => {
-    const randomMessageId = Math.floor(Math.random() * 1000000)
+  const addMessageToInbox = (messageId, ownerId, userId) => {
+    // const randomMessageId = Math.floor(Math.random() * 1000000)
 
     const inboxData = {
       "user_id": userId,
       "owner_id": ownerId,
-      "message_id": randomMessageId,
+      "message_id": messageId,
     };
   
     fetch("/message/to/inbox", {
@@ -66,8 +66,8 @@ function MessageThreads() {
 
   const handleSendMessage = () => {
     let message = {
-      "recipient_id": 1,
-      "sender_id": 2,
+      "recipient_id": 2,
+      "sender_id": 1,
       "context_id": selectedContextId,
       "subject": null,
       "content": newMessage,
@@ -84,11 +84,11 @@ function MessageThreads() {
       }
     })
     .then((response) => response.json())
-    .then((message) => console.log(message))
+    .then((message) => { if (message && message.id){
+      addMessageToInbox(message.id, message.recipient_id, message.sender_id)
+      }})
     
-    if (message){
-    addMessageToInbox(message.recipient_id, message.sender_id)
-    }
+   
     // Clear the input field after sending the message
     setNewMessageSent(!newMessageSent)
     setNewMessage('')

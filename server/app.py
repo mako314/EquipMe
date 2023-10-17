@@ -753,7 +753,7 @@ class OwnerMessages(Resource):
     def get(self, owner_id):
         owner_message_threads = Inbox.query.filter_by(owner_id=owner_id).all()
         message_threads = []
-        print(owner_message_threads)
+        # print(owner_message_threads)
 
         for thread in owner_message_threads:
             # Needed to change this to just ID as opposed to message_id
