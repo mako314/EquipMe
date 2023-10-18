@@ -110,7 +110,7 @@ class CheckSession(Resource):
         #     response = make_response(jsonify(user_row.to_dict()), 200)
         user = User.query.filter(User.id == session.get('user_id')).first()
         if user:
-            return user.to_dict()
+            return user.to_dict(rules=('-_password_hash',)), 200
         else:
             return {'message': '401: Not Authorized'}, 401
 
@@ -124,7 +124,7 @@ class OwnerCheckSession(Resource):
     def get(self):
         owner = EquipmentOwner.query.filter(EquipmentOwner.id == session.get('owner_id')).first()
         if owner:
-            return owner.to_dict()
+            return owner.to_dict(rules=('-_password_hash',)), 200
         else:
             return {'message': '401: Not Authorized'}, 401
 
