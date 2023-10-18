@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useState} from 'react'
 import OwnerContext from '../OwnerComponents/OwnerContext';
+import UserContext from '../UserComponents/UserContext';
+
 function MessageThreads() {
 
   const [owner, setOwner] = useContext(OwnerContext)
@@ -11,9 +13,20 @@ function MessageThreads() {
             response.json().then((owner) => setOwner(owner));
         }
     });
-  }, []);
+  }, [])
 
-  // console.log(owner)
+  console.log(owner)
+
+
+  const [user, setUser] = useContext(UserContext)
+
+  useEffect(() => {
+    fetch("/check_session").then((response) => {
+      if (response.ok) {
+        response.json().then((user) => setUser(user));
+      }
+    });
+  }, []);
 
   // ---------------Detect whether or not an owner is logged in-------------------
 
@@ -155,6 +168,7 @@ function MessageThreads() {
             >
               {/* Display the subject of the first thread in the context */
               filteredThreads[contextId][0].subject}
+              {/* {console.log(filteredThreads)} */}
             </li>
           ))}
         </ul>
