@@ -108,9 +108,6 @@ class CheckSession(Resource):
         #     user_row = User.query.filter(User.id == user_id).first()
 
         #     response = make_response(jsonify(user_row.to_dict()), 200)
-
-
-
         user = User.query.filter(User.id == session.get('user_id')).first()
         if user:
             return user.to_dict()
@@ -125,17 +122,6 @@ api.add_resource(CheckSession, '/check_session')
 class OwnerCheckSession(Resource):
 
     def get(self):
-
-        # user_id = session.get('user_id')
-
-        # if user_id:
-
-        #     user_row = User.query.filter(User.id == user_id).first()
-
-        #     response = make_response(jsonify(user_row.to_dict()), 200)
-
-
-
         owner = EquipmentOwner.query.filter(EquipmentOwner.id == session.get('owner_id')).first()
         if owner:
             return owner.to_dict()
