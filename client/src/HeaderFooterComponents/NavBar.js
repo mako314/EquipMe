@@ -35,7 +35,7 @@ function NavBar({ setSearchTerm }) {
   }
 
   function ownerHandleLogout() {
-    fetch("/logout", {
+    fetch("/owner/logout", {
         method: "DELETE"
     }).then( () => {
       setOwner(null)

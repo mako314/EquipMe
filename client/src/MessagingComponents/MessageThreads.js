@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useState} from 'react'
 import OwnerContext from '../OwnerComponents/OwnerContext';
+import UserContext from '../UserComponents/UserContext';
+
 function MessageThreads() {
 
   const [owner, setOwner] = useContext(OwnerContext)
@@ -11,9 +13,20 @@ function MessageThreads() {
             response.json().then((owner) => setOwner(owner));
         }
     });
-  }, []);
+  }, [])
 
-  // console.log(owner)
+  console.log(owner)
+
+
+  const [user, setUser] = useContext(UserContext)
+
+  useEffect(() => {
+    fetch("/check_session").then((response) => {
+      if (response.ok) {
+        response.json().then((user) => setUser(user));
+      }
+    });
+  }, []);
 
   // ---------------Detect whether or not an owner is logged in-------------------
 
@@ -26,7 +39,8 @@ function MessageThreads() {
 
   useEffect(() => {
     // Fetch message threads from API
-    fetch('/messages/2')
+    if (owner && owner.id){
+    fetch(`/owner/messages/${owner.id}`)
       .then((response) => response.json())
       .then((data) => {
         setThreads(data)
@@ -40,6 +54,26 @@ function MessageThreads() {
       .catch((error) => {
         console.error('Error fetching message threads:', error)
       })
+      } else if (user && user.id) {
+        fetch(`/user/messages/${user.id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setThreads(data)
+          console.log(data)
+
+        // Automatically select the context ID of the first thread when threads are loaded
+        if (data.length > 0) {
+          setSelectedContextId(data[0].context_id)
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching message threads:', error)
+      })
+      } else {
+        // What happens if you access and are neither a user nor an owner account type.
+        setThreads([]);
+        setSelectedContextId(null);
+      }
   }, [newMessageSent])
 
   //When one clicks the mapped threads (by context ID) in the return, this selects the context ID and displays those messages
@@ -155,6 +189,7 @@ function MessageThreads() {
             >
               {/* Display the subject of the first thread in the context */
               filteredThreads[contextId][0].subject}
+              {/* {console.log(filteredThreads)} */}
             </li>
           ))}
         </ul>
