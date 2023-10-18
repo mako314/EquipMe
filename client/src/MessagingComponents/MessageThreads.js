@@ -4,6 +4,8 @@ import UserContext from '../UserComponents/UserContext'
 
 function MessageThreads() {
 
+// ---------------Detect whether or not an owner is logged in-------------------
+
   const [owner, setOwner] = useContext(OwnerContext)
 
   
@@ -16,7 +18,9 @@ function MessageThreads() {
   }, [])
 
   console.log(owner)
+// --------------------------------------------------------------------
 
+// ---------------Detect whether or not a USER is logged in-------------------
 
   const [user, setUser] = useContext(UserContext)
 
@@ -27,14 +31,16 @@ function MessageThreads() {
       }
     })
   }, [])
+// --------------------------------------------------------------------
 
-  // ---------------Detect whether or not an owner is logged in-------------------
 
   //State to manage detection of threads, selecting a thread by context id, and sending a new message.
   const [threads, setThreads] = useState([])
   const [selectedContextId, setSelectedContextId] = useState(null)
   const [newMessage, setNewMessage] = useState('') // State for the new message input
   const [newMessageSent, setNewMessageSent] = useState(true)
+  const [recipientFromThreadID, setRecipientFromThreadID] = useState(null)
+  const [senderFromThreadID, setSenderFromThreadID] = useState(null)
 
 
   useEffect(() => {
@@ -191,11 +197,17 @@ function MessageThreads() {
               className={`cursor-pointer ${
                 selectedContextId === contextId ? 'font-semibold' : ''
               }`}
-              onClick={() => handleContextSelect(contextId)}
+              onClick={() => {
+                handleContextSelect(contextId)
+                setRecipientFromThreadID(filteredThreads[contextId][0].recipient_id)
+
+
+              }
+              }
             >
               {/* Display the subject of the first thread in the context */
               filteredThreads[contextId][0].subject}
-              {/* {console.log(filteredThreads)} */}
+              {console.log(filteredThreads)}
             </li>
           ))}
         </ul>
