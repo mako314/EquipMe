@@ -200,14 +200,15 @@ function MessageThreads() {
               onClick={() => {
                 handleContextSelect(contextId)
                 setRecipientFromThreadID(filteredThreads[contextId][0].recipient_id)
-
-
+                setSenderFromThreadID(filteredThreads[contextId][0].sender_id)
               }
               }
             >
               {/* Display the subject of the first thread in the context */
               filteredThreads[contextId][0].subject}
               {console.log(filteredThreads)}
+              {console.log("recipient id from thead", recipientFromThreadID)}
+              {console.log("sender id from thead", senderFromThreadID)}
             </li>
           ))}
         </ul>
