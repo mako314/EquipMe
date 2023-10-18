@@ -39,7 +39,7 @@ function MessageThreads() {
 
   useEffect(() => {
     // Fetch message threads from API
-    if (owner){
+    if (owner && owner.id){
     fetch(`/owner/messages/${owner.id}`)
       .then((response) => response.json())
       .then((data) => {
@@ -54,7 +54,7 @@ function MessageThreads() {
       .catch((error) => {
         console.error('Error fetching message threads:', error)
       })} 
-      if (user) {
+      if (user && user.id) {
         fetch(`/user/messages/${user.id}`)
         .then((response) => response.json())
         .then((data) => {
