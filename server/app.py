@@ -775,11 +775,11 @@ api.add_resource(OwnerMessages, "/owner/messages/<int:owner_id>/")
 
 class UserMessages(Resource):
     def get(self, user_id):
-        owner_message_threads = Inbox.query.filter_by(user_id=user_id).all()
+        user_message_threads = Inbox.query.filter_by(user_id=user_id).all()
         message_threads = []
-        # print(owner_message_threads)
+        print(user_message_threads)
 
-        for thread in owner_message_threads:
+        for thread in user_message_threads:
             # Needed to change this to just ID as opposed to message_id
             message_id = thread.id
             # Use message_id to retrieve the content of the message, sender, and recipient
@@ -811,6 +811,7 @@ class UserMessages(Resource):
 
 api.add_resource(UserMessages, "/user/messages/<int:user_id>/")
 
+#--------------------------------------------Inbox handling, and message sending below-----------------------------------------
 class SendMessage(Resource):
     def post(self):
         data = request.get_json()

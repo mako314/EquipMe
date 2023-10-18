@@ -53,8 +53,8 @@ function MessageThreads() {
       })
       .catch((error) => {
         console.error('Error fetching message threads:', error)
-      })} 
-      if (user && user.id) {
+      })
+      }else if (user && user.id) {
         fetch(`/user/messages/${user.id}`)
         .then((response) => response.json())
         .then((data) => {
@@ -69,8 +69,7 @@ function MessageThreads() {
       .catch((error) => {
         console.error('Error fetching message threads:', error)
       })
-      }
-      else {
+      } else {
         // What happens if you access and are neither a user nor an owner account type.
         setThreads([]);
         setSelectedContextId(null);
