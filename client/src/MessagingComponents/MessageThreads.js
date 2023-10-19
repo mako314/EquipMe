@@ -1,8 +1,10 @@
 import React, { useContext, useEffect, useState} from 'react'
-import OwnerContext from '../OwnerComponents/OwnerContext';
-import UserContext from '../UserComponents/UserContext';
+import OwnerContext from '../OwnerComponents/OwnerContext'
+import UserContext from '../UserComponents/UserContext'
 
 function MessageThreads() {
+
+// ---------------Detect whether or not an owner is logged in-------------------
 
   const [owner, setOwner] = useContext(OwnerContext)
 
@@ -10,71 +12,81 @@ function MessageThreads() {
   useEffect(() => {
     fetch("/owner/check_session").then((response) => {
         if (response.ok) {
-            response.json().then((owner) => setOwner(owner));
+            response.json().then((owner) => setOwner(owner))
         }
-    });
+    })
   }, [])
 
   console.log(owner)
+// --------------------------------------------------------------------
 
+// ---------------Detect whether or not a USER is logged in-------------------
 
   const [user, setUser] = useContext(UserContext)
 
   useEffect(() => {
     fetch("/check_session").then((response) => {
       if (response.ok) {
-        response.json().then((user) => setUser(user));
+        response.json().then((user) => setUser(user))
       }
-    });
-  }, []);
+    })
+  }, [])
+// --------------------------------------------------------------------
 
-  // ---------------Detect whether or not an owner is logged in-------------------
 
   //State to manage detection of threads, selecting a thread by context id, and sending a new message.
   const [threads, setThreads] = useState([])
   const [selectedContextId, setSelectedContextId] = useState(null)
   const [newMessage, setNewMessage] = useState('') // State for the new message input
-  const [newMessageSent, setNewMessageSent] = useState(true);
+  const [newMessageSent, setNewMessageSent] = useState(true)
+  const [recipientFromThreadID, setRecipientFromThreadID] = useState(null)
+  const [senderFromThreadID, setSenderFromThreadID] = useState(null)
 
 
   useEffect(() => {
-    // Fetch message threads from API
-    if (owner && owner.id){
-    fetch(`/owner/messages/${owner.id}`)
-      .then((response) => response.json())
-      .then((data) => {
+    // Ensure both owner and user data are available before proceeding
+    if (owner && owner.id) {
+      fetchOwnerMessages(owner.id)
+    } else if (user && user.id) {
+      fetchUserMessages(user.id)
+    } else {
+      // Handle the case where neither owner nor user data is available
+      setThreads([])
+      setSelectedContextId(null)
+    }
+  }, [owner, user, newMessageSent])
+
+  const fetchOwnerMessages = async (ownerId) => {
+    try {
+      const ownerResponse = await fetch(`/owner/messages/${ownerId}`)
+      if (ownerResponse.ok) {
+        const data = await ownerResponse.json()
         setThreads(data)
-        console.log(data)
-
         // Automatically select the context ID of the first thread when threads are loaded
         if (data.length > 0) {
           setSelectedContextId(data[0].context_id)
         }
-      })
-      .catch((error) => {
-        console.error('Error fetching message threads:', error)
-      })
-      } else if (user && user.id) {
-        fetch(`/user/messages/${user.id}`)
-        .then((response) => response.json())
-        .then((data) => {
-          setThreads(data)
-          console.log(data)
-
-        // Automatically select the context ID of the first thread when threads are loaded
-        if (data.length > 0) {
-          setSelectedContextId(data[0].context_id)
-        }
-      })
-      .catch((error) => {
-        console.error('Error fetching message threads:', error)
-      })
-      } else {
-        // What happens if you access and are neither a user nor an owner account type.
-        setThreads([]);
-        setSelectedContextId(null);
       }
-  }, [newMessageSent])
+    } catch (error) {
+      console.error('Error fetching owner message threads:', error)
+    }
+  }
+
+  const fetchUserMessages = async (userId) => {
+    try {
+      const userResponse = await fetch(`/user/messages/${userId}`)
+      if (userResponse.ok) {
+        const data = await userResponse.json()
+        setThreads(data)
+        // Automatically select the context ID of the first thread when threads are loaded
+        if (data.length > 0) {
+          setSelectedContextId(data[0].context_id)
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching user message threads:', error)
+    }
+  }
 
   //When one clicks the mapped threads (by context ID) in the return, this selects the context ID and displays those messages
   const handleContextSelect = (contextId) => {
@@ -122,7 +134,7 @@ function MessageThreads() {
       .then((response) => response.json())
       .then((inbox) => console.log("Added to inbox:", inbox))
       .catch((error) => {
-        console.error("Error adding to inbox:", error);
+        console.error("Error adding to inbox:", error)
       })
   }
   
@@ -185,11 +197,18 @@ function MessageThreads() {
               className={`cursor-pointer ${
                 selectedContextId === contextId ? 'font-semibold' : ''
               }`}
-              onClick={() => handleContextSelect(contextId)}
+              onClick={() => {
+                handleContextSelect(contextId)
+                setRecipientFromThreadID(filteredThreads[contextId][0].recipient_id)
+                setSenderFromThreadID(filteredThreads[contextId][0].sender_id)
+              }
+              }
             >
               {/* Display the subject of the first thread in the context */
               filteredThreads[contextId][0].subject}
-              {/* {console.log(filteredThreads)} */}
+              {console.log(filteredThreads)}
+              {console.log("recipient id from thead", recipientFromThreadID)}
+              {console.log("sender id from thead", senderFromThreadID)}
             </li>
           ))}
         </ul>
