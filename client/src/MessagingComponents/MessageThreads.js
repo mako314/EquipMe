@@ -224,8 +224,16 @@ function MessageThreads() {
                   key={thread.id}
                   className="bg-white rounded-lg shadow-md p-4 mb-4"
                 >
+                  
                   <p className="text-lg font-semibold mb-2">{thread.subject}</p>
+                  <div className="flex items-center"> 
+                  <img
+                    src={'https://surgassociates.com/wp-content/uploads/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.jpg'} // Use the path to your avatar image
+                    alt="Avatar"
+                    className="w-8 h-8 rounded-full mr-2" // Adjust the size and style
+                  />
                   <p className="text-gray-600">{thread.content}</p>
+                  </div>
                 </div>
               ))}
             </ul>
