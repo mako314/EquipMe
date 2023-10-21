@@ -32,7 +32,7 @@ if __name__ == '__main__':
         phone="312-555-1122",
         location="Chicago, Illinois",
         profession="Construction Equipment Operator",
-        profileImg="https://avatarfiles.alphacoders.com/325/thumb-325695.png",
+        profileImage="https://avatarfiles.alphacoders.com/325/thumb-325695.png",
         # bannerImg="banner_benjamin.png"
     )
 
@@ -45,7 +45,7 @@ if __name__ == '__main__':
         phone="305-555-2233",
         location="Miami, Florida",
         profession="Heavy Machine Operator",
-        profileImg="https://avatarfiles.alphacoders.com/325/thumb-325695.png",
+        profileImage="https://avatarfiles.alphacoders.com/325/thumb-325695.png",
         # bannerImg="banner_ethan.png"
     )
         
@@ -58,7 +58,7 @@ if __name__ == '__main__':
         phone="713-555-3344",
         location="Houston, Texas",
         profession="Industrial Cleaning Specialist",
-        profileImg="https://avatarfiles.alphacoders.com/325/thumb-325695.png",
+        profileImage="https://avatarfiles.alphacoders.com/325/thumb-325695.png",
         # bannerImg="banner_william.png"
     )
 
@@ -71,7 +71,7 @@ if __name__ == '__main__':
         phone="602-555-4455",
         location="Phoenix, Arizona",
         profession="Party and Event Equipment Organizer",
-        profileImg="https://avatarfiles.alphacoders.com/325/thumb-325695.png",
+        profileImage="https://avatarfiles.alphacoders.com/325/thumb-325695.png",
         # bannerImg="banner_sofia.png"
     )
         
@@ -84,7 +84,7 @@ if __name__ == '__main__':
         phone="312-555-5566",
         location="Chicago, Illinois",
         profession="Painting Contractor",
-        profileImg="https://avatarfiles.alphacoders.com/325/thumb-325695.png",
+        profileImage="https://avatarfiles.alphacoders.com/325/thumb-325695.png",
         # bannerImg="banner_christian.png"
     )
 
@@ -97,7 +97,7 @@ if __name__ == '__main__':
         phone="206-555-6677",
         location="Seattle, Washington",
         profession="Landscape Designer",
-        profileImg="https://avatarfiles.alphacoders.com/325/thumb-325695.png",
+        profileImage="https://avatarfiles.alphacoders.com/325/thumb-325695.png",
         # bannerImg="banner_sarah.png"
     )
         user_6 = User(
@@ -109,7 +109,7 @@ if __name__ == '__main__':
         phone="713-555-7788",
         location="Houston, Texas",
         profession="Automotive Mechanic",
-        profileImg="https://avatarfiles.alphacoders.com/325/thumb-325695.png",
+        profileImage="https://avatarfiles.alphacoders.com/325/thumb-325695.png",
         # bannerImg="banner_thomas.png"
     )
         #Add all users
