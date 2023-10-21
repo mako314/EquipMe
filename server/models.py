@@ -28,7 +28,7 @@ class User(db.Model, SerializerMixin):
     location = db.Column(db.String)
     profession = db.Column(db.String)
     
-    profileImg = db.Column(db.String)
+    profileImage = db.Column(db.String)
     # bannerImg = db.Column(db.String)
     # I don't think I'll be requiring / asking for banner images IMO
 
@@ -308,6 +308,7 @@ class Message(db.Model, SerializerMixin):
     sender_id = db.Column(db.Integer)
 
     context_id = db.Column(db.Integer, nullable = True)
+    user_type = db.Column(db.String)
 
     subject = db.Column(db.String, nullable = True)
     content = db.Column(db.String)

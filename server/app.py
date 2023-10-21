@@ -789,6 +789,7 @@ class UserMessages(Resource):
             recipient_id = message.recipient_id
             subject = message.subject
             content = message.content
+            user_type = message.user_type
             
             # Append the message details to the message_threads list
             message_threads.append({
@@ -798,7 +799,9 @@ class UserMessages(Resource):
                 "recipient_id": recipient_id,
                 "context_id": context_id,
                 "subject": subject,
-                "content": content
+                "content": content,
+                "user_type": user_type,
+
             })
 
         if message_threads:
@@ -821,6 +824,7 @@ class SendMessage(Resource):
             recipient_id = data['recipient_id'],
             sender_id = data['sender_id'],
             context_id = data['context_id'],
+            user_type = data["user_type"],
             subject = data['subject'],
             content = data['content'],
             message_status = data['message_status'],

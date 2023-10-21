@@ -32,7 +32,7 @@ if __name__ == '__main__':
         phone="312-555-1122",
         location="Chicago, Illinois",
         profession="Construction Equipment Operator",
-        profileImg="profile_benjamin.png",
+        profileImage="https://avatarfiles.alphacoders.com/325/thumb-325695.png",
         # bannerImg="banner_benjamin.png"
     )
 
@@ -45,7 +45,7 @@ if __name__ == '__main__':
         phone="305-555-2233",
         location="Miami, Florida",
         profession="Heavy Machine Operator",
-        profileImg="profile_ethan.png",
+        profileImage="https://avatarfiles.alphacoders.com/325/thumb-325695.png",
         # bannerImg="banner_ethan.png"
     )
         
@@ -58,7 +58,7 @@ if __name__ == '__main__':
         phone="713-555-3344",
         location="Houston, Texas",
         profession="Industrial Cleaning Specialist",
-        profileImg="profile_william.png",
+        profileImage="https://avatarfiles.alphacoders.com/325/thumb-325695.png",
         # bannerImg="banner_william.png"
     )
 
@@ -71,7 +71,7 @@ if __name__ == '__main__':
         phone="602-555-4455",
         location="Phoenix, Arizona",
         profession="Party and Event Equipment Organizer",
-        profileImg="profile_sofia.png",
+        profileImage="https://avatarfiles.alphacoders.com/325/thumb-325695.png",
         # bannerImg="banner_sofia.png"
     )
         
@@ -84,7 +84,7 @@ if __name__ == '__main__':
         phone="312-555-5566",
         location="Chicago, Illinois",
         profession="Painting Contractor",
-        profileImg="profile_christian.png",
+        profileImage="https://avatarfiles.alphacoders.com/325/thumb-325695.png",
         # bannerImg="banner_christian.png"
     )
 
@@ -97,7 +97,7 @@ if __name__ == '__main__':
         phone="206-555-6677",
         location="Seattle, Washington",
         profession="Landscape Designer",
-        profileImg="profile_sarah.png",
+        profileImage="https://avatarfiles.alphacoders.com/325/thumb-325695.png",
         # bannerImg="banner_sarah.png"
     )
         user_6 = User(
@@ -109,7 +109,7 @@ if __name__ == '__main__':
         phone="713-555-7788",
         location="Houston, Texas",
         profession="Automotive Mechanic",
-        profileImg="profile_thomas.png",
+        profileImage="https://avatarfiles.alphacoders.com/325/thumb-325695.png",
         # bannerImg="banner_thomas.png"
     )
         #Add all users
@@ -165,7 +165,7 @@ if __name__ == '__main__':
             phone="312-555-6789",
             email="markdavis82@yahoo.com",
             _password_hash="", 
-            profileImage = " ",
+            profileImage = "https://avatarfiles.alphacoders.com/322/thumb-322447.png",
             website = " "
         )
         owner_2 = EquipmentOwner(
@@ -175,7 +175,7 @@ if __name__ == '__main__':
             phone="602-555-7891",
             email="ejohnson@live.com",
             _password_hash="",
-            profileImage = " ",
+            profileImage = "https://avatarfiles.alphacoders.com/322/thumb-322447.png",
             website = " "
         )
         owner_3 = EquipmentOwner(
@@ -185,7 +185,7 @@ if __name__ == '__main__':
             phone="713-555-0123",
             email="andrewjacobs93@gmail.com",
             _password_hash="",
-            profileImage = " ",
+            profileImage = "https://avatarfiles.alphacoders.com/322/thumb-322447.png",
             website = " "
         )
         owner_4 = EquipmentOwner(
@@ -195,7 +195,7 @@ if __name__ == '__main__':
             phone="206-555-3456",
             email="hcavill34@hotmail.com",
             _password_hash="",
-            profileImage = " ",
+            profileImage = "https://avatarfiles.alphacoders.com/322/thumb-322447.png",
             website = " "
         )
         owner_5 = EquipmentOwner(
@@ -205,7 +205,7 @@ if __name__ == '__main__':
             phone="305-555-1234",
             email="davidr83@gmail.com",
             _password_hash="",
-            profileImage = " ",
+            profileImage = "https://avatarfiles.alphacoders.com/322/thumb-322447.png",
             website = " "
         )
         owner_6 = EquipmentOwner(
@@ -215,7 +215,7 @@ if __name__ == '__main__':
             phone="312-555-5678",
             email="amywilson22@yahoo.com",
             _password_hash="",
-            profileImage = " ",
+            profileImage = "https://avatarfiles.alphacoders.com/322/thumb-322447.png",
             website = " "
         )
         owner_7 = EquipmentOwner(
@@ -225,7 +225,7 @@ if __name__ == '__main__':
             phone="713-555-4567",
             email="daniel.lee78@yahoo.com",
             _password_hash="",
-            profileImage = " ",
+            profileImage = "https://avatarfiles.alphacoders.com/322/thumb-322447.png",
             website = " "
         )
         owner_8 = EquipmentOwner(
@@ -235,7 +235,7 @@ if __name__ == '__main__':
             phone ="212-555-2345",
             email="jess.sanchez22@gmail.com",
             _password_hash="",
-            profileImage = " ",
+            profileImage = "https://avatarfiles.alphacoders.com/322/thumb-322447.png",
             website = " "
         )
         owner_9 = EquipmentOwner(
@@ -245,7 +245,7 @@ if __name__ == '__main__':
             phone="407-555-9012",
             email="ryan.phillips87@gmail.com",
             _password_hash="",
-            profileImage = " ",
+            profileImage = "https://avatarfiles.alphacoders.com/322/thumb-322447.png",
             website = " "
         )
         owner_10 = EquipmentOwner(
@@ -255,7 +255,7 @@ if __name__ == '__main__':
             phone="504-555-7890",
             email="madams90@gmail.com",
             _password_hash="",
-            profileImage = " ",
+            profileImage = "https://avatarfiles.alphacoders.com/322/thumb-322447.png",
             website = " "
         )
         
@@ -431,24 +431,28 @@ if __name__ == '__main__':
                 context_id = 1,
                 subject = "Equipment Inquiry",
                 content = "Hey, hope this message finds you well, I'd like to rent this equipment. What would the cost be?",
+                user_type = "user",
             ),
             Message(
                 recipient_id = 1,
                 sender_id = 2, # Owner
                 context_id = 1,
                 content = "Yes it is still available, we offer rate discounts depending on how long you are trying to rent for, what is the time frame?",
+                user_type = "owner",
             ),
             Message(
                 recipient_id = 2, # Owner
-                sender_id = 1,
+                sender_id = 1, # User
                 context_id = 1,
                 content = "Lets try for three weeks if you can send me a quote?",
+                user_type = "user",
             ),
             Message(
-                recipient_id = 1, 
+                recipient_id = 1, # User
                 sender_id = 2, # Owner
                 context_id = 1,
                 content = "Attached is a quote, thank you!",
+                user_type = "owner",
             ),
             Message(
                 recipient_id = 2, # Owner
@@ -456,24 +460,28 @@ if __name__ == '__main__':
                 context_id = 2,
                 subject = "Still got that lawnmower?",
                 content = "Hey, hope this message finds you well, I'd like to rent this equipment. What would the cost be?",
+                user_type = "user",
             ),
             Message(
-                recipient_id = 3,
+                recipient_id = 3, # User
                 sender_id = 2, # Owner
                 context_id = 2,
                 content = "tetseroni?",
+                user_type = "owner",
             ),
             Message(
                 recipient_id = 3, # Owner
-                sender_id = 1,
+                sender_id = 1, # User
                 context_id = 2,
                 content = "Lets try for three weeks ON THAT LAWNMoWER if you can send me a quote?",
+                user_type = "user",
             ),
             Message(
-                recipient_id = 3, 
+                recipient_id = 3,  # User
                 sender_id = 2, # Owner
                 context_id = 2,
                 content = "Attached is a quote, thank you!",
+                user_type = "owner",
             ),
         ]
 
