@@ -824,6 +824,7 @@ class SendMessage(Resource):
             recipient_id = data['recipient_id'],
             sender_id = data['sender_id'],
             context_id = data['context_id'],
+            user_type = data["user_type"],
             subject = data['subject'],
             content = data['content'],
             message_status = data['message_status'],

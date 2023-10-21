@@ -148,6 +148,19 @@ function MessageThreads() {
         "recipient_id": 2,
         "sender_id": 1,
         "context_id": selectedContextId,
+        "user_type": "owner",
+        "subject": null,
+        "content": newMessage,
+        "message_status": "sent",
+        "created_on": new Date().toISOString(),
+      }
+    } else if (user && user.id)
+    {
+      message = {
+        "recipient_id": 2,
+        "sender_id": user.id,
+        "context_id": selectedContextId,
+        "user_type" : "user",
         "subject": null,
         "content": newMessage,
         "message_status": "sent",
