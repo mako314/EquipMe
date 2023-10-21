@@ -165,7 +165,7 @@ if __name__ == '__main__':
             phone="312-555-6789",
             email="markdavis82@yahoo.com",
             _password_hash="", 
-            profileImage = " ",
+            profileImage = "https://avatarfiles.alphacoders.com/322/thumb-322447.png",
             website = " "
         )
         owner_2 = EquipmentOwner(
@@ -175,7 +175,7 @@ if __name__ == '__main__':
             phone="602-555-7891",
             email="ejohnson@live.com",
             _password_hash="",
-            profileImage = " ",
+            profileImage = "https://avatarfiles.alphacoders.com/322/thumb-322447.png",
             website = " "
         )
         owner_3 = EquipmentOwner(
@@ -185,7 +185,7 @@ if __name__ == '__main__':
             phone="713-555-0123",
             email="andrewjacobs93@gmail.com",
             _password_hash="",
-            profileImage = " ",
+            profileImage = "https://avatarfiles.alphacoders.com/322/thumb-322447.png",
             website = " "
         )
         owner_4 = EquipmentOwner(
@@ -195,7 +195,7 @@ if __name__ == '__main__':
             phone="206-555-3456",
             email="hcavill34@hotmail.com",
             _password_hash="",
-            profileImage = " ",
+            profileImage = "https://avatarfiles.alphacoders.com/322/thumb-322447.png",
             website = " "
         )
         owner_5 = EquipmentOwner(
@@ -205,7 +205,7 @@ if __name__ == '__main__':
             phone="305-555-1234",
             email="davidr83@gmail.com",
             _password_hash="",
-            profileImage = " ",
+            profileImage = "https://avatarfiles.alphacoders.com/322/thumb-322447.png",
             website = " "
         )
         owner_6 = EquipmentOwner(
@@ -215,7 +215,7 @@ if __name__ == '__main__':
             phone="312-555-5678",
             email="amywilson22@yahoo.com",
             _password_hash="",
-            profileImage = " ",
+            profileImage = "https://avatarfiles.alphacoders.com/322/thumb-322447.png",
             website = " "
         )
         owner_7 = EquipmentOwner(
@@ -225,7 +225,7 @@ if __name__ == '__main__':
             phone="713-555-4567",
             email="daniel.lee78@yahoo.com",
             _password_hash="",
-            profileImage = " ",
+            profileImage = "https://avatarfiles.alphacoders.com/322/thumb-322447.png",
             website = " "
         )
         owner_8 = EquipmentOwner(
@@ -235,7 +235,7 @@ if __name__ == '__main__':
             phone ="212-555-2345",
             email="jess.sanchez22@gmail.com",
             _password_hash="",
-            profileImage = " ",
+            profileImage = "https://avatarfiles.alphacoders.com/322/thumb-322447.png",
             website = " "
         )
         owner_9 = EquipmentOwner(
@@ -245,7 +245,7 @@ if __name__ == '__main__':
             phone="407-555-9012",
             email="ryan.phillips87@gmail.com",
             _password_hash="",
-            profileImage = " ",
+            profileImage = "https://avatarfiles.alphacoders.com/322/thumb-322447.png",
             website = " "
         )
         owner_10 = EquipmentOwner(
@@ -255,7 +255,7 @@ if __name__ == '__main__':
             phone="504-555-7890",
             email="madams90@gmail.com",
             _password_hash="",
-            profileImage = " ",
+            profileImage = "https://avatarfiles.alphacoders.com/322/thumb-322447.png",
             website = " "
         )
         
