@@ -207,8 +207,8 @@ function MessageThreads() {
               {/* Display the subject of the first thread in the context */
               filteredThreads[contextId][0].subject}
               {console.log(filteredThreads)}
-              {console.log("recipient id from thead", recipientFromThreadID)}
-              {console.log("sender id from thead", senderFromThreadID)}
+              {/* {console.log("recipient id from thread", recipientFromThreadID)}
+              {console.log("sender id from thread", senderFromThreadID)} */}
             </li>
           ))}
         </ul>
@@ -219,24 +219,27 @@ function MessageThreads() {
         {selectedContextId !== null && (
           <div className="bg-white rounded-lg shadow-md p-4">
             <ul>
-              {filteredThreads[selectedContextId]?.map((thread) => (
+              {filteredThreads[selectedContextId]?.map((message) => (
                 <div
-                  key={thread.id}
+                  key={message.id}
                   className="bg-white rounded-lg shadow-md p-4 mb-4"
                 >
                   
-                  <p className="text-lg font-semibold mb-2">{thread.subject}</p>
+                  <p className="text-lg font-semibold mb-2">{message.subject}</p>
                   <div className="flex items-center"> 
                   <img
-                    src={user.profileImage} // Use the path to your avatar image
+                    src={message.sender_id === user.id && message.user_type === "user" ? user.profileImage : "error"} // Use the path to your avatar image
                     alt="Avatar"
                     className="w-8 h-8 rounded-full mr-2" // Adjust the size and style
                   />
-                  <p className="text-gray-600">{thread.content}</p>
+                  <p className="text-gray-600">{message.content}</p>
+                  {/* {console.log("MESSAGE SENDER ID:" ,message.sender_id)}
+                  {console.log("USER TYPE:", message.user_type)} */}
                   </div>
                 </div>
               ))}
             </ul>
+            {/*   */}
           </div>
         )}
           <div className="mt-4 flex items-end">
