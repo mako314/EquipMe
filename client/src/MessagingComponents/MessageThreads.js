@@ -4,7 +4,7 @@ import UserContext from '../UserComponents/UserContext'
 
 function MessageThreads() {
 
-// ---------------Detect whether or not an owner is logged in-------------------
+// ---------------Detect whether or not an OWNER is logged in-------------------
 
   const [owner, setOwner] = useContext(OwnerContext)
 

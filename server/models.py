@@ -308,6 +308,7 @@ class Message(db.Model, SerializerMixin):
     sender_id = db.Column(db.Integer)
 
     context_id = db.Column(db.Integer, nullable = True)
+    user_type = db.Column(db.String)
 
     subject = db.Column(db.String, nullable = True)
     content = db.Column(db.String)
