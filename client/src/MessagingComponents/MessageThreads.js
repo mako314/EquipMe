@@ -42,6 +42,9 @@ function MessageThreads() {
   const [recipientFromThreadID, setRecipientFromThreadID] = useState(null)
   const [senderFromThreadID, setSenderFromThreadID] = useState(null)
 
+  const [threadRecipientID, setThreadRecipientID] = useState(null)
+  const [recipientInfo, setRecipientInfo] = useState(null)
+
 
   useEffect(() => {
     // Ensure both owner and user data are available before proceeding
@@ -197,6 +200,16 @@ function MessageThreads() {
     setNewMessage('')
 
   }
+
+    useEffect(() => {
+      fetch("/equipment_owners")
+        .then((resp) => resp.json())
+        .then((data) => {
+            setEquipmentOwnerArray(data)
+        })
+    }, [threadRecipientID])
+
+
   
   return (
     <div className="flex bg-gray-100 min-h-screen">
