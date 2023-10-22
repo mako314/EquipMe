@@ -17,7 +17,7 @@ function MessageThreads() {
     })
   }, [])
 
-  console.log(owner)
+  
 // --------------------------------------------------------------------
 
 // ---------------Detect whether or not a USER is logged in-------------------
@@ -39,6 +39,10 @@ function MessageThreads() {
   const [selectedContextId, setSelectedContextId] = useState(null)
   const [newMessage, setNewMessage] = useState('') // State for the new message input
   const [newMessageSent, setNewMessageSent] = useState(true)
+
+
+  //State to hold info of recipient, 
+  const [recipientInfo, setRecipientInfo] = useState(null)
   const [recipientFromThreadID, setRecipientFromThreadID] = useState(null)
   const [senderFromThreadID, setSenderFromThreadID] = useState(null)
 
@@ -65,6 +69,7 @@ function MessageThreads() {
         // Automatically select the context ID of the first thread when threads are loaded
         if (data.length > 0) {
           setSelectedContextId(data[0].context_id)
+          setRecipientFromThreadID(data[0].recipient_id)
         }
       }
     } catch (error) {
@@ -81,12 +86,21 @@ function MessageThreads() {
         // Automatically select the context ID of the first thread when threads are loaded
         if (data.length > 0) {
           setSelectedContextId(data[0].context_id)
+          setRecipientFromThreadID(data[0].recipient_id)
         }
       }
     } catch (error) {
       console.error('Error fetching user message threads:', error)
     }
   }
+
+  useEffect(() => {
+    if (user && selectedContextId) {
+      fetchUserRecipient(recipientFromThreadID)
+    } else if (owner && selectedContextId) {
+      fetchOwnerRecipient(recipientFromThreadID)
+    }
+  }, [selectedContextId, user, recipientFromThreadID])
 
   //When one clicks the mapped threads (by context ID) in the return, this selects the context ID and displays those messages
   const handleContextSelect = (contextId) => {
@@ -197,6 +211,48 @@ function MessageThreads() {
     setNewMessage('')
 
   }
+
+  //  const UserLoggedRecipient = () =>  useEffect(() => {
+  //     fetch(`/equipment_owner/${recipientFromThreadID}`)
+  //       .then((resp) => resp.json())
+  //       .then((data) => {
+  //         setRecipientInfo(data)
+  //       })
+  //   }, [])
+
+    const fetchUserRecipient = async (recipientFromThreadID) => {
+      try {
+        const userRecipientResponse = await fetch(`/equipment_owner/${recipientFromThreadID}`)
+        if (userRecipientResponse.ok) {
+          const data = await userRecipientResponse.json()
+          setRecipientInfo(data)
+          // Automatically select the context ID of the first thread when threads are loaded
+        }
+      } catch (error) {
+        console.error('Error fetching user message threads:', error)
+      }
+    }
+
+    const fetchOwnerRecipient = async (recipientFromThreadID) => {
+      try {
+        const ownerRecipientResponse = await fetch(`/user/${recipientFromThreadID}`)
+        if (ownerRecipientResponse.ok) {
+          const data = await ownerRecipientResponse.json()
+          setRecipientInfo(data)
+          // Automatically select the context ID of the first thread when threads are loaded
+        }
+      } catch (error) {
+        console.error('Error fetching user message threads:', error)
+      }
+    }
+
+    console.log(recipientInfo)
+    console.log(owner)
+    console.log(user)
+
+    // let userLoggedInMessageImages = message.sender_id === user.id && message.user_type === "user"  ? user.profileImage : recipientInfo.profileImage
+    // let ownerLoggedInMessageImages = message.sender_id === owner.id && message.user_type === "owner"  ? owner.profileImage : recipientInfo.profileImage
+
   
   return (
     <div className="flex bg-gray-100 min-h-screen">
@@ -214,6 +270,11 @@ function MessageThreads() {
                 handleContextSelect(contextId)
                 setRecipientFromThreadID(filteredThreads[contextId][0].recipient_id)
                 setSenderFromThreadID(filteredThreads[contextId][0].sender_id)
+                if (user){
+                  fetchUserRecipient(recipientFromThreadID)
+                } else if(owner){
+                  fetchOwnerRecipient(recipientFromThreadID)
+                }
               }
               }
             >
@@ -241,13 +302,23 @@ function MessageThreads() {
                   <p className="text-lg font-semibold mb-2">{message.subject}</p>
                   <div className="flex items-center"> 
                   <img
-                    src={message.sender_id === user.id && message.user_type === "user" ? user.profileImage : "error"} // Use the path to your avatar image
+                     src={
+                      message.sender_id === user?.id && message.user_type === "user"
+                        ? user?.profileImage
+                        : message.sender_id === owner?.id && message.user_type === "owner"
+                        ? owner?.profileImage
+                        : recipientInfo?.profileImage
+                    }
                     alt="Avatar"
                     className="w-8 h-8 rounded-full mr-2" // Adjust the size and style
                   />
                   <p className="text-gray-600">{message.content}</p>
                   {/* {console.log("MESSAGE SENDER ID:" ,message.sender_id)}
-                  {console.log("USER TYPE:", message.user_type)} */}
+                  {console.log("USER TYPE:", message.user_type)} 
+                  || message.sender_id === recipientInfo.id && message.user_type === "owner"
+                  message.sender_id === user.id && message.user_type === "user"  ? user.profileImage : recipientInfo.profileImage
+                  
+                  */}
                   </div>
                 </div>
               ))}
