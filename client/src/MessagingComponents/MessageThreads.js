@@ -47,6 +47,7 @@ function MessageThreads() {
   const [senderFromThreadID, setSenderFromThreadID] = useState(null)
 
 
+  // This initializes the fetching of the messages, once it checks whether an owner or a user are logged in, it then fetches their messages.
   useEffect(() => {
     // Ensure both owner and user data are available before proceeding
     if (owner && owner.id) {
@@ -60,6 +61,8 @@ function MessageThreads() {
     }
   }, [owner, user, newMessageSent])
 
+
+  // Needed to use async and such due to the aynschrous nature of react
   const fetchOwnerMessages = async (ownerId) => {
     try {
       const ownerResponse = await fetch(`/owner/messages/${ownerId}`)
@@ -77,6 +80,7 @@ function MessageThreads() {
     }
   }
 
+  // Needed to use async and such due to the aynschrous nature of react
   const fetchUserMessages = async (userId) => {
     try {
       const userResponse = await fetch(`/user/messages/${userId}`)
@@ -94,34 +98,24 @@ function MessageThreads() {
     }
   }
 
-  useEffect(() => {
-    if (user && selectedContextId) {
-      fetchUserRecipient(recipientFromThreadID)
-    } else if (owner && selectedContextId) {
-      fetchOwnerRecipient(recipientFromThreadID)
-    }
-  }, [selectedContextId, user, recipientFromThreadID])
+    //This essentially goes into the threads, and accumulates / tests for every context ID that way they're all unique as they should be
+    const filteredThreads = threads.length > 0
+    ? threads.reduce((acc, thread) => {
+        if (!acc[thread.context_id]) {
+          acc[thread.context_id] = []
+        }
+        acc[thread.context_id].push(thread)
+        return acc
+      }, {})
+    : {}
 
   //When one clicks the mapped threads (by context ID) in the return, this selects the context ID and displays those messages
   const handleContextSelect = (contextId) => {
     setSelectedContextId(contextId)
     console.log("Selected context ID:", contextId)
   }
-  
-  //This essentially goes into the threads, and accumulates / tests for every context ID that way they're all unique as they should be
-  const filteredThreads = threads.length > 0
-  ? threads.reduce((acc, thread) => {
-      if (!acc[thread.context_id]) {
-        acc[thread.context_id] = []
-      }
-      acc[thread.context_id].push(thread)
-      return acc
-    }, {})
-  : {}
 
-  
   const addMessageToInbox = (messageId, ownerId, userId) => {
-    // const randomMessageId = Math.floor(Math.random() * 1000000)
     let inboxData
 
     if (owner && owner.id){
@@ -151,6 +145,8 @@ function MessageThreads() {
         console.error("Error adding to inbox:", error)
       })
   }
+
+  //------------------------Above this, is handling all the populating of messages, -----------------------------------
   
   // Handles actually sending the message with the text area, using formik seemed to complicated in this sense, so I will have to see what I can do about 
   const handleSendMessage = () => {
@@ -220,6 +216,14 @@ function MessageThreads() {
   //       })
   //   }, [])
 
+  useEffect(() => {
+    if (user && selectedContextId) {
+      fetchUserRecipient(recipientFromThreadID)
+    } else if (owner && selectedContextId) {
+      fetchOwnerRecipient(recipientFromThreadID)
+    }
+  }, [selectedContextId, user, recipientFromThreadID])
+
     const fetchUserRecipient = async (recipientFromThreadID) => {
       try {
         const userRecipientResponse = await fetch(`/equipment_owner/${recipientFromThreadID}`)
@@ -248,7 +252,7 @@ function MessageThreads() {
 
     console.log(recipientInfo)
     console.log(owner)
-    console.log(user)
+    // console.log(user)
 
     // let userLoggedInMessageImages = message.sender_id === user.id && message.user_type === "user"  ? user.profileImage : recipientInfo.profileImage
     // let ownerLoggedInMessageImages = message.sender_id === owner.id && message.user_type === "owner"  ? owner.profileImage : recipientInfo.profileImage
@@ -268,7 +272,8 @@ function MessageThreads() {
               }`}
               onClick={() => {
                 handleContextSelect(contextId)
-                setRecipientFromThreadID(filteredThreads[contextId][0].recipient_id)
+                setRecipientFromThreadID(filteredThreads[contextId][selectedContextId].recipient_id)
+                console.log("Here's the recipient id info:", filteredThreads[contextId][selectedContextId].recipient_id)
                 setSenderFromThreadID(filteredThreads[contextId][0].sender_id)
                 if (user){
                   fetchUserRecipient(recipientFromThreadID)
@@ -280,7 +285,8 @@ function MessageThreads() {
             >
               {/* Display the subject of the first thread in the context */
               filteredThreads[contextId][0].subject}
-              {console.log(filteredThreads)}
+              {/* {console.log(filteredThreads)}
+              {console.log("Here's the recipient id info:", filteredThreads.recipient_id)} */}
               {/* {console.log("recipient id from thread", recipientFromThreadID)}
               {console.log("sender id from thread", senderFromThreadID)} */}
             </li>
@@ -303,11 +309,7 @@ function MessageThreads() {
                   <div className="flex items-center"> 
                   <img
                      src={
-                      message.sender_id === user?.id && message.user_type === "user"
-                        ? user?.profileImage
-                        : message.sender_id === owner?.id && message.user_type === "owner"
-                        ? owner?.profileImage
-                        : recipientInfo?.profileImage
+                      message.sender_id === user?.id && message.user_type === "user" ? user?.profileImage : message.sender_id === owner.id && message.user_type === "owner" ? owner?.profileImage : recipientInfo?.profileImage
                     }
                     alt="Avatar"
                     className="w-8 h-8 rounded-full mr-2" // Adjust the size and style
