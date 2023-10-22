@@ -69,7 +69,8 @@ function MessageThreads() {
         // Automatically select the context ID of the first thread when threads are loaded
         if (data.length > 0) {
           setSelectedContextId(data[0].context_id)
-
+          setRecipientFromThreadID(data[0].recipient_id)
+          fetchOwnerRecipient(recipientFromThreadID)
         }
       }
     } catch (error) {
@@ -87,6 +88,7 @@ function MessageThreads() {
         if (data.length > 0) {
           setSelectedContextId(data[0].context_id)
           setRecipientFromThreadID(data[0].recipient_id)
+          fetchUserRecipient(recipientFromThreadID)
         }
       }
     } catch (error) {
@@ -212,7 +214,7 @@ function MessageThreads() {
   //       })
   //   }, [])
 
-    const fetchUserRecipient = async (userId) => {
+    const fetchUserRecipient = async (recipientFromThreadID) => {
       try {
         const userRecipientResponse = await fetch(`/equipment_owner/${recipientFromThreadID}`)
         if (userRecipientResponse.ok) {
@@ -225,7 +227,7 @@ function MessageThreads() {
       }
     }
 
-    const fetchOwnerRecipient = async (userId) => {
+    const fetchOwnerRecipient = async (recipientFromThreadID) => {
       try {
         const ownerRecipientResponse = await fetch(`/user/${recipientFromThreadID}`)
         if (ownerRecipientResponse.ok) {
@@ -260,6 +262,11 @@ function MessageThreads() {
                 handleContextSelect(contextId)
                 setRecipientFromThreadID(filteredThreads[contextId][0].recipient_id)
                 setSenderFromThreadID(filteredThreads[contextId][0].sender_id)
+                if (user){
+                  fetchUserRecipient(recipientFromThreadID)
+                } else if(owner){
+                  fetchOwnerRecipient(recipientFromThreadID)
+                }
               }
               }
             >
@@ -287,7 +294,13 @@ function MessageThreads() {
                   <p className="text-lg font-semibold mb-2">{message.subject}</p>
                   <div className="flex items-center"> 
                   <img
-                    src={""} // Use the path to your avatar image
+                    src={
+                      message.sender_id === user?.id && message.user_type === "user"
+                        ? user?.profileImage
+                        : message.sender_id === owner?.id && message.user_type === "owner"
+                        ? owner?.profileImage
+                        : recipientInfo?.profileImage
+                    }
                     alt="Avatar"
                     className="w-8 h-8 rounded-full mr-2" // Adjust the size and style
                   />
@@ -295,6 +308,8 @@ function MessageThreads() {
                   {/* {console.log("MESSAGE SENDER ID:" ,message.sender_id)}
                   {console.log("USER TYPE:", message.user_type)} 
                   || message.sender_id === recipientInfo.id && message.user_type === "owner"
+                  message.sender_id === user.id && message.user_type === "user"  ? user.profileImage : recipientInfo.profileImage
+                  
                   */}
                   </div>
                 </div>
