@@ -39,11 +39,12 @@ function MessageThreads() {
   const [selectedContextId, setSelectedContextId] = useState(null)
   const [newMessage, setNewMessage] = useState('') // State for the new message input
   const [newMessageSent, setNewMessageSent] = useState(true)
+
+
+  //State to hold info of recipient, 
+  const [recipientInfo, setRecipientInfo] = useState(null)
   const [recipientFromThreadID, setRecipientFromThreadID] = useState(null)
   const [senderFromThreadID, setSenderFromThreadID] = useState(null)
-
-  const [threadRecipientID, setThreadRecipientID] = useState(null)
-  const [recipientInfo, setRecipientInfo] = useState(null)
 
 
   useEffect(() => {
@@ -68,6 +69,7 @@ function MessageThreads() {
         // Automatically select the context ID of the first thread when threads are loaded
         if (data.length > 0) {
           setSelectedContextId(data[0].context_id)
+
         }
       }
     } catch (error) {
@@ -84,6 +86,7 @@ function MessageThreads() {
         // Automatically select the context ID of the first thread when threads are loaded
         if (data.length > 0) {
           setSelectedContextId(data[0].context_id)
+          setRecipientFromThreadID(data[0].recipient_id)
         }
       }
     } catch (error) {
@@ -202,12 +205,14 @@ function MessageThreads() {
   }
 
     useEffect(() => {
-      fetch("/equipment_owners")
+      fetch(`/equipment_owner/${recipientFromThreadID}`)
         .then((resp) => resp.json())
         .then((data) => {
-            setEquipmentOwnerArray(data)
+          setRecipientInfo(data)
         })
-    }, [threadRecipientID])
+    }, [recipientFromThreadID])
+
+    console.log(recipientInfo)
 
 
   
@@ -254,7 +259,7 @@ function MessageThreads() {
                   <p className="text-lg font-semibold mb-2">{message.subject}</p>
                   <div className="flex items-center"> 
                   <img
-                    src={message.sender_id === user.id && message.user_type === "user" ? user.profileImage : "error"} // Use the path to your avatar image
+                    src={message.sender_id === user.id && message.user_type === "user" || message.sender_id === recipientInfo.id && message.user_type === "owner" ? user.profileImage : recipientInfo.profileImage} // Use the path to your avatar image
                     alt="Avatar"
                     className="w-8 h-8 rounded-full mr-2" // Adjust the size and style
                   />
