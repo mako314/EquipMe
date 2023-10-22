@@ -58,7 +58,7 @@ if __name__ == '__main__':
         phone="713-555-3344",
         location="Houston, Texas",
         profession="Industrial Cleaning Specialist",
-        profileImage="https://avatarfiles.alphacoders.com/325/thumb-325695.png",
+        profileImage="https://avatarfiles.alphacoders.com/119/119089.png",
         # bannerImg="banner_william.png"
     )
 
@@ -432,6 +432,8 @@ if __name__ == '__main__':
                 subject = "Equipment Inquiry",
                 content = "Hey, hope this message finds you well, I'd like to rent this equipment. What would the cost be?",
                 user_type = "user",
+                message_status = "Delivered"
+                created_on = "",
             ),
             Message(
                 recipient_id = 1,
@@ -439,6 +441,8 @@ if __name__ == '__main__':
                 context_id = 1,
                 content = "Yes it is still available, we offer rate discounts depending on how long you are trying to rent for, what is the time frame?",
                 user_type = "owner",
+                message_status = "Delivered"
+                created_on = "",
             ),
             Message(
                 recipient_id = 2, # Owner
@@ -446,6 +450,8 @@ if __name__ == '__main__':
                 context_id = 1,
                 content = "Lets try for three weeks if you can send me a quote?",
                 user_type = "user",
+                message_status = "Delivered"
+                created_on = "",
             ),
             Message(
                 recipient_id = 1, # User
@@ -453,6 +459,8 @@ if __name__ == '__main__':
                 context_id = 1,
                 content = "Attached is a quote, thank you!",
                 user_type = "owner",
+                message_status = "Delivered"
+                created_on = "",
             ),
             Message(
                 recipient_id = 2, # Owner
@@ -461,6 +469,8 @@ if __name__ == '__main__':
                 subject = "Still got that lawnmower?",
                 content = "Hey, hope this message finds you well, I'd like to rent this equipment. What would the cost be?",
                 user_type = "user",
+                message_status = "Delivered"
+                created_on = "",
             ),
             Message(
                 recipient_id = 3, # User
@@ -468,6 +478,8 @@ if __name__ == '__main__':
                 context_id = 2,
                 content = "tetseroni?",
                 user_type = "owner",
+                message_status = "Delivered"
+                created_on = "",
             ),
             Message(
                 recipient_id = 3, # Owner
@@ -475,6 +487,8 @@ if __name__ == '__main__':
                 context_id = 2,
                 content = "Lets try for three weeks ON THAT LAWNMoWER if you can send me a quote?",
                 user_type = "user",
+                message_status = "Delivered"
+                created_on = "",
             ),
             Message(
                 recipient_id = 3,  # User
@@ -482,6 +496,8 @@ if __name__ == '__main__':
                 context_id = 2,
                 content = "Attached is a quote, thank you!",
                 user_type = "owner",
+                message_status = "Delivered"
+                created_on = "",
             ),
         ]
 

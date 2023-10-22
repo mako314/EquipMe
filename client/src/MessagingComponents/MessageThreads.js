@@ -297,7 +297,7 @@ function MessageThreads() {
       {/* Message Content */}
       <div className="flex-grow p-4">
         {selectedContextId !== null && (
-          <div className="bg-white rounded-lg shadow-md p-4">
+          <div className="bg-white rounded-lg shadow-md p-4 relative">
             <ul>
               {filteredThreads[selectedContextId]?.map((message) => (
                 <div
@@ -318,11 +318,10 @@ function MessageThreads() {
                   />
                   <p className="text-gray-600">{message.content}</p>
                   {/* {console.log("MESSAGE SENDER ID:" ,message.sender_id)}
-                  {console.log("USER TYPE:", message.user_type)} 
-                  || message.sender_id === recipientInfo.id && message.user_type === "owner"
-                  message.sender_id === user.id && message.user_type === "user"  ? user.profileImage : recipientInfo.profileImage
-                  
-                  */}
+                  {console.log("USER TYPE:", message.user_type)}*/}
+                   <div className="text-blue-500 text-xs ml-auto mt-6">
+                    {message.message_status}
+                  </div>
                   </div>
                 </div>
               ))}
