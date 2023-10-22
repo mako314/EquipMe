@@ -309,9 +309,9 @@ function MessageThreads() {
                   <div className="flex items-center"> 
                   <img
                      src={
-                      message.sender_id === user?.id && message.user_type === "user" ? user?.profileImage 
-                      : message.sender_id === owner.id && message.user_type === "owner" ? owner?.profileImage 
-                      : recipientInfo?.profileImage
+                      message.sender_id === user?.id && message.user_type === "user" ? 
+                      user?.profileImage : message.sender_id === owner.id && message.user_type === "owner" ? 
+                      owner?.profileImage : recipientInfo?.profileImage
                     }
                     alt="Avatar"
                     className="w-8 h-8 rounded-full mr-2" // Adjust the size and style
