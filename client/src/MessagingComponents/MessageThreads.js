@@ -17,7 +17,7 @@ function MessageThreads() {
     })
   }, [])
 
-  console.log(owner)
+  
 // --------------------------------------------------------------------
 
 // ---------------Detect whether or not a USER is logged in-------------------
@@ -70,7 +70,6 @@ function MessageThreads() {
         if (data.length > 0) {
           setSelectedContextId(data[0].context_id)
           setRecipientFromThreadID(data[0].recipient_id)
-          fetchOwnerRecipient(recipientFromThreadID)
         }
       }
     } catch (error) {
@@ -88,13 +87,20 @@ function MessageThreads() {
         if (data.length > 0) {
           setSelectedContextId(data[0].context_id)
           setRecipientFromThreadID(data[0].recipient_id)
-          fetchUserRecipient(recipientFromThreadID)
         }
       }
     } catch (error) {
       console.error('Error fetching user message threads:', error)
     }
   }
+
+  useEffect(() => {
+    if (user && selectedContextId) {
+      fetchUserRecipient(recipientFromThreadID)
+    } else if (owner && selectedContextId) {
+      fetchOwnerRecipient(recipientFromThreadID)
+    }
+  }, [selectedContextId, user, recipientFromThreadID])
 
   //When one clicks the mapped threads (by context ID) in the return, this selects the context ID and displays those messages
   const handleContextSelect = (contextId) => {
@@ -241,6 +247,8 @@ function MessageThreads() {
     }
 
     console.log(recipientInfo)
+    console.log(owner)
+    console.log(user)
 
     // let userLoggedInMessageImages = message.sender_id === user.id && message.user_type === "user"  ? user.profileImage : recipientInfo.profileImage
     // let ownerLoggedInMessageImages = message.sender_id === owner.id && message.user_type === "owner"  ? owner.profileImage : recipientInfo.profileImage
@@ -294,7 +302,7 @@ function MessageThreads() {
                   <p className="text-lg font-semibold mb-2">{message.subject}</p>
                   <div className="flex items-center"> 
                   <img
-                    src={
+                     src={
                       message.sender_id === user?.id && message.user_type === "user"
                         ? user?.profileImage
                         : message.sender_id === owner?.id && message.user_type === "owner"
