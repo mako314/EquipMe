@@ -225,6 +225,19 @@ function MessageThreads() {
       }
     }
 
+    const fetchOwnerRecipient = async (userId) => {
+      try {
+        const ownerRecipientResponse = await fetch(`/user/${recipientFromThreadID}`)
+        if (ownerRecipientResponse.ok) {
+          const data = await ownerRecipientResponse.json()
+          setRecipientInfo(data)
+          // Automatically select the context ID of the first thread when threads are loaded
+        }
+      } catch (error) {
+        console.error('Error fetching user message threads:', error)
+      }
+    }
+
     console.log(recipientInfo)
 
     // let userLoggedInMessageImages = message.sender_id === user.id && message.user_type === "user"  ? user.profileImage : recipientInfo.profileImage
