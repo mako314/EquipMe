@@ -204,16 +204,31 @@ function MessageThreads() {
 
   }
 
-    useEffect(() => {
-      fetch(`/equipment_owner/${recipientFromThreadID}`)
-        .then((resp) => resp.json())
-        .then((data) => {
+  //  const UserLoggedRecipient = () =>  useEffect(() => {
+  //     fetch(`/equipment_owner/${recipientFromThreadID}`)
+  //       .then((resp) => resp.json())
+  //       .then((data) => {
+  //         setRecipientInfo(data)
+  //       })
+  //   }, [])
+
+    const fetchUserRecipient = async (userId) => {
+      try {
+        const userRecipientResponse = await fetch(`/equipment_owner/${recipientFromThreadID}`)
+        if (userRecipientResponse.ok) {
+          const data = await userRecipientResponse.json()
           setRecipientInfo(data)
-        })
-    }, [recipientFromThreadID])
+          // Automatically select the context ID of the first thread when threads are loaded
+        }
+      } catch (error) {
+        console.error('Error fetching user message threads:', error)
+      }
+    }
 
     console.log(recipientInfo)
 
+    // let userLoggedInMessageImages = message.sender_id === user.id && message.user_type === "user"  ? user.profileImage : recipientInfo.profileImage
+    // let ownerLoggedInMessageImages = message.sender_id === owner.id && message.user_type === "owner"  ? owner.profileImage : recipientInfo.profileImage
 
   
   return (
@@ -259,13 +274,15 @@ function MessageThreads() {
                   <p className="text-lg font-semibold mb-2">{message.subject}</p>
                   <div className="flex items-center"> 
                   <img
-                    src={message.sender_id === user.id && message.user_type === "user" || message.sender_id === recipientInfo.id && message.user_type === "owner" ? user.profileImage : recipientInfo.profileImage} // Use the path to your avatar image
+                    src={""} // Use the path to your avatar image
                     alt="Avatar"
                     className="w-8 h-8 rounded-full mr-2" // Adjust the size and style
                   />
                   <p className="text-gray-600">{message.content}</p>
                   {/* {console.log("MESSAGE SENDER ID:" ,message.sender_id)}
-                  {console.log("USER TYPE:", message.user_type)} */}
+                  {console.log("USER TYPE:", message.user_type)} 
+                  || message.sender_id === recipientInfo.id && message.user_type === "owner"
+                  */}
                   </div>
                 </div>
               ))}
