@@ -38,7 +38,7 @@ function MessageThreads() {
   const [threads, setThreads] = useState([])
   const [selectedContextId, setSelectedContextId] = useState(null)
   const [newMessage, setNewMessage] = useState('') // State for the new message input
-  const [newMessageSent, setNewMessageSent] = useState(true)
+  const [newMessageSent, setNewMessageSent] = useState(false)
 
 
   //State to hold info of recipient, 
@@ -48,20 +48,38 @@ function MessageThreads() {
 
 
   // This initializes the fetching of the messages, once it checks whether an owner or a user are logged in, it then fetches their messages.
-  useEffect(() => {
-    // Ensure both owner and user data are available before proceeding
+  // useEffect(() => {
+  //   // Ensure both owner and user data are available before proceeding
+  //   if (owner && owner.id) {
+  //     fetchOwnerMessages(owner.id)
+  //   } else if (user && user.id) {
+  //     fetchUserMessages(user.id)
+  //   } else {
+  //     // Handle the case where neither owner nor user data is available
+  //     setThreads([])
+  //     setSelectedContextId(null)
+  //   }
+  // }, [owner, user, newMessageSent])
+
+  const fetchMessages = () => {
     if (owner && owner.id) {
       fetchOwnerMessages(owner.id)
     } else if (user && user.id) {
       fetchUserMessages(user.id)
     } else {
-      // Handle the case where neither owner nor user data is available
       setThreads([])
       setSelectedContextId(null)
     }
-  }, [owner, user, newMessageSent])
+    setNewMessageSent(true)
+  }
+
+  useEffect(() => {
+    // Ensure both owner and user data are available before proceeding
+    fetchMessages();
+  }, [owner, user, newMessageSent]);
 
 
+  //-------------------------------------------------------------------------------------------------------------------------------
   // Needed to use async and such due to the aynschrous nature of react
   const fetchOwnerMessages = async (ownerId) => {
     try {
@@ -156,12 +174,12 @@ function MessageThreads() {
     if (owner && owner.id){
       message = {
         "recipient_id": 2,
-        "sender_id": 1,
+        "sender_id": owner.id,
         "context_id": selectedContextId,
         "user_type": "owner",
         "subject": null,
         "content": newMessage,
-        "message_status": "sent",
+        "message_status": "Delivered",
         "created_on": new Date().toISOString(),
       }
     } else if (user && user.id)
@@ -173,7 +191,7 @@ function MessageThreads() {
         "user_type" : "user",
         "subject": null,
         "content": newMessage,
-        "message_status": "sent",
+        "message_status": "Delivered",
         "created_on": new Date().toISOString(),
       }
     } else {
@@ -183,7 +201,7 @@ function MessageThreads() {
         "context_id": selectedContextId,
         "subject": null,
         "content": newMessage,
-        "message_status": "sent",
+        "message_status": "Delivered",
         "created_on": new Date().toISOString(),
       }
   }
@@ -204,8 +222,10 @@ function MessageThreads() {
    
     // Clear the input field after sending the message
     setNewMessageSent(!newMessageSent)
+    fetchMessages()
     setNewMessage('')
 
+    // I need to do something here to help refresh the page for new messages.
   }
 
   //  const UserLoggedRecipient = () =>  useEffect(() => {
@@ -253,10 +273,6 @@ function MessageThreads() {
     console.log(recipientInfo)
     console.log(owner)
     // console.log(user)
-
-    // let userLoggedInMessageImages = message.sender_id === user.id && message.user_type === "user"  ? user.profileImage : recipientInfo.profileImage
-    // let ownerLoggedInMessageImages = message.sender_id === owner.id && message.user_type === "owner"  ? owner.profileImage : recipientInfo.profileImage
-
   
   return (
     <div className="flex bg-gray-100 min-h-screen">
@@ -310,7 +326,7 @@ function MessageThreads() {
                   <img
                      src={
                       message.sender_id === user?.id && message.user_type === "user" ? 
-                      user?.profileImage : message.sender_id === owner.id && message.user_type === "owner" ? 
+                      user?.profileImage : message.sender_id === owner?.id && message.user_type === "owner" ? 
                       owner?.profileImage : recipientInfo?.profileImage
                     }
                     alt="Avatar"
@@ -321,6 +337,9 @@ function MessageThreads() {
                   {console.log("USER TYPE:", message.user_type)}*/}
                    <div className="text-blue-500 text-xs ml-auto mt-6">
                     {message.message_status}
+                    <p>
+                      {message.created_on}
+                    </p>
                   </div>
                   </div>
                 </div>
