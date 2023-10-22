@@ -285,10 +285,10 @@ function MessageThreads() {
             >
               {/* Display the subject of the first thread in the context */
               filteredThreads[contextId][0].subject}
-              {/* {console.log(filteredThreads)}
-              {console.log("Here's the recipient id info:", filteredThreads.recipient_id)} */}
-              {/* {console.log("recipient id from thread", recipientFromThreadID)}
-              {console.log("sender id from thread", senderFromThreadID)} */}
+               {console.log(filteredThreads)}
+              {/* {console.log("Here's the recipient id info:", filteredThreads.recipient_id)}
+              {console.log("recipient id from thread", recipientFromThreadID)}
+              {console.log("sender id from thread", senderFromThreadID)}  */}
             </li>
           ))}
         </ul>
@@ -309,7 +309,9 @@ function MessageThreads() {
                   <div className="flex items-center"> 
                   <img
                      src={
-                      message.sender_id === user?.id && message.user_type === "user" ? user?.profileImage : message.sender_id === owner.id && message.user_type === "owner" ? owner?.profileImage : recipientInfo?.profileImage
+                      message.sender_id === user?.id && message.user_type === "user" ? user?.profileImage 
+                      : message.sender_id === owner.id && message.user_type === "owner" ? owner?.profileImage 
+                      : recipientInfo?.profileImage
                     }
                     alt="Avatar"
                     className="w-8 h-8 rounded-full mr-2" // Adjust the size and style

@@ -751,6 +751,7 @@ class OwnerMessages(Resource):
             recipient_id = message.recipient_id
             subject = message.subject
             content = message.content
+            user_type = message.user_type
             
             # Append the message details to the message_threads list
             message_threads.append({
@@ -759,6 +760,7 @@ class OwnerMessages(Resource):
                 "sender_id": sender_id,
                 "recipient_id": recipient_id,
                 "context_id": context_id,
+                "user_type": user_type,
                 "subject": subject,
                 "content": content
             })
