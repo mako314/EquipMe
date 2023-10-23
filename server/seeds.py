@@ -1,4 +1,4 @@
-from models import db, User, EquipmentOwner, Equipment, RentalAgreement, EquipmentImage, Inbox, Message
+from models import db, User, EquipmentOwner, Equipment, RentalAgreement, EquipmentImage, UserInbox, OwnerInbox, Message
 import pandas as pd
 from app import app
 from random import randint, choice as rc

@@ -50,7 +50,7 @@ class User(db.Model, SerializerMixin):
     agreements = db.relationship('RentalAgreement', back_populates="user")
 
     inboxes = db.relationship(
-        "Inbox", back_populates="user")
+        "UserInbox", back_populates="user")
 
     #Serialization rules
     serialize_rules = ('-agreements.user', '-inboxes.user')
@@ -118,7 +118,7 @@ class EquipmentOwner(db.Model, SerializerMixin):
 
     agreements = db.relationship('RentalAgreement', back_populates ='owner')
 
-    inboxes = db.relationship('Inbox', back_populates='owner')
+    inboxes = db.relationship('OwnerInbox', back_populates='owner')
     #you can just do a query EquipmentOwner.query.get(1), or equipment = owner.equipment. Then you can do for equipment in owner.equipment print(equipment) for example
 
     #Serialization rules
@@ -319,27 +319,67 @@ class Message(db.Model, SerializerMixin):
     default=datetime.utcnow,
     )
 
+    thread_id = db.Column(db.Integer, db.ForeignKey('threads.id'))
+    thread = db.relationship('Thread', back_populates='messages')
+
+
+
     # I also have to consider attaching an equipment ID. Maybe equipment quotes can be a table also?
 
 
+class Thread(db.Model):
+    __tablename__ = "threads"
 
-class Inbox(db.Model, SerializerMixin):
-    __tablename__ = "inboxes"
+    id = db.Column(db.Integer, primary_key=True)
+    subject = db.Column(db.String, nullable=True)
+    messages = db.relationship('Message', back_populates='thread')
+
+    user_inbox = db.relationship("UserInbox", back_populates="thread")
+    owner_inboxes = db.relationship("OwnerInbox", back_populates="thread")
+
+
+class UserInbox(db.Model, SerializerMixin):
+    __tablename__ = "user_inboxes"
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    thread_id = db.Column(db.Integer, db.ForeignKey('threads.id'))
+
+    user = db.relationship("User", back_populates="user_inboxes")
+    thread = db.relationship("Thread", back_populates="user_inboxes")
+
+    serialize_rules = ('-user.user_inbox', '-thread.user_inboxes')
+
+class OwnerInbox(db.Model, SerializerMixin):
+    __tablename__ = "owner_inboxes"
+
+    id = db.Column(db.Integer, primary_key=True)
     owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'))
-    message_id = db.Column(db.Integer, db.ForeignKey('messages.id'))
-    context_id = db.Column(db.Integer, db.ForeignKey('messages.context_id'))
+    thread_id = db.Column(db.Integer, db.ForeignKey('threads.id'))
 
-    user = db.relationship(
-        "User", back_populates="inboxes", foreign_keys=[user_id])
+    owner = db.relationship("EquipmentOwner", back_populates="owner_inboxes")
+    thread = db.relationship("Thread", back_populates="owner_inboxes")
+
+    serialize_rules = ('-user.owner_inboxes', 'thread.owner_inboxes')
+
+
+
+
+
+
+# class Inbox(db.Model, SerializerMixin):
+#     __tablename__ = "inboxes"
+
+#     id = db.Column(db.Integer, primary_key=True)
+#     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+#     owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'))
+#     message_id = db.Column(db.Integer, db.ForeignKey('messages.id'))
     
-    owner = db.relationship(
-        "EquipmentOwner", back_populates="inboxes", foreign_keys=[owner_id])
+
+#     user = db.relationship(
+#         "User", back_populates="inboxes", foreign_keys=[user_id])
     
-    serialize_rules = ('-user.inboxes', '-owner.inboxes')
-
-
-
-
+#     owner = db.relationship(
+#         "EquipmentOwner", back_populates="inboxes", foreign_keys=[owner_id])
+    
+#     serialize_rules = ('-user.inboxes', '-owner.inboxes')
