@@ -853,6 +853,21 @@ class SendMessage(Resource):
 
 api.add_resource(SendMessage, "/messages")
 
+class SingleMessage(Resource):
+    def get(self, message_id):
+        #Grab equipment with the equipment ID, declare an available quantity
+        message = Message.query.filter(Message.id == message_id).first()
+
+        if message:
+            return make_response(message.to_dict(),200)
+        else:
+            response = make_response({
+            "error": "Owner not found"
+            }, 404)
+            return response
+
+api.add_resource(SingleMessage, "/message/<int:message_id>")
+
 class MessageToInbox(Resource):
     def post(self):
         data = request.get_json()

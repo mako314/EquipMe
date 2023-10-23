@@ -330,7 +330,7 @@ class Inbox(db.Model, SerializerMixin):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'))
     message_id = db.Column(db.Integer, db.ForeignKey('messages.id'))
-    
+    context_id = db.Column(db.Integer, db.ForeignKey('messages.context_id'))
 
     user = db.relationship(
         "User", back_populates="inboxes", foreign_keys=[user_id])

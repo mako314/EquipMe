@@ -512,41 +512,49 @@ if __name__ == '__main__':
                 user_id=1,  # User 1 (sender of message 1)
                 owner_id=2,  # Owner 2 (recipient of message 1)
                 message_id=1,  # Message 1
+                context_id = 1
             ),
             Inbox(
                 user_id=1,  # User 2 (sender of message 2)
                 owner_id=2,  # Owner 1 (recipient of message 2)
                 message_id=2,  # Message 2
+                context_id = 1
             ),
             Inbox(
                 user_id=1,  # User 1 (sender of message 3)
                 owner_id=2,  # Owner 2 (recipient of message 3)
                 message_id=3,  # Message 3
+                context_id = 1
             ),
             Inbox(
                 user_id=1,  # User 2 (sender of message 4)
                 owner_id=2,  # Owner 2 (recipient of message 4)
                 message_id=4,  # Message 4
+                context_id = 1
             ),
             Inbox(
                 user_id=3,  # User 3 (sender of message 1)
                 owner_id=2,  # Owner 2 (recipient of message 1)
                 message_id=5,  # Message 5
+                context_id = 2
             ),
             Inbox(
                 user_id=3,  # User 2 (sender of message 2)
                 owner_id=2,  # Owner 2 (recipient of message 2)
                 message_id=6,  # Message 6
+                context_id = 2
             ),
             Inbox(
                 user_id=3,  # User 3 (sender of message 3)
                 owner_id=2,  # Owner 2 (recipient of message 3)
                 message_id=7,  # Message 7
+                context_id = 2
             ),
             Inbox(
                 user_id=3,  # User 3 (sender of message 4)
                 owner_id=2,  # Owner 2 (recipient of message 4)
                 message_id=8,  # Message 8
+                context_id = 2
             ),
         ]
 

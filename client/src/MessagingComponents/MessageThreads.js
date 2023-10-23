@@ -266,8 +266,8 @@ function MessageThreads() {
     }
 
     // console.log(recipientInfo)
-    // console.log(owner)
-    // console.log(user)
+    console.log(owner)
+    console.log(user)
   
   return (
     <div className="flex bg-gray-100 min-h-screen">

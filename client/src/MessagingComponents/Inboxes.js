@@ -33,7 +33,76 @@ function Inboxes({}) {
     }, [])
     // --------------------------------------------------------------------
 
+    const [threads, setThreads] = useState([])
+    const [selectedContextId, setSelectedContextId] = useState(null)
 
+
+    useEffect(() => {
+        // Ensure both owner and user data are available before proceeding
+        if (owner && owner.id) {
+          fetchOwnerMessages(owner.id)
+        } else if (user && user.id) {
+          fetchUserMessages(user.id)
+        } else {
+          // Handle the case where neither owner nor user data is available
+          setThreads([])
+          setSelectedContextId(null)
+        }
+      }, [owner, user])
+    
+      // Needed to use async and such due to the aynschrous nature of react
+      const fetchOwnerMessages = async (ownerId) => {
+        try {
+          const ownerResponse = await fetch(`/owner/messages/${ownerId}`)
+          if (ownerResponse.ok) {
+            const data = await ownerResponse.json()
+            setThreads(data)
+            // Automatically select the context ID of the first thread when threads are loaded
+            if (data.length > 0 && selectedContextId === null) {
+              setSelectedContextId(data[0].context_id)
+              setRecipientFromThreadID(data[0].recipient_id)
+            } else if (selectedContextId){
+              console.log("INSIDE OF FETCH Owner MESSAGES", selectedContextId)
+              setSelectedContextId(data[selectedContextId].context_id)
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching owner message threads:', error)
+        }
+      }
+    
+      // Needed to use async and such due to the aynschrous nature of react
+      const fetchUserMessages = async (userId) => {
+        try {
+          const userResponse = await fetch(`/user/messages/${userId}`)
+          if (userResponse.ok) {
+            const data = await userResponse.json()
+            setThreads(data)
+            // Automatically select the context ID of the first thread when threads are loaded
+            if (data.length > 0 && selectedContextId === null) {
+              setSelectedContextId(data[0].context_id)
+              setRecipientFromThreadID(data[0].recipient_id)
+            } else if (selectedContextId){
+              console.log("INSIDE OF FETCH USER MESSAGES", selectedContextId)
+              setSelectedContextId(data[selectedContextId].context_id)
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching user message threads:', error)
+        }
+      }
+
+      
+
+    const filteredThreads = threads.length > 0
+    ? threads.reduce((acc, thread) => {
+        if (!acc[thread.context_id]) {
+          acc[thread.context_id] = []
+        }
+        acc[thread.context_id].push(thread)
+        return acc
+      }, {})
+    : {}
 
     return(
         <div className="flex-grow p-4">
