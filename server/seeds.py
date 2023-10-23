@@ -518,42 +518,34 @@ if __name__ == '__main__':
         user_inbox = [
             UserInbox(
                 user_id=1,  # User 1 (sender of message 1)
-                message_id=1,  # Message 1
                 thread_id = 1
             ),
             UserInbox(
                 user_id=1,  # User 2 (sender of message 2)
-                message_id=2,  # Message 2
                 thread_id = 1
             ),
             UserInbox(
                 user_id=1,  # User 1 (sender of message 3)
-                message_id=3,  # Message 3
                 thread_id = 1
             ),
             UserInbox(
                 user_id=1,  # User 2 (sender of message 4)
-                message_id=4,  # Message 4
                 thread_id = 1
             ),
             UserInbox(
                 user_id=3,  # User 3 (sender of message 1)
-                message_id=5,  # Message 5
                 thread_id = 2
             ),
             UserInbox(
                 user_id=3,  # User 2 (sender of message 2)
-                message_id=6,  # Message 6
                 thread_id = 2
             ),
             UserInbox(
                 user_id=3,  # User 3 (sender of message 3)
-                message_id=7,  # Message 7
                 thread_id = 2
             ),
             UserInbox(
                 user_id=3,  # User 3 (sender of message 4)
-                message_id=8,  # Message 8
                 thread_id = 2
             ),
         ]
@@ -565,42 +557,34 @@ if __name__ == '__main__':
         owner_inbox = [
             OwnerInbox(
                 owner_id=1,  # User 1 (sender of message 1)
-                message_id=1,  # Message 1
                 thread_id = 1
             ),
             OwnerInbox(
                 owner_id=1,  # User 2 (sender of message 2)
-                message_id=2,  # Message 2
                 thread_id = 1
             ),
             OwnerInbox(
                 owner_id=1,  # User 1 (sender of message 3)
-                message_id=3,  # Message 3
                 thread_id = 1
             ),
             OwnerInbox(
                 owner_id=1,  # User 2 (sender of message 4)
-                message_id=4,  # Message 4
                 thread_id = 1
             ),
             OwnerInbox(
                 owner_id=3,  # User 3 (sender of message 1)
-                message_id=5,  # Message 5
                 thread_id = 2
             ),
             OwnerInbox(
                 owner_id=3,  # User 2 (sender of message 2)
-                message_id=6,  # Message 6
                 thread_id = 2
             ),
             OwnerInbox(
                 owner_id=3,  # User 3 (sender of message 3)
-                message_id=7,  # Message 7
                 thread_id = 2
             ),
             OwnerInbox(
                 owner_id=3,  # User 3 (sender of message 4)
-                message_id=8,  # Message 8
                 thread_id = 2
             ),
         ]

@@ -49,11 +49,11 @@ class User(db.Model, SerializerMixin):
     #do a cascade to make life easier
     agreements = db.relationship('RentalAgreement', back_populates="user")
 
-    inboxes = db.relationship(
+    user_inboxes = db.relationship(
         "UserInbox", back_populates="user")
 
     #Serialization rules
-    serialize_rules = ('-agreements.user', '-inboxes.user')
+    serialize_rules = ('-agreements.user', '-user_inboxes.user')
 
 
     #PROPERTIES
@@ -118,11 +118,11 @@ class EquipmentOwner(db.Model, SerializerMixin):
 
     agreements = db.relationship('RentalAgreement', back_populates ='owner')
 
-    inboxes = db.relationship('OwnerInbox', back_populates='owner')
+    owner_inboxes = db.relationship('OwnerInbox', back_populates='owner')
     #you can just do a query EquipmentOwner.query.get(1), or equipment = owner.equipment. Then you can do for equipment in owner.equipment print(equipment) for example
 
     #Serialization rules
-    serialize_rules = ('-equipment.owner', '-agreements.owner', '-inbox.owner','-inbox.user' )
+    serialize_rules = ('-equipment.owner', '-agreements.owner', '-owner_inboxes.owner','-owner_inboxes.user' )
 
     #PROPERTIES
     @hybrid_property
@@ -334,7 +334,7 @@ class Thread(db.Model):
     subject = db.Column(db.String, nullable=True)
     messages = db.relationship('Message', back_populates='thread')
 
-    user_inbox = db.relationship("UserInbox", back_populates="thread")
+    user_inboxes = db.relationship("UserInbox", back_populates="thread")
     owner_inboxes = db.relationship("OwnerInbox", back_populates="thread")
 
 
