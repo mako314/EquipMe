@@ -105,43 +105,37 @@ function Inboxes({}) {
     : {}
 
     return(
-        <div className="flex-grow p-4">
-        {selectedContextId !== null && (
-          <div className="bg-white rounded-lg shadow-md p-4 relative">
-            <ul>
-              {filteredThreads[selectedContextId]?.map((message) => (
-                <div
-                  key={message.id}
-                  className="bg-white rounded-lg shadow-md p-4 mb-4"
-                >
-                  
-                  <p className="text-lg font-semibold mb-2">{message.subject}</p>
-                  <div className="flex items-center"> 
-                  <img
-                     src={
-                      message.sender_id === user?.id && message.user_type === "user" ? 
-                      user?.profileImage : message.sender_id === owner?.id && message.user_type === "owner" ? 
-                      owner?.profileImage : recipientInfo?.profileImage
-                    }
-                    alt="Avatar"
-                    className="w-8 h-8 rounded-full mr-2" // Adjust the size and style
-                  />
-                  <p className="text-gray-600">{message.content}</p>
-                  {/* {console.log("MESSAGE SENDER ID:" ,message.sender_id)}
-                  {console.log("USER TYPE:", message.user_type)}*/}
-                   <div className="text-blue-500 text-xs ml-auto mt-6">
-                    {message.message_status}
-                    <p>
-                      {message.created_on}
-                    </p>
-                  </div>
-                  </div>
-                </div>
-              ))}
-            </ul>
-            {/*   */}
-          </div>
-        )}
+        <div className="w-1/4 bg-gray-200 p-4">
+        <h2 className="text-2xl font-bold mb-4">Message Threads</h2>
+        <ul>
+          {filteredThreads && Object.entries(filteredThreads).map(([contextId]) => (
+            <li
+              key={contextId}
+              className={`cursor-pointer ${
+                selectedContextId === contextId ? 'font-semibold' : ''
+              }`}
+              onClick={() => {
+                handleContextSelect(contextId)
+                setRecipientFromThreadID(filteredThreads[contextId][selectedContextId].recipient_id)
+                // console.log("Here's the recipient id info:", filteredThreads[contextId][selectedContextId].recipient_id)
+                setSenderFromThreadID(filteredThreads[contextId][0].sender_id)
+                if (user){
+                  fetchUserRecipient(recipientFromThreadID)
+                } else if(owner){
+                  fetchOwnerRecipient(recipientFromThreadID)
+                }
+              }
+              }
+            >
+              {/* Display the subject of the first thread in the context */
+              filteredThreads[contextId][0].subject}
+               {/* {console.log(filteredThreads)} */}
+              {/* {console.log("Here's the recipient id info:", filteredThreads.recipient_id)}
+              {console.log("recipient id from thread", recipientFromThreadID)}
+              {console.log("sender id from thread", senderFromThreadID)}  */}
+            </li>
+          ))}
+        </ul>
       </div>
     )
 }

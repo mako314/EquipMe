@@ -1,4 +1,4 @@
-from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement, Message, Inbox
+from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement, Message, UserInbox, OwnerInbox
 # from flask_cors import CORS
 # from flask_migrate import Migrate
 # from flask import Flask, request, make_response, jsonify
@@ -735,94 +735,94 @@ api.add_resource(AvailabilityChecker, "/availability/<int:equipment_id>/<string:
 
 #----------------------------------------------- Messaging Routes -----------------------------------------------------------------------------
 
-class OwnerMessages(Resource):
-    def get(self, owner_id):
-        owner_message_threads = Inbox.query.filter_by(owner_id=owner_id).all()
-        message_threads = []
-        # print(owner_message_threads)
+# class OwnerMessages(Resource):
+#     def get(self, owner_id):
+#         owner_message_threads = Inbox.query.filter_by(owner_id=owner_id).all()
+#         message_threads = []
+#         # print(owner_message_threads)
 
-        for thread in owner_message_threads:
-            # Needed to change this to just ID as opposed to message_id
-            message_id = thread.id
-            # Use message_id to retrieve the content of the message, sender, and recipient
-            message = Message.query.get(message_id)
-            sender_id = message.sender_id
-            context_id = message.context_id
-            recipient_id = message.recipient_id
-            subject = message.subject
-            content = message.content
-            user_type = message.user_type
-            message_status = message.message_status
-            created_on = message.created_on
+#         for thread in owner_message_threads:
+#             # Needed to change this to just ID as opposed to message_id
+#             message_id = thread.id
+#             # Use message_id to retrieve the content of the message, sender, and recipient
+#             message = Message.query.get(message_id)
+#             sender_id = message.sender_id
+#             context_id = message.context_id
+#             recipient_id = message.recipient_id
+#             subject = message.subject
+#             content = message.content
+#             user_type = message.user_type
+#             message_status = message.message_status
+#             created_on = message.created_on
 
-            # Append the message details to the message_threads list
-            message_threads.append({
-                "id": message_id,
-                "message_id": message_id,
-                "sender_id": sender_id,
-                "recipient_id": recipient_id,
-                "context_id": context_id,
-                "user_type": user_type,
-                "subject": subject,
-                "content": content,
-                "message_status": message_status,
-                "created_on" : created_on
-            })
+#             # Append the message details to the message_threads list
+#             message_threads.append({
+#                 "id": message_id,
+#                 "message_id": message_id,
+#                 "sender_id": sender_id,
+#                 "recipient_id": recipient_id,
+#                 "context_id": context_id,
+#                 "user_type": user_type,
+#                 "subject": subject,
+#                 "content": content,
+#                 "message_status": message_status,
+#                 "created_on" : created_on
+#             })
 
-        if message_threads:
-            return make_response(message_threads, 200)
-        else:
-            response = make_response({
-            "error": "Message thread not found"
-            }, 404)
-            return response
+#         if message_threads:
+#             return make_response(message_threads, 200)
+#         else:
+#             response = make_response({
+#             "error": "Message thread not found"
+#             }, 404)
+#             return response
 
-api.add_resource(OwnerMessages, "/owner/messages/<int:owner_id>/")
+# api.add_resource(OwnerMessages, "/owner/messages/<int:owner_id>/")
 
-class UserMessages(Resource):
-    def get(self, user_id):
-        user_message_threads = Inbox.query.filter_by(user_id=user_id).all()
-        message_threads = []
-        print(user_message_threads)
+# class UserMessages(Resource):
+#     def get(self, user_id):
+#         user_message_threads = Inbox.query.filter_by(user_id=user_id).all()
+#         message_threads = []
+#         print(user_message_threads)
 
-        for thread in user_message_threads:
-            # Needed to change this to just ID as opposed to message_id
-            message_id = thread.id
-            # Use message_id to retrieve the content of the message, sender, and recipient
-            message = Message.query.get(message_id)
-            sender_id = message.sender_id
-            context_id = message.context_id
-            recipient_id = message.recipient_id
-            subject = message.subject
-            content = message.content
-            user_type = message.user_type
-            message_status = message.message_status
-            created_on = message.created_on
+#         for thread in user_message_threads:
+#             # Needed to change this to just ID as opposed to message_id
+#             message_id = thread.id
+#             # Use message_id to retrieve the content of the message, sender, and recipient
+#             message = Message.query.get(message_id)
+#             sender_id = message.sender_id
+#             context_id = message.context_id
+#             recipient_id = message.recipient_id
+#             subject = message.subject
+#             content = message.content
+#             user_type = message.user_type
+#             message_status = message.message_status
+#             created_on = message.created_on
             
-            # Append the message details to the message_threads list
-            message_threads.append({
-                "id": message_id,
-                "message_id": message_id,
-                "sender_id": sender_id,
-                "recipient_id": recipient_id,
-                "context_id": context_id,
-                "subject": subject,
-                "content": content,
-                "user_type": user_type,
-                "message_status": message_status,
-                "created_on" : created_on
+#             # Append the message details to the message_threads list
+#             message_threads.append({
+#                 "id": message_id,
+#                 "message_id": message_id,
+#                 "sender_id": sender_id,
+#                 "recipient_id": recipient_id,
+#                 "context_id": context_id,
+#                 "subject": subject,
+#                 "content": content,
+#                 "user_type": user_type,
+#                 "message_status": message_status,
+#                 "created_on" : created_on
 
-            })
+#             })
 
-        if message_threads:
-            return make_response(message_threads, 200)
-        else:
-            response = make_response({
-            "error": "Message thread not found"
-            }, 404)
-            return response
+#         if message_threads:
+#             return make_response(message_threads, 200)
+#         else:
+#             response = make_response({
+#             "error": "Message thread not found"
+#             }, 404)
+#             return response
 
-api.add_resource(UserMessages, "/user/messages/<int:user_id>/")
+# api.add_resource(UserMessages, "/user/messages/<int:user_id>/")
 
 #--------------------------------------------Inbox handling, and message sending below-----------------------------------------
 class SendMessage(Resource):
@@ -868,27 +868,27 @@ class SingleMessage(Resource):
 
 api.add_resource(SingleMessage, "/message/<int:message_id>")
 
-class MessageToInbox(Resource):
-    def post(self):
-        data = request.get_json()
-        #try Validations:
-        add_to_inbox = Inbox(
-            user_id=data['user_id'],
-            owner_id=data['owner_id'],
-            message_id=data['message_id']
-        )
+# class MessageToInbox(Resource):
+#     def post(self):
+#         data = request.get_json()
+#         #try Validations:
+#         add_to_inbox = Inbox(
+#             user_id=data['user_id'],
+#             owner_id=data['owner_id'],
+#             message_id=data['message_id']
+#         )
 
-        db.session.add(add_to_inbox)
+#         db.session.add(add_to_inbox)
 
-        db.session.commit()
+#         db.session.commit()
 
-        response = make_response(add_to_inbox.to_dict(), 201)
+#         response = make_response(add_to_inbox.to_dict(), 201)
 
-        return response
+#         return response
 
-        #except ValueError ()
+#         #except ValueError ()
 
-api.add_resource(MessageToInbox, "/message/to/inbox")
+# api.add_resource(MessageToInbox, "/message/to/inbox")
 
 class EditMessage(Resource):
     def patch(self, id):
@@ -925,45 +925,45 @@ class EditMessage(Resource):
         
 api.add_resource(EditMessage, '/message/<int:id>')
 
-class NewThread(Resource):
-    def post(self):
-        data = request.getjson()
+# class NewThread(Resource):
+#     def post(self):
+#         data = request.getjson()
 
-        #try Validations:
-        new_inbox = Inbox(
-            user_id = data['user_id'],
-            owner_id = data['owner_id'],
-            message_id = data['message_id'],
-        )
+#         #try Validations:
+#         new_inbox = Inbox(
+#             user_id = data['user_id'],
+#             owner_id = data['owner_id'],
+#             message_id = data['message_id'],
+#         )
 
-        db.session.add(new_inbox)
+#         db.session.add(new_inbox)
 
-        db.session.commit()
+#         db.session.commit()
 
-        response = make_response(new_inbox.to_dict(), 201)
+#         response = make_response(new_inbox.to_dict(), 201)
 
-        return response
-        #except ValueError ()
+#         return response
+#         #except ValueError ()
 
-api.add_resource(NewThread, '/inbox')
+# api.add_resource(NewThread, '/inbox')
 
-class InboxDeletion(Resource):
-    def delete(self, id):
-        inbox_thread = Inbox.query.filter(Inbox.id == id).first()
+# class InboxDeletion(Resource):
+#     def delete(self, id):
+#         inbox_thread = Inbox.query.filter(Inbox.id == id).first()
 
-        if inbox_thread:
-            #may need to delete the renter id and equipment id
-            db.session.delete(inbox_thread)
-            db.session.commit()
-            response = make_response({"message":"Succesfully deleted!"}, 204)
-            return response
-        else:
-            response = make_response({
-            "error": "Thread not found"
-            }, 404)
-            return response
+#         if inbox_thread:
+#             #may need to delete the renter id and equipment id
+#             db.session.delete(inbox_thread)
+#             db.session.commit()
+#             response = make_response({"message":"Succesfully deleted!"}, 204)
+#             return response
+#         else:
+#             response = make_response({
+#             "error": "Thread not found"
+#             }, 404)
+#             return response
 
-api.add_resource(InboxDeletion, '/inbox/<int:id>')
+# api.add_resource(InboxDeletion, '/inbox/<int:id>')
 
 
 if __name__ == '__main__':
