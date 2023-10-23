@@ -38,15 +38,18 @@ function MessageThreads() {
   const [threads, setThreads] = useState([])
   const [selectedContextId, setSelectedContextId] = useState(null)
   const [newMessage, setNewMessage] = useState('') // State for the new message input
-  const [newMessageSent, setNewMessageSent] = useState(true)
-
+  // const [newMessageSent, setNewMessageSent] = useState(false)
+  const [newMessagesCount, setNewMessagesCount] = useState(0) // Track new messages
 
   //State to hold info of recipient, 
   const [recipientInfo, setRecipientInfo] = useState(null)
   const [recipientFromThreadID, setRecipientFromThreadID] = useState(null)
   const [senderFromThreadID, setSenderFromThreadID] = useState(null)
 
+  // State variable to store the selected thread ID
+  const [selectedThreadId, setSelectedThreadId] = useState(null);
 
+  // This initializes the fetching of the messages, once it checks whether an owner or a user are logged in, it then fetches their messages.
   useEffect(() => {
     // Ensure both owner and user data are available before proceeding
     if (owner && owner.id) {
@@ -58,8 +61,31 @@ function MessageThreads() {
       setThreads([])
       setSelectedContextId(null)
     }
-  }, [owner, user, newMessageSent])
+  }, [owner, user, newMessagesCount])
+  // 
 
+  // const fetchMessages = () => {
+  //   if (owner && owner.id) {
+  //     fetchOwnerMessages(owner.id)
+  //   } else if (user && user.id) {
+  //     fetchUserMessages(user.id)
+  //   } else {
+  //     setThreads([])
+  //     setSelectedContextId(null)
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   // Ensure both owner and user data are available before proceeding
+  //   fetchMessages()
+  //   console.log("I'VE RAN")
+  // }, [owner, user, newMessagesCount])
+
+  console.log("NEW MESSAGE COUNT:", newMessagesCount)
+
+
+  //-------------------------------------------------------------------------------------------------------------------------------
+  // Needed to use async and such due to the aynschrous nature of react
   const fetchOwnerMessages = async (ownerId) => {
     try {
       const ownerResponse = await fetch(`/owner/messages/${ownerId}`)
@@ -67,9 +93,12 @@ function MessageThreads() {
         const data = await ownerResponse.json()
         setThreads(data)
         // Automatically select the context ID of the first thread when threads are loaded
-        if (data.length > 0) {
+        if (data.length > 0 && selectedContextId === null) {
           setSelectedContextId(data[0].context_id)
           setRecipientFromThreadID(data[0].recipient_id)
+          //likely need to edit the setSelectedContext here also
+        } else if (selectedContextId){
+          setSelectedContextId(data[selectedContextId].context_id)
         }
       }
     } catch (error) {
@@ -77,6 +106,7 @@ function MessageThreads() {
     }
   }
 
+  // Needed to use async and such due to the aynschrous nature of react
   const fetchUserMessages = async (userId) => {
     try {
       const userResponse = await fetch(`/user/messages/${userId}`)
@@ -84,9 +114,12 @@ function MessageThreads() {
         const data = await userResponse.json()
         setThreads(data)
         // Automatically select the context ID of the first thread when threads are loaded
-        if (data.length > 0) {
+        if (data.length > 0 && selectedContextId === null) {
           setSelectedContextId(data[0].context_id)
           setRecipientFromThreadID(data[0].recipient_id)
+          //likely need to edit the setSelectedContext here also
+        } else if (selectedContextId){
+          setSelectedContextId(data[selectedContextId].context_id)
         }
       }
     } catch (error) {
@@ -94,34 +127,24 @@ function MessageThreads() {
     }
   }
 
-  useEffect(() => {
-    if (user && selectedContextId) {
-      fetchUserRecipient(recipientFromThreadID)
-    } else if (owner && selectedContextId) {
-      fetchOwnerRecipient(recipientFromThreadID)
-    }
-  }, [selectedContextId, user, recipientFromThreadID])
+    //This essentially goes into the threads, and accumulates / tests for every context ID that way they're all unique as they should be
+    const filteredThreads = threads.length > 0
+    ? threads.reduce((acc, thread) => {
+        if (!acc[thread.context_id]) {
+          acc[thread.context_id] = []
+        }
+        acc[thread.context_id].push(thread)
+        return acc
+      }, {})
+    : {}
 
   //When one clicks the mapped threads (by context ID) in the return, this selects the context ID and displays those messages
   const handleContextSelect = (contextId) => {
     setSelectedContextId(contextId)
     console.log("Selected context ID:", contextId)
   }
-  
-  //This essentially goes into the threads, and accumulates / tests for every context ID that way they're all unique as they should be
-  const filteredThreads = threads.length > 0
-  ? threads.reduce((acc, thread) => {
-      if (!acc[thread.context_id]) {
-        acc[thread.context_id] = []
-      }
-      acc[thread.context_id].push(thread)
-      return acc
-    }, {})
-  : {}
 
-  
   const addMessageToInbox = (messageId, ownerId, userId) => {
-    // const randomMessageId = Math.floor(Math.random() * 1000000)
     let inboxData
 
     if (owner && owner.id){
@@ -151,21 +174,24 @@ function MessageThreads() {
         console.error("Error adding to inbox:", error)
       })
   }
+
+  //------------------------Above this, is handling all the populating of messages, -----------------------------------
   
   // Handles actually sending the message with the text area, using formik seemed to complicated in this sense, so I will have to see what I can do about 
   const handleSendMessage = () => {
 
     let message
+    // let currentSelectedContextId = selectedContextId
 
     if (owner && owner.id){
       message = {
         "recipient_id": 2,
-        "sender_id": 1,
+        "sender_id": owner.id,
         "context_id": selectedContextId,
         "user_type": "owner",
         "subject": null,
         "content": newMessage,
-        "message_status": "sent",
+        "message_status": "Delivered",
         "created_on": new Date().toISOString(),
       }
     } else if (user && user.id)
@@ -177,7 +203,7 @@ function MessageThreads() {
         "user_type" : "user",
         "subject": null,
         "content": newMessage,
-        "message_status": "sent",
+        "message_status": "Delivered",
         "created_on": new Date().toISOString(),
       }
     } else {
@@ -187,7 +213,7 @@ function MessageThreads() {
         "context_id": selectedContextId,
         "subject": null,
         "content": newMessage,
-        "message_status": "sent",
+        "message_status": "Delivered",
         "created_on": new Date().toISOString(),
       }
   }
@@ -203,22 +229,26 @@ function MessageThreads() {
     .then((response) => response.json())
     .then((message) => { if (message && message.id){
       addMessageToInbox(message.id, message.recipient_id, message.sender_id)
-      }})
+      handleContextSelect(selectedContextId)
+    }})
     
    
+    
+
+    // setNewMessagesCount(prevCount => prevCount + 1)
     // Clear the input field after sending the message
-    setNewMessageSent(!newMessageSent)
     setNewMessage('')
 
+    // fetchMessages()
   }
 
-  //  const UserLoggedRecipient = () =>  useEffect(() => {
-  //     fetch(`/equipment_owner/${recipientFromThreadID}`)
-  //       .then((resp) => resp.json())
-  //       .then((data) => {
-  //         setRecipientInfo(data)
-  //       })
-  //   }, [])
+  useEffect(() => {
+    if (user && selectedContextId) {
+      fetchUserRecipient(recipientFromThreadID)
+    } else if (owner && selectedContextId) {
+      fetchOwnerRecipient(recipientFromThreadID)
+    }
+  }, [selectedContextId, user, recipientFromThreadID, owner])
 
     const fetchUserRecipient = async (recipientFromThreadID) => {
       try {
@@ -246,13 +276,9 @@ function MessageThreads() {
       }
     }
 
-    console.log(recipientInfo)
-    console.log(owner)
-    console.log(user)
-
-    // let userLoggedInMessageImages = message.sender_id === user.id && message.user_type === "user"  ? user.profileImage : recipientInfo.profileImage
-    // let ownerLoggedInMessageImages = message.sender_id === owner.id && message.user_type === "owner"  ? owner.profileImage : recipientInfo.profileImage
-
+    // console.log(recipientInfo)
+    // console.log(owner)
+    // console.log(user)
   
   return (
     <div className="flex bg-gray-100 min-h-screen">
@@ -268,7 +294,8 @@ function MessageThreads() {
               }`}
               onClick={() => {
                 handleContextSelect(contextId)
-                setRecipientFromThreadID(filteredThreads[contextId][0].recipient_id)
+                setRecipientFromThreadID(filteredThreads[contextId][selectedContextId].recipient_id)
+                // console.log("Here's the recipient id info:", filteredThreads[contextId][selectedContextId].recipient_id)
                 setSenderFromThreadID(filteredThreads[contextId][0].sender_id)
                 if (user){
                   fetchUserRecipient(recipientFromThreadID)
@@ -280,9 +307,10 @@ function MessageThreads() {
             >
               {/* Display the subject of the first thread in the context */
               filteredThreads[contextId][0].subject}
-              {console.log(filteredThreads)}
-              {/* {console.log("recipient id from thread", recipientFromThreadID)}
-              {console.log("sender id from thread", senderFromThreadID)} */}
+               {/* {console.log(filteredThreads)} */}
+              {/* {console.log("Here's the recipient id info:", filteredThreads.recipient_id)}
+              {console.log("recipient id from thread", recipientFromThreadID)}
+              {console.log("sender id from thread", senderFromThreadID)}  */}
             </li>
           ))}
         </ul>
@@ -291,7 +319,7 @@ function MessageThreads() {
       {/* Message Content */}
       <div className="flex-grow p-4">
         {selectedContextId !== null && (
-          <div className="bg-white rounded-lg shadow-md p-4">
+          <div className="bg-white rounded-lg shadow-md p-4 relative">
             <ul>
               {filteredThreads[selectedContextId]?.map((message) => (
                 <div
@@ -303,22 +331,22 @@ function MessageThreads() {
                   <div className="flex items-center"> 
                   <img
                      src={
-                      message.sender_id === user?.id && message.user_type === "user"
-                        ? user?.profileImage
-                        : message.sender_id === owner?.id && message.user_type === "owner"
-                        ? owner?.profileImage
-                        : recipientInfo?.profileImage
+                      message.sender_id === user?.id && message.user_type === "user" ? 
+                      user?.profileImage : message.sender_id === owner?.id && message.user_type === "owner" ? 
+                      owner?.profileImage : recipientInfo?.profileImage
                     }
                     alt="Avatar"
                     className="w-8 h-8 rounded-full mr-2" // Adjust the size and style
                   />
                   <p className="text-gray-600">{message.content}</p>
                   {/* {console.log("MESSAGE SENDER ID:" ,message.sender_id)}
-                  {console.log("USER TYPE:", message.user_type)} 
-                  || message.sender_id === recipientInfo.id && message.user_type === "owner"
-                  message.sender_id === user.id && message.user_type === "user"  ? user.profileImage : recipientInfo.profileImage
-                  
-                  */}
+                  {console.log("USER TYPE:", message.user_type)}*/}
+                   <div className="text-blue-500 text-xs ml-auto mt-6">
+                    {message.message_status}
+                    <p>
+                      {message.created_on}
+                    </p>
+                  </div>
                   </div>
                 </div>
               ))}

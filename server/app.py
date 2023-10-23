@@ -751,7 +751,10 @@ class OwnerMessages(Resource):
             recipient_id = message.recipient_id
             subject = message.subject
             content = message.content
-            
+            user_type = message.user_type
+            message_status = message.message_status
+            created_on = message.created_on
+
             # Append the message details to the message_threads list
             message_threads.append({
                 "id": message_id,
@@ -759,8 +762,11 @@ class OwnerMessages(Resource):
                 "sender_id": sender_id,
                 "recipient_id": recipient_id,
                 "context_id": context_id,
+                "user_type": user_type,
                 "subject": subject,
-                "content": content
+                "content": content,
+                "message_status": message_status,
+                "created_on" : created_on
             })
 
         if message_threads:
@@ -790,6 +796,8 @@ class UserMessages(Resource):
             subject = message.subject
             content = message.content
             user_type = message.user_type
+            message_status = message.message_status
+            created_on = message.created_on
             
             # Append the message details to the message_threads list
             message_threads.append({
@@ -801,6 +809,8 @@ class UserMessages(Resource):
                 "subject": subject,
                 "content": content,
                 "user_type": user_type,
+                "message_status": message_status,
+                "created_on" : created_on
 
             })
 
