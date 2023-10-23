@@ -17,7 +17,9 @@ if __name__ == '__main__':
         User.query.delete()
         EquipmentImage.query.delete()
         Message.query.delete()
-        Inbox.query.delete()
+        UserInbox.query.delete()
+        OwnerInbox.query.delete()
+
 
 #----------------------------------------------------------------------
 #Seed Renters
@@ -434,6 +436,7 @@ if __name__ == '__main__':
                 user_type = "user",
                 message_status = "Delivered",
                 created_on = datetime.utcnow(),
+                thread_id = 1
             ),
             Message(
                 recipient_id = 1,
@@ -443,6 +446,7 @@ if __name__ == '__main__':
                 user_type = "owner",
                 message_status = "Delivered",
                 created_on = datetime.utcnow(),
+                thread_id = 1
             ),
             Message(
                 recipient_id = 2, # Owner
@@ -452,6 +456,7 @@ if __name__ == '__main__':
                 user_type = "user",
                 message_status = "Delivered",
                 created_on = datetime.utcnow(),
+                thread_id = 1
             ),
             Message(
                 recipient_id = 1, # User
@@ -461,6 +466,7 @@ if __name__ == '__main__':
                 user_type = "owner",
                 message_status = "Delivered",
                 created_on = datetime.utcnow(),
+                thread_id = 1
             ),
             Message(
                 recipient_id = 2, # Owner
@@ -471,6 +477,7 @@ if __name__ == '__main__':
                 user_type = "user",
                 message_status = "Delivered",
                 created_on = datetime.utcnow(),
+                thread_id = 2
             ),
             Message(
                 recipient_id = 3, # User
@@ -480,6 +487,7 @@ if __name__ == '__main__':
                 user_type = "owner",
                 message_status = "Delivered",
                 created_on = datetime.utcnow(),
+                thread_id = 2
             ),
             Message(
                 recipient_id = 2, # Owner
@@ -489,6 +497,7 @@ if __name__ == '__main__':
                 user_type = "user",
                 message_status = "Delivered",
                 created_on = datetime.utcnow(),
+                thread_id = 2
             ),
             Message(
                 recipient_id = 3,  # User
@@ -498,6 +507,7 @@ if __name__ == '__main__':
                 user_type = "owner",
                 message_status = "Delivered",
                 created_on = datetime.utcnow(),
+                thread_id = 2
             ),
         ]
 
