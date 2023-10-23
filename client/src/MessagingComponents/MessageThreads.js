@@ -63,6 +63,7 @@ function MessageThreads() {
     }
   }, [owner, user])
 
+  // newMessage kind of works to refresh it.
   // console.log("NEW MESSAGE COUNT:", newMessagesCount)
  // newMessagesCount
 
@@ -213,18 +214,20 @@ function MessageThreads() {
     .then((response) => response.json())
     .then((message) => { if (message && message.id){
       addMessageToInbox(message.id, message.recipient_id, message.sender_id)
-      handleContextSelect(selectedContextId)
+      setSelectedContextId(message.context_id)
     }})
 
-    // setNewMessagesCount(prevCount => prevCount + 1)
+    // setNewMessagesCount(newMessagesCount + 1)
     // Clear the input field after sending the message
     setNewMessage('')
 
-    if (user){
-      fetchUserMessages(user.id)
-    } else if (owner) {
-      fetchOwnerMessages(owner.id)
-    }
+    // if (user){
+    //   fetchUserMessages(user.id)
+    // } else if (owner) {
+    //   fetchOwnerMessages(owner.id)
+    // }
+
+     // ^ this is a no-go, just breaks it and sends to another thread
     
   }
 
