@@ -482,8 +482,8 @@ if __name__ == '__main__':
                 created_on = datetime.utcnow(),
             ),
             Message(
-                recipient_id = 3, # Owner
-                sender_id = 1, # User
+                recipient_id = 2, # Owner
+                sender_id = 3, # User
                 context_id = 2,
                 content = "Lets try for three weeks ON THAT LAWNMoWER if you can send me a quote?",
                 user_type = "user",
