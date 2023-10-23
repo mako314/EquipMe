@@ -38,45 +38,50 @@ function MessageThreads() {
   const [threads, setThreads] = useState([])
   const [selectedContextId, setSelectedContextId] = useState(null)
   const [newMessage, setNewMessage] = useState('') // State for the new message input
-  const [newMessageSent, setNewMessageSent] = useState(false)
-
+  // const [newMessageSent, setNewMessageSent] = useState(false)
+  const [newMessagesCount, setNewMessagesCount] = useState(0) // Track new messages
 
   //State to hold info of recipient, 
   const [recipientInfo, setRecipientInfo] = useState(null)
   const [recipientFromThreadID, setRecipientFromThreadID] = useState(null)
   const [senderFromThreadID, setSenderFromThreadID] = useState(null)
 
+  // State variable to store the selected thread ID
+  const [selectedThreadId, setSelectedThreadId] = useState(null);
 
   // This initializes the fetching of the messages, once it checks whether an owner or a user are logged in, it then fetches their messages.
-  // useEffect(() => {
-  //   // Ensure both owner and user data are available before proceeding
-  //   if (owner && owner.id) {
-  //     fetchOwnerMessages(owner.id)
-  //   } else if (user && user.id) {
-  //     fetchUserMessages(user.id)
-  //   } else {
-  //     // Handle the case where neither owner nor user data is available
-  //     setThreads([])
-  //     setSelectedContextId(null)
-  //   }
-  // }, [owner, user, newMessageSent])
-
-  const fetchMessages = () => {
+  useEffect(() => {
+    // Ensure both owner and user data are available before proceeding
     if (owner && owner.id) {
       fetchOwnerMessages(owner.id)
     } else if (user && user.id) {
       fetchUserMessages(user.id)
     } else {
+      // Handle the case where neither owner nor user data is available
       setThreads([])
       setSelectedContextId(null)
     }
-    setNewMessageSent(true)
-  }
+  }, [owner, user, newMessagesCount])
+  // 
 
-  useEffect(() => {
-    // Ensure both owner and user data are available before proceeding
-    fetchMessages();
-  }, [owner, user, newMessageSent]);
+  // const fetchMessages = () => {
+  //   if (owner && owner.id) {
+  //     fetchOwnerMessages(owner.id)
+  //   } else if (user && user.id) {
+  //     fetchUserMessages(user.id)
+  //   } else {
+  //     setThreads([])
+  //     setSelectedContextId(null)
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   // Ensure both owner and user data are available before proceeding
+  //   fetchMessages()
+  //   console.log("I'VE RAN")
+  // }, [owner, user, newMessagesCount])
+
+  console.log("NEW MESSAGE COUNT:", newMessagesCount)
 
 
   //-------------------------------------------------------------------------------------------------------------------------------
@@ -88,9 +93,12 @@ function MessageThreads() {
         const data = await ownerResponse.json()
         setThreads(data)
         // Automatically select the context ID of the first thread when threads are loaded
-        if (data.length > 0) {
+        if (data.length > 0 && selectedContextId === null) {
           setSelectedContextId(data[0].context_id)
           setRecipientFromThreadID(data[0].recipient_id)
+          //likely need to edit the setSelectedContext here also
+        } else if (selectedContextId){
+          setSelectedContextId(data[selectedContextId].context_id)
         }
       }
     } catch (error) {
@@ -106,9 +114,12 @@ function MessageThreads() {
         const data = await userResponse.json()
         setThreads(data)
         // Automatically select the context ID of the first thread when threads are loaded
-        if (data.length > 0) {
+        if (data.length > 0 && selectedContextId === null) {
           setSelectedContextId(data[0].context_id)
           setRecipientFromThreadID(data[0].recipient_id)
+          //likely need to edit the setSelectedContext here also
+        } else if (selectedContextId){
+          setSelectedContextId(data[selectedContextId].context_id)
         }
       }
     } catch (error) {
@@ -170,6 +181,7 @@ function MessageThreads() {
   const handleSendMessage = () => {
 
     let message
+    // let currentSelectedContextId = selectedContextId
 
     if (owner && owner.id){
       message = {
@@ -217,24 +229,18 @@ function MessageThreads() {
     .then((response) => response.json())
     .then((message) => { if (message && message.id){
       addMessageToInbox(message.id, message.recipient_id, message.sender_id)
-      }})
+      handleContextSelect(selectedContextId)
+    }})
     
    
+    
+
+    // setNewMessagesCount(prevCount => prevCount + 1)
     // Clear the input field after sending the message
-    setNewMessageSent(!newMessageSent)
-    fetchMessages()
     setNewMessage('')
 
-    // I need to do something here to help refresh the page for new messages.
+    // fetchMessages()
   }
-
-  //  const UserLoggedRecipient = () =>  useEffect(() => {
-  //     fetch(`/equipment_owner/${recipientFromThreadID}`)
-  //       .then((resp) => resp.json())
-  //       .then((data) => {
-  //         setRecipientInfo(data)
-  //       })
-  //   }, [])
 
   useEffect(() => {
     if (user && selectedContextId) {
@@ -242,7 +248,7 @@ function MessageThreads() {
     } else if (owner && selectedContextId) {
       fetchOwnerRecipient(recipientFromThreadID)
     }
-  }, [selectedContextId, user, recipientFromThreadID])
+  }, [selectedContextId, user, recipientFromThreadID, owner])
 
     const fetchUserRecipient = async (recipientFromThreadID) => {
       try {
@@ -270,8 +276,8 @@ function MessageThreads() {
       }
     }
 
-    console.log(recipientInfo)
-    console.log(owner)
+    // console.log(recipientInfo)
+    // console.log(owner)
     // console.log(user)
   
   return (
@@ -289,7 +295,7 @@ function MessageThreads() {
               onClick={() => {
                 handleContextSelect(contextId)
                 setRecipientFromThreadID(filteredThreads[contextId][selectedContextId].recipient_id)
-                console.log("Here's the recipient id info:", filteredThreads[contextId][selectedContextId].recipient_id)
+                // console.log("Here's the recipient id info:", filteredThreads[contextId][selectedContextId].recipient_id)
                 setSenderFromThreadID(filteredThreads[contextId][0].sender_id)
                 if (user){
                   fetchUserRecipient(recipientFromThreadID)
@@ -301,7 +307,7 @@ function MessageThreads() {
             >
               {/* Display the subject of the first thread in the context */
               filteredThreads[contextId][0].subject}
-               {console.log(filteredThreads)}
+               {/* {console.log(filteredThreads)} */}
               {/* {console.log("Here's the recipient id info:", filteredThreads.recipient_id)}
               {console.log("recipient id from thread", recipientFromThreadID)}
               {console.log("sender id from thread", senderFromThreadID)}  */}
