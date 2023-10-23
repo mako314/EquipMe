@@ -511,6 +511,19 @@ if __name__ == '__main__':
 
         db.session.add_all(messages)
         db.session.commit()
+#---------------------Inbox testing----------------
+        print("Creating USER Inbox...")
+        threads = [
+            UserInbox(
+                subject="Equipment Inquiry",
+            ),
+            UserInbox(
+                user_id="Did I even spell inquiry right? Hope this works!", 
+            )
+        ]
+
+        db.session.add_all(threads)
+        db.session.commit()
 
 
 #---------------------Inbox testing----------------
@@ -556,35 +569,35 @@ if __name__ == '__main__':
         print("Creating OWNER Inbox...")
         owner_inbox = [
             OwnerInbox(
-                owner_id=1,  # User 1 (sender of message 1)
+                owner_id=2,  # User 1 (sender of message 1)
                 thread_id = 1
             ),
             OwnerInbox(
-                owner_id=1,  # User 2 (sender of message 2)
+                owner_id=2,  # User 2 (sender of message 2)
                 thread_id = 1
             ),
             OwnerInbox(
-                owner_id=1,  # User 1 (sender of message 3)
+                owner_id=2,  # User 1 (sender of message 3)
                 thread_id = 1
             ),
             OwnerInbox(
-                owner_id=1,  # User 2 (sender of message 4)
+                owner_id=2,  # User 2 (sender of message 4)
                 thread_id = 1
             ),
             OwnerInbox(
-                owner_id=3,  # User 3 (sender of message 1)
+                owner_id=2,  # User 3 (sender of message 1)
                 thread_id = 2
             ),
             OwnerInbox(
-                owner_id=3,  # User 2 (sender of message 2)
+                owner_id=2,  # User 2 (sender of message 2)
                 thread_id = 2
             ),
             OwnerInbox(
-                owner_id=3,  # User 3 (sender of message 3)
+                owner_id=2,  # User 3 (sender of message 3)
                 thread_id = 2
             ),
             OwnerInbox(
-                owner_id=3,  # User 3 (sender of message 4)
+                owner_id=2,  # User 3 (sender of message 4)
                 thread_id = 2
             ),
         ]
