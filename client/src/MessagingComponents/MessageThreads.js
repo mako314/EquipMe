@@ -39,7 +39,7 @@ function MessageThreads() {
   const [selectedContextId, setSelectedContextId] = useState(null)
   const [newMessage, setNewMessage] = useState('') // State for the new message input
   // const [newMessageSent, setNewMessageSent] = useState(false)
-  const [newMessagesCount, setNewMessagesCount] = useState(0) // Track new messages
+  // const [newMessagesCount, setNewMessagesCount] = useState(0) // Track new messages
 
   //State to hold info of recipient, 
   const [recipientInfo, setRecipientInfo] = useState(null)
@@ -61,28 +61,11 @@ function MessageThreads() {
       setThreads([])
       setSelectedContextId(null)
     }
-  }, [owner, user, newMessagesCount])
-  // 
+  }, [owner, user])
 
-  // const fetchMessages = () => {
-  //   if (owner && owner.id) {
-  //     fetchOwnerMessages(owner.id)
-  //   } else if (user && user.id) {
-  //     fetchUserMessages(user.id)
-  //   } else {
-  //     setThreads([])
-  //     setSelectedContextId(null)
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   // Ensure both owner and user data are available before proceeding
-  //   fetchMessages()
-  //   console.log("I'VE RAN")
-  // }, [owner, user, newMessagesCount])
-
-  console.log("NEW MESSAGE COUNT:", newMessagesCount)
-
+  // newMessage kind of works to refresh it.
+  // console.log("NEW MESSAGE COUNT:", newMessagesCount)
+ // newMessagesCount
 
   //-------------------------------------------------------------------------------------------------------------------------------
   // Needed to use async and such due to the aynschrous nature of react
@@ -96,8 +79,8 @@ function MessageThreads() {
         if (data.length > 0 && selectedContextId === null) {
           setSelectedContextId(data[0].context_id)
           setRecipientFromThreadID(data[0].recipient_id)
-          //likely need to edit the setSelectedContext here also
         } else if (selectedContextId){
+          console.log("INSIDE OF FETCH Owner MESSAGES", selectedContextId)
           setSelectedContextId(data[selectedContextId].context_id)
         }
       }
@@ -117,8 +100,8 @@ function MessageThreads() {
         if (data.length > 0 && selectedContextId === null) {
           setSelectedContextId(data[0].context_id)
           setRecipientFromThreadID(data[0].recipient_id)
-          //likely need to edit the setSelectedContext here also
         } else if (selectedContextId){
+          console.log("INSIDE OF FETCH USER MESSAGES", selectedContextId)
           setSelectedContextId(data[selectedContextId].context_id)
         }
       }
@@ -153,9 +136,9 @@ function MessageThreads() {
         "owner_id": owner.id,
         "message_id": messageId,
       }
-    } else {
+    } else if (user && user.id) {
      inboxData = {
-      "user_id": userId,
+      "user_id": user.id,
       "owner_id": ownerId,
       "message_id": messageId,
     }
@@ -169,7 +152,9 @@ function MessageThreads() {
       },
     })
       .then((response) => response.json())
-      .then((inbox) => console.log("Added to inbox:", inbox))
+      .then((inbox) => {
+        console.log("Added to inbox:", inbox)
+      })
       .catch((error) => {
         console.error("Error adding to inbox:", error)
       })
@@ -229,17 +214,21 @@ function MessageThreads() {
     .then((response) => response.json())
     .then((message) => { if (message && message.id){
       addMessageToInbox(message.id, message.recipient_id, message.sender_id)
-      handleContextSelect(selectedContextId)
+      setSelectedContextId(message.context_id)
     }})
-    
-   
-    
 
-    // setNewMessagesCount(prevCount => prevCount + 1)
+    // setNewMessagesCount(newMessagesCount + 1)
     // Clear the input field after sending the message
     setNewMessage('')
 
-    // fetchMessages()
+    // if (user){
+    //   fetchUserMessages(user.id)
+    // } else if (owner) {
+    //   fetchOwnerMessages(owner.id)
+    // }
+
+     // ^ this is a no-go, just breaks it and sends to another thread
+    
   }
 
   useEffect(() => {
@@ -277,8 +266,8 @@ function MessageThreads() {
     }
 
     // console.log(recipientInfo)
-    // console.log(owner)
-    // console.log(user)
+    console.log(owner)
+    console.log(user)
   
   return (
     <div className="flex bg-gray-100 min-h-screen">
