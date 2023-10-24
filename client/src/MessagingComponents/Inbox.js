@@ -42,7 +42,7 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID}){
     let owner_inboxes;
     if (owner && owner.owner_inboxes) {
         owner_inboxes = owner.owner_inboxes
-        console.log("Owner Inboxes:", owner_inboxes)
+        // console.log("Owner Inboxes:", owner_inboxes)
     }
 
     useEffect(() => {
@@ -55,7 +55,7 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID}){
         }
       }, [user, owner, owner_inboxes])
 
-      console.log("Inboxes in State:", inboxes)
+      // console.log("Inboxes in State:", inboxes)
 
     const handleThreadSelect = (threadID) => {
     setSelectedThreadID(threadID)

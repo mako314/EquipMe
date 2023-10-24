@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState} from 'react'
 import OwnerContext from '../OwnerComponents/OwnerContext'
 import UserContext from '../UserComponents/UserContext'
+import MessageInput from './MessageInput'
 
 function ChatArea({inboxes, SelectedThreadID}){
 
@@ -66,6 +67,7 @@ function ChatArea({inboxes, SelectedThreadID}){
               ))}
             </ul>
           </div>
+          <MessageInput SelectedThreadID={SelectedThreadID}/>
         </div>
       )
 }

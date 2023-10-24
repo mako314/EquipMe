@@ -746,7 +746,6 @@ class SendMessage(Resource):
             sender_id = data['sender_id'],
             context_id = data['context_id'],
             user_type = data["user_type"],
-            subject = data['subject'],
             content = data['content'],
             message_status = data['message_status'],
             created_on = datetime.utcnow(),

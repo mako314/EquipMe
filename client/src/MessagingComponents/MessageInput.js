@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState} from 'react'
 import OwnerContext from '../OwnerComponents/OwnerContext'
 import UserContext from '../UserComponents/UserContext'
+import MessageThreads from './MessageThreads'
 
-function MessageInput({inboxes, SelectedThreadID}){
+function MessageInput({SelectedThreadID}){
 
 // ---------------Detect whether or not an OWNER is logged in-------------------
 
@@ -35,37 +36,86 @@ function MessageInput({inboxes, SelectedThreadID}){
   }, [])
 // --------------------------------------------------------------------
 
-
-
 //const [inboxes, setInboxes] = useState([])
 //const [SelectedThreadID, setSelectedThreadID] = useState(null)
-    const selectedThread = inboxes?.find(inbox => inbox.id === SelectedThreadID);
+//const selectedThread = inboxes?.find(inbox => inbox.id === SelectedThreadID);
+const [newMessage, setNewMessage] = useState('') // State for the new message input
+
+const handleSendMessage = () => {
+
+    let message
+    // let currentSelectedContextId = selectedContextId
+
+    if (owner && owner.id){
+      message = {
+        "recipient_id": 2,
+        "sender_id": owner.id,
+        "context_id": 2,
+        "user_type": "owner",
+        "content": newMessage,
+        "message_status": "Delivered",
+        "created_on": new Date().toISOString(),
+        "thread_id": SelectedThreadID
+      }
+    } else if (user && user.id)
+    {
+      message = {
+        "recipient_id": 2,
+        "sender_id": user.id,
+        "context_id": 2,
+        "user_type" : "user",
+        "content": newMessage,
+        "message_status": "Delivered",
+        "created_on": new Date().toISOString(),
+        "thread_id": SelectedThreadID
+      }
+    } else {
+      message = {
+        "recipient_id": 2,
+        "sender_id": 1,
+        "context_id": 2,
+        "content": newMessage,
+        "message_status": "Delivered",
+        "created_on": new Date().toISOString(),
+        "thread_id": SelectedThreadID
+      }
+  }
+
+    console.log('Sending message:', message)
+    fetch("/messages", {
+      method: "POST",
+      body: JSON.stringify(message),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then((response) => response.json())
+    .then((message) => { if (message && message.id){
+        console.log("Adding message:", message.content, "To a thread with an ID of:", message.thread_id)
+    //   addMessageToInbox(message.id, message.recipient_id, message.sender_id)
+    //  ^^ going to need to do an add message to thread, which then adds it to the inboxes
+    //   setSelectedContextId(message.context_id)
+    }})
+
+    setNewMessage('')
+  }
 
     return (
-        <div className="flex-grow p-4">
-          <div className="bg-white rounded-lg shadow-md p-4 relative">
-            <ul>
-              {/* If selectedThread is available, map over its messages */}
-              {selectedThread?.thread.messages.map((message) => (
-                <div key={message.id} className="bg-white rounded-lg shadow-md p-4 mb-4">
-                  <div className="flex items-center"> 
-                    <img
-                      src="" // This will be set later on
-                      alt="Avatar"
-                      className="w-8 h-8 rounded-full mr-2"
-                    />
-                    <p className="text-gray-600">{message.content}</p>
-                    <div className="text-blue-500 text-xs ml-auto mt-6">
-                      {message.message_status}
-                      <p>
-                        {message.created_on}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </ul>
-          </div>
+        <div className="mt-4 flex items-end">
+        {/* NEEDS TO GO INSIDE OF MESSAGE CONTENT, NOT NEW MESSAGE THREADS */}
+          <input
+            type="text"
+            placeholder="Type your message..."
+            className="flex-grow border rounded py-2 px-3"
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+          />
+          <button
+            onClick={handleSendMessage}
+            className="bg-blue-500 text-white rounded px-6 py-2 ml-2"
+          >
+            Send
+          </button>
         </div>
       )
 }
