@@ -62,6 +62,7 @@ function NewMessageThreads() {
       setNewMessage={setNewMessage}
       newMessage={newMessage}
       setInboxes={setInboxes}
+      recipientInfo={recipientInfo}
       />
 
     </div>

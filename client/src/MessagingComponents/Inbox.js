@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState} from 'react'
 import OwnerContext from '../OwnerComponents/OwnerContext'
 import UserContext from '../UserComponents/UserContext'
 
-function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, recipientInfo, setRecipientInfo }){
+function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRecipientInfo }){
 
 // ---------------Detect whether or not an OWNER is logged in-------------------
 
@@ -74,8 +74,8 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, recip
     const fetchRecipientData = async (recipientID, userType) => {
       let endpoint = userType === "user" ? `/user/${recipientID}` : `/equipment_owner/${recipientID}`;
       
-      console.log("Recipient ID:", recipientID)
-      console.log("Type of user:", userType)
+      // console.log("Recipient ID:", recipientID)
+      
 
       try {
         const response = await fetch(endpoint)
@@ -101,12 +101,40 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, recip
                 SelectedThreadID === inbox.id ? 'font-semibold' : ''
               }`}
               onClick={() => {
-                handleThreadSelect(inbox.id)
-                const firstMessage = inbox.thread.messages[0]
-                const recipientType = firstMessage.user_type === "user" ? "owner" : "user"
-                const recipientID = firstMessage.user_type === "user" ? firstMessage.recipient_id : firstMessage.sender_id
-                fetchRecipientData(recipientID, recipientType)
-              }}
+                handleThreadSelect(inbox.id);
+                const firstMessage = inbox.thread.messages[0];
+                
+                let recipientType;
+                let recipientID;
+
+                if (user) {
+                    // If a user is logged in
+                    if (firstMessage.user_type === "user") {
+                        // If the first message was sent by a user
+                        recipientType = "owner"
+                        recipientID = firstMessage.recipient_id
+                    } else {
+                        // If the first message was sent by an owner
+                        recipientType = "owner"
+                        recipientID = firstMessage.sender_id
+                    }
+                } else if (owner) {
+                    // If an owner is logged in
+                    if (firstMessage.user_type === "owner") {
+                        // If the first message was sent by an owner
+                        recipientType = "user"
+                        recipientID = firstMessage.recipient_id
+                    } else {
+                        // If the first message was sent by a user
+                        recipientType = "user"
+                        recipientID = firstMessage.sender_id
+                    }
+                }
+                
+                console.log("Recipient Type:", recipientType);
+                console.log("Recipient ID:", recipientID);
+                fetchRecipientData(recipientID, recipientType);
+            }}
             >
                 {inbox.thread.subject}
             </li>

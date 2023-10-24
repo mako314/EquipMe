@@ -3,7 +3,7 @@ import OwnerContext from '../OwnerComponents/OwnerContext'
 import UserContext from '../UserComponents/UserContext'
 import MessageThreads from './MessageThreads'
 
-function MessageInput({SelectedThreadID, setNewMessage, newMessage, setInboxes, inboxes}){
+function MessageInput({SelectedThreadID, setNewMessage, newMessage, setInboxes, inboxes, recipientInfo}){
 
 // ---------------Detect whether or not an OWNER is logged in-------------------
 
@@ -48,7 +48,7 @@ const handleSendMessage = () => {
 
     if (owner && owner.id){
       message = {
-        "recipient_id": 2,
+        "recipient_id": recipientInfo.id,
         "sender_id": owner.id,
         "context_id": 2,
         "user_type": "owner",
@@ -60,7 +60,7 @@ const handleSendMessage = () => {
     } else if (user && user.id)
     {
       message = {
-        "recipient_id": 2,
+        "recipient_id": recipientInfo.id,
         "sender_id": user.id,
         "context_id": 2,
         "user_type" : "user",

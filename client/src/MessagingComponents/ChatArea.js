@@ -3,7 +3,7 @@ import OwnerContext from '../OwnerComponents/OwnerContext'
 import UserContext from '../UserComponents/UserContext'
 import MessageInput from './MessageInput'
 
-function ChatArea({inboxes, SelectedThreadID, setNewMessage, newMessage, setInboxes }){
+function ChatArea({inboxes, SelectedThreadID, setNewMessage, newMessage, setInboxes, recipientInfo }){
 
 // ---------------Detect whether or not an OWNER is logged in-------------------
 
@@ -46,7 +46,11 @@ function ChatArea({inboxes, SelectedThreadID, setNewMessage, newMessage, setInbo
                 <div key={message.id} className="bg-white rounded-lg shadow-md p-4 mb-4">
                   <div className="flex items-center"> 
                     <img
-                      src="" // This will be set later on
+                      src={
+                        message.sender_id === user?.id && message.user_type === "user" ? 
+                        user?.profileImage : message.sender_id === owner?.id && message.user_type === "owner" ? 
+                        owner?.profileImage : recipientInfo?.profileImage
+                      }
                       alt="Avatar"
                       className="w-8 h-8 rounded-full mr-2"
                     />
@@ -68,6 +72,7 @@ function ChatArea({inboxes, SelectedThreadID, setNewMessage, newMessage, setInbo
           setNewMessage={setNewMessage}
           newMessage={newMessage}
           setInboxes={setInboxes}
+          recipientInfo={recipientInfo}
           />
         </div>
       )
