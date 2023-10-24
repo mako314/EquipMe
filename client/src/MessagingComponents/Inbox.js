@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState} from 'react'
 import OwnerContext from '../OwnerComponents/OwnerContext'
 import UserContext from '../UserComponents/UserContext'
 
-function MessageTest(){
+function Inbox(){
 
 // ---------------Detect whether or not an OWNER is logged in-------------------
 
@@ -36,6 +36,7 @@ function MessageTest(){
 // --------------------------------------------------------------------
 
   const [inboxes, setInboxes] = useState([])
+  const [SelectedThreadID, setSelectedThreadID] = useState(null)
 
     let owner_inboxes;
     if (owner && owner.owner_inboxes) {
@@ -55,23 +56,32 @@ function MessageTest(){
 
       console.log("Inboxes in State:", inboxes)
 
+    const handleThreadSelect = (threadID) => {
+    setSelectedThreadID(threadID)
+    console.log("Selected thread ID:", threadID)
+    }
+
     return(
-        <div className="flex bg-gray-100 min-h-screen">
-      {/* Left Sidebar */}
       <div className="w-1/4 bg-gray-200 p-4">
+        {/* Left Sidebar */}
         <h2 className="text-2xl font-bold mb-4">Message Inboxes</h2>
         <ul>
           {inboxes?.map((inbox) => (
             <li
               key={inbox.id}
+              className={`cursor-pointer ${
+                SelectedThreadID === inbox.id ? 'font-semibold' : ''
+              }`}
+              onClick={() => {
+                handleThreadSelect(inbox.id)
+              }}
             >
                 {inbox.thread.subject}
             </li>
           ))}
         </ul>
       </div>
-    </div>
     )
 }
 
-export default MessageTest
+export default Inbox

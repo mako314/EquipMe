@@ -56,7 +56,7 @@ import BulkEquipmentUpload from './EquipmentComponents/BulkEquipmentUpload';
 
 //---------------------- Messaging Component-----------------------------
 import MessageThreads from './MessagingComponents/MessageThreads'
-import MessageTest from './MessagingComponents/MessagesTest'
+import NewMessageThreads from './MessagingComponents/NewMessageThreads';
 
 
 function App() {
@@ -320,7 +320,7 @@ function App() {
 
             <Route path='/temp/equipment/upload' element={<ProductImageForm />} />
 
-            <Route path='/messaging' element={<MessageTest />} />
+            <Route path='/messaging' element={<NewMessageThreads />} />
           </Routes>
 
           <Footer />
