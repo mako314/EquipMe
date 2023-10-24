@@ -37,8 +37,9 @@ function NewMessageThreads() {
   // Take state from inbox and declare here so it is usable in whole messaging app
   const [inboxes, setInboxes] = useState([])
   const [SelectedThreadID, setSelectedThreadID] = useState(null)
+  const [newMessage, setNewMessage] = useState('') // State for the new message input
 
-  
+
   return (
     <div className="flex bg-gray-100 min-h-screen">
       {/* Left Sidebar */}
@@ -47,12 +48,16 @@ function NewMessageThreads() {
       inboxes={inboxes} 
       SelectedThreadID={SelectedThreadID}
       setSelectedThreadID={setSelectedThreadID}
+      newMessage={newMessage}
       />
 
       {/* Message Area */}
       <ChatArea
       inboxes={inboxes} 
       SelectedThreadID={SelectedThreadID}
+      setNewMessage={setNewMessage}
+      newMessage={newMessage}
+      setInboxes={setInboxes}
       />
 
     </div>

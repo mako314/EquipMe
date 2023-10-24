@@ -527,16 +527,16 @@ if __name__ == '__main__':
         db.session.add_all(messages)
         db.session.commit()
 
-        thread2 = Thread.query.filter_by(id=2).first()
-        if thread2:
-            print(f"Subject of Thread {thread2.id}: {thread2.subject}")
+        # thread2 = Thread.query.filter_by(id=2).first()
+        # if thread2:
+        #     print(f"Subject of Thread {thread2.id}: {thread2.subject}")
             
-            # Print messages for the thread
-            print("Messages in this thread:")
-            for message in thread2.messages:
-                print(f"Message Content: {message.content}")
-        else:
-            print("No thread with ID 2 found.")
+        #     # Print messages for the thread
+        #     print("Messages in this thread:")
+        #     for message in thread2.messages:
+        #         print(f"Message Content: {message.content}")
+        # else:
+        #     print("No thread with ID 2 found.")
 #---------------------Inbox testing----------------
         print("Creating USER Inbox...")
         user_inbox = [

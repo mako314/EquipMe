@@ -3,7 +3,7 @@ import OwnerContext from '../OwnerComponents/OwnerContext'
 import UserContext from '../UserComponents/UserContext'
 import MessageInput from './MessageInput'
 
-function ChatArea({inboxes, SelectedThreadID}){
+function ChatArea({inboxes, SelectedThreadID, setNewMessage, newMessage, setInboxes }){
 
 // ---------------Detect whether or not an OWNER is logged in-------------------
 
@@ -18,7 +18,7 @@ function ChatArea({inboxes, SelectedThreadID}){
     })
   }, [])
 
-  console.log(owner)
+//   console.log(owner)
 
   
 // --------------------------------------------------------------------
@@ -67,7 +67,13 @@ function ChatArea({inboxes, SelectedThreadID}){
               ))}
             </ul>
           </div>
-          <MessageInput SelectedThreadID={SelectedThreadID}/>
+          <MessageInput
+          inboxes={inboxes} 
+          SelectedThreadID={SelectedThreadID}
+          setNewMessage={setNewMessage}
+          newMessage={newMessage}
+          setInboxes={setInboxes}
+          />
         </div>
       )
 }

@@ -3,7 +3,7 @@ import OwnerContext from '../OwnerComponents/OwnerContext'
 import UserContext from '../UserComponents/UserContext'
 import MessageThreads from './MessageThreads'
 
-function MessageInput({SelectedThreadID}){
+function MessageInput({SelectedThreadID, setNewMessage, newMessage, setInboxes, inboxes}){
 
 // ---------------Detect whether or not an OWNER is logged in-------------------
 
@@ -18,7 +18,7 @@ function MessageInput({SelectedThreadID}){
     })
   }, [])
 
-  console.log(owner)
+//   console.log(owner)
 
   
 // --------------------------------------------------------------------
@@ -39,7 +39,7 @@ function MessageInput({SelectedThreadID}){
 //const [inboxes, setInboxes] = useState([])
 //const [SelectedThreadID, setSelectedThreadID] = useState(null)
 //const selectedThread = inboxes?.find(inbox => inbox.id === SelectedThreadID);
-const [newMessage, setNewMessage] = useState('') // State for the new message input
+// const [newMessage, setNewMessage] = useState('') // State for the new message input
 
 const handleSendMessage = () => {
 
@@ -92,9 +92,20 @@ const handleSendMessage = () => {
     .then((response) => response.json())
     .then((message) => { if (message && message.id){
         console.log("Adding message:", message.content, "To a thread with an ID of:", message.thread_id)
-    //   addMessageToInbox(message.id, message.recipient_id, message.sender_id)
-    //  ^^ going to need to do an add message to thread, which then adds it to the inboxes
-    //   setSelectedContextId(message.context_id)
+        const updatedInboxes = inboxes.map(inbox => {
+            if (inbox.id === SelectedThreadID) {
+                return {
+                    ...inbox,
+                    thread: {
+                        ...inbox.thread,
+                        messages: [...inbox.thread.messages, message]
+                    }
+                }
+            }
+            return inbox;
+        })
+
+        setInboxes(updatedInboxes);
     }})
 
     setNewMessage('')
