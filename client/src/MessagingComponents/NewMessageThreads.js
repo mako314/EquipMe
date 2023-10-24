@@ -32,11 +32,18 @@ function NewMessageThreads() {
       }
     })
   }, [])
+
+  const [inboxes, setInboxes] = useState([])
+  const [SelectedThreadID, setSelectedThreadID] = useState(null)
   
   return (
     <div className="flex bg-gray-100 min-h-screen">
       {/* Left Sidebar */}
-      <Inbox/>
+      <Inbox setInboxes={setInboxes} 
+      inboxes={inboxes} 
+      SelectedThreadID={SelectedThreadID}
+      setSelectedThreadID={setSelectedThreadID}
+      />
     </div>
   )
 }

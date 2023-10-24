@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState} from 'react'
 import OwnerContext from '../OwnerComponents/OwnerContext'
 import UserContext from '../UserComponents/UserContext'
 
-function Inbox(){
+function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID}){
 
 // ---------------Detect whether or not an OWNER is logged in-------------------
 
@@ -35,8 +35,9 @@ function Inbox(){
   }, [])
 // --------------------------------------------------------------------
 
-  const [inboxes, setInboxes] = useState([])
-  const [SelectedThreadID, setSelectedThreadID] = useState(null)
+  // Moved the state below into NewMessageThreads
+  // const [inboxes, setInboxes] = useState([])
+  // const [SelectedThreadID, setSelectedThreadID] = useState(null)
 
     let owner_inboxes;
     if (owner && owner.owner_inboxes) {
