@@ -545,7 +545,7 @@ if __name__ == '__main__':
                 thread_id = 1
             ),
             UserInbox(
-                user_id=1,
+                user_id=3,
                 thread_id = 2
             )
         ]
