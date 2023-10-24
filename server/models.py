@@ -159,6 +159,7 @@ class EquipmentOwner(db.Model, SerializerMixin):
         return f"My name is {self.name}"
 
 
+
 class Equipment(db.Model, SerializerMixin):
     __tablename__= "equipments"
 
@@ -323,12 +324,12 @@ class Message(db.Model, SerializerMixin):
     thread = db.relationship('Thread', back_populates='messages')
 
 
-    serialize_rules = ('-messages.thread',)
+    serialize_rules = ('-thread',)
 
     # I also have to consider attaching an equipment ID. Maybe equipment quotes can be a table also?
 
 
-class Thread(db.Model):
+class Thread(db.Model, SerializerMixin):
     __tablename__ = "threads"
 
     id = db.Column(db.Integer, primary_key=True)

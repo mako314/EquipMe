@@ -424,6 +424,20 @@ if __name__ == '__main__':
         db.session.commit()
 
         print("Reseting EQUIPMENT pictures **TEMPORARILY**")
+
+        #---------------------Thread testing----------------
+        print("Creating threads...")
+        threads = [
+            Thread(
+                subject="Equipment Inquiry",
+            ),
+            Thread(
+                subject="Did I even spell inquiry right? Hope this works!", 
+            )
+        ]
+
+        db.session.add_all(threads)
+        db.session.commit()
 #---------------------Message and Inbox testing----------------
 
         print("Generating example messages...")
@@ -513,21 +527,16 @@ if __name__ == '__main__':
         db.session.add_all(messages)
         db.session.commit()
 
-#---------------------Thread testing----------------
-        print("Creating threads...")
-        threads = [
-            Thread(
-                subject="Equipment Inquiry",
-            ),
-            Thread(
-                subject="Did I even spell inquiry right? Hope this works!", 
-            )
-        ]
-
-        db.session.add_all(threads)
-        db.session.commit()
-
-
+        thread2 = Thread.query.filter_by(id=2).first()
+        if thread2:
+            print(f"Subject of Thread {thread2.id}: {thread2.subject}")
+            
+            # Print messages for the thread
+            print("Messages in this thread:")
+            for message in thread2.messages:
+                print(f"Message Content: {message.content}")
+        else:
+            print("No thread with ID 2 found.")
 #---------------------Inbox testing----------------
         print("Creating USER Inbox...")
         user_inbox = [
@@ -537,7 +546,7 @@ if __name__ == '__main__':
             ),
             UserInbox(
                 user_id=1,
-                thread_id = 1
+                thread_id = 2
             )
         ]
 
@@ -552,7 +561,7 @@ if __name__ == '__main__':
             ),
             OwnerInbox(
                 owner_id=2,  
-                thread_id = 1
+                thread_id = 2
             )
         ]
 
