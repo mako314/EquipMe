@@ -37,6 +37,7 @@ function NewMessageThreads() {
   // Take state from inbox and declare here so it is usable in whole messaging app
   const [inboxes, setInboxes] = useState([])
   const [SelectedThreadID, setSelectedThreadID] = useState(null)
+
   
   return (
     <div className="flex bg-gray-100 min-h-screen">
@@ -53,6 +54,7 @@ function NewMessageThreads() {
       inboxes={inboxes} 
       SelectedThreadID={SelectedThreadID}
       />
+
     </div>
   )
 }
