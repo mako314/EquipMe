@@ -1,4 +1,4 @@
-from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement, Message, UserInbox, OwnerInbox
+from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement, Message, Thread,UserInbox, OwnerInbox
 # from flask_cors import CORS
 # from flask_migrate import Migrate
 # from flask import Flask, request, make_response, jsonify
@@ -855,18 +855,32 @@ api.add_resource(SendMessage, "/messages")
 
 class SingleMessage(Resource):
     def get(self, message_id):
-        #Grab equipment with the equipment ID, declare an available quantity
         message = Message.query.filter(Message.id == message_id).first()
 
         if message:
             return make_response(message.to_dict(),200)
         else:
             response = make_response({
-            "error": "Owner not found"
+            "error": "Message not found"
             }, 404)
             return response
 
 api.add_resource(SingleMessage, "/message/<int:message_id>")
+
+
+class ThreadById(Resource):
+    def get(self, thread_id):
+        thread = Thread.query.filter(Thread.id == thread_id).first()
+
+        if thread:
+            return make_response(thread.to_dict(),200)
+        else:
+            response = make_response({
+            "error": "Thread not found"
+            }, 404)
+            return response
+
+api.add_resource(ThreadById, "/thread/<int:thread_id>")
 
 # class MessageToInbox(Resource):
 #     def post(self):
