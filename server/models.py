@@ -351,7 +351,7 @@ class UserInbox(db.Model, SerializerMixin):
     user = db.relationship("User", back_populates="user_inboxes")
     thread = db.relationship("Thread", back_populates="user_inboxes")
 
-    serialize_rules = ('-user.user_inboxes', '-thread.user_inboxes')
+    serialize_rules = ('-user.user_inboxes', '-thread.user_inboxes', '-thread.owner_inboxes')
 
 class OwnerInbox(db.Model, SerializerMixin):
     __tablename__ = "owner_inboxes"
@@ -363,7 +363,7 @@ class OwnerInbox(db.Model, SerializerMixin):
     owner = db.relationship("EquipmentOwner", back_populates="owner_inboxes")
     thread = db.relationship("Thread", back_populates="owner_inboxes")
 
-    serialize_rules = ('-owner.owner_inboxes', 'thread.owner_inboxes')
+    serialize_rules = ('-owner.owner_inboxes', '-thread.owner_inboxes', '-thread.user_inboxes')
 
 
 # class Inbox(db.Model, SerializerMixin):
