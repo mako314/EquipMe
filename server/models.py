@@ -323,6 +323,7 @@ class Message(db.Model, SerializerMixin):
     thread = db.relationship('Thread', back_populates='messages')
 
 
+    serialize_rules = ('-messages.thread',)
 
     # I also have to consider attaching an equipment ID. Maybe equipment quotes can be a table also?
 
@@ -332,11 +333,12 @@ class Thread(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     subject = db.Column(db.String, nullable=True)
-    messages = db.relationship('Message', back_populates='thread')
 
+    messages = db.relationship('Message', back_populates='thread')
     user_inboxes = db.relationship("UserInbox", back_populates="thread")
     owner_inboxes = db.relationship("OwnerInbox", back_populates="thread")
 
+    serialize_rules = ('-user_inboxes.thread', '-owner_inboxes.thread', '-messages.thread')
 
 class UserInbox(db.Model, SerializerMixin):
     __tablename__ = "user_inboxes"
@@ -348,7 +350,7 @@ class UserInbox(db.Model, SerializerMixin):
     user = db.relationship("User", back_populates="user_inboxes")
     thread = db.relationship("Thread", back_populates="user_inboxes")
 
-    serialize_rules = ('-user.user_inbox', '-thread.user_inboxes')
+    serialize_rules = ('-user.user_inboxes', '-thread.user_inboxes')
 
 class OwnerInbox(db.Model, SerializerMixin):
     __tablename__ = "owner_inboxes"
@@ -360,11 +362,7 @@ class OwnerInbox(db.Model, SerializerMixin):
     owner = db.relationship("EquipmentOwner", back_populates="owner_inboxes")
     thread = db.relationship("Thread", back_populates="owner_inboxes")
 
-    serialize_rules = ('-user.owner_inboxes', 'thread.owner_inboxes')
-
-
-
-
+    serialize_rules = ('-owner.owner_inboxes', 'thread.owner_inboxes')
 
 
 # class Inbox(db.Model, SerializerMixin):

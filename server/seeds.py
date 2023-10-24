@@ -1,4 +1,4 @@
-from models import db, User, EquipmentOwner, Equipment, RentalAgreement, EquipmentImage, UserInbox, OwnerInbox, Message
+from models import db, User, EquipmentOwner, Equipment, RentalAgreement, EquipmentImage, Thread, UserInbox, OwnerInbox, Message
 import pandas as pd
 from app import app
 from random import randint, choice as rc
@@ -19,6 +19,7 @@ if __name__ == '__main__':
         Message.query.delete()
         UserInbox.query.delete()
         OwnerInbox.query.delete()
+        Thread.query.delete()
 
 
 #----------------------------------------------------------------------
@@ -423,8 +424,8 @@ if __name__ == '__main__':
         db.session.commit()
 
         print("Reseting EQUIPMENT pictures **TEMPORARILY**")
-
 #---------------------Message and Inbox testing----------------
+
         print("Generating example messages...")
         messages = [
             Message(
@@ -511,14 +512,15 @@ if __name__ == '__main__':
 
         db.session.add_all(messages)
         db.session.commit()
-#---------------------Inbox testing----------------
-        print("Creating USER Inbox...")
+
+#---------------------Thread testing----------------
+        print("Creating threads...")
         threads = [
-            UserInbox(
+            Thread(
                 subject="Equipment Inquiry",
             ),
-            UserInbox(
-                user_id="Did I even spell inquiry right? Hope this works!", 
+            Thread(
+                subject="Did I even spell inquiry right? Hope this works!", 
             )
         ]
 
@@ -530,37 +532,13 @@ if __name__ == '__main__':
         print("Creating USER Inbox...")
         user_inbox = [
             UserInbox(
-                user_id=1,  # User 1 (sender of message 1)
+                user_id=1,  
                 thread_id = 1
             ),
             UserInbox(
-                user_id=1,  # User 2 (sender of message 2)
+                user_id=1,
                 thread_id = 1
-            ),
-            UserInbox(
-                user_id=1,  # User 1 (sender of message 3)
-                thread_id = 1
-            ),
-            UserInbox(
-                user_id=1,  # User 2 (sender of message 4)
-                thread_id = 1
-            ),
-            UserInbox(
-                user_id=3,  # User 3 (sender of message 1)
-                thread_id = 2
-            ),
-            UserInbox(
-                user_id=3,  # User 2 (sender of message 2)
-                thread_id = 2
-            ),
-            UserInbox(
-                user_id=3,  # User 3 (sender of message 3)
-                thread_id = 2
-            ),
-            UserInbox(
-                user_id=3,  # User 3 (sender of message 4)
-                thread_id = 2
-            ),
+            )
         ]
 
         db.session.add_all(user_inbox)
@@ -569,41 +547,26 @@ if __name__ == '__main__':
         print("Creating OWNER Inbox...")
         owner_inbox = [
             OwnerInbox(
-                owner_id=2,  # User 1 (sender of message 1)
+                owner_id=2,  
                 thread_id = 1
             ),
             OwnerInbox(
-                owner_id=2,  # User 2 (sender of message 2)
+                owner_id=2,  
                 thread_id = 1
-            ),
-            OwnerInbox(
-                owner_id=2,  # User 1 (sender of message 3)
-                thread_id = 1
-            ),
-            OwnerInbox(
-                owner_id=2,  # User 2 (sender of message 4)
-                thread_id = 1
-            ),
-            OwnerInbox(
-                owner_id=2,  # User 3 (sender of message 1)
-                thread_id = 2
-            ),
-            OwnerInbox(
-                owner_id=2,  # User 2 (sender of message 2)
-                thread_id = 2
-            ),
-            OwnerInbox(
-                owner_id=2,  # User 3 (sender of message 3)
-                thread_id = 2
-            ),
-            OwnerInbox(
-                owner_id=2,  # User 3 (sender of message 4)
-                thread_id = 2
-            ),
+            )
         ]
 
         db.session.add_all(owner_inbox)
         db.session.commit()
+
+        owner2 = EquipmentOwner.query.filter_by(id=2).first()
+        if owner2:
+            print("Owner 2's Inboxes:")
+            for inbox in owner2.owner_inboxes:
+                print(f"Inbox ID: {inbox.id}, Thread ID: {inbox.thread_id}")
+
+
+
 
 #----------------- OLD RENTAL AGREEMENTS 
         #     RentalAgreement(
