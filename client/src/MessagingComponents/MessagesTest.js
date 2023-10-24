@@ -35,7 +35,7 @@ function MessageTest(){
   }, [])
 // --------------------------------------------------------------------
 
-  const [threads, setThreads] = useState([])
+  const [inboxes, setInboxes] = useState([])
 
     let owner_inboxes;
     if (owner && owner.owner_inboxes) {
@@ -45,28 +45,29 @@ function MessageTest(){
 
     useEffect(() => {
         if (user){
-        setThreads(user)
+        setInboxes(user)
         } else if (owner){
-        setThreads(owner_inboxes)
+        setInboxes(owner_inboxes)
         } else{
-        setThreads(null)
+        setInboxes(null)
         }
-      }, [])
+      }, [user, owner, owner_inboxes])
 
-      console.log("Threads in State:", threads)
+      console.log("Inboxes in State:", inboxes)
 
     return(
         <div className="flex bg-gray-100 min-h-screen">
       {/* Left Sidebar */}
       <div className="w-1/4 bg-gray-200 p-4">
-        <h2 className="text-2xl font-bold mb-4">Message Threads</h2>
+        <h2 className="text-2xl font-bold mb-4">Message Inboxes</h2>
         <ul>
-          {/* {threads.map((thread) => (
+          {inboxes?.map((inbox) => (
             <li
-              key={thread.id}
+              key={inbox.id}
             >
+                {inbox.thread.subject}
             </li>
-          ))} */}
+          ))}
         </ul>
       </div>
     </div>
