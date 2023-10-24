@@ -38,7 +38,7 @@ function NewMessageThreads() {
   const [inboxes, setInboxes] = useState([])
   const [SelectedThreadID, setSelectedThreadID] = useState(null)
   const [newMessage, setNewMessage] = useState('') // State for the new message input
-
+  const [recipientInfo, setRecipientInfo] = useState([])
 
   return (
     <div className="flex bg-gray-100 min-h-screen">
@@ -49,6 +49,8 @@ function NewMessageThreads() {
       SelectedThreadID={SelectedThreadID}
       setSelectedThreadID={setSelectedThreadID}
       newMessage={newMessage}
+      setRecipientInfo={setRecipientInfo}
+      recipientInfo={recipientInfo}
       />
 
       {/* Message Area */}

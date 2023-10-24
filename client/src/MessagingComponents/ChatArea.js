@@ -8,7 +8,7 @@ function ChatArea({inboxes, SelectedThreadID, setNewMessage, newMessage, setInbo
 // ---------------Detect whether or not an OWNER is logged in-------------------
 
   const [owner, setOwner] = useContext(OwnerContext)
-
+  const [user, setUser] = useContext(UserContext)
   
   useEffect(() => {
     fetch("/owner/check_session").then((response) => {
@@ -21,11 +21,8 @@ function ChatArea({inboxes, SelectedThreadID, setNewMessage, newMessage, setInbo
 //   console.log(owner)
 
   
-// --------------------------------------------------------------------
-
+// ----------------------------------------------------------------------
 // ---------------Detect whether or not a USER is logged in-------------------
-
-  const [user, setUser] = useContext(UserContext)
 
   useEffect(() => {
     fetch("/check_session").then((response) => {
@@ -34,13 +31,11 @@ function ChatArea({inboxes, SelectedThreadID, setNewMessage, newMessage, setInbo
       }
     })
   }, [])
+  
 // --------------------------------------------------------------------
 
 
-
-//const [inboxes, setInboxes] = useState([])
-//const [SelectedThreadID, setSelectedThreadID] = useState(null)
-    const selectedThread = inboxes?.find(inbox => inbox.id === SelectedThreadID);
+  const selectedThread = inboxes?.find(inbox => inbox.id === SelectedThreadID);
 
     return (
         <div className="flex-grow p-4">

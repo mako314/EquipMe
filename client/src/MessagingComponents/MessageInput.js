@@ -92,7 +92,7 @@ const handleSendMessage = () => {
     .then((response) => response.json())
     .then((message) => { if (message && message.id){
         console.log("Adding message:", message.content, "To a thread with an ID of:", message.thread_id)
-        const updatedInboxes = inboxes.map(inbox => {
+        const updatedInboxes = inboxes?.map(inbox => {
             if (inbox.id === SelectedThreadID) {
                 return {
                     ...inbox,
@@ -102,10 +102,10 @@ const handleSendMessage = () => {
                     }
                 }
             }
-            return inbox;
+            return inbox
         })
 
-        setInboxes(updatedInboxes);
+        setInboxes(updatedInboxes)
     }})
 
     setNewMessage('')
