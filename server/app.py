@@ -234,6 +234,18 @@ class UserByID(Resource):
 api.add_resource(UserByID, '/user/<int:id>')
 
 
+class UserByProfession(Resource):
+    def get(self, ownerProfession):
+        users = [user.to_dict(rules =('-_password_hash',)) for user in User.query.filter(User.profession == ownerProfession).all()]
+        if users:
+            response = make_response(users, 200)
+        else:
+            response = make_response({
+            "error": "Users not found"
+            }, 404)
+
+        return response
+api.add_resource(UserByProfession, '/users/<string:ownerProfession>')
 #-----------------------------------------------------------EQUIPMENT Owners Classes--------------------------------------------------------------
 
 #Display all Owners of Equipment who list their stuff to rent, users should be able to click the Owner and get taken to their page with all their equipment
