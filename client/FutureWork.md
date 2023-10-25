@@ -266,3 +266,12 @@ OwnerFeaturedEquipment
 
 7. lets work on calendar dates for the forms also 
 
+
+
+
+
+
+
+Stopped calendars for a while, been working on the messaging system which is almost complete! 
+
+Would be a good idea to make my svg a component that way it's more re-usable

@@ -14,6 +14,7 @@ function OwnerDashboard({ownerToEdit, updateOwner, setFromOwnerDash, users, sear
 
     const [owner, setOwner] = useContext(OwnerContext)
     const [toggleHomeDash, setToggleHomeDash] = useState(null)
+    const [togglePotentialRenters, setTogglePotentialRenters] = useState(false)
 
     useEffect(() => {
         fetch("/owner/check_session").then((response) => {
@@ -22,10 +23,6 @@ function OwnerDashboard({ownerToEdit, updateOwner, setFromOwnerDash, users, sear
             }
         });
     }, []);
-
-    // const 
-    // { equipment,
-    //  } = owner
 
     console.log(owner)
     console.log(users)
@@ -73,31 +70,15 @@ useEffect(() => {
         <div> Planned Deals </div>
 //------------------------------------------------------------------------------------
 
-    // potentialRenters =
-    //     <div>
-    //         Here I'd like to include potential renters that could be interested in this owners equipment. For example if someone has rented span heavy machinery 8 days out of every month?
-    //     </div>
-    
-    useEffect(() => {
+    const handlePotentialRenter = () => {
         potentialRenters =
-    <>
-        <UserCollection searchTerm={searchTerm} users={users}/>
-    </>
-    }, [owner, users])
+        <>
+            <UserCollection searchTerm={searchTerm} users={users}/>
+        </>
+    }
 
-    // searchTerm, users
-    console.log(potentialRenters)
+    console.log(togglePotentialRenters)
     console.log(toggleHomeDash)
-
-
-
-    // useEffect(() => {
-    //     fetch(`/users/${owner.profession}`).then((response) => {
-    //       if (response.ok) {
-    //         response.json().then((user) => setUser(user))
-    //       }
-    //     })
-    //   }, [])
 
     if (owner) {
         
@@ -155,7 +136,10 @@ useEffect(() => {
 
                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(plannedDeals)}> Planned Deals </span>
 
-                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(potentialRenters)}>Potential Renters</span>
+                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {
+                                handlePotentialRenter()
+                                setToggleHomeDash(potentialRenters)
+                            }}>Potential Renters</span>
 
                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none"> What do I need here </span>
 
