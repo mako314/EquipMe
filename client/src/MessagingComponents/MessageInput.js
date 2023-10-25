@@ -36,15 +36,11 @@ function MessageInput({SelectedThreadID, setNewMessage, newMessage, setInboxes, 
   }, [])
 // --------------------------------------------------------------------
 
-//const [inboxes, setInboxes] = useState([])
-//const [SelectedThreadID, setSelectedThreadID] = useState(null)
-//const selectedThread = inboxes?.find(inbox => inbox.id === SelectedThreadID);
-// const [newMessage, setNewMessage] = useState('') // State for the new message input
-
 const handleSendMessage = () => {
 
     let message
-    // let currentSelectedContextId = selectedContextId
+    
+    // This portion below tests whether or not a user or an owner is logged in, and declares them the sender. From there, the recipient info is pulled from inbox.js and prop drilled into here and placed into the appropriate spot.
 
     if (owner && owner.id){
       message = {
@@ -92,8 +88,11 @@ const handleSendMessage = () => {
     .then((response) => response.json())
     .then((message) => { if (message && message.id){
         console.log("Adding message:", message.content, "To a thread with an ID of:", message.thread_id)
+        //This monster down here is what does all the magic. Cannot believe I hadn't considered just using the spread operator for real time updates... ah!!
         const updatedInboxes = inboxes?.map(inbox => {
             if (inbox.id === SelectedThreadID) {
+                console.log("Inbox ID:",inbox.id)
+                console.log("Thread ID:",SelectedThreadID)
                 return {
                     ...inbox,
                     thread: {

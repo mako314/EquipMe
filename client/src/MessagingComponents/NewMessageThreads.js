@@ -40,7 +40,7 @@ function NewMessageThreads() {
   const [newMessage, setNewMessage] = useState('') // State for the new message input
   const [recipientInfo, setRecipientInfo] = useState([])
 
-  console.log("This is your recipient!:",recipientInfo)
+  // console.log("This is your recipient!:",recipientInfo)
 
   return (
     <div className="flex bg-gray-100 min-h-screen">

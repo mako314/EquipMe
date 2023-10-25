@@ -34,7 +34,7 @@ function ChatArea({inboxes, SelectedThreadID, setNewMessage, newMessage, setInbo
   
 // --------------------------------------------------------------------
 
-
+  // Selects the thread to display , I may incorporate a place holder in place of it being empty at the mounting of the application
   const selectedThread = inboxes?.find(inbox => inbox.id === SelectedThreadID);
 
     return (

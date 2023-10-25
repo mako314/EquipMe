@@ -43,17 +43,8 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
         // console.log("Owner Inboxes:", owner_inboxes)
     }
 
-    // useEffect(() => {
-    //     if (user){
-    //     setInboxes(user)
-    //     } else if (owner){
-    //     setInboxes(owner_inboxes)
-    //     } else{
-    //     setInboxes(null)
-    //     }
-    //   }, [user, owner, owner_inboxes])
 
-
+    // I had a normal use Effect earlier, but I was getting issues, so I incorporated Array.isArray to test for whether or not it's an array before setting state
     useEffect(() => {
       if (user_inboxes && Array.isArray(user_inboxes)) {
           setInboxes(user_inboxes)
@@ -64,19 +55,19 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
       }
   }, [user_inboxes, owner_inboxes])
 
-    console.log("Inboxes in State:", inboxes)
+    // console.log("Inboxes in State:", inboxes)
 
+    //This handles simple thread selection, basically taking the threads we have mapped out on the left sidebar and taking the ID to select the thread.
     const handleThreadSelect = (threadID) => {
     setSelectedThreadID(threadID)
-    console.log("Selected thread ID:", threadID)
+    // console.log("Selected thread ID:", threadID)
     }
 
+    //Goes inside the onclick with the conditionals (ifs and else ifs) to determine who the recipient is. Tests for whether or not an individual signed in is the recipient or the sender, takes that ID and user type to connect to backend.
     const fetchRecipientData = async (recipientID, userType) => {
       let endpoint = userType === "user" ? `/user/${recipientID}` : `/equipment_owner/${recipientID}`;
       
       // console.log("Recipient ID:", recipientID)
-      
-
       try {
         const response = await fetch(endpoint)
         if (response.ok) {
