@@ -58,13 +58,13 @@ function OwnerDisplay() {
                             </ul> */}
                             {/* although it says equipmentMap, this map is really universal, so name may be prone to CHANGE */}
 
-                            <EquipmentMap location={location}/> 
+                            {/* <EquipmentMap location={location}/>  */}
 
                         </div>
                     </div>
                 </div>
 
-                {/* --- right hand side content --- */}
+                {/* --- Right hand side content --- */}
                 <div class="col-span-4 sm:col-span-9">
                     <div class="bg-white shadow rounded-lg p-6">
                         <h2 class="text-xl font-bold mb-4">About Me</h2>
