@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-function UserCard({ id, email, name, location, phone, profileImage, equipmentArray, handleEditOwner, item, handleOwnerDelete }) {
+function UserCard({ id, email, name, location, phone, profileImage, item, profession }) {
 
 
     //test can likely delete below

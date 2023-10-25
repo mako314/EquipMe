@@ -2,27 +2,18 @@ import React, { useState, useEffect } from 'react';
 import UserCard from "./UserCard";
 
 
-function UserCollection({ searchTerm, handleEditOwner, handleOwnerDelete, equipmentOwnerArray }) {
+function UserCollection({ searchTerm, users }) {
   
-    // const [equipmentOwnerArray, setEquipmentOwnerArray] = useState([])
+    const userCards = users?.map((item) => {
 
-    // useEffect(() => {
-    //     fetch("/equipment_owners")
-    //         .then((resp) => resp.json())
-    //         .then((data) => {
-    //             setEquipmentOwnerArray(data)
-    //         })
-    // }, [])
-    const ownerCards = equipmentOwnerArray?.map((item) => {
-
-            if (item.name.toLowerCase().includes(searchTerm.toLowerCase()) || item.location.toLowerCase().includes(searchTerm.toLowerCase()) || item.email.toLowerCase().includes(searchTerm.toLowerCase()) || item.phone.toLowerCase().includes(searchTerm.toLowerCase())){
-            return <UserCard key={item.email} id={item.id} email={item.email} name={item.name} location={item.location} phone={item.phone} equipmentArray={item.equipment} profileImage={item.profileImage} handleEditOwner={handleEditOwner} item={item} handleOwnerDelete={handleOwnerDelete}/>}
+            if (item.name?.toLowerCase().includes(searchTerm.toLowerCase()) || item.location?.toLowerCase().includes(searchTerm.toLowerCase()) || item.email?.toLowerCase().includes(searchTerm.toLowerCase()) || item.phone?.toLowerCase().includes(searchTerm.toLowerCase())){
+            return <UserCard key={item.email} id={item.id} email={item.email} name={item.name} location={item.location} phone={item.phone} profileImage={item.profileImage} item={item} profession={item.profession}/>}
     })
 
     return (
     <div className="p-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {ownerCards}
+        {userCards}
         </div>
 
     </div>)

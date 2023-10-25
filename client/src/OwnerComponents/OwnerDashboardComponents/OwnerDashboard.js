@@ -1,11 +1,16 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
+
+//Imports//
 import OwnerContext from '../OwnerContext';
 import ProductCollection from '../../EquipmentComponents/ProductCollection'
-import { ReactComponent as EquipMeLogo } from '../../Content/EquipMeLogo.svg'
 import OwnerEditForm from '../OwnerEditForm';
+import UserCollection from '../../UserComponents/UserCollection';
 
-function OwnerDashboard({ownerToEdit, updateOwner, setFromOwnerDash, users}) {
+import { ReactComponent as EquipMeLogo } from '../../Content/EquipMeLogo.svg'
+
+
+function OwnerDashboard({ownerToEdit, updateOwner, setFromOwnerDash, users, searchTerm}) {
 
     const [owner, setOwner] = useContext(OwnerContext)
     const [toggleHomeDash, setToggleHomeDash] = useState(null)
@@ -23,12 +28,13 @@ function OwnerDashboard({ownerToEdit, updateOwner, setFromOwnerDash, users}) {
     //  } = owner
 
     console.log(owner)
-    // let name
-    // let equipment
-    // if (owner){
-    //      name  = owner.name
-    //      equipment = owner.equipment
-    // }
+    console.log(users)
+    let name
+    let equipment
+    if (owner){
+         name  = owner.name
+         equipment = owner.equipment
+    }
 
     const navigate = useNavigate()
 
@@ -40,7 +46,10 @@ function OwnerDashboard({ownerToEdit, updateOwner, setFromOwnerDash, users}) {
     let dashHome
     let loggedInDisplay
     let activeListings
-    let accountSettings 
+    let accountSettings
+    let plannedDeals
+    let potentialRenters
+
 //----------------------------------------activeListings--------------------------------
     useEffect(() => {
         if (owner){
@@ -60,16 +69,24 @@ useEffect(() => {
 }, [owner])
 //------------------------------------------------------------------------------------
 
-    let plannedDeals =
+    plannedDeals =
         <div> Planned Deals </div>
 //------------------------------------------------------------------------------------
 
-    let potentialRenters =
-        <div>
-            Here I'd like to include potential renters that could be interested in this owners equipment. For example if someone has rented span heavy machinery 8 days out of every month?
-        </div>
+    // potentialRenters =
+    //     <div>
+    //         Here I'd like to include potential renters that could be interested in this owners equipment. For example if someone has rented span heavy machinery 8 days out of every month?
+    //     </div>
+    
+    useEffect(() => {
+        potentialRenters =
+    <>
+        <UserCollection searchTerm={searchTerm} users={users}/>
+    </>
+    }, [owner, users])
 
-
+    // searchTerm, users
+    console.log(potentialRenters)
     console.log(toggleHomeDash)
 
 
