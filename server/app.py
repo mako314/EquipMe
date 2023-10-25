@@ -735,95 +735,6 @@ api.add_resource(AvailabilityChecker, "/availability/<int:equipment_id>/<string:
 
 #----------------------------------------------- Messaging Routes -----------------------------------------------------------------------------
 
-# class OwnerMessages(Resource):
-#     def get(self, owner_id):
-#         owner_message_threads = Inbox.query.filter_by(owner_id=owner_id).all()
-#         message_threads = []
-#         # print(owner_message_threads)
-
-#         for thread in owner_message_threads:
-#             # Needed to change this to just ID as opposed to message_id
-#             message_id = thread.id
-#             # Use message_id to retrieve the content of the message, sender, and recipient
-#             message = Message.query.get(message_id)
-#             sender_id = message.sender_id
-#             context_id = message.context_id
-#             recipient_id = message.recipient_id
-#             subject = message.subject
-#             content = message.content
-#             user_type = message.user_type
-#             message_status = message.message_status
-#             created_on = message.created_on
-
-#             # Append the message details to the message_threads list
-#             message_threads.append({
-#                 "id": message_id,
-#                 "message_id": message_id,
-#                 "sender_id": sender_id,
-#                 "recipient_id": recipient_id,
-#                 "context_id": context_id,
-#                 "user_type": user_type,
-#                 "subject": subject,
-#                 "content": content,
-#                 "message_status": message_status,
-#                 "created_on" : created_on
-#             })
-
-#         if message_threads:
-#             return make_response(message_threads, 200)
-#         else:
-#             response = make_response({
-#             "error": "Message thread not found"
-#             }, 404)
-#             return response
-
-# api.add_resource(OwnerMessages, "/owner/messages/<int:owner_id>/")
-
-# class UserMessages(Resource):
-#     def get(self, user_id):
-#         user_message_threads = Inbox.query.filter_by(user_id=user_id).all()
-#         message_threads = []
-#         print(user_message_threads)
-
-#         for thread in user_message_threads:
-#             # Needed to change this to just ID as opposed to message_id
-#             message_id = thread.id
-#             # Use message_id to retrieve the content of the message, sender, and recipient
-#             message = Message.query.get(message_id)
-#             sender_id = message.sender_id
-#             context_id = message.context_id
-#             recipient_id = message.recipient_id
-#             subject = message.subject
-#             content = message.content
-#             user_type = message.user_type
-#             message_status = message.message_status
-#             created_on = message.created_on
-            
-#             # Append the message details to the message_threads list
-#             message_threads.append({
-#                 "id": message_id,
-#                 "message_id": message_id,
-#                 "sender_id": sender_id,
-#                 "recipient_id": recipient_id,
-#                 "context_id": context_id,
-#                 "subject": subject,
-#                 "content": content,
-#                 "user_type": user_type,
-#                 "message_status": message_status,
-#                 "created_on" : created_on
-
-#             })
-
-#         if message_threads:
-#             return make_response(message_threads, 200)
-#         else:
-#             response = make_response({
-#             "error": "Message thread not found"
-#             }, 404)
-#             return response
-
-# api.add_resource(UserMessages, "/user/messages/<int:user_id>/")
-
 #--------------------------------------------Inbox handling, and message sending below-----------------------------------------
 class SendMessage(Resource):
     def post(self):
@@ -835,10 +746,10 @@ class SendMessage(Resource):
             sender_id = data['sender_id'],
             context_id = data['context_id'],
             user_type = data["user_type"],
-            subject = data['subject'],
             content = data['content'],
             message_status = data['message_status'],
-            created_on = datetime.utcnow()
+            created_on = datetime.utcnow(),
+            thread_id = data['thread_id']
         )
 
         db.session.add(new_message)
