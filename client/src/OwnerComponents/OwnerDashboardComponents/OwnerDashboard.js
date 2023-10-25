@@ -36,30 +36,28 @@ function OwnerDashboard({ownerToEdit, updateOwner, setFromOwnerDash, fromOwnerDa
     let dashHome
     let loggedInDisplay
     let activeListings
-
+    let accountSettings 
+//----------------------------------------activeListings--------------------------------
     useEffect(() => {
         activeListings =
     <div>
         <ProductCollection equipmentArray={owner.equipment}/>
     </div>
     }, [owner])
-
-
+//------------------------------------------------------------------------------------
+//---------------------------------------accountSettings------------------------------------
+    
+useEffect(() => {
+    accountSettings =
+<>
+    <OwnerEditForm ownerToEdit={ownerToEdit} updateOwner={updateOwner}/>
+</>
+}, [owner])
+//------------------------------------------------------------------------------------
 
     let plannedDeals =
         <div> Planned Deals </div>
-
-    
-    let accountSettings 
-    useEffect(() => {
-        accountSettings =
-    <>
-        <OwnerEditForm ownerToEdit={ownerToEdit} updateOwner={updateOwner}/>
-    </>
-    }, [owner])
-
-    
-
+//------------------------------------------------------------------------------------
 
     let potentialRenters =
         <div>
@@ -71,7 +69,13 @@ function OwnerDashboard({ownerToEdit, updateOwner, setFromOwnerDash, fromOwnerDa
 
 
 
-
+    // useEffect(() => {
+    //     fetch(`/users/${owner.profession}`).then((response) => {
+    //       if (response.ok) {
+    //         response.json().then((user) => setUser(user))
+    //       }
+    //     })
+    //   }, [])
 
     if (owner) {
         const { name } = owner
