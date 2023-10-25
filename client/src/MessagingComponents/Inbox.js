@@ -1,13 +1,17 @@
 import React, { useContext, useEffect, useState} from 'react'
 import OwnerContext from '../OwnerComponents/OwnerContext'
 import UserContext from '../UserComponents/UserContext'
+import {useNavigate} from 'react-router-dom';
 
 function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRecipientInfo }){
 
 // ---------------Detect whether or not an OWNER is logged in-------------------
+ 
 
   const [owner, setOwner] = useContext(OwnerContext)
   const [user, setUser] = useContext(UserContext)
+
+  const navigate = useNavigate();
   
   useEffect(() => {
     fetch("/owner/check_session").then((response) => {
@@ -78,11 +82,16 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
         console.error('Error fetching recipient data:', error)
       }
     }
+
+    const navigateBackToOwnerDash = () => {
+      navigate(`/owner/dashboard`)
+  }
     
 
     return(
-      <div className="w-1/4 bg-gray-200 p-4">
+      <div className="w-1/4 bg-gray-200 p-4 flex flex-col justify-between">
         {/* Left Sidebar */}
+        <div> 
         <h2 className="text-2xl font-bold mb-4">Message Inboxes</h2>
         <ul>
           {inboxes?.map((inbox) => (
@@ -131,6 +140,12 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
             </li>
           ))}
         </ul>
+        </div>
+        <div className="ml-auto flex items-center px-6 lg:ml-0 lg:p-0">
+              <button className="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded bg-amber-500 px-5 text-sm font-medium tracking-wide text-white shadow-md shadow-amber-200 transition duration-300 hover:bg-emerald-600 hover:shadow-sm hover:shadow-emerald-200 focus:bg-emerald-700 focus:shadow-sm focus:shadow-emerald-200 focus-visible:outline-none disabled:cursor-not-allowed disabled:border-emerald-300 disabled:bg-emerald-300 disabled:shadow-none"  onClick={navigateBackToOwnerDash}>
+               Return to Dashboard
+              </button>
+        </div>
       </div>
     )
 }
