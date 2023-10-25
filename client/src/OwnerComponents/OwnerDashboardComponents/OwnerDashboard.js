@@ -14,7 +14,7 @@ function OwnerDashboard({ownerToEdit, updateOwner, setFromOwnerDash, users, sear
 
     const [owner, setOwner] = useContext(OwnerContext)
     const [toggleHomeDash, setToggleHomeDash] = useState(null)
-    const [togglePotentialRenters, setTogglePotentialRenters] = useState(false)
+    const [potentialRentalUsers, setPotentialRentalUsers] = useState([])
 
     useEffect(() => {
         fetch("/owner/check_session").then((response) => {
@@ -69,15 +69,21 @@ useEffect(() => {
     plannedDeals =
         <div> Planned Deals </div>
 //------------------------------------------------------------------------------------
+    useEffect(() => {
+        fetch(`/users/${owner?.profession}`)
+        .then((resp) => resp.json())
+        .then((data) => {
+            setPotentialRentalUsers(data)
+        })
+    }, [owner])
 
     const handlePotentialRenter = () => {
         potentialRenters =
         <>
-            <UserCollection searchTerm={searchTerm} users={users}/>
+            <UserCollection searchTerm={searchTerm} users={potentialRentalUsers}/>
         </>
     }
 
-    console.log(togglePotentialRenters)
     console.log(toggleHomeDash)
 
     if (owner) {
