@@ -85,7 +85,10 @@ function App() {
   const [equipmentToEdit, setEquipmentToEdit] = useState([])
   const [featuredRental, setFeaturedRental] = useState([])
 
-  //Do I even need two state variables to do this ? Turns out all original fetches work
+  // Do I even need two state variables to do this ? Turns out all original fetches work
+
+  // State to determine if you came from ownerDash
+  const [fromOwnerDash, setFromOwnerDash] = useState(false)
 
   //-------------------------------------------- FOR USER - CHECK SESSION TO STAY LOGGED IN ON REFRESH--------------------------
 
@@ -310,7 +313,7 @@ function App() {
             <Route path='/temp/bulk_equipment_upload' element={<BulkEquipmentUpload />} />
 
             {/* Owner Dashboard Page*/}
-            <Route path='/owner/dashboard' element={<OwnerDashboard updateOwner={updateOwner} ownerToEdit={ownerToEdit} />} />
+            <Route path='/owner/dashboard' element={<OwnerDashboard updateOwner={updateOwner} ownerToEdit={ownerToEdit} setFromOwnerDash={setFromOwnerDash} fromOwnerDash={fromOwnerDash}/>} />
 
             {/* Temporary calendar routing */}
             <Route path='/temp/calendar' element={<Calendar />} />
@@ -320,7 +323,7 @@ function App() {
 
             <Route path='/temp/equipment/upload' element={<ProductImageForm />} />
 
-            <Route path='/messaging' element={<NewMessageThreads />} />
+            <Route path='/messaging' element={<NewMessageThreads fromOwnerDash={fromOwnerDash}/>} />
           </Routes>
 
           <Footer />

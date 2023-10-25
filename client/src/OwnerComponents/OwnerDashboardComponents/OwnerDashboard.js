@@ -5,7 +5,7 @@ import ProductCollection from '../../EquipmentComponents/ProductCollection'
 import { ReactComponent as EquipMeLogo } from '../../Content/EquipMeLogo.svg'
 import OwnerEditForm from '../OwnerEditForm';
 
-function OwnerDashboard({ownerToEdit, updateOwner}) {
+function OwnerDashboard({ownerToEdit, updateOwner, setFromOwnerDash, fromOwnerDash}) {
 
     const [owner, setOwner] = useContext(OwnerContext)
     const [toggleHomeDash, setToggleHomeDash] = useState(null)
@@ -164,7 +164,7 @@ function OwnerDashboard({ownerToEdit, updateOwner}) {
 
                             <Link to='/list_equipment'>
 
-                                <button type="submit" className="flex items-center justify-center h-10 px-4 ml-auto mr-2 rounded-lg bg-orange-500 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700"> List an Item</button>
+                                <button type="submit" className="flex items-center justify-center h-10 px-4 ml-auto mr-2 rounded-lg bg-orange-500 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700" onClick={setFromOwnerDash(true)}> List an Item</button>
 
                             </Link>
 
