@@ -3,8 +3,9 @@ import { Link, useNavigate } from 'react-router-dom'
 import OwnerContext from '../OwnerContext';
 import ProductCollection from '../../EquipmentComponents/ProductCollection'
 import { ReactComponent as EquipMeLogo } from '../../Content/EquipMeLogo.svg'
+import OwnerEditForm from '../OwnerEditForm';
 
-function OwnerDashboard() {
+function OwnerDashboard({ownerToEdit, updateOwner}) {
 
     const [owner, setOwner] = useContext(OwnerContext)
     const [toggleHomeDash, setToggleHomeDash] = useState(null)
@@ -35,6 +36,7 @@ function OwnerDashboard() {
     let dashHome
     let loggedInDisplay
     let activeListings
+
     useEffect(() => {
         activeListings =
     <div>
@@ -42,9 +44,19 @@ function OwnerDashboard() {
     </div>
     }, [owner])
 
+
+
     let plannedDeals =
         <div> Planned Deals </div>
 
+    
+    let accountSettings 
+    useEffect(() => {
+        accountSettings =
+    <>
+        <OwnerEditForm ownerToEdit={ownerToEdit} updateOwner={updateOwner}/>
+    </>
+    }, [owner])
 
     
 
@@ -107,9 +119,9 @@ function OwnerDashboard() {
                                 </svg>
                             </div>
                             <div className="absolute z-10 flex-col items-start hidden w-full pb-1 bg-white shadow-lg group-focus:flex">
-                                <span className="w-full px-4 py-2 text-left hover:bg-gray-300" href="#"> My Listings? </span>
-                                <span className="w-full px-4 py-2 text-left hover:bg-gray-300" href="#"> Possible Conversions </span>
-                                <span className="w-full px-4 py-2 text-left hover:bg-gray-300" href="#"> Graphs </span>
+                                <span className="w-full px-4 py-2 text-left hover:bg-gray-300" onClick={() => setToggleHomeDash(accountSettings)}> Account Settings </span>
+                                <span className="w-full px-4 py-2 text-left hover:bg-gray-300" > Possible Conversions </span>
+                                <span className="w-full px-4 py-2 text-left hover:bg-gray-300" > Graphs </span>
                             </div>
                         </button>
                         <div className="flex flex-col flex-grow p-4 overflow-auto">
@@ -127,7 +139,7 @@ function OwnerDashboard() {
                             <Link to='/messaging'>
                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none"> Inbox </span>
                             </Link>
-                            
+
                             <span className="flex items-center flex-shrink-0 h-10 px-3 mt-auto text-sm font-medium bg-gray-200 rounded hover:bg-gray-300"
                                 href="#">
                                 <svg className="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
