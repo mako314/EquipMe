@@ -4,7 +4,7 @@ import UserContext from '../UserComponents/UserContext'
 import Inbox from './Inbox'
 import ChatArea from './ChatArea'
 
-function NewMessageThreads() {
+function NewMessageThreads({fromOwnerDash}) {
 
 // ---------------Detect whether or not an OWNER is logged in-------------------
 
@@ -53,6 +53,7 @@ function NewMessageThreads() {
       newMessage={newMessage}
       setRecipientInfo={setRecipientInfo}
       recipientInfo={recipientInfo}
+      fromOwnerDash={fromOwnerDash}
       />
 
       {/* Message Area */}

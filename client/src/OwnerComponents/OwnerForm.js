@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import {useFormik} from "formik"
 import { object, string, number} from 'yup'
 
-function UserForm({addOwner}){
+function OwnerForm({addOwner}){
 
     const [error, setError] = useState()
     const navigate = useNavigate()
@@ -118,7 +118,7 @@ function UserForm({addOwner}){
     )
 }
 
-export default UserForm;
+export default OwnerForm;
 
 
 // <form className="form" onSubmit={formik.handleSubmit}>

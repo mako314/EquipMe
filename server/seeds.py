@@ -174,7 +174,7 @@ if __name__ == '__main__':
         owner_2 = EquipmentOwner(
             name="Emily Johnson", # Party Equipment
             location="Phoenix, Arizona",
-            profession="Party",
+            profession="Construction Equipment Operator",
             phone="602-555-7891",
             email="ejohnson@live.com",
             _password_hash="",

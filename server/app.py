@@ -142,7 +142,7 @@ class Users(Resource):
     
     #post to users, DONE, unsure if i want to be able to see all users..
     def get(self):
-        users = [user.to_dict() for user in User.query.all()]
+        users = [user.to_dict(rules =('-_password_hash',)) for user in User.query.all()]
 
         response = make_response(users, 200)
 
@@ -234,6 +234,18 @@ class UserByID(Resource):
 api.add_resource(UserByID, '/user/<int:id>')
 
 
+class UserByProfession(Resource):
+    def get(self, ownerProfession):
+        users = [user.to_dict(rules =('-_password_hash',)) for user in User.query.filter(User.profession == ownerProfession).all()]
+        if users:
+            response = make_response(users, 200)
+        else:
+            response = make_response({
+            "error": "Users not found"
+            }, 404)
+
+        return response
+api.add_resource(UserByProfession, '/users/<string:ownerProfession>')
 #-----------------------------------------------------------EQUIPMENT Owners Classes--------------------------------------------------------------
 
 #Display all Owners of Equipment who list their stuff to rent, users should be able to click the Owner and get taken to their page with all their equipment
@@ -793,28 +805,6 @@ class ThreadById(Resource):
 
 api.add_resource(ThreadById, "/thread/<int:thread_id>")
 
-# class MessageToInbox(Resource):
-#     def post(self):
-#         data = request.get_json()
-#         #try Validations:
-#         add_to_inbox = Inbox(
-#             user_id=data['user_id'],
-#             owner_id=data['owner_id'],
-#             message_id=data['message_id']
-#         )
-
-#         db.session.add(add_to_inbox)
-
-#         db.session.commit()
-
-#         response = make_response(add_to_inbox.to_dict(), 201)
-
-#         return response
-
-#         #except ValueError ()
-
-# api.add_resource(MessageToInbox, "/message/to/inbox")
-
 class EditMessage(Resource):
     def patch(self, id):
         message = Message.query.filter(Message.id == id).first()
@@ -849,46 +839,6 @@ class EditMessage(Resource):
             return response
         
 api.add_resource(EditMessage, '/message/<int:id>')
-
-# class NewThread(Resource):
-#     def post(self):
-#         data = request.getjson()
-
-#         #try Validations:
-#         new_inbox = Inbox(
-#             user_id = data['user_id'],
-#             owner_id = data['owner_id'],
-#             message_id = data['message_id'],
-#         )
-
-#         db.session.add(new_inbox)
-
-#         db.session.commit()
-
-#         response = make_response(new_inbox.to_dict(), 201)
-
-#         return response
-#         #except ValueError ()
-
-# api.add_resource(NewThread, '/inbox')
-
-# class InboxDeletion(Resource):
-#     def delete(self, id):
-#         inbox_thread = Inbox.query.filter(Inbox.id == id).first()
-
-#         if inbox_thread:
-#             #may need to delete the renter id and equipment id
-#             db.session.delete(inbox_thread)
-#             db.session.commit()
-#             response = make_response({"message":"Succesfully deleted!"}, 204)
-#             return response
-#         else:
-#             response = make_response({
-#             "error": "Thread not found"
-#             }, 404)
-#             return response
-
-# api.add_resource(InboxDeletion, '/inbox/<int:id>')
 
 
 if __name__ == '__main__':

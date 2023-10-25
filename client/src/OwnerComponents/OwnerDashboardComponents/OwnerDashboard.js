@@ -1,13 +1,20 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
+
+//Imports//
 import OwnerContext from '../OwnerContext';
 import ProductCollection from '../../EquipmentComponents/ProductCollection'
+import OwnerEditForm from '../OwnerEditForm';
+import UserCollection from '../../UserComponents/UserCollection';
+
 import { ReactComponent as EquipMeLogo } from '../../Content/EquipMeLogo.svg'
 
-function OwnerDashboard() {
+
+function OwnerDashboard({ownerToEdit, updateOwner, setFromOwnerDash, users, searchTerm}) {
 
     const [owner, setOwner] = useContext(OwnerContext)
     const [toggleHomeDash, setToggleHomeDash] = useState(null)
+    const [potentialRentalUsers, setPotentialRentalUsers] = useState([])
 
     useEffect(() => {
         fetch("/owner/check_session").then((response) => {
@@ -17,13 +24,14 @@ function OwnerDashboard() {
         });
     }, []);
 
-    // const 
-    // { equipment,
-    //  } = owner
-
     console.log(owner)
-
-
+    console.log(users)
+    let name
+    let equipment
+    if (owner){
+         name  = owner.name
+         equipment = owner.equipment
+    }
 
     const navigate = useNavigate()
 
@@ -35,37 +43,51 @@ function OwnerDashboard() {
     let dashHome
     let loggedInDisplay
     let activeListings
+    let accountSettings
+    let plannedDeals
+    let potentialRenters
+
+//----------------------------------------activeListings--------------------------------
     useEffect(() => {
+        if (owner){
         activeListings =
     <div>
         <ProductCollection equipmentArray={owner.equipment}/>
-    </div>
+    </div>}
+    }, [owner])
+//------------------------------------------------------------------------------------
+//---------------------------------------accountSettings------------------------------------
+    
+useEffect(() => {
+    accountSettings =
+<>
+    <OwnerEditForm ownerToEdit={ownerToEdit} updateOwner={updateOwner}/>
+</>
+}, [owner])
+//------------------------------------------------------------------------------------
+
+    plannedDeals =
+        <div> Planned Deals </div>
+//------------------------------------------------------------------------------------
+    useEffect(() => {
+        fetch(`/users/${owner?.profession}`)
+        .then((resp) => resp.json())
+        .then((data) => {
+            setPotentialRentalUsers(data)
+        })
     }, [owner])
 
-    let plannedDeals =
-        <div> Planned Deals </div>
-
-
-    
-
-
-    let potentialRenters =
-        <div>
-            Here I'd like to include potential renters that could be interested in this owners equipment. For example if someone has rented a heavy machinery 8 days out of every month?
-        </div>
-
+    const handlePotentialRenter = () => {
+        potentialRenters =
+        <>
+            <UserCollection searchTerm={searchTerm} users={potentialRentalUsers}/>
+        </>
+    }
 
     console.log(toggleHomeDash)
 
-
-
-
-
     if (owner) {
-        const { name } = owner
-        //-----------------------------------------------
-
-
+        
         dashHome =
             <div>
                 {/* CENTER OF PAGE , BLOCKS AND SUCH  */}
@@ -107,9 +129,9 @@ function OwnerDashboard() {
                                 </svg>
                             </div>
                             <div className="absolute z-10 flex-col items-start hidden w-full pb-1 bg-white shadow-lg group-focus:flex">
-                                <a className="w-full px-4 py-2 text-left hover:bg-gray-300" href="#"> My Listings? </a>
-                                <a className="w-full px-4 py-2 text-left hover:bg-gray-300" href="#"> Possible Conversions </a>
-                                <a className="w-full px-4 py-2 text-left hover:bg-gray-300" href="#"> Graphs </a>
+                                <span className="w-full px-4 py-2 text-left hover:bg-gray-300" onClick={() => setToggleHomeDash(accountSettings)}> Account Settings </span>
+                                <span className="w-full px-4 py-2 text-left hover:bg-gray-300" > Possible Conversions </span>
+                                <span className="w-full px-4 py-2 text-left hover:bg-gray-300" > Graphs </span>
                             </div>
                         </button>
                         <div className="flex flex-col flex-grow p-4 overflow-auto">
@@ -120,19 +142,24 @@ function OwnerDashboard() {
 
                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(plannedDeals)}> Planned Deals </span>
 
-                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(potentialRenters)}>Potential Renters</span>
+                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {
+                                handlePotentialRenter()
+                                setToggleHomeDash(potentialRenters)
+                            }}>Potential Renters</span>
 
                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none"> What do I need here </span>
 
-                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none"> extra </span>
+                            <Link to='/messaging'>
+                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none"> Inbox </span>
+                            </Link>
 
-                            <a className="flex items-center flex-shrink-0 h-10 px-3 mt-auto text-sm font-medium bg-gray-200 rounded hover:bg-gray-300"
+                            <span className="flex items-center flex-shrink-0 h-10 px-3 mt-auto text-sm font-medium bg-gray-200 rounded hover:bg-gray-300"
                                 href="#">
                                 <svg className="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                                 </svg>
                                 <span className="ml-2 leading-none">New Item</span>
-                            </a>
+                            </span>
                         </div>
 
                     </div>
@@ -147,11 +174,13 @@ function OwnerDashboard() {
                             {/* <button className="flex items-center justify-center h-10 px-4 ml-auto text-sm font-medium bg-gray-200 rounded hover:bg-gray-300">
                                 Action 2
                             </button> */}
+
                             <Link to='/list_equipment'>
 
-                                <button type="submit" className="flex items-center justify-center h-10 px-4 ml-auto mr-2 rounded-lg bg-orange-500 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700"> List an Item</button>
+                                <button type="submit" className="flex items-center justify-center h-10 px-4 ml-auto mr-2 rounded-lg bg-orange-500 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700" onClick={setFromOwnerDash(true)}> List an Item</button>
 
                             </Link>
+
                             <button className="relative ml-2 text-sm focus:outline-none group">
                                 <div className="flex items-center justify-between w-10 h-10 rounded hover:bg-gray-300">
                                     <svg className="w-5 h-5 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -159,9 +188,9 @@ function OwnerDashboard() {
                                     </svg>
                                 </div>
                                 <div className="absolute right-0 flex-col items-start hidden w-40 pb-1 bg-white border border-gray-300 shadow-lg group-focus:flex">
-                                    <a className="w-full px-4 py-2 text-left hover:bg-gray-300" href="#">Menu Item 1</a>
-                                    <a className="w-full px-4 py-2 text-left hover:bg-gray-300" href="#">Menu Item 1</a>
-                                    <a className="w-full px-4 py-2 text-left hover:bg-gray-300" href="#">Menu Item 1</a>
+                                    <span className="w-full px-4 py-2 text-left hover:bg-gray-300" href="#">Menu Item 1</span>
+                                    <span className="w-full px-4 py-2 text-left hover:bg-gray-300" href="#">Menu Item 1</span>
+                                    <span className="w-full px-4 py-2 text-left hover:bg-gray-300" href="#">Menu Item 1</span>
                                 </div>
                             </button>
                         </div>

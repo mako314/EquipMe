@@ -11,6 +11,7 @@ import Footer from './HeaderFooterComponents/Footer'
 import ProductCollection from './EquipmentComponents/ProductCollection';
 import OwnerCollection from './OwnerComponents/OwnerCollection';
 import RentalCollection from './RentalComponents/RentalCollection'
+import UserCollection from './UserComponents/UserCollection';
 
 //-------------------------Display Pages-----------------------------------
 import ProductDisplay from './EquipmentComponents/ProductDisplay';
@@ -76,7 +77,7 @@ function App() {
   const [searchTerm, setSearchTerm] = useState("")
 
   //These useStates will handle POST. Grabbing and ...spreading so it updates accordingly.
-  const [newUsers, setNewUsers] = useState([])
+  const [users, setUsers] = useState([])
   const [owners, setOwners] = useState([])
   const [rentalAgreement, setRentalAgreement] = useState([])
 
@@ -85,7 +86,10 @@ function App() {
   const [equipmentToEdit, setEquipmentToEdit] = useState([])
   const [featuredRental, setFeaturedRental] = useState([])
 
-  //Do I even need two state variables to do this ? Turns out all original fetches work
+  // Do I even need two state variables to do this ? Turns out all original fetches work
+
+  // State to determine if you came from ownerDash
+  const [fromOwnerDash, setFromOwnerDash] = useState(false)
 
   //-------------------------------------------- FOR USER - CHECK SESSION TO STAY LOGGED IN ON REFRESH--------------------------
 
@@ -114,9 +118,8 @@ function App() {
   // console.log(owner)
 
   //------------------------------------------------------------------------------------------------------------------
+  
   //---------------------------------Fetches -----------------------
-
-
   //---------------------------------Posts and general Fetches -----------------------
   //Going to improvise this for the post also / maybe patch also?
   useEffect(() => {
@@ -138,12 +141,12 @@ function App() {
     fetch("/users")
       .then((resp) => resp.json())
       .then((data) => {
-        setNewUsers(data)
+        setUsers(data)
       })
   }, [])
 
   const addUser = (user) => {
-    setNewUsers(users => [...users, user])
+    setUsers(users => [...users, user])
   }
   //--------------------------------------------
 
@@ -310,7 +313,7 @@ function App() {
             <Route path='/temp/bulk_equipment_upload' element={<BulkEquipmentUpload />} />
 
             {/* Owner Dashboard Page*/}
-            <Route path='/owner/dashboard' element={<OwnerDashboard />} />
+            <Route path='/owner/dashboard' element={<OwnerDashboard updateOwner={updateOwner} ownerToEdit={ownerToEdit} setFromOwnerDash={setFromOwnerDash} users={users} searchTerm={searchTerm}/>} />
 
             {/* Temporary calendar routing */}
             <Route path='/temp/calendar' element={<Calendar />} />
@@ -320,7 +323,9 @@ function App() {
 
             <Route path='/temp/equipment/upload' element={<ProductImageForm />} />
 
-            <Route path='/messaging' element={<NewMessageThreads />} />
+            <Route path='/messaging' element={<NewMessageThreads fromOwnerDash={fromOwnerDash}/>} />
+            <Route path='/users/extra' element={<UserCollection searchTerm={searchTerm} users={users}/>} />
+
           </Routes>
 
           <Footer />
