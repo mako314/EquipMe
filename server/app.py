@@ -142,7 +142,7 @@ class Users(Resource):
     
     #post to users, DONE, unsure if i want to be able to see all users..
     def get(self):
-        users = [user.to_dict() for user in User.query.all()]
+        users = [user.to_dict(rules =('-_password_hash',)) for user in User.query.all()]
 
         response = make_response(users, 200)
 

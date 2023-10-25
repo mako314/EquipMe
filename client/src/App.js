@@ -76,7 +76,7 @@ function App() {
   const [searchTerm, setSearchTerm] = useState("")
 
   //These useStates will handle POST. Grabbing and ...spreading so it updates accordingly.
-  const [newUsers, setNewUsers] = useState([])
+  const [users, setUsers] = useState([])
   const [owners, setOwners] = useState([])
   const [rentalAgreement, setRentalAgreement] = useState([])
 
@@ -117,9 +117,8 @@ function App() {
   // console.log(owner)
 
   //------------------------------------------------------------------------------------------------------------------
+  
   //---------------------------------Fetches -----------------------
-
-
   //---------------------------------Posts and general Fetches -----------------------
   //Going to improvise this for the post also / maybe patch also?
   useEffect(() => {
@@ -141,12 +140,12 @@ function App() {
     fetch("/users")
       .then((resp) => resp.json())
       .then((data) => {
-        setNewUsers(data)
+        setUsers(data)
       })
   }, [])
 
   const addUser = (user) => {
-    setNewUsers(users => [...users, user])
+    setUsers(users => [...users, user])
   }
   //--------------------------------------------
 
@@ -313,7 +312,7 @@ function App() {
             <Route path='/temp/bulk_equipment_upload' element={<BulkEquipmentUpload />} />
 
             {/* Owner Dashboard Page*/}
-            <Route path='/owner/dashboard' element={<OwnerDashboard updateOwner={updateOwner} ownerToEdit={ownerToEdit} setFromOwnerDash={setFromOwnerDash} fromOwnerDash={fromOwnerDash}/>} />
+            <Route path='/owner/dashboard' element={<OwnerDashboard updateOwner={updateOwner} ownerToEdit={ownerToEdit} setFromOwnerDash={setFromOwnerDash} users={users}/>} />
 
             {/* Temporary calendar routing */}
             <Route path='/temp/calendar' element={<Calendar />} />
@@ -324,6 +323,7 @@ function App() {
             <Route path='/temp/equipment/upload' element={<ProductImageForm />} />
 
             <Route path='/messaging' element={<NewMessageThreads fromOwnerDash={fromOwnerDash}/>} />
+          
           </Routes>
 
           <Footer />

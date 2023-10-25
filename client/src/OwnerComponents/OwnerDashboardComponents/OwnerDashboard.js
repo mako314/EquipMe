@@ -5,7 +5,7 @@ import ProductCollection from '../../EquipmentComponents/ProductCollection'
 import { ReactComponent as EquipMeLogo } from '../../Content/EquipMeLogo.svg'
 import OwnerEditForm from '../OwnerEditForm';
 
-function OwnerDashboard({ownerToEdit, updateOwner, setFromOwnerDash, fromOwnerDash}) {
+function OwnerDashboard({ownerToEdit, updateOwner, setFromOwnerDash, users}) {
 
     const [owner, setOwner] = useContext(OwnerContext)
     const [toggleHomeDash, setToggleHomeDash] = useState(null)
@@ -23,8 +23,12 @@ function OwnerDashboard({ownerToEdit, updateOwner, setFromOwnerDash, fromOwnerDa
     //  } = owner
 
     console.log(owner)
-
-
+    // let name
+    // let equipment
+    // if (owner){
+    //      name  = owner.name
+    //      equipment = owner.equipment
+    // }
 
     const navigate = useNavigate()
 
@@ -39,10 +43,11 @@ function OwnerDashboard({ownerToEdit, updateOwner, setFromOwnerDash, fromOwnerDa
     let accountSettings 
 //----------------------------------------activeListings--------------------------------
     useEffect(() => {
+        if (owner){
         activeListings =
     <div>
         <ProductCollection equipmentArray={owner.equipment}/>
-    </div>
+    </div>}
     }, [owner])
 //------------------------------------------------------------------------------------
 //---------------------------------------accountSettings------------------------------------
@@ -78,10 +83,7 @@ useEffect(() => {
     //   }, [])
 
     if (owner) {
-        const { name } = owner
-        //-----------------------------------------------
-
-
+        
         dashHome =
             <div>
                 {/* CENTER OF PAGE , BLOCKS AND SUCH  */}
