@@ -790,6 +790,28 @@ class SingleMessage(Resource):
 
 api.add_resource(SingleMessage, "/message/<int:message_id>")
 
+class StartNewThread(Resource):
+    def post(self):
+        data = request.get_json()
+        #try validations:
+
+        new_thread = Thread(
+            subject = data['subject'],
+        )
+
+        db.session.add(new_thread)
+
+        db.session.commit()
+
+        response = make_response(new_thread.to_dict(),201)
+
+        return response
+
+        #except ValueError
+
+api.add_resource(StartNewThread, "/new/thread")
+
+
 
 class ThreadById(Resource):
     def get(self, thread_id):
