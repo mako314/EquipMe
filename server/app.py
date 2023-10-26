@@ -790,6 +790,51 @@ class SingleMessage(Resource):
 
 api.add_resource(SingleMessage, "/message/<int:message_id>")
 
+class StartNewThread(Resource):
+    def post(self):
+        data = request.get_json()
+        #try validations:
+
+        new_thread = Thread(
+            subject = data['subject'],
+        )
+
+        db.session.add(new_thread)
+
+        db.session.commit()
+
+        response = make_response(new_thread.to_dict(),201)
+
+        return response
+
+        #except ValueError
+
+api.add_resource(StartNewThread, "/new/thread")
+
+class AddToInboxes(Resource):
+    def post(self):
+        data = request.get_json()
+        #try validations:
+
+        new_user_inbox = UserInbox(
+            user_id = data['user_id'],
+            thread_id = data['thread_id']
+        )
+
+        new_owner_inbox = OwnerInbox(
+            owner_id = data['owner_id'],
+            thread_id = data['thread_id']
+        )
+
+        db.session.add(new_user_inbox, new_owner_inbox)
+
+        db.session.commit()
+
+        response = make_response(new_user_inbox.to_dict(), new_owner_inbox.to_dict(), 201)
+
+        return response
+        
+        #except valueError
 
 class ThreadById(Resource):
     def get(self, thread_id):
