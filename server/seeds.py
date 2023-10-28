@@ -162,7 +162,8 @@ if __name__ == '__main__':
 
 # Seed Equipment Owners individually,
         owner_1 = EquipmentOwner(
-            name="Mark Davis", # Painting Equipment
+            firstName="Mark", # Painting Equipment
+            lastName = "Davis",
             location="Chicago, Illinois",
             profession="Plumbing",
             phone="312-555-6789",
@@ -172,7 +173,8 @@ if __name__ == '__main__':
             website = " "
         )
         owner_2 = EquipmentOwner(
-            name="Emily Johnson", # Party Equipment
+            firstName="Emily", # Party Equipment
+            lastName = "Johnson",
             location="Phoenix, Arizona",
             profession="Construction Equipment Operator",
             phone="602-555-7891",
@@ -182,7 +184,8 @@ if __name__ == '__main__':
             website = " "
         )
         owner_3 = EquipmentOwner(
-            name="Andrew Jacobs", #Automotive Equipment
+            firstName="Andrew", #Automotive Equipment
+            lastName = "Jacobs",
             location="Houston, Texas",
             profession="Automotive",
             phone="713-555-0123",
@@ -192,7 +195,8 @@ if __name__ == '__main__':
             website = " "
         )
         owner_4 = EquipmentOwner(
-            name="Henry Cavill", #Garden Equipment
+            firstName="Henry", #Garden Equipment
+            lastName = "Cavill",
             location="Seattle, Washington",
             profession="Garden",
             phone="206-555-3456",
@@ -202,7 +206,8 @@ if __name__ == '__main__':
             website = " "
         )
         owner_5 = EquipmentOwner(
-            name="David Rodriguez", #Heavy Machinery
+            firstName="David", #Heavy Machinery
+            lastName = "Rodriguez",
             location="Miami, Florida",
             profession="Heavy Machinery",
             phone="305-555-1234",
@@ -212,7 +217,8 @@ if __name__ == '__main__':
             website = " "
         )
         owner_6 = EquipmentOwner(
-            name="Amy Wilson", #Construction Equipment
+            firstName="Amy", #Construction Equipment
+            lastName = "Wilson",
             location="Chicago, Illinois",
             profession="Construction",
             phone="312-555-5678",
@@ -222,7 +228,8 @@ if __name__ == '__main__':
             website = " "
         )
         owner_7 = EquipmentOwner(
-            name="Daniel Lee", # Cleaning Equipment
+            firstName="Daniel", # Cleaning Equipment
+            lastName = "Lee",
             location="Houston, Texas",
             profession="Cleaning",
             phone="713-555-4567",
@@ -232,7 +239,8 @@ if __name__ == '__main__':
             website = " "
         )
         owner_8 = EquipmentOwner(
-            name="Jessica Sanchez", # Plumbing Equipment
+            firstName="Jessica", # Plumbing Equipment
+            lastName = "Sanchez",
             location="New York City, New York",
             profession="Plumbing",
             phone ="212-555-2345",
@@ -242,7 +250,8 @@ if __name__ == '__main__':
             website = " "
         )
         owner_9 = EquipmentOwner(
-            name="Ryan Phillips", #Power-tool and hand-tool Equipment
+            firstName="Ryan", #Power-tool and hand-tool Equipment
+            lastName = "Phillips",
             location="Orlando, Florida",
             profession="Power tools and Hand tools",
             phone="407-555-9012",
@@ -252,7 +261,8 @@ if __name__ == '__main__':
             website = " "
         )
         owner_10 = EquipmentOwner(
-            name="Michelle Adams", #Woodwork
+            firstName="Michelle", #Woodwork
+            lastName = "Adams",
             location="New Orleans, Louisiana",
             profession="Woodworking",
             phone="504-555-7890",
@@ -334,7 +344,7 @@ if __name__ == '__main__':
                 availability = 'True',
                 delivery = 'False',
                 quantity = 3,
-                owner_id = 5
+                owner_id = 2
             ),
             Equipment(
                 name = 'Forklift',
@@ -348,7 +358,7 @@ if __name__ == '__main__':
                 availability = 'True',
                 delivery = 'False',
                 quantity = 2,
-                owner_id = 6
+                owner_id = 2
             ),
             Equipment(
                 name = 'Lawnmower',
@@ -362,7 +372,7 @@ if __name__ == '__main__':
                 availability = 'True',
                 delivery = 'False',
                 quantity = 5,
-                owner_id = 4
+                owner_id = 2
             ),
             Equipment(
                 name = 'Pipe Cutters',
@@ -376,7 +386,7 @@ if __name__ == '__main__':
                 availability = 'True',
                 delivery = 'True',
                 quantity = 4,
-                owner_id = 8
+                owner_id = 2
             ),
         ]
 

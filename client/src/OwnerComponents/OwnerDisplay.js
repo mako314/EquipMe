@@ -5,7 +5,7 @@ import EquipmentMap from '../MapComponents/EquipmentMap'
 
 function OwnerDisplay() {
   const [owner, setOwner] = useState([])
-  const { name, location, email, phone, equipment, profession, profileImage, website } = owner
+  const { firstName, lastName, location, email, phone, equipment, profession, profileImage, website } = owner
 
   const { id } = useParams()
   // const navigate = useNavigate()
@@ -39,7 +39,7 @@ function OwnerDisplay() {
                             <img src={profileImage} class="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0">
 
                             </img>
-                            <h1 class="text-xl font-bold">{name}</h1>
+                            <h1 class="text-xl font-bold"> {firstName} {lastName}</h1>
                             <p class="text-gray-600">{profession}</p>
                             <div class="mt-6 flex flex-wrap gap-4 justify-center">
                                 <a href="#" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">Contact</a>

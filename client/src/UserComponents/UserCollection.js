@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import UserCard from "./UserCard";
 
 
-function UserCollection({ searchTerm, users }) {
+function UserCollection({ searchTerm, users, fromOwnerDash }) {
   
     const userCards = users?.map((item) => {
 
             if (item.name?.toLowerCase().includes(searchTerm.toLowerCase()) || item.location?.toLowerCase().includes(searchTerm.toLowerCase()) || item.email?.toLowerCase().includes(searchTerm.toLowerCase()) || item.phone?.toLowerCase().includes(searchTerm.toLowerCase())){
-            return <UserCard key={item.email} id={item.id} email={item.email} name={item.name} location={item.location} phone={item.phone} profileImage={item.profileImage} item={item} profession={item.profession}/>}
+            return <UserCard key={item.email} fromOwnerDash={fromOwnerDash} id={item.id} email={item.email} name={item.name} location={item.location} phone={item.phone} profileImage={item.profileImage} item={item} profession={item.profession}/>}
     })
+
 
     return (
     <div className="p-4">

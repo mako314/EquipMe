@@ -1,19 +1,25 @@
 import React, { useContext, useState, useEffect } from 'react';
 import UserContext from './UserContext';
 import RentalCollection from '../RentalComponents/RentalCollection';
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 function UserProfile() {
-
+  // User context, meaning if user is signed in, they get their data,
   const [user, setUser] = useContext(UserContext)
+
+  //This will be used to set the userProfile after it's been clicked from the owner, unsure if I want users to be able to view other users
+  const [userProfile, setUserProfile] = useState([])
   const navigate = useNavigate();
+  const { id } = useParams()
 
   console.log(user)
 
-  function handleCsvClick(e) {
-    console.log("Button working")
-    navigate('/temp/bulk_equipment_upload')
-  }
+  // function handleCsvClick(e) {
+  //   console.log("Button working")
+  //   navigate('/temp/bulk_equipment_upload')
+  // }
+
+  // User base is solely for renting I think at the moment, would be too much to allow random users to upload equipment
 
   //Check if user is logged in, I may just make this context and wrap it around my whole app too.
   useEffect(() => {
@@ -24,18 +30,27 @@ function UserProfile() {
     });
   }, []);
 
-  //Destructure for props
-  const {
-    email,
-    firstName,
-    id,
-    lastName,
-    location,
-    phone,
-    profession,
-    profileImg,
-  } = user
+  useEffect(() => {
+    fetch(`/user/${id}`)
+      .then((resp) => resp.json())
+      .then((data) => {
+        setUserProfile(data)
+      })
+  }, [])
 
+  //Destructure for props
+  const source = user || userProfile
+
+  const {
+    email = '',
+    firstName = '',
+    lastName = '',
+    location = '',
+    phone = '',
+    profession = '',
+    profileImg = ''
+  } = source || {}
+  
   //May actually want to include a banner image so it looks nicer
 
 
@@ -89,14 +104,15 @@ function UserProfile() {
                     </button>
 
                     {/* New Material that SK has added for sheet functionality */}
-                    <button
+                    {/* <button
                       className="bg-pink-500 active:bg-pink-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1"
                       type="button"
                       style={{ transition: "all .15s ease" }}
                       onClick={handleCsvClick}
                     >
                       Add Equipment via CSV
-                    </button>
+                    </button> */}
+                    
                   </div>
                 </div>
                 <div className="w-full lg:w-4/12 px-4 lg:order-1">

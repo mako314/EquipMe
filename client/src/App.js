@@ -17,7 +17,7 @@ import UserCollection from './UserComponents/UserCollection';
 import ProductDisplay from './EquipmentComponents/ProductDisplay';
 import OwnerDisplay from './OwnerComponents/OwnerDisplay';
 
-//-------------------------Forms----------------------------------------
+//-------------------------UserForms----------------------------------------
 import UserForm from './UserComponents/UserForm';
 
 //-------------------------OwnerForms---------------------------------------
@@ -40,7 +40,7 @@ import { OwnerProvider } from './OwnerComponents/OwnerContext';
 
 //----------------------User Functionality-----------------------------
 import UserProfile from './UserComponents/UserProfile';
-
+import UserCard from './UserComponents/UserCard';
 
 //----------------------Owner Dashboard-----------------------------
 import OwnerDashboard from './OwnerComponents/OwnerDashboardComponents/OwnerDashboard';
@@ -86,10 +86,9 @@ function App() {
   const [equipmentToEdit, setEquipmentToEdit] = useState([])
   const [featuredRental, setFeaturedRental] = useState([])
 
-  // Do I even need two state variables to do this ? Turns out all original fetches work
-
-  // State to determine if you came from ownerDash
+  // State to determine if you came from ownerDash, below will be more state to control owner actions
   const [fromOwnerDash, setFromOwnerDash] = useState(false)
+
 
   //-------------------------------------------- FOR USER - CHECK SESSION TO STAY LOGGED IN ON REFRESH--------------------------
 
@@ -101,7 +100,7 @@ function App() {
     });
   }, []);
 
-  console.log(user)
+  // console.log(user)
 
   //------------------------------------------------------------------------------------------------------------------
 
@@ -134,7 +133,7 @@ function App() {
     setEquipmentArray(equipmentArray => [...equipmentArray, equipment])
   }
 
-  //----------------------------------------------------------------
+  //------------------------------USERS----------------------------------------------
 
   //These will be the Post useEffects - USERS
   useEffect(() => {
@@ -148,7 +147,7 @@ function App() {
   const addUser = (user) => {
     setUsers(users => [...users, user])
   }
-  //--------------------------------------------
+  //------------------------------OWNERS----------------------------------------------
 
   //These will be the Post useEffects - OWNERS -- THIS HAD RENTERS
   useEffect(() => {
@@ -162,25 +161,26 @@ function App() {
   const addOwner = (owner) => {
     setOwners(owners => [...owners, owner])
   }
-
   // The above is also used for EDIT by that I mean the state variable setOwners
 
-  //---------------------------------------------------------------------------------
-  //POST RENTAL AGREEMENTS
+  // Delete here FOR OWNER--
 
-  useEffect(() => {
-    fetch("/rental_agreements")
-      .then((resp) => resp.json())
-      .then((data) => {
-        setRentalAgreement(data)
+    const deleteOwner = (ownerToDelete) => {
+      setOwners(owners =>
+        owners.filter(owner => owner.id !== ownerToDelete.id))
+    }
+  
+  
+    const handleOwnerDelete = (owner) => {
+      fetch(`/equipment_owner/${owner.id}`, {
+        method: "DELETE"
       })
-  }, [])
+        .then(() => {
+          deleteOwner(owner)
+          navigate('/equipment_owners')
+        })
+    }
 
-  const addRentalAgreement = (rentalAgreement) => {
-    setRentalAgreement(rentalAgreements => [...rentalAgreements, rentalAgreement])
-  }
-
-  //-----------------------Edit content begins here----------------------------------
   // EDIT/PATCH OWNERS-------------------------
 
   const updateOwner = (ownerToUpdate) => {
@@ -199,8 +199,23 @@ function App() {
     navigate(`/owner/${owner.id}/edit`)
   }
 
+  //------------------------------RENTAL AGREEMENTS----------------------------------------------
+  //POST RENTAL AGREEMENTS
 
-  //EDIT/PATCH Equipment --------------------------
+  useEffect(() => {
+    fetch("/rental_agreements")
+      .then((resp) => resp.json())
+      .then((data) => {
+        setRentalAgreement(data)
+      })
+  }, [])
+
+  const addRentalAgreement = (rentalAgreement) => {
+    setRentalAgreement(rentalAgreements => [...rentalAgreements, rentalAgreement])
+  }
+
+  //------------------------------Equipment----------------------------------------------
+  //EDIT/PATCH Equipment
 
   const updateEquipment = (equipmentToUpdate) => {
     setEquipmentArray(equipments => equipments.map(equipment => {
@@ -218,27 +233,8 @@ function App() {
     navigate(`/equipment/${equipment.id}/edit`)
   }
 
-  //-----------------------------------------DELETE CONTENT BELOW--------------------
-  // ------------------------delete here FOR OWNER-------------------------------
 
-  const deleteOwner = (ownerToDelete) => {
-    setOwners(owners =>
-      owners.filter(owner => owner.id !== ownerToDelete.id))
-  }
-
-
-  const handleOwnerDelete = (owner) => {
-    fetch(`/equipment_owner/${owner.id}`, {
-      method: "DELETE"
-    })
-      .then(() => {
-        deleteOwner(owner)
-        navigate('/equipment_owners')
-      })
-  }
-
-
-  //--------------------Delete for PRODUCTS/EQUIPMENT below---------------------------------------------------
+  //Delete for PRODUCTS/EQUIPMENT below
 
   const deleteEquipment = (equipmentToDelete) => {
     setEquipmentArray(equipments =>
@@ -258,11 +254,9 @@ function App() {
 
 
 
-
-
   // I believe this is the search -----------------------
   const filteredEquipmentArray = equipmentArray.filter((item) => {
-    return item.model.toLowerCase().includes(searchTerm.toLowerCase()) || item.location.toLowerCase().includes(searchTerm.toLowerCase()) || item.make.toLowerCase().includes(searchTerm.toLowerCase()) || item.name.toLowerCase().includes(searchTerm.toLowerCase())
+    return item.model?.toLowerCase().includes(searchTerm?.toLowerCase()) || item.location?.toLowerCase().includes(searchTerm?.toLowerCase()) || item.make?.toLowerCase().includes(searchTerm?.toLowerCase()) || item.name?.toLowerCase().includes(searchTerm?.toLowerCase())
   })
   //-----------------------------------------------------
 
@@ -281,10 +275,11 @@ function App() {
             <Route path='/equipment' element={<ProductCollection equipmentArray={filteredEquipmentArray} handleEquipmentDelete={handleEquipmentDelete} handleEditEquipment={handleEditEquipment} />} />
             <Route path='/equipment_owners' element={<OwnerCollection searchTerm={searchTerm} handleEditOwner={handleEditOwner} handleOwnerDelete={handleOwnerDelete} equipmentOwnerArray={owners} />} />
             <Route path='/rental_agreements' element={<RentalCollection />} />
-
+            <Route path='/users/extra' element={<UserCollection searchTerm={searchTerm} users={users}/>} />
+    
             {/* ID / INDIVIDUAL / DISPLAY ROUTES */}
             <Route path='/equipment/:id' element={<ProductDisplay />} />
-            <Route path='/equipment_owners/:id' element={<OwnerDisplay />} />
+            <Route path='/equipment_owner/:id' element={<OwnerDisplay />} />
 
             {/* Respective Posts */}
             <Route path='/renter_signup' element={<UserForm addUser={addUser} />} />
@@ -307,24 +302,24 @@ function App() {
             <Route path='/owner/login' element={<OwnerLogin />} />
 
             {/* User Profile Page*/}
-            <Route path='/user/profile/:id' element={<UserProfile navigate={navigate} />} />
+            <Route path='/user/profile/:id' element={<UserProfile/>} />
 
             {/* Temp Route for CSV File Upload*/}
             <Route path='/temp/bulk_equipment_upload' element={<BulkEquipmentUpload />} />
 
             {/* Owner Dashboard Page*/}
-            <Route path='/owner/dashboard' element={<OwnerDashboard updateOwner={updateOwner} ownerToEdit={ownerToEdit} setFromOwnerDash={setFromOwnerDash} users={users} searchTerm={searchTerm}/>} />
+            <Route path='/owner/dashboard' element={<OwnerDashboard updateOwner={updateOwner} ownerToEdit={ownerToEdit} fromOwnerDash={fromOwnerDash} setFromOwnerDash={setFromOwnerDash} searchTerm={searchTerm}/>} />
 
             {/* Temporary calendar routing */}
             <Route path='/temp/calendar' element={<Calendar />} />
 
             {/* Temporary file upload routing */}
             <Route path='/temp/upload' element={<EquipmentFileUpload />} />
-
             <Route path='/temp/equipment/upload' element={<ProductImageForm />} />
 
+            {/* Messaging routing  */}
             <Route path='/messaging' element={<NewMessageThreads fromOwnerDash={fromOwnerDash}/>} />
-            <Route path='/users/extra' element={<UserCollection searchTerm={searchTerm} users={users}/>} />
+            <Route path='/user/card/:id' element={<UserCard/>} />
 
           </Routes>
 

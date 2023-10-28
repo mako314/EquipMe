@@ -253,7 +253,7 @@ class EquipmentOwners(Resource):
 
     #succesful get to display
     def get(self):
-        equip_owners = [owner.to_dict(only = ('id', 'profession', 'email', 'location', 'name', 'phone','equipment')) for owner in EquipmentOwner.query.all()]
+        equip_owners = [owner.to_dict(only = ('id', 'profession', 'email', 'location', 'firstName', 'lastName', 'phone','equipment')) for owner in EquipmentOwner.query.all()]
         #had to allow ID also to grab it with link
         response = make_response(equip_owners, 200)
         #rules =('-agreements', 'equipment')
@@ -265,7 +265,8 @@ class EquipmentOwners(Resource):
         data = request.get_json()
         try:
             new_owner = EquipmentOwner(
-                name = data['name'],
+                firstName = data['firstName'],
+                lastName = data['lastName'],
                 location = data['location'],
                 profession = data['profession'],
                 phone = data['phone'],
@@ -835,6 +836,9 @@ class AddToInboxes(Resource):
         return response
         
         #except valueError
+
+api.add_resource(AddToInboxes, "/new/inboxes")
+
 
 class ThreadById(Resource):
     def get(self, thread_id):

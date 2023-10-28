@@ -10,13 +10,14 @@ function OwnerForm({addOwner}){
     const navigate = useNavigate()
 
     const formSchema = object({
-        name: string().required('Please enter a name'),
+        firstName: string().required('Please enter a name'),
         email: string().required('Please enter an email address')
     })
 
     const formik = useFormik({
         initialValues: {
-            name: '',
+            firstName: '',
+            lastName: '',
             location: '',
             profession: '',
             phone: '',
@@ -68,8 +69,13 @@ function OwnerForm({addOwner}){
         </div>
       
       <div>
-        <label htmlFor="name" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Name </label>
-        <input type="text" name="name" value={formik.values.name} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+        <label htmlFor="firstName" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> First Name </label>
+        <input type="text" name="firstName" value={formik.values.firstName} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+      </div>
+
+      <div>
+        <label htmlFor="lastName" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Last Name </label>
+        <input type="text" name="lastName" value={formik.values.lastName} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
       </div>
 
       <div className="sm:col-span-2">
