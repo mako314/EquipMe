@@ -14,10 +14,12 @@ function UserProfile() {
 
   console.log(user)
 
-  function handleCsvClick(e) {
-    console.log("Button working")
-    navigate('/temp/bulk_equipment_upload')
-  }
+  // function handleCsvClick(e) {
+  //   console.log("Button working")
+  //   navigate('/temp/bulk_equipment_upload')
+  // }
+
+  // User base is solely for renting I think at the moment, would be too much to allow random users to upload equipment
 
   //Check if user is logged in, I may just make this context and wrap it around my whole app too.
   useEffect(() => {
@@ -102,14 +104,15 @@ function UserProfile() {
                     </button>
 
                     {/* New Material that SK has added for sheet functionality */}
-                    <button
+                    {/* <button
                       className="bg-pink-500 active:bg-pink-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1"
                       type="button"
                       style={{ transition: "all .15s ease" }}
                       onClick={handleCsvClick}
                     >
                       Add Equipment via CSV
-                    </button>
+                    </button> */}
+                    
                   </div>
                 </div>
                 <div className="w-full lg:w-4/12 px-4 lg:order-1">

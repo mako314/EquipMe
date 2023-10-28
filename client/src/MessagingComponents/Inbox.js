@@ -95,7 +95,9 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
       <div className="w-1/4 bg-gray-200 p-4 flex flex-col justify-between">
         {/* Left Sidebar */}
         <div> 
-        <h2 className="text-2xl font-bold mb-4"> Welcome </h2>
+        <h2 className="text-2xl font-bold mb-4"> Welcome {owner ? owner?.firstName : user?.firstName} </h2>
+        <h3 className="text-l font-bold mb-4"> View your Inbox Below</h3>
+        {/* ^^^ is just a place holder,  */}
         <ul>
           {inboxes?.map((inbox) => (
             <li
