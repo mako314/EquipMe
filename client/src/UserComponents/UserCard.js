@@ -15,7 +15,7 @@ function UserCard({ id, email, name, location, phone, profileImage, item, profes
     //test can likely delete below
     // console.log(item)
 
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     function handleClick(e) {
         navigate(`/user/profile/${id}`)
@@ -29,7 +29,66 @@ function UserCard({ id, email, name, location, phone, profileImage, item, profes
     console.log("WHAT ARE YOU",fromOwnerDash)
 
 
-    function ContactModal(){ 
+    function ContactModal(){
+
+        async function handleSendMessage() {
+            const randomContext = Math.floor(Math.random() * 1000) + 1
+
+            // 1. Create a new thread with the subject
+            let response = await fetch("/new/thread", {
+                method: "POST",
+                body: JSON.stringify({ subject: subject }),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+    
+            let threadData = await response.json()
+            if (response.ok && threadData) {
+                // 2. Create two inboxes once the thread is successfully created.
+                response = await fetch("/new/inboxes", {
+                    method: "POST",
+                    body: JSON.stringify({ 
+                        user_id: id,
+                        owner_id: owner.id,
+                        thread_id: threadData.id
+                    }),
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                })
+    
+                if (response.ok) {
+                    // 3. Send the message once the inboxes are successfully created
+                    response = await fetch("/messages", {
+                        method: "POST",
+                        body: JSON.stringify({
+                            recipient_id: id,
+                            sender_id: owner.id,
+                            context_id: randomContext,
+                            user_type: "Owner",
+                            content: message,
+                            message_status: "Delivered",
+                            created_on: new Date().toISOString(),
+                            thread_id: threadData.id
+                        }),
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+                    })
+    
+                    if (response.ok) {
+                        console.log("Message sent successfully")
+                    } else {
+                        console.error("Failed to send the message")
+                    }
+                } else {
+                    console.error("Failed to create inboxes")
+                }
+            } else {
+                console.error("Failed to create a new thread")
+            }
+        }
         
     return(
     <> 
