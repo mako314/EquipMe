@@ -10,7 +10,7 @@ import UserCollection from '../../UserComponents/UserCollection';
 import { ReactComponent as EquipMeLogo } from '../../Content/EquipMeLogo.svg'
 
 
-function OwnerDashboard({ownerToEdit, updateOwner, setFromOwnerDash, users, searchTerm}) {
+function OwnerDashboard({ownerToEdit, updateOwner, setFromOwnerDash, searchTerm}) {
 
     const [owner, setOwner] = useContext(OwnerContext)
     const [toggleHomeDash, setToggleHomeDash] = useState(null)
@@ -25,7 +25,11 @@ function OwnerDashboard({ownerToEdit, updateOwner, setFromOwnerDash, users, sear
     }, []);
 
     console.log(owner)
-    console.log(users)
+    
+    //----- Variables in the order they appear -----
+    let plannedDeals
+    let potentialRenters
+
     let firstName
     let equipment
     let lastName
@@ -41,13 +45,7 @@ function OwnerDashboard({ownerToEdit, updateOwner, setFromOwnerDash, users, sear
         navigate('/temp/bulk_equipment_upload')
     }
 
-    //----- Variables in the order they appear -----
-    let dashHome
-    // let loggedInDisplay
-    let activeListings
-    let accountSettings
-    let plannedDeals
-    let potentialRenters
+    
 
 //----------------------------------------activeListings------------------------------
 // Need to build out a back to dash button here for owners along with edit functionality 
@@ -73,7 +71,6 @@ function AccountSettings() {
     )
 }
 
-console.log("ACCOUNT SETTINGS:", accountSettings)
 //------------------------------------------------------------------------------------
 
     plannedDeals =
@@ -155,8 +152,6 @@ console.log("ACCOUNT SETTINGS:", accountSettings)
                                 handlePotentialRenter()
                                 setToggleHomeDash(potentialRenters)
                             }}>Potential Renters</span>
-
-                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none"> What do I need here </span>
 
                             <Link to='/messaging'>
                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none"> Inbox </span>

@@ -310,7 +310,7 @@ function App() {
             <Route path='/temp/bulk_equipment_upload' element={<BulkEquipmentUpload />} />
 
             {/* Owner Dashboard Page*/}
-            <Route path='/owner/dashboard' element={<OwnerDashboard updateOwner={updateOwner} ownerToEdit={ownerToEdit} setFromOwnerDash={setFromOwnerDash} users={users} searchTerm={searchTerm}/>} />
+            <Route path='/owner/dashboard' element={<OwnerDashboard updateOwner={updateOwner} ownerToEdit={ownerToEdit} setFromOwnerDash={setFromOwnerDash} searchTerm={searchTerm}/>} />
 
             {/* Temporary calendar routing */}
             <Route path='/temp/calendar' element={<Calendar />} />
