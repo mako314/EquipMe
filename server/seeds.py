@@ -344,7 +344,7 @@ if __name__ == '__main__':
                 availability = 'True',
                 delivery = 'False',
                 quantity = 3,
-                owner_id = 5
+                owner_id = 2
             ),
             Equipment(
                 name = 'Forklift',
@@ -358,7 +358,7 @@ if __name__ == '__main__':
                 availability = 'True',
                 delivery = 'False',
                 quantity = 2,
-                owner_id = 6
+                owner_id = 2
             ),
             Equipment(
                 name = 'Lawnmower',
@@ -372,7 +372,7 @@ if __name__ == '__main__':
                 availability = 'True',
                 delivery = 'False',
                 quantity = 5,
-                owner_id = 4
+                owner_id = 2
             ),
             Equipment(
                 name = 'Pipe Cutters',
@@ -386,7 +386,7 @@ if __name__ == '__main__':
                 availability = 'True',
                 delivery = 'True',
                 quantity = 4,
-                owner_id = 8
+                owner_id = 2
             ),
         ]
 

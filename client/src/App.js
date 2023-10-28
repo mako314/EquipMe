@@ -134,7 +134,7 @@ function App() {
     setEquipmentArray(equipmentArray => [...equipmentArray, equipment])
   }
 
-  //----------------------------------------------------------------
+  //------------------------------USERS----------------------------------------------
 
   //These will be the Post useEffects - USERS
   useEffect(() => {
@@ -148,7 +148,7 @@ function App() {
   const addUser = (user) => {
     setUsers(users => [...users, user])
   }
-  //--------------------------------------------
+  //------------------------------OWNERS----------------------------------------------
 
   //These will be the Post useEffects - OWNERS -- THIS HAD RENTERS
   useEffect(() => {
@@ -162,25 +162,26 @@ function App() {
   const addOwner = (owner) => {
     setOwners(owners => [...owners, owner])
   }
-
   // The above is also used for EDIT by that I mean the state variable setOwners
 
-  //---------------------------------------------------------------------------------
-  //POST RENTAL AGREEMENTS
+  // Delete here FOR OWNER--
 
-  useEffect(() => {
-    fetch("/rental_agreements")
-      .then((resp) => resp.json())
-      .then((data) => {
-        setRentalAgreement(data)
+    const deleteOwner = (ownerToDelete) => {
+      setOwners(owners =>
+        owners.filter(owner => owner.id !== ownerToDelete.id))
+    }
+  
+  
+    const handleOwnerDelete = (owner) => {
+      fetch(`/equipment_owner/${owner.id}`, {
+        method: "DELETE"
       })
-  }, [])
+        .then(() => {
+          deleteOwner(owner)
+          navigate('/equipment_owners')
+        })
+    }
 
-  const addRentalAgreement = (rentalAgreement) => {
-    setRentalAgreement(rentalAgreements => [...rentalAgreements, rentalAgreement])
-  }
-
-  //-----------------------Edit content begins here----------------------------------
   // EDIT/PATCH OWNERS-------------------------
 
   const updateOwner = (ownerToUpdate) => {
@@ -199,8 +200,23 @@ function App() {
     navigate(`/owner/${owner.id}/edit`)
   }
 
+  //------------------------------RENTAL AGREEMENTS----------------------------------------------
+  //POST RENTAL AGREEMENTS
 
-  //EDIT/PATCH Equipment --------------------------
+  useEffect(() => {
+    fetch("/rental_agreements")
+      .then((resp) => resp.json())
+      .then((data) => {
+        setRentalAgreement(data)
+      })
+  }, [])
+
+  const addRentalAgreement = (rentalAgreement) => {
+    setRentalAgreement(rentalAgreements => [...rentalAgreements, rentalAgreement])
+  }
+
+  //------------------------------Equipment----------------------------------------------
+  //EDIT/PATCH Equipment
 
   const updateEquipment = (equipmentToUpdate) => {
     setEquipmentArray(equipments => equipments.map(equipment => {
@@ -218,27 +234,8 @@ function App() {
     navigate(`/equipment/${equipment.id}/edit`)
   }
 
-  //-----------------------------------------DELETE CONTENT BELOW--------------------
-  // ------------------------delete here FOR OWNER-------------------------------
 
-  const deleteOwner = (ownerToDelete) => {
-    setOwners(owners =>
-      owners.filter(owner => owner.id !== ownerToDelete.id))
-  }
-
-
-  const handleOwnerDelete = (owner) => {
-    fetch(`/equipment_owner/${owner.id}`, {
-      method: "DELETE"
-    })
-      .then(() => {
-        deleteOwner(owner)
-        navigate('/equipment_owners')
-      })
-  }
-
-
-  //--------------------Delete for PRODUCTS/EQUIPMENT below---------------------------------------------------
+  //Delete for PRODUCTS/EQUIPMENT below
 
   const deleteEquipment = (equipmentToDelete) => {
     setEquipmentArray(equipments =>
@@ -262,7 +259,7 @@ function App() {
 
   // I believe this is the search -----------------------
   const filteredEquipmentArray = equipmentArray.filter((item) => {
-    return item.model.toLowerCase().includes(searchTerm.toLowerCase()) || item.location.toLowerCase().includes(searchTerm.toLowerCase()) || item.make.toLowerCase().includes(searchTerm.toLowerCase()) || item.name.toLowerCase().includes(searchTerm.toLowerCase())
+    return item.model?.toLowerCase().includes(searchTerm?.toLowerCase()) || item.location?.toLowerCase().includes(searchTerm?.toLowerCase()) || item.make?.toLowerCase().includes(searchTerm?.toLowerCase()) || item.name?.toLowerCase().includes(searchTerm?.toLowerCase())
   })
   //-----------------------------------------------------
 

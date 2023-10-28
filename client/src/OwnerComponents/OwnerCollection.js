@@ -13,9 +13,10 @@ function OwnerCollection({ searchTerm, handleEditOwner, handleOwnerDelete, equip
     //             setEquipmentOwnerArray(data)
     //         })
     // }, [])
+    console.log(equipmentOwnerArray)
     const ownerCards = equipmentOwnerArray?.map((item) => {
 
-            if (item.name.toLowerCase().includes(searchTerm.toLowerCase()) || item.location.toLowerCase().includes(searchTerm.toLowerCase()) || item.email.toLowerCase().includes(searchTerm.toLowerCase()) || item.phone.toLowerCase().includes(searchTerm.toLowerCase())){
+            if (item.name?.toLowerCase().includes(searchTerm?.toLowerCase()) || item.location?.toLowerCase().includes(searchTerm?.toLowerCase()) || item.email?.toLowerCase().includes(searchTerm?.toLowerCase()) || item.phone?.toLowerCase().includes(searchTerm?.toLowerCase())){
             return <OwnerCard key={item.email} id={item.id} email={item.email} firstName={item.firstName} lastName={item.lastName} location={item.location} phone={item.phone} equipmentArray={item.equipment} profileImage={item.profileImage} handleEditOwner={handleEditOwner} item={item} handleOwnerDelete={handleOwnerDelete}/>}
     })
 

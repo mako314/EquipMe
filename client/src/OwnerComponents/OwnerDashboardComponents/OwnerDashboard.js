@@ -95,7 +95,6 @@ console.log("ACCOUNT SETTINGS:", accountSettings)
     }
 
     function DashHome(){
-
         return(
             <div>
                 {/* CENTER OF PAGE , BLOCKS AND SUCH  */}
@@ -119,35 +118,9 @@ console.log("ACCOUNT SETTINGS:", accountSettings)
             </div>
         )
     }
-        // dashHome =
-        //     <div>
-        //         {/* CENTER OF PAGE , BLOCKS AND SUCH  */}
-        //         <div className="flex-grow p-6 overflow-auto bg-gray-200">
-        //             <div className="grid grid-cols-3 gap-6">
-        //                 <div className="h-24 col-span-3 bg-white border border-gray-300 text-center"> Welcome {firstName} </div>
-        //                 <div className="h-96 col-span-1 bg-white border border-gray-300">
-
-                            
-
-        //                 </div>
-        //                 <div className="h-96 col-span-1 bg-white border border-gray-300"></div>
-        //                 <div className="h-96 col-span-1 bg-white border border-gray-300"></div>
-        //                 <div className="h-96 col-span-2 bg-white border border-gray-300"></div>
-        //                 <div className="h-96 col-span-1 bg-white border border-gray-300"></div>
-        //                 <div className="h-24 col-span-1 bg-white border border-gray-300"></div>
-        //                 <div className="h-24 col-span-2 bg-white border border-gray-300"></div>
-
-        //             </div>
-        //         </div>
-        //     </div>
-
-// ----------- Display, in the process of inputting variables into it--------------
     
 
-
-
     function LoggedInDisplay(){
-        
         return(
             <>
                 <div className="flex w-screen h-screen text-gray-700">
@@ -174,7 +147,7 @@ console.log("ACCOUNT SETTINGS:", accountSettings)
 
                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<DashHome/>)}> Home </span>
 
-                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(activeListings)}> Active listings </span>
+                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<ActiveListings/>)}> Active listings </span>
 
                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(plannedDeals)}> Planned Deals </span>
 
