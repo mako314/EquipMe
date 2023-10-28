@@ -11,7 +11,7 @@ function UserCard({ id, email, name, location, phone, profileImage, item, profes
     const navigate = useNavigate();
 
     function handleClick(e) {
-        navigate(`/equipment_owners/${id}`)
+        navigate(`/user/profile/${id}`)
     }
 //--------------------------------------------------------------------------- This handles opening the modal to contact the individual (user)---------------------------------
     function toggleModal() {

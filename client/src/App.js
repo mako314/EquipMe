@@ -284,7 +284,7 @@ function App() {
 
             {/* ID / INDIVIDUAL / DISPLAY ROUTES */}
             <Route path='/equipment/:id' element={<ProductDisplay />} />
-            <Route path='/equipment_owners/:id' element={<OwnerDisplay />} />
+            <Route path='/equipment_owner/:id' element={<OwnerDisplay />} />
 
             {/* Respective Posts */}
             <Route path='/renter_signup' element={<UserForm addUser={addUser} />} />

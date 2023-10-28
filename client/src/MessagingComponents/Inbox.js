@@ -32,7 +32,7 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
     })
   }, [])
 
-  console.log(user)
+  // console.log(user)
 // --------------------------------------------------------------------
 
     let user_inboxes
@@ -83,16 +83,19 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
       }
     }
 
+    //This returns one to the owner dashboard if they came from there
     const navigateBackToOwnerDash = () => {
       navigate(`/owner/dashboard`)
   }
+
+  const inboxSource = user || owner
     
 
     return(
       <div className="w-1/4 bg-gray-200 p-4 flex flex-col justify-between">
         {/* Left Sidebar */}
         <div> 
-        <h2 className="text-2xl font-bold mb-4">Message Inboxes</h2>
+        <h2 className="text-2xl font-bold mb-4"> Welcome </h2>
         <ul>
           {inboxes?.map((inbox) => (
             <li

@@ -1,12 +1,16 @@
 import React, { useContext, useState, useEffect } from 'react';
 import UserContext from './UserContext';
 import RentalCollection from '../RentalComponents/RentalCollection';
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 function UserProfile() {
-
+  // User context, meaning if user is signed in, they get their data,
   const [user, setUser] = useContext(UserContext)
+
+  //This will be used to set the userProfile after it's been clicked from the owner, unsure if I want users to be able to view other users
+  const [userProfile, setUserProfile] = useState([])
   const navigate = useNavigate();
+  const { id } = useParams()
 
   console.log(user)
 
@@ -24,18 +28,27 @@ function UserProfile() {
     });
   }, []);
 
-  //Destructure for props
-  const {
-    email,
-    firstName,
-    id,
-    lastName,
-    location,
-    phone,
-    profession,
-    profileImg,
-  } = user
+  useEffect(() => {
+    fetch(`/user/${id}`)
+      .then((resp) => resp.json())
+      .then((data) => {
+        setUserProfile(data)
+      })
+  }, [])
 
+  //Destructure for props
+  const source = user || userProfile
+
+  const {
+    email = '',
+    firstName = '',
+    lastName = '',
+    location = '',
+    phone = '',
+    profession = '',
+    profileImg = ''
+  } = source || {}
+  
   //May actually want to include a banner image so it looks nicer
 
 

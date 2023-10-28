@@ -12,13 +12,14 @@ function OwnerEditForm({ownerToEdit, updateOwner}){
     const navigate = useNavigate()
 
     const formSchema = object({
-        name: string().required('Please enter a name'),
+        firstName: string().required('Please enter a name'),
         email: string().required('Please enter an email address')
     })
 
     const formik = useFormik({
         initialValues: {
-            name: ownerToEdit.name,
+            firstName: ownerToEdit.firstName,
+            lastName: ownerToEdit.lastName,
             location: ownerToEdit.location,
             profession: ownerToEdit.profession,
             phone: ownerToEdit.phone,
@@ -85,9 +86,11 @@ function OwnerEditForm({ownerToEdit, updateOwner}){
                 </div>
                 
                 <div>
-                    <label htmlFor="name" className="mt-4 mb-2 inline-block text-sm text-gray-800 sm:text-base"> Name </label>
-                    <input type="text" name="name" value={formik.values.name} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
-                
+                    <label htmlFor="firstName" className="mt-4 mb-2 inline-block text-sm text-gray-800 sm:text-base"> First Name </label>
+                    <input type="text" name="firstName" value={formik.values.firstName} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+
+                    <label htmlFor="lastName" className="mt-4 mb-2 inline-block text-sm text-gray-800 sm:text-base"> Last Name </label>
+                    <input type="text" name="lastName" value={formik.values.lastName} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
 
                 
                     <label htmlFor="phone" className="mt-4 mb-2 inline-block text-sm text-gray-800 sm:text-base">Phone</label>

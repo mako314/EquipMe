@@ -265,7 +265,8 @@ class EquipmentOwners(Resource):
         data = request.get_json()
         try:
             new_owner = EquipmentOwner(
-                name = data['name'],
+                firstName = data['firstName'],
+                lastName = data['lastName'],
                 location = data['location'],
                 profession = data['profession'],
                 phone = data['phone'],
