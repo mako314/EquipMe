@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom"
 
-function UserCard({ id, email, name, location, phone, profileImage, item, profession }) {
+function UserCard({ id, email, name, location, phone, profileImage, item, profession, setFromOwnerDash }) {
 
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [subject, setSubject] = useState("")
@@ -18,8 +18,11 @@ function UserCard({ id, email, name, location, phone, profileImage, item, profes
 
 //--------------------------------------------------------------------------- This handles opening the modal to contact the individual (user)---------------------------------
     function toggleModal() {
+        // setFromOwnerDash(true)
         setIsModalOpen(!isModalOpen)
     }
+
+    console.log("WHAT ARE YOU",setFromOwnerDash)
 
     // function SubjectForm(){
     //     <form className="space-y-6" action="#">

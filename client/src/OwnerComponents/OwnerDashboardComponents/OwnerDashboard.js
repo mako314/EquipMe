@@ -87,7 +87,7 @@ function AccountSettings() {
     const handlePotentialRenter = () => {
         potentialRenters =
         <>
-            <UserCollection searchTerm={searchTerm} users={potentialRentalUsers}/>
+            <UserCollection searchTerm={searchTerm} users={potentialRentalUsers} setFromOwnerDash={setFromOwnerDash}/>
         </>
     }
 

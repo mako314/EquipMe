@@ -17,7 +17,7 @@ import UserCollection from './UserComponents/UserCollection';
 import ProductDisplay from './EquipmentComponents/ProductDisplay';
 import OwnerDisplay from './OwnerComponents/OwnerDisplay';
 
-//-------------------------Forms----------------------------------------
+//-------------------------UserForms----------------------------------------
 import UserForm from './UserComponents/UserForm';
 
 //-------------------------OwnerForms---------------------------------------
@@ -40,7 +40,7 @@ import { OwnerProvider } from './OwnerComponents/OwnerContext';
 
 //----------------------User Functionality-----------------------------
 import UserProfile from './UserComponents/UserProfile';
-
+import UserCard from './UserComponents/UserCard';
 
 //----------------------Owner Dashboard-----------------------------
 import OwnerDashboard from './OwnerComponents/OwnerDashboardComponents/OwnerDashboard';
@@ -88,7 +88,6 @@ function App() {
 
   // State to determine if you came from ownerDash, below will be more state to control owner actions
   const [fromOwnerDash, setFromOwnerDash] = useState(false)
-  const [ownerToUser, setOwnerToUser] = useState(false)
 
 
   //-------------------------------------------- FOR USER - CHECK SESSION TO STAY LOGGED IN ON REFRESH--------------------------
@@ -255,8 +254,6 @@ function App() {
 
 
 
-
-
   // I believe this is the search -----------------------
   const filteredEquipmentArray = equipmentArray.filter((item) => {
     return item.model?.toLowerCase().includes(searchTerm?.toLowerCase()) || item.location?.toLowerCase().includes(searchTerm?.toLowerCase()) || item.make?.toLowerCase().includes(searchTerm?.toLowerCase()) || item.name?.toLowerCase().includes(searchTerm?.toLowerCase())
@@ -278,9 +275,10 @@ function App() {
             <Route path='/equipment' element={<ProductCollection equipmentArray={filteredEquipmentArray} handleEquipmentDelete={handleEquipmentDelete} handleEditEquipment={handleEditEquipment} />} />
             <Route path='/equipment_owners' element={<OwnerCollection searchTerm={searchTerm} handleEditOwner={handleEditOwner} handleOwnerDelete={handleOwnerDelete} equipmentOwnerArray={owners} />} />
             <Route path='/rental_agreements' element={<RentalCollection />} />
-
+            <Route path='/users/extra' element={<UserCollection searchTerm={searchTerm} users={users}/>} />
+    
             {/* ID / INDIVIDUAL / DISPLAY ROUTES */}
-            <Route path='/equipment/:id' element={<ProductDisplay ownerToUser={ownerToUser}/>} />
+            <Route path='/equipment/:id' element={<ProductDisplay />} />
             <Route path='/equipment_owner/:id' element={<OwnerDisplay />} />
 
             {/* Respective Posts */}
@@ -296,7 +294,7 @@ function App() {
             {/* Rename this too ^^^ */}
 
             {/* Respective Edit Routes */}
-            <Route path='/owner/:id/edit' element={<OwnerEditForm ownerToEdit={ownerToEdit} updateOwner={updateOwner} setOwnerToUser={setOwnerToUser}/>} />
+            <Route path='/owner/:id/edit' element={<OwnerEditForm ownerToEdit={ownerToEdit} updateOwner={updateOwner} />} />
             <Route path='/equipment/:id/edit' element={<ProductEditForm equipmentToEdit={equipmentToEdit} updateEquipment={updateEquipment} />} />
 
             {/* Login Page Route */}
@@ -304,7 +302,7 @@ function App() {
             <Route path='/owner/login' element={<OwnerLogin />} />
 
             {/* User Profile Page*/}
-            <Route path='/user/profile/:id' element={<UserProfile navigate={navigate} />} />
+            <Route path='/user/profile/:id' element={<UserProfile/>} />
 
             {/* Temp Route for CSV File Upload*/}
             <Route path='/temp/bulk_equipment_upload' element={<BulkEquipmentUpload />} />
@@ -317,11 +315,11 @@ function App() {
 
             {/* Temporary file upload routing */}
             <Route path='/temp/upload' element={<EquipmentFileUpload />} />
-
             <Route path='/temp/equipment/upload' element={<ProductImageForm />} />
 
+            {/* Messaging routing  */}
             <Route path='/messaging' element={<NewMessageThreads fromOwnerDash={fromOwnerDash}/>} />
-            <Route path='/users/extra' element={<UserCollection searchTerm={searchTerm} users={users}/>} />
+            <Route path='/user/card/:id' element={<UserCard  />} />
 
           </Routes>
 
