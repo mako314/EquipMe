@@ -21,24 +21,24 @@ function UserCard({ id, email, name, location, phone, profileImage, item, profes
         setIsModalOpen(!isModalOpen)
     }
 
-    function SubjectForm(){
-        <form className="space-y-6" action="#">
-            <div>
-                <label for="subject" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"> Subject: </label>
-                <input type="text" name="subject" id="subject" placeholder="Subject" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required/>
-            </div>
-        </form>
-    }
+    // function SubjectForm(){
+    //     <form className="space-y-6" action="#">
+    //         <div>
+    //             <label htmlFor="subject" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"> Subject: </label>
+    //             <input type="text" name="subject" id="subject" placeholder="Subject" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required/>
+    //         </div>
+    //     </form>
+    // }
 
-    function MessageForm(){
-        <form className="space-y-6" action="#">
-            <div>
-                {/* Message fields here */}
-                <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"> Message: </label>
-                <textarea  type="text" name="message" id="message" placeholder="Start typing your message..." class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required/>
-            </div>
-        </form>
-    }
+    // function MessageForm(){
+    //     <form className="space-y-6" action="#">
+    //         <div>
+    //             {/* Message fields here */}
+    //             <label htmlFor="message" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"> Message: </label>
+    //             <textarea  type="text" name="message" id="message" placeholder="Start typing your message..." className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required/>
+    //         </div>
+    //     </form>
+    // }
 
     function SubmitSubject (subject) {
         // might use this to separate the subject and the messaging, make a separate one for message for example
@@ -84,14 +84,14 @@ function UserCard({ id, email, name, location, phone, profileImage, item, profes
                     <form className="space-y-6" action="#">
                         
                         <div>
-                        <label for="subject" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"> Subject: </label>
-                        <input type="text" name="subject" id="subject" placeholder="Subject" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required/>
+                        <label htmlFor="subject" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"> Subject: </label>
+                        <input type="text" name="subject" id="subject" placeholder="Subject" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required/>
                         </div>
                         
                         <div>
                             {/* Message fields here */}
-                            <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"> Message: </label>
-                            <textarea  type="text" name="message" id="message" placeholder="Start typing your message..." class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required/>
+                            <label htmlFor="message" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"> Message: </label>
+                            <textarea  type="text" name="message" id="message" placeholder="Start typing your message..." className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required/>
                         </div>
 
                         <div className="flex justify-between">

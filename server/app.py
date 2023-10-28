@@ -837,6 +837,9 @@ class AddToInboxes(Resource):
         
         #except valueError
 
+api.add_resource(AddToInboxes, "/new/inboxes")
+
+
 class ThreadById(Resource):
     def get(self, thread_id):
         thread = Thread.query.filter(Thread.id == thread_id).first()

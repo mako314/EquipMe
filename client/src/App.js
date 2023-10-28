@@ -86,10 +86,10 @@ function App() {
   const [equipmentToEdit, setEquipmentToEdit] = useState([])
   const [featuredRental, setFeaturedRental] = useState([])
 
-  // Do I even need two state variables to do this ? Turns out all original fetches work
-
-  // State to determine if you came from ownerDash
+  // State to determine if you came from ownerDash, below will be more state to control owner actions
   const [fromOwnerDash, setFromOwnerDash] = useState(false)
+  const [ownerToUser, setOwnerToUser] = useState(false)
+
 
   //-------------------------------------------- FOR USER - CHECK SESSION TO STAY LOGGED IN ON REFRESH--------------------------
 
@@ -280,7 +280,7 @@ function App() {
             <Route path='/rental_agreements' element={<RentalCollection />} />
 
             {/* ID / INDIVIDUAL / DISPLAY ROUTES */}
-            <Route path='/equipment/:id' element={<ProductDisplay />} />
+            <Route path='/equipment/:id' element={<ProductDisplay ownerToUser={ownerToUser}/>} />
             <Route path='/equipment_owner/:id' element={<OwnerDisplay />} />
 
             {/* Respective Posts */}
@@ -296,7 +296,7 @@ function App() {
             {/* Rename this too ^^^ */}
 
             {/* Respective Edit Routes */}
-            <Route path='/owner/:id/edit' element={<OwnerEditForm ownerToEdit={ownerToEdit} updateOwner={updateOwner} />} />
+            <Route path='/owner/:id/edit' element={<OwnerEditForm ownerToEdit={ownerToEdit} updateOwner={updateOwner} setOwnerToUser={setOwnerToUser}/>} />
             <Route path='/equipment/:id/edit' element={<ProductEditForm equipmentToEdit={equipmentToEdit} updateEquipment={updateEquipment} />} />
 
             {/* Login Page Route */}
