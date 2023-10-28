@@ -1,7 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom"
+import OwnerContext from '../OwnerComponents/OwnerContext'
 
-function UserCard({ id, email, name, location, phone, profileImage, item, profession, setFromOwnerDash }) {
+function UserCard({ id, email, name, location, phone, profileImage, item, profession, fromOwnerDash }) {
+    
+    const [owner, setOwner] = useContext(OwnerContext)
+
+    console.log(owner)
 
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [subject, setSubject] = useState("")
@@ -18,47 +23,14 @@ function UserCard({ id, email, name, location, phone, profileImage, item, profes
 
 //--------------------------------------------------------------------------- This handles opening the modal to contact the individual (user)---------------------------------
     function toggleModal() {
-        // setFromOwnerDash(true)
         setIsModalOpen(!isModalOpen)
     }
 
-    console.log("WHAT ARE YOU",setFromOwnerDash)
+    console.log("WHAT ARE YOU",fromOwnerDash)
 
-    // function SubjectForm(){
-    //     <form className="space-y-6" action="#">
-    //         <div>
-    //             <label htmlFor="subject" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"> Subject: </label>
-    //             <input type="text" name="subject" id="subject" placeholder="Subject" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required/>
-    //         </div>
-    //     </form>
-    // }
-
-    // function MessageForm(){
-    //     <form className="space-y-6" action="#">
-    //         <div>
-    //             {/* Message fields here */}
-    //             <label htmlFor="message" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"> Message: </label>
-    //             <textarea  type="text" name="message" id="message" placeholder="Start typing your message..." className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required/>
-    //         </div>
-    //     </form>
-    // }
-
-    function SubmitSubject (subject) {
-        // might use this to separate the subject and the messaging, make a separate one for message for example
-        fetch("/messages", {
-            method: "POST",
-            body: JSON.stringify(subject),
-            headers: {
-              "Content-Type": "application/json"
-            }
-          })
-          .then((response) => response.json())
-          .then((message) => {
-
-          })
-    }
 
     function ContactModal(){ 
+        
     return(
     <> 
     <button onClick={toggleModal} className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
@@ -143,7 +115,7 @@ function UserCard({ id, email, name, location, phone, profileImage, item, profes
                     </div>
                     
                         <button className= " ml-auto text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700" onClick={handleClick}>More Info</button>
-                        {<ContactModal/>}
+                        <ContactModal/>
                 </div>
             </div>
         </div>

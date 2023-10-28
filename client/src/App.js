@@ -100,7 +100,7 @@ function App() {
     });
   }, []);
 
-  console.log(user)
+  // console.log(user)
 
   //------------------------------------------------------------------------------------------------------------------
 
@@ -308,7 +308,7 @@ function App() {
             <Route path='/temp/bulk_equipment_upload' element={<BulkEquipmentUpload />} />
 
             {/* Owner Dashboard Page*/}
-            <Route path='/owner/dashboard' element={<OwnerDashboard updateOwner={updateOwner} ownerToEdit={ownerToEdit} setFromOwnerDash={setFromOwnerDash} searchTerm={searchTerm}/>} />
+            <Route path='/owner/dashboard' element={<OwnerDashboard updateOwner={updateOwner} ownerToEdit={ownerToEdit} fromOwnerDash={fromOwnerDash} setFromOwnerDash={setFromOwnerDash} searchTerm={searchTerm}/>} />
 
             {/* Temporary calendar routing */}
             <Route path='/temp/calendar' element={<Calendar />} />
@@ -319,7 +319,7 @@ function App() {
 
             {/* Messaging routing  */}
             <Route path='/messaging' element={<NewMessageThreads fromOwnerDash={fromOwnerDash}/>} />
-            <Route path='/user/card/:id' element={<UserCard  />} />
+            <Route path='/user/card/:id' element={<UserCard/>} />
 
           </Routes>
 

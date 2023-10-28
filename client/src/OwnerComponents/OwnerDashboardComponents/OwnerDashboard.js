@@ -10,7 +10,7 @@ import UserCollection from '../../UserComponents/UserCollection';
 import { ReactComponent as EquipMeLogo } from '../../Content/EquipMeLogo.svg'
 
 
-function OwnerDashboard({ownerToEdit, updateOwner, setFromOwnerDash, searchTerm}) {
+function OwnerDashboard({ownerToEdit, updateOwner, fromOwnerDash, setFromOwnerDash, searchTerm}) {
 
     const [owner, setOwner] = useContext(OwnerContext)
     const [toggleHomeDash, setToggleHomeDash] = useState(null)
@@ -24,7 +24,7 @@ function OwnerDashboard({ownerToEdit, updateOwner, setFromOwnerDash, searchTerm}
         });
     }, []);
 
-    console.log(owner)
+    // console.log(owner)
     
     //----- Variables in the order they appear -----
     let plannedDeals
@@ -87,7 +87,7 @@ function AccountSettings() {
     const handlePotentialRenter = () => {
         potentialRenters =
         <>
-            <UserCollection searchTerm={searchTerm} users={potentialRentalUsers} setFromOwnerDash={setFromOwnerDash}/>
+            <UserCollection searchTerm={searchTerm} users={potentialRentalUsers} setFromOwnerDash={setFromOwnerDash} fromOwnerDash={fromOwnerDash}/>
         </>
     }
 
@@ -150,6 +150,7 @@ function AccountSettings() {
 
                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {
                                 handlePotentialRenter()
+                                setFromOwnerDash(true)
                                 setToggleHomeDash(potentialRenters)
                             }}>Potential Renters</span>
 
