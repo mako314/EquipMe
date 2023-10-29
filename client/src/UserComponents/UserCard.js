@@ -8,15 +8,8 @@ function UserCard({ id, email, name, location, phone, profileImage, item, profes
     const [owner, setOwner] = useContext(OwnerContext)
 
     console.log(owner)
-    console.log(id)
+
     console.log("WHAT ARE YOU",fromOwnerDash)
-
-    const [isModalOpen, setIsModalOpen] = useState(false)
-    const [subject, setSubject] = useState("")
-    const [message, setMessage] = useState("")
-
-    //test can likely delete below
-    // console.log(item)
 
     const navigate = useNavigate()
 
@@ -25,15 +18,7 @@ function UserCard({ id, email, name, location, phone, profileImage, item, profes
     }
 
 //--------------------------------------------------------------------------- This handles opening the modal to contact the individual (user)---------------------------------
-    // function toggleModal() {
-    //     setIsModalOpen(!isModalOpen)
-    // }
-
     
-
-
-    
-
 
     return (
 
