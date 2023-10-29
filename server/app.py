@@ -830,8 +830,13 @@ class AddToInboxes(Resource):
         db.session.add(new_user_inbox, new_owner_inbox)
 
         db.session.commit()
+        
+        response_data = {
+            'user_inbox': new_user_inbox.to_dict(),
+            'owner_inbox': new_owner_inbox.to_dict()
+        }
 
-        response = make_response(new_user_inbox.to_dict(), new_owner_inbox.to_dict(), 201)
+        response = make_response(response_data, 201)
 
         return response
         
