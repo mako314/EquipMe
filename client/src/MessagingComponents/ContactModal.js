@@ -1,15 +1,36 @@
 import React, { useContext, useState, useEffect } from 'react'
 import OwnerContext from '../OwnerComponents/OwnerContext'
+import UserContext from '../UserComponents/UserContext'
+import {toast} from 'react-toastify'
 
-function ContactModal({userID}){
+
+function ContactModal({recipientID}){
     const [owner, setOwner] = useContext(OwnerContext)
 
+    const [user, setUser] = useContext(UserContext)
 
-    //Definitely need to set validations and such to prevent double subjects, 
-    
+    // useEffect(() => {
+    //   fetch("/check_session").then((response) => {
+    //     if (response.ok) {
+    //       response.json().then((user) => setUser(user))
+    //     }
+    //   })
+    // }, [])
+
+
+    //Definitely need to set validations and such to prevent double subjects,
+
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [subject, setSubject] = useState("")
     const [message, setMessage] = useState("")
+
+    const sender = user || owner
+    
+    if(sender === user){
+        console.log("true")
+    }
+
+    console.log("Hi, I'm you're sender:", sender?.firstName)
 
     function toggleModal() {
         setIsModalOpen(!isModalOpen)
@@ -34,8 +55,8 @@ function ContactModal({userID}){
             response = await fetch("/new/inboxes", {
                 method: "POST",
                 body: JSON.stringify({ 
-                    user_id: userID,
-                    owner_id: owner.id,
+                    user_id: user ? user.id : recipientID,
+                    owner_id: owner ? owner.id : recipientID,
                     thread_id: threadData.id
                 }),
                 headers: {
@@ -48,10 +69,10 @@ function ContactModal({userID}){
                 response = await fetch("/messages", {
                     method: "POST",
                     body: JSON.stringify({
-                        recipient_id: userID,
-                        sender_id: owner.id,
+                        recipient_id: recipientID,
+                        sender_id: sender.id,
                         context_id: randomContext,
-                        user_type: "Owner",
+                        user_type: sender === user ? "user": "owner",
                         content: message,
                         message_status: "Delivered",
                         created_on: new Date().toISOString(),
@@ -63,8 +84,12 @@ function ContactModal({userID}){
                 })
 
                 if (response.ok) {
+                    toast.success("✉️ Message sent successfully!",{
+                    "autoClose" : 2000
+                    })
                     console.log("Message sent successfully")
-                    window.alert("Message sent successfully!")
+                    
+                    // window.alert("Message sent successfully!")
                 } else {
                     console.error("Failed to send the message")
                 }
