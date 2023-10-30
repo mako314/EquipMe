@@ -25,7 +25,7 @@ function OwnerDisplay() {
 
   // console.log(equipmentNames)
 
-  console.log(owner)
+//   console.log(owner)
 
   return (
 
@@ -41,7 +41,7 @@ function OwnerDisplay() {
                             <h1 class="text-xl font-bold"> {firstName} {lastName}</h1>
                             <p class="text-gray-600">{profession}</p>
                             <div class="mt-6 flex flex-wrap gap-4 justify-center">
-                                <ContactModal userID={id}/>
+                                <ContactModal recipientID={id}/>
                                 <span class="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded"> {website}</span>
                             </div>
                         </div>
