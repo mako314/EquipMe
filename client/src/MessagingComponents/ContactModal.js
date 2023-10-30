@@ -67,8 +67,11 @@ function ContactModal({userID}){
                 })
 
                 if (response.ok) {
+                    toast.success("✉️ Message sent successfully!",{
+                    "autoClose" : 2000
+                    })
                     console.log("Message sent successfully")
-                    toast.success("Message sent successfully!")
+                    
                     // window.alert("Message sent successfully!")
                 } else {
                     console.error("Failed to send the message")
