@@ -59,6 +59,10 @@ import BulkEquipmentUpload from './EquipmentComponents/BulkEquipmentUpload';
 import MessageThreads from './MessagingComponents/MessageThreads'
 import NewMessageThreads from './MessagingComponents/NewMessageThreads';
 
+//---------------------- Toastify -----------------------------
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function App() {
 
@@ -322,6 +326,18 @@ function App() {
             <Route path='/user/card/:id' element={<UserCard/>} />
 
           </Routes>
+          <ToastContainer
+          position="bottom-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          />
 
           <Footer />
         </>

@@ -1,11 +1,15 @@
 import React, { useContext, useState, useEffect } from 'react'
 import OwnerContext from '../OwnerComponents/OwnerContext'
+import {toast} from 'react-toastify'
+
 
 function ContactModal({userID}){
     const [owner, setOwner] = useContext(OwnerContext)
 
 
-    //Definitely need to set validations and such to prevent double subjects, 
+    //Definitely need to set validations and such to prevent double subjects,
+
+    
     
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [subject, setSubject] = useState("")
@@ -64,7 +68,8 @@ function ContactModal({userID}){
 
                 if (response.ok) {
                     console.log("Message sent successfully")
-                    window.alert("Message sent successfully!")
+                    toast.success("Message sent successfully!")
+                    // window.alert("Message sent successfully!")
                 } else {
                     console.error("Failed to send the message")
                 }
