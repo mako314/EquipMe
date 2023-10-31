@@ -60,7 +60,7 @@ import MessageThreads from './MessagingComponents/MessageThreads'
 import NewMessageThreads from './MessagingComponents/NewMessageThreads';
 
 //---------------------- Checkout -----------------------------
-import Checkout from './RentalComponents/Checkout';
+import Checkout from './CheckoutComponents/Checkout';
 
 //---------------------- Toastify -----------------------------
 import { ToastContainer, toast } from 'react-toastify'
