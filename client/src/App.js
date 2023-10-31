@@ -59,6 +59,9 @@ import BulkEquipmentUpload from './EquipmentComponents/BulkEquipmentUpload';
 import MessageThreads from './MessagingComponents/MessageThreads'
 import NewMessageThreads from './MessagingComponents/NewMessageThreads';
 
+//---------------------- Checkout -----------------------------
+import Checkout from './RentalComponents/Checkout';
+
 //---------------------- Toastify -----------------------------
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
@@ -324,6 +327,10 @@ function App() {
             {/* Messaging routing  */}
             <Route path='/messaging' element={<NewMessageThreads fromOwnerDash={fromOwnerDash}/>} />
             <Route path='/user/card/:id' element={<UserCard/>} />
+
+            {/* Temporary Checkout Routing */}
+            <Route path='/checkout' element={<Checkout/>} />
+
 
           </Routes>
           <ToastContainer
