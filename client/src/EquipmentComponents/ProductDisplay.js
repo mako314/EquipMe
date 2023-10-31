@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import EquipmentMap from '../MapComponents/EquipmentMap'
 
-function EquipmentDisplay() {
+function EquipmentDisplay({itemsInCart, setItemsInCart}) {
   const [oneEquipment, setOneEquipment] = useState([])
   const { model, name, make, location, email, phone, quantity, images } = oneEquipment
 
@@ -19,7 +19,7 @@ function EquipmentDisplay() {
       })
   }, [])
 
-  console.log(oneEquipment)
+  console.log("ITEMS CURRENTLY IN THE CART",itemsInCart)
 
   // Need to make some onclicks for when a user clicks description, reviews, details etc. 
 
@@ -31,6 +31,10 @@ function EquipmentDisplay() {
   //   equipment_pictures = <img alt="ecommerce" class="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded" src={images[0].imageURL} />
 
   // }
+
+  function handleClick(e) {
+    setItemsInCart([...itemsInCart, oneEquipment])
+  }
 
   let loggedOutDisplay
   loggedOutDisplay = (
@@ -60,7 +64,9 @@ function EquipmentDisplay() {
             </div>
             <div className="flex">
               <span className="title-font font-medium text-2xl text-white">$58.00</span>
-              <button className="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">Rent Now</button>
+
+              <button className="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded" onClick={handleClick} >Rent Now</button>
+
               <button className="rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
                 <svg fill="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-5 h-5" viewBox="0 0 24 24">
                   <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>

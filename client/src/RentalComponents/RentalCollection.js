@@ -30,7 +30,7 @@ function RentalCollection({ }) {
     const rentalCards = rentalAgreementArray?.map((item) => {
         console.log(item)
         if(item && item.equipment && item.user){
-        return (<RentalCard key={item.id} equipmentName={item.equipment.name} rentalDates={item.rental_dates} renterFirstName={item.user.firstName} renterLastName={item.user.lastName}/> )
+        return (<RentalCard key={item.id} item={item} equipmentName={item.equipment.name} rentalDates={item.rental_dates} renterFirstName={item.user.firstName} renterLastName={item.user.lastName}/> )
         }
     })
 
