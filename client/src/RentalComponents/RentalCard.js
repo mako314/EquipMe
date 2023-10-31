@@ -1,8 +1,8 @@
 import React from "react";
 
-function RentalCard({ equipmentName, rentalDates, renterFirstName, renterLastName, location, ownerEmail, ownerName }) {
+function RentalCard({ item, equipmentName, rentalDates, renterFirstName, renterLastName, location, ownerEmail, ownerName }) {
 
-
+    console.log(item)
     return (
 
         <div class="w-full max-w-sm overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 mb-4 mt-3 m-auto">
