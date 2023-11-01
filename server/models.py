@@ -32,28 +32,20 @@ class User(db.Model, SerializerMixin):
     # bannerImg = db.Column(db.String)
     # I don't think I'll be requiring / asking for banner images IMO
 
-
-
-    #Position and or profession? 
     #Bio ? Don't think needed tbh.
 
-    #Would I need a document attribute here? To hold a users document such as insurance and such?
-
-
-    #STUFF BELOW IS DONE
-    #might need to add email to identify user
-    #Also a phone number to reach them?
-    # and reviews
+    #Would I need a document attribute here? To hold a users document such as insurance and such
 
     #relationships 
     #do a cascade to make life easier
     agreements = db.relationship('RentalAgreement', back_populates="user")
 
-    user_inboxes = db.relationship(
-        "UserInbox", back_populates="user")
+    user_inboxes = db.relationship("UserInbox", back_populates="user")
+
+    cart = db.relationship('Cart', back_populates='user')
 
     #Serialization rules
-    serialize_rules = ('-agreements.user', '-user_inboxes.user')
+    serialize_rules = ('-agreements.user', '-user_inboxes.user', '-cart.user')
 
 
     #PROPERTIES
@@ -306,29 +298,35 @@ class Cart(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     total = db.Column(db.Integer)
     cart_status = db.Column(db.String)
-    total = db.Column(db.Float)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    item = db.relationship('CartItem', back_populates='cart')
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    
+    #We'll try this cascade delete first : https://docs.sqlalchemy.org/en/20/orm/cascades.html#cascade-delete-orphan
+    item = db.relationship('CartItem', back_populates='cart' cascade="all, delete-orphan")
+    user = db.relationship ('User', back_populates='cart')
 
-    serialize_rules = ('-item.cart',)
+    serialize_rules = ('-item.cart','-user.cart')
 
 
 class CartItem(db.Model, SerializerMixin):
     __tablename__ = "cart_items"
     id = db.Column(db.Integer, primary_key= True)
 
-    dollar_at_addition = db.Column(db.Integer)
-    cents_at_addition = db.Column(db.Integer)
-    dollar_price_changed = db.Column(db.Integer)
-    cent_price_changed = db.Column(db.Integer)
+    price_cents_at_addition = db.Column(db.Integer)
+    price_cents_if_changed = db.Column(db.Integer, nullable = True)
     quantity = db.Column(db.Integer, default=1)
-
+    
     cart_id = db.Column(db.Integer, db.ForeignKey('carts.id'))
+    equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
 
-    cart = db.relationship('Cart', back_populates='item')
+    cart = db.relationship('Cart', back_populates='item' cascade="all, delete-orphan")
     equipment = db.relationship('Equipment', back_populates='cart_item')
 
     serialize_rules = ('-cart.item','-equipment.cart_item')
+
+    # Need to consider taxes, negative values, need validations here ASAP
 
 #-------------------------Message System---------------
 

@@ -23,7 +23,6 @@ function EquipmentDisplay({}) {
       })
   }, [])
 
-  console.log("ITEMS CURRENTLY IN THE CART",itemsInCart)
 
   // Need to make some onclicks for when a user clicks description, reviews, details etc. 
 
