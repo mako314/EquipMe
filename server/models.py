@@ -205,10 +205,12 @@ class Equipment(db.Model, SerializerMixin):
 
     agreements = db.relationship('RentalAgreement', back_populates="equipment")
 
+    cart_item = db.relationship('CartItem', back_populates='equipment')
+
     images = db.relationship('EquipmentImage', back_populates='equipment')
 
     #Serialization rules
-    serialize_rules = ('-owner.equipment', '-agreements.equipment', '-owner.agreements', '-images.equipment')
+    serialize_rules = ('-owner.equipment', '-agreements.equipment', '-owner.agreements', '-images.equipment', '-cart_item.equipment')
 
     #VALIDATIONS BEGIN HERE
     # @validates("email")
@@ -304,6 +306,7 @@ class Cart(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     total = db.Column(db.Integer)
     cart_status = db.Column(db.String)
+    total = db.Column(db.Float)
 
     item = db.relationship('CartItem', back_populates='cart')
 
@@ -314,9 +317,18 @@ class CartItem(db.Model, SerializerMixin):
     __tablename__ = "cart_items"
     id = db.Column(db.Integer, primary_key= True)
 
-    cart = db.relationship('Cart', back_populates='item')
+    dollar_at_addition = db.Column(db.Integer)
+    cents_at_addition = db.Column(db.Integer)
+    dollar_price_changed = db.Column(db.Integer)
+    cent_price_changed = db.Column(db.Integer)
+    quantity = db.Column(db.Integer, default=1)
 
-    serialize_rules = ('-cart.item',)
+    cart_id = db.Column(db.Integer, db.ForeignKey('carts.id'))
+
+    cart = db.relationship('Cart', back_populates='item')
+    equipment = db.relationship('Equipment', back_populates='cart_item')
+
+    serialize_rules = ('-cart.item','-equipment.cart_item')
 
 #-------------------------Message System---------------
 
