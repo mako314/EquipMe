@@ -1,13 +1,17 @@
 import React from 'react'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import EquipmentMap from '../MapComponents/EquipmentMap'
+import UserContext from '../UserComponents/UserContext'
+
 
 function EquipmentDisplay({itemsInCart, setItemsInCart}) {
   const [oneEquipment, setOneEquipment] = useState([])
   const { model, name, make, location, email, phone, quantity, images } = oneEquipment
 
   const { id } = useParams()
+  const [user, setUser] = useContext(UserContext)
+
   const navigate = useNavigate()
 
 
@@ -65,7 +69,7 @@ function EquipmentDisplay({itemsInCart, setItemsInCart}) {
             <div className="flex">
               <span className="title-font font-medium text-2xl text-white">$58.00</span>
 
-              <button className="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded" onClick={handleClick} >Rent Now</button>
+              <button className="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded" onClick={user ? handleClick : null } >Rent Now</button>
 
               <button className="rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
                 <svg fill="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-5 h-5" viewBox="0 0 24 24">

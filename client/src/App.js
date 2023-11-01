@@ -61,6 +61,7 @@ import NewMessageThreads from './MessagingComponents/NewMessageThreads';
 
 //---------------------- Checkout -----------------------------
 import Checkout from './CheckoutComponents/Checkout';
+import Cart from './CheckoutComponents/Cart';
 
 //---------------------- Toastify -----------------------------
 import { ToastContainer, toast } from 'react-toastify'
@@ -332,6 +333,7 @@ function App() {
 
             {/* Temporary Checkout Routing */}
             <Route path='/checkout' element={<Checkout/>} />
+            <Route path='/cart' element={<Cart itemsInCart={itemsInCart}/>} />
 
 
           </Routes>
