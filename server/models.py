@@ -304,7 +304,7 @@ class Cart(db.Model, SerializerMixin):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     
     #We'll try this cascade delete first : https://docs.sqlalchemy.org/en/20/orm/cascades.html#cascade-delete-orphan
-    item = db.relationship('CartItem', back_populates='cart' cascade="all, delete-orphan")
+    item = db.relationship('CartItem', back_populates='cart', cascade="all, delete")
     user = db.relationship ('User', back_populates='cart')
 
     serialize_rules = ('-item.cart','-user.cart')
@@ -321,7 +321,7 @@ class CartItem(db.Model, SerializerMixin):
     cart_id = db.Column(db.Integer, db.ForeignKey('carts.id'))
     equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
 
-    cart = db.relationship('Cart', back_populates='item' cascade="all, delete-orphan")
+    cart = db.relationship('Cart', back_populates='item')
     equipment = db.relationship('Equipment', back_populates='cart_item')
 
     serialize_rules = ('-cart.item','-equipment.cart_item')
