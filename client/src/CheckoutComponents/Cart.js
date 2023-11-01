@@ -1,6 +1,8 @@
 import React from "react";
 
-function Cart(){
+function Cart({itemsInCart}){
+  
+  console.log(itemsInCart)
 
     return(
         <div class="h-screen bg-gray-100 pt-20">

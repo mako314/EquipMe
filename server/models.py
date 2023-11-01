@@ -298,7 +298,25 @@ class RentalAgreement(db.Model, SerializerMixin):
     def __repr__(self):
         return f"<Rental Agreement: Equipment in {self.location}, Total Price: {self.total_price}, Rental Dates: {self.rental_dates}>"
     
+#-------------------------Cart System---------------
+class Cart(db.Model, SerializerMixin):
+    __tablename__ = "carts"
+    id = db.Column(db.Integer, primary_key=True)
+    total = db.Column(db.Integer)
+    cart_status = db.Column(db.String)
 
+    item = db.relationship('CartItem', back_populates='cart')
+
+    serialize_rules = ('-item.cart',)
+
+
+class CartItem(db.Model, SerializerMixin):
+    __tablename__ = "cart_items"
+    id = db.Column(db.Integer, primary_key= True)
+
+    cart = db.relationship('Cart', back_populates='item')
+
+    serialize_rules = ('-cart.item',)
 
 #-------------------------Message System---------------
 
