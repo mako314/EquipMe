@@ -161,13 +161,6 @@ class Equipment(db.Model, SerializerMixin):
     type = db.Column(db.String)
     make = db.Column(db.String)
     model = db.Column(db.String)
-
-#----------------------------------------------------------------
-    #Removed due to incorporating a relationship
-    # owner_name = db.Column(db.String)
-    # phone = db.Column(db.String) #this and the one below are recently added.
-    # email = db.Column(db.String) #This is already included via the owner relationship.
-#----------------------------------------------------------------
     location = db.Column(db.String)
     availability = db.Column(db.String)
     delivery = db.Column(db.String)
@@ -185,12 +178,8 @@ class Equipment(db.Model, SerializerMixin):
 
     #Should add things like a deposit required, short description, condition to rent vehicle i.e. license required? Y/N? What else could be included needs to be brainstormed
 
-
     #relationship
     #do a cascade to make life easier
-
-    #Do I need owner ID? I likely do, I also need to do cascades still for a cleaner delete
-
     owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'))
 
     owner = db.relationship("EquipmentOwner", back_populates="equipment")
@@ -199,10 +188,12 @@ class Equipment(db.Model, SerializerMixin):
 
     cart_item = db.relationship('CartItem', back_populates='equipment')
 
+    equipment_price = db.relationship('EquipmentPrice', back_populates='equipment', cascade="all, delete")
+
     images = db.relationship('EquipmentImage', back_populates='equipment')
 
     #Serialization rules
-    serialize_rules = ('-owner.equipment', '-agreements.equipment', '-owner.agreements', '-images.equipment', '-cart_item.equipment')
+    serialize_rules = ('-owner.equipment', '-agreements.equipment', '-owner.agreements', '-images.equipment', '-cart_item.equipment','-equipment_price.equipment' )
 
     #VALIDATIONS BEGIN HERE
     # @validates("email")
@@ -219,6 +210,19 @@ class Equipment(db.Model, SerializerMixin):
             return quantity
         else:
             raise ValueError("You cannot list nothing, please enter a quantity greater than 0.")
+
+class EquipmentPrice(db.Model, SerializerMixin):
+    __tablename__= "equipment_prices"
+    id = db.Column(db.Integer, primary_key = True)
+
+    hourly_rate = db.Column(db.Integer)
+    daily_rate = db.Column(db.Integer)
+    weekly_rate = db.Column(db.Integer)
+
+    equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
+    equipment = db.Relationship('Equipment', back_populates ='equipment_price')
+
+    serialize_rules = ('-equipment.equipment_price',)
 
 class EquipmentImage(db.Model, SerializerMixin):
     __tablename__= "equipment_images"
@@ -299,7 +303,7 @@ class Cart(db.Model, SerializerMixin):
     total = db.Column(db.Integer)
     cart_status = db.Column(db.String)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, nullable=True, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     

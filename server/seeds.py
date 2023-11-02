@@ -443,8 +443,40 @@ if __name__ == '__main__':
             total = 10, #Going to write the calculating formula for this after first seed attempt
             cart_status = "ACTIVE",
             created_at = datetime.utcnow(),
-
+            user_id = 1,
         )
+
+        print("Generating example cart items...")   
+        cart_items = [
+            CartItem(
+                price_cents_at_addition = 5,
+                price_cents_if_changed = 5,
+                quantity = 1,
+                cart_id= 1,
+                equipment_id = 1,
+            ),
+            CartItem(
+                price_cents_at_addition = 5,
+                price_cents_if_changed = 5,
+                quantity = 1,
+                cart_id= 1,
+                equipment_id = 2,
+            ),
+            CartItem(
+                price_cents_at_addition = 5,
+                price_cents_if_changed = 5,
+                quantity = 1,
+                cart_id= 1,
+                equipment_id = 3,
+            ),
+            CartItem(
+                price_cents_at_addition = 5,
+                price_cents_if_changed = 5,
+                quantity = 1,
+                cart_id= 1,
+                equipment_id = 4,
+            ),
+        ]     
 
 
 
