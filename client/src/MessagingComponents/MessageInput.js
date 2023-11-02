@@ -50,7 +50,7 @@ const handleSendMessage = () => {
         "user_type": "owner",
         "content": newMessage,
         "message_status": "Delivered",
-        "created_on": new Date().toISOString(),
+        "created_at": new Date().toISOString(),
         "thread_id": SelectedThreadID
       }
     } else if (user && user.id)
@@ -62,7 +62,7 @@ const handleSendMessage = () => {
         "user_type" : "user",
         "content": newMessage,
         "message_status": "Delivered",
-        "created_on": new Date().toISOString(),
+        "created_at": new Date().toISOString(),
         "thread_id": SelectedThreadID
       }
     } else {
@@ -72,7 +72,7 @@ const handleSendMessage = () => {
         "context_id": 2,
         "content": newMessage,
         "message_status": "Delivered",
-        "created_on": new Date().toISOString(),
+        "created_at": new Date().toISOString(),
         "thread_id": SelectedThreadID
       }
   }

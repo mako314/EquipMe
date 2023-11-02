@@ -263,12 +263,12 @@ class RentalAgreement(db.Model, SerializerMixin):
 #----------------------------------------------------------------
     
     # Include a created at date, updated at.
-    created_on = db.Column(
+    created_at = db.Column(
     db.DateTime, nullable=False,
     default=datetime.utcnow,
     )
 
-    modified_on = db.Column(
+    updated_at = db.Column(
     db.DateTime, nullable=False,
     default=datetime.utcnow,
     onupdate=datetime.utcnow
@@ -344,7 +344,7 @@ class Message(db.Model, SerializerMixin):
     content = db.Column(db.String)
     message_status = db.Column(db.String, nullable = True)
 
-    created_on = db.Column(
+    created_at = db.Column(
     db.DateTime, nullable=False,
     default=datetime.utcnow,
     )

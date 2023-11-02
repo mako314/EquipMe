@@ -1,4 +1,4 @@
-from models import db, User, EquipmentOwner, Equipment, RentalAgreement, EquipmentImage, Thread, UserInbox, OwnerInbox, Message
+from models import db, User, EquipmentOwner, Equipment, RentalAgreement, EquipmentImage, Thread, UserInbox, OwnerInbox, Message, Cart, CartItem
 import pandas as pd
 from app import app
 from random import randint, choice as rc
@@ -337,9 +337,6 @@ if __name__ == '__main__':
                 type = 'Heavy Machinery',
                 make = 'Caterpillar',
                 model = '336E L',
-                # owner_name = ,
-                # phone = ,
-                # email = ,
                 location = 'Miami, Florida',
                 availability = 'True',
                 delivery = 'False',
@@ -351,9 +348,6 @@ if __name__ == '__main__':
                 type = 'Industrial Vehicle',
                 make = 'Toyota Material Handling',
                 model = '8FGCU25',
-                # owner_name = ,
-                # phone = ,
-                # email = ,
                 location = 'Chicago, Illinois',
                 availability = 'True',
                 delivery = 'False',
@@ -365,9 +359,6 @@ if __name__ == '__main__':
                 type = 'Garden Lawnmower',
                 make = 'Honda',
                 model = 'HRX217VKA',
-                # owner_name = ,
-                # phone = ,
-                # email = ,
                 location = 'Seattle, Washington',
                 availability = 'True',
                 delivery = 'False',
@@ -379,9 +370,6 @@ if __name__ == '__main__':
                 type = 'Plumbing Equipment',
                 make = 'Lenox',
                 model = '21011TC138',
-                # owner_name = ,
-                # phone = ,
-                # email = ,
                 location = 'New York City, New York',
                 availability = 'True',
                 delivery = 'True',
@@ -406,8 +394,8 @@ if __name__ == '__main__':
             owner_id = 6, # Amy Wilson
             user_id=1,  # Benjamin Davis
             equipment_id=2,  # Amy Wilson #Available
-            created_on = datetime.utcnow(),
-            modified_on = datetime.utcnow()
+            created_at = datetime.utcnow(),
+            updated_at = datetime.utcnow()
         ),
         RentalAgreement(
             location="Miami, Florida",
@@ -416,8 +404,8 @@ if __name__ == '__main__':
             owner_id = 5, # David Rodriguez
             user_id=2,  # Ethan Martinez
             equipment_id=1,  # David Rodriguez #Available
-            created_on = datetime.utcnow(),
-            modified_on = datetime.utcnow()
+            created_at = datetime.utcnow(),
+            updated_at = datetime.utcnow()
         ),
         RentalAgreement(
             location="Seattle, Washington",
@@ -426,8 +414,8 @@ if __name__ == '__main__':
             owner_id = 4, # Henry Cavill
             user_id=5,  # Sarah Thompson
             equipment_id=3,  # Daniel Lee #Available
-            created_on = datetime.utcnow(),
-            modified_on = datetime.utcnow()
+            created_at = datetime.utcnow(),
+            updated_at = datetime.utcnow()
         )]
 
         db.session.add_all(rental_agreements)
@@ -448,6 +436,18 @@ if __name__ == '__main__':
 
         db.session.add_all(threads)
         db.session.commit()
+
+#---------------------Cart and Item testing----------------
+        print("Generating example cart...")
+        cart1 = Cart(
+            total = 10, #Going to write the calculating formula for this after first seed attempt
+            cart_status = "ACTIVE",
+            created_at = datetime.utcnow(),
+
+        )
+
+
+
 #---------------------Message and Inbox testing----------------
 
         print("Generating example messages...")
@@ -459,7 +459,7 @@ if __name__ == '__main__':
                 content = "Hey, hope this message finds you well, I'd like to rent this equipment. What would the cost be?",
                 user_type = "user",
                 message_status = "Delivered",
-                created_on = datetime.utcnow(),
+                created_at = datetime.utcnow(),
                 thread_id = 1
             ),
             Message(
@@ -469,7 +469,7 @@ if __name__ == '__main__':
                 content = "Yes it is still available, we offer rate discounts depending on how long you are trying to rent for, what is the time frame?",
                 user_type = "owner",
                 message_status = "Delivered",
-                created_on = datetime.utcnow(),
+                created_at = datetime.utcnow(),
                 thread_id = 1
             ),
             Message(
@@ -479,7 +479,7 @@ if __name__ == '__main__':
                 content = "Lets try for three weeks if you can send me a quote?",
                 user_type = "user",
                 message_status = "Delivered",
-                created_on = datetime.utcnow(),
+                created_at = datetime.utcnow(),
                 thread_id = 1
             ),
             Message(
@@ -489,7 +489,7 @@ if __name__ == '__main__':
                 content = "Attached is a quote, thank you!",
                 user_type = "owner",
                 message_status = "Delivered",
-                created_on = datetime.utcnow(),
+                created_at = datetime.utcnow(),
                 thread_id = 1
             ),
             Message(
@@ -499,7 +499,7 @@ if __name__ == '__main__':
                 content = "Hey, hope this message finds you well, I'd like to rent this equipment. What would the cost be?",
                 user_type = "user",
                 message_status = "Delivered",
-                created_on = datetime.utcnow(),
+                created_at = datetime.utcnow(),
                 thread_id = 2
             ),
             Message(
@@ -509,7 +509,7 @@ if __name__ == '__main__':
                 content = "tetseroni?",
                 user_type = "owner",
                 message_status = "Delivered",
-                created_on = datetime.utcnow(),
+                created_at = datetime.utcnow(),
                 thread_id = 2
             ),
             Message(
@@ -519,7 +519,7 @@ if __name__ == '__main__':
                 content = "Lets try for three weeks ON THAT LAWNMoWER if you can send me a quote?",
                 user_type = "user",
                 message_status = "Delivered",
-                created_on = datetime.utcnow(),
+                created_at = datetime.utcnow(),
                 thread_id = 2
             ),
             Message(
@@ -529,7 +529,7 @@ if __name__ == '__main__':
                 content = "Attached is a quote, thank you!",
                 user_type = "owner",
                 message_status = "Delivered",
-                created_on = datetime.utcnow(),
+                created_at = datetime.utcnow(),
                 thread_id = 2
             ),
         ]
@@ -603,8 +603,8 @@ if __name__ == '__main__':
         #     owner_id = 6, # Amy Wilson
         #     user_id=1,  # Benjamin Davis
         #     equipment_id=38,  # Amy Wilson #Available
-        #     created_on = datetime.utcnow(),
-        #     modified_on = datetime.utcnow()
+        #     created_at = datetime.utcnow(),
+        #     updated_at = datetime.utcnow()
         # ),
         # RentalAgreement(
         #     location="Miami, Florida",
@@ -613,8 +613,8 @@ if __name__ == '__main__':
         #     owner_id = 5, # David Rodriguez
         #     user_id=2,  # Ethan Martinez
         #     equipment_id=8,  # David Rodriguez #Available
-        #     created_on = datetime.utcnow(),
-        #     modified_on = datetime.utcnow()
+        #     created_at = datetime.utcnow(),
+        #     updated_at = datetime.utcnow()
         # ),
         # RentalAgreement(
         #     location="Houston, Texas",
@@ -623,8 +623,8 @@ if __name__ == '__main__':
         #     owner_id = 7, # Daniel Lee
         #     user_id=3,  # William Anderson
         #     equipment_id=317,  # Daniel Lee #Available
-        #     created_on = datetime.utcnow(),
-        #     modified_on = datetime.utcnow()
+        #     created_at = datetime.utcnow(),
+        #     updated_at = datetime.utcnow()
         # ),
         # RentalAgreement(
         #     location="Phoenix, Arizona",
@@ -633,8 +633,8 @@ if __name__ == '__main__':
         #     owner_id = 2, # Emily Johnson
         #     user_id=4,  # Sofia Rodriguez
         #     equipment_id=361,  # Emily Johnson #Available
-        #     created_on = datetime.utcnow(),
-        #     modified_on = datetime.utcnow()
+        #     created_at = datetime.utcnow(),
+        #     updated_at = datetime.utcnow()
         # ),
         # RentalAgreement(
         #     location="Seattle, Washington",
@@ -643,8 +643,8 @@ if __name__ == '__main__':
         #     owner_id = 4, # Henry Cavill
         #     user_id=6,  # Sarah Thompson
         #     equipment_id=121,  # Henry Cavill #Available
-        #     created_on = datetime.utcnow(),
-        #     modified_on = datetime.utcnow()
+        #     created_at = datetime.utcnow(),
+        #     updated_at = datetime.utcnow()
         # ),
         # RentalAgreement(
         #     location="Houston, Texas",
@@ -653,8 +653,8 @@ if __name__ == '__main__':
         #     owner_id = 3, # Andrew Jacobs
         #     user_id=7,  # Thomas Brady
         #     equipment_id=311,  # Andrew Jacobs #Available
-        #     created_on = datetime.utcnow(),
-        #     modified_on = datetime.utcnow()
+        #     created_at = datetime.utcnow(),
+        #     updated_at = datetime.utcnow()
         # ),
         # RentalAgreement(
         #     location="Chicago, Illinois",
@@ -663,8 +663,8 @@ if __name__ == '__main__':
         #     owner_id = 1, # Mark Davis
         #     user_id=5,  # Christian Domingues
         #     equipment_id=238,  # Mark Davis #Available
-        #     created_on = datetime.utcnow(),
-        #     modified_on = datetime.utcnow()
+        #     created_at = datetime.utcnow(),
+        #     updated_at = datetime.utcnow()
         # ),
         # RentalAgreement(
         #     location="Phoenix, Arizona",
@@ -673,8 +673,8 @@ if __name__ == '__main__':
         #     owner_id = 2, # Emily Johnson
         #     user_id=4,  # Sofia Rodriguez
         #     equipment_id=355,  # Emily Johnson #Available
-        #     created_on = datetime.utcnow(),
-        #     modified_on = datetime.utcnow()
+        #     created_at = datetime.utcnow(),
+        #     updated_at = datetime.utcnow()
         # ),
         # RentalAgreement(
         #     location="Dallas, Texas",
@@ -683,8 +683,8 @@ if __name__ == '__main__':
         #     owner_id = 7,
         #     user_id=3,  # William Anderson
         #     equipment_id=318,  # Daniel Lee #Available
-        #     created_on = datetime.utcnow(),
-        #     modified_on = datetime.utcnow()
+        #     created_at = datetime.utcnow(),
+        #     updated_at = datetime.utcnow()
         # )
 #-------------------------------------------------------------------------------------------------------------------------------------------------
 
