@@ -1,4 +1,4 @@
-from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement, Message, Thread,UserInbox, OwnerInbox
+from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement, Message, Thread,UserInbox, OwnerInbox, Cart, CartItem, EquipmentPrice
 # from flask_cors import CORS
 # from flask_migrate import Migrate
 # from flask import Flask, request, make_response, jsonify
@@ -745,6 +745,18 @@ class AvailabilityChecker(Resource):
 
 api.add_resource(AvailabilityChecker, "/availability/<int:equipment_id>/<string:start_date>/<string:end_date>")
 
+#----------------------------------------------- Cart / Item Routes -----------------------------------------------------------------------------
+class Carts(Resource):
+    #Get ALL rental agreements
+    #list of all the renters and the equipment
+    def get(self):
+        carts = [cart.to_dict() for cart in Cart.query.all()]
+
+        response = make_response(carts, 200)
+
+        return response
+    
+api.add_resource(Carts, "/carts")
 
 #----------------------------------------------- Messaging Routes -----------------------------------------------------------------------------
 

@@ -9,9 +9,6 @@ from datetime import datetime
 
 
 #---------------HELPER IMPORTS----------------
-
-
-
 class User(db.Model, SerializerMixin):
     __tablename__ = "users"
 
@@ -310,7 +307,7 @@ class Cart(db.Model, SerializerMixin):
     items = db.relationship('CartItem', back_populates='cart', cascade="all, delete")
     user = db.relationship ('User', back_populates='cart')
 
-    serialize_rules = ('-item.cart','-user.cart')
+    serialize_rules = ('-items.cart','-items.cart_id','-items.equipment.agreements','-items.equipment.owner.owner_inboxes','-user.cart','-user.user_inboxes','-user.agreements')
 
     def calculate_total(self):
         #Calculate the total price of all items in the cart
@@ -327,13 +324,14 @@ class CartItem(db.Model, SerializerMixin):
     price_cents_at_addition = db.Column(db.Integer)
     price_cents_if_changed = db.Column(db.Integer, nullable = True)
     quantity = db.Column(db.Integer, default=1)
+    #Maybe length of rental here,
     cart_id = db.Column(db.Integer, db.ForeignKey('carts.id'))
     equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
 
     cart = db.relationship('Cart', back_populates='items')
     equipment = db.relationship('Equipment', back_populates='cart_item')
 
-    serialize_rules = ('-cart.item','-equipment.cart_item')
+    serialize_rules = ('-cart.items','-equipment.cart_item')
 
     #Need validations to test for positive integers, 
 
