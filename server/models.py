@@ -32,28 +32,20 @@ class User(db.Model, SerializerMixin):
     # bannerImg = db.Column(db.String)
     # I don't think I'll be requiring / asking for banner images IMO
 
-
-
-    #Position and or profession? 
     #Bio ? Don't think needed tbh.
 
-    #Would I need a document attribute here? To hold a users document such as insurance and such?
-
-
-    #STUFF BELOW IS DONE
-    #might need to add email to identify user
-    #Also a phone number to reach them?
-    # and reviews
+    #Would I need a document attribute here? To hold a users document such as insurance and such
 
     #relationships 
     #do a cascade to make life easier
     agreements = db.relationship('RentalAgreement', back_populates="user")
 
-    user_inboxes = db.relationship(
-        "UserInbox", back_populates="user")
+    user_inboxes = db.relationship("UserInbox", back_populates="user")
+
+    cart = db.relationship('Cart', back_populates='user')
 
     #Serialization rules
-    serialize_rules = ('-agreements.user', '-user_inboxes.user')
+    serialize_rules = ('-agreements.user', '-user_inboxes.user', '-cart.user')
 
 
     #PROPERTIES
@@ -169,13 +161,6 @@ class Equipment(db.Model, SerializerMixin):
     type = db.Column(db.String)
     make = db.Column(db.String)
     model = db.Column(db.String)
-
-#----------------------------------------------------------------
-    #Removed due to incorporating a relationship
-    # owner_name = db.Column(db.String)
-    # phone = db.Column(db.String) #this and the one below are recently added.
-    # email = db.Column(db.String) #This is already included via the owner relationship.
-#----------------------------------------------------------------
     location = db.Column(db.String)
     availability = db.Column(db.String)
     delivery = db.Column(db.String)
@@ -193,22 +178,22 @@ class Equipment(db.Model, SerializerMixin):
 
     #Should add things like a deposit required, short description, condition to rent vehicle i.e. license required? Y/N? What else could be included needs to be brainstormed
 
-
     #relationship
     #do a cascade to make life easier
-
-    #Do I need owner ID? I likely do, I also need to do cascades still for a cleaner delete
-
     owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'))
 
     owner = db.relationship("EquipmentOwner", back_populates="equipment")
 
     agreements = db.relationship('RentalAgreement', back_populates="equipment")
 
+    cart_item = db.relationship('CartItem', back_populates='equipment')
+
+    equipment_price = db.relationship('EquipmentPrice', back_populates='equipment', cascade="all, delete")
+
     images = db.relationship('EquipmentImage', back_populates='equipment')
 
     #Serialization rules
-    serialize_rules = ('-owner.equipment', '-agreements.equipment', '-owner.agreements', '-images.equipment')
+    serialize_rules = ('-owner.equipment', '-agreements.equipment', '-owner.agreements', '-images.equipment', '-cart_item.equipment','-equipment_price.equipment' )
 
     #VALIDATIONS BEGIN HERE
     # @validates("email")
@@ -226,6 +211,20 @@ class Equipment(db.Model, SerializerMixin):
         else:
             raise ValueError("You cannot list nothing, please enter a quantity greater than 0.")
 
+class EquipmentPrice(db.Model, SerializerMixin):
+    __tablename__= "equipment_prices"
+    id = db.Column(db.Integer, primary_key = True)
+
+    hourly_rate = db.Column(db.Integer, nullable= True)
+    daily_rate = db.Column(db.Integer, nullable= True)
+    weekly_rate = db.Column(db.Integer, nullable= True)
+    promo_rate = db.Column(db.Integer, nullable= True)
+
+    equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
+    equipment = db.Relationship('Equipment', back_populates ='equipment_price')
+
+    serialize_rules = ('-equipment.equipment_price',)
+
 class EquipmentImage(db.Model, SerializerMixin):
     __tablename__= "equipment_images"
 
@@ -239,8 +238,6 @@ class EquipmentImage(db.Model, SerializerMixin):
 
     #Serialization rules
     serialize_rules = ('-equipment.images', )
-
-
 
 
 class RentalAgreement(db.Model, SerializerMixin):
@@ -269,12 +266,12 @@ class RentalAgreement(db.Model, SerializerMixin):
 #----------------------------------------------------------------
     
     # Include a created at date, updated at.
-    created_on = db.Column(
+    created_at = db.Column(
     db.DateTime, nullable=False,
     default=datetime.utcnow,
     )
 
-    modified_on = db.Column(
+    updated_at = db.Column(
     db.DateTime, nullable=False,
     default=datetime.utcnow,
     onupdate=datetime.utcnow
@@ -298,7 +295,41 @@ class RentalAgreement(db.Model, SerializerMixin):
     def __repr__(self):
         return f"<Rental Agreement: Equipment in {self.location}, Total Price: {self.total_price}, Rental Dates: {self.rental_dates}>"
     
+#-------------------------Cart System---------------
+class Cart(db.Model, SerializerMixin):
+    __tablename__ = "carts"
+    id = db.Column(db.Integer, primary_key=True)
+    total = db.Column(db.Integer)
+    cart_status = db.Column(db.String)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, nullable=True, default=datetime.utcnow, onupdate=datetime.utcnow)
 
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    
+    #We'll try this cascade delete first : https://docs.sqlalchemy.org/en/20/orm/cascades.html#cascade-delete-orphan
+    item = db.relationship('CartItem', back_populates='cart', cascade="all, delete")
+    user = db.relationship ('User', back_populates='cart')
+
+    serialize_rules = ('-item.cart','-user.cart')
+
+
+class CartItem(db.Model, SerializerMixin):
+    __tablename__ = "cart_items"
+    id = db.Column(db.Integer, primary_key= True)
+
+    price_cents_at_addition = db.Column(db.Integer)
+    price_cents_if_changed = db.Column(db.Integer, nullable = True)
+    quantity = db.Column(db.Integer, default=1)
+    
+    cart_id = db.Column(db.Integer, db.ForeignKey('carts.id'))
+    equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
+
+    cart = db.relationship('Cart', back_populates='item')
+    equipment = db.relationship('Equipment', back_populates='cart_item')
+
+    serialize_rules = ('-cart.item','-equipment.cart_item')
+
+    # Need to consider taxes, negative values, need validations here ASAP
 
 #-------------------------Message System---------------
 
@@ -316,7 +347,7 @@ class Message(db.Model, SerializerMixin):
     content = db.Column(db.String)
     message_status = db.Column(db.String, nullable = True)
 
-    created_on = db.Column(
+    created_at = db.Column(
     db.DateTime, nullable=False,
     default=datetime.utcnow,
     )

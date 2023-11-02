@@ -11,3 +11,6 @@ Listings: Users can list the tools and equipment they have available for rent, s
 Searching and Booking: Users in need of specific tools can search for them on the platform, view available listings, and book the items for a specific duration.
 
 Coordination: The platform would facilitate the coordination of pick-ups or deliveries, ensuring a smooth exchange between the item owner and the renter.
+
+
+For some reason I encountered a bug on the mobile view of iphone12. It seems to be fixed now, but I will have to restructure how I do my buttons. 

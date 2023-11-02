@@ -61,6 +61,7 @@ import NewMessageThreads from './MessagingComponents/NewMessageThreads';
 
 //---------------------- Checkout -----------------------------
 import Checkout from './CheckoutComponents/Checkout';
+import Cart from './CheckoutComponents/Cart';
 
 //---------------------- Toastify -----------------------------
 import { ToastContainer, toast } from 'react-toastify'
@@ -95,9 +96,6 @@ function App() {
 
   // State to determine if you came from ownerDash, below will be more state to control owner actions
   const [fromOwnerDash, setFromOwnerDash] = useState(false)
-
-  // State to hold checkout items
-  const [itemsInCart, setItemsInCart] = useState([])
 
   //-------------------------------------------- FOR USER - CHECK SESSION TO STAY LOGGED IN ON REFRESH--------------------------
 
@@ -287,7 +285,7 @@ function App() {
             <Route path='/users/extra' element={<UserCollection searchTerm={searchTerm} users={users}/>} />
     
             {/* ID / INDIVIDUAL / DISPLAY ROUTES */}
-            <Route path='/equipment/:id' element={<ProductDisplay setItemsInCart={setItemsInCart} itemsInCart={itemsInCart}/>} />
+            <Route path='/equipment/:id' element={<ProductDisplay />} />
             <Route path='/equipment_owner/:id' element={<OwnerDisplay />} />
 
             {/* Respective Posts */}
@@ -332,6 +330,7 @@ function App() {
 
             {/* Temporary Checkout Routing */}
             <Route path='/checkout' element={<Checkout/>} />
+            <Route path='/cart' element={<Cart/>} />
 
 
           </Routes>

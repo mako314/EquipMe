@@ -591,7 +591,7 @@ class RentalAgreements(Resource):
                 owner_id = data['owner_id'],
                 user_id = data['user_id'],
                 equipment_id = data['equipment_id'],
-                created_on = datetime.utcnow(),
+                created_at = datetime.utcnow(),
                 modified_on = datetime.utcnow(),
 
             )
@@ -761,7 +761,7 @@ class SendMessage(Resource):
             user_type = data["user_type"],
             content = data['content'],
             message_status = data['message_status'],
-            created_on = datetime.utcnow(),
+            created_at = datetime.utcnow(),
             thread_id = data['thread_id']
         )
 
