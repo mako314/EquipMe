@@ -779,12 +779,57 @@ class Carts(Resource):
     
 api.add_resource(Carts, "/carts")
 
+class CartByItems(Resource):
+    def post(self):
+        data = request.get_json()
+
+        #try Validations
+        new_item = CartItem(
+            price_cents_at_addition = data['price_cents_at_addition'],
+            price_cents_if_changed = data['price_cents_if_changed'],
+            quantity = data['quantity'],
+            cart_id = data['cart_id'],
+            equipment_id = data['equipment_id'],
+            cart_status = data['cart_status'],
+            user_id = data['user_id']
+        )
+
+        db.session.add(new_item)
+
+        db.session.commit()
+
+        response = make_response(new_item.to_dict(), 201)
+
+        return response
+
+        #except ValueError ()
+
+
+api.add_resource(CartByItems, '/cart/item')
+
 class CartItemByID(Resource):
     def get(self,id):
         cart_item = CartItem.query.filter(CartItem.id == id).first()
 
         if cart_item:
             return make_response(cart_item.to_dict(),200)
+        else:
+            response = make_response({
+            "error": "Item not found"
+            }, 404)
+            return response
+        
+    def patch(self, id):
+        cart_item = Message.query.filter(Message.id == id).first()
+
+        if cart_item:
+            data = request.get_json()
+            for key in data:
+                setattr(cart_item, key, data[key])
+            db.session.add(cart_item)
+            db.session.commit()
+            response = make_response(cart_item.to_dict(), 202)
+            return response
         else:
             response = make_response({
             "error": "Item not found"
@@ -823,20 +868,6 @@ class SendMessage(Resource):
         #except ValueError ()
 
 api.add_resource(SendMessage, "/messages")
-
-class SingleMessage(Resource):
-    def get(self, message_id):
-        message = Message.query.filter(Message.id == message_id).first()
-
-        if message:
-            return make_response(message.to_dict(),200)
-        else:
-            response = make_response({
-            "error": "Message not found"
-            }, 404)
-            return response
-
-api.add_resource(SingleMessage, "/message/<int:message_id>")
 
 class StartNewThread(Resource):
     def post(self):
@@ -906,7 +937,18 @@ class ThreadById(Resource):
 
 api.add_resource(ThreadById, "/thread/<int:thread_id>")
 
-class EditMessage(Resource):
+class MessageByID(Resource):
+    def get(self, id):
+        message = Message.query.filter(Message.id == id).first()
+
+        if message:
+            return make_response(message.to_dict(),200)
+        else:
+            response = make_response({
+            "error": "Message not found"
+            }, 404)
+            return response
+        
     def patch(self, id):
         message = Message.query.filter(Message.id == id).first()
 
@@ -939,7 +981,7 @@ class EditMessage(Resource):
             }, 404)
             return response
         
-api.add_resource(EditMessage, '/message/<int:id>')
+api.add_resource(MessageByID, '/message/<int:id>')
 
 
 if __name__ == '__main__':
