@@ -20,6 +20,9 @@ if __name__ == '__main__':
         UserInbox.query.delete()
         OwnerInbox.query.delete()
         Thread.query.delete()
+        Cart.query.delete()
+        CartItem.query.delete()
+        EquipmentPrice.query.delete()
 
 
 #----------------------------------------------------------------------
@@ -476,13 +479,12 @@ if __name__ == '__main__':
 #---------------------Cart and Item testing----------------
         print("Generating example cart...")
         cart1 = Cart(
-            total = 10, #Going to write the calculating formula for this after first seed attempt
             cart_status = "ACTIVE",
             created_at = datetime.utcnow(),
             user_id = 1,
         )
         db.session.add(cart1)
-        db.session.commit()
+        
 
         print("Generating example cart items...")   
         cart_items = [
@@ -517,6 +519,10 @@ if __name__ == '__main__':
         ]
 
         db.session.add_all(cart_items)
+        db.session.commit()
+
+        # Now that all items are added, calculate the total
+        cart1.total = cart1.calculate_total()
         db.session.commit()
 
 #---------------------Message and Inbox testing----------------
