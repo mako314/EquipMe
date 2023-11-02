@@ -756,6 +756,27 @@ class Carts(Resource):
 
         return response
     
+    def post(self):
+        data = request.get_json()
+
+        #try Validations
+        new_cart = Cart(
+            total = 0,
+            cart_status = data['cart_status'],
+            created_at = datetime.utcnow(),
+            user_id = data['user_id']
+        )
+
+        db.session.add(new_cart)
+
+        db.session.commit()
+
+        response = make_response(new_cart.to_dict(), 201)
+
+        return response
+
+        #except ValueError ()
+    
 api.add_resource(Carts, "/carts")
 
 class CartItemByID(Resource):
