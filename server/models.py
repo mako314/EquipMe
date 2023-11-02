@@ -215,9 +215,10 @@ class EquipmentPrice(db.Model, SerializerMixin):
     __tablename__= "equipment_prices"
     id = db.Column(db.Integer, primary_key = True)
 
-    hourly_rate = db.Column(db.Integer)
-    daily_rate = db.Column(db.Integer)
-    weekly_rate = db.Column(db.Integer)
+    hourly_rate = db.Column(db.Integer, nullable= True)
+    daily_rate = db.Column(db.Integer, nullable= True)
+    weekly_rate = db.Column(db.Integer, nullable= True)
+    promo_rate = db.Column(db.Integer, nullable= True)
 
     equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
     equipment = db.Relationship('Equipment', back_populates ='equipment_price')
@@ -237,8 +238,6 @@ class EquipmentImage(db.Model, SerializerMixin):
 
     #Serialization rules
     serialize_rules = ('-equipment.images', )
-
-
 
 
 class RentalAgreement(db.Model, SerializerMixin):
