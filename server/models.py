@@ -382,6 +382,7 @@ class Thread(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     subject = db.Column(db.String, nullable=True)
+    #Need to incorporate something like user_delete & owner_delete
 
     messages = db.relationship('Message', back_populates='thread')
     user_inboxes = db.relationship("UserInbox", back_populates="thread")
