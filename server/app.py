@@ -824,24 +824,48 @@ class CartByUserID(Resource):
         
 api.add_resource(CartByUserID, "/cart/item/<int:user_id>")
 
-class CartItems(Resource):
-    def post(self):
+class AddItemToCart(Resource):
+    def post(self,cart_id):
         data = request.get_json()
 
         #try Validations
+        cart = Cart.query.filter(Cart.id == cart_id).first()
+        equipment = Equipment.query.filter(Equipment.id == data['equipment_id']).first()
+
+        if not cart:
+            return make_response({'error': 'Cart not found'}, 404)
+        if not equipment:
+            return make_response({'error': 'Equipment not found'}, 404)
+        
+        rental_period = data['rental_period']  # For example: 'hourly', 'daily', 'weekly', 'promo'
+        price = 0
+
+        if rental_period == 'hourly':
+            price = equipment.equipment_price.hourly_rate
+        elif rental_period == 'daily':
+            price = equipment.equipment_price.daily_rate
+        elif rental_period == 'weekly':
+            price = equipment.equipment_price.weekly_rate
+        elif rental_period == 'promo':
+            price = equipment.equipment_price.promo_rate
+        else:
+            return make_response({'error': 'Invalid rental period'}, 400)
+
+        total_price = price * data['quantity']
+
+        #Create new CartItem with price calculated by $ * quantity (ALL IN CENTS)
         new_item = CartItem(
-            price_cents_at_addition = data['price_cents_at_addition'],
-            price_cents_if_changed = data['price_cents_if_changed'],
-            quantity = data['quantity'],
-            cart_id = data['cart_id'],
-            equipment_id = data['equipment_id'],
-            cart_status = data['cart_status'],
-            user_id = data['user_id']
+        equipment_id=equipment.id,
+        quantity=data['quantity'],
+        price_cents_at_addition=total_price
         )
 
-        db.session.add(new_item)
+        cart.items.append(new_item)
 
+        db.session.add(new_item)
         db.session.commit()
+        
+        cart.calculate_total()
 
         response = make_response(new_item.to_dict(), 201)
 
@@ -850,7 +874,7 @@ class CartItems(Resource):
         #except ValueError ()
 
 
-api.add_resource(CartItems, '/cart/item')
+api.add_resource(AddItemToCart, '/cart/<int:cart_id>')
 
 class CartItemByID(Resource):
     def get(self,id):

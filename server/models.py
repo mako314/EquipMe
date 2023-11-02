@@ -324,6 +324,7 @@ class CartItem(db.Model, SerializerMixin):
     price_cents_at_addition = db.Column(db.Integer)
     price_cents_if_changed = db.Column(db.Integer, nullable = True)
     quantity = db.Column(db.Integer, default=1)
+    rental_length = db.Column(db.Integer, default=1)
     #Maybe length of rental here,
     cart_id = db.Column(db.Integer, db.ForeignKey('carts.id'))
     equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
@@ -339,7 +340,7 @@ class CartItem(db.Model, SerializerMixin):
     def total_cost(self):
         price = self.price_cents_if_changed if self.price_cents_if_changed else self.price_cents_at_addition
         if isinstance(price, int):
-            return price * self.quantity
+            return (price * self.rental_length) * self.quantity
         else:
         # Handle the case where price is not an int. You could raise an exception or handle it some other way.
             raise ValueError("The price must be an integer.")
