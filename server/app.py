@@ -820,7 +820,7 @@ class CartItemByID(Resource):
             return response
         
     def patch(self, id):
-        cart_item = Message.query.filter(Message.id == id).first()
+        cart_item = CartItem.query.filter(CartItem.id == id).first()
 
         if cart_item:
             data = request.get_json()
@@ -829,6 +829,20 @@ class CartItemByID(Resource):
             db.session.add(cart_item)
             db.session.commit()
             response = make_response(cart_item.to_dict(), 202)
+            return response
+        else:
+            response = make_response({
+            "error": "Item not found"
+            }, 404)
+            return response
+    
+    def delete(self, id):
+        cart_item = CartItem.query.filter(CartItem.id == id).first()
+
+        if cart_item:
+            db.session.delete(cart_item)
+            db.session.commit()
+            response = make_response({"message":"Succesfully deleted!"}, 204)
             return response
         else:
             response = make_response({
