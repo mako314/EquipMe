@@ -413,6 +413,9 @@ if __name__ == '__main__':
             ),
         ]
 
+        db.session.add_all(equipment_prices)
+        db.session.commit()
+
 #-------------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -478,40 +481,43 @@ if __name__ == '__main__':
             created_at = datetime.utcnow(),
             user_id = 1,
         )
+        db.session.add(cart1)
+        db.session.commit()
 
         print("Generating example cart items...")   
         cart_items = [
             CartItem(
-                price_cents_at_addition = 5,
-                price_cents_if_changed = 5,
+                price_cents_at_addition = equipment_prices[0].hourly_rate,
+                price_cents_if_changed = None,
                 quantity = 1,
                 cart_id= 1,
                 equipment_id = 1,
             ),
             CartItem(
-                price_cents_at_addition = 5,
-                price_cents_if_changed = 5,
+                price_cents_at_addition = equipment_prices[1].daily_rate,
+                price_cents_if_changed = None,
                 quantity = 1,
                 cart_id= 1,
                 equipment_id = 2,
             ),
             CartItem(
-                price_cents_at_addition = 5,
-                price_cents_if_changed = 5,
+                price_cents_at_addition = equipment_prices[2].weekly_rate,
+                price_cents_if_changed = None,
                 quantity = 1,
                 cart_id= 1,
                 equipment_id = 3,
             ),
             CartItem(
-                price_cents_at_addition = 5,
-                price_cents_if_changed = 5,
+                price_cents_at_addition = equipment_prices[3].weekly_rate,
+                price_cents_if_changed = None,
                 quantity = 1,
                 cart_id= 1,
                 equipment_id = 4,
             ),
-        ]     
+        ]
 
-
+        db.session.add_all(cart_items)
+        db.session.commit()
 
 #---------------------Message and Inbox testing----------------
 

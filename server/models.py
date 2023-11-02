@@ -218,7 +218,7 @@ class EquipmentPrice(db.Model, SerializerMixin):
     hourly_rate = db.Column(db.Integer, nullable= True)
     daily_rate = db.Column(db.Integer, nullable= True)
     weekly_rate = db.Column(db.Integer, nullable= True)
-    promo_rate = db.Column(db.Integer, nullable= True)
+    promo_rate = db.Column(db.Integer, nullable= True) # I need to incorporate maybe multiple promo rates
 
     equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
     equipment = db.Relationship('Equipment', back_populates ='equipment_price')
