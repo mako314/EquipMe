@@ -758,6 +758,20 @@ class Carts(Resource):
     
 api.add_resource(Carts, "/carts")
 
+class CartItemByID(Resource):
+    def get(self,id):
+        cart_item = CartItem.query.filter(CartItem.id == id).first()
+
+        if cart_item:
+            return make_response(cart_item.to_dict(),200)
+        else:
+            response = make_response({
+            "error": "Item not found"
+            }, 404)
+            return response
+        
+api.add_resource(CartItemByID, "/cart/item/<int:id>")
+
 #----------------------------------------------- Messaging Routes -----------------------------------------------------------------------------
 
 #--------------------------------------------Inbox handling, and message sending below-----------------------------------------

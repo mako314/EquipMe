@@ -331,7 +331,7 @@ class CartItem(db.Model, SerializerMixin):
     cart = db.relationship('Cart', back_populates='items')
     equipment = db.relationship('Equipment', back_populates='cart_item')
 
-    serialize_rules = ('-cart.items','-equipment.cart_item')
+    serialize_rules = ('-cart.items','-cart.user','-equipment.agreements','-equipment.cart_item','-equipment.owner.owner_inboxes')
 
     #Need validations to test for positive integers, 
 
