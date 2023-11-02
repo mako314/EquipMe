@@ -1,4 +1,4 @@
-from models import db, User, EquipmentOwner, Equipment, RentalAgreement, EquipmentImage, Thread, UserInbox, OwnerInbox, Message, Cart, CartItem
+from models import db, User, EquipmentOwner, Equipment, RentalAgreement, EquipmentImage, Thread, UserInbox, OwnerInbox, Message, Cart, CartItem, EquipmentPrice
 import pandas as pd
 from app import app
 from random import randint, choice as rc
@@ -380,6 +380,39 @@ if __name__ == '__main__':
 
         db.session.add_all(equipment_list)
         db.session.commit()
+
+        print('Calculating price of Equipment...')
+        equipment_prices = [
+            EquipmentPrice(
+            hourly_rate = 1595,
+            daily_rate = 32000,
+            weekly_rate = 220000,
+            promo_rate = 1495,
+            equipment_id = 1
+            ),
+            EquipmentPrice(
+            hourly_rate = 1595,
+            daily_rate = 32000,
+            weekly_rate = 220000,
+            promo_rate = 1495,
+            equipment_id = 2
+            ),
+            EquipmentPrice(
+            hourly_rate = 1595,
+            daily_rate = 32000,
+            weekly_rate = 220000,
+            promo_rate = 1495,
+            equipment_id = 3
+            ),
+            EquipmentPrice(
+            hourly_rate = 1595,
+            daily_rate = 32000,
+            weekly_rate = 220000,
+            promo_rate = 1495,
+            equipment_id = 4
+            ),
+        ]
+
 #-------------------------------------------------------------------------------------------------------------------------------------------------
 
 
