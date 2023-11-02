@@ -1,4 +1,4 @@
-from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement, Message, Thread,UserInbox, OwnerInbox
+from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement, Message, Thread,UserInbox, OwnerInbox, Cart, CartItem, EquipmentPrice
 # from flask_cors import CORS
 # from flask_migrate import Migrate
 # from flask import Flask, request, make_response, jsonify
@@ -351,7 +351,7 @@ class Equipments(Resource):
     #get ALL equipment -- DONE
     def get(self):
         equipment = [equipment.to_dict(
-            only =('id','model','name','make','location', 'type','location','availability','delivery','quantity', 'owner', ) #needed to include all of this for when one patches
+            only =('id','model','name','make','location', 'type','location','availability','delivery','quantity', 'owner', 'equipment_price' ) #needed to include all of this for when one patches
         ) for equipment in Equipment.query.all()]                                       # no longer need phone, email, and owner_name
 
         response = make_response(equipment, 200)
@@ -745,6 +745,181 @@ class AvailabilityChecker(Resource):
 
 api.add_resource(AvailabilityChecker, "/availability/<int:equipment_id>/<string:start_date>/<string:end_date>")
 
+#----------------------------------------------- Cart / Item Routes -----------------------------------------------------------------------------
+class Carts(Resource):
+    #Get ALL rental agreements
+    #list of all the renters and the equipment
+    def get(self):
+        carts = [cart.to_dict() for cart in Cart.query.all()]
+
+        response = make_response(carts, 200)
+
+        return response
+    
+    def post(self):
+        data = request.get_json()
+
+        #try Validations
+        new_cart = Cart(
+            total = 0,
+            cart_status = data['cart_status'],
+            created_at = datetime.utcnow(),
+            user_id = data['user_id']
+        )
+
+        db.session.add(new_cart)
+
+        db.session.commit()
+
+        response = make_response(new_cart.to_dict(), 201)
+
+        return response
+
+        #except ValueError ()
+    
+api.add_resource(Carts, "/carts")
+
+class CartByUserID(Resource):
+    def get(self,user_id):
+        cart = Cart.query.filter(Cart.user_id == user_id).first()
+
+        if cart:
+            return make_response(cart.to_dict(),200)
+        else:
+            response = make_response({
+            "error": "Item not found"
+            }, 404)
+            return response
+        
+    def patch(self, user_id):
+        cart = Cart.query.filter(Cart.user_id == user_id).first()
+
+        if cart:
+            data = request.get_json()
+            for key in data:
+                setattr(cart, key, data[key])
+            db.session.add(cart)
+            db.session.commit()
+            response = make_response(cart.to_dict(), 202)
+            return response
+        else:
+            response = make_response({
+            "error": "Item not found"
+            }, 404)
+            return response
+    
+    def delete(self, user_id):
+        cart = Cart.query.filter(Cart.user_id == user_id).first()
+
+        if cart:
+            db.session.delete(cart)
+            db.session.commit()
+            response = make_response({"message":"Succesfully deleted!"}, 204)
+            return response
+        else:
+            response = make_response({
+            "error": "Item not found"
+            }, 404)
+            return response
+        
+api.add_resource(CartByUserID, "/cart/item/<int:user_id>")
+
+class AddItemToCart(Resource):
+    def post(self,cart_id):
+        data = request.get_json()
+
+        #try Validations
+        cart = Cart.query.filter(Cart.id == cart_id).first()
+        equipment = Equipment.query.filter(Equipment.id == data['equipment_id']).first()
+
+        if not cart:
+            return make_response({'error': 'Cart not found'}, 404)
+        if not equipment:
+            return make_response({'error': 'Equipment not found'}, 404)
+        
+        rental_period = data['rental_period']  # For example: 'hourly', 'daily', 'weekly', 'promo'
+        price = 0
+
+        if rental_period == 'hourly':
+            price = equipment.equipment_price.hourly_rate
+        elif rental_period == 'daily':
+            price = equipment.equipment_price.daily_rate
+        elif rental_period == 'weekly':
+            price = equipment.equipment_price.weekly_rate
+        elif rental_period == 'promo':
+            price = equipment.equipment_price.promo_rate
+        else:
+            return make_response({'error': 'Invalid rental period'}, 400)
+
+        total_price = price * data['quantity']
+
+        #Create new CartItem with price calculated by $ * quantity (ALL IN CENTS)
+        new_item = CartItem(
+        equipment_id=equipment.id,
+        quantity=data['quantity'],
+        price_cents_at_addition=total_price
+        )
+
+        cart.items.append(new_item)
+
+        db.session.add(new_item)
+        db.session.commit()
+        
+        cart.calculate_total()
+
+        response = make_response(new_item.to_dict(), 201)
+
+        return response
+
+        #except ValueError ()
+
+
+api.add_resource(AddItemToCart, '/cart/<int:cart_id>')
+
+class CartItemByID(Resource):
+    def get(self,id):
+        cart_item = CartItem.query.filter(CartItem.id == id).first()
+
+        if cart_item:
+            return make_response(cart_item.to_dict(),200)
+        else:
+            response = make_response({
+            "error": "Item not found"
+            }, 404)
+            return response
+        
+    def patch(self, id):
+        cart_item = CartItem.query.filter(CartItem.id == id).first()
+
+        if cart_item:
+            data = request.get_json()
+            for key in data:
+                setattr(cart_item, key, data[key])
+            db.session.add(cart_item)
+            db.session.commit()
+            response = make_response(cart_item.to_dict(), 202)
+            return response
+        else:
+            response = make_response({
+            "error": "Item not found"
+            }, 404)
+            return response
+    
+    def delete(self, id):
+        cart_item = CartItem.query.filter(CartItem.id == id).first()
+
+        if cart_item:
+            db.session.delete(cart_item)
+            db.session.commit()
+            response = make_response({"message":"Succesfully deleted!"}, 204)
+            return response
+        else:
+            response = make_response({
+            "error": "Item not found"
+            }, 404)
+            return response
+        
+api.add_resource(CartItemByID, "/cart/item/<int:id>")
 
 #----------------------------------------------- Messaging Routes -----------------------------------------------------------------------------
 
@@ -776,20 +951,6 @@ class SendMessage(Resource):
         #except ValueError ()
 
 api.add_resource(SendMessage, "/messages")
-
-class SingleMessage(Resource):
-    def get(self, message_id):
-        message = Message.query.filter(Message.id == message_id).first()
-
-        if message:
-            return make_response(message.to_dict(),200)
-        else:
-            response = make_response({
-            "error": "Message not found"
-            }, 404)
-            return response
-
-api.add_resource(SingleMessage, "/message/<int:message_id>")
 
 class StartNewThread(Resource):
     def post(self):
@@ -859,7 +1020,18 @@ class ThreadById(Resource):
 
 api.add_resource(ThreadById, "/thread/<int:thread_id>")
 
-class EditMessage(Resource):
+class MessageByID(Resource):
+    def get(self, id):
+        message = Message.query.filter(Message.id == id).first()
+
+        if message:
+            return make_response(message.to_dict(),200)
+        else:
+            response = make_response({
+            "error": "Message not found"
+            }, 404)
+            return response
+        
     def patch(self, id):
         message = Message.query.filter(Message.id == id).first()
 
@@ -892,7 +1064,7 @@ class EditMessage(Resource):
             }, 404)
             return response
         
-api.add_resource(EditMessage, '/message/<int:id>')
+api.add_resource(MessageByID, '/message/<int:id>')
 
 
 if __name__ == '__main__':

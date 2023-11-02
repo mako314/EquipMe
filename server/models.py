@@ -9,9 +9,6 @@ from datetime import datetime
 
 
 #---------------HELPER IMPORTS----------------
-
-
-
 class User(db.Model, SerializerMixin):
     __tablename__ = "users"
 
@@ -218,7 +215,7 @@ class EquipmentPrice(db.Model, SerializerMixin):
     hourly_rate = db.Column(db.Integer, nullable= True)
     daily_rate = db.Column(db.Integer, nullable= True)
     weekly_rate = db.Column(db.Integer, nullable= True)
-    promo_rate = db.Column(db.Integer, nullable= True)
+    promo_rate = db.Column(db.Integer, nullable= True) # I need to incorporate maybe multiple promo rates
 
     equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
     equipment = db.Relationship('Equipment', back_populates ='equipment_price')
@@ -307,10 +304,17 @@ class Cart(db.Model, SerializerMixin):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     
     #We'll try this cascade delete first : https://docs.sqlalchemy.org/en/20/orm/cascades.html#cascade-delete-orphan
-    item = db.relationship('CartItem', back_populates='cart', cascade="all, delete")
+    items = db.relationship('CartItem', back_populates='cart', cascade="all, delete")
     user = db.relationship ('User', back_populates='cart')
 
-    serialize_rules = ('-item.cart','-user.cart')
+    serialize_rules = ('-items.cart','-items.cart_id','-items.equipment.agreements','-items.equipment.owner.owner_inboxes','-user.cart','-user.user_inboxes','-user.agreements')
+
+    def calculate_total(self):
+        #Calculate the total price of all items in the cart
+        self.total = sum(item.total_cost for item in self.items)
+        db.session.add(self)  # Assuming you want to make the changes in the current session
+        db.session.commit()   # Save the changes to the database
+        return self.total
 
 
 class CartItem(db.Model, SerializerMixin):
@@ -320,14 +324,27 @@ class CartItem(db.Model, SerializerMixin):
     price_cents_at_addition = db.Column(db.Integer)
     price_cents_if_changed = db.Column(db.Integer, nullable = True)
     quantity = db.Column(db.Integer, default=1)
-    
+    rental_length = db.Column(db.Integer, default=1)
+    #Maybe length of rental here,
     cart_id = db.Column(db.Integer, db.ForeignKey('carts.id'))
     equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
 
-    cart = db.relationship('Cart', back_populates='item')
+    cart = db.relationship('Cart', back_populates='items')
     equipment = db.relationship('Equipment', back_populates='cart_item')
 
-    serialize_rules = ('-cart.item','-equipment.cart_item')
+    serialize_rules = ('-cart.items','-cart.user','-equipment.agreements','-equipment.cart_item','-equipment.owner.owner_inboxes')
+
+    #Need validations to test for positive integers, 
+
+    @property
+    def total_cost(self):
+        price = self.price_cents_if_changed if self.price_cents_if_changed else self.price_cents_at_addition
+        if isinstance(price, int):
+            return (price * self.rental_length) * self.quantity
+        else:
+        # Handle the case where price is not an int. You could raise an exception or handle it some other way.
+            raise ValueError("The price must be an integer.")
+        
 
     # Need to consider taxes, negative values, need validations here ASAP
 
@@ -366,6 +383,7 @@ class Thread(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     subject = db.Column(db.String, nullable=True)
+    #Need to incorporate something like user_delete & owner_delete
 
     messages = db.relationship('Message', back_populates='thread')
     user_inboxes = db.relationship("UserInbox", back_populates="thread")

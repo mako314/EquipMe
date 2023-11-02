@@ -1,4 +1,4 @@
-from models import db, User, EquipmentOwner, Equipment, RentalAgreement, EquipmentImage, Thread, UserInbox, OwnerInbox, Message, Cart, CartItem
+from models import db, User, EquipmentOwner, Equipment, RentalAgreement, EquipmentImage, Thread, UserInbox, OwnerInbox, Message, Cart, CartItem, EquipmentPrice
 import pandas as pd
 from app import app
 from random import randint, choice as rc
@@ -20,6 +20,9 @@ if __name__ == '__main__':
         UserInbox.query.delete()
         OwnerInbox.query.delete()
         Thread.query.delete()
+        Cart.query.delete()
+        CartItem.query.delete()
+        EquipmentPrice.query.delete()
 
 
 #----------------------------------------------------------------------
@@ -380,6 +383,42 @@ if __name__ == '__main__':
 
         db.session.add_all(equipment_list)
         db.session.commit()
+
+        print('Calculating price of Equipment...')
+        equipment_prices = [
+            EquipmentPrice(
+            hourly_rate = 1595,
+            daily_rate = 32000,
+            weekly_rate = 220000,
+            promo_rate = 1495,
+            equipment_id = 1
+            ),
+            EquipmentPrice(
+            hourly_rate = 1595,
+            daily_rate = 32000,
+            weekly_rate = 220000,
+            promo_rate = 1495,
+            equipment_id = 2
+            ),
+            EquipmentPrice(
+            hourly_rate = 1595,
+            daily_rate = 32000,
+            weekly_rate = 220000,
+            promo_rate = 1495,
+            equipment_id = 3
+            ),
+            EquipmentPrice(
+            hourly_rate = 1595,
+            daily_rate = 32000,
+            weekly_rate = 220000,
+            promo_rate = 1495,
+            equipment_id = 4
+            ),
+        ]
+
+        db.session.add_all(equipment_prices)
+        db.session.commit()
+
 #-------------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -440,45 +479,51 @@ if __name__ == '__main__':
 #---------------------Cart and Item testing----------------
         print("Generating example cart...")
         cart1 = Cart(
-            total = 10, #Going to write the calculating formula for this after first seed attempt
             cart_status = "ACTIVE",
             created_at = datetime.utcnow(),
             user_id = 1,
         )
+        db.session.add(cart1)
+        
 
         print("Generating example cart items...")   
         cart_items = [
             CartItem(
-                price_cents_at_addition = 5,
-                price_cents_if_changed = 5,
+                price_cents_at_addition = equipment_prices[0].hourly_rate,
+                price_cents_if_changed = None,
                 quantity = 1,
                 cart_id= 1,
                 equipment_id = 1,
             ),
             CartItem(
-                price_cents_at_addition = 5,
-                price_cents_if_changed = 5,
+                price_cents_at_addition = equipment_prices[1].daily_rate,
+                price_cents_if_changed = None,
                 quantity = 1,
                 cart_id= 1,
                 equipment_id = 2,
             ),
             CartItem(
-                price_cents_at_addition = 5,
-                price_cents_if_changed = 5,
+                price_cents_at_addition = equipment_prices[2].weekly_rate,
+                price_cents_if_changed = None,
                 quantity = 1,
                 cart_id= 1,
                 equipment_id = 3,
             ),
             CartItem(
-                price_cents_at_addition = 5,
-                price_cents_if_changed = 5,
+                price_cents_at_addition = equipment_prices[3].weekly_rate,
+                price_cents_if_changed = None,
                 quantity = 1,
                 cart_id= 1,
                 equipment_id = 4,
             ),
-        ]     
+        ]
 
+        db.session.add_all(cart_items)
+        db.session.commit()
 
+        # Now that all items are added, calculate the total
+        cart1.total = cart1.calculate_total()
+        db.session.commit()
 
 #---------------------Message and Inbox testing----------------
 
