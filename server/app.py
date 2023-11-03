@@ -837,34 +837,40 @@ class AddItemToCart(Resource):
         if not equipment:
             return make_response({'error': 'Equipment not found'}, 404)
         
-        rental_period = data['rental_period']  # For example: 'hourly', 'daily', 'weekly', 'promo'
-        price = 0
+        pricing = equipment.equipment_price[0]   
+             
+        rental_rate = data['rental_rate']  # For example: 'hourly', 'daily', 'weekly', 'promo'
+        rental_length = data['rental_length']
+        price_cents_at_addition = 0
 
-        if rental_period == 'hourly':
-            price = equipment.equipment_price.hourly_rate
-        elif rental_period == 'daily':
-            price = equipment.equipment_price.daily_rate
-        elif rental_period == 'weekly':
-            price = equipment.equipment_price.weekly_rate
-        elif rental_period == 'promo':
-            price = equipment.equipment_price.promo_rate
+        print(equipment.equipment_price)
+
+        if rental_rate == 'hourly':
+            price_cents_at_addition = pricing.hourly_rate
+        elif rental_rate == 'daily':
+            price_cents_at_addition = pricing.daily_rate
+        elif rental_rate == 'weekly':
+            price_cents_at_addition = pricing.weekly_rate
+        elif rental_rate == 'promo':
+            price_cents_at_addition = pricing.promo_rate
         else:
             return make_response({'error': 'Invalid rental period'}, 400)
 
-        total_price = price * data['quantity']
+        total_price_cents = (price_cents_at_addition * rental_length) * data['quantity']
 
         #Create new CartItem with price calculated by $ * quantity (ALL IN CENTS)
         new_item = CartItem(
         equipment_id=equipment.id,
         quantity=data['quantity'],
-        price_cents_at_addition=total_price
+        rental_length = data['rental_length'],
+        price_cents_at_addition=total_price_cents
         )
 
         cart.items.append(new_item)
 
         db.session.add(new_item)
         db.session.commit()
-        
+
         cart.calculate_total()
 
         response = make_response(new_item.to_dict(), 201)
