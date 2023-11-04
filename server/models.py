@@ -325,6 +325,7 @@ class CartItem(db.Model, SerializerMixin):
     price_cents_if_changed = db.Column(db.Integer, nullable = True)
     quantity = db.Column(db.Integer, default=1)
     rental_length = db.Column(db.Integer, default=1)
+    
     #Maybe length of rental here,
     cart_id = db.Column(db.Integer, db.ForeignKey('carts.id'))
     equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
@@ -334,15 +335,27 @@ class CartItem(db.Model, SerializerMixin):
 
     serialize_rules = ('-cart.items','-cart.user','-equipment.agreements','-equipment.cart_item','-equipment.owner.owner_inboxes')
 
-    #Need validations to test for positive integers, 
+    # _total = db.Column('total', db.Integer)
+    #Need validations to test for positive integers,
+    # @property
+    # def total(self):
+    #     return self._total
+    # @total.setter
+    # def total(self, price_cents_at_addition, price_cents_if_changed):
+    #     if price_cents_at_addition and isinstance(price_cents_at_addition, int) and price_cents_at_addition > 0:
+    #         self.total = (price_cents_at_addition * self.rental_length) * self.quantity
+    #     elif price_cents_if_changed and isinstance(price_cents_if_changed, int) and price_cents_if_changed > 0:
+    #         self.total = (price_cents_at_addition * self.rental_length) * self.quantity
+    #     else:
+    #         raise Exception
 
     @property
     def total_cost(self):
         price = self.price_cents_if_changed if self.price_cents_if_changed else self.price_cents_at_addition
-        if isinstance(price, int):
+        if isinstance(price, int) and price > 0:
             return (price * self.rental_length) * self.quantity
         else:
-        # Handle the case where price is not an int. You could raise an exception or handle it some other way.
+        # Handle the case where price is not an int.
             raise ValueError("The price must be an integer.")
         
 
