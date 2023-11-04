@@ -11,7 +11,9 @@ app = Flask(__name__)
 
 app.secret_key = "TESTING123456789" # signature for Flask session
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URI')
+
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
 
@@ -20,9 +22,8 @@ metadata = MetaData(naming_convention={
 })
 db = SQLAlchemy(metadata=metadata)
 
-migrate = Migrate(app, db)
-
 db.init_app(app)
+migrate = Migrate(app, db)
 api = Api(app)
 
 bcrypt = Bcrypt(app) # allows for encryption/hashing
