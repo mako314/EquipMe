@@ -9,14 +9,14 @@ function HomePage({ equipmentArray, setFeaturedRental }) {
 
     function handleClick(e) {
         const test_item = equipmentArray?.filter((item) => {
-            return item.model == featuredModel
+            return item.model === featuredModel
         })
         navigate(`/equipment/${test_item[0].id}`)
     }
 
     function handleClick2(e) {
         const test_item = equipmentArray?.filter((item) => {
-            return item.model == featuredModel
+            return item.model === featuredModel
         })
         setFeaturedRental(test_item)
         navigate(`/rental_signup_prepop`)
