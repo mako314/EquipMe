@@ -51,7 +51,7 @@ import Calendar from './CalendarComponents/Calendar';
 
 
 //----------------------Temporary File Uploader for Equipment Images-----------------------------
-import EquipmentFileUpload from './EquipmentComponents/EquipmentFileUpload';
+import EquipmentImageFileUpload from './EquipmentComponents/EquipmentImageFileUpload' 
 import ProductImageForm from './EquipmentComponents/ProductImageForm';
 import BulkEquipmentUpload from './EquipmentComponents/BulkEquipmentUpload';
 
@@ -321,7 +321,7 @@ function App() {
             <Route path='/temp/calendar' element={<Calendar />} />
 
             {/* Temporary file upload routing */}
-            <Route path='/temp/upload' element={<EquipmentFileUpload />} />
+            <Route path='/temp/upload' element={<EquipmentImageFileUpload />} />
             <Route path='/temp/equipment/upload' element={<ProductImageForm />} />
 
             {/* Messaging routing  */}
