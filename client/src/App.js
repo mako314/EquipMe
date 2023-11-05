@@ -158,7 +158,7 @@ function App() {
 
   //These will be the Post useEffects - OWNERS -- THIS HAD RENTERS
   useEffect(() => {
-    fetch("/equipment_owners")
+    fetch("/api/equipment_owners")
       .then((resp) => resp.json())
       .then((data) => {
         setOwners(data)
