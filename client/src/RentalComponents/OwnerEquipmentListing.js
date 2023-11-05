@@ -43,7 +43,7 @@ function OwnerEquipmentListing({ addRentalAgreement, owners, equipmentArray, fea
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
-            fetch('/rental_agreements', {
+            fetch('/api/rental_agreements', {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
