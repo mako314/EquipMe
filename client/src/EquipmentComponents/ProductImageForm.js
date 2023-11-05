@@ -35,7 +35,7 @@ function ProductImageForm({ addEquipment }){
 
     // useEffect to check whether or not an owner is logged in! Succesfuly conditional rendering
     useEffect(() => {
-        fetch("/owner/check_session").then((response) => {
+        fetch("/api/owner/check_session").then((response) => {
           if (response.ok) {
             response.json().then((owner) => setOwner(owner));
           }
@@ -63,7 +63,7 @@ function ProductImageForm({ addEquipment }){
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
-            fetch('/equipment/images' , {
+            fetch('/api/equipment/images' , {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
