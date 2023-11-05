@@ -18,7 +18,7 @@ function OwnerLogin(){
         let email = e.target.email.value;
         let password = e.target.password.value;
 
-        fetch('/owner/login', {
+        fetch('/api/owner/login', {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -36,7 +36,7 @@ function OwnerLogin(){
 
     // removes session, removes state
     function handleLogout() {
-        fetch("/logout", {
+        fetch("/api/logout", {
             method: "DELETE"
         }).then(setOwner(null))
     }

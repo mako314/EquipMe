@@ -35,7 +35,7 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
-            fetch(`/equipment/${equipmentToEdit.id}` , {
+            fetch(`/api/equipment/${equipmentToEdit.id}` , {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json"

@@ -16,7 +16,7 @@ function EquipmentDisplay({}) {
 
 
   useEffect(() => {
-    fetch(`/equipment/${id}`)
+    fetch(`/api/equipment/${id}`)
       .then((resp) => resp.json())
       .then((data) => {
         setOneEquipment(data)

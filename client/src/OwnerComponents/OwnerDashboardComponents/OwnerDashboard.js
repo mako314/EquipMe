@@ -17,7 +17,7 @@ function OwnerDashboard({ownerToEdit, updateOwner, fromOwnerDash, setFromOwnerDa
     const [potentialRentalUsers, setPotentialRentalUsers] = useState([])
 
     useEffect(() => {
-        fetch("/owner/check_session").then((response) => {
+        fetch("/api/owner/check_session").then((response) => {
             if (response.ok) {
                 response.json().then((owner) => setOwner(owner));
             }
@@ -77,7 +77,7 @@ function AccountSettings() {
         <div> Planned Deals </div>
 //------------------------------------------------------------------------------------
     useEffect(() => {
-        fetch(`/users/${owner?.profession}`)
+        fetch(`/api/users/${owner?.profession}`)
         .then((resp) => resp.json())
         .then((data) => {
             setPotentialRentalUsers(data)

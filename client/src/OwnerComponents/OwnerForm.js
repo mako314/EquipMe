@@ -27,7 +27,7 @@ function OwnerForm({addOwner}){
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
-            fetch('/equipment_owners' , {
+            fetch('/api/equipment_owners' , {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

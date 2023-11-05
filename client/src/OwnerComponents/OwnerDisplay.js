@@ -12,7 +12,7 @@ function OwnerDisplay() {
   // const navigate = useNavigate()
 
   useEffect(() => {
-    fetch(`/equipment_owner/${id}`)
+    fetch(`/api/equipment_owner/${id}`)
       .then((resp) => resp.json())
       .then((data) => {
         setOwner(data)

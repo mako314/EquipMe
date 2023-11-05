@@ -28,7 +28,7 @@ function OwnerEditForm({ownerToEdit, updateOwner}){
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
-            fetch(`/equipment_owner/${ownerToEdit.id}` , {
+            fetch(`/api/equipment_owner/${ownerToEdit.id}` , {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json"
