@@ -38,6 +38,9 @@ import { UserProvider } from './UserComponents/UserContext';
 import OwnerLogin from './OwnerComponents/OwnerLogin';
 import { OwnerProvider } from './OwnerComponents/OwnerContext';
 
+//----------------------API Functionality-----------------------------
+import ApiUrlContext from './Api';
+
 //----------------------User Functionality-----------------------------
 import UserProfile from './UserComponents/UserProfile';
 import UserCard from './UserComponents/UserCard';
@@ -271,6 +274,7 @@ function App() {
     // UseContext gets called here, allowing the entirety of my app access to the USER and OWNER information!
     <OwnerProvider>
       <UserProvider>
+        <ApiUrlContext>
         <>
           <NavBar setSearchTerm={setSearchTerm} />
 
@@ -349,6 +353,7 @@ function App() {
 
           <Footer />
         </>
+        </ApiUrlContext>
       </UserProvider>
     </OwnerProvider>
   );

@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-load_dotenv('.env.development')
+load_dotenv('../.env.local')
 
-import app
+from app import app
 app.run()
