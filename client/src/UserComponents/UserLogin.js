@@ -28,7 +28,7 @@ function UserLogin(){
         let email = e.target.email.value;
         let password = e.target.password.value;
 
-        fetch('/login', {
+        fetch('/api/login', {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -46,7 +46,7 @@ function UserLogin(){
 
     // removes session, removes state
     function handleLogout() {
-        fetch("/logout", {
+        fetch("/api/logout", {
             method: "DELETE"
         }).then(setUser(null))
     }

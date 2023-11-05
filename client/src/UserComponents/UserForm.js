@@ -18,7 +18,7 @@ function UserForm({ addUser }){
         let email = formik.values.email;
         let password = formik.values.password;
 
-        fetch('/login', {
+        fetch('/api/login', {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -55,7 +55,7 @@ function UserForm({ addUser }){
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
-            fetch('/users' , {
+            fetch('/api/users' , {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
