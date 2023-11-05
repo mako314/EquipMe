@@ -129,7 +129,7 @@ function App() {
   //---------------------------------Posts and general Fetches -----------------------
   //Going to improvise this for the post also / maybe patch also?
   useEffect(() => {
-    fetch("https://equip-me.onrender.com/equipment")
+    fetch("/api/equipment")
       .then((resp) => resp.json())
       .then((data) => {
         setEquipmentArray(data)
