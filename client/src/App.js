@@ -144,7 +144,7 @@ function App() {
 
   //These will be the Post useEffects - USERS
   useEffect(() => {
-    fetch("/users")
+    fetch("/api/users")
       .then((resp) => resp.json())
       .then((data) => {
         setUsers(data)
@@ -179,7 +179,7 @@ function App() {
   
   
     const handleOwnerDelete = (owner) => {
-      fetch(`/equipment_owner/${owner.id}`, {
+      fetch(`/api/equipment_owner/${owner.id}`, {
         method: "DELETE"
       })
         .then(() => {
@@ -210,7 +210,7 @@ function App() {
   //POST RENTAL AGREEMENTS
 
   useEffect(() => {
-    fetch("/rental_agreements")
+    fetch("/api/rental_agreements")
       .then((resp) => resp.json())
       .then((data) => {
         setRentalAgreement(data)
