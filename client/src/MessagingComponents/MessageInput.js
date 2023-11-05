@@ -11,7 +11,7 @@ function MessageInput({SelectedThreadID, setNewMessage, newMessage, setInboxes, 
 
   
   useEffect(() => {
-    fetch("/owner/check_session").then((response) => {
+    fetch("/api/owner/check_session").then((response) => {
         if (response.ok) {
             response.json().then((owner) => setOwner(owner))
         }
@@ -28,7 +28,7 @@ function MessageInput({SelectedThreadID, setNewMessage, newMessage, setInboxes, 
   const [user, setUser] = useContext(UserContext)
 
   useEffect(() => {
-    fetch("/check_session").then((response) => {
+    fetch("/api/check_session").then((response) => {
       if (response.ok) {
         response.json().then((user) => setUser(user))
       }
@@ -78,7 +78,7 @@ const handleSendMessage = () => {
   }
 
     console.log('Sending message:', message)
-    fetch("/messages", {
+    fetch("/api/messages", {
       method: "POST",
       body: JSON.stringify(message),
       headers: {

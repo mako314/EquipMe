@@ -14,7 +14,7 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
   const navigate = useNavigate();
   
   useEffect(() => {
-    fetch("/owner/check_session").then((response) => {
+    fetch("/api/owner/check_session").then((response) => {
         if (response.ok) {
             response.json().then((owner) => setOwner(owner))
         }
@@ -25,7 +25,7 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
 // ---------------Detect whether or not a USER is logged in-------------------
 
   useEffect(() => {
-    fetch("/check_session").then((response) => {
+    fetch("/api/check_session").then((response) => {
       if (response.ok) {
         response.json().then((user) => setUser(user))
       }
@@ -69,7 +69,7 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
 
     //Goes inside the onclick with the conditionals (ifs and else ifs) to determine who the recipient is. Tests for whether or not an individual signed in is the recipient or the sender, takes that ID and user type to connect to backend.
     const fetchRecipientData = async (recipientID, userType) => {
-      let endpoint = userType === "user" ? `/user/${recipientID}` : `/equipment_owner/${recipientID}`;
+      let endpoint = userType === "user" ? `/api/user/${recipientID}` : `/api/equipment_owner/${recipientID}`;
       
       // console.log("Recipient ID:", recipientID)
       try {
