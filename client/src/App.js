@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-// useContext
+import React, { useContext, useState, useEffect } from 'react';
 import { useNavigate, Route, Routes } from 'react-router-dom';
 
 import './App.css';
@@ -102,7 +101,7 @@ function App() {
   const [fromOwnerDash, setFromOwnerDash] = useState(false)
 
   // context for APIUrl
-  // const apiUrl = useContext(ApiUrlContext)
+  const apiUrl = useContext(ApiUrlContext)
 
   //-------------------------------------------- FOR USER - CHECK SESSION TO STAY LOGGED IN ON REFRESH--------------------------
 
