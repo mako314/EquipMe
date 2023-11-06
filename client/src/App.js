@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useNavigate, Route, Routes } from 'react-router-dom';
 
 import './App.css';
@@ -39,7 +39,8 @@ import OwnerLogin from './OwnerComponents/OwnerLogin';
 import { OwnerProvider } from './OwnerComponents/OwnerContext';
 
 //----------------------API Functionality-----------------------------
-import {ApiProvider} from './Api';
+import { ApiProvider } from './Api';
+import ApiUrlContext from './Api';
 
 //----------------------User Functionality-----------------------------
 import UserProfile from './UserComponents/UserProfile';
@@ -101,6 +102,8 @@ function App() {
   const [fromOwnerDash, setFromOwnerDash] = useState(false)
 
   // context for APIUrl
+  const apiUrl = useContext(ApiUrlContext)
+  console.log("this is the api url:", apiUrl)
   
 
   //-------------------------------------------- FOR USER - CHECK SESSION TO STAY LOGGED IN ON REFRESH--------------------------
@@ -135,7 +138,7 @@ function App() {
   //---------------------------------Posts and general Fetches -----------------------
   //Going to improvise this for the post also / maybe patch also?
   useEffect(() => {
-    fetch("/api/equipment")
+    fetch(`${apiUrl}equipment`)
       .then((resp) => resp.json())
       .then((data) => {
         setEquipmentArray(data)
