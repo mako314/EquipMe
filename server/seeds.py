@@ -170,6 +170,7 @@ if __name__ == '__main__':
         owner_1 = EquipmentOwner(
             firstName="Mark", # Painting Equipment
             lastName = "Davis",
+            age=42,
             location="Chicago, Illinois",
             profession="Plumbing",
             phone="312-555-6789",
@@ -181,6 +182,7 @@ if __name__ == '__main__':
         owner_2 = EquipmentOwner(
             firstName="Emily", # Party Equipment
             lastName = "Johnson",
+            age=22,
             location="Phoenix, Arizona",
             profession="Construction Equipment Operator",
             phone="602-555-7891",
@@ -192,6 +194,7 @@ if __name__ == '__main__':
         owner_3 = EquipmentOwner(
             firstName="Andrew", #Automotive Equipment
             lastName = "Jacobs",
+            age=32,
             location="Houston, Texas",
             profession="Automotive",
             phone="713-555-0123",
@@ -203,6 +206,7 @@ if __name__ == '__main__':
         owner_4 = EquipmentOwner(
             firstName="Henry", #Garden Equipment
             lastName = "Cavill",
+            age=54,
             location="Seattle, Washington",
             profession="Garden",
             phone="206-555-3456",
@@ -214,6 +218,7 @@ if __name__ == '__main__':
         owner_5 = EquipmentOwner(
             firstName="David", #Heavy Machinery
             lastName = "Rodriguez",
+            age=65,
             location="Miami, Florida",
             profession="Heavy Machinery",
             phone="305-555-1234",
@@ -225,6 +230,7 @@ if __name__ == '__main__':
         owner_6 = EquipmentOwner(
             firstName="Amy", #Construction Equipment
             lastName = "Wilson",
+            age=29,
             location="Chicago, Illinois",
             profession="Construction",
             phone="312-555-5678",
@@ -236,6 +242,7 @@ if __name__ == '__main__':
         owner_7 = EquipmentOwner(
             firstName="Daniel", # Cleaning Equipment
             lastName = "Lee",
+            age=35,
             location="Houston, Texas",
             profession="Cleaning",
             phone="713-555-4567",
@@ -247,6 +254,7 @@ if __name__ == '__main__':
         owner_8 = EquipmentOwner(
             firstName="Jessica", # Plumbing Equipment
             lastName = "Sanchez",
+            age=38,
             location="New York City, New York",
             profession="Plumbing",
             phone ="212-555-2345",
@@ -258,6 +266,7 @@ if __name__ == '__main__':
         owner_9 = EquipmentOwner(
             firstName="Ryan", #Power-tool and hand-tool Equipment
             lastName = "Phillips",
+            age=39,
             location="Orlando, Florida",
             profession="Power tools and Hand tools",
             phone="407-555-9012",
@@ -269,6 +278,7 @@ if __name__ == '__main__':
         owner_10 = EquipmentOwner(
             firstName="Michelle", #Woodwork
             lastName = "Adams",
+            age=40,
             location="New Orleans, Louisiana",
             profession="Woodworking",
             phone="504-555-7890",
