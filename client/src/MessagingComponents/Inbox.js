@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState} from 'react'
 import OwnerContext from '../OwnerComponents/OwnerContext'
 import UserContext from '../UserComponents/UserContext'
+import ApiUrlContext from '../Api';
 import {useNavigate} from 'react-router-dom';
 
 function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRecipientInfo, fromOwnerDash }){
@@ -10,11 +11,12 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
 
   const [owner, setOwner] = useContext(OwnerContext)
   const [user, setUser] = useContext(UserContext)
+  const apiUrl = useContext(ApiUrlContext)
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   
   useEffect(() => {
-    fetch("/api/owner/check_session").then((response) => {
+    fetch(`${apiUrl}owner/check_session`).then((response) => {
         if (response.ok) {
             response.json().then((owner) => setOwner(owner))
         }
@@ -25,7 +27,7 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
 // ---------------Detect whether or not a USER is logged in-------------------
 
   useEffect(() => {
-    fetch("/api/check_session").then((response) => {
+    fetch(`${apiUrl}check_session`).then((response) => {
       if (response.ok) {
         response.json().then((user) => setUser(user))
       }
@@ -69,7 +71,7 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
 
     //Goes inside the onclick with the conditionals (ifs and else ifs) to determine who the recipient is. Tests for whether or not an individual signed in is the recipient or the sender, takes that ID and user type to connect to backend.
     const fetchRecipientData = async (recipientID, userType) => {
-      let endpoint = userType === "user" ? `/api/user/${recipientID}` : `/api/equipment_owner/${recipientID}`;
+      let endpoint = userType === "user" ? `${apiUrl}user/${recipientID}` : `${apiUrl}equipment_owner/${recipientID}`;
       
       // console.log("Recipient ID:", recipientID)
       try {

@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState} from 'react'
 import OwnerContext from '../OwnerComponents/OwnerContext'
 import UserContext from '../UserComponents/UserContext'
+import ApiUrlContext from '../Api'
 import Inbox from './Inbox'
 import ChatArea from './ChatArea'
 
@@ -9,10 +10,11 @@ function NewMessageThreads({fromOwnerDash}) {
 // ---------------Detect whether or not an OWNER is logged in-------------------
 
   const [owner, setOwner] = useContext(OwnerContext)
+  const apiUrl = useContext(ApiUrlContext)
 
   
   useEffect(() => {
-    fetch("/api/owner/check_session").then((response) => {
+    fetch(`${apiUrl}owner/check_session`).then((response) => {
         if (response.ok) {
             response.json().then((owner) => setOwner(owner))
         }
@@ -27,7 +29,7 @@ function NewMessageThreads({fromOwnerDash}) {
   const [user, setUser] = useContext(UserContext)
 
   useEffect(() => {
-    fetch("/api/check_session").then((response) => {
+    fetch(`${apiUrl}check_session`).then((response) => {
       if (response.ok) {
         response.json().then((user) => setUser(user))
       }

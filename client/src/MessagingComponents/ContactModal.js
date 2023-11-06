@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react'
 import OwnerContext from '../OwnerComponents/OwnerContext'
 import UserContext from '../UserComponents/UserContext'
+import ApiUrlContext from '../Api'
 import {toast} from 'react-toastify'
 
 
@@ -8,6 +9,8 @@ function ContactModal({recipientID}){
     const [owner, setOwner] = useContext(OwnerContext)
 
     const [user, setUser] = useContext(UserContext)
+
+    const apiUrl = useContext(ApiUrlContext)
 
     // useEffect(() => {
     //   fetch("/check_session").then((response) => {
@@ -41,7 +44,7 @@ function ContactModal({recipientID}){
         
         event.preventDefault()
         // 1. Create a new thread with the subject
-        let response = await fetch("/api/new/thread", {
+        let response = await fetch(`${apiUrl}new/thread`, {
             method: "POST",
             body: JSON.stringify({ subject: subject }),
             headers: {
@@ -52,7 +55,7 @@ function ContactModal({recipientID}){
         let threadData = await response.json()
         if (response.ok && threadData) {
             // 2. Create two inboxes once the thread is successfully created.
-            response = await fetch("/api/new/inboxes", {
+            response = await fetch(`${apiUrl}new/inboxes`, {
                 method: "POST",
                 body: JSON.stringify({ 
                     user_id: user ? user.id : recipientID,
@@ -66,7 +69,7 @@ function ContactModal({recipientID}){
 
             if (response.ok) {
                 // 3. Send the message once the inboxes are successfully created
-                response = await fetch("/api/messages", {
+                response = await fetch(`${apiUrl}messages`, {
                     method: "POST",
                     body: JSON.stringify({
                         recipient_id: recipientID,
