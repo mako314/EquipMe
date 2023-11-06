@@ -6,6 +6,7 @@ import OwnerContext from '../OwnerContext';
 import ProductCollection from '../../EquipmentComponents/ProductCollection'
 import OwnerEditForm from '../OwnerEditForm';
 import UserCollection from '../../UserComponents/UserCollection';
+import ApiUrlContext from '../../Api';
 
 import { ReactComponent as EquipMeLogo } from '../../Content/EquipMeLogo.svg'
 
@@ -16,8 +17,10 @@ function OwnerDashboard({ownerToEdit, updateOwner, fromOwnerDash, setFromOwnerDa
     const [toggleHomeDash, setToggleHomeDash] = useState(null)
     const [potentialRentalUsers, setPotentialRentalUsers] = useState([])
 
+    const apiUrl = useContext(ApiUrlContext)
+
     useEffect(() => {
-        fetch("/api/owner/check_session").then((response) => {
+        fetch(`${apiUrl}owner/check_session`).then((response) => {
             if (response.ok) {
                 response.json().then((owner) => setOwner(owner));
             }
@@ -77,7 +80,7 @@ function AccountSettings() {
         <div> Planned Deals </div>
 //------------------------------------------------------------------------------------
     useEffect(() => {
-        fetch(`/api/users/${owner?.profession}`)
+        fetch(`${apiUrl}users/${owner?.profession}`)
         .then((resp) => resp.json())
         .then((data) => {
             setPotentialRentalUsers(data)

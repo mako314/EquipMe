@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import {useFormik} from "formik"
 import { object, string, number} from 'yup'
 import OwnerContext from "../OwnerComponents/OwnerContext";
+import ApiUrlContext from "../Api";
 
 //----------------------------IMAGE UPLOAD----------------------------
 import { ref, uploadBytes, listAll, getDownloadURL} from 'firebase/storage';
@@ -15,9 +16,8 @@ import {v4} from 'uuid';
 function ProductForm({ addEquipment }){
     const [error, setError] = useState()
     const navigate = useNavigate()
-
-    
     const [owner, setOwner] = useContext(OwnerContext)
+    const apiUrl = useContext(ApiUrlContext)
 
 
 //----------------------------IMAGE UPLOAD----------------------------
@@ -35,7 +35,7 @@ function ProductForm({ addEquipment }){
 
     //useEffect to check whether or not an owner is logged in! Succesfuly conditional rendering
     useEffect(() => {
-        fetch("/api/owner/check_session").then((response) => {
+        fetch(`${apiUrl}owner/check_session`).then((response) => {
           if (response.ok) {
             response.json().then((owner) => setOwner(owner));
           }
@@ -72,7 +72,7 @@ function ProductForm({ addEquipment }){
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
-            fetch('/api/equipment' , {
+            fetch(`${apiUrl}equipment` , {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -90,7 +90,7 @@ function ProductForm({ addEquipment }){
                               imageURL: values.imageURL,
                           };
                           
-                            fetch ('/api/equipment/images' , {
+                            fetch (`${apiUrl}equipment/images` , {
                               method: "POST",
                               headers: {
                                 "Content-Type": "application/json"

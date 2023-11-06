@@ -1,13 +1,15 @@
 import React, { useState, useContext, useEffect } from "react";
 import RentalCard from "./RentalCard"
 import UserContext from "../UserComponents/UserContext";
+import ApiUrlContext from "../Api";
 
 function RentalCollection({ }) {
     const [rentalAgreementArray, setRentalAgreementArray] = useState([])
     const [user, setUser] = useContext(UserContext)
+    const apiUrl = useContext(ApiUrlContext)
 
     useEffect(() => {
-        fetch("/api/rental_agreements")
+        fetch(`${apiUrl}rental_agreements`)
             .then((resp) => resp.json())
             .then((data) => {
                 setRentalAgreementArray(data)
@@ -16,7 +18,7 @@ function RentalCollection({ }) {
 
     //Check if user is logged in, I may just make this context and wrap it around my whole app too.
     useEffect(() => {
-        fetch("/api/check_session").then((response) => {
+        fetch(`${apiUrl}check_session`).then((response) => {
           if (response.ok) {
             response.json().then((user) => setUser(user));
           }

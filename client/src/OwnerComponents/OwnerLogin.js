@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom"
 import OwnerContext from './OwnerContext';
+import ApiUrlContext from '../Api';
 
 function OwnerLogin(){
 
@@ -8,6 +9,7 @@ function OwnerLogin(){
     const navigate = useNavigate();
 
     const [owner, setOwner] = useContext(OwnerContext)
+    const apiUrl = useContext(ApiUrlContext)
 
     console.log(owner);
 
@@ -18,7 +20,7 @@ function OwnerLogin(){
         let email = e.target.email.value;
         let password = e.target.password.value;
 
-        fetch('/api/owner/login', {
+        fetch(`${apiUrl}owner/login`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -36,7 +38,7 @@ function OwnerLogin(){
 
     // removes session, removes state
     function handleLogout() {
-        fetch("/api/logout", {
+        fetch(`${apiUrl}logout`, {
             method: "DELETE"
         }).then(setOwner(null))
     }

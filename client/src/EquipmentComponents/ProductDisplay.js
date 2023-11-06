@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import EquipmentMap from '../MapComponents/EquipmentMap'
 import UserContext from '../UserComponents/UserContext'
+import ApiUrlContext from '../Api'
 
 
 function EquipmentDisplay({}) {
@@ -11,12 +12,13 @@ function EquipmentDisplay({}) {
 
   const { id } = useParams()
   const [user, setUser] = useContext(UserContext)
+  const apiUrl = useContext(ApiUrlContext)
 
   const navigate = useNavigate()
 
 
   useEffect(() => {
-    fetch(`/api/equipment/${id}`)
+    fetch(`${apiUrl}equipment/${id}`)
       .then((resp) => resp.json())
       .then((data) => {
         setOneEquipment(data)

@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState} from 'react'
 import OwnerContext from '../OwnerComponents/OwnerContext'
 import UserContext from '../UserComponents/UserContext'
+import ApiUrlContext from '../Api'
 import MessageInput from './MessageInput'
 
 function ChatArea({inboxes, SelectedThreadID, setNewMessage, newMessage, setInboxes, recipientInfo }){
@@ -9,9 +10,10 @@ function ChatArea({inboxes, SelectedThreadID, setNewMessage, newMessage, setInbo
 
   const [owner, setOwner] = useContext(OwnerContext)
   const [user, setUser] = useContext(UserContext)
+  const apiUrl = useContext(ApiUrlContext)
   
   useEffect(() => {
-    fetch("/api/owner/check_session").then((response) => {
+    fetch(`${apiUrl}owner/check_session`).then((response) => {
         if (response.ok) {
             response.json().then((owner) => setOwner(owner))
         }
@@ -25,7 +27,7 @@ function ChatArea({inboxes, SelectedThreadID, setNewMessage, newMessage, setInbo
 // ---------------Detect whether or not a USER is logged in-------------------
 
   useEffect(() => {
-    fetch("/api/check_session").then((response) => {
+    fetch(`${apiUrl}check_session`).then((response) => {
       if (response.ok) {
         response.json().then((user) => setUser(user))
       }

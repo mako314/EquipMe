@@ -4,12 +4,14 @@ import { useNavigate } from "react-router-dom";
 import {useFormik} from "formik"
 import { object, string, number} from 'yup'
 import  UserContext  from './UserContext';
+import ApiUrlContext from "../Api";
 
 function UserForm({ addUser }){
     const [error, setError] = useState()
     const navigate = useNavigate()
 
     const [user, setUser] = useContext(UserContext)
+    const apiUrl = useContext(ApiUrlContext)
 
 
     //Going to bring handleLogin so you're logged in when this fires off
@@ -18,7 +20,7 @@ function UserForm({ addUser }){
         let email = formik.values.email;
         let password = formik.values.password;
 
-        fetch('/api/login', {
+        fetch(`${apiUrl}login`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -55,7 +57,7 @@ function UserForm({ addUser }){
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
-            fetch('/api/users' , {
+            fetch(`${apiUrl}users` , {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

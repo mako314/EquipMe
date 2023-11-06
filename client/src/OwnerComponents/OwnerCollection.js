@@ -4,15 +4,6 @@ import OwnerCard from "./OwnerCard";
 
 function OwnerCollection({ searchTerm, handleEditOwner, handleOwnerDelete, equipmentOwnerArray }) {
   
-    // const [equipmentOwnerArray, setEquipmentOwnerArray] = useState([])
-
-    // useEffect(() => {
-    //     fetch("/equipment_owners")
-    //         .then((resp) => resp.json())
-    //         .then((data) => {
-    //             setEquipmentOwnerArray(data)
-    //         })
-    // }, [])
     console.log(equipmentOwnerArray)
     const ownerCards = equipmentOwnerArray?.map((item) => {
 
