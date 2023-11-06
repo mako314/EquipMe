@@ -1,8 +1,9 @@
 import React from "react";
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import {useFormik} from "formik"
 import { object, string, number} from 'yup'
+import ApiUrlContext from "../Api";
 
 function OwnerEditForm({ownerToEdit, updateOwner}){
 
@@ -10,6 +11,7 @@ function OwnerEditForm({ownerToEdit, updateOwner}){
 
     const [error, setError] = useState()
     const navigate = useNavigate()
+    const apiUrl = useContext(ApiUrlContext)
 
     const formSchema = object({
         firstName: string().required('Please enter a name'),
@@ -28,7 +30,7 @@ function OwnerEditForm({ownerToEdit, updateOwner}){
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
-            fetch(`/api/equipment_owner/${ownerToEdit.id}` , {
+            fetch(`${apiUrl}equipment_owner/${ownerToEdit.id}` , {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json"

@@ -1,10 +1,12 @@
 import React, { useState, useContext, useEffect } from "react";
 import RentalCard from "./RentalCard"
 import UserContext from "../UserComponents/UserContext";
+import ApiUrlContext from "../Api";
 
 function RentalCollection({ }) {
     const [rentalAgreementArray, setRentalAgreementArray] = useState([])
     const [user, setUser] = useContext(UserContext)
+    const apiUrl = useContext(ApiUrlContext)
 
     useEffect(() => {
         fetch(`${apiUrl}rental_agreements`)

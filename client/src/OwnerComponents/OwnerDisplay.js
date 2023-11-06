@@ -1,8 +1,9 @@
 import React from 'react'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import EquipmentMap from '../MapComponents/EquipmentMap'
 import ContactModal from '../MessagingComponents/ContactModal'
+import ApiUrlContext from '../Api'
 
 function OwnerDisplay() {
   const [owner, setOwner] = useState([])
@@ -10,9 +11,10 @@ function OwnerDisplay() {
 
   const { id } = useParams()
   // const navigate = useNavigate()
+  const apiUrl = useContext(ApiUrlContext)
 
   useEffect(() => {
-    fetch(`/api/equipment_owner/${id}`)
+    fetch(`${apiUrl}equipment_owner/${id}`)
       .then((resp) => resp.json())
       .then((data) => {
         setOwner(data)
