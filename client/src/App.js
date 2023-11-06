@@ -102,7 +102,7 @@ function App() {
   const [fromOwnerDash, setFromOwnerDash] = useState(false)
 
   // context for APIUrl
-  const apiUrl = useContext(ApiUrlContext)
+  const apiUrl = process.env.REACT_APP_API_URL
   console.log("this is the api url:", apiUrl)
   
 

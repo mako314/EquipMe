@@ -14,3 +14,5 @@ Coordination: The platform would facilitate the coordination of pick-ups or deli
 
 
 For some reason I encountered a bug on the mobile view of iphone12. It seems to be fixed now, but I will have to restructure how I do my buttons. 
+
+I can include the package json and package-lock.json in the root if needed. Just edit the script in package.json inside of the root one and have it cd into client and run it from there.

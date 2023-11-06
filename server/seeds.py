@@ -6,6 +6,9 @@ from random import randint, choice as rc
 
 from datetime import datetime
 
+# IF you want to re-seed when you start development, just add everything in here (tab for indentation)
+def seed_database():
+    pass
 
 if __name__ == '__main__':
     with app.app_context():
