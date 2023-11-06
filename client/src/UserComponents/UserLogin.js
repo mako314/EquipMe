@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom"
 import  UserContext  from './UserContext';
+import ApiUrlContext from '../Api';
 
 function UserLogin(){
 
@@ -9,6 +10,7 @@ function UserLogin(){
 
     // const [user, setUser] = useState(null); // stores user on client-side
     const [user, setUser] = useContext(UserContext)
+    const apiUrl = useContext(ApiUrlContext)
 
     console.log(user);
 
@@ -28,7 +30,7 @@ function UserLogin(){
         let email = e.target.email.value;
         let password = e.target.password.value;
 
-        fetch('/api/login', {
+        fetch(`${apiUrl}login`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -46,7 +48,7 @@ function UserLogin(){
 
     // removes session, removes state
     function handleLogout() {
-        fetch("/api/logout", {
+        fetch(`${apiUrl}logout`, {
             method: "DELETE"
         }).then(setUser(null))
     }

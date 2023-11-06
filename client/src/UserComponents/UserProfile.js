@@ -1,11 +1,13 @@
 import React, { useContext, useState, useEffect } from 'react';
 import UserContext from './UserContext';
+import ApiUrlContext from '../Api';
 import RentalCollection from '../RentalComponents/RentalCollection';
 import { useParams, useNavigate } from 'react-router-dom';
 
 function UserProfile() {
   // User context, meaning if user is signed in, they get their data,
   const [user, setUser] = useContext(UserContext)
+  const apiUrl = useContext(ApiUrlContext)
 
   //This will be used to set the userProfile after it's been clicked from the owner, unsure if I want users to be able to view other users
   const [userProfile, setUserProfile] = useState([])
@@ -23,7 +25,7 @@ function UserProfile() {
 
   //Check if user is logged in, I may just make this context and wrap it around my whole app too.
   useEffect(() => {
-    fetch("/api/check_session").then((response) => {
+    fetch(`${apiUrl}check_session`).then((response) => {
       if (response.ok) {
         response.json().then((user) => setUser(user));
       }
@@ -31,7 +33,7 @@ function UserProfile() {
   }, []);
 
   useEffect(() => {
-    fetch(`/api/user/${id}`)
+    fetch(`${apiUrl}user/${id}`)
       .then((resp) => resp.json())
       .then((data) => {
         setUserProfile(data)
