@@ -268,13 +268,18 @@ class EquipmentOwners(Resource):
                 firstName = data['firstName'],
                 lastName = data['lastName'],
                 location = data['location'],
+                age = data['age'],
                 profession = data['profession'],
                 phone = data['phone'],
                 email = data['email'],
+                _password_hash = data['password'],
                 profileImage = data['profileImage'],
                 website = data['website']
             )
             db.session.add(new_owner)
+
+            new_owner.password_hash = new_owner._password_hash
+
             db.session.commit()
 
             response = make_response(new_owner.to_dict(), 201)

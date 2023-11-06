@@ -92,6 +92,7 @@ class EquipmentOwner(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     firstName = db.Column(db.String)
     lastName = db.Column(db.String)
+    age = db.Column(db.Integer)
     location = db.Column(db.String)
     profession = db.Column(db.String)
     phone = db.Column(db.String)

@@ -89,9 +89,9 @@ function UserForm({ addUser }){
   <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
 
     <div className="mb-10 md:mb-16">
-      <h2 className="mb-4 text-center text-2xl font-bold text-gray-800 md:mb-6 lg:text-3xl">Ready to List?</h2>
+      <h2 className="mb-4 text-center text-2xl font-bold text-gray-800 md:mb-6 lg:text-3xl">You're One Step Closer to Renting!</h2>
 
-      <p className="mx-auto max-w-screen-md text-center text-gray-500 md:text-lg"> Get listing in a few simple steps!</p>
+      <p className="mx-auto max-w-screen-md text-center text-gray-500 md:text-lg"> Get renting in a few simple steps</p>
     </div>
 
     <form onSubmit={formik.handleSubmit} className="mx-auto grid max-w-screen-md gap-4 sm:grid-cols-2">
@@ -113,8 +113,8 @@ function UserForm({ addUser }){
       </div>
 
       <div className="sm:col-span-2">
-        <label htmlFor="age" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Age </label>
-        <input type="text" name="age" value={formik.values.age} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+        <label htmlFor="location" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Location </label>
+        <input type="text" name="location" value={formik.values.location} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
       </div>
 
       <div className="sm:col-span-2">
@@ -128,13 +128,13 @@ function UserForm({ addUser }){
       </div>
 
       <div className="sm:col-span-2">
-        <label htmlFor="phone" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Phone </label>
-        <input type="text" name="phone" value={formik.values.phone} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+        <label htmlFor="age" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Age </label>
+        <input type="text" name="age" value={formik.values.age} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
       </div>
 
       <div className="sm:col-span-2">
-        <label htmlFor="location" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Location </label>
-        <input type="text" name="location" value={formik.values.location} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+        <label htmlFor="phone" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Phone </label>
+        <input type="text" name="phone" value={formik.values.phone} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
       </div>
 
       <div className="sm:col-span-2">
