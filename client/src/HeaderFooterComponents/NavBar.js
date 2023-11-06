@@ -7,6 +7,7 @@ import SearchBar from "./SearchBar";
 //Context imports
 import  UserContext  from '../UserComponents/UserContext';
 import OwnerContext from "../OwnerComponents/OwnerContext";
+import ApiUrlContext from "../Api";
 
 function NavBar({ setSearchTerm }) {
 
@@ -20,13 +21,15 @@ function NavBar({ setSearchTerm }) {
   //state for owners
   const [owner, setOwner] = useContext(OwnerContext)
 
+  const apiUrl = useContext(ApiUrlContext)
+
 
   const closeMobileView = () => {
     setIsToggleOpen(false);
   }
 
   function userHandleLogout() {
-    fetch("/api/logout", {
+    fetch(`${apiUrl}logout`, {
         method: "DELETE"
     }).then( () => {
       setUser(null)
@@ -35,7 +38,7 @@ function NavBar({ setSearchTerm }) {
   }
 
   function ownerHandleLogout() {
-    fetch("/api/owner/logout", {
+    fetch(`${apiUrl}owner/logout`, {
         method: "DELETE"
     }).then( () => {
       setOwner(null)

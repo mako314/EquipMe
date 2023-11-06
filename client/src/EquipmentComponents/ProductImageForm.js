@@ -7,12 +7,12 @@ import { object, string, number} from 'yup'
 
 //-----------------Imports from Components-----------------
 import OwnerContext from "../OwnerComponents/OwnerContext";
+import ApiUrlContext from "../Api";
 import { storage } from "../CloudComponents/Firebase";
 
 //-----------------Imports from Firebase-------------------
 import { ref, uploadBytes, listAll, getDownloadURL} from 'firebase/storage';
 import {v4} from 'uuid';
-
 
 
 function ProductImageForm({ addEquipment }){
@@ -21,6 +21,7 @@ function ProductImageForm({ addEquipment }){
 
     
     const [owner, setOwner] = useContext(OwnerContext)
+    const apiUrl = useContext(ApiUrlContext)
 
 //-----------------------Upload Portion-------------------------------
     const [imageUpload, setImageUpload] = useState(null)
@@ -35,7 +36,7 @@ function ProductImageForm({ addEquipment }){
 
     // useEffect to check whether or not an owner is logged in! Succesfuly conditional rendering
     useEffect(() => {
-        fetch("/api/owner/check_session").then((response) => {
+        fetch(`${apiUrl}owner/check_session`).then((response) => {
           if (response.ok) {
             response.json().then((owner) => setOwner(owner));
           }
@@ -63,7 +64,7 @@ function ProductImageForm({ addEquipment }){
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
-            fetch('/api/equipment/images' , {
+            fetch(`${apiUrl}equipment/images` , {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

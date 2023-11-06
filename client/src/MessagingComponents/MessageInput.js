@@ -79,7 +79,7 @@ const handleSendMessage = () => {
   }
 
     console.log('Sending message:', message)
-    fetch("/api/messages", {
+    fetch(`${apiUrl}messages`, {
       method: "POST",
       body: JSON.stringify(message),
       headers: {
