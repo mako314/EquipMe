@@ -3,12 +3,15 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
 import {useFormik} from "formik"
 import { object, string, number} from 'yup'
+import ApiUrlContext from "../Api";
 
 function RentalForm({ addRentalAgreement, owners, equipmentArray }){
     const [error, setError] = useState()
     const [rentFrom, setRentFrom] = useState("")
     const [locRent, setLocRent] = useState("")
     const [selectFrom, setSelectFrom] = useState([])
+
+    const apiUrl = useContext(ApiUrlContext)
 
 
 // ------------------------------------------THIS CODE IS FOR RENTAL AGREEMENTS, RENTALFORMPREPOP IS FOR LISTING EQUIPMENT-----------------------------------------------------
@@ -41,7 +44,7 @@ function RentalForm({ addRentalAgreement, owners, equipmentArray }){
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
-            fetch('/api/rental_agreements' , {
+            fetch(`${apiUrl}rental_agreements` , {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -88,7 +91,7 @@ function RentalForm({ addRentalAgreement, owners, equipmentArray }){
     ))
 
     useEffect(() => {
-    fetch(`/all_equipment/${rentFrom}`)
+    fetch(`${apiUrl}all_equipment/${rentFrom}`)
         .then((resp) => resp.json())
         .then((data) => {
         setSelectFrom(data)

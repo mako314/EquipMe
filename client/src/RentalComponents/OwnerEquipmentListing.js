@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik"
 import { object, string, number } from 'yup'
+import ApiUrlContext from "../Api";
 
 function OwnerEquipmentListing({ addRentalAgreement, owners, equipmentArray, featuredRental }) {
 
@@ -22,6 +23,7 @@ function OwnerEquipmentListing({ addRentalAgreement, owners, equipmentArray, fea
     const [selectFrom, setSelectFrom] = useState([])
 
     const navigate = useNavigate()
+    const apiUrl = useContext(ApiUrlContext)
 
     console.log(featuredRental[0].location)
 
@@ -43,7 +45,7 @@ function OwnerEquipmentListing({ addRentalAgreement, owners, equipmentArray, fea
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
-            fetch('/api/rental_agreements', {
+            fetch(`${apiUrl}rental_agreements`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
