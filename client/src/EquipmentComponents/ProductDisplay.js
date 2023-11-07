@@ -8,8 +8,9 @@ import ApiUrlContext from '../Api'
 
 function EquipmentDisplay({}) {
   const [oneEquipment, setOneEquipment] = useState([])
-  const { model, name, make, location, email, phone, quantity, images } = oneEquipment
+  const { model, name, make, location, email, phone, quantity, images, equipment_price } = oneEquipment
 
+  // THE ID HERE IS THE EQUIPMENT ID.
   const { id } = useParams()
   const [user, setUser] = useContext(UserContext)
   const apiUrl = useContext(ApiUrlContext)
@@ -25,6 +26,15 @@ function EquipmentDisplay({}) {
       })
   }, [])
 
+  console.log("Display Page one equipment:", equipment_price)
+
+  const equip_prices = equipment_price?.map((price) => {
+    return <>
+    <span className="title-font font-medium text-2xl text-white">Hourly Rate: ${price.hourly_rate/100}</span>
+    <span className="title-font font-medium text-2xl text-white">Daily Rate: ${price.daily_rate/100}</span>
+    <span className="title-font font-medium text-2xl text-white">Weekly Rate: ${price.weekly_rate/100}</span>
+    </>
+  })
 
   // Need to make some onclicks for when a user clicks description, reviews, details etc. 
 
@@ -64,8 +74,8 @@ function EquipmentDisplay({}) {
               <span className="ml-auto text-white">{quantity}</span>
             </div>
             <div className="flex">
-              <span className="title-font font-medium text-2xl text-white">$58.00</span>
-
+              {/* <span className="title-font font-medium text-2xl text-white">$58.00</span> */}
+              {equip_prices}
               <button className="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded" >Rent Now</button>
 
               <button className="rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
