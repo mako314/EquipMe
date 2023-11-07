@@ -140,13 +140,15 @@ function AddToCartModal(){
                           </div>
                           {/* Cart Container Div */}
 
-                          <button 
-                              // type="submit" 
-                              // onClick={handleSendMessage}
-                              className=" w-half text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                          >
-                              Add to Cart
-                          </button>
+                          <div className="flex justify-end">
+                              <button 
+                                  // type="submit" 
+                                  // onClick={handleSendMessage}
+                                  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                              >
+                                  Add to Cart
+                              </button>
+                          </div>
                           
                           <div className="text-xs font-medium text-gray-500 dark:text-gray-300">
                               * You will have another chance to edit your carts contents  
