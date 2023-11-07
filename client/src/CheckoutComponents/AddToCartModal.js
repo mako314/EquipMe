@@ -2,11 +2,23 @@ import React, { useContext, useState, useEffect } from 'react'
 
 function AddToCartModal(){
   
+  const [quantity, setQuantity] = useState(1)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   function toggleModal() {
     setIsModalOpen(!isModalOpen)
 }
+
+const decrementQuantity = () => {
+  if (quantity > 1) {
+      setQuantity(prevQuantity => prevQuantity - 1)
+  }
+}
+
+const incrementQuantity = () => {
+  setQuantity(prevQuantity => prevQuantity + 1)
+}
+
 //   function handleAddToCartClick() {
         
 //     let email = formik.values.email;
@@ -87,9 +99,24 @@ function AddToCartModal(){
                                     <div className="mt-4 flex justify-between sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
                                         <div className="flex items-center border-gray-100">
                                             {/* Quantity Adjustment */}
-                                            <span className="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-white"> - </span>
-                                            <input className="h-8 w-8 border bg-white text-center text-xs outline-none" type="number" defaultValue="1" min="1" />
-                                            <span className="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-white"> + </span>
+                                            <span
+                                                className="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-white"
+                                                onClick={decrementQuantity}
+                                            >
+                                                -
+                                            </span>
+                                            <input 
+                                                  className="h-8 w-8 border bg-white text-center text-xs outline-none"
+                                                  type="number"
+                                                  value={quantity}
+                                                  onChange={(e) => setQuantity(parseInt(e.target.value, 10))}
+                                                  min="1" />
+                                           <span
+                                              className="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-white"
+                                              onClick={incrementQuantity}
+                                          >
+                                              +
+                                          </span>
                                         </div>
 
                                         <div className="flex items-center space-x-4">
@@ -104,6 +131,7 @@ function AddToCartModal(){
                                 </div>
                             </div>
 
+                            {/* Grab this for the map */}
                             <div className="justify-between mb-6 rounded-lg bg-white p-6 shadow-md sm:flex sm:justify-start">
                                 {/* Image Preview */}
                                 <img src="https://www.ptsworks.com/wp-content/uploads/2020/02/heavy-construction-equipment-types.jpg" alt="product-image" className="w-full rounded-lg sm:w-40" />
@@ -136,6 +164,7 @@ function AddToCartModal(){
                                     </div>
                                 </div>
                             </div>
+                            {/* Grab this for the map */}
 
                           </div>
                           {/* Cart Container Div */}
