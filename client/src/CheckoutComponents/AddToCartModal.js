@@ -1,8 +1,15 @@
 import React, { useContext, useState, useEffect } from 'react'
+import ApiUrlContext from '../Api'
+import UserContext from '../UserComponents/UserContext'
 
-function AddToCartModal(){
-  
-  const [quantity, setQuantity] = useState(1)
+function AddToCartModal({equip_id, oneEquipment}){
+
+  const apiUrl = useContext(ApiUrlContext)
+
+  const [user, setUser] = useContext(UserContext)
+  const [selectedRate, setSeletectedRate] = useState('')
+
+  const [equipmentQuantity, setEquipmentQuantity] = useState(1)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   function toggleModal() {
@@ -10,35 +17,38 @@ function AddToCartModal(){
 }
 
 const decrementQuantity = () => {
-  if (quantity > 1) {
-      setQuantity(prevQuantity => prevQuantity - 1)
-  }
+  setEquipmentQuantity((prevequipmentQuantity) => (prevequipmentQuantity > 1 ? prevequipmentQuantity - 1 : 1))
 }
-
 const incrementQuantity = () => {
-  setQuantity(prevQuantity => prevQuantity + 1)
+  setEquipmentQuantity(prevequipmentQuantity => prevequipmentQuantity + 1)
 }
 
-//   function handleAddToCartClick() {
-        
-//     let email = formik.values.email;
-//     let password = formik.values.password;
+const handleRateChange = (e) => {
+  setSeletectedRate(e.target.value);
+}
 
-//     fetch(`${apiUrl}cart/${id}`, {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify( { email, password } ),
-//       }).then((resp) => {
-//         if (resp.ok) {
-//           resp.json().then((user) => {
-//             setUser(user)
-//             navigate(`/user/profile/${user.id}`); // <-------- navigates to the profile
-//           });
-//         }
-//       });
-// }
+console.log(oneEquipment)
+
+function handleAddToCartClick() {
+  let rental_length 
+  let rental_rate = 'hourly'
+  let quantity = 1
+  let equipment_id = equip_id
+
+  fetch(`${apiUrl}cart/${user.id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify( { equipment_id, quantity, rental_rate } ),
+    }).then((resp) => {
+      if (resp.ok) {
+        resp.json().then(() => {
+
+        });
+      }
+    });
+}
 
 
     return(
@@ -83,7 +93,8 @@ const incrementQuantity = () => {
                           {/* Cart Container Div */}
                           <div className="space-y-6 overflow-y-auto max-h-96">
 
-                                <div className="justify-between mb-6 rounded-lg bg-white p-6 shadow-md sm:flex sm:justify-start">
+                            {/* Grab this for the map */}
+                            <div className="justify-between mb-6 rounded-lg bg-white p-6 shadow-md sm:flex sm:justify-start">
                                 {/* Image Preview */}
                                 <img src="https://www.ptsworks.com/wp-content/uploads/2020/02/heavy-construction-equipment-types.jpg" alt="product-image" className="w-full rounded-lg sm:w-40" />
 
@@ -108,8 +119,8 @@ const incrementQuantity = () => {
                                             <input 
                                                   className="h-8 w-8 border bg-white text-center text-xs outline-none"
                                                   type="number"
-                                                  value={quantity}
-                                                  onChange={(e) => setQuantity(parseInt(e.target.value, 10))}
+                                                  value={equipmentQuantity}
+                                                  onChange={(e) => setEquipmentQuantity(parseInt(e.target.value, 10))}
                                                   min="1" />
                                            <span
                                               className="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-white"
@@ -121,7 +132,15 @@ const incrementQuantity = () => {
 
                                         <div className="flex items-center space-x-4">
                                             {/* Price */}
-                                            <p className="text-sm">Price Here</p>
+                                            <select
+                                            className="text-sm"
+                                            value={selectedRate} 
+                                            onChange={handleRateChange}>
+                                              <option value="Orange">Orange</option>
+                                              <option value="Radish">Radish</option>
+                                              <option value="Cherry">Cherry</option>
+                                            </select>
+                                            {/* <p className="text-sm">Price Here</p> */}
                                             {/* Delete Icon */}
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="h-5 w-5 cursor-pointer duration-150 hover:text-red-500">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -130,40 +149,7 @@ const incrementQuantity = () => {
                                     </div>
                                 </div>
                             </div>
-
-                            {/* Grab this for the map */}
-                            <div className="justify-between mb-6 rounded-lg bg-white p-6 shadow-md sm:flex sm:justify-start">
-                                {/* Image Preview */}
-                                <img src="https://www.ptsworks.com/wp-content/uploads/2020/02/heavy-construction-equipment-types.jpg" alt="product-image" className="w-full rounded-lg sm:w-40" />
-
-                                <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between">
-                                    {/* Product Details */}
-                                    <div className="mt-5 sm:mt-0">
-                                        <h2 className="text-lg font-bold text-gray-900">Heavy Construction Equipment</h2>
-                                        {/* Additional details like size or color can go here */}
-                                        <p className="mt-1 text-xs text-gray-700">Various Models</p>
-                                    </div>
-
-                                    {/* Quantity and Price */}
-                                    <div className="mt-4 flex justify-between sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
-                                        <div className="flex items-center border-gray-100">
-                                            {/* Quantity Adjustment */}
-                                            <span className="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-white"> - </span>
-                                            <input className="h-8 w-8 border bg-white text-center text-xs outline-none" type="number" defaultValue="1" min="1" />
-                                            <span className="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-white"> + </span>
-                                        </div>
-
-                                        <div className="flex items-center space-x-4">
-                                            {/* Price */}
-                                            <p className="text-sm">Price Here</p>
-                                            {/* Delete Icon */}
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="h-5 w-5 cursor-pointer duration-150 hover:text-red-500">
-                                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                           
                             {/* Grab this for the map */}
 
                           </div>

@@ -884,6 +884,25 @@ class AddItemToCart(Resource):
 
         #except ValueError ()
 
+    def patch(self, cart_id):
+        cart = Cart.query.filter(Cart.id == cart_id).first()
+
+        cart_item = cart.query.filter(Equipment.id == data['equipment_id']).first()
+
+        if cart_item:
+            data = request.get_json()
+            for key in data:
+                setattr(cart_item, key, data[key])
+            db.session.add(cart_item)
+            db.session.commit()
+            response = make_response(cart_item.to_dict(), 202)
+            return response
+        else:
+            response = make_response({
+            "error": "Item not found"
+            }, 404)
+            return response
+
 
 api.add_resource(AddItemToCart, '/cart/<int:cart_id>')
 
