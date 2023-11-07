@@ -6,19 +6,36 @@ function AddToCartModal({equip_id, oneEquipment}){
 
   const apiUrl = useContext(ApiUrlContext)
 
+  const { equipment_price } = oneEquipment
+
+  console.log("Equipment price:", equipment_price)
+  console.log("Your Equipment:",oneEquipment)
+
+
   const [user, setUser] = useContext(UserContext)
   const [selectedRate, setSeletectedRate] = useState('')
+  const [dayRange, setDayRange] = useState('')
 
   const [equipmentQuantity, setEquipmentQuantity] = useState(1)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  function toggleModal() {
+  const rateOptions = equipment_price?.map((price) => {
+    return <>
+    <option className="text-black"value="hourly">Hourly Rate: ${price.hourly_rate/100}</option>
+    <option className="text-black"value="daily">Daily Rate: ${price.daily_rate/100}</option>
+    <option className="text-black"value="weekly">Weekly Rate: ${price.weekly_rate/100}</option>
+    <option className="text-black"value="promo">Promo Rate: ${price.promo_rate/100}</option>
+    </>
+  })
+
+function toggleModal() {
     setIsModalOpen(!isModalOpen)
 }
 
 const decrementQuantity = () => {
   setEquipmentQuantity((prevequipmentQuantity) => (prevequipmentQuantity > 1 ? prevequipmentQuantity - 1 : 1))
 }
+
 const incrementQuantity = () => {
   setEquipmentQuantity(prevequipmentQuantity => prevequipmentQuantity + 1)
 }
@@ -26,8 +43,6 @@ const incrementQuantity = () => {
 const handleRateChange = (e) => {
   setSeletectedRate(e.target.value);
 }
-
-console.log(oneEquipment)
 
 function handleAddToCartClick() {
   let rental_length 
@@ -101,14 +116,14 @@ function handleAddToCartClick() {
                                 <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between">
                                     {/* Product Details */}
                                     <div className="mt-5 sm:mt-0">
-                                        <h2 className="text-lg font-bold text-gray-900">Heavy Construction Equipment</h2>
+                                        <h2 className="text-lg font-bold text-gray-900">{oneEquipment.make}</h2>
                                         {/* Additional details like size or color can go here */}
-                                        <p className="mt-1 text-xs text-gray-700">Various Models</p>
+                                        <p className="mt-1 text-xs text-gray-700">{oneEquipment.model}</p>
                                     </div>
 
                                     {/* Quantity and Price */}
                                     <div className="mt-4 flex justify-between sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
-                                        <div className="flex items-center border-gray-100">
+                                        <div className="flex items-center justify-end space-x-2">
                                             {/* Quantity Adjustment */}
                                             <span
                                                 className="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-white"
@@ -130,22 +145,27 @@ function handleAddToCartClick() {
                                           </span>
                                         </div>
 
-                                        <div className="flex items-center space-x-4">
+                                        <div className="flex items-center justify-end space-x-2">
                                             {/* Price */}
                                             <select
-                                            className="text-sm"
+                                            className="border-2 border-black text-sm text-black"
                                             value={selectedRate} 
                                             onChange={handleRateChange}>
-                                              <option value="Orange">Orange</option>
-                                              <option value="Radish">Radish</option>
-                                              <option value="Cherry">Cherry</option>
+                                            {rateOptions}
                                             </select>
-                                            {/* <p className="text-sm">Price Here</p> */}
-                                            {/* Delete Icon */}
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="h-5 w-5 cursor-pointer duration-150 hover:text-red-500">
-                                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                            </svg>
                                         </div>
+
+                                        <div className="flex items-center justify-end space-x-2">
+                                            {/* Price */}
+                                            <select
+                                            className="border-2 border-black text-sm text-black"
+                                            value={selectedRate} 
+                                            onChange={handleRateChange}>
+                                            {rateOptions}
+                                            </select>
+                                        </div>
+
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -166,7 +186,7 @@ function handleAddToCartClick() {
                           </div>
                           
                           <div className="text-xs font-medium text-gray-500 dark:text-gray-300">
-                              * You will have another chance to edit your carts contents  
+                              * You will have another chance to edit your carts contents.
                           </div>
                       </div>
                   </div>
