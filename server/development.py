@@ -17,6 +17,6 @@ app.run()
 
 
 # Just run 
-#export DATABASE_URI=sqlite:///app.db
+# export DATABASE_URI=sqlite:///app.db
 # for some reason I had to re-upgrade the db for this to work, so just remember flask db init and all those steps.
 # Use this to seed if it goes nuclear like it did before. You may not even need the run_seeding()

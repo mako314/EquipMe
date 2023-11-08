@@ -4,51 +4,130 @@ import UserContext from '../UserComponents/UserContext'
 
 function AddToCartModal({equip_id, oneEquipment}){
 
+  //Grab apiUrl from context + user info
   const apiUrl = useContext(ApiUrlContext)
-
   const [user, setUser] = useContext(UserContext)
-  const [selectedRate, setSeletectedRate] = useState('')
 
+  //Destructure for equipment_price
+  const { equipment_price } = oneEquipment
+
+  console.log("Equipment price:", equipment_price)
+  console.log("Your Equipment:",oneEquipment)
+  console.log("The USER:", user)
+  const {cart} = user
+  
+  // console.log("This is the selected rate:", selectedRate)
+  // console.log("this is the date range:", dayRange)
+
+  
+
+  //States to capture info, day ranges, costs, length of rental, quantity, and track modal, cart
+  const [selectedRate, setSelectedRate] = useState('')
+  const [dayRange, setDayRange] = useState('')
+  const [rentalLength, setRentalLength] = useState(1)
   const [equipmentQuantity, setEquipmentQuantity] = useState(1)
+  const [currentCart, setCurrentCart] = useState(0)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
+  console.log("The Cart ID:", currentCart)
+
+
+  //Map over equipment price, and take the rates as options
+  const rateOptions = equipment_price?.map((price) => {
+    return <>
+    <option className="text-black"value="hourly">Hourly Rate: ${price.hourly_rate/100}</option>
+    <option className="text-black"value="daily">Daily Rate: ${price.daily_rate/100}</option>
+    <option className="text-black"value="weekly">Weekly Rate: ${price.weekly_rate/100}</option>
+    <option className="text-black"value="promo">Promo Rate: ${price.promo_rate/100}</option>
+    </>
+  })
+
+  //Just basic day options, to track the amount of time they're trying to rent for
+  const dayOptions = <>
+  <option className="text-black"value="hours">Hours</option>
+  <option className="text-black"value="days">Days</option>
+  <option className="text-black"value="week">Weeks</option>
+  <option className="text-black"value="promo">Promo</option>
+  </>
+
+  const cartOptions = cart?.map((item) => {
+    return <>
+    <option className="text-black"value={item.id}>{item.cart_name}</option> 
+    
+    </>
+  })
+  
+  //Toggles modal
   function toggleModal() {
-    setIsModalOpen(!isModalOpen)
-}
+      setIsModalOpen(!isModalOpen)
+  }
 
-const decrementQuantity = () => {
-  setEquipmentQuantity((prevequipmentQuantity) => (prevequipmentQuantity > 1 ? prevequipmentQuantity - 1 : 1))
-}
-const incrementQuantity = () => {
-  setEquipmentQuantity(prevequipmentQuantity => prevequipmentQuantity + 1)
-}
+  // -1 on quantity
+  const decrementQuantity = () => {
+    setEquipmentQuantity((prevequipmentQuantity) => (prevequipmentQuantity > 1 ? prevequipmentQuantity - 1 : 1))
+  }
 
-const handleRateChange = (e) => {
-  setSeletectedRate(e.target.value);
-}
+  // +1 on quantity 
+  const incrementQuantity = () => {
+    setEquipmentQuantity(prevequipmentQuantity => prevequipmentQuantity + 1)
+  }
 
-console.log(oneEquipment)
+  const handleCartChange = (e) => {
+    setCurrentCart(e.target.value)
+  }
 
-function handleAddToCartClick() {
-  let rental_length 
-  let rental_rate = 'hourly'
-  let quantity = 1
-  let equipment_id = equip_id
+  //Concide rate with rental length (dayRange)
+  const handleRateChange = (e) => {
+    const newRate = e.target.value
+    setSelectedRate(newRate)
+    if (newRate === "hourly"){
+      setDayRange("hours")
+    } else if (newRate === "daily"){
+      setDayRange("days")
+    } else if (newRate === "weekly"){
+      setDayRange("week")
+    } else if (newRate === "promo"){
+      setDayRange("promo")
+    }
+  }
 
-  fetch(`${apiUrl}cart/${user.id}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify( { equipment_id, quantity, rental_rate } ),
-    }).then((resp) => {
-      if (resp.ok) {
-        resp.json().then(() => {
+  //Concide rental length (dayRange) with rate
+  const handleDayRangeChange = (e) => {
+    const newDayRange = e.target.value
+    setDayRange(newDayRange)
 
-        });
-      }
-    });
-}
+    if (newDayRange === "hours"){
+      setSelectedRate("hourly")
+    } else if (newDayRange === "days"){
+      setSelectedRate("daily")
+    } else if (newDayRange === "week"){
+      setSelectedRate("weekly")
+    } else if (newDayRange === "promo"){
+      setSelectedRate("promo")
+    }
+  }
+
+  // Handles adding item to cart, may need to create a cart first, haha...ha......ha.
+  function handleAddToCartClick() {
+    let rental_length = rentalLength
+    let rental_rate = selectedRate
+    let quantity = equipmentQuantity
+    let equipment_id = equip_id
+
+    fetch(`${apiUrl}cart/${currentCart}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify( { rental_length, equipment_id, quantity, rental_rate } ),
+      }).then((resp) => {
+        if (resp.ok) {
+          resp.json().then(() => {
+
+          });
+        }
+      });
+  }
 
 
     return(
@@ -77,17 +156,24 @@ function handleAddToCartClick() {
                       <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">My Cart</h3>
                       <div className="space-y-6 " action="#">
                           <div className="flex justify-between">
+
                               <div className="flex items-start">
-                                  <div className="flex items-center h-5">
-                                      {/* Checkbox*/}
-                                  </div>
-                                  <label 
+                                  {/* CART SELECTION*/}
+                                  <select
+                                        className="text-sm font-medium text-gray-900 dark:text-gray-300 border-2 border-black"
+                                        value={currentCart} 
+                                        onChange={handleCartChange}>
+                                        {cartOptions}
+                                        <option className="text-black"value="2"> Test 2</option>
+                                  </select>
+                                  <label
                                       htmlFor="remember" 
-                                      className="text-sm font-medium text-gray-900 dark:text-gray-300"
+                                      className="text-sm ml-2 font-medium text-gray-900 dark:text-gray-300"
                                   >
-                                      Make sure you've selected the correct rate! 
+                                  Make sure you've selected the correct cart! 
                                   </label>
                               </div>
+
                           </div>
 
                           {/* Cart Container Div */}
@@ -101,14 +187,14 @@ function handleAddToCartClick() {
                                 <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between">
                                     {/* Product Details */}
                                     <div className="mt-5 sm:mt-0">
-                                        <h2 className="text-lg font-bold text-gray-900">Heavy Construction Equipment</h2>
+                                        <h2 className="text-lg font-bold text-gray-900">{oneEquipment.make}</h2>
                                         {/* Additional details like size or color can go here */}
-                                        <p className="mt-1 text-xs text-gray-700">Various Models</p>
+                                        <p className="mt-1 text-xs text-gray-700">{oneEquipment.model}</p>
                                     </div>
 
                                     {/* Quantity and Price */}
                                     <div className="mt-4 flex justify-between sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
-                                        <div className="flex items-center border-gray-100">
+                                        <div className="flex items-center justify-end space-x-2">
                                             {/* Quantity Adjustment */}
                                             <span
                                                 className="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-white"
@@ -117,7 +203,7 @@ function handleAddToCartClick() {
                                                 -
                                             </span>
                                             <input 
-                                                  className="h-8 w-8 border bg-white text-center text-xs outline-none"
+                                                  className="h-8 w-8 border border-black bg-white text-black text-center text-xs outline-none"
                                                   type="number"
                                                   value={equipmentQuantity}
                                                   onChange={(e) => setEquipmentQuantity(parseInt(e.target.value, 10))}
@@ -130,22 +216,33 @@ function handleAddToCartClick() {
                                           </span>
                                         </div>
 
-                                        <div className="flex items-center space-x-4">
+                                        <div className="flex items-center justify-end space-x-2">
+                                            {/* Price */}
+                                            <input 
+                                                  className="h-8 w-8 border border-black bg-white text-black text-center text-xs outline-none"
+                                                  type="number"
+                                                  value={rentalLength}
+                                                  onChange={(e) => setRentalLength(parseInt(e.target.value, 10))}
+                                                  min="1" />
+                                            <select
+                                            className="border-2 border-black text-sm text-black"
+                                            value={dayRange} 
+                                            onChange={handleDayRangeChange}>
+                                            {dayOptions}
+                                            </select>
+                                        </div>
+
+                                        <div className="flex items-center justify-end space-x-2">
                                             {/* Price */}
                                             <select
-                                            className="text-sm"
+                                            className="border-2 border-black text-sm text-black"
                                             value={selectedRate} 
                                             onChange={handleRateChange}>
-                                              <option value="Orange">Orange</option>
-                                              <option value="Radish">Radish</option>
-                                              <option value="Cherry">Cherry</option>
+                                            {rateOptions}
                                             </select>
-                                            {/* <p className="text-sm">Price Here</p> */}
-                                            {/* Delete Icon */}
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="h-5 w-5 cursor-pointer duration-150 hover:text-red-500">
-                                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                            </svg>
                                         </div>
+
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -159,6 +256,7 @@ function handleAddToCartClick() {
                               <button 
                                   // type="submit" 
                                   // onClick={handleSendMessage}
+                                  onClick={handleAddToCartClick}
                                   className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                               >
                                   Add to Cart
@@ -166,7 +264,7 @@ function handleAddToCartClick() {
                           </div>
                           
                           <div className="text-xs font-medium text-gray-500 dark:text-gray-300">
-                              * You will have another chance to edit your carts contents  
+                              * You will have another chance to edit your carts contents.
                           </div>
                       </div>
                   </div>

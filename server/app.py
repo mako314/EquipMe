@@ -767,6 +767,7 @@ class Carts(Resource):
         #try Validations
         new_cart = Cart(
             total = 0,
+            cart_name = data['cart_name'],
             cart_status = data['cart_status'],
             created_at = datetime.utcnow(),
             user_id = data['user_id']
@@ -848,8 +849,6 @@ class AddItemToCart(Resource):
         rental_length = data['rental_length']
         price_cents_at_addition = 0
 
-        print(equipment.equipment_price)
-
         if rental_rate == 'hourly':
             price_cents_at_addition = pricing.hourly_rate
         elif rental_rate == 'daily':
@@ -862,6 +861,9 @@ class AddItemToCart(Resource):
             return make_response({'error': 'Invalid rental period'}, 400)
 
         total_price_cents = (price_cents_at_addition * rental_length) * data['quantity']
+        
+        print("Your cart is:",cart.cart_name)
+        print("Your equipment is:", equipment)
 
         #Create new CartItem with price calculated by $ * quantity (ALL IN CENTS)
         new_item = CartItem(
@@ -877,6 +879,7 @@ class AddItemToCart(Resource):
         db.session.commit()
 
         cart.calculate_total()
+        db.session.commit()
 
         response = make_response(new_item.to_dict(), 201)
 
