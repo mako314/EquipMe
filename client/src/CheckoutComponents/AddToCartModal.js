@@ -27,6 +27,12 @@ function AddToCartModal({equip_id, oneEquipment}){
     <option className="text-black"value="promo">Promo Rate: ${price.promo_rate/100}</option>
     </>
   })
+let dayOptions = <>
+<option className="text-black"value="hours">Hours</option>
+<option className="text-black"value="days">Days</option>
+<option className="text-black"value="week">Weeks</option>
+<option className="text-black"value="promo">Promo</option>
+</>
 
 function toggleModal() {
     setIsModalOpen(!isModalOpen)
@@ -42,6 +48,10 @@ const incrementQuantity = () => {
 
 const handleRateChange = (e) => {
   setSeletectedRate(e.target.value);
+}
+
+const handleDayRangeChange = (e) => {
+  setDayRange(e.target.value);
 }
 
 function handleAddToCartClick() {
@@ -149,9 +159,9 @@ function handleAddToCartClick() {
                                             {/* Price */}
                                             <select
                                             className="border-2 border-black text-sm text-black"
-                                            value={selectedRate} 
-                                            onChange={handleRateChange}>
-                                            {rateOptions}
+                                            value={dayRange} 
+                                            onChange={handleDayRangeChange}>
+                                            {dayOptions}
                                             </select>
                                         </div>
 
