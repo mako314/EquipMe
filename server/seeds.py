@@ -497,7 +497,13 @@ if __name__ == '__main__':
             created_at = datetime.utcnow(),
             user_id = 1,
         )
-        db.session.add(cart1)
+        cart2 = Cart(
+            cart_name ="My Miami Project",
+            cart_status = "ACTIVE",
+            created_at = datetime.utcnow(),
+            user_id = 1,
+        )
+        db.session.add_all([cart1, cart2])
         
 
         print("Generating example cart items...")   
