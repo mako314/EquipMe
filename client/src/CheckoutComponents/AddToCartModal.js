@@ -15,7 +15,7 @@ function AddToCartModal({equip_id, oneEquipment}){
   console.log("Your Equipment:",oneEquipment)
   console.log("The USER:", user)
   const {cart} = user
-  console.log("The Cart:", cart[0].id)
+  
   // console.log("This is the selected rate:", selectedRate)
   // console.log("this is the date range:", dayRange)
 
@@ -28,6 +28,8 @@ function AddToCartModal({equip_id, oneEquipment}){
   const [equipmentQuantity, setEquipmentQuantity] = useState(1)
   const [currentCart, setCurrentCart] = useState(0)
   const [isModalOpen, setIsModalOpen] = useState(false)
+
+  console.log("The Cart ID:", currentCart)
 
 
   //Map over equipment price, and take the rates as options
@@ -50,7 +52,7 @@ function AddToCartModal({equip_id, oneEquipment}){
 
   const cartOptions = cart?.map((item) => {
     return <>
-    <option className="text-black"value={item.id}> Cart {item.id}</option> 
+    <option className="text-black"value={item.id}>{item.cart_name}</option> 
     
     </>
   })
@@ -112,7 +114,7 @@ function AddToCartModal({equip_id, oneEquipment}){
     let quantity = equipmentQuantity
     let equipment_id = equip_id
 
-    fetch(`${apiUrl}cart/${user.id}`, {
+    fetch(`${apiUrl}cart/${currentCart}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -162,6 +164,7 @@ function AddToCartModal({equip_id, oneEquipment}){
                                         value={currentCart} 
                                         onChange={handleCartChange}>
                                         {cartOptions}
+                                        <option className="text-black"value="2"> Test 2</option>
                                   </select>
                                   <label
                                       htmlFor="remember" 
@@ -253,6 +256,7 @@ function AddToCartModal({equip_id, oneEquipment}){
                               <button 
                                   // type="submit" 
                                   // onClick={handleSendMessage}
+                                  onClick={handleAddToCartClick}
                                   className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                               >
                                   Add to Cart
