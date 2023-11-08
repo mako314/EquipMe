@@ -492,6 +492,7 @@ if __name__ == '__main__':
 #---------------------Cart and Item testing----------------
         print("Generating example cart...")
         cart1 = Cart(
+            cart_name ="Heavy Duty",
             cart_status = "ACTIVE",
             created_at = datetime.utcnow(),
             user_id = 1,

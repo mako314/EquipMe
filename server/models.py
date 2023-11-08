@@ -298,6 +298,7 @@ class Cart(db.Model, SerializerMixin):
     __tablename__ = "carts"
     id = db.Column(db.Integer, primary_key=True)
     total = db.Column(db.Integer)
+    cart_name = db.Column(db.String, nullable=True)
     cart_status = db.Column(db.String)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, nullable=True, default=datetime.utcnow, onupdate=datetime.utcnow)

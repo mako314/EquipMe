@@ -767,6 +767,7 @@ class Carts(Resource):
         #try Validations
         new_cart = Cart(
             total = 0,
+            cart_name = data['cart_name'],
             cart_status = data['cart_status'],
             created_at = datetime.utcnow(),
             user_id = data['user_id']
