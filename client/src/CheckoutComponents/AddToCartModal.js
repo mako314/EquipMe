@@ -13,11 +13,15 @@ function AddToCartModal({equip_id, oneEquipment}){
 
 
   const [user, setUser] = useContext(UserContext)
-  const [selectedRate, setSeletectedRate] = useState('')
-  const [dayRange, setDayRange] = useState('')
 
+  const [selectedRate, setSelectedRate] = useState('')
+  const [dayRange, setDayRange] = useState('')
+  const [rentalLength, setRentalLength] = useState(1)
   const [equipmentQuantity, setEquipmentQuantity] = useState(1)
   const [isModalOpen, setIsModalOpen] = useState(false)
+
+  console.log("This is the selected rate:", selectedRate)
+  console.log("this is the date range:", dayRange)
 
   const rateOptions = equipment_price?.map((price) => {
     return <>
@@ -27,6 +31,7 @@ function AddToCartModal({equip_id, oneEquipment}){
     <option className="text-black"value="promo">Promo Rate: ${price.promo_rate/100}</option>
     </>
   })
+
 let dayOptions = <>
 <option className="text-black"value="hours">Hours</option>
 <option className="text-black"value="days">Days</option>
@@ -47,11 +52,25 @@ const incrementQuantity = () => {
 }
 
 const handleRateChange = (e) => {
-  setSeletectedRate(e.target.value);
+  // if (dayRange === "days"){
+  //   setSelectedRate("daily")
+  // } else {}
+    setSelectedRate(e.target.value)
 }
 
 const handleDayRangeChange = (e) => {
-  setDayRange(e.target.value);
+  const newDayRange = e.target.value
+  setDayRange(newDayRange)
+
+  if (newDayRange === "hours"){
+    setSelectedRate("hourly")
+  } else if (newDayRange === "days"){
+    setSelectedRate("daily")
+  } else if (newDayRange === "week"){
+    setSelectedRate("weekly")
+  } else if (newDayRange === "promo"){
+    setSelectedRate("promo")
+  }
 }
 
 function handleAddToCartClick() {
@@ -142,7 +161,7 @@ function handleAddToCartClick() {
                                                 -
                                             </span>
                                             <input 
-                                                  className="h-8 w-8 border bg-white text-center text-xs outline-none"
+                                                  className="h-8 w-8 border border-black bg-white text-black text-center text-xs outline-none"
                                                   type="number"
                                                   value={equipmentQuantity}
                                                   onChange={(e) => setEquipmentQuantity(parseInt(e.target.value, 10))}
@@ -157,6 +176,12 @@ function handleAddToCartClick() {
 
                                         <div className="flex items-center justify-end space-x-2">
                                             {/* Price */}
+                                            <input 
+                                                  className="h-8 w-8 border border-black bg-white text-black text-center text-xs outline-none"
+                                                  type="number"
+                                                  value={rentalLength}
+                                                  onChange={(e) => setRentalLength(parseInt(e.target.value, 10))}
+                                                  min="1" />
                                             <select
                                             className="border-2 border-black text-sm text-black"
                                             value={dayRange} 
