@@ -52,10 +52,17 @@ const incrementQuantity = () => {
 }
 
 const handleRateChange = (e) => {
-  // if (dayRange === "days"){
-  //   setSelectedRate("daily")
-  // } else {}
-    setSelectedRate(e.target.value)
+  const newRate = e.target.value
+  setSelectedRate(newRate)
+  if (newRate === "hourly"){
+    setDayRange("hours")
+  } else if (newRate === "daily"){
+    setDayRange("days")
+  } else if (newRate === "weekly"){
+    setDayRange("week")
+  } else if (newRate === "promo"){
+    setDayRange("promo")
+  }
 }
 
 const handleDayRangeChange = (e) => {
