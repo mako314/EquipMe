@@ -4,25 +4,33 @@ import UserContext from '../UserComponents/UserContext'
 
 function AddToCartModal({equip_id, oneEquipment}){
 
+  //Grab apiUrl from context + user info
   const apiUrl = useContext(ApiUrlContext)
+  const [user, setUser] = useContext(UserContext)
 
+  //Destructure for equipment_price
   const { equipment_price } = oneEquipment
 
   console.log("Equipment price:", equipment_price)
   console.log("Your Equipment:",oneEquipment)
+  console.log("The USER:", user)
+  const {cart} = user
+  console.log("The Cart:", cart[0].id)
+  // console.log("This is the selected rate:", selectedRate)
+  // console.log("this is the date range:", dayRange)
 
+  
 
-  const [user, setUser] = useContext(UserContext)
-
+  //States to capture info, day ranges, costs, length of rental, quantity, and track modal, cart
   const [selectedRate, setSelectedRate] = useState('')
   const [dayRange, setDayRange] = useState('')
   const [rentalLength, setRentalLength] = useState(1)
   const [equipmentQuantity, setEquipmentQuantity] = useState(1)
+  const [currentCart, setCurrentCart] = useState(0)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  console.log("This is the selected rate:", selectedRate)
-  console.log("this is the date range:", dayRange)
 
+  //Map over equipment price, and take the rates as options
   const rateOptions = equipment_price?.map((price) => {
     return <>
     <option className="text-black"value="hourly">Hourly Rate: ${price.hourly_rate/100}</option>
@@ -32,74 +40,92 @@ function AddToCartModal({equip_id, oneEquipment}){
     </>
   })
 
-let dayOptions = <>
-<option className="text-black"value="hours">Hours</option>
-<option className="text-black"value="days">Days</option>
-<option className="text-black"value="week">Weeks</option>
-<option className="text-black"value="promo">Promo</option>
-</>
+  //Just basic day options, to track the amount of time they're trying to rent for
+  const dayOptions = <>
+  <option className="text-black"value="hours">Hours</option>
+  <option className="text-black"value="days">Days</option>
+  <option className="text-black"value="week">Weeks</option>
+  <option className="text-black"value="promo">Promo</option>
+  </>
 
-function toggleModal() {
-    setIsModalOpen(!isModalOpen)
-}
-
-const decrementQuantity = () => {
-  setEquipmentQuantity((prevequipmentQuantity) => (prevequipmentQuantity > 1 ? prevequipmentQuantity - 1 : 1))
-}
-
-const incrementQuantity = () => {
-  setEquipmentQuantity(prevequipmentQuantity => prevequipmentQuantity + 1)
-}
-
-const handleRateChange = (e) => {
-  const newRate = e.target.value
-  setSelectedRate(newRate)
-  if (newRate === "hourly"){
-    setDayRange("hours")
-  } else if (newRate === "daily"){
-    setDayRange("days")
-  } else if (newRate === "weekly"){
-    setDayRange("week")
-  } else if (newRate === "promo"){
-    setDayRange("promo")
+  const cartOptions = cart?.map((item) => {
+    return <>
+    <option className="text-black"value={item.id}> Cart {item.id}</option> 
+    
+    </>
+  })
+  
+  //Toggles modal
+  function toggleModal() {
+      setIsModalOpen(!isModalOpen)
   }
-}
 
-const handleDayRangeChange = (e) => {
-  const newDayRange = e.target.value
-  setDayRange(newDayRange)
-
-  if (newDayRange === "hours"){
-    setSelectedRate("hourly")
-  } else if (newDayRange === "days"){
-    setSelectedRate("daily")
-  } else if (newDayRange === "week"){
-    setSelectedRate("weekly")
-  } else if (newDayRange === "promo"){
-    setSelectedRate("promo")
+  // -1 on quantity
+  const decrementQuantity = () => {
+    setEquipmentQuantity((prevequipmentQuantity) => (prevequipmentQuantity > 1 ? prevequipmentQuantity - 1 : 1))
   }
-}
 
-function handleAddToCartClick() {
-  let rental_length 
-  let rental_rate = 'hourly'
-  let quantity = 1
-  let equipment_id = equip_id
+  // +1 on quantity 
+  const incrementQuantity = () => {
+    setEquipmentQuantity(prevequipmentQuantity => prevequipmentQuantity + 1)
+  }
 
-  fetch(`${apiUrl}cart/${user.id}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify( { equipment_id, quantity, rental_rate } ),
-    }).then((resp) => {
-      if (resp.ok) {
-        resp.json().then(() => {
+  const handleCartChange = (e) => {
+    setCurrentCart(e.target.value)
+  }
 
-        });
-      }
-    });
-}
+  //Concide rate with rental length (dayRange)
+  const handleRateChange = (e) => {
+    const newRate = e.target.value
+    setSelectedRate(newRate)
+    if (newRate === "hourly"){
+      setDayRange("hours")
+    } else if (newRate === "daily"){
+      setDayRange("days")
+    } else if (newRate === "weekly"){
+      setDayRange("week")
+    } else if (newRate === "promo"){
+      setDayRange("promo")
+    }
+  }
+
+  //Concide rental length (dayRange) with rate
+  const handleDayRangeChange = (e) => {
+    const newDayRange = e.target.value
+    setDayRange(newDayRange)
+
+    if (newDayRange === "hours"){
+      setSelectedRate("hourly")
+    } else if (newDayRange === "days"){
+      setSelectedRate("daily")
+    } else if (newDayRange === "week"){
+      setSelectedRate("weekly")
+    } else if (newDayRange === "promo"){
+      setSelectedRate("promo")
+    }
+  }
+
+  // Handles adding item to cart, may need to create a cart first, haha...ha......ha.
+  function handleAddToCartClick() {
+    let rental_length = rentalLength
+    let rental_rate = selectedRate
+    let quantity = equipmentQuantity
+    let equipment_id = equip_id
+
+    fetch(`${apiUrl}cart/${user.id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify( { rental_length, equipment_id, quantity, rental_rate } ),
+      }).then((resp) => {
+        if (resp.ok) {
+          resp.json().then(() => {
+
+          });
+        }
+      });
+  }
 
 
     return(
@@ -128,17 +154,23 @@ function handleAddToCartClick() {
                       <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">My Cart</h3>
                       <div className="space-y-6 " action="#">
                           <div className="flex justify-between">
+
                               <div className="flex items-start">
-                                  <div className="flex items-center h-5">
-                                      {/* Checkbox*/}
-                                  </div>
-                                  <label 
+                                  {/* CART SELECTION*/}
+                                  <select
+                                        className="text-sm font-medium text-gray-900 dark:text-gray-300 border-2 border-black"
+                                        value={currentCart} 
+                                        onChange={handleCartChange}>
+                                        {cartOptions}
+                                  </select>
+                                  <label
                                       htmlFor="remember" 
-                                      className="text-sm font-medium text-gray-900 dark:text-gray-300"
+                                      className="text-sm ml-2 font-medium text-gray-900 dark:text-gray-300"
                                   >
-                                      Make sure you've selected the correct rate! 
+                                  Make sure you've selected the correct cart! 
                                   </label>
                               </div>
+
                           </div>
 
                           {/* Cart Container Div */}
