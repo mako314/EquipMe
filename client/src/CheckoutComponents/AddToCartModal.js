@@ -8,13 +8,26 @@ function AddToCartModal({equip_id, oneEquipment}){
   const apiUrl = useContext(ApiUrlContext)
   const [user, setUser] = useContext(UserContext)
 
+  //Check session for user
+  useEffect(() => {
+    fetch(`${apiUrl}check_session`).then((response) => {
+      if (response.ok) {
+        response.json().then((user) => setUser(user));
+      }
+    });
+  }, []);
+
   //Destructure for equipment_price
   const { equipment_price } = oneEquipment
 
-  console.log("Equipment price:", equipment_price)
-  console.log("Your Equipment:",oneEquipment)
-  console.log("The USER:", user)
-  const {cart} = user
+  // console.log("Equipment price:", equipment_price)
+  // console.log("Your Equipment:",oneEquipment)
+  // console.log("The USER:", user)
+  let cart
+  if (user){
+    cart  = user.cart
+}
+  console.log("YOUR CART:", cart)
   
   // console.log("This is the selected rate:", selectedRate)
   // console.log("this is the date range:", dayRange)
@@ -29,7 +42,7 @@ function AddToCartModal({equip_id, oneEquipment}){
   const [currentCart, setCurrentCart] = useState(0)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  console.log("The Cart ID:", currentCart)
+  // console.log("The Cart ID:", currentCart)
 
 
   //Map over equipment price, and take the rates as options
@@ -108,6 +121,12 @@ function AddToCartModal({equip_id, oneEquipment}){
   }
 
   // Handles adding item to cart, may need to create a cart first, haha...ha......ha.
+  // So the post works, but you have to play around with it, I needto capture values prior to 
+  console.log("This is the rental length:",rentalLength)
+  console.log("This is the selected rate:",selectedRate)
+  console.log("This is the equipment quality:",equipmentQuantity)
+  console.log("This is the equipment ID:",equip_id)
+  console.log("This is the current cart ID:",currentCart)
   function handleAddToCartClick() {
     let rental_length = rentalLength
     let rental_rate = selectedRate
@@ -124,9 +143,9 @@ function AddToCartModal({equip_id, oneEquipment}){
         if (resp.ok) {
           resp.json().then(() => {
 
-          });
+          })
         }
-      });
+      })
   }
 
 
@@ -196,6 +215,7 @@ function AddToCartModal({equip_id, oneEquipment}){
                                     <div className="mt-4 flex justify-between sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
                                         <div className="flex items-center justify-end space-x-2">
                                             {/* Quantity Adjustment */}
+                                            <span className='text-black'> Quantity </span>
                                             <span
                                                 className="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-white"
                                                 onClick={decrementQuantity}
