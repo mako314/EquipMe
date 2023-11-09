@@ -103,11 +103,12 @@ function App() {
 
   // context for APIUrl
   const apiUrl = process.env.REACT_APP_API_URL
-  console.log("this is the api url:", apiUrl)
+  // console.log("this is the api url:", apiUrl)
   
 
   //-------------------------------------------- FOR USER - CHECK SESSION TO STAY LOGGED IN ON REFRESH--------------------------
 
+  //FIX THIS WITH APIURL
   useEffect(() => {
     fetch("/check_session").then((response) => {
       if (response.ok) {

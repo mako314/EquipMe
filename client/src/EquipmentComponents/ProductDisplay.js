@@ -18,6 +18,14 @@ function EquipmentDisplay({}) {
 
   const navigate = useNavigate()
 
+  useEffect(() => {
+    fetch(`${apiUrl}check_session`).then((response) => {
+      if (response.ok) {
+        response.json().then((user) => setUser(user));
+      }
+    });
+  }, []);
+
 
   useEffect(() => {
     fetch(`${apiUrl}equipment/${id}`)
