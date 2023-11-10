@@ -100,14 +100,6 @@ api.add_resource(OwnerLogout, '/owner/logout')
 class CheckSession(Resource):
 
     def get(self):
-
-        # user_id = session.get('user_id')
-
-        # if user_id:
-
-        #     user_row = User.query.filter(User.id == user_id).first()
-
-        #     response = make_response(jsonify(user_row.to_dict()), 200)
         user = User.query.filter(User.id == session.get('user_id')).first()
         if user:
             return user.to_dict(rules=('-_password_hash',)), 200
