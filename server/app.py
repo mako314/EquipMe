@@ -468,7 +468,7 @@ class EquipmentByID(Resource):
 api.add_resource(EquipmentByID, '/equipment/<int:id>')
 
 #GET ALL EQUIPMENT BY THEIR OWNER ID, THIS IS USED IN OUR RENTAL AGREEMENT FORM
-class AllEquipmentByID(Resource):
+class AllEquipmentByOwnerID(Resource):
     def get(self,id):
         equipment = [equipment.to_dict(
             only =('id','model','name','make','location', 'type','phone','email','location','availability','delivery','quantity', 'owner_name') #needed to include all of this for when one patches
@@ -478,7 +478,7 @@ class AllEquipmentByID(Resource):
 
         return response
 
-api.add_resource(AllEquipmentByID, '/all_equipment/<int:id>')
+api.add_resource(AllEquipmentByOwnerID, '/all_equipment/<int:id>')
 
 #-----------------------------------------------------EQUIPMENT IMAGE Classes------------------------------------------------------------------
 
