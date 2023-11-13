@@ -13,13 +13,17 @@ function EquipmentDisplay({}) {
 
   // THE ID HERE IS THE EQUIPMENT ID.
   const { id } = useParams()
+
+  // Likely need the owner context also + its check session
   const [user, setUser] = useContext(UserContext)
   const apiUrl = useContext(ApiUrlContext)
 
   const navigate = useNavigate()
 
   useEffect(() => {
-    fetch(`${apiUrl}check_session`).then((response) => {
+    fetch(`${apiUrl}check_session`, {
+      credentials: 'include'
+    }).then((response) => {
       if (response.ok) {
         response.json().then((user) => setUser(user));
       }

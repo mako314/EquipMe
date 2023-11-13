@@ -16,7 +16,9 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
   const navigate = useNavigate()
   
   useEffect(() => {
-    fetch(`${apiUrl}owner/check_session`).then((response) => {
+    fetch(`${apiUrl}owner/check_session`, {
+      credentials: 'include'
+    }).then((response) => {
         if (response.ok) {
             response.json().then((owner) => setOwner(owner))
         }
@@ -27,7 +29,9 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
 // ---------------Detect whether or not a USER is logged in-------------------
 
   useEffect(() => {
-    fetch(`${apiUrl}check_session`).then((response) => {
+    fetch(`${apiUrl}check_session`, {
+      credentials: 'include'
+    }).then((response) => {
       if (response.ok) {
         response.json().then((user) => setUser(user))
       }

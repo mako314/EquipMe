@@ -14,7 +14,9 @@ function NewMessageThreads({fromOwnerDash}) {
 
   
   useEffect(() => {
-    fetch(`${apiUrl}owner/check_session`).then((response) => {
+    fetch(`${apiUrl}owner/check_session`, {
+      credentials: 'include'
+    }).then((response) => {
         if (response.ok) {
             response.json().then((owner) => setOwner(owner))
         }
@@ -29,7 +31,9 @@ function NewMessageThreads({fromOwnerDash}) {
   const [user, setUser] = useContext(UserContext)
 
   useEffect(() => {
-    fetch(`${apiUrl}check_session`).then((response) => {
+    fetch(`${apiUrl}check_session`, {
+      credentials: 'include'
+    }).then((response) => {
       if (response.ok) {
         response.json().then((user) => setUser(user))
       }
