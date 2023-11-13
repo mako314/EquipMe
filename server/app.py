@@ -37,7 +37,6 @@ class Login(Resource):
             response = jsonify({"msg": "login successful"}, 200)
             set_access_cookies(response, access_token, httponly=True)
             return response
-
         else:
             return {'error': 'Invalid credentials'}, 401
 
@@ -53,21 +52,17 @@ class OwnerLogin(Resource):
 
     def post(self):
         data = request.get_json()
-        #Test to find username,
         email = data['email']
         print(email)
         owner = EquipmentOwner.query.filter(EquipmentOwner.email == email).first()
-        #Grab password
         password = data['password']
-        # print(user)
-        #Test to see if password matches
-        if owner:
-            if owner.authenticate(password):
-                session['owner_id'] = owner.id
-                return owner.to_dict(), 200
-        #Do I need to JSONIFY^ ?
-
-        return make_response({'error': 'Invalid email or password'}, 401)
+        if owner and owner.authenticate(password):
+            access_token = create_access_token(identity=owner.id)
+            response = jsonify({"msg": "login successful"}, 200)
+            set_access_cookies(response, access_token, httponly=True)
+            return response
+        else:
+            return {'error': 'Invalid credentials'}, 401
 
 api.add_resource(OwnerLogin, '/owner/login')
 #------------------------------------------------------------------------------------------------------------------------------
