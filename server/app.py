@@ -85,7 +85,9 @@ class OwnerLogout(Resource):
 
     def delete(self):
         session['owner_id'] = None
-        return {'message': '204: No Content'}, 204
+        response = make_response({'message': 'Logout successful'}, 200)
+        response.delete_cookie('access_token')
+        return response
 
 api.add_resource(OwnerLogout, '/owner/logout')
 #------------------------------------------------------------------------------------------------------------------------------
@@ -109,9 +111,10 @@ api.add_resource(CheckSession, '/check_session')
 #------------------------------------ OWNER Check Session------------------------------------------------------------------------------
 
 class OwnerCheckSession(Resource):
-
+    @jwt_required()
     def get(self):
-        owner = EquipmentOwner.query.filter(EquipmentOwner.id == session.get('owner_id')).first()
+        current_owner_id = get_jwt_identity()
+        owner = EquipmentOwner.query.get(current_owner_id)
         if owner:
             return owner.to_dict(rules=('-_password_hash',)), 200
         else:
