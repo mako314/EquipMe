@@ -482,7 +482,7 @@ if __name__ == '__main__':
                 subject="Equipment Inquiry",
             ),
             Thread(
-                subject="Did I even spell inquiry right? Hope this works!", 
+                subject="I'd like to rent your Forklift, please and thank you.", 
             )
         ]
 
