@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import UserContext from './UserContext';
 import ApiUrlContext from '../Api';
 import RentalCollection from '../RentalComponents/RentalCollection';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useInRouterContext } from 'react-router-dom';
 
 function UserProfile() {
   // User context, meaning if user is signed in, they get their data,
@@ -173,7 +173,7 @@ function UserProfile() {
                   </div>
 
                 </div>
-                <RentalCollection />
+                <RentalCollection key={user.id}/>
               </div>
             </div>
           </div>

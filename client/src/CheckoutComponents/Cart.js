@@ -7,7 +7,9 @@ function Cart(){
   const apiUrl = useContext(ApiUrlContext)
 
   useEffect(() => {
-    fetch(`${apiUrl}check_session`).then((response) => {
+    fetch(`${apiUrl}check_session`, {
+      credentials: 'include'
+    }).then((response) => {
       if (response.ok) {
         response.json().then((user) => setUser(user));
       }

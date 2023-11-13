@@ -12,10 +12,10 @@ from sqlalchemy import asc
 import pandas as pd
 import xml.etree.ElementTree as ET
 
+from flask_jwt_extended import create_access_token, set_access_cookies, jwt_required, get_jwt_identity
 #------------------------------------HELPERS----------------------------------
 from datetime import datetime
 from helpers import is_available_for_date_range
-from flask_jwt_extended import create_access_token
 #------------------------------------USER LOGIN------------------------------------------------------------------------------
 
 class Login(Resource):
@@ -34,9 +34,10 @@ class Login(Resource):
         #Test to see if password matches
         if user and user.authenticate(password):
             access_token = create_access_token(identity=user.id)
-            response = make_response({'message': 'Login successful'}, 200)
-            response.set_cookie('access_token', access_token, httponly=True)
+            response = jsonify({"msg": "login successful"}, 200)
+            set_access_cookies(response, access_token, httponly=True)
             return response
+
         else:
             return {'error': 'Invalid credentials'}, 401
 
@@ -98,12 +99,14 @@ api.add_resource(OwnerLogout, '/owner/logout')
 
 class CheckSession(Resource):
 
+    @jwt_required()
     def get(self):
-        user = User.query.filter(User.id == session.get('user_id')).first()
+        current_user_id = get_jwt_identity()
+        user = User.query.get(current_user_id)
         if user:
             return user.to_dict(rules=('-_password_hash',)), 200
         else:
-            return {'message': '401: Not Authorized'}, 401
+            return {'message': 'User not found'}, 404
 
 api.add_resource(CheckSession, '/check_session')
 #------------------------------------------------------------------------------------------------------------------------------
