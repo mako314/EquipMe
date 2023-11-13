@@ -25,7 +25,9 @@ function UserProfile() {
 
   //Check if user is logged in, I may just make this context and wrap it around my whole app too.
   useEffect(() => {
-    fetch(`${apiUrl}check_session`).then((response) => {
+    fetch(`${apiUrl}check_session`, {
+      credentials: 'include'
+    }).then((response) => {
       if (response.ok) {
         response.json().then((user) => setUser(user));
       }

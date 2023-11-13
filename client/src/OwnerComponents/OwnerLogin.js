@@ -22,6 +22,7 @@ function OwnerLogin(){
 
         fetch(`${apiUrl}owner/login`, {
             method: "POST",
+            credentials: 'include',
             headers: {
               "Content-Type": "application/json",
             },
