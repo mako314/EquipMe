@@ -6,6 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Api
 from sqlalchemy import MetaData
 from dotenv import load_dotenv
+from flask_jwt_extended import JWTManager
 import os
 
 app = Flask(__name__)
@@ -34,4 +35,8 @@ api = Api(app)
 
 bcrypt = Bcrypt(app) # allows for encryption/hashing
 
-CORS(app)
+#Time to manage cookies, yum.
+app.config['JWT_SECRET_KEY'] = os.environ['JWT_SECRET_KEY']
+jwt = JWTManager(app)
+
+CORS(app, supports_credentials=True)

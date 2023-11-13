@@ -107,8 +107,7 @@ function App() {
   
 
   //-------------------------------------------- FOR USER - CHECK SESSION TO STAY LOGGED IN ON REFRESH--------------------------
-
-  //FIX THIS WITH APIURL
+  
   useEffect(() => {
     fetch(`${apiUrl}check_session`).then((response) => {
       if (response.ok) {

@@ -1,8 +1,20 @@
-import React from "react";
+import React,{useContext, useEffect, useState} from "react";
+import UserContext from '../UserComponents/UserContext'
+import ApiUrlContext from '../Api'
 
 function Cart(){
-  
-  
+  const [user, setUser] = useContext(UserContext)
+  const apiUrl = useContext(ApiUrlContext)
+
+  useEffect(() => {
+    fetch(`${apiUrl}check_session`).then((response) => {
+      if (response.ok) {
+        response.json().then((user) => setUser(user));
+      }
+    });
+  }, []);
+
+  console.log(user)
 
     return(
         <div class="h-screen bg-gray-100 pt-20">

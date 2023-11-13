@@ -15,9 +15,7 @@ import xml.etree.ElementTree as ET
 #------------------------------------HELPERS----------------------------------
 from datetime import datetime
 from helpers import is_available_for_date_range
-
-
-
+from flask_jwt_extended import create_access_token
 #------------------------------------USER LOGIN------------------------------------------------------------------------------
 
 class Login(Resource):
@@ -29,19 +27,18 @@ class Login(Resource):
         data = request.get_json()
         #Test to find username,
         email = data['email']
-        print(email)
         user = User.query.filter(User.email == email).first()
         #Grab password
         password = data['password']
         # print(user)
         #Test to see if password matches
-        if user:
-            if user.authenticate(password):
-                session['user_id'] = user.id
-                return user.to_dict(), 200
-        #Do I need to JSONIFY^ ?
-
-        return make_response({'error': 'Invalid email or password'}, 401)
+        if user and user.authenticate(password):
+            access_token = create_access_token(identity=user.id)
+            response = make_response({'message': 'Login successful'}, 200)
+            response.set_cookie('access_token', access_token, httponly=True)
+            return response
+        else:
+            return {'error': 'Invalid credentials'}, 401
 
 api.add_resource(Login, '/login')
 #------------------------------------------------------------------------------------------------------------------------------
@@ -78,9 +75,11 @@ api.add_resource(OwnerLogin, '/owner/login')
 
 class Logout(Resource):
 
-    def delete(self): # just add this line!
+    def delete(self): 
         session['user_id'] = None
-        return {'message': '204: No Content'}, 204
+        response = make_response({'message': 'Logout successful'}, 200)
+        response.delete_cookie('access_token')
+        return response
 
 api.add_resource(Logout, '/logout')
 #------------------------------------------------------------------------------------------------------------------------------
@@ -88,7 +87,7 @@ api.add_resource(Logout, '/logout')
 
 class OwnerLogout(Resource):
 
-    def delete(self): # just add this line!
+    def delete(self):
         session['owner_id'] = None
         return {'message': '204: No Content'}, 204
 
