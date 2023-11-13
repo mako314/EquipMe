@@ -128,7 +128,7 @@ Contact
             </button>
 
             <div className="px-6 py-6 lg:px-8">
-                <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">Sign in to our platform</h3>
+                <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">Send a Message</h3>
                 <form className="space-y-6" action="#">
                     
                     <div>
@@ -144,19 +144,7 @@ Contact
                         onChange={(e) => setMessage(e.target.value)}required/>
                     </div>
 
-                    <div className="flex justify-between">
-                        <div className="flex items-start">
-                            <div className="flex items-center h-5">
-                                {/* Checkbox*/}
-                            </div>
-                            <label 
-                                htmlFor="remember" 
-                                className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                            >
-                                Could include something extra here, 
-                            </label>
-                        </div>
-                    </div>
+                    
 
                     <button 
                         type="submit" 
@@ -166,8 +154,17 @@ Contact
                         Send Message
                     </button>
                     
-                    <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
-                        testing what this looks like  
+                    <div className="flex justify-between">
+                        <div className="flex items-start">
+                            <div className="flex items-center h-5">
+                            </div>
+                            <label 
+                                htmlFor="remember" 
+                                className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                            >
+                            Remember to abide by our code of conduct.
+                            </label>
+                        </div>
                     </div>
                 </form>
             </div>

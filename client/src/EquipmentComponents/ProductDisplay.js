@@ -108,7 +108,7 @@ function EquipmentDisplay({}) {
 
         {/* The Google Map for the equipment is included below the information and leaves room for 
         product images to be included to the right of the equipment information */}
-        {/* <EquipmentMap location={location} /> */}
+        <EquipmentMap location={location} />
       </div>
 
     </section>

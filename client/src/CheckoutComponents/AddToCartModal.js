@@ -85,6 +85,7 @@ function AddToCartModal({equip_id, oneEquipment}){
     setEquipmentQuantity(prevequipmentQuantity => prevequipmentQuantity + 1)
   }
 
+  //Selects which cart you're trying to add it to
   const handleCartChange = (e) => {
     setCurrentCart(e.target.value)
   }
