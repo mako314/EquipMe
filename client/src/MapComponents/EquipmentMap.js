@@ -69,7 +69,7 @@ class EquipmentMap extends Component {
   render() {
     return (
         // <div className="map-container">
-          <div id="map" style={{ height: '500px' }}></div>
+          <div id="map" style={{ height: '500px', width:'550px'}}></div>
         // </div>
       )
   }
