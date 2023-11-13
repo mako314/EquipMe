@@ -18,7 +18,7 @@ function AddToCartModal({equip_id, oneEquipment}){
   }, []);
 
   //Destructure for equipment_price
-  const { equipment_price } = oneEquipment
+  const { equipment_price, equipment_image } = oneEquipment
 
   // console.log("Equipment price:", equipment_price)
   // console.log("Your Equipment:",oneEquipment)
@@ -202,7 +202,7 @@ function AddToCartModal({equip_id, oneEquipment}){
                             {/* Grab this for the map */}
                             <div className="justify-between mb-6 rounded-lg bg-white p-6 shadow-md sm:flex sm:justify-start">
                                 {/* Image Preview */}
-                                <img src="https://www.ptsworks.com/wp-content/uploads/2020/02/heavy-construction-equipment-types.jpg" alt="product-image" className="w-full rounded-lg sm:w-40" />
+                                <img src={equipment_image} alt="product-image" className="w-full rounded-lg sm:w-40" />
 
                                 <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between">
                                     {/* Product Details */}
