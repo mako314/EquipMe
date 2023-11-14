@@ -47,12 +47,12 @@ function AddToCartModal({equip_id, oneEquipment}){
 
   //Map over equipment price, and take the rates as options
   const rateOptions = equipment_price?.map((price) => {
-    return <>
+    return (<>
     <option className="text-black"value="hourly">Hourly Rate: ${price.hourly_rate/100}</option>
     <option className="text-black"value="daily">Daily Rate: ${price.daily_rate/100}</option>
     <option className="text-black"value="weekly">Weekly Rate: ${price.weekly_rate/100}</option>
     <option className="text-black"value="promo">Promo Rate: ${price.promo_rate/100}</option>
-    </>
+    </>)
   })
 
   //Just basic day options, to track the amount of time they're trying to rent for
