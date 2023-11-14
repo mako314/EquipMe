@@ -76,7 +76,7 @@ function Cart(){
   //-------------------------------------
 
   //Map over equipment price, and take the rates as options
-  // let rateOptions
+  
   // if(cart || cart?.length > 0){
   //   rateOptions = cart[currentCart].equipment.equipment_price?.map((price) => {
   //   return <>
@@ -108,11 +108,25 @@ function Cart(){
     return <div>Cart is empty or loading...</div>;
   }
 
-  
+  let rateOptions
   if(Array.isArray(cart[currentCart].items)){
-    cart[currentCart].items?.map((item) => {
-      console.log("ITEMS:", item)
+    cart[currentCart].items?.forEach((item) => {
+      if (Array.isArray(item.equipment.equipment_price)) {
+        item.equipment.equipment_price?.map((price) =>{
+          console.log("Hopefully the price:", price)
+          rateOptions = 
+            <>
+            <option className="text-black"value="hourly">Hourly Rate: ${price.hourly_rate/100}</option>
+            <option className="text-black"value="daily">Daily Rate: ${price.daily_rate/100}</option>
+            <option className="text-black"value="weekly">Weekly Rate: ${price.weekly_rate/100}</option>
+            <option className="text-black"value="promo">Promo Rate: ${price.promo_rate/100}</option>
+            </>
+        })
+      }
+      
     })
+    
+
   }
 
   // console.log(currentCart)
@@ -188,7 +202,7 @@ function Cart(){
                           className="border-2 border-black text-sm text-black"
                           value={selectedRate} 
                           onChange={handleRateChange}>
-                          {/* {rateOptions} */}
+                          {rateOptions}
                           </select>
                       </div>
 
