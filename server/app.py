@@ -12,12 +12,10 @@ from sqlalchemy import asc
 import pandas as pd
 import xml.etree.ElementTree as ET
 
+from flask_jwt_extended import create_access_token, set_access_cookies, jwt_required, get_jwt_identity
 #------------------------------------HELPERS----------------------------------
 from datetime import datetime
 from helpers import is_available_for_date_range
-
-
-
 #------------------------------------USER LOGIN------------------------------------------------------------------------------
 
 class Login(Resource):
@@ -29,19 +27,18 @@ class Login(Resource):
         data = request.get_json()
         #Test to find username,
         email = data['email']
-        print(email)
         user = User.query.filter(User.email == email).first()
         #Grab password
         password = data['password']
         # print(user)
         #Test to see if password matches
-        if user:
-            if user.authenticate(password):
-                session['user_id'] = user.id
-                return user.to_dict(), 200
-        #Do I need to JSONIFY^ ?
-
-        return make_response({'error': 'Invalid email or password'}, 401)
+        if user and user.authenticate(password):
+            access_token = create_access_token(identity=user.id)
+            response = jsonify({"msg": "login successful"}, 200)
+            set_access_cookies(response, access_token)
+            return response
+        else:
+            return {'error': 'Invalid credentials'}, 401
 
 api.add_resource(Login, '/login')
 #------------------------------------------------------------------------------------------------------------------------------
@@ -55,21 +52,17 @@ class OwnerLogin(Resource):
 
     def post(self):
         data = request.get_json()
-        #Test to find username,
         email = data['email']
         print(email)
         owner = EquipmentOwner.query.filter(EquipmentOwner.email == email).first()
-        #Grab password
         password = data['password']
-        # print(user)
-        #Test to see if password matches
-        if owner:
-            if owner.authenticate(password):
-                session['owner_id'] = owner.id
-                return owner.to_dict(), 200
-        #Do I need to JSONIFY^ ?
-
-        return make_response({'error': 'Invalid email or password'}, 401)
+        if owner and owner.authenticate(password):
+            access_token = create_access_token(identity=owner.id)
+            response = jsonify({"msg": "login successful"}, 200)
+            set_access_cookies(response, access_token)
+            return response
+        else:
+            return {'error': 'Invalid credentials'}, 401
 
 api.add_resource(OwnerLogin, '/owner/login')
 #------------------------------------------------------------------------------------------------------------------------------
@@ -78,9 +71,11 @@ api.add_resource(OwnerLogin, '/owner/login')
 
 class Logout(Resource):
 
-    def delete(self): # just add this line!
+    def delete(self): 
         session['user_id'] = None
-        return {'message': '204: No Content'}, 204
+        response = make_response({'message': 'Logout successful'}, 200)
+        response.delete_cookie('access_token')
+        return response
 
 api.add_resource(Logout, '/logout')
 #------------------------------------------------------------------------------------------------------------------------------
@@ -88,9 +83,11 @@ api.add_resource(Logout, '/logout')
 
 class OwnerLogout(Resource):
 
-    def delete(self): # just add this line!
+    def delete(self):
         session['owner_id'] = None
-        return {'message': '204: No Content'}, 204
+        response = make_response({'message': 'Logout successful'}, 200)
+        response.delete_cookie('access_token')
+        return response
 
 api.add_resource(OwnerLogout, '/owner/logout')
 #------------------------------------------------------------------------------------------------------------------------------
@@ -99,12 +96,14 @@ api.add_resource(OwnerLogout, '/owner/logout')
 
 class CheckSession(Resource):
 
+    @jwt_required()
     def get(self):
-        user = User.query.filter(User.id == session.get('user_id')).first()
+        current_user_id = get_jwt_identity()
+        user = User.query.get(current_user_id)
         if user:
             return user.to_dict(rules=('-_password_hash',)), 200
         else:
-            return {'message': '401: Not Authorized'}, 401
+            return {'message': 'User not found'}, 404
 
 api.add_resource(CheckSession, '/check_session')
 #------------------------------------------------------------------------------------------------------------------------------
@@ -112,9 +111,10 @@ api.add_resource(CheckSession, '/check_session')
 #------------------------------------ OWNER Check Session------------------------------------------------------------------------------
 
 class OwnerCheckSession(Resource):
-
+    @jwt_required()
     def get(self):
-        owner = EquipmentOwner.query.filter(EquipmentOwner.id == session.get('owner_id')).first()
+        current_owner_id = get_jwt_identity()
+        owner = EquipmentOwner.query.get(current_owner_id)
         if owner:
             return owner.to_dict(rules=('-_password_hash',)), 200
         else:
@@ -468,7 +468,7 @@ class EquipmentByID(Resource):
 api.add_resource(EquipmentByID, '/equipment/<int:id>')
 
 #GET ALL EQUIPMENT BY THEIR OWNER ID, THIS IS USED IN OUR RENTAL AGREEMENT FORM
-class AllEquipmentByID(Resource):
+class AllEquipmentByOwnerID(Resource):
     def get(self,id):
         equipment = [equipment.to_dict(
             only =('id','model','name','make','location', 'type','phone','email','location','availability','delivery','quantity', 'owner_name') #needed to include all of this for when one patches
@@ -478,7 +478,7 @@ class AllEquipmentByID(Resource):
 
         return response
 
-api.add_resource(AllEquipmentByID, '/all_equipment/<int:id>')
+api.add_resource(AllEquipmentByOwnerID, '/all_equipment/<int:id>')
 
 #-----------------------------------------------------EQUIPMENT IMAGE Classes------------------------------------------------------------------
 

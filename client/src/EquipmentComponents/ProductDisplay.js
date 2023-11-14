@@ -9,17 +9,21 @@ import ApiUrlContext from '../Api'
 
 function EquipmentDisplay({}) {
   const [oneEquipment, setOneEquipment] = useState([])
-  const { model, name, make, location, email, phone, quantity, images, equipment_price } = oneEquipment
+  const { model, name, make, location, email, phone, quantity, equipment_image, equipment_price } = oneEquipment
 
   // THE ID HERE IS THE EQUIPMENT ID.
   const { id } = useParams()
+
+  // Likely need the owner context also + its check session
   const [user, setUser] = useContext(UserContext)
   const apiUrl = useContext(ApiUrlContext)
 
   const navigate = useNavigate()
 
   useEffect(() => {
-    fetch(`${apiUrl}check_session`).then((response) => {
+    fetch(`${apiUrl}check_session`, {
+      credentials: 'include'
+    }).then((response) => {
       if (response.ok) {
         response.json().then((user) => setUser(user));
       }
@@ -35,7 +39,7 @@ function EquipmentDisplay({}) {
       })
   }, [])
 
-  console.log("Display Page one equipment:", equipment_price)
+  console.log("Display Page one equipment:", equipment_image)
 
   const equip_prices = equipment_price?.map((price) => {
     return <>
@@ -62,7 +66,7 @@ function EquipmentDisplay({}) {
   loggedOutDisplay = (
     <section className="text-gray-400 bg-gray-900 body-font overflow-hidden ">
       <div className="container px-5 py-24 mx-auto">
-        <div className="lg:w-4/5 flex flex-wrap">
+        <div className="lg:w-4/5 flex flex-wrap mb-5 ">
           <div className="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">
             <h2 className="text-sm title-font text-gray-500 tracking-widest">{name}</h2>
             <h1 className="text-white text-3xl title-font font-medium mb-4">{make + model}</h1>
@@ -77,8 +81,8 @@ function EquipmentDisplay({}) {
               <span className="ml-auto text-white">{location}</span>
             </div>
             <div className="flex border-t border-gray-800 py-2">
-              <span className="text-gray-500">Size</span>
-              <span className="ml-auto text-white">Medium</span>
+              <span className="text-gray-500">Owner</span>
+              <span className="ml-auto text-white">Owner Name</span>
             </div>
             <div className="flex border-t border-b mb-6 border-gray-800 py-2">
               <span className="text-gray-500">Quantity</span>
@@ -99,11 +103,7 @@ function EquipmentDisplay({}) {
 
           </div>
 
-
-
-          {/* {equipment_pictures} */}
-
-
+          <img alt={`${make + model}`} class="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0 ml-auto object-cover object-center rounded" src={equipment_image} />
         </div>
 
         {/* The Google Map for the equipment is included below the information and leaves room for 

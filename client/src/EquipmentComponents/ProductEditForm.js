@@ -7,6 +7,8 @@ import ApiUrlContext from "../Api";
 
 function ProductEditForm({equipmentToEdit, updateEquipment}){
     
+    //Going to likely need owner context and check session here also
+    
     const [error, setError] = useState()
     const navigate = useNavigate()
     const apiUrl = useContext(ApiUrlContext)

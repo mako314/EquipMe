@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import UserContext from './UserContext';
 import ApiUrlContext from '../Api';
 import RentalCollection from '../RentalComponents/RentalCollection';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useInRouterContext } from 'react-router-dom';
 
 function UserProfile() {
   // User context, meaning if user is signed in, they get their data,
@@ -25,7 +25,9 @@ function UserProfile() {
 
   //Check if user is logged in, I may just make this context and wrap it around my whole app too.
   useEffect(() => {
-    fetch(`${apiUrl}check_session`).then((response) => {
+    fetch(`${apiUrl}check_session`, {
+      credentials: 'include'
+    }).then((response) => {
       if (response.ok) {
         response.json().then((user) => setUser(user));
       }
@@ -173,7 +175,7 @@ function UserProfile() {
                   </div>
 
                 </div>
-                <RentalCollection />
+                <RentalCollection key={user.id}/>
               </div>
             </div>
           </div>

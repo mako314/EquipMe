@@ -13,7 +13,9 @@ function ChatArea({inboxes, SelectedThreadID, setNewMessage, newMessage, setInbo
   const apiUrl = useContext(ApiUrlContext)
   
   useEffect(() => {
-    fetch(`${apiUrl}owner/check_session`).then((response) => {
+    fetch(`${apiUrl}owner/check_session`, {
+      credentials: 'include'
+    }).then((response) => {
         if (response.ok) {
             response.json().then((owner) => setOwner(owner))
         }
@@ -27,7 +29,9 @@ function ChatArea({inboxes, SelectedThreadID, setNewMessage, newMessage, setInbo
 // ---------------Detect whether or not a USER is logged in-------------------
 
   useEffect(() => {
-    fetch(`${apiUrl}check_session`).then((response) => {
+    fetch(`${apiUrl}check_session`, {
+      credentials: 'include'
+    }).then((response) => {
       if (response.ok) {
         response.json().then((user) => setUser(user))
       }

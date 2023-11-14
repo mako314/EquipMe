@@ -107,10 +107,11 @@ function App() {
   
 
   //-------------------------------------------- FOR USER - CHECK SESSION TO STAY LOGGED IN ON REFRESH--------------------------
-
-  //FIX THIS WITH APIURL
+  
   useEffect(() => {
-    fetch(`${apiUrl}check_session`).then((response) => {
+    fetch(`${apiUrl}check_session`, {
+      credentials: 'include'
+    }).then((response) => {
       if (response.ok) {
         response.json().then((user) => setUser(user));
       }
@@ -124,7 +125,9 @@ function App() {
   //-------------------------------------------- FOR OWNER - CHECK SESSION TO STAY LOGGED IN ON REFRESH--------------------------
 
   useEffect(() => {
-    fetch(`${apiUrl}owner/check_session`).then((response) => {
+    fetch(`${apiUrl}owner/check_session`, {
+      credentials: 'include'
+    }).then((response) => {
       if (response.ok) {
         response.json().then((owner) => setOwner(owner));
       }

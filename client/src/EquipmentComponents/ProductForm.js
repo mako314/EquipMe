@@ -35,7 +35,9 @@ function ProductForm({ addEquipment }){
 
     //useEffect to check whether or not an owner is logged in! Succesfuly conditional rendering
     useEffect(() => {
-        fetch(`${apiUrl}owner/check_session`).then((response) => {
+        fetch(`${apiUrl}owner/check_session`, {
+          credentials: 'include'
+        }).then((response) => {
           if (response.ok) {
             response.json().then((owner) => setOwner(owner));
           }
