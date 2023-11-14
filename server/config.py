@@ -37,6 +37,7 @@ bcrypt = Bcrypt(app) # allows for encryption/hashing
 
 #Time to manage cookies, yum.
 app.config['JWT_SECRET_KEY'] = os.environ['JWT_SECRET_KEY']
+app.config['JWT_TOKEN_LOCATION'] = ['cookies']
 jwt = JWTManager(app)
 
 CORS(app, supports_credentials=True)

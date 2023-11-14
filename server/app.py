@@ -35,7 +35,7 @@ class Login(Resource):
         if user and user.authenticate(password):
             access_token = create_access_token(identity=user.id)
             response = jsonify({"msg": "login successful"}, 200)
-            set_access_cookies(response, access_token, httponly=True)
+            set_access_cookies(response, access_token)
             return response
         else:
             return {'error': 'Invalid credentials'}, 401
@@ -59,7 +59,7 @@ class OwnerLogin(Resource):
         if owner and owner.authenticate(password):
             access_token = create_access_token(identity=owner.id)
             response = jsonify({"msg": "login successful"}, 200)
-            set_access_cookies(response, access_token, httponly=True)
+            set_access_cookies(response, access_token)
             return response
         else:
             return {'error': 'Invalid credentials'}, 401

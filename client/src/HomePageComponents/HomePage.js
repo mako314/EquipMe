@@ -34,29 +34,29 @@ function HomePage({ equipmentArray, setFeaturedRental }) {
     }
 
         
-        useEffect(() => {
-            fetch(`${apiUrl}check_session`, {
-            credentials: 'include'
-            }).then((response) => {
-            if (response.ok) {
-                response.json().then((user) => setUser(user));
-            }
-            });
-        }, []);
+    useEffect(() => {
+        fetch(`${apiUrl}check_session`, {
+        credentials: 'include'
+        }).then((response) => {
+        if (response.ok) {
+            response.json().then((user) => setUser(user));
+        }
+        });
+    }, []);
 
-        // console.log(user)
+    // console.log(user)
 
-        //------------------------------------------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
 
-        useEffect(() => {
-            fetch(`${apiUrl}owner/check_session`, {
-            credentials: 'include'
-            }).then((response) => {
-            if (response.ok) {
-                response.json().then((owner) => setOwner(owner));
-            }
-            });
-        }, []);
+    useEffect(() => {
+        fetch(`${apiUrl}owner/check_session`, {
+        credentials: 'include'
+        }).then((response) => {
+        if (response.ok) {
+            response.json().then((owner) => setOwner(owner));
+        }
+        });
+    }, []);
 
 
     // console.log(equipmentArray[116])
