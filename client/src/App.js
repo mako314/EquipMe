@@ -332,7 +332,7 @@ function App() {
             <Route path='/owner/dashboard' element={<OwnerDashboard updateOwner={updateOwner} ownerToEdit={ownerToEdit} fromOwnerDash={fromOwnerDash} setFromOwnerDash={setFromOwnerDash} searchTerm={searchTerm}/>} />
 
             {/* Temporary calendar routing */}
-            <Route path='/temp/calendar' element={<Calendar />} />
+            <Route path='/calendar' element={<Calendar />} />
 
             {/* Temporary file upload routing */}
             <Route path='/temp/upload' element={<EquipmentImageFileUpload />} />
