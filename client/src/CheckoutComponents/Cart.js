@@ -5,12 +5,14 @@ import ApiUrlContext from '../Api'
 
 function Cart(){
   const [currentCart, setCurrentCart] = useState(0)
-  const [selectedRate, setSelectedRate] = useState('')
-  const [dayRange, setDayRange] = useState('')
-  const [rentalLength, setRentalLength] = useState(1)
-  const [equipmentQuantity, setEquipmentQuantity] = useState(1)
+  // const [selectedRate, setSelectedRate] = useState('')
+  // const [dayRange, setDayRange] = useState('')
+  // const [rentalLength, setRentalLength] = useState(1)
+  // const [equipmentQuantity, setEquipmentQuantity] = useState(1)
   const [user, setUser] = useContext(UserContext)
   const apiUrl = useContext(ApiUrlContext)
+
+  console.log(user)
 
   useEffect(() => {
     fetch(`${apiUrl}check_session`, {
@@ -31,16 +33,16 @@ function Cart(){
     cart  = user?.cart
   }
 
-  //----------------------
-  // -1 on quantity
-  const decrementQuantity = () => {
-    setEquipmentQuantity((prevequipmentQuantity) => (prevequipmentQuantity > 1 ? prevequipmentQuantity - 1 : 1))
-  }
+  // //----------------------
+  // // -1 on quantity
+  // const decrementQuantity = () => {
+  //   setEquipmentQuantity((prevequipmentQuantity) => (prevequipmentQuantity > 1 ? prevequipmentQuantity - 1 : 1))
+  // }
 
-  // +1 on quantity 
-  const incrementQuantity = () => {
-    setEquipmentQuantity(prevequipmentQuantity => prevequipmentQuantity + 1)
-  }
+  // // +1 on quantity 
+  // const incrementQuantity = () => {
+  //   setEquipmentQuantity(prevequipmentQuantity => prevequipmentQuantity + 1)
+  // }
 
 
   //Concide rate with rental length (dayRange)
@@ -126,8 +128,6 @@ function Cart(){
       equipment_image={item.equipment.equipment_image}
       make={item.equipment.make}
       model={item.equipment.model}
-      decrementQuantity={decrementQuantity}
-      incrementQuantity={incrementQuantity}
       dayOptions={dayOptions}
       rateOptions={rateOptions}
       />

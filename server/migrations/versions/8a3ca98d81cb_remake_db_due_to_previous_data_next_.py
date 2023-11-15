@@ -1,8 +1,8 @@
-"""create postgresql
+"""<remake db due to previous data, next time can just delete all first re-run upgrade>
 
-Revision ID: 155fabc275e2
+Revision ID: 8a3ca98d81cb
 Revises: 
-Create Date: 2023-11-04 15:35:38.741363
+Create Date: 2023-11-14 20:24:22.868491
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '155fabc275e2'
+revision = '8a3ca98d81cb'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -22,6 +22,7 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('firstName', sa.String(), nullable=True),
     sa.Column('lastName', sa.String(), nullable=True),
+    sa.Column('age', sa.Integer(), nullable=True),
     sa.Column('location', sa.String(), nullable=True),
     sa.Column('profession', sa.String(), nullable=True),
     sa.Column('phone', sa.String(), nullable=True),
@@ -52,6 +53,7 @@ def upgrade():
     op.create_table('carts',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('total', sa.Integer(), nullable=True),
+    sa.Column('cart_name', sa.String(), nullable=True),
     sa.Column('cart_status', sa.String(), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
@@ -65,6 +67,7 @@ def upgrade():
     sa.Column('type', sa.String(), nullable=True),
     sa.Column('make', sa.String(), nullable=True),
     sa.Column('model', sa.String(), nullable=True),
+    sa.Column('equipment_image', sa.String(), nullable=True),
     sa.Column('location', sa.String(), nullable=True),
     sa.Column('availability', sa.String(), nullable=True),
     sa.Column('delivery', sa.String(), nullable=True),
@@ -123,6 +126,8 @@ def upgrade():
     sa.Column('price_cents_if_changed', sa.Integer(), nullable=True),
     sa.Column('quantity', sa.Integer(), nullable=True),
     sa.Column('rental_length', sa.Integer(), nullable=True),
+    sa.Column('created_at', sa.DateTime(), nullable=False),
+    sa.Column('updated_at', sa.DateTime(), nullable=False),
     sa.Column('cart_id', sa.Integer(), nullable=True),
     sa.Column('equipment_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['cart_id'], ['carts.id'], name=op.f('fk_cart_items_cart_id_carts')),
