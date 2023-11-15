@@ -827,20 +827,23 @@ class AddItemToCart(Resource):
         data = request.get_json()
 
         #try Validations
+        # Look for cart and equipment
         cart = Cart.query.filter(Cart.id == cart_id).first()
         equipment = Equipment.query.filter(Equipment.id == data['equipment_id']).first()
 
+        # If neither cart or equipment are found, return 404
         if not cart:
             return make_response({'error': 'Cart not found'}, 404)
         if not equipment:
             return make_response({'error': 'Equipment not found'}, 404)
         
+        #Initialize pricing, pricing at the moment can only handle array with an index of 0, unless I decide to incorporate other pricing options, so you could run pricing "sets" owner could just select. Has access to rates
         pricing = equipment.equipment_price[0]   
              
         rental_rate = data['rental_rate']  # For example: 'hourly', 'daily', 'weekly', 'promo'
         rental_length = data['rental_length']
         price_cents_at_addition = 0
-
+        # Takes input and changes price accordingly
         if rental_rate == 'hourly':
             price_cents_at_addition = pricing.hourly_rate
         elif rental_rate == 'daily':
@@ -862,9 +865,10 @@ class AddItemToCart(Resource):
         equipment_id=equipment.id,
         quantity=data['quantity'],
         rental_length = data['rental_length'],
-        price_cents_at_addition=total_price_cents
+        price_cents_at_addition=total_price_cents,
+        created_at = datetime.utcnow(),
         )
-
+        # Append item to cart, after adding and comitting, calculcate total if wanting to do a group adding system can do for item in a new list made here, append, then calculate total at the end.
         cart.items.append(new_item)
 
         db.session.add(new_item)

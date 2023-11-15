@@ -329,6 +329,17 @@ class CartItem(db.Model, SerializerMixin):
     price_cents_if_changed = db.Column(db.Integer, nullable = True)
     quantity = db.Column(db.Integer, default=1)
     rental_length = db.Column(db.Integer, default=1)
+
+    created_at = db.Column(
+    db.DateTime, nullable=False,
+    default=datetime.utcnow,
+    )
+
+    updated_at = db.Column(
+    db.DateTime, nullable=True,
+    default=datetime.utcnow,
+    onupdate=datetime.utcnow
+    )
     
     #Maybe length of rental here,
     cart_id = db.Column(db.Integer, db.ForeignKey('carts.id'))

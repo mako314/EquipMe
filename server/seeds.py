@@ -4,11 +4,18 @@ from app import app
 from random import randint, choice as rc
 
 
-from datetime import datetime
+from datetime import datetime, timedelta
+import random
 
 # IF you want to re-seed when you start development, just add everything in here (tab for indentation)
 def seed_database():
     pass
+
+def random_time_30_days():
+    current_day = datetime.now()
+    days_ago_30 = current_day - timedelta(days=30)
+    random_date = days_ago_30 + timedelta(days=random.randint(0, 30))
+    return random_date
 
 if __name__ == '__main__':
     with app.app_context():
@@ -519,6 +526,7 @@ if __name__ == '__main__':
                 rental_length = 1,
                 cart_id= 1,
                 equipment_id = 1,
+                created_at = random_time_30_days(),
             ),
             CartItem(
                 price_cents_at_addition = equipment_prices[1].daily_rate,
@@ -527,6 +535,7 @@ if __name__ == '__main__':
                 rental_length = 1,
                 cart_id= 1,
                 equipment_id = 1,
+                created_at = random_time_30_days(),
             ),
             CartItem(
                 price_cents_at_addition = equipment_prices[2].weekly_rate,
@@ -535,14 +544,7 @@ if __name__ == '__main__':
                 rental_length = 1,
                 cart_id= 1,
                 equipment_id = 1,
-            ),
-            CartItem(
-                price_cents_at_addition = equipment_prices[3].weekly_rate,
-                price_cents_if_changed = None,
-                quantity = 1,
-                rental_length = 1,
-                cart_id= 1,
-                equipment_id = 1,
+                created_at = random_time_30_days(),
             ),
         ]
 

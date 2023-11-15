@@ -116,13 +116,13 @@ function Cart(){
 
   let cartItems
   if(Array.isArray(cart[currentCart].items)){
-  cartItems = cart[currentCart].items.map((item) =>{
+  cartItems = cart[currentCart].items.map((item, index) =>{
     // {console.log("The individual items",item)}
-    // {console.log("THE MAKES", item.equipment.make)}
-  
+    {console.log("ID", item)}
+
     return(
       <CartItem 
-      key={item.id}
+      key={`${item.equipment_id}_${item.rental_length}_${item.quantity}_${index}`}
       equipment_image={item.equipment.equipment_image}
       make={item.equipment.make}
       model={item.equipment.model}
