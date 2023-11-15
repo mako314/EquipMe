@@ -64,10 +64,10 @@ function AddToCartModal({equip_id, oneEquipment}){
   </>
 
   const cartOptions = cart?.map((item) => {
-    return <>
+    return (<>
     <option className="text-black"value={item.id}>{item.cart_name}</option> 
     
-    </>
+    </>)
   })
   
   //Toggles modal

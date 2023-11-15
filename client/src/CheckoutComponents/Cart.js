@@ -1,4 +1,4 @@
-import React,{useContext, useEffect, useState} from "react";
+import React,{useContext, useEffect, useState, Fragment} from "react";
 import CartItem from "./CartItem";
 import UserContext from '../UserComponents/UserContext'
 import ApiUrlContext from '../Api'
@@ -12,7 +12,7 @@ function Cart(){
   const [user, setUser] = useContext(UserContext)
   const apiUrl = useContext(ApiUrlContext)
 
-  console.log(user)
+  // console.log(user)
 
   useEffect(() => {
     fetch(`${apiUrl}check_session`, {
@@ -85,9 +85,10 @@ function Cart(){
   </>
 
   const cartOptions = cart?.map((item) => {
-    return <>
-    <option className="text-black"value={item.id - 1}>{item.cart_name}</option> 
-    </>
+    return (
+    <Fragment key={`${item.id} ${item.cart_name}`}>
+    <option className="text-black" value={item.id - 1}>{item.cart_name}</option> 
+    </Fragment>)
   })
 
   if (!cart || cart?.length === 0) {
@@ -99,14 +100,15 @@ function Cart(){
   if(Array.isArray(cart[currentCart].items)){
     cart[currentCart].items?.forEach((item) => {
       if (Array.isArray(item.equipment.equipment_price)) {
-        item.equipment.equipment_price?.map((price) =>{
+        item.equipment.equipment_price?.map((price) => {
+          return(
           rateOptions = 
-            <>
+          <Fragment key={price.id}>
             <option className="text-black"value="hourly">Hourly Rate: ${price.hourly_rate/100}</option>
             <option className="text-black"value="daily">Daily Rate: ${price.daily_rate/100}</option>
             <option className="text-black"value="weekly">Weekly Rate: ${price.weekly_rate/100}</option>
             <option className="text-black"value="promo">Promo Rate: ${price.promo_rate/100}</option>
-            </>
+          </Fragment>)
         })
       }
     })
@@ -118,94 +120,21 @@ function Cart(){
 
   let cartItems
   if(Array.isArray(cart[currentCart].items)){
-  cartItems = cart[currentCart].items.map((item, index) =>{
+  cartItems = cart[currentCart].items.map((item) =>{
     // {console.log("The individual items",item)}
-    {console.log("ID", item)}
-
+    // {console.log("ID", item)}
+    let timeDate = item.created_at
+    let uniqueId = `${item.equipment_id}_${timeDate}`
+    console.log("The UNIQUE ID:", uniqueId)
     return(
       <CartItem 
-      key={`${item.equipment_id}_${item.rental_length}_${item.quantity}_${index}`}
+      key={uniqueId}
       equipment_image={item.equipment.equipment_image}
       make={item.equipment.make}
       model={item.equipment.model}
       dayOptions={dayOptions}
       rateOptions={rateOptions}
       />
-  // <div className="space-y-6 overflow-y-auto max-h-96">
-
-  //         {/* Grab this for the map */}
-  //         <div className="justify-between mb-6 rounded-lg bg-white p-6 shadow-md sm:flex sm:justify-start">
-  //             {/* Image Preview */}
-  //             <img src={item.equipment.equipment_image} alt="product-image" className="w-full rounded-lg sm:w-40" />
-
-  //             <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between">
-  //                 {/* Product Details */}
-  //                 <div className="mt-5 sm:mt-0">
-  //                     <h2 className="text-lg font-bold text-gray-900">{item.equipment.make}</h2>
-  //                     {/* Additional details like size or color can go here */}
-  //                     <p className="mt-1 text-xs text-gray-700">{item.equipment.model}</p>
-  //                 </div>
-
-  //                 {/* Quantity and Price */}
-  //                 <div className="mt-4 flex justify-between sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
-  //                     <div className="flex items-center justify-end space-x-2">
-  //                         {/* Quantity Adjustment */}
-  //                         <span className='text-black'> Quantity </span>
-  //                         <span
-  //                             className="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-white"
-  //                             onClick={decrementQuantity}
-  //                         >
-  //                             -
-  //                         </span>
-  //                         <input 
-  //                               className="h-8 w-8 border border-black bg-white text-black text-center text-xs outline-none"
-  //                               type="number"
-  //                               value={equipmentQuantity}
-  //                               onChange={(e) => setEquipmentQuantity(parseInt(e.target.value, 10))}
-  //                               min="1" />
-  //                         <span
-  //                           className="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-white"
-  //                           onClick={incrementQuantity}
-  //                       >
-  //                           +
-  //                       </span>
-  //                     </div>
-
-  //                     <div className="flex items-center justify-end space-x-2">
-  //                         {/* Price */}
-  //                         <input 
-  //                               className="h-8 w-8 border border-black bg-white text-black text-center text-xs outline-none"
-  //                               type="number"
-  //                               value={rentalLength}
-  //                               onChange={(e) => setRentalLength(parseInt(e.target.value, 10))}
-  //                               min="1" />
-  //                         <select
-  //                         className="border-2 border-black text-sm text-black"
-  //                         value={dayRange} 
-  //                         onChange={handleDayRangeChange}>
-  //                         {dayOptions}
-  //                         </select>
-  //                     </div>
-
-  //                     <div className="flex items-center justify-end space-x-2">
-  //                         {/* Price */}
-  //                         <select
-  //                         className="border-2 border-black text-sm text-black"
-  //                         value={selectedRate} 
-  //                         onChange={handleRateChange}>
-  //                         {rateOptions}
-  //                         </select>
-  //                     </div>
-
-                      
-  //                 </div>
-  //             </div>
-  //         </div>
-          
-  //         {/* Grab this for the map */}
-
-  //       </div>
-
   )})}
 
   
