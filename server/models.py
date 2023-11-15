@@ -184,7 +184,7 @@ class Equipment(db.Model, SerializerMixin):
 
     owner = db.relationship("EquipmentOwner", back_populates="equipment")
 
-    agreements = db.relationship('RentalAgreement', back_populates="equipment")
+    # agreements = db.relationship('RentalAgreement', back_populates="equipment")
 
     cart_item = db.relationship('CartItem', back_populates='equipment')
 
@@ -193,8 +193,9 @@ class Equipment(db.Model, SerializerMixin):
     images = db.relationship('EquipmentImage', back_populates='equipment')
 
     #Serialization rules
-    serialize_rules = ('-owner.equipment', '-agreements.equipment', '-owner.agreements', '-images.equipment', '-cart_item.equipment','-equipment_price.equipment' )
-
+    serialize_rules = ('-owner.equipment',  '-owner.agreements', '-images.equipment', '-cart_item.equipment','-equipment_price.equipment' )
+    # '-agreements.equipment',
+    
     #VALIDATIONS BEGIN HERE
     # @validates("email")
     # def validates_email(self, key, email):
