@@ -40,31 +40,32 @@ function Calendar() {
 
 
   return (
-    <div className='Calendar'>
-      <label for="meeting-time">Choose a starting day and time for your rental:  </label>
+    <div className='Calendar bg-white p-4 rounded-lg shadow'>
+  <div className='mb-4'>
+    <label htmlFor="start-date" className='block text-sm font-medium text-gray-700'>Choose a starting day and time for your rental:</label>
+    <input
+      type="datetime-local"
+      id="start-date"
+      name="start-date"
+      className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+      min={formattedStartDate}
+      max={addDays(formattedStartDate, 365)}
+    />
+  </div>
 
-      <input
-        type="datetime-local"
-        id="start-date"
-        name="start-date"
-        // value={formattedDate}
-        min = {formattedStartDate}
-        max={addDays(formattedStartDate, 365)}
-        />
-
-      <label for="meeting-time">Choose an ending day and time for your rental:  </label>
-
-      <input
-        type="datetime-local"
-        id="end-date"
-        name="end-date"
-        // value={formattedDate}
-        min = {formattedStartDate}
-        max={addDays(formattedStartDate, 365)}
-        />
-
-    </div>
-  );
+  <div className='mb-4'>
+    <label htmlFor="end-date" className='block text-sm font-medium text-gray-700'>Choose an ending day and time for your rental:</label>
+    <input
+      type="datetime-local"
+      id="end-date"
+      name="end-date"
+      className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+      min={formattedStartDate}
+      max={addDays(formattedStartDate, 365)}
+    />
+  </div>
+</div>
+  )
 }
 
 export default Calendar;

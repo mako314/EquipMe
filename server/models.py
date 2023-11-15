@@ -244,11 +244,14 @@ class RentalAgreement(db.Model, SerializerMixin):
     __tablename__ = "agreements"
 
     id = db.Column(db.Integer, primary_key=True)
-    location = db.Column(db.String)
-    total_price = db.Column(db.Integer) # Maybe find a way to find the daily cost / hourly cost?
     
 #----------------------------------------------------------------
-    rental_dates = db.Column(db.String) #maybe integer? will need to do this in routing
+    rental_start_date = db.Column(db.String) 
+
+    rental_end_date = db.Column(db.String)
+
+    # rental_length = db.Column()
+
 
     # legal_doc = db.Column(db.String) # need a way to upload documentation 
     #need a way to grab the equipment
@@ -259,9 +262,12 @@ class RentalAgreement(db.Model, SerializerMixin):
     #do a cascade to make life easier 
     # this is how everything gets linked up
     # So I likely still need to do the rental agreement form
+
+    # equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
     owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
+    cart_item_id = db.Column(db.Integer, db.ForeignKey('cart_items.id'))
+    
 
 #----------------------------------------------------------------
     
@@ -282,15 +288,18 @@ class RentalAgreement(db.Model, SerializerMixin):
     user = db.relationship(
         "User", back_populates="agreements"
     )
-    equipment = db.relationship(
-        "Equipment", back_populates="agreements")
+    # equipment = db.relationship(
+    #     "Equipment", back_populates="agreements")
     
     owner = db.relationship(
         "EquipmentOwner", back_populates="agreements"
     )
+    items = db.relationship(
+        'CartItem', back_populates='agreements', cascade="all, delete")
+    
     
     #Serialization rules
-    serialize_rules = ('-user.agreements', '-owner.equipment', '-owner.agreements', '-equipment.owner', '-equipment.agreements')
+    serialize_rules = ('-user.agreements', '-owner.equipment', '-owner.agreements', '-equipment.owner', '-equipment.agreements', '-items.agreements')
 
     def __repr__(self):
         return f"<Rental Agreement: Equipment in {self.location}, Total Price: {self.total_price}, Rental Dates: {self.rental_dates}>"
@@ -347,8 +356,9 @@ class CartItem(db.Model, SerializerMixin):
 
     cart = db.relationship('Cart', back_populates='items')
     equipment = db.relationship('Equipment', back_populates='cart_item')
+    agreements = db.relationship('RentalAgreement', back_populates="items")
 
-    serialize_rules = ('-cart.items','-cart.user','-equipment.agreements','-equipment.cart_item','-equipment.owner.owner_inboxes')
+    serialize_rules = ('-cart.items','-cart.user','-equipment.agreements','-equipment.cart_item','-equipment.owner.owner_inboxes', '-agreements.items', '-agreements.user', '-agreements.owner')
 
     # _total = db.Column('total', db.Integer)
     #Need validations to test for positive integers,
