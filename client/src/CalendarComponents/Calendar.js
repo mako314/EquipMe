@@ -3,7 +3,7 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 
 function App() {
-  const [date, setDate] = useState([]);
+  const [date, setDate] = useState([new Date()]);
   console.log(date)
   return (
     <div className='app'>
@@ -13,7 +13,8 @@ function App() {
         onChange={setDate} 
         value={date} 
         selectRange={true}
-        hover={new Date()}
+        hover={new Date(2017, 0, 1)}
+        minDate={new Date()}
         />
       </div>
       <p className='text-center'>
