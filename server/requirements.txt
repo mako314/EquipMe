@@ -13,6 +13,7 @@ faker==19.13.0
 flask==3.0.0
 flask-bcrypt==1.0.1
 flask-cors==4.0.0
+flask_jwt_extended==4.5.3
 flask-migrate==4.0.5
 flask-restful==0.3.10
 flask-sqlalchemy==3.1.1
