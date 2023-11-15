@@ -17,7 +17,7 @@ app.run()
 
 
 # Just run 
-# export JWT_SECRET_KEY=UpWx2_clwMTbtWmWKtKeBnB1TQuyQ6xXpaBu8y_W0Lc
+# export JWT_SECRET_KEY= CHECK .ENV.LOCAL
 # export DATABASE_URI=sqlite:///app.db
 
 # If there's previous data and you have a non-nullable value, you'll likely need to clear all the data in seed first.
