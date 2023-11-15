@@ -553,7 +553,7 @@ class RentalAgreements(Resource):
     #Get ALL rental agreements
     #list of all the renters and the equipment
     def get(self):
-        agreements = [agreement.to_dict( only = ('equipment','user','rental_dates')) for agreement in RentalAgreement.query.all()]
+        agreements = [agreement.to_dict() for agreement in RentalAgreement.query.all()]
 
         response = make_response(agreements, 200)
 
@@ -582,12 +582,11 @@ class RentalAgreements(Resource):
 
             #may need a way to write in validations
             new_rental_agreement = RentalAgreement(
-                location = data['location'],
-                total_price = data['total_price'],
-                rental_dates = data[f"{start_date} to {end_date}"],
+                rental_start_date = data['rental_start_date'],
+                rental_end_date = data['rental_end_date'],
                 owner_id = data['owner_id'],
                 user_id = data['user_id'],
-                equipment_id = data['equipment_id'],
+                cart_item_id = data['cart_item_id'],
                 created_at = datetime.utcnow(),
                 modified_on = datetime.utcnow(),
 

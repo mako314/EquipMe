@@ -166,16 +166,6 @@ class Equipment(db.Model, SerializerMixin):
     delivery = db.Column(db.String)
     quantity = db.Column(db.Integer)
 
-
-    #Going to have to change my seeds file, to incorporate some of this, I may just do 6 pieces of equipment to start.
-
-
-    # I need to think about how to do the rates better. I know I'd like to use an hourly rate, a daily, weekly, monthly, maybe even one for a year. I'd likely calculate it with a property so I need to think about how i'd write it and the flow.
-    
-    # cost_per_day = db.Column(db.Integer)
-    # cost_per_week = db.Column(db.Integer)
-    # cost_per_month = db.Column(db.Integer)
-
     #Should add things like a deposit required, short description, condition to rent vehicle i.e. license required? Y/N? What else could be included needs to be brainstormed
 
     #relationship
@@ -194,7 +184,8 @@ class Equipment(db.Model, SerializerMixin):
 
     #Serialization rules
     serialize_rules = ('-owner.equipment',  '-owner.agreements', '-images.equipment', '-cart_item.equipment','-equipment_price.equipment' )
-    # '-agreements.equipment',
+    
+    # '-agreements.equipment', # REMOVED DUE TO AGREEMENTS BEING TO CART ITEMS
     
     #VALIDATIONS BEGIN HERE
     # @validates("email")
@@ -300,7 +291,8 @@ class RentalAgreement(db.Model, SerializerMixin):
     
     
     #Serialization rules
-    serialize_rules = ('-user.agreements', '-owner.equipment', '-owner.agreements', '-equipment.owner', '-equipment.agreements', '-items.agreements')
+    serialize_rules = ('-user.agreements', '-owner.equipment', '-owner.agreements', '-items.agreements')
+    # '-equipment.owner', '-equipment.agreements',
 
     def __repr__(self):
         return f"<Rental Agreement: Equipment in {self.location}, Total Price: {self.total_price}, Rental Dates: {self.rental_dates}>"
