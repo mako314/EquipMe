@@ -1,4 +1,5 @@
 import React,{useContext, useEffect, useState} from "react";
+import CartItem from "./CartItem";
 import UserContext from '../UserComponents/UserContext'
 import ApiUrlContext from '../Api'
 
@@ -18,8 +19,8 @@ function Cart(){
       if (response.ok) {
         response.json().then((user) => setUser(user));
       }
-    });
-  }, []);
+    })
+  }, [])
 
   const handleCartChange = (e) => {
     setCurrentCart(e.target.value)
@@ -43,52 +44,36 @@ function Cart(){
 
 
   //Concide rate with rental length (dayRange)
-  const handleRateChange = (e) => {
-    const newRate = e.target.value
-    setSelectedRate(newRate)
-    if (newRate === "hourly"){
-      setDayRange("hours")
-    } else if (newRate === "daily"){
-      setDayRange("days")
-    } else if (newRate === "weekly"){
-      setDayRange("week")
-    } else if (newRate === "promo"){
-      setDayRange("promo")
-    }
-  }
+  // const handleRateChange = (e) => {
+  //   const newRate = e.target.value
+  //   setSelectedRate(newRate)
+  //   if (newRate === "hourly"){
+  //     setDayRange("hours")
+  //   } else if (newRate === "daily"){
+  //     setDayRange("days")
+  //   } else if (newRate === "weekly"){
+  //     setDayRange("week")
+  //   } else if (newRate === "promo"){
+  //     setDayRange("promo")
+  //   }
+  // }
 
-  //Concide rental length (dayRange) with rate
-  const handleDayRangeChange = (e) => {
-    const newDayRange = e.target.value
-    setDayRange(newDayRange)
-
-    if (newDayRange === "hours"){
-      setSelectedRate("hourly")
-    } else if (newDayRange === "days"){
-      setSelectedRate("daily")
-    } else if (newDayRange === "week"){
-      setSelectedRate("weekly")
-    } else if (newDayRange === "promo"){
-      setSelectedRate("promo")
-    }
-  }
+  // //Concide rental length (dayRange) with rate
+  // const handleDayRangeChange = (e) => {
+  //   const newDayRange = e.target.value
+  //   setDayRange(newDayRange)
+  //   if (newDayRange === "hours"){
+  //     setSelectedRate("hourly")
+  //   } else if (newDayRange === "days"){
+  //     setSelectedRate("daily")
+  //   } else if (newDayRange === "week"){
+  //     setSelectedRate("weekly")
+  //   } else if (newDayRange === "promo"){
+  //     setSelectedRate("promo")
+  //   }
+  // }
 
   //-------------------------------------
-
-  //Map over equipment price, and take the rates as options
-  
-  // if(cart || cart?.length > 0){
-  //   rateOptions = cart[currentCart].equipment.equipment_price?.map((price) => {
-  //   return <>
-  //   <option className="text-black"value="hourly">Hourly Rate: ${price.hourly_rate/100}</option>
-  //   <option className="text-black"value="daily">Daily Rate: ${price.daily_rate/100}</option>
-  //   <option className="text-black"value="weekly">Weekly Rate: ${price.weekly_rate/100}</option>
-  //   <option className="text-black"value="promo">Promo Rate: ${price.promo_rate/100}</option>
-  //   </>
-  // })}
-
-
-
   //Just basic day options, to track the amount of time they're trying to rent for
   const dayOptions = <>
   <option className="text-black"value="hours">Hours</option>
@@ -100,7 +85,6 @@ function Cart(){
   const cartOptions = cart?.map((item) => {
     return <>
     <option className="text-black"value={item.id - 1}>{item.cart_name}</option> 
-    
     </>
   })
 
@@ -108,12 +92,12 @@ function Cart(){
     return <div>Cart is empty or loading...</div>;
   }
 
+  //Map over equipment price, and take the rates as options
   let rateOptions
   if(Array.isArray(cart[currentCart].items)){
     cart[currentCart].items?.forEach((item) => {
       if (Array.isArray(item.equipment.equipment_price)) {
         item.equipment.equipment_price?.map((price) =>{
-          console.log("Hopefully the price:", price)
           rateOptions = 
             <>
             <option className="text-black"value="hourly">Hourly Rate: ${price.hourly_rate/100}</option>
@@ -123,10 +107,7 @@ function Cart(){
             </>
         })
       }
-      
     })
-    
-
   }
 
   // console.log(currentCart)
@@ -140,80 +121,90 @@ function Cart(){
     // {console.log("THE MAKES", item.equipment.make)}
   
     return(
-  <div className="space-y-6 overflow-y-auto max-h-96">
+      <CartItem 
+      key={item.id}
+      equipment_image={item.equipment.equipment_image}
+      make={item.equipment.make}
+      model={item.equipment.model}
+      decrementQuantity={decrementQuantity}
+      incrementQuantity={incrementQuantity}
+      dayOptions={dayOptions}
+      rateOptions={rateOptions}
+      />
+  // <div className="space-y-6 overflow-y-auto max-h-96">
 
-          {/* Grab this for the map */}
-          <div className="justify-between mb-6 rounded-lg bg-white p-6 shadow-md sm:flex sm:justify-start">
-              {/* Image Preview */}
-              <img src={item.equipment.equipment_image} alt="product-image" className="w-full rounded-lg sm:w-40" />
+  //         {/* Grab this for the map */}
+  //         <div className="justify-between mb-6 rounded-lg bg-white p-6 shadow-md sm:flex sm:justify-start">
+  //             {/* Image Preview */}
+  //             <img src={item.equipment.equipment_image} alt="product-image" className="w-full rounded-lg sm:w-40" />
 
-              <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between">
-                  {/* Product Details */}
-                  <div className="mt-5 sm:mt-0">
-                      <h2 className="text-lg font-bold text-gray-900">{item.equipment.make}</h2>
-                      {/* Additional details like size or color can go here */}
-                      <p className="mt-1 text-xs text-gray-700">{item.equipment.model}</p>
-                  </div>
+  //             <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between">
+  //                 {/* Product Details */}
+  //                 <div className="mt-5 sm:mt-0">
+  //                     <h2 className="text-lg font-bold text-gray-900">{item.equipment.make}</h2>
+  //                     {/* Additional details like size or color can go here */}
+  //                     <p className="mt-1 text-xs text-gray-700">{item.equipment.model}</p>
+  //                 </div>
 
-                  {/* Quantity and Price */}
-                  <div className="mt-4 flex justify-between sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
-                      <div className="flex items-center justify-end space-x-2">
-                          {/* Quantity Adjustment */}
-                          <span className='text-black'> Quantity </span>
-                          <span
-                              className="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-white"
-                              onClick={decrementQuantity}
-                          >
-                              -
-                          </span>
-                          <input 
-                                className="h-8 w-8 border border-black bg-white text-black text-center text-xs outline-none"
-                                type="number"
-                                value={equipmentQuantity}
-                                onChange={(e) => setEquipmentQuantity(parseInt(e.target.value, 10))}
-                                min="1" />
-                          <span
-                            className="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-white"
-                            onClick={incrementQuantity}
-                        >
-                            +
-                        </span>
-                      </div>
+  //                 {/* Quantity and Price */}
+  //                 <div className="mt-4 flex justify-between sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
+  //                     <div className="flex items-center justify-end space-x-2">
+  //                         {/* Quantity Adjustment */}
+  //                         <span className='text-black'> Quantity </span>
+  //                         <span
+  //                             className="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-white"
+  //                             onClick={decrementQuantity}
+  //                         >
+  //                             -
+  //                         </span>
+  //                         <input 
+  //                               className="h-8 w-8 border border-black bg-white text-black text-center text-xs outline-none"
+  //                               type="number"
+  //                               value={equipmentQuantity}
+  //                               onChange={(e) => setEquipmentQuantity(parseInt(e.target.value, 10))}
+  //                               min="1" />
+  //                         <span
+  //                           className="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-white"
+  //                           onClick={incrementQuantity}
+  //                       >
+  //                           +
+  //                       </span>
+  //                     </div>
 
-                      <div className="flex items-center justify-end space-x-2">
-                          {/* Price */}
-                          <input 
-                                className="h-8 w-8 border border-black bg-white text-black text-center text-xs outline-none"
-                                type="number"
-                                value={rentalLength}
-                                onChange={(e) => setRentalLength(parseInt(e.target.value, 10))}
-                                min="1" />
-                          <select
-                          className="border-2 border-black text-sm text-black"
-                          value={dayRange} 
-                          onChange={handleDayRangeChange}>
-                          {dayOptions}
-                          </select>
-                      </div>
+  //                     <div className="flex items-center justify-end space-x-2">
+  //                         {/* Price */}
+  //                         <input 
+  //                               className="h-8 w-8 border border-black bg-white text-black text-center text-xs outline-none"
+  //                               type="number"
+  //                               value={rentalLength}
+  //                               onChange={(e) => setRentalLength(parseInt(e.target.value, 10))}
+  //                               min="1" />
+  //                         <select
+  //                         className="border-2 border-black text-sm text-black"
+  //                         value={dayRange} 
+  //                         onChange={handleDayRangeChange}>
+  //                         {dayOptions}
+  //                         </select>
+  //                     </div>
 
-                      <div className="flex items-center justify-end space-x-2">
-                          {/* Price */}
-                          <select
-                          className="border-2 border-black text-sm text-black"
-                          value={selectedRate} 
-                          onChange={handleRateChange}>
-                          {rateOptions}
-                          </select>
-                      </div>
+  //                     <div className="flex items-center justify-end space-x-2">
+  //                         {/* Price */}
+  //                         <select
+  //                         className="border-2 border-black text-sm text-black"
+  //                         value={selectedRate} 
+  //                         onChange={handleRateChange}>
+  //                         {rateOptions}
+  //                         </select>
+  //                     </div>
 
                       
-                  </div>
-              </div>
-          </div>
+  //                 </div>
+  //             </div>
+  //         </div>
           
-          {/* Grab this for the map */}
+  //         {/* Grab this for the map */}
 
-        </div>
+  //       </div>
 
   )})}
 
@@ -233,7 +224,6 @@ function Cart(){
       </select>
 
       {cartItems}
-
 
       </div>
       <div className="mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-0 md:w-1/3">
