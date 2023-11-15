@@ -35,11 +35,11 @@ function AddToCartModal({equip_id, oneEquipment}){
   
 
   //States to capture info, day ranges, costs, length of rental, quantity, and track modal, cart
-  const [selectedRate, setSelectedRate] = useState('')
+  const [selectedRate, setSelectedRate] = useState("hourly")
   const [dayRange, setDayRange] = useState('')
   const [rentalLength, setRentalLength] = useState(1)
   const [equipmentQuantity, setEquipmentQuantity] = useState(1)
-  const [currentCart, setCurrentCart] = useState(0)
+  const [currentCart, setCurrentCart] = useState(1)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   // console.log("The Cart ID:", currentCart)
@@ -47,12 +47,12 @@ function AddToCartModal({equip_id, oneEquipment}){
 
   //Map over equipment price, and take the rates as options
   const rateOptions = equipment_price?.map((price) => {
-    return <>
+    return (<>
     <option className="text-black"value="hourly">Hourly Rate: ${price.hourly_rate/100}</option>
     <option className="text-black"value="daily">Daily Rate: ${price.daily_rate/100}</option>
     <option className="text-black"value="weekly">Weekly Rate: ${price.weekly_rate/100}</option>
     <option className="text-black"value="promo">Promo Rate: ${price.promo_rate/100}</option>
-    </>
+    </>)
   })
 
   //Just basic day options, to track the amount of time they're trying to rent for
@@ -64,10 +64,10 @@ function AddToCartModal({equip_id, oneEquipment}){
   </>
 
   const cartOptions = cart?.map((item) => {
-    return <>
+    return (<>
     <option className="text-black"value={item.id}>{item.cart_name}</option> 
     
-    </>
+    </>)
   })
   
   //Toggles modal
@@ -125,7 +125,7 @@ function AddToCartModal({equip_id, oneEquipment}){
   // So the post works, but you have to play around with it, I needto capture values prior to 
   console.log("This is the rental length:",rentalLength)
   console.log("This is the selected rate:",selectedRate)
-  console.log("This is the equipment quality:",equipmentQuantity)
+  console.log("This is the equipment quantity:",equipmentQuantity)
   console.log("This is the equipment ID:",equip_id)
   console.log("This is the current cart ID:",currentCart)
   function handleAddToCartClick() {
