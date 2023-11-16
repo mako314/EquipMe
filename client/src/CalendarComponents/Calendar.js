@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import {toast} from 'react-toastify'
 
 function Calendar() {
   
@@ -38,20 +39,19 @@ function Calendar() {
 
   // I don't think this matters, the min parameter inside of date-local NEVER worked.
 
-  // useEffect(() => {
-  //   // Whenever the startRental changes, update the minimum end time
-  //   if (startRental) {
-  //     const startDateTime = new Date(startRental).getTime()
-  //     const minEndDateTime = new Date(startDateTime + 3600000) // Add one hour
-  //     setFormattedEndDate(formatDate(minEndDateTime))
-  //   }
-  // }, [startRental])
+  useEffect(() => {
+    // Whenever the startRental changes, update the minimum end time
+    if (startRental) {
+      const startDateTime = new Date(startRental).getTime()
+      const minEndDateTime = new Date(startDateTime + 3600000) // Add one hour
+      setFormattedEndDate(formatDate(minEndDateTime))
+    }
+  }, [startRental])
 
 //----------------------------------------------------------------------------------------
   
   // console.log("format start:", formattedStartDate)
   // console.log("format end:", formattedEndDate)
-
   // Was just setting formatted variables with let, instead I made a function that formats them.
   const formatDate = (date) => {
     // Was having a lot of issues and couldn't tell where from, so I wrote some validations to test what could be going wrong
@@ -69,34 +69,24 @@ function Calendar() {
     return localDate.toISOString().slice(0, -8)
   }
 
-  const addDays = (days, time=0) => {
-    //I kept having issues regardless, this is just a cheap workaround with an "optional" parameter
-
-    // Time here is x amounts of hours ahead, for example I'm using 1 hour in microseconds
-    // Days ahead is days ahead, I chose 365
-
-    // Was having a lot of issues and couldn't tell where from, so I wrote some validations to test what could be going wrong
-    // if (!(dateStr instanceof Date)) {
-    //   console.error('Invalid date provided to addDays:', dateStr)
-    //   return null
-    // }
-    // This adds on x amount of days from the date. .getDate gets the date, today being 11/15/2023, it gets 15. Then adds days to it. Only using this to add a year (365)
-
-    // I opted to just create a new day here. This can probably just be globally scoped.
-    let date = new Date()
-    // Off set for timezone 
-    let timezoneOffset = date.getTimezoneOffset() * 60000 // EST
-    
-    date.setDate(date.getDate() + days)
-    let localDate
-    if (time > 0){
-     localDate = new Date((date - timezoneOffset) + time)
-    } else {
-     localDate = new Date(date - timezoneOffset)
+  // Time here is x amounts of hours ahead, for example I'm using 1 hour in microseconds
+  // Days ahead is days ahead, I chose 365
+  const addDays = (baseDate, days, time = 0) => {
+    // Parse the base date
+    let date = new Date(baseDate);
+  
+    // Add the specified number of days
+    date.setDate(date.getDate() + days);
+  
+    // Optionally, add additional time in milliseconds
+    if (time > 0) {
+      date = new Date(date.getTime() + time);
     }
-    // Format the new day we have! 
-    return formatDate(localDate)
+  
+    // Return the formatted date
+    return formatDate(date);
   }
+
 
   //Handles changing the START date
   const handleStartDateChange = (event) => {
@@ -116,7 +106,7 @@ function Calendar() {
       // toast.warn("Start date and time must be one hour ahead of local time to allow for a smoother process.")
     }
     
-  //--------------------------------------FormattedEndDate kind of useless since min is not working properly for it---------------
+  //--------------------------------------FormattedEndDate kind of useless (TIME WISE) since min is not working properly for it---------------
 
     //Set the new end date off the same value, then calculate one hour ahead (so minimum booking is 1hr)
     let newEndDate = new Date(new Date(event.target.value).getTime() + 3600000) // One hour later
@@ -179,7 +169,7 @@ function Calendar() {
       value={startRental}
       onChange={handleStartDateChange}
       min={formattedStartDate} // This one worked though, 
-      max={addDays(365)}
+      max={startRental ? addDays(startRental, 365) : undefined}
     />
   </div>
 
@@ -193,7 +183,7 @@ function Calendar() {
       value={endRental}
       onChange={handleEndDateChange}
       min={formattedStartDate} //This does not matter, what an annoying concept. (Day works)
-      max={addDays(365,3600000)}
+      max={startRental ? addDays(startRental, 365, 3600000) : undefined}
       disabled={!formattedEndDate}
     />
   </div>
