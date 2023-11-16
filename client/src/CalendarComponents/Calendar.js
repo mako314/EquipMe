@@ -99,11 +99,13 @@ function Calendar() {
     }
   }
 
+  //So this was what was giving me errors earlier, the max value was just addDays(formattedStartDate, 365) or the letEndMaxValue variable set equal to it. However that was a str, and not a date object. In here it just takes that, converts it back to its unformatted day, and adds days to it. 
   const startMaxValue = (date) => {
     let unFormatDay = new Date(date)
     return addDays(unFormatDay, 365)
   }
 
+  //The about but instead of start max value, end max value.
   const endMaxValue = (date) => {
     let unFormatDay = new Date(date)
     return addDays(unFormatDay, 365)
