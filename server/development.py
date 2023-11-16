@@ -13,7 +13,7 @@ from app import app
 #         seed_database()
 
 # run_seeding()
-app.run()
+app.run(port=5555, debug=True)
 
 
 # Just run 
