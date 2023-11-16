@@ -5,10 +5,10 @@ import ApiUrlContext from '../Api'
 
 function Cart(){
   const [currentCart, setCurrentCart] = useState(0)
-  // const [selectedRate, setSelectedRate] = useState('')
-  // const [dayRange, setDayRange] = useState('')
-  // const [rentalLength, setRentalLength] = useState(1)
-  // const [equipmentQuantity, setEquipmentQuantity] = useState(1)
+  const [selectedRate, setSelectedRate] = useState('')
+  const [dayRange, setDayRange] = useState('')
+  const [rentalLength, setRentalLength] = useState(1)
+  const [equipmentQuantity, setEquipmentQuantity] = useState(1)
   const [user, setUser] = useContext(UserContext)
   const apiUrl = useContext(ApiUrlContext)
 
@@ -33,48 +33,6 @@ function Cart(){
     cart  = user?.cart
   }
 
-  // //----------------------
-  // // -1 on quantity
-  // const decrementQuantity = () => {
-  //   setEquipmentQuantity((prevequipmentQuantity) => (prevequipmentQuantity > 1 ? prevequipmentQuantity - 1 : 1))
-  // }
-
-  // // +1 on quantity 
-  // const incrementQuantity = () => {
-  //   setEquipmentQuantity(prevequipmentQuantity => prevequipmentQuantity + 1)
-  // }
-
-
-  //Concide rate with rental length (dayRange)
-  // const handleRateChange = (e) => {
-  //   const newRate = e.target.value
-  //   setSelectedRate(newRate)
-  //   if (newRate === "hourly"){
-  //     setDayRange("hours")
-  //   } else if (newRate === "daily"){
-  //     setDayRange("days")
-  //   } else if (newRate === "weekly"){
-  //     setDayRange("week")
-  //   } else if (newRate === "promo"){
-  //     setDayRange("promo")
-  //   }
-  // }
-
-  // //Concide rental length (dayRange) with rate
-  // const handleDayRangeChange = (e) => {
-  //   const newDayRange = e.target.value
-  //   setDayRange(newDayRange)
-  //   if (newDayRange === "hours"){
-  //     setSelectedRate("hourly")
-  //   } else if (newDayRange === "days"){
-  //     setSelectedRate("daily")
-  //   } else if (newDayRange === "week"){
-  //     setSelectedRate("weekly")
-  //   } else if (newDayRange === "promo"){
-  //     setSelectedRate("promo")
-  //   }
-  // }
-
   //-------------------------------------
   //Just basic day options, to track the amount of time they're trying to rent for
   const dayOptions = <>
@@ -84,12 +42,16 @@ function Cart(){
   <option className="text-black"value="promo">Promo</option>
   </>
 
+  // Map over carts, present options
   const cartOptions = cart?.map((item) => {
     return (
     <Fragment key={`${item.id} ${item.cart_name}`}>
+    {/* so the value starts at 0, but the item.id (cart id) starts at 1. So I -1 here to get the right cart index */}
     <option className="text-black" value={item.id - 1}>{item.cart_name}</option> 
     </Fragment>)
   })
+
+  console.log(currentCart)
 
   if (!cart || cart?.length === 0) {
     return <div>Cart is empty or loading...</div>;
@@ -134,6 +96,14 @@ function Cart(){
       model={item.equipment.model}
       dayOptions={dayOptions}
       rateOptions={rateOptions}
+      selectedRate={selectedRate}
+      setSelectedRate={setSelectedRate}
+      dayRange={dayRange}
+      setDayRange={setDayRange}
+      rentalLength={rentalLength}
+      setRentalLength={setRentalLength}
+      equipmentQuantity={equipmentQuantity}
+      setEquipmentQuantity={setEquipmentQuantity}
       />
   )})}
 
@@ -149,7 +119,6 @@ function Cart(){
             value={currentCart} 
             onChange={handleCartChange}>
             {cartOptions}
-            <option className="text-black"value="2"> Test 2</option>
       </select>
 
       {cartItems}

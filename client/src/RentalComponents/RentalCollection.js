@@ -43,7 +43,7 @@ function RentalCollection({ }) {
     // Filters the rental agreements based on whether or not the signed in Users ID matches the userID of the rental agreement.
     let UserRentalCards
     if (user){
-    UserRentalCards = rentalAgreementArray.filter((item) => item.user.id === user.id).map((item) => (
+    UserRentalCards = rentalAgreementArray?.filter((item) => item.user.id === user.id)?.map((item) => (
     <RentalCard
       key={item.id}
       equipmentName={item.equipment.name}

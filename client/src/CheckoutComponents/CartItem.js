@@ -2,11 +2,12 @@ import React,{useContext, useEffect, useState} from "react";
 import UserContext from '../UserComponents/UserContext'
 import ApiUrlContext from '../Api'
 
-function CartItem({equipment_image, make, model, dayOptions, rateOptions}){
-  const [selectedRate, setSelectedRate] = useState('')
-  const [dayRange, setDayRange] = useState('')
-  const [rentalLength, setRentalLength] = useState(1)
-  const [equipmentQuantity, setEquipmentQuantity] = useState(1)
+function CartItem({equipment_image, make, model, dayOptions, rateOptions, selectedRate, setSelectedRate, dayRange, setDayRange, rentalLength, setRentalLength, equipmentQuantity, setEquipmentQuantity}){
+
+  // const [selectedRate, setSelectedRate] = useState('')
+  // const [dayRange, setDayRange] = useState('')
+  // const [rentalLength, setRentalLength] = useState(1)
+  // const [equipmentQuantity, setEquipmentQuantity] = useState(1)
 
   //Concide rate with rental length (dayRange)
   const handleRateChange = (e) => {
