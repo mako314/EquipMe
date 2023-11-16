@@ -562,42 +562,51 @@ class RentalAgreements(Resource):
     #post a rental agreement
     def post(self):
         data = request.get_json()
+
         #try:
+        cartId = data['cart_id']
+        cart = Cart.query.filter(Cart.id == cartId).first()
+        
+        
+        cart.items
+        # If neither cart or equipment are found, return 404
+        if not cart:
+            return make_response({'error': 'Cart not found'}, 404)
 
         #need a way to grab equipment and owner
         # load category and then from there display 
         #take the input
 
         equipment_id = data['equipment_id']
-        start_date = data['start_date']
-        end_date = data['end_date']
+        start_date = data['rental_start_date']
+        end_date = data['rental_end_date']
 
         equipment = Equipment.query.filter(Equipment.id == equipment_id).first()
         
         if not equipment:
             return {"error": "Equipment not found"}, 404
         
-        if is_available_for_date_range(equipment, start_date, end_date) and equipment.quantity > 0:
-            equipment.quantity -= 1
+        # if is_available_for_date_range(equipment, start_date, end_date) and equipment.quantity > 0:
+        #     equipment.quantity -= 1
 
-            #may need a way to write in validations
-            new_rental_agreement = RentalAgreement(
-                rental_start_date = data['rental_start_date'],
-                rental_end_date = data['rental_end_date'],
-                owner_id = data['owner_id'],
-                user_id = data['user_id'],
-                cart_item_id = data['cart_item_id'],
-                created_at = datetime.utcnow(),
-                modified_on = datetime.utcnow(),
+        #may need a way to write in validations
+        new_rental_agreement = RentalAgreement(
+            rental_start_date = start_date,
+            rental_end_date = end_date,
+            owner_id = data['owner_id'],
+            user_id = data['user_id'],
+            cart_item_id = data['cart_item_id'],
+            created_at = datetime.utcnow(),
+            modified_on = datetime.utcnow(),
 
-            )
-            db.session.add(new_rental_agreement)
-            db.session.commit()
+        )
+        db.session.add(new_rental_agreement)
+        db.session.commit()
 
-            response = make_response(new_rental_agreement.to_dict(), 201)
-            return response
-        else:
-            return {"error": "Equipment not available for the requested date range or quantity depleted"}, 400
+        response = make_response(new_rental_agreement.to_dict(), 201)
+        return response
+        # else:
+        #     return {"error": "Equipment not available for the requested date range or quantity depleted"}, 400
         # db.session.add(new_rental_agreement)
         # db.session.commit()
 
@@ -867,6 +876,7 @@ class AddItemToCart(Resource):
         price_cents_at_addition=total_price_cents,
         created_at = datetime.utcnow(),
         )
+
         # Append item to cart, after adding and comitting, calculcate total if wanting to do a group adding system can do for item in a new list made here, append, then calculate total at the end.
         cart.items.append(new_item)
 
