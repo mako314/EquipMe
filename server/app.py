@@ -867,6 +867,10 @@ class AddItemToCart(Resource):
         
         print("Your cart is:",cart.cart_name)
         print("Your equipment is:", equipment)
+        print("Your rental rate:", rental_rate)
+        print("Your rental length:", rental_length)
+        print("Total price in CENTS:", total_price_cents)
+        print("QUANTITY OF:", data['quantity'])
 
         #Create new CartItem with price calculated by $ * quantity (ALL IN CENTS)
         new_item = CartItem(
