@@ -182,7 +182,7 @@ function Calendar() {
       className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
       value={endRental}
       onChange={handleEndDateChange}
-      min={formattedStartDate} //This does not matter, what an annoying concept. (Day works)
+      min={formattedEndDate} //This does not matter, what an annoying concept. (Day works)
       max={startRental ? addDays(startRental, 365, 3600000) : undefined}
       disabled={!formattedEndDate}
     />
