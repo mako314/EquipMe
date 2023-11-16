@@ -40,31 +40,45 @@ function Calendar() {
   // Was just setting formatted variables with let, instead I made a function that formats them.
   const formatDate = (date) => {
     // Was having a lot of issues and couldn't tell where from, so I wrote some validations to test what could be going wrong
-    if (!(date instanceof Date) || isNaN(date)) {
+    if (!(date instanceof Date)) {
       console.error('Invalid date provided to formatDate:', date)
       return null
     }
     // Adjust the date to local timezone
     let timezoneOffset = date.getTimezoneOffset() * 60000
-    // To get the local date, you just take the date (which we test to see if it was an instance of Date, since the useEffect makes it so it continues). When subtracting timezoneOffset, you just get the appropriate time, 24hr format.
+    // To get the local date, you just take the date z(which we test to see if it was an instance of Date, since the useEffect makes it so it continues). When subtracting timezoneOffset, you just get the appropriate time, 24hr format.
     let localDate = new Date(date - timezoneOffset)
     // Slice so I don't get the very long info, 
     return localDate.toISOString().slice(0, 16)
   }
 
-  const addDays = (dateStr, days) => {
-    // Was having a lot of issues and couldn't tell where from, so I wrote some validations to test what could be going wrong
-    if (!(dateStr instanceof Date) || isNaN(dateStr)) {
-      console.error('Invalid date provided to addDays:', dateStr)
-      return null
-    }
-    
-    // This adds on x amount of days from the date. .getDate gets the date, today being 11/15/2023, it gets 15. Then adds days to it. Only using this to add a year (365)
-    let date = new Date(dateStr)
-    date.setDate(date.getDate() + days)
+  const addDays = (days, time=0) => {
+    //I kept having issues regardless, this is just a cheap workaround with an "optional" parameter
 
+    // Time here is x amounts of hours ahead, for example I'm using 1 hour in microseconds
+    // Days ahead is days ahead, I chose 365
+
+    // Was having a lot of issues and couldn't tell where from, so I wrote some validations to test what could be going wrong
+    // if (!(dateStr instanceof Date)) {
+    //   console.error('Invalid date provided to addDays:', dateStr)
+    //   return null
+    // }
+    // This adds on x amount of days from the date. .getDate gets the date, today being 11/15/2023, it gets 15. Then adds days to it. Only using this to add a year (365)
+
+    // I opted to just create a new day here. This can probably just be globally scoped.
+    let date = new Date()
+    // Off set for my timezone 
+    let timezoneOffset = date.getTimezoneOffset() * 60000 // EST
+    
+    date.setDate(date.getDate() + days)
+    let localDate
+    if (time > 0){
+     localDate = new Date((date - timezoneOffset) + time)
+    } else {
+     localDate = new Date(date - timezoneOffset)
+    }
     // Format the new day we have! 
-    return formatDate(date)
+    return formatDate(localDate)
   }
 
   //Handles changing the START date
@@ -99,31 +113,17 @@ function Calendar() {
     }
   }
 
-  //So this was what was giving me errors earlier, the max value was just addDays(formattedStartDate, 365) or the letEndMaxValue variable set equal to it. However that was a str, and not a date object. In here it just takes that, converts it back to its unformatted day, and adds days to it. 
-  const startMaxValue = (date) => {
-    let unFormatDay = new Date(date)
-    return addDays(unFormatDay, 365)
-  }
-
-  //The about but instead of start max value, end max value.
-  const endMaxValue = (date) => {
-    let unFormatDay = new Date(date)
-    return addDays(unFormatDay, 365)
-  }
-
-  // let endMaxValue = addDays(formattedEndDate, 365)
-
-  console.log("START MAX",startMaxValue(formattedStartDate, 365))
-  console.log("END MAX",endMaxValue(formattedEndDate, 365))
+  // console.log("START MAX",startMaxValue(formattedStartDate, 365))
+  // console.log("END MAX",endMaxValue(formattedEndDate, 365))
 
   // console.log("Start Rental:", startRental)
   // console.log("End Rental:", endRental)
   // console.log("Formatted End Date:", formattedEndDate)
   // console.log("Starting day:", formattedStartDate)
-  // console.log("One year from now:",addDays(formattedStartDate, 365))
+  console.log("STARTING ONE YEAR FROM NOW:",addDays(365))
 
   // console.log("End date should be +1 hr:", formattedEndDate)
-  // console.log("One year from now:",addDays(formattedEndDate, 365))
+  console.log("One year from now:",(addDays(365,3600000)) )
 
   // console.log("Starting day:", startRental)
   // console.log("Ending day:", endRental)
@@ -140,7 +140,7 @@ function Calendar() {
       value={startRental}
       onChange={handleStartDateChange}
       min={formattedStartDate}
-      max={startMaxValue}
+      max={addDays(365)}
     />
   </div>
 
@@ -154,7 +154,7 @@ function Calendar() {
       value={endRental}
       onChange={handleEndDateChange}
       min={formattedEndDate}
-      max={endMaxValue}
+      max={addDays(365,3600000)}
     />
   </div>
 </div>
