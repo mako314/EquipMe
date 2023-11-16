@@ -54,7 +54,7 @@ function Cart(){
   console.log(currentCart)
 
   if (!cart || cart?.length === 0) {
-    return <div>Cart is empty or loading...</div>;
+    return <div>Cart is empty or loading...</div>
   }
 
   //Map over equipment price, and take the rates as options
@@ -107,8 +107,6 @@ function Cart(){
       />
   )})}
 
-  
-
     return(
         <div className="h-screen bg-gray-100 pt-20 overflow-y-auto">
     <h1 className="mb-10 text-center text-2xl font-bold">Cart Items</h1>
@@ -120,8 +118,9 @@ function Cart(){
             onChange={handleCartChange}>
             {cartOptions}
       </select>
-
-      {cartItems}
+      {cart[currentCart].items?.length === 0 ? <div>Cart is empty or loading...</div> : cartItems}
+      
+      {/* {cartItems} */}
 
       </div>
       <div className="mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-0 md:w-1/3">
