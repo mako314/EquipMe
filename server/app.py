@@ -839,6 +839,9 @@ class AddItemToCart(Resource):
         cart = Cart.query.filter(Cart.id == cart_id).first()
         equipment = Equipment.query.filter(Equipment.id == data['equipment_id']).first()
 
+        # new_items = [] # Math here, need to add stuff to a list, call function on it, then calculate total. Something is going wrong somewhere. 
+        # THE ABOVE MIGHT BEEN FIXED BY READING BELOOOOOOOOOOOOOOOOOOOOOW
+
         # If neither cart or equipment are found, return 404
         if not cart:
             return make_response({'error': 'Cart not found'}, 404)
@@ -852,27 +855,31 @@ class AddItemToCart(Resource):
 
         input_rental_rate = data['rental_rate']  # For example: 'hourly', 'daily', 'weekly', 'promo'
         input_rental_length = data['rental_length']
-        price_cents_at_addition = 0
+        price_when_added = 0
 
         # Takes input and changes price accordingly
         if input_rental_rate == 'hourly':
-            price_cents_at_addition = pricing.hourly_rate
+            price_when_added = pricing.hourly_rate
         elif input_rental_rate == 'daily':
-            price_cents_at_addition = pricing.daily_rate
+            price_when_added = pricing.daily_rate
         elif input_rental_rate == 'weekly':
-            price_cents_at_addition = pricing.weekly_rate
+            price_when_added = pricing.weekly_rate
         elif input_rental_rate == 'promo':
-            price_cents_at_addition = pricing.promo_rate
+            price_when_added = pricing.promo_rate
         else:
             return make_response({'error': 'Invalid rental period'}, 400)
-
-        total_price_cents = (price_cents_at_addition * input_rental_length) * data['quantity']
         
+#----------------------------------------------------------------------------------------------------------------------------------
+        # total_price_cents = (price_cents_at_addition * input_rental_length) * data['quantity']
+        # This reads as it was doing the math, calculating how much was there, but then it re-does the math in cart.
+        #^ I think this was messing it up, it's getting late now so I will test this more tomorrow
+#----------------------------------------------------------------------------------------------------------------------------------
+
         print("Your cart is:",cart.cart_name)
         print("Your equipment is:", equipment)
         print("Your rental rate:", input_rental_rate)
         print("Your rental length:", input_rental_length)
-        print("Total price in CENTS:", total_price_cents)
+        print("Total price in CENTS:", price_when_added)
         print("QUANTITY OF:", data['quantity'])
 
         #Create new CartItem with price calculated by $ * quantity (ALL IN CENTS)
@@ -881,7 +888,7 @@ class AddItemToCart(Resource):
         quantity = data['quantity'],
         rental_rate = input_rental_rate,
         rental_length = input_rental_length,
-        price_cents_at_addition=total_price_cents,
+        price_cents_at_addition=price_when_added,
         created_at = datetime.utcnow(),
         )
 

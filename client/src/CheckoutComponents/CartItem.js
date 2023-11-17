@@ -5,9 +5,10 @@ import ApiUrlContext from '../Api'
 function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate, cartItemRentalLength, cartItemQuantity}){
 
   console.log("Rental Length:", cartItemRentalLength)
+  console.log("Rental cartItemRate:", cartItemRate)
   // A lot of props and state. Can  likely move in "day options"
   const [selectedRate, setSelectedRate] = useState(cartItemRate)
-  const [dayRange, setDayRange] = useState('')
+  const [dayRange, setDayRange] = useState('') //Can't set this to cartItemRate because this is hours, days, week. While cartItemRate is hourly, daily, weekly. 
   const [rentalLength, setRentalLength] = useState(cartItemRentalLength)
   const [equipmentQuantity, setEquipmentQuantity] = useState(cartItemQuantity)
   
@@ -19,6 +20,19 @@ function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate
   <option className="text-black"value="week">Weeks</option>
   <option className="text-black"value="promo">Promo</option>
   </>
+
+  // Set a day range if cartItemRate exists, it should exist. This component will likely only be used inside of Cart. We'll see!
+  useEffect(() => {
+    if (cartItemRate === "hourly"){
+      setDayRange("hours")
+    } else if (cartItemRate === "daily"){
+      setDayRange("days")
+    } else if (cartItemRate === "weekly"){
+      setDayRange("week")
+    } else if (cartItemRate === "promo"){
+      setDayRange("promo")
+    }
+  }, [])
 
   //Concide rate with rental length (dayRange)
   const handleRateChange = (e) => {
