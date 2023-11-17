@@ -3,7 +3,7 @@ import ApiUrlContext from '../Api'
 import UserContext from '../UserComponents/UserContext'
 import CreateNewCart from './CreateNewCart'
 
-function AddToCartModal({equip_id, oneEquipment}){
+function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
 
   //Grab apiUrl from context + user info
   const apiUrl = useContext(ApiUrlContext)
@@ -15,7 +15,7 @@ function AddToCartModal({equip_id, oneEquipment}){
   const [rentalLength, setRentalLength] = useState(1)
   const [equipmentQuantity, setEquipmentQuantity] = useState(1)
   const [currentCart, setCurrentCart] = useState(1)
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  // const [isModalOpen, setIsModalOpen] = useState(false)
   const [isNewCartModalOpen, setIsNewCartModalOpen] = useState(false)
   const [cartData, setCartData] = useState([])
 
@@ -83,11 +83,12 @@ const addCart = (newCart) => {
     </Fragment>)
   })
   
-  //Toggles modal to ADD to cart
-  const toggleModal = () => {
-      setIsModalOpen(!isModalOpen)
-  }
+  // //Toggles modal to ADD to cart
+  // const toggleModal = () => {
+  //     setIsModalOpen(!isModalOpen)
+  // }
 
+ //Toggles modal to CREATE a new cart
   const toggleCartCreationModal = () => {
     setIsNewCartModalOpen(!isNewCartModalOpen)
 }
@@ -181,7 +182,7 @@ const addCart = (newCart) => {
           aria-hidden="true" 
           className="fixed top-0 left-0 right-0 bottom-0 z-50 flex justify-center items-center overflow-x-hidden overflow-y-auto"
       >
-          <div className="relative w-full max-w-2xl max-h-3/5 bg-white rounded-lg shadow dark:bg-gray-700 overflow-y-auto">
+          <div className="relative w-full max-w-2xl max-h-3/5 bg-white rounded-lg shadow dark:bg-gray-700 overflow-y-auto" onClick={(e) => e.stopPropagation()}>
               <div className="">
                   <button 
                       onClick={toggleModal} 
