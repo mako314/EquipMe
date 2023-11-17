@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect, Fragment } from 'react'
 import ApiUrlContext from '../Api'
 import UserContext from '../UserComponents/UserContext'
 import CreateNewCart from './CreateNewCart'
+import {toast} from 'react-toastify'
 
 function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
 
@@ -40,10 +41,6 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
     }
   }, [user])
 
-//   let cart
-//   if (user){
-//     cart  = user.cart
-// }
 
 const addCart = (newCart) => {
   setCartData((cartData) => [...cartData, newCart])
@@ -164,7 +161,10 @@ const addCart = (newCart) => {
       }).then((resp) => {
         if (resp.ok) {
           resp.json().then(() => {
-
+            //-1 in the cart_name, arrays index start at 0, but this grabs the correct ID. So If I select first cart, it's ID of 1. But in the array index it's 0.
+            toast.success(`🛒 Succesfully added ${quantity} ${oneEquipment.make} ${oneEquipment.name} ${oneEquipment.model},  ${cartData[currentCart - 1].cart_name}`,{
+              "autoClose" : 2000
+            })
           })
         }
       })
