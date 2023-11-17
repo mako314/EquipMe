@@ -9,6 +9,9 @@ function Cart(){
   const [dayRange, setDayRange] = useState('')
   const [rentalLength, setRentalLength] = useState(1)
   const [equipmentQuantity, setEquipmentQuantity] = useState(1)
+
+  const [cartData, setCartData] = useState([]);
+
   const [user, setUser] = useContext(UserContext)
   const apiUrl = useContext(ApiUrlContext)
 
@@ -24,49 +27,13 @@ function Cart(){
     })
   }, [])
 
-  let fetchedCartItems
   useEffect(() => {
     const fetchCartData = async () => {
       try {
         const response = await fetch(`${apiUrl}user/${user?.id}/cart/`)
         if (response.ok) {
-          const cartData = await response.json()
-          console.log("YOUR CART DATA SIRE:", cartData)
-          fetchedCartItems = cartData.forEach((cart) => {
-            // let timeDate = item.created_at
-            // let uniqueId = `${item.equipment_id}_${timeDate}`
-
-          console.log("MAPPED CART ITEMS",cart.items)
-          cart.items.map((item) => {
-          console.log("MAPPED CART EQUIP IDS",item.equipment_id)
-          console.log("mapped out prices:", (item.price_cents_at_addition / 100))
-          console.log("rental length:", item.rental_length)
-          console.log("RENTAL RATE:", item.rental_rate)
-          console.log("EQUIPMENT PICTURE:",item.equipment.equipment_image)
-          console.log("EQUIPMENT MAKE:",item.equipment.make)
-          console.log("EQUIPMENT MODEL:",item.equipment.model)
-          console.log("EQUIPMENT MODEL:",item.equipment.name)
-          })
-          
-          //   return(
-          //     <CartItem 
-          //     key={uniqueId}
-          //     equipment_image={item.equipment.equipment_image}
-          //     make={item.equipment.make}
-          //     model={item.equipment.model}
-          //     dayOptions={dayOptions}
-          //     rateOptions={rateOptions}
-          //     selectedRate={selectedRate}
-          //     setSelectedRate={setSelectedRate}
-          //     dayRange={dayRange}
-          //     setDayRange={setDayRange}
-          //     rentalLength={rentalLength}
-          //     setRentalLength={setRentalLength}
-          //     equipmentQuantity={equipmentQuantity}
-          //     setEquipmentQuantity={setEquipmentQuantity}
-          //     />
-          // )
-          })
+          const carts = await response.json()
+          setCartData(carts)
           // update cart state here
         } else {
           // Handle errors
@@ -79,6 +46,8 @@ function Cart(){
   
     fetchCartData()
   }, [user])
+
+  console.log(cartData[currentCart].items)
 
   const handleCartChange = (e) => {
     setCurrentCart(e.target.value)
@@ -136,32 +105,32 @@ function Cart(){
   // console.log("The Current Cart:",cart[currentCart])
   // console.log("The Current Cart ITEMS:",cart[currentCart].items)
 
-  let cartItems
-  if(Array.isArray(cart[currentCart].items)){
-  cartItems = cart[currentCart].items.map((item) =>{
-    // {console.log("The individual items",item)}
-    // {console.log("ID", item)}
-    // let timeDate = item.created_at
-    // let uniqueId = `${item.equipment_id}_${timeDate}`
-    // console.log("The UNIQUE ID:", uniqueId)
-    return(
-      <CartItem 
-      // key={uniqueId}
-      equipment_image={item.equipment.equipment_image}
-      make={item.equipment.make}
-      model={item.equipment.model}
-      dayOptions={dayOptions}
-      rateOptions={rateOptions}
-      selectedRate={selectedRate}
-      setSelectedRate={setSelectedRate}
-      dayRange={dayRange}
-      setDayRange={setDayRange}
-      rentalLength={rentalLength}
-      setRentalLength={setRentalLength}
-      equipmentQuantity={equipmentQuantity}
-      setEquipmentQuantity={setEquipmentQuantity}
-      />
-  )})}
+  // let cartItems
+  // if(Array.isArray(cart[currentCart].items)){
+  // cartItems = cart[currentCart].items.map((item) =>{
+  //   // {console.log("The individual items",item)}
+  //   // {console.log("ID", item)}
+  //   // let timeDate = item.created_at
+  //   // let uniqueId = `${item.equipment_id}_${timeDate}`
+  //   // console.log("The UNIQUE ID:", uniqueId)
+  //   return(
+  //     <CartItem 
+  //     // key={uniqueId}
+  //     equipment_image={item.equipment.equipment_image}
+  //     make={item.equipment.make}
+  //     model={item.equipment.model}
+  //     dayOptions={dayOptions}
+  //     rateOptions={rateOptions}
+  //     selectedRate={selectedRate}
+  //     setSelectedRate={setSelectedRate}
+  //     dayRange={dayRange}
+  //     setDayRange={setDayRange}
+  //     rentalLength={rentalLength}
+  //     setRentalLength={setRentalLength}
+  //     equipmentQuantity={equipmentQuantity}
+  //     setEquipmentQuantity={setEquipmentQuantity}
+  //     />
+  // )})}
 
     return(
         <div className="h-screen bg-gray-100 pt-20 overflow-y-auto">
@@ -174,9 +143,27 @@ function Cart(){
             onChange={handleCartChange}>
             {cartOptions}
       </select>
-      {cart[currentCart].items?.length === 0 ? <div>Cart is empty or loading...</div> : cartItems}
+      {/* {cart[currentCart].items?.length === 0 ? <div>Cart is empty or loading...</div> : fetchedCartItems} */}
 
-      {/* {cartItems} */}
+      { cart ? cartData[currentCart].items.map((item) => (
+        <CartItem 
+        key={ `${item.equipment_id}_${item.created_at}`}
+        equipment_image={item.equipment.equipment_image}
+        make={item.equipment.make}
+        model={item.equipment.model}
+        dayOptions={dayOptions}
+        rateOptions={rateOptions}
+        selectedRate={item.rental_rate}
+        setSelectedRate={setSelectedRate}
+        dayRange={dayRange}
+        setDayRange={setDayRange}
+        rentalLength={item.rental_length}
+        setRentalLength={setRentalLength}
+        equipmentQuantity={item.equipment.quantity}
+        setEquipmentQuantity={setEquipmentQuantity}
+        />
+      ))  
+     : <p> Give me a second im loading over here...</p>}
 
       </div>
       <div className="mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-0 md:w-1/3">
