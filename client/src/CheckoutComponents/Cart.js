@@ -10,7 +10,7 @@ function Cart(){
   // const [rentalLength, setRentalLength] = useState(1)
   // const [equipmentQuantity, setEquipmentQuantity] = useState(1)
 
-  const [cartData, setCartData] = useState([]);
+  // const [cartData, setCartData] = useState([]);
 
   const [user, setUser] = useContext(UserContext)
   const apiUrl = useContext(ApiUrlContext)
@@ -27,25 +27,25 @@ function Cart(){
     })
   }, [])
 
-  useEffect(() => {
-    const fetchCartData = async () => {
-      try {
-        const response = await fetch(`${apiUrl}user/${user?.id}/cart/`)
-        if (response.ok) {
-          const carts = await response.json()
-          setCartData(carts)
-          // update cart state here
-        } else {
-          // Handle errors
-        }
-      } catch (error) {
-        console.log(error)
-        // Handle fetching errors
-      }
-    }
+  // useEffect(() => {
+  //   const fetchCartData = async () => {
+  //     try {
+  //       const response = await fetch(`${apiUrl}user/${user?.id}/cart/`)
+  //       if (response.ok) {
+  //         const carts = await response.json()
+  //         setCartData(carts)
+  //         // update cart state here
+  //       } else {
+  //         // Handle errors
+  //       }
+  //     } catch (error) {
+  //       console.log(error)
+  //       // Handle fetching errors
+  //     }
+  //   }
   
-    fetchCartData()
-  }, [user])
+  //   fetchCartData()
+  // }, [user])
 
   // console.log(cartData[currentCart].items)
 
@@ -95,6 +95,9 @@ function Cart(){
     })
   }
 
+  console.log("JUST CART:", cart)
+  // console.log("CART DATA:", cartData)
+
     return(
         <div className="h-screen bg-gray-100 pt-20 overflow-y-auto">
     <h1 className="mb-10 text-center text-2xl font-bold">Cart Items</h1>
@@ -108,20 +111,23 @@ function Cart(){
       </select>
       {/* {cart[currentCart].items?.length === 0 ? <div>Cart is empty or loading...</div> : fetchedCartItems} */}
 
-      { cart ? cartData[currentCart]?.items.map((item) => (
-        console.log("THE ITEM:", item),
-        <CartItem 
-        key={ `${item.equipment_id}_${item.created_at}`}
-        equipment_image={item.equipment.equipment_image}
-        make={item.equipment.make}
-        model={item.equipment.model}
-        rateOptions={rateOptions}
-        cartItemRate={item.rental_rate}
-        cartItemRentalLength={item.rental_length}
-        cartItemQuantity={item.quantity}
-        />
-      ))  
-     : <p> Give me a second im loading over here...</p>}
+      { cart[currentCart].items?.length === 0 ?
+        <p> Cart is empty or loading...</p> 
+        : 
+        cart[currentCart]?.items.map((item) => (
+          // console.log("THE ITEM:", item),
+          <CartItem 
+          key={ `${item.equipment_id}_${item.created_at}`}
+          equipment_image={item.equipment.equipment_image}
+          make={item.equipment.make}
+          model={item.equipment.model}
+          rateOptions={rateOptions}
+          cartItemRate={item.rental_rate}
+          cartItemRentalLength={item.rental_length}
+          cartItemQuantity={item.quantity}
+          />
+        ))  
+        }
 
       </div>
       <div className="mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-0 md:w-1/3">
@@ -137,7 +143,7 @@ function Cart(){
         <div className="flex justify-between">
           <p className="text-lg font-bold">Total</p>
           <div className="">
-            <p className="mb-1 text-lg font-bold">$134.98 USD</p>
+            <p className="mb-1 text-lg font-bold">${(cart[currentCart]?.total / 100)}</p>
             <p className="text-sm text-gray-700">including VAT</p>
           </div>
         </div>
