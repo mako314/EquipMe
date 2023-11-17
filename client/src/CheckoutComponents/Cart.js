@@ -5,10 +5,10 @@ import ApiUrlContext from '../Api'
 
 function Cart(){
   const [currentCart, setCurrentCart] = useState(0)
-  const [selectedRate, setSelectedRate] = useState('')
-  const [dayRange, setDayRange] = useState('')
-  const [rentalLength, setRentalLength] = useState(1)
-  const [equipmentQuantity, setEquipmentQuantity] = useState(1)
+  // const [selectedRate, setSelectedRate] = useState('')
+  // const [dayRange, setDayRange] = useState('')
+  // const [rentalLength, setRentalLength] = useState(1)
+  // const [equipmentQuantity, setEquipmentQuantity] = useState(1)
 
   const [cartData, setCartData] = useState([]);
 
@@ -47,7 +47,7 @@ function Cart(){
     fetchCartData()
   }, [user])
 
-  console.log(cartData[currentCart].items)
+  // console.log(cartData[currentCart].items)
 
   const handleCartChange = (e) => {
     setCurrentCart(e.target.value)
@@ -59,13 +59,7 @@ function Cart(){
   }
 
   //-------------------------------------
-  //Just basic day options, to track the amount of time they're trying to rent for
-  const dayOptions = <>
-  <option className="text-black"value="hours">Hours</option>
-  <option className="text-black"value="days">Days</option>
-  <option className="text-black"value="week">Weeks</option>
-  <option className="text-black"value="promo">Promo</option>
-  </>
+
 
   // Map over carts, present options
   const cartOptions = cart?.map((item) => {
@@ -101,37 +95,6 @@ function Cart(){
     })
   }
 
-  // console.log(currentCart)
-  // console.log("The Current Cart:",cart[currentCart])
-  // console.log("The Current Cart ITEMS:",cart[currentCart].items)
-
-  // let cartItems
-  // if(Array.isArray(cart[currentCart].items)){
-  // cartItems = cart[currentCart].items.map((item) =>{
-  //   // {console.log("The individual items",item)}
-  //   // {console.log("ID", item)}
-  //   // let timeDate = item.created_at
-  //   // let uniqueId = `${item.equipment_id}_${timeDate}`
-  //   // console.log("The UNIQUE ID:", uniqueId)
-  //   return(
-  //     <CartItem 
-  //     // key={uniqueId}
-  //     equipment_image={item.equipment.equipment_image}
-  //     make={item.equipment.make}
-  //     model={item.equipment.model}
-  //     dayOptions={dayOptions}
-  //     rateOptions={rateOptions}
-  //     selectedRate={selectedRate}
-  //     setSelectedRate={setSelectedRate}
-  //     dayRange={dayRange}
-  //     setDayRange={setDayRange}
-  //     rentalLength={rentalLength}
-  //     setRentalLength={setRentalLength}
-  //     equipmentQuantity={equipmentQuantity}
-  //     setEquipmentQuantity={setEquipmentQuantity}
-  //     />
-  // )})}
-
     return(
         <div className="h-screen bg-gray-100 pt-20 overflow-y-auto">
     <h1 className="mb-10 text-center text-2xl font-bold">Cart Items</h1>
@@ -145,22 +108,17 @@ function Cart(){
       </select>
       {/* {cart[currentCart].items?.length === 0 ? <div>Cart is empty or loading...</div> : fetchedCartItems} */}
 
-      { cart ? cartData[currentCart].items.map((item) => (
+      { cart ? cartData[currentCart]?.items.map((item) => (
+        console.log("THE ITEM:", item),
         <CartItem 
         key={ `${item.equipment_id}_${item.created_at}`}
         equipment_image={item.equipment.equipment_image}
         make={item.equipment.make}
         model={item.equipment.model}
-        dayOptions={dayOptions}
         rateOptions={rateOptions}
-        selectedRate={item.rental_rate}
-        setSelectedRate={setSelectedRate}
-        dayRange={dayRange}
-        setDayRange={setDayRange}
-        rentalLength={item.rental_length}
-        setRentalLength={setRentalLength}
-        equipmentQuantity={item.equipment.quantity}
-        setEquipmentQuantity={setEquipmentQuantity}
+        cartItemRate={item.rental_rate}
+        cartItemRentalLength={item.rental_length}
+        cartItemQuantity={item.quantity}
         />
       ))  
      : <p> Give me a second im loading over here...</p>}

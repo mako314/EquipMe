@@ -2,10 +2,24 @@ import React,{useContext, useEffect, useState} from "react";
 import UserContext from '../UserComponents/UserContext'
 import ApiUrlContext from '../Api'
 
-function CartItem({equipment_image, name, make, model, dayOptions, rateOptions, selectedRate, setSelectedRate, dayRange, setDayRange, rentalLength, setRentalLength, equipmentQuantity, setEquipmentQuantity}){
+function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate, cartItemRentalLength, cartItemQuantity}){
 
-  // A lot of props coming in, they used to exist here, but it complicated state management.
+  console.log("Rental Length:", cartItemRentalLength)
+  // A lot of props and state. Can  likely move in "day options"
+  const [selectedRate, setSelectedRate] = useState(cartItemRate)
+  const [dayRange, setDayRange] = useState('')
+  const [rentalLength, setRentalLength] = useState(cartItemRentalLength)
+  const [equipmentQuantity, setEquipmentQuantity] = useState(cartItemQuantity)
   
+
+  //Just basic day options, to track the amount of time they're trying to rent for
+  const dayOptions = <>
+  <option className="text-black"value="hours">Hours</option>
+  <option className="text-black"value="days">Days</option>
+  <option className="text-black"value="week">Weeks</option>
+  <option className="text-black"value="promo">Promo</option>
+  </>
+
   //Concide rate with rental length (dayRange)
   const handleRateChange = (e) => {
     const newRate = e.target.value
