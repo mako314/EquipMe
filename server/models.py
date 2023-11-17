@@ -330,6 +330,7 @@ class CartItem(db.Model, SerializerMixin):
     price_cents_at_addition = db.Column(db.Integer)
     price_cents_if_changed = db.Column(db.Integer, nullable = True)
     quantity = db.Column(db.Integer, default=1)
+    rental_rate = db.Column(db.String)
     rental_length = db.Column(db.Integer, default=1)
 
     created_at = db.Column(

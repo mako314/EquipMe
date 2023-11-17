@@ -562,42 +562,51 @@ class RentalAgreements(Resource):
     #post a rental agreement
     def post(self):
         data = request.get_json()
+
         #try:
+        cartId = data['cart_id']
+        cart = Cart.query.filter(Cart.id == cartId).first()
+        
+        
+        cart.items
+        # If neither cart or equipment are found, return 404
+        if not cart:
+            return make_response({'error': 'Cart not found'}, 404)
 
         #need a way to grab equipment and owner
         # load category and then from there display 
         #take the input
 
         equipment_id = data['equipment_id']
-        start_date = data['start_date']
-        end_date = data['end_date']
+        start_date = data['rental_start_date']
+        end_date = data['rental_end_date']
 
         equipment = Equipment.query.filter(Equipment.id == equipment_id).first()
         
         if not equipment:
             return {"error": "Equipment not found"}, 404
         
-        if is_available_for_date_range(equipment, start_date, end_date) and equipment.quantity > 0:
-            equipment.quantity -= 1
+        # if is_available_for_date_range(equipment, start_date, end_date) and equipment.quantity > 0:
+        #     equipment.quantity -= 1
 
-            #may need a way to write in validations
-            new_rental_agreement = RentalAgreement(
-                rental_start_date = data['rental_start_date'],
-                rental_end_date = data['rental_end_date'],
-                owner_id = data['owner_id'],
-                user_id = data['user_id'],
-                cart_item_id = data['cart_item_id'],
-                created_at = datetime.utcnow(),
-                modified_on = datetime.utcnow(),
+        #may need a way to write in validations
+        new_rental_agreement = RentalAgreement(
+            rental_start_date = start_date,
+            rental_end_date = end_date,
+            owner_id = data['owner_id'],
+            user_id = data['user_id'],
+            cart_item_id = data['cart_item_id'],
+            created_at = datetime.utcnow(),
+            modified_on = datetime.utcnow(),
 
-            )
-            db.session.add(new_rental_agreement)
-            db.session.commit()
+        )
+        db.session.add(new_rental_agreement)
+        db.session.commit()
 
-            response = make_response(new_rental_agreement.to_dict(), 201)
-            return response
-        else:
-            return {"error": "Equipment not available for the requested date range or quantity depleted"}, 400
+        response = make_response(new_rental_agreement.to_dict(), 201)
+        return response
+        # else:
+        #     return {"error": "Equipment not available for the requested date range or quantity depleted"}, 400
         # db.session.add(new_rental_agreement)
         # db.session.commit()
 
@@ -778,10 +787,10 @@ api.add_resource(Carts, "/carts")
 
 class CartByUserID(Resource):
     def get(self,user_id):
-        cart = Cart.query.filter(Cart.user_id == user_id).first()
-
-        if cart:
-            return make_response(cart.to_dict(),200)
+        carts = Cart.query.filter(Cart.user_id == user_id).all()
+        if carts:
+            carts_dict = [cart.to_dict() for cart in carts]
+            return make_response(carts_dict,200)
         else:
             response = make_response({
             "error": "Item not found"
@@ -819,7 +828,7 @@ class CartByUserID(Resource):
             }, 404)
             return response
         
-api.add_resource(CartByUserID, "/cart/item/<int:user_id>")
+api.add_resource(CartByUserID, "/user/<int:user_id>/cart/")
 
 class AddItemToCart(Resource):
     def post(self,cart_id):
@@ -830,6 +839,9 @@ class AddItemToCart(Resource):
         cart = Cart.query.filter(Cart.id == cart_id).first()
         equipment = Equipment.query.filter(Equipment.id == data['equipment_id']).first()
 
+        # new_items = [] # Math here, need to add stuff to a list, call function on it, then calculate total. Something is going wrong somewhere. 
+        # THE ABOVE MIGHT BEEN FIXED BY READING BELOOOOOOOOOOOOOOOOOOOOOW
+
         # If neither cart or equipment are found, return 404
         if not cart:
             return make_response({'error': 'Cart not found'}, 404)
@@ -838,35 +850,48 @@ class AddItemToCart(Resource):
         
         #Initialize pricing, pricing at the moment can only handle array with an index of 0, unless I decide to incorporate other pricing options, so you could run pricing "sets" owner could just select. Has access to rates
         pricing = equipment.equipment_price[0]   
-             
-        rental_rate = data['rental_rate']  # For example: 'hourly', 'daily', 'weekly', 'promo'
-        rental_length = data['rental_length']
-        price_cents_at_addition = 0
+        
+        #changed rental_rate and rental_length because I was reusing the variable names in the post. Changed names to be INPUT
+
+        input_rental_rate = data['rental_rate']  # For example: 'hourly', 'daily', 'weekly', 'promo'
+        input_rental_length = data['rental_length']
+        price_when_added = 0
+
         # Takes input and changes price accordingly
-        if rental_rate == 'hourly':
-            price_cents_at_addition = pricing.hourly_rate
-        elif rental_rate == 'daily':
-            price_cents_at_addition = pricing.daily_rate
-        elif rental_rate == 'weekly':
-            price_cents_at_addition = pricing.weekly_rate
-        elif rental_rate == 'promo':
-            price_cents_at_addition = pricing.promo_rate
+        if input_rental_rate == 'hourly':
+            price_when_added = pricing.hourly_rate
+        elif input_rental_rate == 'daily':
+            price_when_added = pricing.daily_rate
+        elif input_rental_rate == 'weekly':
+            price_when_added = pricing.weekly_rate
+        elif input_rental_rate == 'promo':
+            price_when_added = pricing.promo_rate
         else:
             return make_response({'error': 'Invalid rental period'}, 400)
-
-        total_price_cents = (price_cents_at_addition * rental_length) * data['quantity']
         
+#----------------------------------------------------------------------------------------------------------------------------------
+        # total_price_cents = (price_cents_at_addition * input_rental_length) * data['quantity']
+        # This reads as it was doing the math, calculating how much was there, but then it re-does the math in cart.
+        #^ I think this was messing it up, it's getting late now so I will test this more tomorrow
+#----------------------------------------------------------------------------------------------------------------------------------
+
         print("Your cart is:",cart.cart_name)
         print("Your equipment is:", equipment)
+        print("Your rental rate:", input_rental_rate)
+        print("Your rental length:", input_rental_length)
+        print("Total price in CENTS:", price_when_added)
+        print("QUANTITY OF:", data['quantity'])
 
         #Create new CartItem with price calculated by $ * quantity (ALL IN CENTS)
         new_item = CartItem(
-        equipment_id=equipment.id,
-        quantity=data['quantity'],
-        rental_length = data['rental_length'],
-        price_cents_at_addition=total_price_cents,
+        equipment_id = equipment.id,
+        quantity = data['quantity'],
+        rental_rate = input_rental_rate,
+        rental_length = input_rental_length,
+        price_cents_at_addition=price_when_added,
         created_at = datetime.utcnow(),
         )
+
         # Append item to cart, after adding and comitting, calculcate total if wanting to do a group adding system can do for item in a new list made here, append, then calculate total at the end.
         cart.items.append(new_item)
 

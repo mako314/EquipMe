@@ -9,6 +9,9 @@ function Cart(){
   // const [dayRange, setDayRange] = useState('')
   // const [rentalLength, setRentalLength] = useState(1)
   // const [equipmentQuantity, setEquipmentQuantity] = useState(1)
+
+  // const [cartData, setCartData] = useState([]);
+
   const [user, setUser] = useContext(UserContext)
   const apiUrl = useContext(ApiUrlContext)
 
@@ -24,6 +27,28 @@ function Cart(){
     })
   }, [])
 
+  // useEffect(() => {
+  //   const fetchCartData = async () => {
+  //     try {
+  //       const response = await fetch(`${apiUrl}user/${user?.id}/cart/`)
+  //       if (response.ok) {
+  //         const carts = await response.json()
+  //         setCartData(carts)
+  //         // update cart state here
+  //       } else {
+  //         // Handle errors
+  //       }
+  //     } catch (error) {
+  //       console.log(error)
+  //       // Handle fetching errors
+  //     }
+  //   }
+  
+  //   fetchCartData()
+  // }, [user])
+
+  // console.log(cartData[currentCart].items)
+
   const handleCartChange = (e) => {
     setCurrentCart(e.target.value)
   }
@@ -33,66 +58,22 @@ function Cart(){
     cart  = user?.cart
   }
 
-  // //----------------------
-  // // -1 on quantity
-  // const decrementQuantity = () => {
-  //   setEquipmentQuantity((prevequipmentQuantity) => (prevequipmentQuantity > 1 ? prevequipmentQuantity - 1 : 1))
-  // }
-
-  // // +1 on quantity 
-  // const incrementQuantity = () => {
-  //   setEquipmentQuantity(prevequipmentQuantity => prevequipmentQuantity + 1)
-  // }
-
-
-  //Concide rate with rental length (dayRange)
-  // const handleRateChange = (e) => {
-  //   const newRate = e.target.value
-  //   setSelectedRate(newRate)
-  //   if (newRate === "hourly"){
-  //     setDayRange("hours")
-  //   } else if (newRate === "daily"){
-  //     setDayRange("days")
-  //   } else if (newRate === "weekly"){
-  //     setDayRange("week")
-  //   } else if (newRate === "promo"){
-  //     setDayRange("promo")
-  //   }
-  // }
-
-  // //Concide rental length (dayRange) with rate
-  // const handleDayRangeChange = (e) => {
-  //   const newDayRange = e.target.value
-  //   setDayRange(newDayRange)
-  //   if (newDayRange === "hours"){
-  //     setSelectedRate("hourly")
-  //   } else if (newDayRange === "days"){
-  //     setSelectedRate("daily")
-  //   } else if (newDayRange === "week"){
-  //     setSelectedRate("weekly")
-  //   } else if (newDayRange === "promo"){
-  //     setSelectedRate("promo")
-  //   }
-  // }
-
   //-------------------------------------
-  //Just basic day options, to track the amount of time they're trying to rent for
-  const dayOptions = <>
-  <option className="text-black"value="hours">Hours</option>
-  <option className="text-black"value="days">Days</option>
-  <option className="text-black"value="week">Weeks</option>
-  <option className="text-black"value="promo">Promo</option>
-  </>
 
+
+  // Map over carts, present options
   const cartOptions = cart?.map((item) => {
     return (
     <Fragment key={`${item.id} ${item.cart_name}`}>
+    {/* so the value starts at 0, but the item.id (cart id) starts at 1. So I -1 here to get the right cart index */}
     <option className="text-black" value={item.id - 1}>{item.cart_name}</option> 
     </Fragment>)
   })
 
+  // console.log(currentCart)
+
   if (!cart || cart?.length === 0) {
-    return <div>Cart is empty or loading...</div>;
+    return <div>Cart is empty or loading...</div>
   }
 
   //Map over equipment price, and take the rates as options
@@ -114,30 +95,8 @@ function Cart(){
     })
   }
 
-  // console.log(currentCart)
-  // console.log("The Current Cart:",cart[currentCart])
-  // console.log("The Current Cart ITEMS:",cart[currentCart].items)
-
-  let cartItems
-  if(Array.isArray(cart[currentCart].items)){
-  cartItems = cart[currentCart].items.map((item) =>{
-    // {console.log("The individual items",item)}
-    // {console.log("ID", item)}
-    let timeDate = item.created_at
-    let uniqueId = `${item.equipment_id}_${timeDate}`
-    console.log("The UNIQUE ID:", uniqueId)
-    return(
-      <CartItem 
-      key={uniqueId}
-      equipment_image={item.equipment.equipment_image}
-      make={item.equipment.make}
-      model={item.equipment.model}
-      dayOptions={dayOptions}
-      rateOptions={rateOptions}
-      />
-  )})}
-
-  
+  console.log("JUST CART:", cart)
+  // console.log("CART DATA:", cartData)
 
     return(
         <div className="h-screen bg-gray-100 pt-20 overflow-y-auto">
@@ -149,10 +108,26 @@ function Cart(){
             value={currentCart} 
             onChange={handleCartChange}>
             {cartOptions}
-            <option className="text-black"value="2"> Test 2</option>
       </select>
+      {/* {cart[currentCart].items?.length === 0 ? <div>Cart is empty or loading...</div> : fetchedCartItems} */}
 
-      {cartItems}
+      { cart[currentCart].items?.length === 0 ?
+        <p> Cart is empty or loading...</p> 
+        : 
+        cart[currentCart]?.items.map((item) => (
+          // console.log("THE ITEM:", item),
+          <CartItem 
+          key={ `${item.equipment_id}_${item.created_at}`}
+          equipment_image={item.equipment.equipment_image}
+          make={item.equipment.make}
+          model={item.equipment.model}
+          rateOptions={rateOptions}
+          cartItemRate={item.rental_rate}
+          cartItemRentalLength={item.rental_length}
+          cartItemQuantity={item.quantity}
+          />
+        ))  
+        }
 
       </div>
       <div className="mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-0 md:w-1/3">
@@ -168,7 +143,7 @@ function Cart(){
         <div className="flex justify-between">
           <p className="text-lg font-bold">Total</p>
           <div className="">
-            <p className="mb-1 text-lg font-bold">$134.98 USD</p>
+            <p className="mb-1 text-lg font-bold">${(cart[currentCart]?.total / 100)}</p>
             <p className="text-sm text-gray-700">including VAT</p>
           </div>
         </div>

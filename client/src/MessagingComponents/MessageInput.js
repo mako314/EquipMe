@@ -24,6 +24,9 @@ function MessageInput({SelectedThreadID, setNewMessage, newMessage, setInboxes, 
 //   console.log(owner)
 
   
+// They should have context ids already so input them here
+
+
 // --------------------------------------------------------------------
 
 // ---------------Detect whether or not a USER is logged in-------------------

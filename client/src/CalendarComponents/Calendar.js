@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import {toast} from 'react-toastify'
 
 function Calendar() {
   
@@ -34,9 +35,23 @@ function Calendar() {
     setFormattedEndDate(formatDate(endDate))
   }, [])
 
-  console.log("format start:", formattedStartDate)
-  console.log("format end:", formattedEndDate)
+//----------------------------------------------------------------------------------------
 
+  // I don't think this matters, the min parameter inside of date-local NEVER worked.
+
+  useEffect(() => {
+    // Whenever the startRental changes, update the minimum end time
+    if (startRental) {
+      const startDateTime = new Date(startRental).getTime()
+      const minEndDateTime = new Date(startDateTime + 3600000) // Add one hour
+      setFormattedEndDate(formatDate(minEndDateTime))
+    }
+  }, [startRental])
+
+//----------------------------------------------------------------------------------------
+  
+  // console.log("format start:", formattedStartDate)
+  // console.log("format end:", formattedEndDate)
   // Was just setting formatted variables with let, instead I made a function that formats them.
   const formatDate = (date) => {
     // Was having a lot of issues and couldn't tell where from, so I wrote some validations to test what could be going wrong
@@ -48,43 +63,50 @@ function Calendar() {
     let timezoneOffset = date.getTimezoneOffset() * 60000
     // To get the local date, you just take the date z(which we test to see if it was an instance of Date, since the useEffect makes it so it continues). When subtracting timezoneOffset, you just get the appropriate time, 24hr format.
     let localDate = new Date(date - timezoneOffset)
-    // Slice so I don't get the very long info, 
-    return localDate.toISOString().slice(0, 16)
+    // Slice so I don't get the very long info, can do -8 or 16. 
+    // https://stackoverflow.com/questions/67423091/react-jsx-add-min-date-time-to-datetime-local-input
+    // For some reason though my MIN did NOT work
+    return localDate.toISOString().slice(0, -8)
   }
 
-  const addDays = (days, time=0) => {
-    //I kept having issues regardless, this is just a cheap workaround with an "optional" parameter
-
-    // Time here is x amounts of hours ahead, for example I'm using 1 hour in microseconds
-    // Days ahead is days ahead, I chose 365
-
-    // Was having a lot of issues and couldn't tell where from, so I wrote some validations to test what could be going wrong
-    // if (!(dateStr instanceof Date)) {
-    //   console.error('Invalid date provided to addDays:', dateStr)
-    //   return null
-    // }
-    // This adds on x amount of days from the date. .getDate gets the date, today being 11/15/2023, it gets 15. Then adds days to it. Only using this to add a year (365)
-
-    // I opted to just create a new day here. This can probably just be globally scoped.
-    let date = new Date()
-    // Off set for my timezone 
-    let timezoneOffset = date.getTimezoneOffset() * 60000 // EST
-    
-    date.setDate(date.getDate() + days)
-    let localDate
-    if (time > 0){
-     localDate = new Date((date - timezoneOffset) + time)
-    } else {
-     localDate = new Date(date - timezoneOffset)
+  // Time here is x amounts of hours ahead, for example I'm using 1 hour in microseconds
+  // Days ahead is days ahead, I chose 365
+  const addDays = (baseDate, days, time = 0) => {
+    // Parse the base date
+    let date = new Date(baseDate);
+  
+    // Add the specified number of days
+    date.setDate(date.getDate() + days);
+  
+    // Optionally, add additional time in milliseconds
+    if (time > 0) {
+      date = new Date(date.getTime() + time);
     }
-    // Format the new day we have! 
-    return formatDate(localDate)
+  
+    // Return the formatted date
+    return formatDate(date);
   }
+
 
   //Handles changing the START date
   const handleStartDateChange = (event) => {
-    //Set Start date, 
-    setStartRental(event.target.value)
+
+    let startDate = new Date()
+    let selectedStart = new Date(event.target.value)
+
+    // Get a min start time, ATM +3600000 is for an hour ahead. This way the start time can only be local time +1hr. It'd be too hard to establish a rental in the next 4 minutes.
+    let minStartTime = new Date(startDate.getTime() + 3600000)
+
+    if (selectedStart >= minStartTime){
+      //Set Start date,
+      setStartRental(event.target.value)
+    } else {
+      // Alert the user that the end date must be at least one hour after the start date
+      console.warn("Start date and time must be one hour ahead of local time to allow for a smoother process.")
+      // toast.warn("Start date and time must be one hour ahead of local time to allow for a smoother process.")
+    }
+    
+  //--------------------------------------FormattedEndDate kind of useless (TIME WISE) since min is not working properly for it---------------
 
     //Set the new end date off the same value, then calculate one hour ahead (so minimum booking is 1hr)
     let newEndDate = new Date(new Date(event.target.value).getTime() + 3600000) // One hour later
@@ -100,31 +122,38 @@ function Calendar() {
 
   //
   const handleEndDateChange = (event) => {
-    let newEnd = new Date(event.target.value)
-    let currentStart = new Date(startRental)
-    
-    //Tests whether or not the end that was set when you picked the start (remember must be 1hr more preset). If graeter than, then allow setting
 
-    if (newEnd > currentStart) {
+    //Date object that user Selects
+    let newEnd = new Date(event.target.value)
+
+    // Remember startRental was sent into the formatDate function so it was sliced,
+    let currentStart = new Date(startRental)
+
+    // Calculate the minimum end time, which is one hour after the start time
+    let minEndDateTime = new Date(currentStart.getTime() + 3600000)
+  
+    console.log("THE NEW END:", newEnd.toISOString())
+    console.log("THE minEndDateTime:", minEndDateTime.toISOString())
+  
+    // Check if the new end time is greater than or equal to the minimum end time
+    if (newEnd >= minEndDateTime) {
       setEndRental(event.target.value)
     } else {
-      //  alert the user going to use toastify here
+      // Alert the user that the end date must be at least one hour after the start date
       console.warn("End date must be at least one hour after the start date.")
+      // toast.warn("End date must be at least one hour after the start date.")
     }
-  }
+  };
 
   // console.log("START MAX",startMaxValue(formattedStartDate, 365))
   // console.log("END MAX",endMaxValue(formattedEndDate, 365))
-
   // console.log("Start Rental:", startRental)
   // console.log("End Rental:", endRental)
   // console.log("Formatted End Date:", formattedEndDate)
   // console.log("Starting day:", formattedStartDate)
-  console.log("STARTING ONE YEAR FROM NOW:",addDays(365))
-
+  // console.log("STARTING ONE YEAR FROM NOW:",addDays(365))
   // console.log("End date should be +1 hr:", formattedEndDate)
-  console.log("One year from now:",(addDays(365,3600000)) )
-
+  // console.log("One year from now:",(addDays(365,3600000)) )
   // console.log("Starting day:", startRental)
   // console.log("Ending day:", endRental)
 
@@ -139,12 +168,12 @@ function Calendar() {
       className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
       value={startRental}
       onChange={handleStartDateChange}
-      min={formattedStartDate}
-      max={addDays(365)}
+      min={formattedStartDate} // This one worked though, 
+      max={startRental ? addDays(startRental, 365) : undefined}
     />
   </div>
 
-  <div className='mb-4'>
+  {startRental ? <div className='mb-4'>
     <label htmlFor="end-date" className='block text-sm font-medium text-gray-700'>Choose an ending day and time for your rental:</label>
     <input
       type="datetime-local"
@@ -153,10 +182,14 @@ function Calendar() {
       className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
       value={endRental}
       onChange={handleEndDateChange}
-      min={formattedEndDate}
-      max={addDays(365,3600000)}
+      min={formattedEndDate} //This does not matter, what an annoying concept. (Day works)
+      max={startRental ? addDays(startRental, 365, 3600000) : undefined}
+      disabled={!formattedEndDate}
     />
   </div>
+  : <span> Please Select A Start Date</span>}
+
+  
 </div>
   )
 }

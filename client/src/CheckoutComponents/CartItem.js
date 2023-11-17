@@ -2,11 +2,37 @@ import React,{useContext, useEffect, useState} from "react";
 import UserContext from '../UserComponents/UserContext'
 import ApiUrlContext from '../Api'
 
-function CartItem({equipment_image, make, model, dayOptions, rateOptions}){
-  const [selectedRate, setSelectedRate] = useState('')
-  const [dayRange, setDayRange] = useState('')
-  const [rentalLength, setRentalLength] = useState(1)
-  const [equipmentQuantity, setEquipmentQuantity] = useState(1)
+function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate, cartItemRentalLength, cartItemQuantity}){
+
+  console.log("Rental Length:", cartItemRentalLength)
+  console.log("Rental cartItemRate:", cartItemRate)
+  // A lot of props and state. Can  likely move in "day options"
+  const [selectedRate, setSelectedRate] = useState(cartItemRate)
+  const [dayRange, setDayRange] = useState('') //Can't set this to cartItemRate because this is hours, days, week. While cartItemRate is hourly, daily, weekly. 
+  const [rentalLength, setRentalLength] = useState(cartItemRentalLength)
+  const [equipmentQuantity, setEquipmentQuantity] = useState(cartItemQuantity)
+  
+
+  //Just basic day options, to track the amount of time they're trying to rent for
+  const dayOptions = <>
+  <option className="text-black"value="hours">Hours</option>
+  <option className="text-black"value="days">Days</option>
+  <option className="text-black"value="week">Weeks</option>
+  <option className="text-black"value="promo">Promo</option>
+  </>
+
+  // Set a day range if cartItemRate exists, it should exist. This component will likely only be used inside of Cart. We'll see!
+  useEffect(() => {
+    if (cartItemRate === "hourly"){
+      setDayRange("hours")
+    } else if (cartItemRate === "daily"){
+      setDayRange("days")
+    } else if (cartItemRate === "weekly"){
+      setDayRange("week")
+    } else if (cartItemRate === "promo"){
+      setDayRange("promo")
+    }
+  }, [])
 
   //Concide rate with rental length (dayRange)
   const handleRateChange = (e) => {
@@ -60,7 +86,7 @@ function CartItem({equipment_image, make, model, dayOptions, rateOptions}){
               <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between">
                   {/* Product Details */}
                   <div className="mt-5 sm:mt-0">
-                      <h2 className="text-lg font-bold text-gray-900">{make}</h2>
+                      <h2 className="text-lg font-bold text-gray-900">{make} {name}</h2>
                       {/* Additional details like size or color can go here */}
                       <p className="mt-1 text-xs text-gray-700">{model}</p>
                   </div>

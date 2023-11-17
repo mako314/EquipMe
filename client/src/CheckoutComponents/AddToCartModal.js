@@ -1,6 +1,7 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect, Fragment } from 'react'
 import ApiUrlContext from '../Api'
 import UserContext from '../UserComponents/UserContext'
+import CartItem from './CartItem'
 
 function AddToCartModal({equip_id, oneEquipment}){
 
@@ -28,7 +29,6 @@ function AddToCartModal({equip_id, oneEquipment}){
     cart  = user.cart
 }
   console.log("YOUR CART:", cart)
-  
   // console.log("This is the selected rate:", selectedRate)
   // console.log("this is the date range:", dayRange)
 
@@ -46,13 +46,15 @@ function AddToCartModal({equip_id, oneEquipment}){
 
 
   //Map over equipment price, and take the rates as options
+  //May need to do fragment KEY
   const rateOptions = equipment_price?.map((price) => {
-    return (<>
+    return (
+    <Fragment key={price.id}>
     <option className="text-black"value="hourly">Hourly Rate: ${price.hourly_rate/100}</option>
     <option className="text-black"value="daily">Daily Rate: ${price.daily_rate/100}</option>
     <option className="text-black"value="weekly">Weekly Rate: ${price.weekly_rate/100}</option>
     <option className="text-black"value="promo">Promo Rate: ${price.promo_rate/100}</option>
-    </>)
+    </Fragment>)
   })
 
   //Just basic day options, to track the amount of time they're trying to rent for
@@ -64,25 +66,16 @@ function AddToCartModal({equip_id, oneEquipment}){
   </>
 
   const cartOptions = cart?.map((item) => {
-    return (<>
+    return (
+    <Fragment key={`${item.id} ${item.cart_name}`}>
     <option className="text-black"value={item.id}>{item.cart_name}</option> 
     
-    </>)
+    </Fragment>)
   })
   
   //Toggles modal
   function toggleModal() {
       setIsModalOpen(!isModalOpen)
-  }
-
-  // -1 on quantity
-  const decrementQuantity = () => {
-    setEquipmentQuantity((prevequipmentQuantity) => (prevequipmentQuantity > 1 ? prevequipmentQuantity - 1 : 1))
-  }
-
-  // +1 on quantity 
-  const incrementQuantity = () => {
-    setEquipmentQuantity(prevequipmentQuantity => prevequipmentQuantity + 1)
   }
 
   //Selects which cart you're trying to add it to
@@ -109,7 +102,6 @@ function AddToCartModal({equip_id, oneEquipment}){
   const handleDayRangeChange = (e) => {
     const newDayRange = e.target.value
     setDayRange(newDayRange)
-
     if (newDayRange === "hours"){
       setSelectedRate("hourly")
     } else if (newDayRange === "days"){
@@ -121,6 +113,18 @@ function AddToCartModal({equip_id, oneEquipment}){
     }
   }
 
+    //----------------------
+    // -1 on quantity
+    const decrementQuantity = () => {
+      setEquipmentQuantity((prevequipmentQuantity) => (prevequipmentQuantity > 1 ? prevequipmentQuantity - 1 : 1))
+    }
+
+    // +1 on quantity 
+    const incrementQuantity = () => {
+      setEquipmentQuantity(prevequipmentQuantity => prevequipmentQuantity + 1)
+    }
+
+
   // Handles adding item to cart, may need to create a cart first, haha...ha......ha.
   // So the post works, but you have to play around with it, I needto capture values prior to 
   console.log("This is the rental length:",rentalLength)
@@ -128,6 +132,7 @@ function AddToCartModal({equip_id, oneEquipment}){
   console.log("This is the equipment quantity:",equipmentQuantity)
   console.log("This is the equipment ID:",equip_id)
   console.log("This is the current cart ID:",currentCart)
+
   function handleAddToCartClick() {
     let rental_length = rentalLength
     let rental_rate = selectedRate
@@ -148,7 +153,6 @@ function AddToCartModal({equip_id, oneEquipment}){
         }
       })
   }
-
 
     return(
       <> 
@@ -193,85 +197,82 @@ function AddToCartModal({equip_id, oneEquipment}){
                                   Make sure you've selected the correct cart! 
                                   </label>
                               </div>
-
                           </div>
 
-                          {/* Cart Container Div */}
                           <div className="space-y-6 overflow-y-auto max-h-96">
 
-                            {/* Grab this for the map */}
-                            <div className="justify-between mb-6 rounded-lg bg-white p-6 shadow-md sm:flex sm:justify-start">
-                                {/* Image Preview */}
-                                <img src={equipment_image} alt="product-image" className="w-full rounded-lg sm:w-40" />
+                          {/* Grab this for the map */}
+                          <div className="justify-between mb-6 rounded-lg bg-white p-6 shadow-md sm:flex sm:justify-start">
+                              {/* Image Preview */}
+                              <img src={equipment_image} alt="product-image" className="w-full rounded-lg sm:w-40" />
 
-                                <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between">
-                                    {/* Product Details */}
-                                    <div className="mt-5 sm:mt-0">
-                                        <h2 className="text-lg font-bold text-gray-900">{oneEquipment.make}</h2>
-                                        {/* Additional details like size or color can go here */}
-                                        <p className="mt-1 text-xs text-gray-700">{oneEquipment.model}</p>
-                                    </div>
+                              <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between">
+                                  {/* Product Details */}
+                                  <div className="mt-5 sm:mt-0">
+                                      <h2 className="text-lg font-bold text-gray-900">{oneEquipment.make} {oneEquipment.name}</h2>
+                                      {/* Additional details like size or color can go here */}
+                                      <p className="mt-1 text-xs text-gray-700">{oneEquipment.model}</p>
+                                  </div>
 
-                                    {/* Quantity and Price */}
-                                    <div className="mt-4 flex justify-between sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
-                                        <div className="flex items-center justify-end space-x-2">
-                                            {/* Quantity Adjustment */}
-                                            <span className='text-black'> Quantity </span>
-                                            <span
-                                                className="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-white"
-                                                onClick={decrementQuantity}
-                                            >
-                                                -
-                                            </span>
-                                            <input 
-                                                  className="h-8 w-8 border border-black bg-white text-black text-center text-xs outline-none"
-                                                  type="number"
-                                                  value={equipmentQuantity}
-                                                  onChange={(e) => setEquipmentQuantity(parseInt(e.target.value, 10))}
-                                                  min="1" />
-                                           <span
-                                              className="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-white"
-                                              onClick={incrementQuantity}
+                                  {/* Quantity and Price */}
+                                  <div className="mt-4 flex justify-between sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
+                                      <div className="flex items-center justify-end space-x-2">
+                                          {/* Quantity Adjustment */}
+                                          <span className='text-black'> Quantity </span>
+                                          <span
+                                              className="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-white"
+                                              onClick={decrementQuantity}
                                           >
-                                              +
+                                              -
                                           </span>
-                                        </div>
+                                          <input 
+                                                className="h-8 w-8 border border-black bg-white text-black text-center text-xs outline-none"
+                                                type="number"
+                                                value={equipmentQuantity}
+                                                onChange={(e) => setEquipmentQuantity(parseInt(e.target.value, 10))}
+                                                min="1" />
+                                          <span
+                                            className="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-white"
+                                            onClick={incrementQuantity}
+                                        >
+                                            +
+                                        </span>
+                                      </div>
 
-                                        <div className="flex items-center justify-end space-x-2">
-                                            {/* Price */}
-                                            <input 
-                                                  className="h-8 w-8 border border-black bg-white text-black text-center text-xs outline-none"
-                                                  type="number"
-                                                  value={rentalLength}
-                                                  onChange={(e) => setRentalLength(parseInt(e.target.value, 10))}
-                                                  min="1" />
-                                            <select
-                                            className="border-2 border-black text-sm text-black"
-                                            value={dayRange} 
-                                            onChange={handleDayRangeChange}>
-                                            {dayOptions}
-                                            </select>
-                                        </div>
+                                      <div className="flex items-center justify-end space-x-2">
+                                          {/* Price */}
+                                          <input 
+                                                className="h-8 w-8 border border-black bg-white text-black text-center text-xs outline-none"
+                                                type="number"
+                                                value={rentalLength}
+                                                onChange={(e) => setRentalLength(parseInt(e.target.value, 10))}
+                                                min="1" />
+                                          <select
+                                          className="border-2 border-black text-sm text-black"
+                                          value={dayRange} 
+                                          onChange={handleDayRangeChange}>
+                                          {dayOptions}
+                                          </select>
+                                      </div>
 
-                                        <div className="flex items-center justify-end space-x-2">
-                                            {/* Price */}
-                                            <select
-                                            className="border-2 border-black text-sm text-black"
-                                            value={selectedRate} 
-                                            onChange={handleRateChange}>
-                                            {rateOptions}
-                                            </select>
-                                        </div>
+                                      <div className="flex items-center justify-end space-x-2">
+                                          {/* Price */}
+                                          <select
+                                          className="border-2 border-black text-sm text-black"
+                                          value={selectedRate} 
+                                          onChange={handleRateChange}>
+                                          {rateOptions}
+                                          </select>
+                                      </div>
 
-                                        
-                                    </div>
-                                </div>
-                            </div>
-                           
-                            {/* Grab this for the map */}
-
+                                      
+                                  </div>
+                              </div>
                           </div>
-                          {/* Cart Container Div */}
+                          
+                          {/* Grab this for the map */}
+
+                        </div>
 
                           <div className="flex justify-end">
                               <button 
