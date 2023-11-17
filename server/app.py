@@ -830,6 +830,50 @@ class CartByUserID(Resource):
         
 api.add_resource(CartByUserID, "/user/<int:user_id>/cart/")
 
+class CartByCartID(Resource):
+    def get(self,id):
+        cart = Cart.query.filter(Cart.id == id).first()
+        if cart:
+            return make_response(cart.to_dict(),200)
+        else:
+            response = make_response({
+            "error": "Item not found"
+            }, 404)
+            return response
+        
+    def patch(self, id):
+        cart = Cart.query.filter(Cart.id == id).first()
+
+        if cart:
+            data = request.get_json()
+            for key in data:
+                setattr(cart, key, data[key])
+            db.session.add(cart)
+            db.session.commit()
+            response = make_response(cart.to_dict(), 202)
+            return response
+        else:
+            response = make_response({
+            "error": "Item not found"
+            }, 404)
+            return response
+    
+    def delete(self, id):
+        cart = Cart.query.filter(Cart.id == id).first()
+
+        if cart:
+            db.session.delete(cart)
+            db.session.commit()
+            response = make_response({"message":"Succesfully deleted!"}, 204)
+            return response
+        else:
+            response = make_response({
+            "error": "Item not found"
+            }, 404)
+            return response
+        
+api.add_resource(CartByCartID, "/cart/<int:id>")
+
 class AddItemToCart(Resource):
     def post(self,cart_id):
         data = request.get_json()
