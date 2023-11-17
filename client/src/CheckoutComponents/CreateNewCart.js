@@ -36,6 +36,7 @@ function CreateNewCart({addCart, toggleModal}){
               resp.json().then((new_cart) => {
                 console.log(new_cart)
                 addCart(new_cart)
+                toggleModal()
               });
             }
           })

@@ -180,6 +180,7 @@ const addCart = (newCart) => {
           id="authentication-modal" 
           tabIndex="-1" 
           aria-hidden="true" 
+          onClick={toggleModal}
           className="fixed top-0 left-0 right-0 bottom-0 z-50 flex justify-center items-center overflow-x-hidden overflow-y-auto"
       >
           <div className="relative w-full max-w-2xl max-h-3/5 bg-white rounded-lg shadow dark:bg-gray-700 overflow-y-auto" onClick={(e) => e.stopPropagation()}>

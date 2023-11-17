@@ -72,7 +72,7 @@ function EquipmentDisplay({}) {
 
   let loggedOutDisplay
   loggedOutDisplay = (
-    <section className="text-gray-400 bg-gray-900 body-font overflow-hidden" onClick={toggleModal} >
+    <section className="text-gray-400 bg-gray-900 body-font overflow-hidden" >
       <div className="container px-5 py-24 mx-auto">
         <div className="lg:w-4/5 flex flex-wrap mb-5 ">
           <div className="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">
