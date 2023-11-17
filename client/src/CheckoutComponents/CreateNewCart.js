@@ -1,6 +1,8 @@
 import React,{useState, useContext, useEffect} from "react";
 import UserContext from "../UserComponents/UserContext";
 import ApiUrlContext from "../Api";
+import {toast} from 'react-toastify'
+
 function CreateNewCart({addCart, toggleModal}){
 
     const [user, setUser] = useContext(UserContext)
@@ -37,8 +39,12 @@ function CreateNewCart({addCart, toggleModal}){
                 console.log(new_cart)
                 addCart(new_cart)
                 toggleModal()
-              });
+              })
+              toast.success(`🛒 ${cartName}, succesfully created!`,{
+                "autoClose" : 2000
+              })
             }
+            
           })
       }
 
