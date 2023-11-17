@@ -24,6 +24,62 @@ function Cart(){
     })
   }, [])
 
+  let fetchedCartItems
+  useEffect(() => {
+    const fetchCartData = async () => {
+      try {
+        const response = await fetch(`${apiUrl}user/${user?.id}/cart/`)
+        if (response.ok) {
+          const cartData = await response.json()
+          console.log("YOUR CART DATA SIRE:", cartData)
+          fetchedCartItems = cartData.forEach((cart) => {
+            // let timeDate = item.created_at
+            // let uniqueId = `${item.equipment_id}_${timeDate}`
+
+          console.log("MAPPED CART ITEMS",cart.items)
+          cart.items.map((item) => {
+          console.log("MAPPED CART EQUIP IDS",item.equipment_id)
+          console.log("mapped out prices:", (item.price_cents_at_addition / 100))
+          console.log("rental length:", item.rental_length)
+          console.log("RENTAL RATE:", item.rental_rate)
+          console.log("EQUIPMENT PICTURE:",item.equipment.equipment_image)
+          console.log("EQUIPMENT MAKE:",item.equipment.make)
+          console.log("EQUIPMENT MODEL:",item.equipment.model)
+          console.log("EQUIPMENT MODEL:",item.equipment.name)
+          })
+          
+          //   return(
+          //     <CartItem 
+          //     key={uniqueId}
+          //     equipment_image={item.equipment.equipment_image}
+          //     make={item.equipment.make}
+          //     model={item.equipment.model}
+          //     dayOptions={dayOptions}
+          //     rateOptions={rateOptions}
+          //     selectedRate={selectedRate}
+          //     setSelectedRate={setSelectedRate}
+          //     dayRange={dayRange}
+          //     setDayRange={setDayRange}
+          //     rentalLength={rentalLength}
+          //     setRentalLength={setRentalLength}
+          //     equipmentQuantity={equipmentQuantity}
+          //     setEquipmentQuantity={setEquipmentQuantity}
+          //     />
+          // )
+          })
+          // update cart state here
+        } else {
+          // Handle errors
+        }
+      } catch (error) {
+        console.log(error)
+        // Handle fetching errors
+      }
+    }
+  
+    fetchCartData()
+  }, [user])
+
   const handleCartChange = (e) => {
     setCurrentCart(e.target.value)
   }
@@ -51,7 +107,7 @@ function Cart(){
     </Fragment>)
   })
 
-  console.log(currentCart)
+  // console.log(currentCart)
 
   if (!cart || cart?.length === 0) {
     return <div>Cart is empty or loading...</div>
@@ -85,12 +141,12 @@ function Cart(){
   cartItems = cart[currentCart].items.map((item) =>{
     // {console.log("The individual items",item)}
     // {console.log("ID", item)}
-    let timeDate = item.created_at
-    let uniqueId = `${item.equipment_id}_${timeDate}`
-    console.log("The UNIQUE ID:", uniqueId)
+    // let timeDate = item.created_at
+    // let uniqueId = `${item.equipment_id}_${timeDate}`
+    // console.log("The UNIQUE ID:", uniqueId)
     return(
       <CartItem 
-      key={uniqueId}
+      // key={uniqueId}
       equipment_image={item.equipment.equipment_image}
       make={item.equipment.make}
       model={item.equipment.model}
@@ -119,7 +175,7 @@ function Cart(){
             {cartOptions}
       </select>
       {cart[currentCart].items?.length === 0 ? <div>Cart is empty or loading...</div> : cartItems}
-      
+
       {/* {cartItems} */}
 
       </div>

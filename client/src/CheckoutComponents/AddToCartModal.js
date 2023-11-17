@@ -161,6 +161,7 @@ function AddToCartModal({equip_id, oneEquipment}){
                           <CartItem
                           key={`${oneEquipment.equipment_id}_${user?.id}`}
                           equipment_image={equipment_image}
+                          name={oneEquipment.name}
                           make={oneEquipment.make}
                           model={oneEquipment.model}
                           dayOptions={dayOptions}

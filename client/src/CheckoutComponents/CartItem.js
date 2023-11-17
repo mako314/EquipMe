@@ -2,13 +2,10 @@ import React,{useContext, useEffect, useState} from "react";
 import UserContext from '../UserComponents/UserContext'
 import ApiUrlContext from '../Api'
 
-function CartItem({equipment_image, make, model, dayOptions, rateOptions, selectedRate, setSelectedRate, dayRange, setDayRange, rentalLength, setRentalLength, equipmentQuantity, setEquipmentQuantity}){
+function CartItem({equipment_image, name, make, model, dayOptions, rateOptions, selectedRate, setSelectedRate, dayRange, setDayRange, rentalLength, setRentalLength, equipmentQuantity, setEquipmentQuantity}){
 
-  // const [selectedRate, setSelectedRate] = useState('')
-  // const [dayRange, setDayRange] = useState('')
-  // const [rentalLength, setRentalLength] = useState(1)
-  // const [equipmentQuantity, setEquipmentQuantity] = useState(1)
-
+  // A lot of props coming in, they used to exist here, but it complicated state management.
+  
   //Concide rate with rental length (dayRange)
   const handleRateChange = (e) => {
     const newRate = e.target.value
@@ -61,7 +58,7 @@ function CartItem({equipment_image, make, model, dayOptions, rateOptions, select
               <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between">
                   {/* Product Details */}
                   <div className="mt-5 sm:mt-0">
-                      <h2 className="text-lg font-bold text-gray-900">{make}</h2>
+                      <h2 className="text-lg font-bold text-gray-900">{make} {name}</h2>
                       {/* Additional details like size or color can go here */}
                       <p className="mt-1 text-xs text-gray-700">{model}</p>
                   </div>

@@ -787,10 +787,10 @@ api.add_resource(Carts, "/carts")
 
 class CartByUserID(Resource):
     def get(self,user_id):
-        cart = Cart.query.filter(Cart.user_id == user_id).first()
-
-        if cart:
-            return make_response(cart.to_dict(),200)
+        carts = Cart.query.filter(Cart.user_id == user_id).all()
+        if carts:
+            carts_dict = [cart.to_dict() for cart in carts]
+            return make_response(carts_dict,200)
         else:
             response = make_response({
             "error": "Item not found"
@@ -828,7 +828,7 @@ class CartByUserID(Resource):
             }, 404)
             return response
         
-api.add_resource(CartByUserID, "/cart/item/<int:user_id>")
+api.add_resource(CartByUserID, "/user/<int:user_id>/cart/")
 
 class AddItemToCart(Resource):
     def post(self,cart_id):
@@ -847,36 +847,40 @@ class AddItemToCart(Resource):
         
         #Initialize pricing, pricing at the moment can only handle array with an index of 0, unless I decide to incorporate other pricing options, so you could run pricing "sets" owner could just select. Has access to rates
         pricing = equipment.equipment_price[0]   
-             
-        rental_rate = data['rental_rate']  # For example: 'hourly', 'daily', 'weekly', 'promo'
-        rental_length = data['rental_length']
+        
+        #changed rental_rate and rental_length because I was reusing the variable names in the post. Changed names to be INPUT
+
+        input_rental_rate = data['rental_rate']  # For example: 'hourly', 'daily', 'weekly', 'promo'
+        input_rental_length = data['rental_length']
         price_cents_at_addition = 0
+
         # Takes input and changes price accordingly
-        if rental_rate == 'hourly':
+        if input_rental_rate == 'hourly':
             price_cents_at_addition = pricing.hourly_rate
-        elif rental_rate == 'daily':
+        elif input_rental_rate == 'daily':
             price_cents_at_addition = pricing.daily_rate
-        elif rental_rate == 'weekly':
+        elif input_rental_rate == 'weekly':
             price_cents_at_addition = pricing.weekly_rate
-        elif rental_rate == 'promo':
+        elif input_rental_rate == 'promo':
             price_cents_at_addition = pricing.promo_rate
         else:
             return make_response({'error': 'Invalid rental period'}, 400)
 
-        total_price_cents = (price_cents_at_addition * rental_length) * data['quantity']
+        total_price_cents = (price_cents_at_addition * input_rental_length) * data['quantity']
         
         print("Your cart is:",cart.cart_name)
         print("Your equipment is:", equipment)
-        print("Your rental rate:", rental_rate)
-        print("Your rental length:", rental_length)
+        print("Your rental rate:", input_rental_rate)
+        print("Your rental length:", input_rental_length)
         print("Total price in CENTS:", total_price_cents)
         print("QUANTITY OF:", data['quantity'])
 
         #Create new CartItem with price calculated by $ * quantity (ALL IN CENTS)
         new_item = CartItem(
-        equipment_id=equipment.id,
-        quantity=data['quantity'],
-        rental_length = data['rental_length'],
+        equipment_id = equipment.id,
+        quantity = data['quantity'],
+        rental_rate = input_rental_rate,
+        rental_length = input_rental_length,
         price_cents_at_addition=total_price_cents,
         created_at = datetime.utcnow(),
         )
