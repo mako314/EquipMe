@@ -348,7 +348,7 @@ class Equipments(Resource):
     #get ALL equipment -- DONE
     def get(self):
         equipment = [equipment.to_dict(
-            only =('id','model','name','make','location', 'type','location','availability','delivery','quantity', 'owner', 'equipment_price' ) #needed to include all of this for when one patches
+            only =('id','model','name','make','location', 'type','location','availability','delivery','quantity', 'owner', 'equipment_price', 'equipment_image' ) #needed to include all of this for when one patches
         ) for equipment in Equipment.query.all()]                                       # no longer need phone, email, and owner_name
 
         response = make_response(equipment, 200)

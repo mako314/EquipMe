@@ -2,10 +2,11 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 // import EquipmentMap from "../MapComponents/EquipmentMap";
 
-function ProductCard({ id, name, model, make, location }) {
+function ProductCard({ id, name, model, make, location, equipment_image }) {
 
     const navigate = useNavigate();
 
+    // placeholder image = https://t4.ftcdn.net/jpg/00/93/18/45/360_F_93184515_pMvi6Fz6o1Qu32kM6lXycawPq8igxjIc.jpg
 
     function handleClick(e) {
         navigate(`/equipment/${id}`)
@@ -14,7 +15,7 @@ function ProductCard({ id, name, model, make, location }) {
     return (
         <div className=" flex items-center">
             <div className="container mx-auto p-9 bg-white max-w-sm rounded-2xl border-2 border-solid border-gray-900 overflow-hidden shadow-outline hover:shadow-2xl transition duration-300">
-                <img className="rounded-xl" src="https://t4.ftcdn.net/jpg/00/93/18/45/360_F_93184515_pMvi6Fz6o1Qu32kM6lXycawPq8igxjIc.jpg" alt="" />
+                <img className="rounded-xl" src={equipment_image} alt="" />
                 <div className="flex justify-between items-center p-4">
                     <div>
                         <h1 className="mt-5 text-2xl font-semibold">{model}</h1>

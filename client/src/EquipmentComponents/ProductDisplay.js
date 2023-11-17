@@ -1,5 +1,5 @@
 import React from 'react'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState, Fragment } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import EquipmentMap from '../MapComponents/EquipmentMap'
 import AddToCartModal from '../CheckoutComponents/AddToCartModal'
@@ -45,11 +45,11 @@ function EquipmentDisplay({}) {
   console.log("Display Page one equipment:", equipment_image)
 
   const equip_prices = equipment_price?.map((price) => {
-    return <>
+    return <Fragment key={oneEquipment.id}>
     <span className="title-font font-medium text-2xl text-white">Hourly Rate: ${price.hourly_rate/100}</span>
     <span className="title-font font-medium text-2xl text-white">Daily Rate: ${price.daily_rate/100}</span>
     <span className="title-font font-medium text-2xl text-white">Weekly Rate: ${price.weekly_rate/100}</span>
-    </>
+    </Fragment>
   })
 
     //Toggles modal to ADD to cart
@@ -77,7 +77,7 @@ function EquipmentDisplay({}) {
         <div className="lg:w-4/5 flex flex-wrap mb-5 ">
           <div className="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">
             <h2 className="text-sm title-font text-gray-500 tracking-widest">{name}</h2>
-            <h1 className="text-white text-3xl title-font font-medium mb-4">{make + model}</h1>
+            <h1 className="text-white text-3xl title-font font-medium mb-4">{make} {model}</h1>
             <div className="flex mb-4">
               <a className="flex-grow text-indigo-400 border-b-2 border-indigo-500 py-1 text-lg px-1 mr-2">Description</a>
               <a className="flex-grow border-b-2 border-gray-800 py-1 text-lg px-1 mr-2">Reviews</a>
@@ -111,7 +111,7 @@ function EquipmentDisplay({}) {
 
           </div>
 
-          <img alt={`${make + model}`} class="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0 ml-auto object-cover object-center rounded" src={equipment_image} />
+          <img alt={`${make + model}`} className="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0 ml-auto object-cover object-center rounded" src={equipment_image} />
         </div>
 
         {/* The Google Map for the equipment is included below the information and leaves room for 
