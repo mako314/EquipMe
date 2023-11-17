@@ -138,7 +138,6 @@ function Cart(){
                 </svg>
                 </div>
                 <h3 className="text-lg leading-6 font-medium text-gray-900">Create New Cart</h3>
-                {/* Rest of your modal content */}
                 <CreateNewCart addCart={addCart} toggleModal={toggleModal} />
               </div>
             </div>

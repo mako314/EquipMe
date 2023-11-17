@@ -1,13 +1,23 @@
 import React, { useContext, useState, useEffect, Fragment } from 'react'
 import ApiUrlContext from '../Api'
 import UserContext from '../UserComponents/UserContext'
-import CartItem from './CartItem'
+import CreateNewCart from './CreateNewCart'
 
 function AddToCartModal({equip_id, oneEquipment}){
 
   //Grab apiUrl from context + user info
   const apiUrl = useContext(ApiUrlContext)
   const [user, setUser] = useContext(UserContext)
+
+  //States to capture info, day ranges, costs, length of rental, quantity, and track modal, cart
+  const [selectedRate, setSelectedRate] = useState("hourly")
+  const [dayRange, setDayRange] = useState('')
+  const [rentalLength, setRentalLength] = useState(1)
+  const [equipmentQuantity, setEquipmentQuantity] = useState(1)
+  const [currentCart, setCurrentCart] = useState(1)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isNewCartModalOpen, setIsNewCartModalOpen] = useState(false)
+  const [cartData, setCartData] = useState([])
 
   //Check session for user
   useEffect(() => {
@@ -24,23 +34,23 @@ function AddToCartModal({equip_id, oneEquipment}){
   // console.log("Equipment price:", equipment_price)
   // console.log("Your Equipment:",oneEquipment)
   // console.log("The USER:", user)
-  let cart
-  if (user){
-    cart  = user.cart
+  useEffect(() => {
+    if (user) {
+      setCartData(user.cart)
+    }
+  }, [user])
+
+//   let cart
+//   if (user){
+//     cart  = user.cart
+// }
+
+const addCart = (newCart) => {
+  setCartData((cartData) => [...cartData, newCart])
 }
-  console.log("YOUR CART:", cart)
+  console.log("YOUR CART:", cartData)
   // console.log("This is the selected rate:", selectedRate)
   // console.log("this is the date range:", dayRange)
-
-  
-
-  //States to capture info, day ranges, costs, length of rental, quantity, and track modal, cart
-  const [selectedRate, setSelectedRate] = useState("hourly")
-  const [dayRange, setDayRange] = useState('')
-  const [rentalLength, setRentalLength] = useState(1)
-  const [equipmentQuantity, setEquipmentQuantity] = useState(1)
-  const [currentCart, setCurrentCart] = useState(1)
-  const [isModalOpen, setIsModalOpen] = useState(false)
 
   // console.log("The Cart ID:", currentCart)
 
@@ -65,7 +75,7 @@ function AddToCartModal({equip_id, oneEquipment}){
   <option className="text-black"value="promo">Promo</option>
   </>
 
-  const cartOptions = cart?.map((item) => {
+  const cartOptions = cartData?.map((item) => {
     return (
     <Fragment key={`${item.id} ${item.cart_name}`}>
     <option className="text-black"value={item.id}>{item.cart_name}</option> 
@@ -73,10 +83,15 @@ function AddToCartModal({equip_id, oneEquipment}){
     </Fragment>)
   })
   
-  //Toggles modal
-  function toggleModal() {
+  //Toggles modal to ADD to cart
+  const toggleModal = () => {
       setIsModalOpen(!isModalOpen)
   }
+
+  const toggleCartCreationModal = () => {
+    setIsNewCartModalOpen(!isNewCartModalOpen)
+}
+  
 
   //Selects which cart you're trying to add it to
   const handleCartChange = (e) => {
@@ -274,6 +289,31 @@ function AddToCartModal({equip_id, oneEquipment}){
                         </div>
 
                           <div className="flex justify-end">
+                              <button
+                                onClick={toggleCartCreationModal}
+                                className="text-white p-2 rounded-md bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 mr-4"
+                              >
+                                Create New Cart
+                              </button>
+
+                              {/* isNewCartModalOpen Modal */}
+                                {isNewCartModalOpen && (
+                                  <div className="fixed inset-0 bg-opacity-50 z-40 mt-36 overflow-y-auto h-full w-full" onClick={toggleCartCreationModal}>
+                                    {/* isNewCartModalOpen Modal */}
+                                    <div className="relative top-20 mx-auto p-5 border-2 border-black w-96 shadow-lg rounded-md bg-white z-50" onClick={(e) => e.stopPropagation()}>
+                                      <div className="mt-3 text-center">
+                                        <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#3b82f6" class="bi bi-cart-plus-fill" viewBox="0 0 16 16">
+                                          <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0z"/>
+                                        </svg>
+                                        </div>
+                                        <h3 className="text-lg leading-6 font-medium text-gray-900">Create New Cart</h3>
+                                        <CreateNewCart addCart={addCart} toggleModal={toggleCartCreationModal} />
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
+
                               <button 
                                   // type="submit" 
                                   // onClick={handleSendMessage}
