@@ -1,21 +1,26 @@
 import React,{useContext, useEffect, useState, Fragment} from "react";
 import CartItem from "./CartItem";
+import CreateNewCart from "./CreateNewCart";
 import UserContext from '../UserComponents/UserContext'
 import ApiUrlContext from '../Api'
 
 function Cart(){
-  const [currentCart, setCurrentCart] = useState(0)
-  // const [selectedRate, setSelectedRate] = useState('')
-  // const [dayRange, setDayRange] = useState('')
-  // const [rentalLength, setRentalLength] = useState(1)
-  // const [equipmentQuantity, setEquipmentQuantity] = useState(1)
-
-  // const [cartData, setCartData] = useState([]);
-
   const [user, setUser] = useContext(UserContext)
   const apiUrl = useContext(ApiUrlContext)
 
-  // console.log(user)
+  const [currentCart, setCurrentCart] = useState(0)
+  const [cartData, setCartData] = useState([]);
+
+  // let cart
+  // if (user){
+  //   setCartData(user?.cart)
+  // }
+
+  useEffect(() => {
+    if (user) {
+      setCartData(user.cart)
+    }
+  }, [user])
 
   useEffect(() => {
     fetch(`${apiUrl}check_session`, {
@@ -53,16 +58,17 @@ function Cart(){
     setCurrentCart(e.target.value)
   }
 
-  let cart
-  if (user){
-    cart  = user?.cart
+  //Needed to move this here to have the state update for a re-render
+  const addCart = (newCart) => {
+    setCartData((cartData) => [...cartData, newCart])
   }
+
 
   //-------------------------------------
 
 
   // Map over carts, present options
-  const cartOptions = cart?.map((item) => {
+  const cartOptions = cartData?.map((item) => {
     return (
     <Fragment key={`${item.id} ${item.cart_name}`}>
     {/* so the value starts at 0, but the item.id (cart id) starts at 1. So I -1 here to get the right cart index */}
@@ -72,14 +78,14 @@ function Cart(){
 
   // console.log(currentCart)
 
-  if (!cart || cart?.length === 0) {
+  if (!cartData || cartData?.length === 0) {
     return <div>Cart is empty or loading...</div>
   }
 
   //Map over equipment price, and take the rates as options
   let rateOptions
-  if(Array.isArray(cart[currentCart].items)){
-    cart[currentCart].items?.forEach((item) => {
+  if(Array.isArray(cartData[currentCart].items)){
+    cartData[currentCart].items?.forEach((item) => {
       if (Array.isArray(item.equipment.equipment_price)) {
         item.equipment.equipment_price?.map((price) => {
           return(
@@ -95,7 +101,7 @@ function Cart(){
     })
   }
 
-  console.log("JUST CART:", cart)
+  console.log("JUST CART:", cartData)
   // console.log("CART DATA:", cartData)
 
     return(
@@ -109,12 +115,13 @@ function Cart(){
             onChange={handleCartChange}>
             {cartOptions}
       </select>
+      <CreateNewCart addCart={addCart}/>
       {/* {cart[currentCart].items?.length === 0 ? <div>Cart is empty or loading...</div> : fetchedCartItems} */}
 
-      { cart[currentCart].items?.length === 0 ?
+      { cartData[currentCart].items?.length === 0 ?
         <p> Cart is empty or loading...</p> 
         : 
-        cart[currentCart]?.items.map((item) => (
+        cartData[currentCart]?.items.map((item) => (
           // console.log("THE ITEM:", item),
           <CartItem 
           key={ `${item.equipment_id}_${item.created_at}`}
@@ -143,7 +150,7 @@ function Cart(){
         <div className="flex justify-between">
           <p className="text-lg font-bold">Total</p>
           <div className="">
-            <p className="mb-1 text-lg font-bold">${(cart[currentCart]?.total / 100)}</p>
+            <p className="mb-1 text-lg font-bold">${(cartData[currentCart]?.total / 100)}</p>
             <p className="text-sm text-gray-700">including VAT</p>
           </div>
         </div>
