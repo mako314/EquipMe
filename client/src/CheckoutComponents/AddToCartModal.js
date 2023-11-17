@@ -188,7 +188,6 @@ function AddToCartModal({equip_id, oneEquipment}){
                                         value={currentCart} 
                                         onChange={handleCartChange}>
                                         {cartOptions}
-                                        <option className="text-black"value="2"> Test 2</option>
                                   </select>
                                   <label
                                       htmlFor="remember" 

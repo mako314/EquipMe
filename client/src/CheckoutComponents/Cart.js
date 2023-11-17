@@ -9,12 +9,11 @@ function Cart(){
   const apiUrl = useContext(ApiUrlContext)
 
   const [currentCart, setCurrentCart] = useState(0)
-  const [cartData, setCartData] = useState([]);
+  const [cartData, setCartData] = useState([])
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
-  // let cart
-  // if (user){
-  //   setCartData(user?.cart)
-  // }
+  // console.log(currentCart)
+
 
   useEffect(() => {
     if (user) {
@@ -54,15 +53,24 @@ function Cart(){
 
   // console.log(cartData[currentCart].items)
 
+  if (!cartData || cartData?.length === 0) {
+    return <div>Cart is empty or loading...</div>
+  }
+
+  //Changes cart based on cart ID
   const handleCartChange = (e) => {
     setCurrentCart(e.target.value)
   }
 
-  //Needed to move this here to have the state update for a re-render
+  //Simple open modal for cart creation
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen)
+  }
+
+  //Needed to move this here to have the state update for a re-render, allows for creating a new cart.
   const addCart = (newCart) => {
     setCartData((cartData) => [...cartData, newCart])
   }
-
 
   //-------------------------------------
 
@@ -76,11 +84,6 @@ function Cart(){
     </Fragment>)
   })
 
-  // console.log(currentCart)
-
-  if (!cartData || cartData?.length === 0) {
-    return <div>Cart is empty or loading...</div>
-  }
 
   //Map over equipment price, and take the rates as options
   let rateOptions
@@ -115,8 +118,34 @@ function Cart(){
             onChange={handleCartChange}>
             {cartOptions}
       </select>
-      <CreateNewCart addCart={addCart}/>
-      {/* {cart[currentCart].items?.length === 0 ? <div>Cart is empty or loading...</div> : fetchedCartItems} */}
+       {/* Button to open the modal */}
+       <button
+          onClick={toggleModal}
+          className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300 ml-4 mb-2"
+        >
+          Create New Cart
+        </button>
+
+        {/* Modal */}
+        {isModalOpen && (
+          <div className="fixed inset-0 bg-opacity-50 z-40 mt-36 overflow-y-auto h-full w-full" onClick={toggleModal}>
+            {/* Modal */}
+            <div className="relative top-20 mx-auto p-5 border-2 border-black w-96 shadow-lg rounded-md bg-white z-50" onClick={(e) => e.stopPropagation()}>
+              <div className="mt-3 text-center">
+                <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#3b82f6" class="bi bi-cart-plus-fill" viewBox="0 0 16 16">
+                  <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0z"/>
+                </svg>
+                </div>
+                <h3 className="text-lg leading-6 font-medium text-gray-900">Create New Cart</h3>
+                {/* Rest of your modal content */}
+                <CreateNewCart addCart={addCart} toggleModal={toggleModal} />
+              </div>
+            </div>
+          </div>
+        )}
+
+      {/* <CreateNewCart addCart={addCart}/> */}
 
       { cartData[currentCart].items?.length === 0 ?
         <p> Cart is empty or loading...</p> 
