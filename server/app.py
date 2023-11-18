@@ -12,33 +12,61 @@ from sqlalchemy import asc
 import pandas as pd
 import xml.etree.ElementTree as ET
 
-from flask_jwt_extended import create_access_token, set_access_cookies, jwt_required, get_jwt_identity
+from flask_jwt_extended import create_access_token, set_access_cookies, jwt_required, get_jwt_identity, unset_jwt_cookies, create_refresh_token, get_jwt
 #------------------------------------HELPERS----------------------------------
 from datetime import datetime
 from helpers import is_available_for_date_range
 #------------------------------------USER LOGIN------------------------------------------------------------------------------
 
+# class Login(Resource):
+
+#     def get(self):
+#         pass
+
+#     def post(self):
+#         data = request.get_json()
+#         #Test to find username,
+#         email = data['email']
+#         user = User.query.filter(User.email == email).first()
+#         #Grab password
+#         password = data['password']
+#         # print(user)
+#         #Test to see if password matches
+#         if user and user.authenticate(password):
+#             access_token = create_access_token(identity=user.id)
+#             # refresh_token = create_refresh_token(identity=user.id)
+#             response = jsonify({"msg": "login successful"}, 200)
+#             set_access_cookies(response, access_token)
+#             return response
+#         else:
+#             return {'error': 'Invalid credentials'}, 401
+
+# api.add_resource(Login, '/login')
+
 class Login(Resource):
-
-    def get(self):
-        pass
-
     def post(self):
         data = request.get_json()
-        #Test to find username,
         email = data['email']
-        user = User.query.filter(User.email == email).first()
-        #Grab password
         password = data['password']
-        # print(user)
-        #Test to see if password matches
+
+        # Check user table
+        user = User.query.filter(User.email == email).first()
         if user and user.authenticate(password):
-            access_token = create_access_token(identity=user.id)
-            response = jsonify({"msg": "login successful"}, 200)
+            access_token = create_access_token(identity={'id': user.id, 'role': 'user'}) # https://flask-jwt-extended.readthedocs.io/en/stable/api.html#flask_jwt_extended.create_access_token It's made JSON serializable with 'This can be accessed later with []' : other_value
+            response = make_response(jsonify({"msg": "User login successful"}), 200) #This wouldn't work unless I did make_response, which I find strange since make_response is supposed to just jsonify? 
+            set_access_cookies(response, access_token) #https://flask-jwt-extended.readthedocs.io/en/stable/api.html#flask_jwt_extended.set_access_cookies Sets the cookie
+            return response
+
+        # Check owner table
+        owner = EquipmentOwner.query.filter(EquipmentOwner.email == email).first()
+        if owner and owner.authenticate(password):
+            access_token = create_access_token(identity={'id': owner.id, 'role': 'owner'})
+            response = make_response(jsonify({"msg": "Owner login successful"}), 200)
             set_access_cookies(response, access_token)
             return response
-        else:
-            return {'error': 'Invalid credentials'}, 401
+
+        # Neither
+        return jsonify(error='Invalid credentials'), 401
 
 api.add_resource(Login, '/login')
 #------------------------------------------------------------------------------------------------------------------------------
@@ -74,7 +102,8 @@ class Logout(Resource):
     def delete(self): 
         session['user_id'] = None
         response = make_response({'message': 'Logout successful'}, 200)
-        response.delete_cookie('access_token')
+        unset_jwt_cookies(response) # https://flask-jwt-extended.readthedocs.io/en/stable/api.html#flask_jwt_extended.unset_jwt_cookies
+        # response.delete_cookie('access_token')
         return response
 
 api.add_resource(Logout, '/logout')
@@ -86,7 +115,8 @@ class OwnerLogout(Resource):
     def delete(self):
         session['owner_id'] = None
         response = make_response({'message': 'Logout successful'}, 200)
-        response.delete_cookie('access_token')
+        unset_jwt_cookies(response)
+        # response.delete_cookie('access_token') # May not need
         return response
 
 api.add_resource(OwnerLogout, '/owner/logout')
@@ -94,16 +124,43 @@ api.add_resource(OwnerLogout, '/owner/logout')
 
 #------------------------------------ USER Check Session------------------------------------------------------------------------------
 
-class CheckSession(Resource):
+# class CheckSession(Resource):
 
+#     @jwt_required()
+#     def get(self):
+#         current_user_id = get_jwt_identity()
+#         user = User.query.get(current_user_id)
+#         if user:
+#             return user.to_dict(rules=('-_password_hash',)), 200
+#         else:
+#             return {'message': 'User not found'}, 404
+
+# api.add_resource(CheckSession, '/check_session')
+class CheckSession(Resource):
     @jwt_required()
     def get(self):
-        current_user_id = get_jwt_identity()
-        user = User.query.get(current_user_id)
-        if user:
-            return user.to_dict(rules=('-_password_hash',)), 200
-        else:
-            return {'message': 'User not found'}, 404
+        identity = get_jwt_identity() #https://flask-jwt-extended.readthedocs.io/en/stable/api.html#flask_jwt_extended.get_jwt_identity
+                                      # I use this to grab the access token identity information.
+        print(identity)
+        identity_id = identity['id']  # Extract the ID from the identity object by grabbing the ['id']
+        identity_role = identity['role']       # Extract the role from the identity object by grabbing the ['role']
+        print("THE IDENTITY ID",identity_id)
+        if identity_role == 'user':
+            user = User.query.get(identity_id)
+            print(user)
+            if user:
+                return {'role': identity_role, 'details': user.to_dict(rules=('-password_hash',))}, 200
+            else:
+                return {'message': 'User not found'}, 404
+        elif identity_role == 'owner':
+            owner = EquipmentOwner.query.get(identity_id)
+            print(owner)
+            if owner:
+                return {'role': identity_role, 'details': owner.to_dict(rules=('-password_hash',))}, 200
+            else:
+                return {'message': 'Owner not found'}, 404
+
+        return {'message': 'Invalid session or role'}, 401
 
 api.add_resource(CheckSession, '/check_session')
 #------------------------------------------------------------------------------------------------------------------------------

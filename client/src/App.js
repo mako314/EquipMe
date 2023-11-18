@@ -107,16 +107,38 @@ function App() {
   
 
   //-------------------------------------------- FOR USER - CHECK SESSION TO STAY LOGGED IN ON REFRESH--------------------------
-  
   useEffect(() => {
     fetch(`${apiUrl}check_session`, {
-      credentials: 'include'
-    }).then((response) => {
+      credentials: 'include' // Ensures cookies are sent with the request
+    })
+    .then(response => {
       if (response.ok) {
-        response.json().then((user) => setUser(user));
+        return response.json()
+      } else {
+        throw new Error('Session check failed')
       }
-    });
-  }, []);
+    })
+    .then(data => {
+      // console.log("The Data",data)
+      if (data.role === 'user') {
+        setUser(data)
+      } else if (data.role === 'owner') {
+        setOwner(data)
+      }
+    })
+    .catch(error => {
+      console.error('Error during session check:', error)
+    })
+  }, [apiUrl, setOwner, setUser])
+  // useEffect(() => {
+  //   fetch(`${apiUrl}check_session`, {
+  //     credentials: 'include'
+  //   }).then((response) => {
+  //     if (response.ok) {
+  //       response.json().then((user) => setUser(user));
+  //     }
+  //   });
+  // }, []);
 
   // console.log(user)
 
@@ -124,15 +146,15 @@ function App() {
 
   //-------------------------------------------- FOR OWNER - CHECK SESSION TO STAY LOGGED IN ON REFRESH--------------------------
 
-  useEffect(() => {
-    fetch(`${apiUrl}owner/check_session`, {
-      credentials: 'include'
-    }).then((response) => {
-      if (response.ok) {
-        response.json().then((owner) => setOwner(owner));
-      }
-    });
-  }, []);
+  // useEffect(() => {
+  //   fetch(`${apiUrl}owner/check_session`, {
+  //     credentials: 'include'
+  //   }).then((response) => {
+  //     if (response.ok) {
+  //       response.json().then((owner) => setOwner(owner));
+  //     }
+  //   });
+  // }, []);
 
   // console.log(owner)
 

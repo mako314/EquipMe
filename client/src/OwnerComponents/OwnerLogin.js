@@ -20,7 +20,7 @@ function OwnerLogin(){
         let email = e.target.email.value;
         let password = e.target.password.value;
 
-        fetch(`${apiUrl}owner/login`, {
+        fetch(`${apiUrl}login`, {
             method: "POST",
             credentials: 'include',
             headers: {

@@ -140,14 +140,14 @@ class EquipmentOwner(db.Model, SerializerMixin):
             raise ValueError("Please check that you entered your email correctly")
         
     @validates("name")
-    def validates_name(self, key, name):
-        if len(name) > 0:
-            return name
+    def validates_name(self, key, firstName):
+        if len(firstName) > 0:
+            return firstName
         else:
-            raise ValueError("Please input a name")
+            raise ValueError("Please input a first name")
 
     def __repr__(self):
-        return f"My name is {self.name}"
+        return f"My name is {self.firstName}"
 
 
 
