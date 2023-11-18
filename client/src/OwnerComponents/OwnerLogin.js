@@ -31,9 +31,10 @@ function OwnerLogin(){
             body: JSON.stringify( { email, password } ),
           }).then((resp) => {
             if (resp.ok) {
-              resp.json().then((owner) => {
-                setOwner(owner)
-                setCurrentUser(owner)
+              resp.json().then((data) => {
+                console.log(data.owner)
+                setOwner(data.owner)
+                setCurrentUser(data.owner)
                 setRole('owner')
                 navigate(`/owner/dashboard`); // <-------- navigates to the home page
               });

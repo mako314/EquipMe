@@ -62,7 +62,8 @@ class Login(Resource):
         owner = EquipmentOwner.query.filter(EquipmentOwner.email == email).first()
         if owner and owner.authenticate(password):
             access_token = create_access_token(identity={'id': owner.id, 'role': 'owner'})
-            response = make_response(jsonify({"msg": "Owner login successful"}), 200)
+            owner_data = owner.to_dict(rules=('-_password_hash',))
+            response = make_response(jsonify({"msg": "Owner login successful", "owner": owner_data}), 200)
             set_access_cookies(response, access_token)
             return response
 
