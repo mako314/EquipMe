@@ -167,6 +167,11 @@ function App() {
   const addUser = (user) => {
     setUsers(users => [...users, user])
   }
+
+  // const addCart = (newCart) =>{
+  //   setNewUserCart(newUserCart => [...newUserCart, newCart])
+  // }
+  
   //------------------------------OWNERS----------------------------------------------
 
   //These will be the Post useEffects - OWNERS -- THIS HAD RENTERS
@@ -299,7 +304,7 @@ function App() {
             <Route path='/users/extra' element={<UserCollection searchTerm={searchTerm} users={users}/>} />
     
             {/* ID / INDIVIDUAL / DISPLAY ROUTES */}
-            <Route path='/equipment/:id' element={<ProductDisplay />} />
+            <Route path='/equipment/:id' element={<ProductDisplay/>} />
             <Route path='/equipment_owner/:id' element={<OwnerDisplay />} />
 
             {/* Respective Posts */}

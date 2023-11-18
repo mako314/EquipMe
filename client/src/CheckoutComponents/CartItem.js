@@ -4,8 +4,8 @@ import ApiUrlContext from '../Api'
 
 function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate, cartItemRentalLength, cartItemQuantity}){
 
-  console.log("Rental Length:", cartItemRentalLength)
-  console.log("Rental cartItemRate:", cartItemRate)
+  // console.log("Rental Length:", cartItemRentalLength)
+  // console.log("Rental cartItemRate:", cartItemRate)
   // A lot of props and state. Can  likely move in "day options"
   const [selectedRate, setSelectedRate] = useState(cartItemRate)
   const [dayRange, setDayRange] = useState('') //Can't set this to cartItemRate because this is hours, days, week. While cartItemRate is hourly, daily, weekly. 

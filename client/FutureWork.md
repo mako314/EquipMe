@@ -3,7 +3,7 @@
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Want to add:
 
-1. Pictures for Equipment, be it an image link or an actual UPLOAD that is tied to their profile somehow?
+1. Pictures for Equipment, be it an image link or an actual UPLOAD that is tied to their profile somehow? ✅
 
 2. Allow individuals to upload their equipment as a CSV, XML, etc and have pandas read and upload it the way I have done with the seed file.
 
@@ -18,10 +18,13 @@ Want to add:
          So make the rental agreements display, dashboard, etc, and then worry about this.
 -->
 
-6. Rental costs, can be per hour, by day, by week, month. Think I will cap it per month
+6. Rental costs, can be per hour, by day, by week, month. Think I will cap it per month ✅
 (promotional offers allocation?) (IN MODELS?)
 
-7. Including a calendar and booking dates. Find a way to incorporate a real calendar that has availability, with informing the user of when a delivery could take place, along with notifications of delivery (Order received, enroute, delivered) Allow for notifications of when delivery needs to be returned, these can be custom similar to google calendar notification system is ideal. (MODELS?)
+
+7. Including a calendar and booking dates. Find a way to incorporate a real calendar that has availability, with informing the user of when a delivery could take place, along with notifications of delivery (Order received, enroute, delivered) Allow for notifications of when delivery needs to be returned, these can be custom similar to google calendar notification system is ideal. (MODELS?) 
+
+// CALENDAR DONE- BUT AVAILABILITY NOT YET, seems too complicated to do without a library using only date-time.
 
 8. Time expiry, meaning if the equipments rental date has passed, and the owner has confirmed the returning of the delivery equipment, the equipment becomes available once again
 
@@ -35,10 +38,13 @@ Want to add:
 Sometimes text color is bugging on navbar if you move too quickly, need to find a solution for this.
 
 13. Need a way to favorite, and possibly have reviews displayed on the Equipment? 
+# Can just make a favorites model, user_id and equipment_id optional owner_id if they want to favorite owners?
+
 
 As far as favoriting, how should I select featured equipment? What would be the criteria for something of this sort? Should it be by favorites? By clicks? We will have to see which one makes more sense, it can definitely be by views, but then i'd have to incorporate a VIEWS feature that goes up +=1 everytime it is clicked.
 
-14. Make rent now take you to rental prepop if signed in, additionally have that be really the only way you can get there, otherwise the flow doesn't make much sense
+14. Make rent now take you to rental prepop if signed in, additionally have that be really the only way you can get there, otherwise the flow doesn't make much sense ✅ - I just add it to their cart.
+
 
 15. Need to make a picture attribute for the table, basically allow multiple picture uploads
 
@@ -62,7 +68,7 @@ Cause ideally the user can favorite many equipments but there's 1 piece of equip
 user - > favorite action < - item being favorited?
 This would be similar for favoriting the owner. 
 
-The user should not have only one person and one equipment favorited so there needs to be a way to favorite multiple.
+The user should not have only one person and one equipment favorited so there needs to be a way to favorite multiple. <- a table duh ->
 
 Possibly allow the user to upload a worksite? Might be too extra tbh.
 
@@ -103,9 +109,9 @@ when using this owner dashboard I'm going to have to make specific mobile views
 --------------------------------------------------------------------------------NAVBAR ITSELF--------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-1. Reinvented the navbar to actually look nice, included the search bar, added a mobile view and such.
+1. Reinvented the navbar to actually look nice, included the search bar, added a mobile view and such. ✅
 
-2. So ideally, I want the search to not only be on change, but also an on submit if possible. When the search is submitted it takes one to a search result page that can show them what they're looking for, be it partners, or be it specific equipment.
+2. So ideally, I want the search to not only be on change, but also an on submit if possible. When the search is submitted it takes one to a search result page that can show them what they're looking for, be it partners, or be it specific equipment. 
 
 Still need a possible location to have the search be sent to, so a search result page is in order.
 
@@ -119,12 +125,16 @@ Still need a possible location to have the search be sent to, so a search result
 
 1. Along with documentation upload, I'd like to make a nice card that reflects on the users dashboard / profile. When clicked it'll populate with the rental agreements that user currently has. Ideally they'd never be able to delete rental agreements (Unless one was submitted incorrectly, a new agreement was reached)
 
-2. I'd like to incorporate a sort of message system for users to discuss with partners about rental agreements.
+2. I'd like to incorporate a sort of message system for users to discuss with partners about rental agreements. ✅
 
-3. 3 way system:
+3. 3 way system: ✅ 
 3.1 Show interest, reach out. 
+
 3.2 After reaching out, discuss, send rental agreement to partner. 
-3.3 After partner accepts the rental agreement is formed.
+3.2.1 - I like this, day is 11/17/23, but instead of reaching out, maybe it just gets sent to the owner after added to cart? Or check out?
+I need to figure a way to work this out. Items can be added to cart and such, but afterwards what? Checkout should require an approval by the owner no? Or should the owner be able to cancel it only with a reason
+
+3.3 After partner accepts the rental agreement is formed. 
 
 
 4. Find a way to upload documents to the rental agreement, take deposits in, and from there it can be submitted.
@@ -133,10 +143,10 @@ Proof of renters insurance (Renter)
 Proof of Owners equipment insurance (Owner)
 Proof of Ownership (Owner) <--This should likely not be visible to the renter, but to a site admin-->
 
-5. Include a created at date, updated at.
+5. Include a created at date, updated at. ✅ 
 
 
-6. Need a (formik setvalues like done in hobby wars), to pre-populate information for a user trying to rent an equipment.
+6. Need a (formik setvalues like done in hobby wars), to pre-populate information for a user trying to rent an equipment. ✅ FORMIK IS ALSO OUTDATED, NEED TO UPDATE THIS EVENTUALLY
 
 7. Need to make nice rental agreement cards, that way they are legible to read and indivdiuals can edit.
 7.1 How should editing the agreement work? 
@@ -146,7 +156,7 @@ Owner can approve or deny edits -> user informed, from there they can discuss wh
 Owner requests to edit -> (Why would they? Maybe piece broke from previous use?) -> send to user, user has options to receive deposit back, or accept the changes
 Sent to owner as confirmation, from there the agreement continues
 
-7.2 Deleting the agreement
+              7.2 Deleting the agreement 
 Will have to implement a date function that takes into account how soon the renter can cancel, for example, if the renter wants to rent a piece of equipment the next day, how early would they have to cancel? Do they forfeit the deposit? 
 
 Owner, have to find a way to safeguard users so the owner cannot just collect deposits, after Owners have done too many cancellations / deletions, send a flag basically. If the equipment has been completely removed, maybe submit an inquiry? 
@@ -161,7 +171,9 @@ Regardless, terms and conditions will have to be built that both parties are req
 9. Need to fix rentalForm so that when a piece of equipment is clicked, the owner can be taken there with the form prepopulated. 
 May incoroporate a way to just filter the way I currently have it also, meaning they can select an owner and or select a type of Equipment and see available rentals from there. 
 
-10. Need preferences for the above. Say a user from Orlando wants to rent a drill, we can show them which ones are available to do delivery, and which ones are local to their area so they can better optimize their rentals.
+10. Need preferences for the above. Say a user from Orlando wants to rent a drill, we can show them which ones are available to do delivery, and which ones are local to their area so they can better optimize their rentals. ✅ We can try to leave it as City, State. 
+
+Can incorporate more if needed, or add an option for an owner to set up a base of operations
 
 11. Added a route to check for availability and quantity to see whether or not a piece of equipment is rentable. 8/31/23
 12. Tomorrow I will test out incorporating the calendar in, and getting dates from the DateFn library, should be challenging enough. 8/31/23
@@ -176,18 +188,19 @@ fin ---
 1. Need to make a display page for the owners, likely make their own profile that they can view? That's something I have to consider. I don't know if a display page is better or basically the same thing .
 
 2. Need to consider a dashboard for when owners log in, so maybe this can take the place of having their own profile. Somewhere to manage their rentals and such.
-2.3 There's a connect button, I'd love to make a messaging / inbox system.
+2.3 There's a connect button, I'd love to make a messaging / inbox system. ✅ 
 
 3. Will write more as it comes. Coded out today 8/23/23
 
 
 5. Upon owner login, also wrote that I need to edit the ownerEquipmentListing to be prepopulated for when they want to list equipment. (Need something for documentation upload that allows also posting to the owners equipment database.)
 
-6. Need to add owner page soon, so they can edit their information also. 
+6. Need to add owner page soon, so they can edit their information also. ✅  pretty sure owner can edit info in dashboard
 
-7. A way for owner to select equipment they'd like to feature.
+7. A way for owner to select equipment they'd like to feature. 
+# NEED TO MAKE EITHER A FEATURED TABLE, OR A CHECKBOX TO "FEATURE"
 
-8. Edit owner views, such as navbar and stuff.
+8. Edit owner views, such as navbar and stuff. ✅ 
 example, don't need renter signup and become a partner when an owner is logged in
 
 

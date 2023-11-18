@@ -162,6 +162,7 @@ class Equipment(db.Model, SerializerMixin):
     #THIS WILL BE TEMPORARY UNTIL I HAVE CLOUD HOSTING SET UP
     equipment_image = db.Column(db.String)
     location = db.Column(db.String)
+    #base_of_operations = db.Column(db.String)
     availability = db.Column(db.String)
     delivery = db.Column(db.String)
     quantity = db.Column(db.Integer)
@@ -241,6 +242,24 @@ class RentalAgreement(db.Model, SerializerMixin):
     rental_start_date = db.Column(db.String) 
 
     rental_end_date = db.Column(db.String)
+
+    # delivery = db.Column(db.String)
+    # delivery_address = db.Column(db.String)
+
+    # owner_decision = db.Column(db.String)
+
+    # owner_comments = db.Column(db.String)
+
+    # user_comments = db.Column(db.String)
+
+    # proof_of_ownership = db.Column(db.String)
+    # owner_insurance = db.Column(db.String)
+    # user_insurance_proof = db.Column(db.String)
+
+    # agreement_stats = db.Column(db.String) 
+    # Ex. in progress, user-accepted, owner-accepted, both-accepted
+
+    # revisions = db.Column(db.Integer)
 
     # rental_length = db.Column()
 
