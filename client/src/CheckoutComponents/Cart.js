@@ -23,13 +23,33 @@ function Cart(){
 
   useEffect(() => {
     fetch(`${apiUrl}check_session`, {
-      credentials: 'include'
-    }).then((response) => {
+      credentials: 'include' // Ensures cookies are sent with the request
+    })
+    .then(response => {
       if (response.ok) {
-        response.json().then((user) => setUser(user));
+        return response.json()
+      } else {
+        throw new Error('Session check failed')
       }
     })
-  }, [])
+    .then(data => {
+      const role = data.role
+      const userDetails = data.details
+
+      console.log("The Data:",data)
+      // console.log("The Role:",data.role )
+      if (role === 'user') {
+        console.log("The Role:", role )
+        setUser(userDetails)
+      } else if (role === 'owner') {
+        console.log("The Role:", role )
+        console.log("This is not currently available for owners, we are trying to avoid re-rental conflicts")
+      }
+    })
+    .catch(error => {
+      console.error('Error during session check:', error)
+    })
+  }, [apiUrl, setUser])
 
   // useEffect(() => {
   //   const fetchCartData = async () => {

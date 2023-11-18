@@ -22,12 +22,34 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
 
   //Check session for user
   useEffect(() => {
-    fetch(`${apiUrl}check_session`).then((response) => {
+    fetch(`${apiUrl}check_session`, {
+      credentials: 'include' // Ensures cookies are sent with the request
+    })
+    .then(response => {
       if (response.ok) {
-        response.json().then((user) => setUser(user));
+        return response.json()
+      } else {
+        throw new Error('Session check failed')
       }
-    });
-  }, []);
+    })
+    .then(data => {
+      const role = data.role
+      const userDetails = data.details
+
+      console.log("The Data:",data)
+      // console.log("The Role:",data.role )
+      if (role === 'user') {
+        console.log("The Role:", role )
+        setUser(userDetails)
+      } else if (role === 'owner') {
+        console.log("The Role:", role )
+        console.log("You don't have a cart silly head")
+      }
+    })
+    .catch(error => {
+      console.error('Error during session check:', error)
+    })
+  }, [apiUrl, setUser])
 
   //Destructure for equipment_price
   const { equipment_price, equipment_image } = oneEquipment

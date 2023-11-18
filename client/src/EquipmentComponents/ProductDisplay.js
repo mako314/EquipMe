@@ -5,6 +5,7 @@ import EquipmentMap from '../MapComponents/EquipmentMap'
 import AddToCartModal from '../CheckoutComponents/AddToCartModal'
 import UserContext from '../UserComponents/UserContext'
 import ApiUrlContext from '../Api'
+import OwnerContext from '../OwnerComponents/OwnerContext'
 
 
 function EquipmentDisplay({}) {
@@ -13,6 +14,7 @@ function EquipmentDisplay({}) {
 
   // Likely need the owner context also + its check session
   const [user, setUser] = useContext(UserContext)
+  const [owner, setOwner] = useContext(OwnerContext)
   const apiUrl = useContext(ApiUrlContext)
 
   const [oneEquipment, setOneEquipment] = useState([])
@@ -23,15 +25,46 @@ function EquipmentDisplay({}) {
 
   const navigate = useNavigate()
 
+  // useEffect(() => {
+  //   fetch(`${apiUrl}check_session`, {
+  //     credentials: 'include'
+  //   }).then((response) => {
+  //     if (response.ok) {
+  //       response.json().then((user) => setUser(user))
+  //     }
+  //   })
+  // }, [])
+
   useEffect(() => {
     fetch(`${apiUrl}check_session`, {
-      credentials: 'include'
-    }).then((response) => {
+      credentials: 'include' // Ensures cookies are sent with the request
+    })
+    .then(response => {
       if (response.ok) {
-        response.json().then((user) => setUser(user));
+        return response.json()
+      } else {
+        throw new Error('Session check failed')
       }
-    });
-  }, []);
+    })
+    .then(data => {
+      const role = data.role
+      const userDetails = data.details
+
+      console.log("The Data:",data)
+      // console.log("The Role:",data.role )
+      if (role === 'user') {
+        console.log("The Role:", role )
+        setUser(userDetails)
+      } else if (role === 'owner') {
+        console.log("The Role:", role )
+        console.log("Owner may exist here,")
+        setOwner(userDetails)
+      }
+    })
+    .catch(error => {
+      console.error('Error during session check:', error)
+    })
+  }, [apiUrl, setOwner, setUser])
 
 
   useEffect(() => {
