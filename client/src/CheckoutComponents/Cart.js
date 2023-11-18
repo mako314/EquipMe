@@ -3,53 +3,32 @@ import CartItem from "./CartItem";
 import CreateNewCart from "./CreateNewCart";
 import UserContext from '../UserComponents/UserContext'
 import ApiUrlContext from '../Api'
+import {toast} from 'react-toastify'
+import { UserSessionContext } from "../UserComponents/SessionContext";
+
 
 function Cart(){
+
+  const { currentUser, role } = UserSessionContext() 
   const [user, setUser] = useContext(UserContext)
   const apiUrl = useContext(ApiUrlContext)
-
   const [currentCart, setCurrentCart] = useState(0)
   const [cartData, setCartData] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
 
+
   // console.log(currentCart)
 
-
   useEffect(() => {
-    if (user) {
-      setCartData(user.cart)
+    if (role === 'user') {
+      setCartData(currentUser.cart)
+    } else if (role === 'owner') {
+      toast.warn(`🛒 We don't currently support owner carts`,{
+        "autoClose" : 2000
+      })
     }
-  }, [user])
+  }, [currentUser])
 
-  useEffect(() => {
-    fetch(`${apiUrl}check_session`, {
-      credentials: 'include' // Ensures cookies are sent with the request
-    })
-    .then(response => {
-      if (response.ok) {
-        return response.json()
-      } else {
-        throw new Error('Session check failed')
-      }
-    })
-    .then(data => {
-      const role = data.role
-      const userDetails = data.details
-
-      console.log("The Data:",data)
-      // console.log("The Role:",data.role )
-      if (role === 'user') {
-        console.log("The Role:", role )
-        setUser(userDetails)
-      } else if (role === 'owner') {
-        console.log("The Role:", role )
-        console.log("This is not currently available for owners, we are trying to avoid re-rental conflicts")
-      }
-    })
-    .catch(error => {
-      console.error('Error during session check:', error)
-    })
-  }, [apiUrl, setUser])
 
   // useEffect(() => {
   //   const fetchCartData = async () => {
@@ -124,7 +103,7 @@ function Cart(){
     })
   }
 
-  console.log("JUST CART:", cartData)
+  // console.log("JUST CART:", cartData)
   // console.log("CART DATA:", cartData)
 
     return(
@@ -153,7 +132,7 @@ function Cart(){
             <div className="relative top-20 mx-auto p-5 border-2 border-black w-96 shadow-lg rounded-md bg-white z-50" onClick={(e) => e.stopPropagation()}>
               <div className="mt-3 text-center">
                 <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#3b82f6" class="bi bi-cart-plus-fill" viewBox="0 0 16 16">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#3b82f6" className="bi bi-cart-plus-fill" viewBox="0 0 16 16">
                   <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0z"/>
                 </svg>
                 </div>

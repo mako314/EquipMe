@@ -7,7 +7,7 @@ import ProductCollection from '../../EquipmentComponents/ProductCollection'
 import OwnerEditForm from '../OwnerEditForm';
 import UserCollection from '../../UserComponents/UserCollection';
 import ApiUrlContext from '../../Api';
-import { UseSessionContext } from '../../UserComponents/SessionContext';
+import { UserSessionContext } from '../../UserComponents/SessionContext';
 
 import { ReactComponent as EquipMeLogo } from '../../Content/EquipMeLogo.svg'
 
@@ -15,7 +15,7 @@ import { ReactComponent as EquipMeLogo } from '../../Content/EquipMeLogo.svg'
 function OwnerDashboard({ownerToEdit, updateOwner, fromOwnerDash, setFromOwnerDash, searchTerm}) {
 
     const [owner, setOwner] = useContext(OwnerContext)
-    const { currentUser, role } = UseSessionContext() 
+    const { currentUser, role } = UserSessionContext() 
     const [toggleHomeDash, setToggleHomeDash] = useState(null)
     const [potentialRentalUsers, setPotentialRentalUsers] = useState([])
 

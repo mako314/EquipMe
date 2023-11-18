@@ -3,7 +3,7 @@ import OwnerContext from '../OwnerComponents/OwnerContext'
 import UserContext from '../UserComponents/UserContext'
 import ApiUrlContext from '../Api';
 import {useNavigate} from 'react-router-dom';
-import { UseSessionContext } from '../UserComponents/SessionContext';
+import { UserSessionContext } from '../UserComponents/SessionContext';
 
 
 function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRecipientInfo, fromOwnerDash }){
@@ -13,45 +13,13 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
 
   const [owner, setOwner] = useContext(OwnerContext)
   const [user, setUser] = useContext(UserContext)
-  const { currentUser, role } = UseSessionContext() 
+  const { currentUser, role } = UserSessionContext() 
   const apiUrl = useContext(ApiUrlContext)
 
   // const [ownerInboxes, setOwnerInboxes] = useState([])
   // const [userInboxes, setUserInboxes] = useState([])
 
   const navigate = useNavigate()
-  
-  // THIS IS IT MA BOI THE USE EFFECT TO CONQUER ALL USE EFFECTS
-  // useEffect(() => {
-  //   fetch(`${apiUrl}check_session`, {
-  //     credentials: 'include' // Ensures cookies are sent with the request
-  //   })
-  //   .then(response => {
-  //     if (response.ok) {
-  //       return response.json()
-  //     } else {
-  //       throw new Error('Session check failed')
-  //     }
-  //   })
-  //   .then(data => {
-  //     const role = data.role
-  //     const userDetails = data.details
-
-  //     console.log("The Data:",data)
-  //     // console.log("The Role:",data.role )
-  //     if (role === 'user') {
-  //       console.log("The Role:", role )
-  //       setUser(userDetails)
-  //     } else if (role === 'owner') {
-  //       console.log("The Role:", role )
-  //       setOwner(userDetails)
-  //     }
-  //   })
-  //   .catch(error => {
-  //     console.error('Error during session check:', error)
-  //   })
-  // }, [apiUrl, setOwner, setUser])
-
   // console.log("You an owner?",owner)
   // console.log(user)
 
