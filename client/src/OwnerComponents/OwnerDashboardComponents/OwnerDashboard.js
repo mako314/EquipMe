@@ -15,7 +15,8 @@ import { ReactComponent as EquipMeLogo } from '../../Content/EquipMeLogo.svg'
 function OwnerDashboard({ownerToEdit, updateOwner, fromOwnerDash, setFromOwnerDash, searchTerm}) {
 
     const [owner, setOwner] = useContext(OwnerContext)
-    const { currentUser, role } = UserSessionContext() 
+    const { currentUser, role } = UserSessionContext()
+    // Honestly with currentUser, we can just make this for both users and owners
     const [toggleHomeDash, setToggleHomeDash] = useState(null)
     const [potentialRentalUsers, setPotentialRentalUsers] = useState([])
 

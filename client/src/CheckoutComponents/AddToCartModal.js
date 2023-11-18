@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect, Fragment } from 'react'
 import ApiUrlContext from '../Api'
 import UserContext from '../UserComponents/UserContext'
+import { UserSessionContext } from '../UserComponents/SessionContext'
 import CreateNewCart from './CreateNewCart'
 import {toast} from 'react-toastify'
 
@@ -9,6 +10,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
   //Grab apiUrl from context + user info
   const apiUrl = useContext(ApiUrlContext)
   const [user, setUser] = useContext(UserContext)
+  const { currentUser, role } = UserSessionContext()
 
   //States to capture info, day ranges, costs, length of rental, quantity, and track modal, cart
   const [selectedRate, setSelectedRate] = useState("hourly")
@@ -17,51 +19,24 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
   const [equipmentQuantity, setEquipmentQuantity] = useState(1)
   const [currentCart, setCurrentCart] = useState(1)
   // const [isModalOpen, setIsModalOpen] = useState(false)
+
   const [isNewCartModalOpen, setIsNewCartModalOpen] = useState(false)
   const [cartData, setCartData] = useState([])
-
-  //Check session for user
-  useEffect(() => {
-    fetch(`${apiUrl}check_session`, {
-      credentials: 'include' // Ensures cookies are sent with the request
-    })
-    .then(response => {
-      if (response.ok) {
-        return response.json()
-      } else {
-        throw new Error('Session check failed')
-      }
-    })
-    .then(data => {
-      const role = data.role
-      const userDetails = data.details
-
-      console.log("The Data:",data)
-      // console.log("The Role:",data.role )
-      if (role === 'user') {
-        console.log("The Role:", role )
-        setUser(userDetails)
-      } else if (role === 'owner') {
-        console.log("The Role:", role )
-        console.log("You don't have a cart silly head")
-      }
-    })
-    .catch(error => {
-      console.error('Error during session check:', error)
-    })
-  }, [apiUrl, setUser])
-
+  
   //Destructure for equipment_price
   const { equipment_price, equipment_image } = oneEquipment
 
   // console.log("Equipment price:", equipment_price)
   // console.log("Your Equipment:",oneEquipment)
   // console.log("The USER:", user)
+
   useEffect(() => {
-    if (user) {
-      setCartData(user.cart)
-    }
-  }, [user])
+    if (role === 'user') {
+      setCartData(currentUser.cart)
+    } 
+  }, [currentUser])
+
+  console.log(role)
 
 
 const addCart = (newCart) => {
@@ -327,7 +302,7 @@ const addCart = (newCart) => {
                                     <div className="relative top-20 mx-auto p-5 border-2 border-black w-96 shadow-lg rounded-md bg-white z-50" onClick={(e) => e.stopPropagation()}>
                                       <div className="mt-3 text-center">
                                         <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#3b82f6" class="bi bi-cart-plus-fill" viewBox="0 0 16 16">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#3b82f6" className="bi bi-cart-plus-fill" viewBox="0 0 16 16">
                                           <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0z"/>
                                         </svg>
                                         </div>
@@ -337,7 +312,6 @@ const addCart = (newCart) => {
                                     </div>
                                   </div>
                                 )}
-
                               <button 
                                   // type="submit" 
                                   // onClick={handleSendMessage}
