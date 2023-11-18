@@ -6,6 +6,7 @@ import AddToCartModal from '../CheckoutComponents/AddToCartModal'
 import UserContext from '../UserComponents/UserContext'
 import ApiUrlContext from '../Api'
 import OwnerContext from '../OwnerComponents/OwnerContext'
+import { UserSessionContext } from '../UserComponents/SessionContext'
 
 
 function EquipmentDisplay({}) {
@@ -16,56 +17,18 @@ function EquipmentDisplay({}) {
   const [user, setUser] = useContext(UserContext)
   const [owner, setOwner] = useContext(OwnerContext)
   const apiUrl = useContext(ApiUrlContext)
-
+  const { currentUser, role } = UserSessionContext()
+  const [addToCartButton, setAddToCartButton] = useState(<span>Placeholder</span>);
   const [oneEquipment, setOneEquipment] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
+
+
   const { model, name, make, location, email, phone, quantity, equipment_image, equipment_price } = oneEquipment
 
 
-
+  console.log("THE currentUser IS:", currentUser)
+  console.log("THE ROLE IS:", role)
   const navigate = useNavigate()
-
-  // useEffect(() => {
-  //   fetch(`${apiUrl}check_session`, {
-  //     credentials: 'include'
-  //   }).then((response) => {
-  //     if (response.ok) {
-  //       response.json().then((user) => setUser(user))
-  //     }
-  //   })
-  // }, [])
-
-  useEffect(() => {
-    fetch(`${apiUrl}check_session`, {
-      credentials: 'include' // Ensures cookies are sent with the request
-    })
-    .then(response => {
-      if (response.ok) {
-        return response.json()
-      } else {
-        throw new Error('Session check failed')
-      }
-    })
-    .then(data => {
-      const role = data.role
-      const userDetails = data.details
-
-      console.log("The Data:",data)
-      // console.log("The Role:",data.role )
-      if (role === 'user') {
-        console.log("The Role:", role )
-        setUser(userDetails)
-      } else if (role === 'owner') {
-        console.log("The Role:", role )
-        console.log("Owner may exist here,")
-        setOwner(userDetails)
-      }
-    })
-    .catch(error => {
-      console.error('Error during session check:', error)
-    })
-  }, [apiUrl, setOwner, setUser])
-
 
   useEffect(() => {
     fetch(`${apiUrl}equipment/${id}`)
@@ -75,7 +38,7 @@ function EquipmentDisplay({}) {
       })
   }, [])
 
-  console.log("Display Page one equipment:", equipment_image)
+  // console.log("Display Page one equipment:", equipment_image)
 
   const equip_prices = equipment_price?.map((price) => {
     return <Fragment key={oneEquipment.id}>
@@ -91,6 +54,17 @@ function EquipmentDisplay({}) {
   }
 
 
+  useEffect( () => {
+    if (role === 'user') {
+      setAddToCartButton(
+        <AddToCartModal equip_id={id} oneEquipment={oneEquipment} toggleModal={toggleModal} isModalOpen={isModalOpen}/>
+      )
+    } else {
+      setAddToCartButton(<span>Placeholder</span>)
+    }
+  }, [role, currentUser])
+
+  
 
   // Need to make some onclicks for when a user clicks description, reviews, details etc. 
 
@@ -133,7 +107,7 @@ function EquipmentDisplay({}) {
               {/* <span className="title-font font-medium text-2xl text-white">$58.00</span> */}
               {equip_prices}
               {/* <button className="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded" >Rent Now</button> */}
-              <AddToCartModal equip_id={id} oneEquipment={oneEquipment} toggleModal={toggleModal} isModalOpen={isModalOpen}/>
+              {addToCartButton}
               <button className="rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
                 <svg fill="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-5 h-5" viewBox="0 0 24 24">
                   <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>

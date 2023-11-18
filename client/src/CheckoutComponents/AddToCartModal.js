@@ -22,7 +22,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
 
   const [isNewCartModalOpen, setIsNewCartModalOpen] = useState(false)
   const [cartData, setCartData] = useState([])
-  
+
   //Destructure for equipment_price
   const { equipment_price, equipment_image } = oneEquipment
 
@@ -36,13 +36,13 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
     } 
   }, [currentUser])
 
-  console.log(role)
+  // console.log(role)
 
 
 const addCart = (newCart) => {
   setCartData((cartData) => [...cartData, newCart])
 }
-  console.log("YOUR CART:", cartData)
+  // console.log("YOUR CART:", cartData)
   // console.log("This is the selected rate:", selectedRate)
   // console.log("this is the date range:", dayRange)
 
@@ -137,11 +137,11 @@ const addCart = (newCart) => {
 
   // Handles adding item to cart, may need to create a cart first, haha...ha......ha.
   // So the post works, but you have to play around with it, I needto capture values prior to 
-  console.log("This is the rental length:",rentalLength)
-  console.log("This is the selected rate:",selectedRate)
-  console.log("This is the equipment quantity:",equipmentQuantity)
-  console.log("This is the equipment ID:",equip_id)
-  console.log("This is the current cart ID:",currentCart)
+  // console.log("This is the rental length:",rentalLength)
+  // console.log("This is the selected rate:",selectedRate)
+  // console.log("This is the equipment quantity:",equipmentQuantity)
+  // console.log("This is the equipment ID:",equip_id)
+  // console.log("This is the current cart ID:",currentCart)
 
   function handleAddToCartClick() {
     let rental_length = rentalLength

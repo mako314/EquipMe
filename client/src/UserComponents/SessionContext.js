@@ -19,6 +19,7 @@ export const SessionProvider = ({ children }) => {
         throw new Error('Session check failed')
       })
       .then(data => {
+        // console.log("Check Session Data:", data)
         if (data.role === 'user') {
           setCurrentUser(data.details)
           setRole('user')
