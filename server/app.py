@@ -12,7 +12,7 @@ from sqlalchemy import asc
 import pandas as pd
 import xml.etree.ElementTree as ET
 
-from flask_jwt_extended import create_access_token, set_access_cookies, jwt_required, get_jwt_identity
+from flask_jwt_extended import create_access_token, set_access_cookies, jwt_required, get_jwt_identity, unset_jwt_cookies, create_refresh_token
 #------------------------------------HELPERS----------------------------------
 from datetime import datetime
 from helpers import is_available_for_date_range
@@ -34,6 +34,7 @@ class Login(Resource):
         #Test to see if password matches
         if user and user.authenticate(password):
             access_token = create_access_token(identity=user.id)
+            # refresh_token = create_refresh_token(identity=user.id)
             response = jsonify({"msg": "login successful"}, 200)
             set_access_cookies(response, access_token)
             return response
@@ -74,6 +75,7 @@ class Logout(Resource):
     def delete(self): 
         session['user_id'] = None
         response = make_response({'message': 'Logout successful'}, 200)
+        unset_jwt_cookies(response) # May not need
         response.delete_cookie('access_token')
         return response
 
@@ -86,6 +88,7 @@ class OwnerLogout(Resource):
     def delete(self):
         session['owner_id'] = None
         response = make_response({'message': 'Logout successful'}, 200)
+        unset_jwt_cookies(response) # May not need
         response.delete_cookie('access_token')
         return response
 

@@ -30,7 +30,8 @@ function NavBar({ setSearchTerm }) {
 
   function userHandleLogout() {
     fetch(`${apiUrl}logout`, {
-        method: "DELETE"
+        method: "DELETE",
+        credentials: 'include'
     }).then( () => {
       setUser(null)
       closeMobileView()
@@ -39,7 +40,8 @@ function NavBar({ setSearchTerm }) {
 
   function ownerHandleLogout() {
     fetch(`${apiUrl}owner/logout`, {
-        method: "DELETE"
+        method: "DELETE",
+        credentials: 'include'
     }).then( () => {
       setOwner(null)
       closeMobileView()
