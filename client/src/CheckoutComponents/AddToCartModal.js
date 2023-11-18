@@ -159,7 +159,7 @@ const addCart = (newCart) => {
         if (resp.ok) {
           resp.json().then(() => {
             //-1 in the cart_name, arrays index start at 0, but this grabs the correct ID. So If I select first cart, it's ID of 1. But in the array index it's 0.
-            toast.success(`🛒 Succesfully added ${quantity} ${oneEquipment.make} ${oneEquipment.name} ${oneEquipment.model},  ${cartData[currentCart - 1].cart_name}`,{
+            toast.success(`🛒 Succesfully added ${quantity} ${oneEquipment.make} ${oneEquipment.name} ${oneEquipment.model}, to ${cartData[currentCart - 1].cart_name}`,{
               "autoClose" : 2000
             })
           })
