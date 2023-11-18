@@ -40,7 +40,10 @@ import { OwnerProvider } from './OwnerComponents/OwnerContext';
 
 //----------------------API Functionality-----------------------------
 import { ApiProvider } from './Api';
-import ApiUrlContext from './Api';
+
+//----------------------Testing a Check Session Context -----------------------------
+import { SessionProvider } from './UserComponents/SessionContext';
+
 
 //----------------------User Functionality-----------------------------
 import UserProfile from './UserComponents/UserProfile';
@@ -309,6 +312,7 @@ function App() {
 
   return (
     // UseContext gets called here, allowing the entirety of my app access to the USER and OWNER information!
+    <SessionProvider>
     <OwnerProvider>
       <UserProvider>
         <ApiProvider>
@@ -393,6 +397,7 @@ function App() {
         </ApiProvider>
       </UserProvider>
     </OwnerProvider>
+    </SessionProvider>
   );
 }
 

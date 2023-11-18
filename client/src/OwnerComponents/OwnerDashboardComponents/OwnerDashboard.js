@@ -7,6 +7,7 @@ import ProductCollection from '../../EquipmentComponents/ProductCollection'
 import OwnerEditForm from '../OwnerEditForm';
 import UserCollection from '../../UserComponents/UserCollection';
 import ApiUrlContext from '../../Api';
+import {useSessionContext} from '../../UserComponents/SessionContext';
 
 import { ReactComponent as EquipMeLogo } from '../../Content/EquipMeLogo.svg'
 
@@ -14,20 +15,25 @@ import { ReactComponent as EquipMeLogo } from '../../Content/EquipMeLogo.svg'
 function OwnerDashboard({ownerToEdit, updateOwner, fromOwnerDash, setFromOwnerDash, searchTerm}) {
 
     const [owner, setOwner] = useContext(OwnerContext)
+    const { currentUser, role } = useSessionContext() 
     const [toggleHomeDash, setToggleHomeDash] = useState(null)
     const [potentialRentalUsers, setPotentialRentalUsers] = useState([])
 
     const apiUrl = useContext(ApiUrlContext)
 
-    useEffect(() => {
-        fetch(`${apiUrl}check_session`, {
-            credentials: 'include'
-          }).then((response) => {
-            if (response.ok) {
-                response.json().then((owner) => setOwner(owner));
-            }
-        });
-    }, []);
+    setOwner(currentUser)
+    console.log("TESTING THIS CONTEXT SESSION CHECKING",currentUser)
+    console.log("With a role of:", role)
+
+    // useEffect(() => {
+    //     fetch(`${apiUrl}check_session`, {
+    //         credentials: 'include'
+    //       }).then((response) => {
+    //         if (response.ok) {
+    //             response.json().then((owner) => setOwner(owner));
+    //         }
+    //     });
+    // }, []);
 
     // console.log(owner)
     
