@@ -3,6 +3,8 @@ import OwnerContext from '../OwnerComponents/OwnerContext'
 import UserContext from '../UserComponents/UserContext'
 import ApiUrlContext from '../Api';
 import {useNavigate} from 'react-router-dom';
+import { UseSessionContext } from '../UserComponents/SessionContext';
+
 
 function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRecipientInfo, fromOwnerDash }){
 
@@ -11,6 +13,7 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
 
   const [owner, setOwner] = useContext(OwnerContext)
   const [user, setUser] = useContext(UserContext)
+  const { currentUser, role } = UseSessionContext() 
   const apiUrl = useContext(ApiUrlContext)
 
   // const [ownerInboxes, setOwnerInboxes] = useState([])
@@ -18,76 +21,44 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
 
   const navigate = useNavigate()
   
-  // useEffect(() => {
-  //   fetch(`${apiUrl}owner/check_session`, {
-  //     credentials: 'include'
-  //   }).then((response) => {
-  //       if (response.ok) {
-  //           response.json().then((owner) => setOwner(owner))
-  //       }
-  //   })
-  // }, [])
-
-  
-// ---------------Detect whether or not a USER is logged in-------------------
-
+  // THIS IS IT MA BOI THE USE EFFECT TO CONQUER ALL USE EFFECTS
   // useEffect(() => {
   //   fetch(`${apiUrl}check_session`, {
-  //     credentials: 'include'
-  //   }).then((response) => {
+  //     credentials: 'include' // Ensures cookies are sent with the request
+  //   })
+  //   .then(response => {
   //     if (response.ok) {
-  //       response.json().then((user) => setUser(user))
+  //       return response.json()
+  //     } else {
+  //       throw new Error('Session check failed')
   //     }
   //   })
-  // }, [])
+  //   .then(data => {
+  //     const role = data.role
+  //     const userDetails = data.details
 
-  // THIS IS IT MA BOI THE USE EFFECT TO CONQUER ALL USE EFFECTS
-  useEffect(() => {
-    fetch(`${apiUrl}check_session`, {
-      credentials: 'include' // Ensures cookies are sent with the request
-    })
-    .then(response => {
-      if (response.ok) {
-        return response.json()
-      } else {
-        throw new Error('Session check failed')
-      }
-    })
-    .then(data => {
-      const role = data.role
-      const userDetails = data.details
+  //     console.log("The Data:",data)
+  //     // console.log("The Role:",data.role )
+  //     if (role === 'user') {
+  //       console.log("The Role:", role )
+  //       setUser(userDetails)
+  //     } else if (role === 'owner') {
+  //       console.log("The Role:", role )
+  //       setOwner(userDetails)
+  //     }
+  //   })
+  //   .catch(error => {
+  //     console.error('Error during session check:', error)
+  //   })
+  // }, [apiUrl, setOwner, setUser])
 
-      console.log("The Data:",data)
-      // console.log("The Role:",data.role )
-      if (role === 'user') {
-        console.log("The Role:", role )
-        setUser(userDetails)
-      } else if (role === 'owner') {
-        console.log("The Role:", role )
-        setOwner(userDetails)
-      }
-    })
-    .catch(error => {
-      console.error('Error during session check:', error)
-    })
-  }, [apiUrl, setOwner, setUser])
-  console.log("You an owner?",owner)
-  console.log(user)
+  // console.log("You an owner?",owner)
+  // console.log(user)
+
+  console.log(currentUser)
+
+
 // --------------------------------------------------------------------
-  //The stuff below here doesn't seem to be necessary. I think this was redundant. No need for user inboxes or owner inboxes to be a variable if I can access them from my user details (owner or user) directly.
-
-    // let user_inboxes
-    // if (user && user.user_inboxes) {
-    //     setInboxes(user.user_inboxes)
-    //     // console.log("User Inboxes:", user_inboxes)
-    // }
-
-    // let owner_inboxes
-    // if (owner && owner.owner_inboxes) {
-    //    setInboxes(owner.owner_inboxes)
-    //     // console.log("Owner Inboxes:", owner_inboxes)
-    // }
-
     
     useEffect(() => {
       if (user && user.user_inboxes) {
@@ -101,18 +72,6 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
     }
   }, [owner, user])
 
-  //The above useEffect seems to perform much much better.
-
-  // I had a normal use Effect earlier, but I was getting issues, so I incorporated Array.isArray to test for whether or not it's an array before setting state
-  //   useEffect(() => {
-  //     if (user_inboxes && Array.isArray(user_inboxes)) {
-  //         setInboxes(user_inboxes)
-  //     } else if (owner_inboxes && Array.isArray(owner_inboxes)) {
-  //         setInboxes(owner_inboxes)
-  //     } else {
-  //         setInboxes([])
-  //     }
-  // }, [user_inboxes, owner_inboxes])
 
     // console.log("Inboxes in State:", inboxes)
 

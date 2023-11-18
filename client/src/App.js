@@ -133,6 +133,7 @@ function App() {
       console.error('Error during session check:', error)
     })
   }, [apiUrl, setOwner, setUser])
+  
   // useEffect(() => {
   //   fetch(`${apiUrl}check_session`, {
   //     credentials: 'include'

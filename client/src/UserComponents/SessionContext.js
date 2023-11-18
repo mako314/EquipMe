@@ -2,7 +2,7 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 
 const SessionContext = createContext();
 
-export const useSessionContext = () => useContext(SessionContext)
+export const UseSessionContext = () => useContext(SessionContext)
 
 export const SessionProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState([])
