@@ -20,7 +20,7 @@ function OwnerDashboard({ownerToEdit, updateOwner, fromOwnerDash, setFromOwnerDa
     const apiUrl = useContext(ApiUrlContext)
 
     useEffect(() => {
-        fetch(`${apiUrl}owner/check_session`, {
+        fetch(`${apiUrl}check_session`, {
             credentials: 'include'
           }).then((response) => {
             if (response.ok) {

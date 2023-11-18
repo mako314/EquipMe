@@ -13,57 +13,102 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
   const [user, setUser] = useContext(UserContext)
   const apiUrl = useContext(ApiUrlContext)
 
+  // const [ownerInboxes, setOwnerInboxes] = useState([])
+  // const [userInboxes, setUserInboxes] = useState([])
+
   const navigate = useNavigate()
   
-  useEffect(() => {
-    fetch(`${apiUrl}owner/check_session`, {
-      credentials: 'include'
-    }).then((response) => {
-        if (response.ok) {
-            response.json().then((owner) => setOwner(owner))
-        }
-    })
-  }, [])
+  // useEffect(() => {
+  //   fetch(`${apiUrl}owner/check_session`, {
+  //     credentials: 'include'
+  //   }).then((response) => {
+  //       if (response.ok) {
+  //           response.json().then((owner) => setOwner(owner))
+  //       }
+  //   })
+  // }, [])
 
-  // console.log(owner)
+  
 // ---------------Detect whether or not a USER is logged in-------------------
+
+  // useEffect(() => {
+  //   fetch(`${apiUrl}check_session`, {
+  //     credentials: 'include'
+  //   }).then((response) => {
+  //     if (response.ok) {
+  //       response.json().then((user) => setUser(user))
+  //     }
+  //   })
+  // }, [])
 
   useEffect(() => {
     fetch(`${apiUrl}check_session`, {
-      credentials: 'include'
-    }).then((response) => {
+      credentials: 'include' // Ensures cookies are sent with the request
+    })
+    .then(response => {
       if (response.ok) {
-        response.json().then((user) => setUser(user))
+        return response.json()
+      } else {
+        throw new Error('Session check failed')
       }
     })
-  }, [])
+    .then(data => {
+      const role = data.role
+      const userDetails = data.details
 
-  // console.log(user)
+      console.log("The Data:",data)
+      // console.log("The Role:",data.role )
+      if (role === 'user') {
+        console.log("The Role:", role )
+        setUser(userDetails)
+      } else if (role === 'owner') {
+        console.log("The Role:", role )
+        setOwner(userDetails)
+      }
+    })
+    .catch(error => {
+      console.error('Error during session check:', error)
+    })
+  }, [apiUrl, setOwner, setUser])
+  console.log("You an owner?",owner)
+  console.log(user)
 // --------------------------------------------------------------------
 
-    let user_inboxes
-    if (user && user.user_inboxes) {
-        user_inboxes = user.user_inboxes
+    // let user_inboxes
+    // if (user && user.user_inboxes) {
+    //     setInboxes(user.user_inboxes)
+    //     // console.log("User Inboxes:", user_inboxes)
+    // }
+
+    // let owner_inboxes
+    // if (owner && owner.owner_inboxes) {
+    //    setInboxes(owner.owner_inboxes)
+    //     // console.log("Owner Inboxes:", owner_inboxes)
+    // }
+
+    useEffect(() => {
+      if (user && user.user_inboxes) {
+        setInboxes(user.user_inboxes)
         // console.log("User Inboxes:", user_inboxes)
     }
 
-    let owner_inboxes
-    if (owner && owner.owner_inboxes) {
-        owner_inboxes = owner.owner_inboxes
+      if (owner && owner.owner_inboxes) {
+       setInboxes(owner.owner_inboxes)
         // console.log("Owner Inboxes:", owner_inboxes)
     }
+  }, [owner, user])
 
 
     // I had a normal use Effect earlier, but I was getting issues, so I incorporated Array.isArray to test for whether or not it's an array before setting state
-    useEffect(() => {
-      if (user_inboxes && Array.isArray(user_inboxes)) {
-          setInboxes(user_inboxes)
-      } else if (owner_inboxes && Array.isArray(owner_inboxes)) {
-          setInboxes(owner_inboxes)
-      } else {
-          setInboxes([])
-      }
-  }, [user_inboxes, owner_inboxes])
+  //   useEffect(() => {
+  //     if (user_inboxes && Array.isArray(user_inboxes)) {
+  //         setInboxes(user_inboxes)
+  //     } else if (owner_inboxes && Array.isArray(owner_inboxes)) {
+  //         setInboxes(owner_inboxes)
+  //     } else {
+  //         setInboxes([])
+  //     }
+  // }, [user_inboxes, owner_inboxes])
 
     // console.log("Inboxes in State:", inboxes)
 
