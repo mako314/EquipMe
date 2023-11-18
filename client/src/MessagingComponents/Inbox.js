@@ -41,6 +41,7 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
   //   })
   // }, [])
 
+  // THIS IS IT MA BOI THE USE EFFECT TO CONQUER ALL USE EFFECTS
   useEffect(() => {
     fetch(`${apiUrl}check_session`, {
       credentials: 'include' // Ensures cookies are sent with the request
@@ -73,6 +74,7 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
   console.log("You an owner?",owner)
   console.log(user)
 // --------------------------------------------------------------------
+  //The stuff below here doesn't seem to be necessary. I think this was redundant. No need for user inboxes or owner inboxes to be a variable if I can access them from my user details (owner or user) directly.
 
     // let user_inboxes
     // if (user && user.user_inboxes) {
@@ -86,6 +88,7 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
     //     // console.log("Owner Inboxes:", owner_inboxes)
     // }
 
+    
     useEffect(() => {
       if (user && user.user_inboxes) {
         setInboxes(user.user_inboxes)
@@ -98,8 +101,9 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
     }
   }, [owner, user])
 
+  //The above useEffect seems to perform much much better.
 
-    // I had a normal use Effect earlier, but I was getting issues, so I incorporated Array.isArray to test for whether or not it's an array before setting state
+  // I had a normal use Effect earlier, but I was getting issues, so I incorporated Array.isArray to test for whether or not it's an array before setting state
   //   useEffect(() => {
   //     if (user_inboxes && Array.isArray(user_inboxes)) {
   //         setInboxes(user_inboxes)
