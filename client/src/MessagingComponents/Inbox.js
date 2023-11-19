@@ -23,8 +23,8 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
   // console.log("You an owner?",owner)
   // console.log(user)
 
-  console.log(currentUser.user_inboxes)
-  console.log(currentUser.owner_inboxes)
+  console.log(currentUser?.user_inboxes)
+  console.log(currentUser?.owner_inboxes)
   console.log(fromOwnerDash)
 
 

@@ -1,13 +1,13 @@
 import React, { useContext, useState, useEffect } from 'react'
-import OwnerContext from '../OwnerComponents/OwnerContext'
-import UserContext from '../UserComponents/UserContext'
+// import OwnerContext from '../OwnerComponents/OwnerContext'
+// import UserContext from '../UserComponents/UserContext'
 import ApiUrlContext from '../Api'
 import {toast} from 'react-toastify'
 import { UserSessionContext } from '../UserComponents/SessionContext'
 
 function ContactModal({recipientID}){
-    const [owner, setOwner] = useContext(OwnerContext)
-    const [user, setUser] = useContext(UserContext)
+    // const [owner, setOwner] = useContext(OwnerContext)
+    // const [user, setUser] = useContext(UserContext)
     const { currentUser, role, checkSession } = UserSessionContext()
 
     const apiUrl = useContext(ApiUrlContext)
@@ -92,7 +92,7 @@ function ContactModal({recipientID}){
                 })
 
                 if (response.ok) {
-                    // await checkSession()
+                    await checkSession()
                     toast.success("✉️ Message sent successfully!",{
                     "autoClose" : 2000
                     })

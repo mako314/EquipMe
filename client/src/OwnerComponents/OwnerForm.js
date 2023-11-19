@@ -5,6 +5,7 @@ import {useFormik} from "formik"
 import { object, string, number} from 'yup'
 import OwnerContext from './OwnerContext'
 import ApiUrlContext from "../Api"
+import { UserSessionContext } from "../UserComponents/SessionContext";
 
 function OwnerForm({addOwner}){
 
@@ -12,13 +13,14 @@ function OwnerForm({addOwner}){
     const navigate = useNavigate()
     const apiUrl = useContext(ApiUrlContext)
     const [owner, setOwner] = useContext(OwnerContext)
+    const { currentUser, role, setCurrentUser, setRole } = UserSessionContext()
 
     function handleLogin() {
         
       let email = formik.values.email;
       let password = formik.values.password;
 
-      fetch(`${apiUrl}owner/login`, {
+      fetch(`${apiUrl}login`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -26,8 +28,9 @@ function OwnerForm({addOwner}){
           body: JSON.stringify( { email, password } ),
         }).then((resp) => {
           if (resp.ok) {
-            resp.json().then((owner) => {
-              setOwner(owner)
+            resp.json().then((data) => {
+              setCurrentUser(data.owner)
+              setRole('owner')
               navigate(`/owner/dashboard`); // <-------- navigates to the profile
             });
           }

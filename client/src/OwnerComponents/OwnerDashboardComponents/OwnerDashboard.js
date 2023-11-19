@@ -2,7 +2,6 @@ import React, { useContext, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
 
 //Imports//
-import OwnerContext from '../OwnerContext';
 import ProductCollection from '../../EquipmentComponents/ProductCollection'
 import OwnerEditForm from '../OwnerEditForm';
 import UserCollection from '../../UserComponents/UserCollection';
@@ -14,7 +13,7 @@ import { ReactComponent as EquipMeLogo } from '../../Content/EquipMeLogo.svg'
 
 function OwnerDashboard({ownerToEdit, updateOwner, fromOwnerDash, setFromOwnerDash, searchTerm}) {
 
-    const [owner, setOwner] = useContext(OwnerContext)
+
     const { currentUser, role} = UserSessionContext()
     // Honestly with currentUser, we can just make this for both users and owners
     const [toggleHomeDash, setToggleHomeDash] = useState(null)
@@ -22,21 +21,8 @@ function OwnerDashboard({ownerToEdit, updateOwner, fromOwnerDash, setFromOwnerDa
 
     const apiUrl = useContext(ApiUrlContext)
 
-    setOwner(currentUser)
     console.log("TESTING THIS CONTEXT SESSION CHECKING",currentUser)
     console.log("With a role of:", role)
-
-    // useEffect(() => {
-    //     fetch(`${apiUrl}check_session`, {
-    //         credentials: 'include'
-    //       }).then((response) => {
-    //         if (response.ok) {
-    //             response.json().then((owner) => setOwner(owner));
-    //         }
-    //     });
-    // }, []);
-
-    // console.log(owner)
     
     //----- Variables in the order they appear -----
     let plannedDeals

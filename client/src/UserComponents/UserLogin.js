@@ -14,17 +14,6 @@ function UserLogin(){
     const apiUrl = useContext(ApiUrlContext)
     const { currentUser, role, setCurrentUser, setRole } = UserSessionContext()
 
-    console.log(user);
-
-    // grabs current session from server-side and sets state
-    // function handleCheckSession() {
-    //     fetch("/check_session").then((resp) => {
-    //       if (resp.ok) {
-    //         resp.json().then((user) => setUser(user));
-    //       }
-    //     });
-    // }
-
     // sends information to server-side, sets session, and sets state
     function handleLogin(e) {
         e.preventDefault();
@@ -43,7 +32,6 @@ function UserLogin(){
             if (resp.ok) {
               resp.json().then((data) => {
                 console.log(data.user)
-                setUser(data.user)
                 setCurrentUser(data.user)
                 setRole('user')
                 navigate(`/user/profile/${data.id}`); // <-------- navigates to the profile
@@ -56,7 +44,7 @@ function UserLogin(){
     function handleLogout() {
         fetch(`${apiUrl}logout`, {
             method: "DELETE"
-        }).then(setUser(null))
+        }).then(setCurrentUser(null))
     }
 
 

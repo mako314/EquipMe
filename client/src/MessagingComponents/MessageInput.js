@@ -1,76 +1,19 @@
 import React, { useContext, useEffect, useState} from 'react'
-import OwnerContext from '../OwnerComponents/OwnerContext'
-import UserContext from '../UserComponents/UserContext'
 import ApiUrlContext from '../Api'
-import MessageThreads from './MessageThreads'
 import { UserSessionContext } from '../UserComponents/SessionContext'
 
 function MessageInput({SelectedThreadID, setNewMessage, newMessage, setInboxes, inboxes, recipientInfo}){
 
 // ---------------Detect whether or not an OWNER is logged in-------------------
 
-  const [owner, setOwner] = useContext(OwnerContext)
-  const [user, setUser] = useContext(UserContext)
   const { currentUser, role } = UserSessionContext()
   const apiUrl = useContext(ApiUrlContext)
   
-  // useEffect(() => {
-  //   fetch(`${apiUrl}owner/check_session`, {
-  //     credentials: 'include'
-  //   }).then((response) => {
-  //       if (response.ok) {
-  //           response.json().then((owner) => setOwner(owner))
-  //       }
-  //   })
-  // }, [])
-
-//   console.log(owner)
-
-  
 // They should have context ids already so input them here
 
-
-// --------------------------------------------------------------------
-
-// ---------------Detect whether or not a USER is logged in-------------------
-
-  
-
-  // useEffect(() => {
-  //   fetch(`${apiUrl}check_session`, {
-  //     credentials: 'include'
-  //   }).then((response) => {
-  //     if (response.ok) {
-  //       response.json().then((user) => setUser(user))
-  //     }
-  //   })
-  // }, [])
-
-  // useEffect(() => {
-  //   fetch(`${apiUrl}check_session`, {
-  //     credentials: 'include' // Ensures cookies are sent with the request
-  //   })
-  //   .then(response => {
-  //     if (response.ok) {
-  //       return response.json()
-  //     } else {
-  //       throw new Error('Session check failed')
-  //     }
-  //   })
-  //   .then(data => {
-  //     console.log("The Data",data)
-  //     if (data.role === 'user') {
-  //       setUser(data)
-  //     } else if (data.role === 'owner') {
-  //       setOwner(data)
-  //     }
-  //   })
-  //   .catch(error => {
-  //     console.error('Error during session check:', error)
-  //   })
-  // }, [apiUrl, setOwner, setUser])
-  // console.log(owner)
-  // console.log(user)
+console.log("This is the inbox ALL", inboxes)
+console.log("These are the threads with the thread ID", inboxes[SelectedThreadID])
+// I need to move context ID to threads, should be simple enough
 // --------------------------------------------------------------------
 
 const handleSendMessage = () => {
@@ -78,19 +21,7 @@ const handleSendMessage = () => {
     let message
     
     // This portion below tests whether or not a user or an owner is logged in, and declares them the sender. From there, the recipient info is pulled from inbox.js and prop drilled into here and placed into the appropriate spot.
-
-    // if (owner && owner.id){
-    //   message = {
-    //     "recipient_id": recipientInfo.id,
-    //     "sender_id": owner.id,
-    //     "context_id": 2,
-    //     "user_type": "owner",
-    //     "content": newMessage,
-    //     "message_status": "Delivered",
-    //     "created_at": new Date().toISOString(),
-    //     "thread_id": SelectedThreadID
-    //   }
-    // } 
+    
     if (role === 'owner' && currentUser.id){
       message = {
         "recipient_id": recipientInfo.id,
@@ -102,20 +33,7 @@ const handleSendMessage = () => {
         "created_at": new Date().toISOString(),
         "thread_id": SelectedThreadID
       }
-    } 
-    // else if (user && user.id) {
-    //   message = {
-    //     "recipient_id": recipientInfo.id,
-    //     "sender_id": user.id,
-    //     "context_id": 2,
-    //     "user_type" : "user",
-    //     "content": newMessage,
-    //     "message_status": "Delivered",
-    //     "created_at": new Date().toISOString(),
-    //     "thread_id": SelectedThreadID
-    //   }
-    // } 
-    else if (role ==='user' && currentUser.id) {
+    } else if (role ==='user' && currentUser.id) {
       message = {
         "recipient_id": recipientInfo.id,
         "sender_id": currentUser.id,

@@ -1,5 +1,4 @@
 import React, { useContext, useState, useEffect } from 'react';
-import UserContext from './UserContext';
 import ApiUrlContext from '../Api';
 import RentalCollection from '../RentalComponents/RentalCollection';
 import { UserSessionContext } from './SessionContext';
@@ -8,7 +7,6 @@ import { useParams, useNavigate, useInRouterContext } from 'react-router-dom';
 
 function UserProfile() {
   // User context, meaning if user is signed in, they get their data,
-  const [user, setUser] = useContext(UserContext)
   const { currentUser, role } = UserSessionContext() 
   const apiUrl = useContext(ApiUrlContext)
 
@@ -26,16 +24,6 @@ function UserProfile() {
 
   // User base is solely for renting I think at the moment, would be too much to allow random users to upload equipment
 
-  //Check if user is logged in, I may just make this context and wrap it around my whole app too.
-  // useEffect(() => {
-  //   fetch(`${apiUrl}check_session`, {
-  //     credentials: 'include'
-  //   }).then((response) => {
-  //     if (response.ok) {
-  //       response.json().then((user) => setUser(user));
-  //     }
-  //   });
-  // }, []);
 
   useEffect(() => {
     fetch(`${apiUrl}user/${id}`)
