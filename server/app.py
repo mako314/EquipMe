@@ -53,7 +53,9 @@ class Login(Resource):
         user = User.query.filter(User.email == email).first()
         if user and user.authenticate(password):
             access_token = create_access_token(identity={'id': user.id, 'role': 'user'}) # https://flask-jwt-extended.readthedocs.io/en/stable/api.html#flask_jwt_extended.create_access_token It's made JSON serializable with 'This can be accessed later with []' : other_value
-            response = make_response(jsonify({"msg": "User login successful"}), 200) #This wouldn't work unless I did make_response, which I find strange since make_response is supposed to just jsonify? 
+            user_data = user.to_dict(rules=('-_password_hash',))
+            # I can also make user_type = 'user' and return that for one single login page on the front end.
+            response = make_response(jsonify({"msg": "User login successful", "user": user_data}), 200) #This wouldn't work unless I did make_response, which I find strange since make_response is supposed to just jsonify? 
             set_access_cookies(response, access_token) #https://flask-jwt-extended.readthedocs.io/en/stable/api.html#flask_jwt_extended.set_access_cookies Sets the cookie
             return response
 
@@ -61,7 +63,9 @@ class Login(Resource):
         owner = EquipmentOwner.query.filter(EquipmentOwner.email == email).first()
         if owner and owner.authenticate(password):
             access_token = create_access_token(identity={'id': owner.id, 'role': 'owner'})
-            response = make_response(jsonify({"msg": "Owner login successful"}), 200)
+            owner_data = owner.to_dict(rules=('-_password_hash',))
+            # I can also make user_type = 'owner'
+            response = make_response(jsonify({"msg": "Owner login successful", "owner": owner_data}), 200)
             set_access_cookies(response, access_token)
             return response
 
@@ -100,7 +104,7 @@ api.add_resource(OwnerLogin, '/owner/login')
 class Logout(Resource):
 
     def delete(self): 
-        session['user_id'] = None
+        session.clear()
         response = make_response({'message': 'Logout successful'}, 200)
         unset_jwt_cookies(response) # https://flask-jwt-extended.readthedocs.io/en/stable/api.html#flask_jwt_extended.unset_jwt_cookies
         # response.delete_cookie('access_token')
@@ -113,7 +117,7 @@ api.add_resource(Logout, '/logout')
 class OwnerLogout(Resource):
 
     def delete(self):
-        session['owner_id'] = None
+        session.clear()
         response = make_response({'message': 'Logout successful'}, 200)
         unset_jwt_cookies(response)
         # response.delete_cookie('access_token') # May not need

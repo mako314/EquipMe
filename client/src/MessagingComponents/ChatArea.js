@@ -3,6 +3,7 @@ import OwnerContext from '../OwnerComponents/OwnerContext'
 import UserContext from '../UserComponents/UserContext'
 import ApiUrlContext from '../Api'
 import MessageInput from './MessageInput'
+import { UserSessionContext } from '../UserComponents/SessionContext'
 
 function ChatArea({inboxes, SelectedThreadID, setNewMessage, newMessage, setInboxes, recipientInfo }){
 
@@ -10,7 +11,9 @@ function ChatArea({inboxes, SelectedThreadID, setNewMessage, newMessage, setInbo
 
   const [owner, setOwner] = useContext(OwnerContext)
   const [user, setUser] = useContext(UserContext)
+  const { currentUser, role } = UserSessionContext()
   const apiUrl = useContext(ApiUrlContext)
+
   
   // useEffect(() => {
   //   fetch(`${apiUrl}owner/check_session`, {
@@ -38,29 +41,30 @@ function ChatArea({inboxes, SelectedThreadID, setNewMessage, newMessage, setInbo
   //   })
   // }, [])
 
-  useEffect(() => {
-    fetch(`${apiUrl}check_session`, {
-      credentials: 'include' // Ensures cookies are sent with the request
-    })
-    .then(response => {
-      if (response.ok) {
-        return response.json()
-      } else {
-        throw new Error('Session check failed')
-      }
-    })
-    .then(data => {
-      console.log("The Data",data)
-      if (data.role === 'user') {
-        setUser(data)
-      } else if (data.role === 'owner') {
-        setOwner(data)
-      }
-    })
-    .catch(error => {
-      console.error('Error during session check:', error)
-    })
-  }, [apiUrl, setOwner, setUser])
+  // useEffect(() => {
+  //   fetch(`${apiUrl}check_session`, {
+  //     credentials: 'include' // Ensures cookies are sent with the request
+  //   })
+  //   .then(response => {
+  //     if (response.ok) {
+  //       return response.json()
+  //     } else {
+  //       throw new Error('Session check failed')
+  //     }
+  //   })
+  //   .then(data => {
+  //     console.log("The Data",data)
+  //     if (data.role === 'user') {
+  //       setUser(data)
+  //     } else if (data.role === 'owner') {
+  //       setOwner(data)
+  //     }
+  //   })
+  //   .catch(error => {
+  //     console.error('Error during session check:', error)
+  //   })
+  // }, [apiUrl, setOwner, setUser])
+  
   // console.log(owner)
   // console.log(user)
   

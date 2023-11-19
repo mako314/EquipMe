@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom"
 import  UserContext  from './UserContext';
+import { UserSessionContext } from './SessionContext';
 import ApiUrlContext from '../Api';
 
 function UserLogin(){
@@ -11,17 +12,7 @@ function UserLogin(){
     // const [user, setUser] = useState(null); // stores user on client-side
     const [user, setUser] = useContext(UserContext)
     const apiUrl = useContext(ApiUrlContext)
-
-    console.log(user);
-
-    // grabs current session from server-side and sets state
-    // function handleCheckSession() {
-    //     fetch("/check_session").then((resp) => {
-    //       if (resp.ok) {
-    //         resp.json().then((user) => setUser(user));
-    //       }
-    //     });
-    // }
+    const { currentUser, role, setCurrentUser, setRole } = UserSessionContext()
 
     // sends information to server-side, sets session, and sets state
     function handleLogin(e) {
@@ -39,9 +30,11 @@ function UserLogin(){
             body: JSON.stringify( { email, password } ),
           }).then((resp) => {
             if (resp.ok) {
-              resp.json().then((user) => {
-                setUser(user)
-                navigate(`/user/profile/${user.id}`); // <-------- navigates to the profile
+              resp.json().then((data) => {
+                console.log(data.user)
+                setCurrentUser(data.user)
+                setRole('user')
+                navigate(`/user/profile/${data.id}`); // <-------- navigates to the profile
               });
             }
           });
@@ -51,7 +44,7 @@ function UserLogin(){
     function handleLogout() {
         fetch(`${apiUrl}logout`, {
             method: "DELETE"
-        }).then(setUser(null))
+        }).then(setCurrentUser(null))
     }
 
 

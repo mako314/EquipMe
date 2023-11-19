@@ -40,7 +40,10 @@ import { OwnerProvider } from './OwnerComponents/OwnerContext';
 
 //----------------------API Functionality-----------------------------
 import { ApiProvider } from './Api';
-import ApiUrlContext from './Api';
+
+//----------------------Testing a Check Session Context -----------------------------
+import { SessionProvider } from './UserComponents/SessionContext';
+
 
 //----------------------User Functionality-----------------------------
 import UserProfile from './UserComponents/UserProfile';
@@ -130,6 +133,7 @@ function App() {
       console.error('Error during session check:', error)
     })
   }, [apiUrl, setOwner, setUser])
+  
   // useEffect(() => {
   //   fetch(`${apiUrl}check_session`, {
   //     credentials: 'include'
@@ -309,6 +313,7 @@ function App() {
 
   return (
     // UseContext gets called here, allowing the entirety of my app access to the USER and OWNER information!
+    <SessionProvider>
     <OwnerProvider>
       <UserProvider>
         <ApiProvider>
@@ -366,7 +371,7 @@ function App() {
             <Route path='/temp/equipment/upload' element={<ProductImageForm />} />
 
             {/* Messaging routing  */}
-            <Route path='/messaging' element={<NewMessageThreads fromOwnerDash={fromOwnerDash}/>} />
+            <Route path='/messaging' element={<NewMessageThreads fromOwnerDash={fromOwnerDash} setFromOwnerDash={setFromOwnerDash}/>} />
             <Route path='/user/card/:id' element={<UserCard/>} />
 
             {/* Temporary Checkout Routing */}
@@ -393,6 +398,7 @@ function App() {
         </ApiProvider>
       </UserProvider>
     </OwnerProvider>
+    </SessionProvider>
   );
 }
 

@@ -2,34 +2,27 @@ import React, { useContext, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
 
 //Imports//
-import OwnerContext from '../OwnerContext';
 import ProductCollection from '../../EquipmentComponents/ProductCollection'
 import OwnerEditForm from '../OwnerEditForm';
 import UserCollection from '../../UserComponents/UserCollection';
 import ApiUrlContext from '../../Api';
+import { UserSessionContext } from '../../UserComponents/SessionContext';
 
 import { ReactComponent as EquipMeLogo } from '../../Content/EquipMeLogo.svg'
 
 
 function OwnerDashboard({ownerToEdit, updateOwner, fromOwnerDash, setFromOwnerDash, searchTerm}) {
 
-    const [owner, setOwner] = useContext(OwnerContext)
+
+    const { currentUser, role} = UserSessionContext()
+    // Honestly with currentUser, we can just make this for both users and owners
     const [toggleHomeDash, setToggleHomeDash] = useState(null)
     const [potentialRentalUsers, setPotentialRentalUsers] = useState([])
 
     const apiUrl = useContext(ApiUrlContext)
 
-    useEffect(() => {
-        fetch(`${apiUrl}check_session`, {
-            credentials: 'include'
-          }).then((response) => {
-            if (response.ok) {
-                response.json().then((owner) => setOwner(owner));
-            }
-        });
-    }, []);
-
-    // console.log(owner)
+    console.log("TESTING THIS CONTEXT SESSION CHECKING",currentUser)
+    console.log("With a role of:", role)
     
     //----- Variables in the order they appear -----
     let plannedDeals
@@ -38,10 +31,10 @@ function OwnerDashboard({ownerToEdit, updateOwner, fromOwnerDash, setFromOwnerDa
     let firstName
     let equipment
     let lastName
-    if (owner){
-         firstName  = owner.firstName
-         lastName = owner.lastName
-         equipment = owner.equipment
+    if (currentUser){
+         firstName  = currentUser.firstName
+         lastName = currentUser.lastName
+         equipment = currentUser.equipment
     }
 
     const navigate = useNavigate()
@@ -55,11 +48,11 @@ function OwnerDashboard({ownerToEdit, updateOwner, fromOwnerDash, setFromOwnerDa
 //----------------------------------------activeListings------------------------------
 // Need to build out a back to dash button here for owners along with edit functionality 
 function ActiveListings(){
-    if (!owner) return null
+    if (!currentUser) return null
 
     return(
     <div>
-        <ProductCollection equipmentArray={owner.equipment}/>
+        <ProductCollection equipmentArray={currentUser.equipment}/>
     </div>
     )
 }
@@ -67,11 +60,11 @@ function ActiveListings(){
 //---------------------------------------accountSettings------------------------------------
 
 function AccountSettings() {
-    if (!owner) return null
+    if (!currentUser) return null
 
     return (
         <>
-            <OwnerEditForm ownerToEdit={ownerToEdit || owner} updateOwner={updateOwner} />
+            <OwnerEditForm ownerToEdit={ownerToEdit || currentUser} updateOwner={updateOwner} />
         </>
     )
 }
@@ -82,12 +75,12 @@ function AccountSettings() {
         <div> Planned Deals </div>
 //------------------------------------------------------------------------------------
     useEffect(() => {
-        fetch(`${apiUrl}users/${owner?.profession}`)
+        fetch(`${apiUrl}users/${currentUser?.profession}`)
         .then((resp) => resp.json())
         .then((data) => {
             setPotentialRentalUsers(data)
         })
-    }, [owner])
+    }, [currentUser])
 
     const handlePotentialRenter = () => {
         potentialRenters =
@@ -155,12 +148,14 @@ function AccountSettings() {
 
                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {
                                 handlePotentialRenter()
-                                setFromOwnerDash(true)
+                                setFromOwnerDash(!fromOwnerDash)
                                 setToggleHomeDash(potentialRenters)
                             }}>Potential Renters</span>
 
                             <Link to='/messaging'>
-                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none"> Inbox </span>
+                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {
+                                setFromOwnerDash(!fromOwnerDash)
+                            }}> Inbox </span>
                             </Link>
 
                             <span className="flex items-center flex-shrink-0 h-10 px-3 mt-auto text-sm font-medium bg-gray-200 rounded hover:bg-gray-300"
@@ -223,7 +218,7 @@ function AccountSettings() {
 
     return (
         <>
-            {owner ? <LoggedInDisplay/> : <LoggedOutDisplay/>}
+            {currentUser ? <LoggedInDisplay/> : <LoggedOutDisplay/>}
         </>
     )
 }

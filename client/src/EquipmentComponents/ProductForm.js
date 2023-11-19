@@ -3,7 +3,8 @@ import { useContext, useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
 import {useFormik} from "formik"
 import { object, string, number} from 'yup'
-import OwnerContext from "../OwnerComponents/OwnerContext";
+// import OwnerContext from "../OwnerComponents/OwnerContext";
+import { UserSessionContext } from "../UserComponents/SessionContext";
 import ApiUrlContext from "../Api";
 
 //----------------------------IMAGE UPLOAD----------------------------
@@ -16,14 +17,12 @@ import {v4} from 'uuid';
 function ProductForm({ addEquipment }){
     const [error, setError] = useState()
     const navigate = useNavigate()
-    const [owner, setOwner] = useContext(OwnerContext)
+    const { currentUser, role } = UserSessionContext()
+    // const [owner, setOwner] = useContext(OwnerContext)
     const apiUrl = useContext(ApiUrlContext)
-
-
 //----------------------------IMAGE UPLOAD----------------------------
     const [imageUpload, setImageUpload] = useState(null)
     const [imageList, setImageList] = useState([])
-
 
     //This is in case I need to start displaying the image previews (I intend to)
     const imageListRef = ref(storage, "equipmentImages/")
@@ -34,17 +33,17 @@ function ProductForm({ addEquipment }){
     // LIST EQUIPMENT 
 
     //useEffect to check whether or not an owner is logged in! Succesfuly conditional rendering
-    useEffect(() => {
-        fetch(`${apiUrl}owner/check_session`, {
-          credentials: 'include'
-        }).then((response) => {
-          if (response.ok) {
-            response.json().then((owner) => setOwner(owner));
-          }
-        });
-      }, []);
+    // useEffect(() => {
+    //     fetch(`${apiUrl}owner/check_session`, {
+    //       credentials: 'include'
+    //     }).then((response) => {
+    //       if (response.ok) {
+    //         response.json().then((owner) => setOwner(owner));
+    //       }
+    //     });
+    //   }, []);
     
-      console.log(owner)
+    //   console.log(owner)
 
     
 
@@ -116,12 +115,12 @@ function ProductForm({ addEquipment }){
     })
 
     useEffect(() => {
-      if (owner && owner.id){
+      if (role === 'owner' && currentUser.id){
       formik.setValues({
-        owner_id: owner.id,
+        owner_id: currentUser.id,
       })
   }
-    }, [owner])
+    }, [currentUser])
 
     const uploadImage = () => {
       if (imageUpload == null) return;
@@ -238,7 +237,7 @@ function ProductForm({ addEquipment }){
 
     return (
         <>
-        { owner ? ownerView : notOwnerView}
+        { role === "owner" ? ownerView : notOwnerView}
         </>
     )
 }

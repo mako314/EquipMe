@@ -1,14 +1,14 @@
 import React, { useContext, useState, useEffect } from 'react'
-import OwnerContext from '../OwnerComponents/OwnerContext'
-import UserContext from '../UserComponents/UserContext'
+// import OwnerContext from '../OwnerComponents/OwnerContext'
+// import UserContext from '../UserComponents/UserContext'
 import ApiUrlContext from '../Api'
 import {toast} from 'react-toastify'
-
+import { UserSessionContext } from '../UserComponents/SessionContext'
 
 function ContactModal({recipientID}){
-    const [owner, setOwner] = useContext(OwnerContext)
-
-    const [user, setUser] = useContext(UserContext)
+    // const [owner, setOwner] = useContext(OwnerContext)
+    // const [user, setUser] = useContext(UserContext)
+    const { currentUser, role, checkSession } = UserSessionContext()
 
     const apiUrl = useContext(ApiUrlContext)
 
@@ -27,13 +27,14 @@ function ContactModal({recipientID}){
     const [subject, setSubject] = useState("")
     const [message, setMessage] = useState("")
 
-    const sender = user || owner
+    // const sender = user || owner
     
-    if(sender === user){
-        console.log("true")
-    }
+    // if(sender === user){
+    //     console.log("true")
+    // }
 
-    console.log("Hi, I'm you're sender:", sender?.firstName)
+    // console.log("Hi, I'm you're sender:", sender?.firstName)
+    console.log("Hi, I'm you're sender:", currentUser?.firstName)
 
     function toggleModal() {
         setIsModalOpen(!isModalOpen)
@@ -58,8 +59,10 @@ function ContactModal({recipientID}){
             response = await fetch(`${apiUrl}new/inboxes`, {
                 method: "POST",
                 body: JSON.stringify({ 
-                    user_id: user ? user.id : recipientID,
-                    owner_id: owner ? owner.id : recipientID,
+                    // user_id: user ? user.id : recipientID,
+                    user_id: role === 'user'? currentUser.id : recipientID,
+                    owner_id: role === 'owner'? currentUser.id : recipientID,
+                    // owner_id: owner ? owner.id : recipientID,
                     thread_id: threadData.id
                 }),
                 headers: {
@@ -73,9 +76,11 @@ function ContactModal({recipientID}){
                     method: "POST",
                     body: JSON.stringify({
                         recipient_id: recipientID,
-                        sender_id: sender.id,
+                        // sender_id: sender.id,
+                        sender_id: currentUser.id,
                         context_id: randomContext,
-                        user_type: sender === user ? "user": "owner",
+                        // user_type: sender === user ? "user": "owner",
+                        user_type: role === 'user' ? "user" : "owner",
                         content: message,
                         message_status: "Delivered",
                         created_on: new Date().toISOString(),
@@ -87,6 +92,7 @@ function ContactModal({recipientID}){
                 })
 
                 if (response.ok) {
+                    await checkSession()
                     toast.success("✉️ Message sent successfully!",{
                     "autoClose" : 2000
                     })

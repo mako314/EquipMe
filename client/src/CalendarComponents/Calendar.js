@@ -27,7 +27,7 @@ function Calendar() {
   // So initially I was just setting variables openly, but instead I opted to for an useEffect as it starts.
   useEffect(() => {
     // Initial setup for start date
-    let date = new Date();
+    let date = new Date()
     setFormattedStartDate(formatDate(date))
 
     // Initial setup for end date (one hour later)
@@ -73,18 +73,18 @@ function Calendar() {
   // Days ahead is days ahead, I chose 365
   const addDays = (baseDate, days, time = 0) => {
     // Parse the base date
-    let date = new Date(baseDate);
+    let date = new Date(baseDate)
   
     // Add the specified number of days
-    date.setDate(date.getDate() + days);
+    date.setDate(date.getDate() + days)
   
     // Optionally, add additional time in milliseconds
     if (time > 0) {
-      date = new Date(date.getTime() + time);
+      date = new Date(date.getTime() + time)
     }
   
     // Return the formatted date
-    return formatDate(date);
+    return formatDate(date)
   }
 
 
@@ -143,7 +143,7 @@ function Calendar() {
       console.warn("End date must be at least one hour after the start date.")
       // toast.warn("End date must be at least one hour after the start date.")
     }
-  };
+  }
 
   // console.log("START MAX",startMaxValue(formattedStartDate, 365))
   // console.log("END MAX",endMaxValue(formattedEndDate, 365))

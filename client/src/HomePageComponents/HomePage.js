@@ -1,20 +1,24 @@
 import React, {useContext, useEffect} from 'react';
 import 'tailwindcss/tailwind.css';
 import { useNavigate } from 'react-router-dom';
-import UserContext from "../UserComponents/UserContext";
-import OwnerContext from '../OwnerComponents/OwnerContext';
+import { UserSessionContext } from '../UserComponents/SessionContext';
+// import UserContext from "../UserComponents/UserContext";
+// import OwnerContext from '../OwnerComponents/OwnerContext';
 import ApiUrlContext from '../Api';
 
 
 function HomePage({ equipmentArray, setFeaturedRental }) {
 
+    //I have not been in here forever!
+
     const featuredModel = "336E L";
     const navigate = useNavigate();
-
-    const [user, setUser] = useContext(UserContext)
-    const[owner, setOwner] = useContext(OwnerContext)
+    const { currentUser, role } = UserSessionContext() 
+    // const [user, setUser] = useContext(UserContext)
+    // const[owner, setOwner] = useContext(OwnerContext)
     const apiUrl = useContext(ApiUrlContext)
 
+    console.log("Home Page User:",currentUser)
 
     function handleClick(e) {
         const test_item = equipmentArray?.filter((item) => {
@@ -32,32 +36,6 @@ function HomePage({ equipmentArray, setFeaturedRental }) {
         // Set a state from app.js that is within rental form, and only when set will it prepopulate the form
 
     }
-
-        
-    useEffect(() => {
-        fetch(`${apiUrl}check_session`, {
-        credentials: 'include'
-        }).then((response) => {
-        if (response.ok) {
-            response.json().then((user) => setUser(user));
-        }
-        });
-    }, []);
-
-    // console.log(user)
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    useEffect(() => {
-        fetch(`${apiUrl}owner/check_session`, {
-        credentials: 'include'
-        }).then((response) => {
-        if (response.ok) {
-            response.json().then((owner) => setOwner(owner));
-        }
-        });
-    }, []);
-
 
     // console.log(equipmentArray[116])
 

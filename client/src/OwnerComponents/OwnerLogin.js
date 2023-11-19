@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom"
 import OwnerContext from './OwnerContext';
 import ApiUrlContext from '../Api';
+import { UserSessionContext } from '../UserComponents/SessionContext';
 
 function OwnerLogin(){
 
@@ -10,6 +11,7 @@ function OwnerLogin(){
 
     const [owner, setOwner] = useContext(OwnerContext)
     const apiUrl = useContext(ApiUrlContext)
+    const { currentUser, role, setCurrentUser, setRole } = UserSessionContext()
 
     console.log(owner);
 
@@ -29,8 +31,11 @@ function OwnerLogin(){
             body: JSON.stringify( { email, password } ),
           }).then((resp) => {
             if (resp.ok) {
-              resp.json().then((owner) => {
-                setOwner(owner)
+              resp.json().then((data) => {
+                console.log(data.owner)
+                setOwner(data.owner)
+                setCurrentUser(data.owner)
+                setRole('owner')
                 navigate(`/owner/dashboard`); // <-------- navigates to the home page
               });
             }

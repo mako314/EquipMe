@@ -7,14 +7,10 @@ import SearchBar from "./SearchBar";
 //Context imports
 import  UserContext  from '../UserComponents/UserContext';
 import OwnerContext from "../OwnerComponents/OwnerContext";
+import { UserSessionContext } from "../UserComponents/SessionContext";
 import ApiUrlContext from "../Api";
 
 function NavBar({ setSearchTerm }) {
-
-  const [isToggleOpen, setIsToggleOpen] = useState(false)
-
-  const navigate = useNavigate();
-  
   //state for user
   const [user, setUser] = useContext(UserContext)
 
@@ -22,7 +18,10 @@ function NavBar({ setSearchTerm }) {
   const [owner, setOwner] = useContext(OwnerContext)
 
   const apiUrl = useContext(ApiUrlContext)
+  const [isToggleOpen, setIsToggleOpen] = useState(false)
+  const { currentUser, role, setCurrentUser, setRole } = UserSessionContext()
 
+  const navigate = useNavigate();
 
   const closeMobileView = () => {
     setIsToggleOpen(false);
@@ -34,6 +33,8 @@ function NavBar({ setSearchTerm }) {
         credentials: 'include'
     }).then( () => {
       setUser(null)
+      setCurrentUser(null); // Clearing the current user in session context
+      setRole(''); //  Clear the role
       closeMobileView()
     })
   }
@@ -44,6 +45,8 @@ function NavBar({ setSearchTerm }) {
         credentials: 'include'
     }).then( () => {
       setOwner(null)
+      setCurrentUser(null); // Clearing the current user in session context
+      setRole(''); //  Clear the role
       closeMobileView()
     })
   }
@@ -51,7 +54,7 @@ function NavBar({ setSearchTerm }) {
   // onClick = {handleLogout}
 
   function UserProfileClick() {
-    navigate(`/user/profile/${user.id}`)
+    navigate(`/user/profile/${currentUser.id}`)
 }
 
   //Need to incorporate the links here in the footer
@@ -502,9 +505,9 @@ function NavBar({ setSearchTerm }) {
     return (
         <>
         {
-        user ? 
+        role === 'user' ? 
         (userLoggedInDisplay) : 
-        owner ? 
+        role === 'owner' ? 
         (ownerLoggedInDisplay) : 
         
         (loggedOutDisplay)
