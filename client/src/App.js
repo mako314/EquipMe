@@ -303,7 +303,7 @@ function App() {
 
 
   // I believe this is the search -----------------------
-  const filteredEquipmentArray = equipmentArray.filter((item) => {
+  const filteredEquipmentArray = equipmentArray?.filter((item) => {
     return item.model?.toLowerCase().includes(searchTerm?.toLowerCase()) || item.location?.toLowerCase().includes(searchTerm?.toLowerCase()) || item.make?.toLowerCase().includes(searchTerm?.toLowerCase()) || item.name?.toLowerCase().includes(searchTerm?.toLowerCase())
   })
   //-----------------------------------------------------
