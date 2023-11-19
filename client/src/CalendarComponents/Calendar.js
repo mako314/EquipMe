@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import {toast} from 'react-toastify'
 
-function Calendar() {
+function Calendar({startRental, setStartRental, endRental, setEndRental, durationType, duration}) {
   
-  const [startRental, setStartRental] = useState('')
-  const [endRental, setEndRental] = useState('')
+  // const [startRental, setStartRental] = useState('')
+  // const [endRental, setEndRental] = useState('')
   const [formattedStartDate, setFormattedStartDate] = useState('')
   const [formattedEndDate, setFormattedEndDate] = useState('')
 
@@ -13,12 +13,10 @@ function Calendar() {
   // let date = new Date()
   // Get timezone offset in minutes and convert it to milliseconds
   // let timezoneOffset = date.getTimezoneOffset() * 60000 // EST
-
   // Adjust the date to local timezone
   // let localStartDate = new Date(date - timezoneOffset)
   // End date the value at the end is 1 extra hjour (minimum 1 hour rental)
   // let localEndDate = new Date((date - timezoneOffset) + 3600000)
-
   // Format the date to "YYYY-MM-DDTHH:mm" format as required by the input :cry:
   // let formattedStartDate = localStartDate.toISOString().slice(0, 16)
   // End date
@@ -145,6 +143,29 @@ function Calendar() {
     }
   }
 
+  // const calculateEndDate = (startRental, duration, durationType) => {
+  //   const endDate = new Date(startRental)
+  
+  //   switch (durationType) {
+  //     case 'hours':
+  //       endDate.setHours(endDate.getHours() + duration)
+  //       break
+  //     case 'days':
+  //       endDate.setDate(endDate.getDate() + duration)
+  //       break
+  //     case 'weeks':
+  //       endDate.setDate(endDate.getDate() + duration * 7)
+  //       break
+  //     default:
+  //       throw new Error('Invalid duration type')
+  //   }
+  
+  //   return endDate
+  // }
+
+  // let endDate = calculateEndDate(startRental, duration, durationType)
+  // setEndRental(setEndRental(endDate)) //need to handle the formatting wity=h existing logic
+
   // console.log("START MAX",startMaxValue(formattedStartDate, 365))
   // console.log("END MAX",endMaxValue(formattedEndDate, 365))
   // console.log("Start Rental:", startRental)
@@ -158,14 +179,14 @@ function Calendar() {
   // console.log("Ending day:", endRental)
 
   return (
-    <div className='Calendar bg-white p-4 rounded-lg shadow'>
+    <div className='Calendar bg-white rounded-lg shadow'>
   <div className='mb-4'>
-    <label htmlFor="start-date" className='block text-sm font-medium text-gray-700'>Choose a starting day and time for your rental:</label>
+    <label htmlFor="start-date" className='block text-sm font-bold text-gray-900'>Start Date (click to select) </label>
     <input
       type="datetime-local"
       id="start-date"
       name="start-date"
-      className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+      className='calendar-input mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 hover:cursor-pointer'
       value={startRental}
       onChange={handleStartDateChange}
       min={formattedStartDate} // This one worked though, 
@@ -174,12 +195,12 @@ function Calendar() {
   </div>
 
   {startRental ? <div className='mb-4'>
-    <label htmlFor="end-date" className='block text-sm font-medium text-gray-700'>Choose an ending day and time for your rental:</label>
+    <label htmlFor="end-date" className='block text-sm font-bold text-gray-900'>End Date (click to select)</label>
     <input
       type="datetime-local"
       id="end-date"
       name="end-date"
-      className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+      className='calendar-input mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 hover:cursor-pointer'
       value={endRental}
       onChange={handleEndDateChange}
       min={formattedEndDate} //This does not matter, what an annoying concept. (Day works)

@@ -244,13 +244,14 @@ class RentalAgreement(db.Model, SerializerMixin):
     rental_end_date = db.Column(db.String)
 
     # delivery = db.Column(db.String)
-    # delivery_address = db.Column(db.String)
+    # delivery_address = db.Column(db.String, nullable= True)
+    # user_comments = db.Column(db.String)
 
     # owner_decision = db.Column(db.String)
-
     # owner_comments = db.Column(db.String)
 
-    # user_comments = db.Column(db.String)
+    
+    # revisions = db.Column(db.Integer, default=0)
 
     # proof_of_ownership = db.Column(db.String)
     # owner_insurance = db.Column(db.String)
@@ -258,8 +259,6 @@ class RentalAgreement(db.Model, SerializerMixin):
 
     # agreement_stats = db.Column(db.String) 
     # Ex. in progress, user-accepted, owner-accepted, both-accepted
-
-    # revisions = db.Column(db.Integer)
 
     # rental_length = db.Column()
 

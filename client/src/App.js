@@ -82,10 +82,7 @@ function App() {
 
 
   //Grab user and have it throughout the whole app
-  const [user, setUser] = useState(null)
-
-  //Grab Owner and have it throughout the whole app
-  const [owner, setOwner] = useState(null)
+  const [currentUser, setCurrentUser] = useState([])
 
   //These useStates will handle POST. Grabbing and ...spreading so it updates accordingly. Set Search Term & Grab Equipment Array
   const [equipmentArray, setEquipmentArray] = useState([])
@@ -124,15 +121,15 @@ function App() {
     .then(data => {
       // console.log("The Data",data)
       if (data.role === 'user') {
-        setUser(data)
+        setCurrentUser(data)
       } else if (data.role === 'owner') {
-        setOwner(data)
+        setCurrentUser(data)
       }
     })
     .catch(error => {
       console.error('Error during session check:', error)
     })
-  }, [apiUrl, setOwner, setUser])
+  }, [apiUrl, setCurrentUser])
   
   // useEffect(() => {
   //   fetch(`${apiUrl}check_session`, {
