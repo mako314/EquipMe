@@ -344,7 +344,8 @@ const addCart = (newCart) => {
                           <div className="flex justify-end">
 
                           <p className="text-xs font-medium text-gray-500 dark:text-gray-300 mr-auto">
-                          * Please note: The start date cannot be in the past and must be at least one hour ahead of the current local time.
+                          * Please note: <br></br>
+                          The start date cannot be in the past and must be at least one hour ahead of the current local time.
                           <br></br> 
                           The end date must be scheduled after the start date.
                           <br></br> 
