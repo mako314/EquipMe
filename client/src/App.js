@@ -352,7 +352,7 @@ function App() {
 
             {/* Login Page Route */}
             <Route path='/login' element={<UserLogin />} />
-            <Route path='/owner/login' element={<OwnerLogin />} />
+            {/* <Route path='/owner/login' element={<OwnerLogin />} /> */}
 
             {/* User Profile Page*/}
             <Route path='/user/profile/:id' element={<UserProfile/>} />

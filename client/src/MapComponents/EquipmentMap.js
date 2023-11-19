@@ -33,7 +33,7 @@ class EquipmentMap extends Component {
       document.head.appendChild(script)
 
       script.onload = () => {
-        this.loadMap() // Load map once script is loaded
+        this.loadMap() // Load map once script is loaded. Was having issues with it not existing basically upon first load 
       }
     } else {
       this.loadMap() // Load map if script already present
