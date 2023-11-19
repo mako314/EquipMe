@@ -82,7 +82,7 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
     //This returns one to the owner dashboard if they came from there
     const navigateBackToOwnerDash = () => {
       setFromOwnerDash(!fromOwnerDash)
-      navigate(`/owner/dashboard`)
+      navigate(`/dashboard`)
   }
 
   // const inboxSource = user || owner

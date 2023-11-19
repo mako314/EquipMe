@@ -38,7 +38,7 @@ function UserLogin(){
                 } else if(data.role === 'owner'){
                   setCurrentUser(data.owner)
                   setRole(data.role)
-                  navigate(`/owner/dashboard`) 
+                  navigate(`/dashboard`) 
                 }
               })
             }
