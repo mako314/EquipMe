@@ -31,16 +31,21 @@ class EquipmentMap extends Component {
       script.async = true
       script.onload = this.loadMap
       document.head.appendChild(script)
+
+      script.onload = () => {
+        this.loadMap() // Load map once script is loaded. Was having issues with it not existing basically upon first load 
+      }
     } else {
-      this.loadMap()
+      this.loadMap() // Load map if script already present
     }
   }
 
   loadMap = () => {
-    if (this.props.location) {
+    //Only load map once element with id of map exists
+    if (this.props.location && document.getElementById('map')) {
       const geocoder = new window.google.maps.Geocoder()
       const mapOptions = {
-        zoom: 8,
+        zoom: 12,
         center: { lat: -34.397, lng: 150.644 },
       }
 

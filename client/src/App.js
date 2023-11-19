@@ -352,7 +352,7 @@ function App() {
 
             {/* Login Page Route */}
             <Route path='/login' element={<UserLogin />} />
-            <Route path='/owner/login' element={<OwnerLogin />} />
+            {/* <Route path='/owner/login' element={<OwnerLogin />} /> */}
 
             {/* User Profile Page*/}
             <Route path='/user/profile/:id' element={<UserProfile/>} />
@@ -360,8 +360,10 @@ function App() {
             {/* Temp Route for CSV File Upload*/}
             <Route path='/temp/bulk_equipment_upload' element={<BulkEquipmentUpload />} />
 
-            {/* Owner Dashboard Page*/}
-            <Route path='/owner/dashboard' element={<OwnerDashboard updateOwner={updateOwner} ownerToEdit={ownerToEdit} fromOwnerDash={fromOwnerDash} setFromOwnerDash={setFromOwnerDash} searchTerm={searchTerm}/>} />
+            {/* Owner Dashboard Page
+            Likely converting this to just a general dashboard. Dashboards for everyone!
+            */}
+            <Route path='/dashboard' element={<OwnerDashboard updateOwner={updateOwner} ownerToEdit={ownerToEdit} fromOwnerDash={fromOwnerDash} setFromOwnerDash={setFromOwnerDash} searchTerm={searchTerm}/>} />
 
             {/* Temporary calendar routing */}
             <Route path='/calendar' element={<Calendar />} />

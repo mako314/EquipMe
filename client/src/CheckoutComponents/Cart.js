@@ -1,7 +1,6 @@
 import React,{useContext, useEffect, useState, Fragment} from "react";
 import CartItem from "./CartItem";
 import CreateNewCart from "./CreateNewCart";
-import UserContext from '../UserComponents/UserContext'
 import ApiUrlContext from '../Api'
 import {toast} from 'react-toastify'
 import { UserSessionContext } from "../UserComponents/SessionContext";
@@ -10,7 +9,6 @@ import { UserSessionContext } from "../UserComponents/SessionContext";
 function Cart(){
 
   const { currentUser, role } = UserSessionContext() 
-  const [user, setUser] = useContext(UserContext)
   const apiUrl = useContext(ApiUrlContext)
   const [currentCart, setCurrentCart] = useState(0)
   const [cartData, setCartData] = useState([])
@@ -28,29 +26,6 @@ function Cart(){
       })
     }
   }, [currentUser])
-
-
-  // useEffect(() => {
-  //   const fetchCartData = async () => {
-  //     try {
-  //       const response = await fetch(`${apiUrl}user/${user?.id}/cart/`)
-  //       if (response.ok) {
-  //         const carts = await response.json()
-  //         setCartData(carts)
-  //         // update cart state here
-  //       } else {
-  //         // Handle errors
-  //       }
-  //     } catch (error) {
-  //       console.log(error)
-  //       // Handle fetching errors
-  //     }
-  //   }
-  
-  //   fetchCartData()
-  // }, [user])
-
-  // console.log(cartData[currentCart].items)
 
   if (!cartData || cartData?.length === 0) {
     return <div>Cart is empty or loading...</div>

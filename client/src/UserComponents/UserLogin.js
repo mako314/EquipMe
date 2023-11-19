@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom"
-import  UserContext  from './UserContext';
 import { UserSessionContext } from './SessionContext';
 import ApiUrlContext from '../Api';
 
@@ -10,7 +9,7 @@ function UserLogin(){
     const navigate = useNavigate();
 
     // const [user, setUser] = useState(null); // stores user on client-side
-    const [user, setUser] = useContext(UserContext)
+    // const [user, setUser] = useContext(UserContext)
     const apiUrl = useContext(ApiUrlContext)
     const { currentUser, role, setCurrentUser, setRole } = UserSessionContext()
 
@@ -31,15 +30,22 @@ function UserLogin(){
           }).then((resp) => {
             if (resp.ok) {
               resp.json().then((data) => {
-                console.log(data.user)
-                setCurrentUser(data.user)
-                setRole('user')
-                navigate(`/user/profile/${data.id}`); // <-------- navigates to the profile
-              });
+                console.log(data.role)
+                if(data.role === 'user'){
+                  setCurrentUser(data.user)
+                  setRole(data.role)
+                  navigate(`/user/profile/${data.id}`); // <-------- navigates to the profile
+                } else if(data.role === 'owner'){
+                  setCurrentUser(data.owner)
+                  setRole(data.role)
+                  navigate(`/dashboard`) 
+                }
+              })
             }
-          });
+          })
     }
 
+    // console.log("the role sir:", role)
     // removes session, removes state
     function handleLogout() {
         fetch(`${apiUrl}logout`, {
