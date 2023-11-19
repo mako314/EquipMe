@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect, Fragment } from 'react'
 import ApiUrlContext from '../Api'
-import UserContext from '../UserComponents/UserContext'
 import { UserSessionContext } from '../UserComponents/SessionContext'
+import Calendar from '../CalendarComponents/Calendar'
 import CreateNewCart from './CreateNewCart'
 import {toast} from 'react-toastify'
 
@@ -9,7 +9,6 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
 
   //Grab apiUrl from context + user info
   const apiUrl = useContext(ApiUrlContext)
-  const [user, setUser] = useContext(UserContext)
   const { currentUser, role } = UserSessionContext()
 
   //States to capture info, day ranges, costs, length of rental, quantity, and track modal, cart
@@ -18,17 +17,21 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
   const [rentalLength, setRentalLength] = useState(1)
   const [equipmentQuantity, setEquipmentQuantity] = useState(1)
   const [currentCart, setCurrentCart] = useState(1)
-  // const [isModalOpen, setIsModalOpen] = useState(false)
-
-  const [isNewCartModalOpen, setIsNewCartModalOpen] = useState(false)
   const [cartData, setCartData] = useState([])
+
+  // const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isNewCartModalOpen, setIsNewCartModalOpen] = useState(false)
+  
+
+  //State for calendar
+  const [startRental, setStartRental] = useState('')
+  const [endRental, setEndRental] = useState('')
 
   //Destructure for equipment_price
   const { equipment_price, equipment_image } = oneEquipment
 
   // console.log("Equipment price:", equipment_price)
   // console.log("Your Equipment:",oneEquipment)
-  // console.log("The USER:", user)
 
   useEffect(() => {
     if (role === 'user') {
@@ -65,7 +68,7 @@ const addCart = (newCart) => {
   const dayOptions = <>
   <option className="text-black"value="hours">Hours</option>
   <option className="text-black"value="days">Days</option>
-  <option className="text-black"value="week">Weeks</option>
+  <option className="text-black"value="weeks">Weeks</option>
   <option className="text-black"value="promo">Promo</option>
   </>
 
@@ -102,7 +105,7 @@ const addCart = (newCart) => {
     } else if (newRate === "daily"){
       setDayRange("days")
     } else if (newRate === "weekly"){
-      setDayRange("week")
+      setDayRange("weeks")
     } else if (newRate === "promo"){
       setDayRange("promo")
     }
@@ -116,7 +119,7 @@ const addCart = (newCart) => {
       setSelectedRate("hourly")
     } else if (newDayRange === "days"){
       setSelectedRate("daily")
-    } else if (newDayRange === "week"){
+    } else if (newDayRange === "weeks"){
       setSelectedRate("weekly")
     } else if (newDayRange === "promo"){
       setSelectedRate("promo")
@@ -166,6 +169,54 @@ const addCart = (newCart) => {
         }
       })
   }
+
+  useEffect(() => {
+    // This function formats the date to the local timezone and removes seconds and milliseconds
+    const toLocalISOString = (date) => {
+      const tzOffset = date.getTimezoneOffset() * 60000 // timezone offset in milliseconds
+      // https://www.w3schools.com/jsref/jsref_toisostring.asp
+      const localISOTime = (new Date(date.getTime() - tzOffset)).toISOString().slice(0, -1)
+      //https://www.w3schools.com/jsref/jsref_substring.asp
+      return localISOTime.substring(0, localISOTime.lastIndexOf(':'))
+    }
+  
+    // This function calculates the end date based on the start date and rental duration
+    const calculateEndDate = (startDate, duration, durationType) => {
+      const endDate = new Date(startDate)
+  
+      switch (durationType) {
+        case 'hourly':
+          endDate.setHours(endDate.getHours() + duration)
+          break
+        case 'daily':
+          endDate.setDate(endDate.getDate() + duration)
+          break
+        case 'weekly':
+          endDate.setDate(endDate.getDate() + (duration * 7))
+          break
+        default:
+          throw new Error('Invalid duration type')
+      }
+      return endDate
+    }
+  
+    if (startRental && rentalLength && selectedRate) {
+      try {
+        // Assume rentalLength is a number and selectedRate is one of 'hourly', 'daily', 'weekly'
+        let duration = rentalLength
+        let durationType = selectedRate // This # needs to correspond to 'hours', 'days', or 'weeks'
+
+        const endDate = calculateEndDate(new Date(startRental), duration, durationType)
+        const formattedEndDate = toLocalISOString(endDate)
+        setEndRental(formattedEndDate) // Update the state with the formatted end date
+      } catch (error) {
+        console.error(error)
+        // Handle the error appropriately
+        // toast.error('Error calculating end date.')
+      }
+    }
+  }, [startRental, rentalLength, selectedRate]) 
+  //toast
 
     return(
       <> 
@@ -217,14 +268,17 @@ const addCart = (newCart) => {
                           {/* Grab this for the map */}
                           <div className="justify-between mb-6 rounded-lg bg-white p-6 shadow-md sm:flex sm:justify-start">
                               {/* Image Preview */}
-                              <img src={equipment_image} alt="product-image" className="w-full rounded-lg sm:w-40" />
+                              <img src={equipment_image} alt="product-image" className=" object-contain w-full rounded-lg sm:w-40 " />
 
                               <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between">
                                   {/* Product Details */}
                                   <div className="mt-5 sm:mt-0">
                                       <h2 className="text-lg font-bold text-gray-900">{oneEquipment.make} {oneEquipment.name}</h2>
                                       {/* Additional details like size or color can go here */}
-                                      <p className="mt-1 text-xs text-gray-700">{oneEquipment.model}</p>
+                                      <p className="mt-1 text-xs text-gray-700 mb-2">{oneEquipment.model}</p>
+                                      
+                                      <Calendar startRental={startRental} setStartRental={setStartRental} endRental={endRental} setEndRental={setEndRental} durationType={dayRange} duration={rentalLength}/>
+                                      
                                   </div>
 
                                   {/* Quantity and Price */}
@@ -288,6 +342,14 @@ const addCart = (newCart) => {
                         </div>
 
                           <div className="flex justify-end">
+
+                          <p className="text-xs font-medium text-gray-500 dark:text-gray-300 mr-auto">
+                          * Please note: The start date cannot be in the past and must be at least one hour ahead of the current local time.
+                          <br></br> 
+                          The end date must be scheduled after the start date.
+                          <br></br> 
+                          You will have the opportunity to review and edit your cart's contents before finalizing.
+                          </p>
                               <button
                                 onClick={toggleCartCreationModal}
                                 className="text-white p-2 rounded-md bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 mr-4"
@@ -322,9 +384,7 @@ const addCart = (newCart) => {
                               </button>
                           </div>
                           
-                          <div className="text-xs font-medium text-gray-500 dark:text-gray-300">
-                              * You will have another chance to edit your carts contents.
-                          </div>
+                          
                       </div>
                   </div>
               </div>
