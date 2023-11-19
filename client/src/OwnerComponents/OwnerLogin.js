@@ -36,7 +36,7 @@ function OwnerLogin(){
                 setOwner(data.owner)
                 setCurrentUser(data.owner)
                 setRole('owner')
-                navigate(`/owner/dashboard`); // <-------- navigates to the home page
+                navigate(`/owner/dashboard`) // <-------- navigates to the dashboRD
               });
             }
           });

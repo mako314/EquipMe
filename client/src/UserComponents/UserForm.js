@@ -4,13 +4,16 @@ import { useNavigate } from "react-router-dom";
 import {useFormik} from "formik"
 import { object, string, number} from 'yup'
 import  UserContext  from './UserContext';
+import { UserSessionContext } from "./SessionContext";
 import ApiUrlContext from "../Api";
 
 function UserForm({ addUser }){
     const [error, setError] = useState()
     const navigate = useNavigate()
 
+
     const [user, setUser] = useContext(UserContext)
+    const { currentUser, role, setCurrentUser, setRole } = UserSessionContext()
     const apiUrl = useContext(ApiUrlContext)
 
 
@@ -28,8 +31,9 @@ function UserForm({ addUser }){
             body: JSON.stringify( { email, password } ),
           }).then((resp) => {
             if (resp.ok) {
-              resp.json().then((user) => {
-                setUser(user)
+              resp.json().then((data) => {
+                setCurrentUser(data.user)
+                setRole(data.role)
                 navigate(`/user/profile/${user.id}`); // <-------- navigates to the profile
               });
             }
