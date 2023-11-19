@@ -54,7 +54,7 @@ function NavBar({ setSearchTerm }) {
   // onClick = {handleLogout}
 
   function UserProfileClick() {
-    navigate(`/user/profile/${user.id}`)
+    navigate(`/user/profile/${currentUser.id}`)
 }
 
   //Need to incorporate the links here in the footer

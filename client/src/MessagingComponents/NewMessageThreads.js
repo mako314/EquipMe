@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState} from 'react'
 import OwnerContext from '../OwnerComponents/OwnerContext'
 import UserContext from '../UserComponents/UserContext'
+import { UserSessionContext } from '../UserComponents/SessionContext'
 import ApiUrlContext from '../Api'
 import Inbox from './Inbox'
 import ChatArea from './ChatArea'
 
-function NewMessageThreads({fromOwnerDash}) {
+function NewMessageThreads({fromOwnerDash, setFromOwnerDash}) {
 
 // ---------------Detect whether or not an OWNER is logged in-------------------
 
@@ -17,6 +18,7 @@ function NewMessageThreads({fromOwnerDash}) {
   const [SelectedThreadID, setSelectedThreadID] = useState(null)
   const [newMessage, setNewMessage] = useState('') // State for the new message input
   const [recipientInfo, setRecipientInfo] = useState([])
+  const { currentUser, role } = UserSessionContext()
 
   // console.log("This is your recipient!:",recipientInfo)
   
@@ -49,29 +51,29 @@ function NewMessageThreads({fromOwnerDash}) {
 
 
 
-  useEffect(() => {
-    fetch(`${apiUrl}check_session`, {
-      credentials: 'include' // Ensures cookies are sent with the request
-    })
-    .then(response => {
-      if (response.ok) {
-        return response.json()
-      } else {
-        throw new Error('Session check failed')
-      }
-    })
-    .then(data => {
-      console.log("The Data",data)
-      if (data.role === 'user') {
-        setUser(data)
-      } else if (data.role === 'owner') {
-        setOwner(data)
-      }
-    })
-    .catch(error => {
-      console.error('Error during session check:', error)
-    })
-  }, [apiUrl, setOwner, setUser])
+  // useEffect(() => {
+  //   fetch(`${apiUrl}check_session`, {
+  //     credentials: 'include' // Ensures cookies are sent with the request
+  //   })
+  //   .then(response => {
+  //     if (response.ok) {
+  //       return response.json()
+  //     } else {
+  //       throw new Error('Session check failed')
+  //     }
+  //   })
+  //   .then(data => {
+  //     console.log("The Data",data)
+  //     if (data.role === 'user') {
+  //       setUser(data)
+  //     } else if (data.role === 'owner') {
+  //       setOwner(data)
+  //     }
+  //   })
+  //   .catch(error => {
+  //     console.error('Error during session check:', error)
+  //   })
+  // }, [apiUrl, setOwner, setUser])
   // console.log(owner)
   // console.log(user)
 
@@ -87,6 +89,7 @@ function NewMessageThreads({fromOwnerDash}) {
       setRecipientInfo={setRecipientInfo}
       recipientInfo={recipientInfo}
       fromOwnerDash={fromOwnerDash}
+      setFromOwnerDash={setFromOwnerDash}
       />
 
       {/* Message Area */}

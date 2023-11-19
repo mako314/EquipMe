@@ -11,7 +11,7 @@ export const SessionProvider = ({ children }) => {
 //   console.log(process.env.REACT_APP_API_URL)
 
   const checkSession = () => {
-    fetch(`${apiUrl}/check_session`, {
+    fetch(`${apiUrl}check_session`, {
       credentials: 'include'
     })
       .then(response => {

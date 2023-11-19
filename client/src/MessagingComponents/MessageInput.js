@@ -3,6 +3,7 @@ import OwnerContext from '../OwnerComponents/OwnerContext'
 import UserContext from '../UserComponents/UserContext'
 import ApiUrlContext from '../Api'
 import MessageThreads from './MessageThreads'
+import { UserSessionContext } from '../UserComponents/SessionContext'
 
 function MessageInput({SelectedThreadID, setNewMessage, newMessage, setInboxes, inboxes, recipientInfo}){
 
@@ -10,6 +11,7 @@ function MessageInput({SelectedThreadID, setNewMessage, newMessage, setInboxes, 
 
   const [owner, setOwner] = useContext(OwnerContext)
   const [user, setUser] = useContext(UserContext)
+  const { currentUser, role } = UserSessionContext()
   const apiUrl = useContext(ApiUrlContext)
   
   // useEffect(() => {
@@ -44,29 +46,29 @@ function MessageInput({SelectedThreadID, setNewMessage, newMessage, setInboxes, 
   //   })
   // }, [])
 
-  useEffect(() => {
-    fetch(`${apiUrl}check_session`, {
-      credentials: 'include' // Ensures cookies are sent with the request
-    })
-    .then(response => {
-      if (response.ok) {
-        return response.json()
-      } else {
-        throw new Error('Session check failed')
-      }
-    })
-    .then(data => {
-      console.log("The Data",data)
-      if (data.role === 'user') {
-        setUser(data)
-      } else if (data.role === 'owner') {
-        setOwner(data)
-      }
-    })
-    .catch(error => {
-      console.error('Error during session check:', error)
-    })
-  }, [apiUrl, setOwner, setUser])
+  // useEffect(() => {
+  //   fetch(`${apiUrl}check_session`, {
+  //     credentials: 'include' // Ensures cookies are sent with the request
+  //   })
+  //   .then(response => {
+  //     if (response.ok) {
+  //       return response.json()
+  //     } else {
+  //       throw new Error('Session check failed')
+  //     }
+  //   })
+  //   .then(data => {
+  //     console.log("The Data",data)
+  //     if (data.role === 'user') {
+  //       setUser(data)
+  //     } else if (data.role === 'owner') {
+  //       setOwner(data)
+  //     }
+  //   })
+  //   .catch(error => {
+  //     console.error('Error during session check:', error)
+  //   })
+  // }, [apiUrl, setOwner, setUser])
   // console.log(owner)
   // console.log(user)
 // --------------------------------------------------------------------
@@ -77,10 +79,22 @@ const handleSendMessage = () => {
     
     // This portion below tests whether or not a user or an owner is logged in, and declares them the sender. From there, the recipient info is pulled from inbox.js and prop drilled into here and placed into the appropriate spot.
 
-    if (owner && owner.id){
+    // if (owner && owner.id){
+    //   message = {
+    //     "recipient_id": recipientInfo.id,
+    //     "sender_id": owner.id,
+    //     "context_id": 2,
+    //     "user_type": "owner",
+    //     "content": newMessage,
+    //     "message_status": "Delivered",
+    //     "created_at": new Date().toISOString(),
+    //     "thread_id": SelectedThreadID
+    //   }
+    // } 
+    if (role === 'owner' && currentUser.id){
       message = {
         "recipient_id": recipientInfo.id,
-        "sender_id": owner.id,
+        "sender_id": currentUser.id,
         "context_id": 2,
         "user_type": "owner",
         "content": newMessage,
@@ -88,11 +102,23 @@ const handleSendMessage = () => {
         "created_at": new Date().toISOString(),
         "thread_id": SelectedThreadID
       }
-    } else if (user && user.id)
-    {
+    } 
+    // else if (user && user.id) {
+    //   message = {
+    //     "recipient_id": recipientInfo.id,
+    //     "sender_id": user.id,
+    //     "context_id": 2,
+    //     "user_type" : "user",
+    //     "content": newMessage,
+    //     "message_status": "Delivered",
+    //     "created_at": new Date().toISOString(),
+    //     "thread_id": SelectedThreadID
+    //   }
+    // } 
+    else if (role ==='user' && currentUser.id) {
       message = {
         "recipient_id": recipientInfo.id,
-        "sender_id": user.id,
+        "sender_id": currentUser.id,
         "context_id": 2,
         "user_type" : "user",
         "content": newMessage,

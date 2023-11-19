@@ -371,7 +371,7 @@ function App() {
             <Route path='/temp/equipment/upload' element={<ProductImageForm />} />
 
             {/* Messaging routing  */}
-            <Route path='/messaging' element={<NewMessageThreads fromOwnerDash={fromOwnerDash}/>} />
+            <Route path='/messaging' element={<NewMessageThreads fromOwnerDash={fromOwnerDash} setFromOwnerDash={setFromOwnerDash}/>} />
             <Route path='/user/card/:id' element={<UserCard/>} />
 
             {/* Temporary Checkout Routing */}

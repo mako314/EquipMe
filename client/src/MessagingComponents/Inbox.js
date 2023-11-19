@@ -6,7 +6,7 @@ import {useNavigate} from 'react-router-dom';
 import { UserSessionContext } from '../UserComponents/SessionContext';
 
 
-function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRecipientInfo, fromOwnerDash }){
+function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRecipientInfo, fromOwnerDash, setFromOwnerDash }){
 
 // ---------------Detect whether or not an OWNER is logged in-------------------
  
@@ -23,25 +23,39 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
   // console.log("You an owner?",owner)
   // console.log(user)
 
-  console.log(currentUser)
+  console.log(currentUser.user_inboxes)
+  console.log(currentUser.owner_inboxes)
+  console.log(fromOwnerDash)
 
 
 // --------------------------------------------------------------------
     
     useEffect(() => {
-      if (user && user.user_inboxes) {
-        setInboxes(user.user_inboxes)
+      if (role === 'user' && currentUser?.user_inboxes) {
+        setInboxes(currentUser?.user_inboxes)
         // console.log("User Inboxes:", user_inboxes)
     }
 
-      if (owner && owner.owner_inboxes) {
-       setInboxes(owner.owner_inboxes)
+      if (role === 'owner' && currentUser?.owner_inboxes) {
+       setInboxes(currentUser?.owner_inboxes)
         // console.log("Owner Inboxes:", owner_inboxes)
     }
-  }, [owner, user])
+  }, [currentUser, fromOwnerDash])
+
+//   useEffect(() => {
+//     if (currentUser && user.user_inboxes) {
+//       setInboxes(user.user_inboxes)
+//       // console.log("User Inboxes:", user_inboxes)
+//   }
+
+//     if (owner && owner.owner_inboxes) {
+//      setInboxes(owner.owner_inboxes)
+//       // console.log("Owner Inboxes:", owner_inboxes)
+//   }
+// }, [owner, user])
 
 
-    // console.log("Inboxes in State:", inboxes)
+    console.log("Inboxes in State:", inboxes)
 
     //This handles simple thread selection, basically taking the threads we have mapped out on the left sidebar and taking the ID to select the thread.
     const handleThreadSelect = (threadID) => {
@@ -67,17 +81,19 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
 
     //This returns one to the owner dashboard if they came from there
     const navigateBackToOwnerDash = () => {
+      setFromOwnerDash(!fromOwnerDash)
       navigate(`/owner/dashboard`)
   }
 
-  const inboxSource = user || owner
+  // const inboxSource = user || owner
     
 
     return(
       <div className="w-1/4 bg-gray-200 p-4 flex flex-col justify-between">
         {/* Left Sidebar */}
         <div> 
-        <h2 className="text-2xl font-bold mb-4"> Welcome {owner ? owner?.firstName : user?.firstName} </h2>
+        {/* <h2 className="text-2xl font-bold mb-4"> Welcome {owner ? owner?.firstName : user?.firstName} </h2> */}
+        <h2 className="text-2xl font-bold mb-4"> Welcome {currentUser?.firstName} </h2>
         <h3 className="text-l font-bold mb-4"> View your Inbox Below</h3>
         {/* ^^^ is just a place holder,  */}
         <ul>
@@ -93,8 +109,8 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
                 
                 let recipientType;
                 let recipientID;
-
-                if (user) {
+                // if (user)
+                if (role === 'user') {
                     // If a user is logged in
                     if (firstMessage.user_type === "user") {
                         // If the first message was sent by a user
@@ -105,7 +121,8 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
                         recipientType = "owner"
                         recipientID = firstMessage.sender_id
                     }
-                } else if (owner) {
+                    // else if (owner)
+                } else if (role === 'owner') {
                     // If an owner is logged in
                     if (firstMessage.user_type === "owner") {
                         // If the first message was sent by an owner
