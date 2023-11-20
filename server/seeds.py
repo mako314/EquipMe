@@ -427,28 +427,28 @@ if __name__ == '__main__':
             daily_rate = 32000,
             weekly_rate = 220000,
             promo_rate = 1495,
-            equipment_id = 1
+            equipment_id = equipment_list[0].id
             ),
             EquipmentPrice(
             hourly_rate = 1595,
             daily_rate = 32000,
             weekly_rate = 220000,
             promo_rate = 1495,
-            equipment_id = 2
+            equipment_id = equipment_list[1].id
             ),
             EquipmentPrice(
             hourly_rate = 1595,
             daily_rate = 32000,
             weekly_rate = 220000,
             promo_rate = 1495,
-            equipment_id = 3
+            equipment_id = equipment_list[2].id
             ),
             EquipmentPrice(
             hourly_rate = 1595,
             daily_rate = 32000,
             weekly_rate = 220000,
             promo_rate = 1495,
-            equipment_id = 4
+            equipment_id = equipment_list[3].id
             ),
         ]
 
@@ -465,13 +465,13 @@ if __name__ == '__main__':
             cart_name ="Heavy Duty",
             cart_status = "ACTIVE",
             created_at = datetime.utcnow(),
-            user_id = 1,
+            user_id = user_1.id,
         )
         cart2 = Cart(
             cart_name ="My Miami Project",
             cart_status = "ACTIVE",
             created_at = datetime.utcnow(),
-            user_id = 1,
+            user_id = user_1.id,
         )
         db.session.add_all([cart1, cart2])
         
@@ -484,8 +484,8 @@ if __name__ == '__main__':
                 quantity = 3,
                 rental_rate="hourly",
                 rental_length = 6,
-                cart_id= 1,
-                equipment_id = 1,
+                cart_id= cart1.id,
+                equipment_id = equipment_list[0].id,
                 created_at = random_time_30_days(),
             ),
             CartItem(
@@ -494,8 +494,8 @@ if __name__ == '__main__':
                 quantity = 2,
                 rental_rate="daily",
                 rental_length = 5,
-                cart_id= 1,
-                equipment_id = 1,
+                cart_id= cart1.id,
+                equipment_id = equipment_list[0].id,
                 created_at = random_time_30_days(),
             ),
             CartItem(
@@ -504,8 +504,8 @@ if __name__ == '__main__':
                 quantity = 2,
                 rental_rate="weekly",
                 rental_length = 2,
-                cart_id= 1,
-                equipment_id = 1,
+                cart_id= cart1.id,
+                equipment_id = equipment_list[0].id,
                 created_at = random_time_30_days(),
             ),
         ]
@@ -524,27 +524,27 @@ if __name__ == '__main__':
         RentalAgreement(
             rental_start_date="2023-07-17",
             rental_end_date="2023-07-20",
-            owner_id = 6, # Amy Wilson
-            user_id=1,  # Benjamin Davis
-            cart_item_id=2,  # Amy Wilson #Available
+            owner_id = owner_2.id, # Amy Wilson
+            user_id=user_1.id,  # Benjamin Davis
+            cart_item_id=cart_items[0].id,  # Amy Wilson #Available
             created_at = datetime.utcnow(),
             updated_at = datetime.utcnow()
         ),
         RentalAgreement(
             rental_start_date="2023-07-17",
             rental_end_date="2023-07-20",
-            owner_id = 5, # David Rodriguez
-            user_id=2,  # Ethan Martinez
-            cart_item_id=1,  # David Rodriguez #Available
+            owner_id = owner_2.id, # David Rodriguez
+            user_id=user_1.id,  # Ethan Martinez
+            cart_item_id=cart_items[1].id,  # David Rodriguez #Available
             created_at = datetime.utcnow(),
             updated_at = datetime.utcnow()
         ),
         RentalAgreement(
             rental_start_date="2023-07-17",
             rental_end_date="2023-07-20",
-            owner_id = 4, # Henry Cavill
-            user_id=5,  # Sarah Thompson
-            cart_item_id=3,  # Daniel Lee #Available
+            owner_id = owner_2.id, # Henry Cavill
+            user_id=user_1.id,  # Sarah Thompson
+            cart_item_id=cart_items[2].id,  # Daniel Lee #Available
             created_at = datetime.utcnow(),
             updated_at = datetime.utcnow()
         )]
@@ -572,84 +572,84 @@ if __name__ == '__main__':
         print("Generating example messages...")
         messages = [
             Message(
-                recipient_id = 2, # Owner
-                sender_id = 1, # User,
+                recipient_id = owner_2.id, # Owner
+                sender_id = user_1.id, # User,
                 context_id = 1,
                 content = "Hey, hope this message finds you well, I'd like to rent this equipment. What would the cost be?",
                 user_type = "user",
                 message_status = "Delivered",
                 created_at = datetime.utcnow(),
-                thread_id = 1
+                thread_id = threads[0].id
             ),
             Message(
-                recipient_id = 1,
-                sender_id = 2, # Owner
+                recipient_id = user_1.id, # User
+                sender_id = owner_2.id, # Owner
                 context_id = 1,
                 content = "Yes it is still available, we offer rate discounts depending on how long you are trying to rent for, what is the time frame?",
                 user_type = "owner",
                 message_status = "Delivered",
                 created_at = datetime.utcnow(),
-                thread_id = 1
+                thread_id = threads[0].id
             ),
             Message(
-                recipient_id = 2, # Owner
-                sender_id = 1, # User
+                recipient_id = owner_2.id, # Owner
+                sender_id = user_1.id, # User
                 context_id = 1,
                 content = "Lets try for three weeks if you can send me a quote?",
                 user_type = "user",
                 message_status = "Delivered",
                 created_at = datetime.utcnow(),
-                thread_id = 1
+                thread_id = threads[0].id
             ),
             Message(
-                recipient_id = 1, # User
-                sender_id = 2, # Owner
+                recipient_id = user_1.id, # User
+                sender_id = owner_2.id, # Owner
                 context_id = 1,
                 content = "Attached is a quote, thank you!",
                 user_type = "owner",
                 message_status = "Delivered",
                 created_at = datetime.utcnow(),
-                thread_id = 1
+                thread_id = threads[0].id
             ),
             Message(
-                recipient_id = 2, # Owner
-                sender_id = 3, # User,
+                recipient_id = owner_2.id, # Owner
+                sender_id = user_1.id, # User,
                 context_id = 2,
                 content = "Hey, hope this message finds you well, I'd like to rent this equipment. What would the cost be?",
                 user_type = "user",
                 message_status = "Delivered",
                 created_at = datetime.utcnow(),
-                thread_id = 2
+                thread_id = threads[1].id
             ),
             Message(
-                recipient_id = 3, # User
-                sender_id = 2, # Owner
+                recipient_id = user_1.id, # User
+                sender_id = owner_2.id, # Owner
                 context_id = 2,
-                content = "tetseroni?",
+                content = "Yes I got it, how can I help you?",
                 user_type = "owner",
                 message_status = "Delivered",
                 created_at = datetime.utcnow(),
-                thread_id = 2
+                thread_id = threads[1].id
             ),
             Message(
-                recipient_id = 2, # Owner
-                sender_id = 3, # User
+                recipient_id = owner_2.id, # Owner
+                sender_id = user_1.id, # User
                 context_id = 2,
                 content = "Lets try for three weeks ON THAT LAWNMoWER if you can send me a quote?",
                 user_type = "user",
                 message_status = "Delivered",
                 created_at = datetime.utcnow(),
-                thread_id = 2
+                thread_id = threads[1].id
             ),
             Message(
-                recipient_id = 3,  # User
-                sender_id = 2, # Owner
+                recipient_id = user_1.id,  # User
+                sender_id = owner_2.id, # Owner
                 context_id = 2,
                 content = "Attached is a quote, thank you!",
                 user_type = "owner",
                 message_status = "Delivered",
                 created_at = datetime.utcnow(),
-                thread_id = 2
+                thread_id = threads[1].id
             ),
         ]
 
@@ -670,12 +670,12 @@ if __name__ == '__main__':
         print("Creating USER Inbox...")
         user_inbox = [
             UserInbox(
-                user_id=1,  
-                thread_id = 1
+                user_id=user_1.id,  
+                thread_id = threads[0].id
             ),
             UserInbox(
-                user_id=3,
-                thread_id = 2
+                user_id=user_1.id,
+                thread_id = threads[1].id
             )
         ]
 
@@ -685,19 +685,19 @@ if __name__ == '__main__':
         print("Creating OWNER Inbox...")
         owner_inbox = [
             OwnerInbox(
-                owner_id=2,  
-                thread_id = 1
+                owner_id=owner_2.id,  
+                thread_id = threads[0].id
             ),
             OwnerInbox(
-                owner_id=2,  
-                thread_id = 2
+                owner_id=owner_2.id,  
+                thread_id = threads[1].id
             )
         ]
 
         db.session.add_all(owner_inbox)
         db.session.commit()
-
-        owner2 = EquipmentOwner.query.filter_by(id=2).first()
+        
+        owner2 = EquipmentOwner.query.filter_by(id = owner_2.id).first()
         if owner2:
             print("Owner 2's Inboxes:")
             for inbox in owner2.owner_inboxes:
