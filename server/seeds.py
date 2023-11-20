@@ -22,6 +22,8 @@ if __name__ == '__main__':
         #Clear dbs
         print("Clearing db...")
         RentalAgreement.query.delete()
+        Cart.query.delete()
+        CartItem.query.delete()
         Equipment.query.delete()
         EquipmentOwner.query.delete()
         User.query.delete()
@@ -30,8 +32,6 @@ if __name__ == '__main__':
         UserInbox.query.delete()
         OwnerInbox.query.delete()
         Thread.query.delete()
-        Cart.query.delete()
-        CartItem.query.delete()
         EquipmentPrice.query.delete()
 
 
