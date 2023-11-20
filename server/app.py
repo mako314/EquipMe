@@ -860,7 +860,6 @@ class CartByUserID(Resource):
         
     def patch(self, user_id):
         cart = Cart.query.filter(Cart.user_id == user_id).first()
-
         if cart:
             data = request.get_json()
             for key in data:

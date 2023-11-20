@@ -177,7 +177,7 @@ class Equipment(db.Model, SerializerMixin):
 
     # agreements = db.relationship('RentalAgreement', back_populates="equipment")
 
-    cart_item = db.relationship('CartItem', back_populates='equipment')
+    cart_item = db.relationship('CartItem', back_populates='equipment', cascade="all, delete")
 
     equipment_price = db.relationship('EquipmentPrice', back_populates='equipment', cascade="all, delete")
 
