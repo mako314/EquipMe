@@ -26,12 +26,12 @@ if __name__ == '__main__':
         Cart.query.delete()
         EquipmentPrice.query.delete()
         Equipment.query.delete()
+        UserInbox.query.delete()
+        OwnerInbox.query.delete()
         EquipmentOwner.query.delete()
         User.query.delete()
         EquipmentImage.query.delete()
         Message.query.delete()
-        UserInbox.query.delete()
-        OwnerInbox.query.delete()
         Thread.query.delete()
         
 
