@@ -892,8 +892,8 @@ class CartByUserID(Resource):
 api.add_resource(CartByUserID, "/user/<int:user_id>/cart/")
 
 class CartByCartID(Resource):
-    def get(self,id):
-        cart = Cart.query.filter(Cart.id == id).first()
+    def get(self,cart_id):
+        cart = Cart.query.filter(Cart.id == cart_id).first()
         if cart:
             return make_response(cart.to_dict(),200)
         else:
@@ -902,8 +902,8 @@ class CartByCartID(Resource):
             }, 404)
             return response
         
-    def patch(self, id):
-        cart = Cart.query.filter(Cart.id == id).first()
+    def patch(self, cart_id):
+        cart = Cart.query.filter(Cart.id == cart_id).first()
 
         if cart:
             data = request.get_json()
@@ -919,8 +919,8 @@ class CartByCartID(Resource):
             }, 404)
             return response
     
-    def delete(self, id):
-        cart = Cart.query.filter(Cart.id == id).first()
+    def delete(self, cart_id):
+        cart = Cart.query.filter(Cart.id == cart_id).first()
 
         if cart:
             db.session.delete(cart)
@@ -933,7 +933,7 @@ class CartByCartID(Resource):
             }, 404)
             return response
         
-api.add_resource(CartByCartID, "/cart/<int:id>")
+api.add_resource(CartByCartID, "/cart/<int:cart_id>")
 
 class AddItemToCart(Resource):
     def post(self,cart_id):
