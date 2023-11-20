@@ -66,7 +66,7 @@ console.log("the role:", role)
                             </ul> */}
                             {/* although it says equipmentMap, this map is really universal, so name may be prone to CHANGE */}
 
-                            {/* <EquipmentMap location={location}/>  */}
+                            <EquipmentMap location={location} ownerDisplayHeight={200} ownerDisplayWidth={250} ownerDisplayZoom={8}/> 
 
                         </div>
                     </div>

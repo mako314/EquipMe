@@ -9,6 +9,7 @@ class EquipmentMap extends Component {
   //   this.loadGoogleMapsScript()
   // }
   componentDidMount() {
+    // If the window doesn't have it, load the script. If it does, just continue and load the map
     if (!window.google) {
       this.loadGoogleMapsScript()
     } else {
@@ -19,6 +20,7 @@ class EquipmentMap extends Component {
   componentDidUpdate(prevProps) {
     //Upon component upload, this fires off, allowing the location to update and the map to be used
     if (prevProps.location !== this.props.location) {
+      
       this.loadMap()
     }
   }
@@ -39,7 +41,7 @@ class EquipmentMap extends Component {
       script.async = true
       document.head.appendChild(script)
       // script.onload = this.loadMap
-
+  
       // script.onload = () => {
       //   this.loadMap() // Load map once script is loaded. Was having issues with it not existing basically upon first load 
       // }
@@ -50,16 +52,18 @@ class EquipmentMap extends Component {
   }
 
   loadMap = () => {
-    //Only load map once element with id of map exists
+    // If the window hasn't loaded yet, console log an error
     if (!window.google || !window.google.maps) {
       console.error('Google Maps API is not loaded yet.')
       return
     }
+    console.log("Beep boop", )
+    //Only load map once element with id of map exists
     const mapDiv = document.getElementById('map')
     if (this.props.location && mapDiv) {
       const geocoder = new window.google.maps.Geocoder()
       const mapOptions = {
-        zoom: 12,
+        zoom: this.props.ownerDisplayZoom ? this.props.ownerDisplayZoom : 12,
         center: { lat: -34.397, lng: 150.644 },
       }
       if (mapDiv && !this.map) {
@@ -85,10 +89,12 @@ class EquipmentMap extends Component {
     })
   }
 
+  
+
   render() {
     return (
         // <div className="map-container">
-          <div id="map" style={{ height: '500px', width:'550px'}}></div>
+          <div id="map" style={{ height: this.props.ownerDisplayHeight ? this.props.ownerDisplayHeight :'500px',  width: this.props.ownerDisplayWidth ? this.props.ownerDisplayWidth : '550px'}}></div>
         // </div>
       )
   }
