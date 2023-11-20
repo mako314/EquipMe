@@ -32,7 +32,7 @@ function CreateNewCart({addCart, toggleModal}){
           'cart_name' : cartName,
           'cart_status' : 'ACTIVE',
           'created_at': new Date().toISOString(),
-          'user_id' : user?.id
+          'user_id' : currentUser?.id
       }
     } else if (role === 'owner'){
       toast.warn(`🛒 We don't currently support owner cart creation`,{

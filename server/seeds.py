@@ -505,6 +505,41 @@ if __name__ == '__main__':
         cart1.total = cart1.calculate_total()
         db.session.commit()
 
+#Seed rental agreements
+#---------------------Rental agreements---------------
+        print("Configuring our current rental agreements...")
+        rental_agreements = [
+        RentalAgreement(
+            rental_start_date="2023-07-17",
+            rental_end_date="2023-07-20",
+            owner_id = 6, # Amy Wilson
+            user_id=1,  # Benjamin Davis
+            cart_item_id=2,  # Amy Wilson #Available
+            created_at = datetime.utcnow(),
+            updated_at = datetime.utcnow()
+        ),
+        RentalAgreement(
+            rental_start_date="2023-07-17",
+            rental_end_date="2023-07-20",
+            owner_id = 5, # David Rodriguez
+            user_id=2,  # Ethan Martinez
+            cart_item_id=1,  # David Rodriguez #Available
+            created_at = datetime.utcnow(),
+            updated_at = datetime.utcnow()
+        ),
+        RentalAgreement(
+            rental_start_date="2023-07-17",
+            rental_end_date="2023-07-20",
+            owner_id = 4, # Henry Cavill
+            user_id=5,  # Sarah Thompson
+            cart_item_id=3,  # Daniel Lee #Available
+            created_at = datetime.utcnow(),
+            updated_at = datetime.utcnow()
+        )]
+
+        db.session.add_all(rental_agreements)
+        db.session.commit()
+
 #---------------------Message and Inbox testing----------------
 
 #---------------------Thread testing----------------
@@ -658,40 +693,7 @@ if __name__ == '__main__':
 
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------
-#Seed rental agreements
-#Rental agreements 
-        print("Configuring our current rental agreements...")
-        rental_agreements = [
-        RentalAgreement(
-            rental_start_date="2023-07-17",
-            rental_end_date="2023-07-20",
-            owner_id = 6, # Amy Wilson
-            user_id=1,  # Benjamin Davis
-            cart_item_id=2,  # Amy Wilson #Available
-            created_at = datetime.utcnow(),
-            updated_at = datetime.utcnow()
-        ),
-        RentalAgreement(
-            rental_start_date="2023-07-17",
-            rental_end_date="2023-07-20",
-            owner_id = 5, # David Rodriguez
-            user_id=2,  # Ethan Martinez
-            cart_item_id=1,  # David Rodriguez #Available
-            created_at = datetime.utcnow(),
-            updated_at = datetime.utcnow()
-        ),
-        RentalAgreement(
-            rental_start_date="2023-07-17",
-            rental_end_date="2023-07-20",
-            owner_id = 4, # Henry Cavill
-            user_id=5,  # Sarah Thompson
-            cart_item_id=3,  # Daniel Lee #Available
-            created_at = datetime.utcnow(),
-            updated_at = datetime.utcnow()
-        )]
 
-        db.session.add_all(rental_agreements)
-        db.session.commit()
 
 
 #Seed Equipment with panda. 
