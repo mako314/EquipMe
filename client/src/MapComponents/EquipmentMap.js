@@ -30,12 +30,15 @@ class EquipmentMap extends Component {
       script.setAttribute("id", "mapScript")
       script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_KEY}&v=weekly&callback=initMap`
       script.async = true
-      script.onload = this.loadMap
-      document.head.appendChild(script)
+
+      // script.onload = this.loadMap
 
       script.onload = () => {
         this.loadMap() // Load map once script is loaded. Was having issues with it not existing basically upon first load 
       }
+
+      document.head.appendChild(script)
+
     } else {
       this.loadMap() // Load map if script already present
     }
@@ -43,18 +46,21 @@ class EquipmentMap extends Component {
 
   loadMap = () => {
     //Only load map once element with id of map exists
-    if (this.props.location && document.getElementById('mapScript')) {
+    if (this.props.location && document.getElementById('map')) {
       const geocoder = new window.google.maps.Geocoder()
       const mapOptions = {
         zoom: 12,
         center: { lat: -34.397, lng: 150.644 },
       }
 
-      if (!this.map) {
+      const mapDiv = document.getElementById('map')
+
+      if (mapDiv && !this.map) {
         this.map = new window.google.maps.Map(document.getElementById('map'), mapOptions)
       }
-
+      if (this.map) {
       this.codeAddress(geocoder, this.map, this.props.location)
+      }
     }
   }
 
