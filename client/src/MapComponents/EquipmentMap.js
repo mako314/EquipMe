@@ -24,9 +24,10 @@ class EquipmentMap extends Component {
   }
   
   loadGoogleMapsScript = () => {
-    if (!window.google) {
+    if (!window.google && document.getElementById('map')) {
       const GOOGLE_MAPS_KEY = process.env.REACT_APP_GOOGLE_MAP_KEY
       const script = document.createElement('script')
+      script.setAttribute("id", "mapScript")
       script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_KEY}&v=weekly&callback=initMap`
       script.async = true
       script.onload = this.loadMap
@@ -42,7 +43,7 @@ class EquipmentMap extends Component {
 
   loadMap = () => {
     //Only load map once element with id of map exists
-    if (this.props.location && document.getElementById('map')) {
+    if (this.props.location && document.getElementById('mapScript')) {
       const geocoder = new window.google.maps.Geocoder()
       const mapOptions = {
         zoom: 12,
