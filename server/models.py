@@ -465,20 +465,3 @@ class OwnerInbox(db.Model, SerializerMixin):
 
     serialize_rules = ('-owner.owner_inboxes', '-thread.owner_inboxes', '-thread.user_inboxes')
 
-
-# class Inbox(db.Model, SerializerMixin):
-#     __tablename__ = "inboxes"
-
-#     id = db.Column(db.Integer, primary_key=True)
-#     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-#     owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'))
-#     message_id = db.Column(db.Integer, db.ForeignKey('messages.id'))
-    
-
-#     user = db.relationship(
-#         "User", back_populates="inboxes", foreign_keys=[user_id])
-    
-#     owner = db.relationship(
-#         "EquipmentOwner", back_populates="inboxes", foreign_keys=[owner_id])
-    
-#     serialize_rules = ('-user.inboxes', '-owner.inboxes')
