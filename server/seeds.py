@@ -24,6 +24,7 @@ if __name__ == '__main__':
         RentalAgreement.query.delete()
         CartItem.query.delete()
         Cart.query.delete()
+        EquipmentPrice.query.delete()
         Equipment.query.delete()
         EquipmentOwner.query.delete()
         User.query.delete()
@@ -32,7 +33,7 @@ if __name__ == '__main__':
         UserInbox.query.delete()
         OwnerInbox.query.delete()
         Thread.query.delete()
-        EquipmentPrice.query.delete()
+        
 
 
 #----------------------------------------------------------------------
