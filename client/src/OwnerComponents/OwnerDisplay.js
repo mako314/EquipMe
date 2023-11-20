@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import EquipmentMap from '../MapComponents/EquipmentMap'
 import ContactModal from '../MessagingComponents/ContactModal'
+import ProductCard from '../EquipmentComponents/ProductCard'
 import { UserSessionContext } from '../UserComponents/SessionContext'
 import ApiUrlContext from '../Api'
 
@@ -10,7 +11,8 @@ function OwnerDisplay() {
     
   
   const [owner, setOwner] = useState([])
-  const { currentUser, role } = UserSessionContext() 
+  const { currentUser, role } = UserSessionContext()
+  const [currentIndex, setCurrentIndex] = useState(0);
   const { firstName, lastName, location, bio, email, phone, equipment, profession, profileImage, website } = owner
 
   console.log("THE OWNER:", owner)
@@ -31,6 +33,17 @@ function OwnerDisplay() {
   })
 
   // console.log(equipmentNames)
+  const equipmentCards = owner.equipment?.map((item) => {
+    return(  <div key={item.id} className="flex-none flex-grow flex-shrink-0 basis-1/3 space-x-4"> 
+    <ProductCard key={item.id} id={item.id} name={item.name} model={item.model} make={item.make} location={item.location} item={item}  equipment_image={item.equipment_image}/>
+    </div>)
+  
+    
+})
+
+const [visibleCards, setVisibleCards] = useState(equipmentCards?.slice(0, 2));
+
+// handleEquipmentDelete={handleEquipmentDelete} handleEditEquipment={handleEditEquipment}
 
 //   console.log(owner)
 
@@ -129,36 +142,28 @@ console.log("the role:", role)
                         <div className="mb-6">
                             <div className="flex justify-between">
                                 <span className="text-gray-600 font-bold"> All Equipment </span>
-                                {/* <p>
-                                    <span className="text-gray-600 mr-2">at ABC Company</span>
-                                    <span className="text-gray-600">2017 - 2019</span>
-                                </p> */}
                             </div>
-                            <p className="mt-2"> All Equipment
-                            </p>
+                            <div className="flex overflow-x-auto space-x-4 py-4"> 
+                            {equipmentCards}
+                            </div>
                         </div>
+
                         <div className="mb-6">
                             <div className="flex justify-between">
                                 <span className="text-gray-600 font-bold"> Featured Equipment </span>
-                                <p>
-                                    {/* <span className="text-gray-600 mr-2">at ABC Company</span>
-                                    <span className="text-gray-600">2017 - 2019</span> */}
-                                </p>
                             </div>
                             <p className="mt-2"> Make a way to feature Equipments
                             </p>
                         </div>
+
                         <div className="mb-6">
                             <div className="flex justify-between">
                                 <span className="text-gray-600 font-bold">Reviews</span>
-                                <p>
-                                    {/* <span className="text-gray-600 mr-2">at ABC Company</span>
-                                    <span className="text-gray-600">2017 - 2019</span> */}
-                                </p>
                             </div>
                             <p className="mt-2">Reviews
                             </p>
                         </div>
+                        
                     </div>
                 </div>
 
