@@ -24,7 +24,7 @@ class EquipmentMap extends Component {
   }
   
   loadGoogleMapsScript = () => {
-    if (!window.google) {
+    if (!window.google && document.getElementById('map')) {
       const GOOGLE_MAPS_KEY = process.env.REACT_APP_GOOGLE_MAP_KEY
       const script = document.createElement('script')
       script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_KEY}&v=weekly&callback=initMap`

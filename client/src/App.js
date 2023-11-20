@@ -131,36 +131,6 @@ function App() {
     })
   }, [apiUrl, setCurrentUser])
   
-  // useEffect(() => {
-  //   fetch(`${apiUrl}check_session`, {
-  //     credentials: 'include'
-  //   }).then((response) => {
-  //     if (response.ok) {
-  //       response.json().then((user) => setUser(user));
-  //     }
-  //   });
-  // }, []);
-
-  // console.log(user)
-
-  //------------------------------------------------------------------------------------------------------------------
-
-  //-------------------------------------------- FOR OWNER - CHECK SESSION TO STAY LOGGED IN ON REFRESH--------------------------
-
-  // useEffect(() => {
-  //   fetch(`${apiUrl}owner/check_session`, {
-  //     credentials: 'include'
-  //   }).then((response) => {
-  //     if (response.ok) {
-  //       response.json().then((owner) => setOwner(owner));
-  //     }
-  //   });
-  // }, []);
-
-  // console.log(owner)
-
-  //------------------------------------------------------------------------------------------------------------------
-  
   //---------------------------------Fetches -----------------------
   //---------------------------------Posts and general Fetches -----------------------
   //Going to improvise this for the post also / maybe patch also?
