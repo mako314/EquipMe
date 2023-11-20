@@ -4,9 +4,16 @@ class EquipmentMap extends Component {
 
   map = null // Reference to the map instance
 
+  // componentDidMount() {
+  //   // If comomponent mounted, load the map
+  //   this.loadGoogleMapsScript()
+  // }
   componentDidMount() {
-    // If comomponent mounted, load the map
-    this.loadGoogleMapsScript()
+    if (!window.google) {
+      this.loadGoogleMapsScript()
+    } else {
+      this.loadMap()
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -24,7 +31,7 @@ class EquipmentMap extends Component {
   }
   
   loadGoogleMapsScript = () => {
-    if (!window.google && document.getElementById('map')) {
+    // if (!window.google && document.getElementById('map')) {
       const GOOGLE_MAPS_KEY = process.env.REACT_APP_GOOGLE_MAP_KEY
       const script = document.createElement('script')
       script.setAttribute("id", "mapScript")
@@ -37,13 +44,17 @@ class EquipmentMap extends Component {
       //   this.loadMap() // Load map once script is loaded. Was having issues with it not existing basically upon first load 
       // }
       window.initMap = this.loadMap
-      } else {
-        this.loadMap() // Load map if script already present
-      }
+      // } else {
+      //   this.loadMap() // Load map if script already present
+      // }
   }
 
   loadMap = () => {
     //Only load map once element with id of map exists
+    if (!window.google || !window.google.maps) {
+      console.error('Google Maps API is not loaded yet.')
+      return
+    }
     const mapDiv = document.getElementById('map')
     if (this.props.location && mapDiv) {
       const geocoder = new window.google.maps.Geocoder()
