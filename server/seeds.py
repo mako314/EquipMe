@@ -413,7 +413,7 @@ if __name__ == '__main__':
                 availability = 'True',
                 delivery = 'True',
                 quantity = 4,
-                owner_id = 2
+                owner_id = owner_2.id
             ),
         ]
 
