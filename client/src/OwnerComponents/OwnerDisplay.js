@@ -127,35 +127,35 @@ console.log("the role:", role)
                         <h2 className="text-xl font-bold mt-6 mb-4">Experience</h2>
                         <div className="mb-6">
                             <div className="flex justify-between">
-                                <span className="text-gray-600 font-bold">Web Developer</span>
-                                <p>
+                                <span className="text-gray-600 font-bold"> All Equipment </span>
+                                {/* <p>
                                     <span className="text-gray-600 mr-2">at ABC Company</span>
                                     <span className="text-gray-600">2017 - 2019</span>
-                                </p>
+                                </p> */}
                             </div>
-                            <p className="mt-2">some of their featured listings here maybe?
+                            <p className="mt-2"> All Equipment
                             </p>
                         </div>
                         <div className="mb-6">
                             <div className="flex justify-between">
-                                <span className="text-gray-600 font-bold">Web Developer</span>
+                                <span className="text-gray-600 font-bold"> Featured Equipment </span>
                                 <p>
-                                    <span className="text-gray-600 mr-2">at ABC Company</span>
-                                    <span className="text-gray-600">2017 - 2019</span>
+                                    {/* <span className="text-gray-600 mr-2">at ABC Company</span>
+                                    <span className="text-gray-600">2017 - 2019</span> */}
                                 </p>
                             </div>
-                            <p className="mt-2">some of their featured listings here maybe?
+                            <p className="mt-2"> Make a way to feature Equipments
                             </p>
                         </div>
                         <div className="mb-6">
                             <div className="flex justify-between">
-                                <span className="text-gray-600 font-bold">Web Developer</span>
+                                <span className="text-gray-600 font-bold">Reviews</span>
                                 <p>
-                                    <span className="text-gray-600 mr-2">at ABC Company</span>
-                                    <span className="text-gray-600">2017 - 2019</span>
+                                    {/* <span className="text-gray-600 mr-2">at ABC Company</span>
+                                    <span className="text-gray-600">2017 - 2019</span> */}
                                 </p>
                             </div>
-                            <p className="mt-2">some of their featured listings here maybe?
+                            <p className="mt-2">Reviews
                             </p>
                         </div>
                     </div>
