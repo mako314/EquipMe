@@ -11,8 +11,9 @@ function OwnerDisplay() {
   
   const [owner, setOwner] = useState([])
   const { currentUser, role } = UserSessionContext() 
-  const { firstName, lastName, location, email, phone, equipment, profession, profileImage, website } = owner
+  const { firstName, lastName, location, bio, email, phone, equipment, profession, profileImage, website } = owner
 
+  console.log("THE OWNER:", owner)
   const { id } = useParams()
   // const navigate = useNavigate()
   const apiUrl = useContext(ApiUrlContext)
@@ -76,7 +77,7 @@ console.log("the role:", role)
                 <div className="col-span-4 sm:col-span-9">
                     <div className="bg-white shadow rounded-lg p-6">
                         <h2 className="text-xl font-bold mb-4">About Me</h2>
-                        <p className="text-gray-700"> Short biography about the company?
+                        <p className="text-gray-700"> {bio}
                         </p>
 
                         <h3 className="font-semibold text-center mt-3 -mb-2">

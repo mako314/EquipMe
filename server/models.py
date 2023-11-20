@@ -17,19 +17,16 @@ class User(db.Model, SerializerMixin):
     firstName = db.Column(db.String)
     lastName = db.Column(db.String)
     age = db.Column(db.Integer)
-    email = db.Column(db.String)
-    _password_hash = db.Column(db.String, nullable=False)
-    phone = db.Column(db.String)
-
-    age = db.Column(db.Integer)
     location = db.Column(db.String)
     profession = db.Column(db.String)
-    
+    bio = db.Column(db.String)
+    phone = db.Column(db.String)
+    email = db.Column(db.String)
     profileImage = db.Column(db.String)
+    _password_hash = db.Column(db.String, nullable=False)
+    
     # bannerImg = db.Column(db.String)
     # I don't think I'll be requiring / asking for banner images IMO
-
-    #Bio ? Don't think needed tbh.
 
     #Would I need a document attribute here? To hold a users document such as insurance and such
 
@@ -95,6 +92,7 @@ class EquipmentOwner(db.Model, SerializerMixin):
     age = db.Column(db.Integer)
     location = db.Column(db.String)
     profession = db.Column(db.String)
+    bio = db.Column(db.String)
     phone = db.Column(db.String)
     email = db.Column(db.String)
     _password_hash = db.Column(db.String, nullable=False)

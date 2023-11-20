@@ -49,6 +49,7 @@ if __name__ == '__main__':
         phone="312-555-1122",
         location="Chicago, Illinois",
         profession="Construction Equipment Operator",
+        bio="I have over 20 years of experience in construction equipment operation. Based in Chicago, I am committed to precision and expertise in handling complex machinery.",
         profileImage="https://avatarfiles.alphacoders.com/325/thumb-325695.png",
         # bannerImg="banner_benjamin.png"
     )
@@ -62,6 +63,7 @@ if __name__ == '__main__':
         phone="305-555-2233",
         location="Miami, Florida",
         profession="Heavy Machine Operator",
+        bio="As a heavy machine operator based in Miami, I specialize in managing and operating large-scale industrial equipment. My nearly two decades in the field have honed my skills and knowledge.",
         profileImage="https://avatarfiles.alphacoders.com/325/thumb-325695.png",
         # bannerImg="banner_ethan.png"
     )
@@ -75,6 +77,7 @@ if __name__ == '__main__':
         phone="713-555-3344",
         location="Houston, Texas",
         profession="Industrial Cleaning Specialist",
+        bio="An industrial cleaning specialist from Houston, I am dedicated to maintaining high standards of cleanliness and safety. My attention to detail is what sets me apart in this industry.",
         profileImage="https://avatarfiles.alphacoders.com/119/119089.png",
         # bannerImg="banner_william.png"
     )
@@ -88,6 +91,7 @@ if __name__ == '__main__':
         phone="602-555-4455",
         location="Phoenix, Arizona",
         profession="Party and Event Equipment Organizer",
+        bio="Organizing large-scale events and parties in Phoenix, I excel in coordinating and arranging event equipment. My creativity and organizational skills ensure every event is a success and memorable.",
         profileImage="https://avatarfiles.alphacoders.com/325/thumb-325695.png",
         # bannerImg="banner_sofia.png"
     )
@@ -101,6 +105,7 @@ if __name__ == '__main__':
         phone="312-555-5566",
         location="Chicago, Illinois",
         profession="Painting Contractor",
+        bio="As a seasoned painting contractor from Chicago, I combine artistic flair with technical expertise. I specialize in various painting techniques, ensuring quality and reliability in every project.",
         profileImage="https://avatarfiles.alphacoders.com/325/thumb-325695.png",
         # bannerImg="banner_christian.png"
     )
@@ -114,6 +119,7 @@ if __name__ == '__main__':
         phone="206-555-6677",
         location="Seattle, Washington",
         profession="Landscape Designer",
+        bio="As a landscape designer in Seattle, my passion lies in transforming outdoor spaces. My designs focus on sustainability and creating visually stunning landscapes that stand the test of time.",
         profileImage="https://avatarfiles.alphacoders.com/325/thumb-325695.png",
         # bannerImg="banner_sarah.png"
     )
@@ -126,6 +132,7 @@ if __name__ == '__main__':
         phone="713-555-7788",
         location="Houston, Texas",
         profession="Automotive Mechanic",
+        bio="I am a skilled automotive mechanic from Houston with a passion for cars. My expertise lies in diagnostics and providing top-notch maintenance and repair services.",
         profileImage="https://avatarfiles.alphacoders.com/325/thumb-325695.png",
         # bannerImg="banner_thomas.png"
     )
@@ -181,6 +188,7 @@ if __name__ == '__main__':
             age=42,
             location="Chicago, Illinois",
             profession="Plumbing",
+            bio= "I specialize in plumbing and bring years of experience in handling and supplying top-notch painting equipment in Chicago. My focus is on providing reliable and efficient tools for any job.",
             phone="312-555-6789",
             email="markdavis82@yahoo.com",
             _password_hash="", 
@@ -193,6 +201,7 @@ if __name__ == '__main__':
             age=22,
             location="Port St. Lucie, FL",
             profession="Construction Equipment Operator",
+            bio= "At 22, I'm deeply involved in the world of construction equipment operation in Port St. Lucie, FL. My goal is to ensure that every project has the right equipment for success.",
             phone="602-555-7891",
             email="ejohnson@live.com",
             _password_hash="",
@@ -205,6 +214,7 @@ if __name__ == '__main__':
             age=32,
             location="Houston, Texas",
             profession="Automotive",
+            bio= "Based in Houston, Texas, I provide automotive equipment for a variety of needs. With my extensive knowledge, I help clients choose the best tools for their automotive projects.",
             phone="713-555-0123",
             email="andrewjacobs93@gmail.com",
             _password_hash="",
@@ -217,6 +227,7 @@ if __name__ == '__main__':
             age=54,
             location="Seattle, Washington",
             profession="Garden",
+            bio= "As a garden equipment provider in Seattle, I take pride in offering high-quality tools. My experience in gardening aids clients in selecting the perfect equipment for their outdoor spaces.",
             phone="206-555-3456",
             email="hcavill34@hotmail.com",
             _password_hash="",
@@ -229,6 +240,7 @@ if __name__ == '__main__':
             age=65,
             location="Miami, Florida",
             profession="Heavy Machinery",
+            bio= "From Miami, I specialize in heavy machinery. With my expertise, I ensure that each client gets the most suitable machinery for their industrial needs.",
             phone="305-555-1234",
             email="davidr83@gmail.com",
             _password_hash="",
@@ -241,6 +253,7 @@ if __name__ == '__main__':
             age=29,
             location="Chicago, Illinois",
             profession="Construction",
+            bio= "In Chicago, I focus on supplying construction equipment. My aim is to help projects run smoothly by providing reliable and effective tools.",
             phone="312-555-5678",
             email="amywilson22@yahoo.com",
             _password_hash="",
@@ -253,6 +266,7 @@ if __name__ == '__main__':
             age=35,
             location="Houston, Texas",
             profession="Cleaning",
+            bio= "I provide top-grade cleaning equipment in Houston. My mission is to ensure cleanliness and efficiency in various environments through state-of-the-art equipment.",
             phone="713-555-4567",
             email="daniel.lee78@yahoo.com",
             _password_hash="",
@@ -265,6 +279,7 @@ if __name__ == '__main__':
             age=38,
             location="New York City, New York",
             profession="Plumbing",
+            bio= "From New York City, I specialize in plumbing equipment. I'm committed to offering the best tools and resources to meet diverse plumbing needs.",
             phone ="212-555-2345",
             email="jess.sanchez22@gmail.com",
             _password_hash="",
@@ -277,6 +292,7 @@ if __name__ == '__main__':
             age=39,
             location="Orlando, Florida",
             profession="Power tools and Hand tools",
+            bio= "In Orlando, Florida, I offer a range of power tools and hand tools. My expertise helps clients find the perfect tools for their projects, ensuring quality and durability.",
             phone="407-555-9012",
             email="ryan.phillips87@gmail.com",
             _password_hash="",
@@ -289,6 +305,7 @@ if __name__ == '__main__':
             age=40,
             location="New Orleans, Louisiana",
             profession="Woodworking",
+            bio= "I am dedicated to woodworking in New Orleans, Louisiana. My passion is to provide high-quality woodworking tools that cater to the intricate needs of this craft.",
             phone="504-555-7890",
             email="madams90@gmail.com",
             _password_hash="",
