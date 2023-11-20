@@ -1,4 +1,4 @@
-from models import db, User, EquipmentOwner, Equipment, RentalAgreement, EquipmentImage, Thread, UserInbox, OwnerInbox, Message, Cart, CartItem, EquipmentPrice
+from models import db, User, EquipmentOwner, Equipment, RentalAgreement, EquipmentImage, Thread, UserInbox, OwnerInbox, Message, Cart, CartItem, EquipmentPrice, FeaturedEquipment, Review
 import pandas as pd
 from app import app
 from random import randint, choice as rc
@@ -25,6 +25,8 @@ if __name__ == '__main__':
         CartItem.query.delete()
         Cart.query.delete()
         EquipmentPrice.query.delete()
+        FeaturedEquipment.query.delete()
+        Review.query.delete()
         Equipment.query.delete()
         UserInbox.query.delete()
         OwnerInbox.query.delete()
@@ -474,7 +476,20 @@ if __name__ == '__main__':
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------
 
-        print("Reseting EQUIPMENT pictures **TEMPORARILY**")
+        # print("Reseting EQUIPMENT pictures **TEMPORARILY**")
+        print("Temporarily Featured Equipment")
+        featured_equipment = [
+            FeaturedEquipment(
+            equipment_id = equipment_list[0].id
+            ),
+            FeaturedEquipment(
+            equipment_id = equipment_list[1].id
+            )
+        ]
+
+        db.session.add_all(featured_equipment)
+        db.session.commit()
+
 
 #---------------------Cart and Item testing----------------
         print("Generating example cart...")
@@ -543,7 +558,7 @@ if __name__ == '__main__':
             rental_end_date="2023-07-20",
             owner_id = owner_2.id, # Amy Wilson
             user_id=user_1.id,  # Benjamin Davis
-            cart_item_id=cart_items[0].id,  # Amy Wilson #Available
+            cart_item_id=cart_items[0].id,  # Excavator caterpillar thing
             created_at = datetime.utcnow(),
             updated_at = datetime.utcnow()
         ),
@@ -552,7 +567,7 @@ if __name__ == '__main__':
             rental_end_date="2023-07-20",
             owner_id = owner_2.id, # David Rodriguez
             user_id=user_1.id,  # Ethan Martinez
-            cart_item_id=cart_items[1].id,  # David Rodriguez #Available
+            cart_item_id=cart_items[1].id,  # Forklift
             created_at = datetime.utcnow(),
             updated_at = datetime.utcnow()
         ),
@@ -561,12 +576,40 @@ if __name__ == '__main__':
             rental_end_date="2023-07-20",
             owner_id = owner_2.id, # Henry Cavill
             user_id=user_1.id,  # Sarah Thompson
-            cart_item_id=cart_items[2].id,  # Daniel Lee #Available
+            cart_item_id=cart_items[2].id,  # Lawnmower
             created_at = datetime.utcnow(),
             updated_at = datetime.utcnow()
         )]
 
         db.session.add_all(rental_agreements)
+        db.session.commit()
+
+#---------------------Review Testing----------------
+        print("Creating reviews...")
+        reviews = [
+            Review(
+                review_stars = 5,
+                review_comment = "Having worked with a wide array of heavy machinery in my two decades on the job, I can say with confidence that Emily Johnson's Caterpillar Excavator is one of the best I've operated. Not only was the machine in excellent condition, but it also performed flawlessly throughout the rental period. Emily was punctual and professional, providing clear instructions and quick support whenever needed. The equipment was well-maintained and handled the demands of the job with ease. It's a solid piece of machinery that I'd recommend to any fellow construction equipment operator looking for reliable heavy machinery. Five stars for both the excavator and Emily's outstanding service.",
+                reviewer_type = "user",
+                created_at = datetime.utcnow(),
+                updated_at = datetime.utcnow(),
+                cart_item_id= cart_items[0].id,
+                user_id = user_1.id,
+                owner_id = owner_2.id
+            ),
+            Review(
+                review_stars = 5,
+                review_comment = "Benjamin Davis was an exemplary renter. His vast experience was evident from the start, handling the excavator with skill and care. He followed all operational guidelines and returned the equipment in impeccable condition. Communication was clear and consistent, making the rental process smooth and professional. It was a pleasure working with someone who respects the machinery and operates it as if it were their own. Benjamin's expertise and professionalism make him a highly recommended renter. I would not hesitate to rent to him again in the future.",
+                reviewer_type = "owner",
+                created_at = datetime.utcnow(),
+                updated_at = datetime.utcnow(),
+                cart_item_id= cart_items[0].id,
+                user_id = user_1.id,
+                owner_id =owner_2.id 
+            )
+        ]
+
+        db.session.add_all(reviews)
         db.session.commit()
 
 #---------------------Message and Inbox testing----------------

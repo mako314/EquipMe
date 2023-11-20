@@ -43,6 +43,24 @@ function OwnerDisplay() {
 
 const [visibleCards, setVisibleCards] = useState(equipmentCards?.slice(0, 2));
 
+const featuredEquipment = owner.equipment?.filter(item => item.featured_equipment?.length > 0)
+.map((item) => (
+    <div key={item.id} className="flex-none flex-grow flex-shrink-0 basis-1/3 space-x-4">
+        <ProductCard 
+            key={item.id}
+            id={item.id}
+            name={item.name}
+            model={item.model}
+            make={item.make}
+            location={item.location}
+            item={item}
+            equipment_image={item.equipment_image}
+        />
+    </div>
+)) || []
+
+// Check if there are any featured equipment items, if not show a message
+const displayEquipment = featuredEquipment.length > 0 ? featuredEquipment : <div>No items currently featured</div>
 // handleEquipmentDelete={handleEquipmentDelete} handleEditEquipment={handleEditEquipment}
 
 //   console.log(owner)
@@ -138,7 +156,7 @@ console.log("the role:", role)
                         </div>
 
                         {/* can possibly include the individuals featured equipment here, replacing the resume styled format */}
-                        <h2 className="text-xl font-bold mt-6 mb-4">Experience</h2>
+                        <h2 className="text-xl font-bold mt-6 mb-4"> More </h2>
                         <div className="mb-6">
                             <div className="flex justify-between">
                                 <span className="text-gray-600 font-bold"> All Equipment </span>
@@ -152,8 +170,9 @@ console.log("the role:", role)
                             <div className="flex justify-between">
                                 <span className="text-gray-600 font-bold"> Featured Equipment </span>
                             </div>
-                            <p className="mt-2"> Make a way to feature Equipments
-                            </p>
+                            <div className="flex overflow-x-auto space-x-4 py-4"> 
+                            {displayEquipment}
+                            </div>
                         </div>
 
                         <div className="mb-6">

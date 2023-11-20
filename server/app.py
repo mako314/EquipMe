@@ -16,32 +16,7 @@ from flask_jwt_extended import create_access_token, set_access_cookies, jwt_requ
 #------------------------------------HELPERS----------------------------------
 from datetime import datetime
 from helpers import is_available_for_date_range
-#------------------------------------USER LOGIN------------------------------------------------------------------------------
-
-# class Login(Resource):
-
-#     def get(self):
-#         pass
-
-#     def post(self):
-#         data = request.get_json()
-#         #Test to find username,
-#         email = data['email']
-#         user = User.query.filter(User.email == email).first()
-#         #Grab password
-#         password = data['password']
-#         # print(user)
-#         #Test to see if password matches
-#         if user and user.authenticate(password):
-#             access_token = create_access_token(identity=user.id)
-#             # refresh_token = create_refresh_token(identity=user.id)
-#             response = jsonify({"msg": "login successful"}, 200)
-#             set_access_cookies(response, access_token)
-#             return response
-#         else:
-#             return {'error': 'Invalid credentials'}, 401
-
-# api.add_resource(Login, '/login')
+#------------------------------------ BOTH USER LOGIN-----------------------------------------------------------------------------
 
 class Login(Resource):
     def post(self):
@@ -112,34 +87,6 @@ class Logout(Resource):
 
 api.add_resource(Logout, '/logout')
 #------------------------------------------------------------------------------------------------------------------------------
-#------------------------------------OWNER LOGOUT------------------------------------------------------------------------------
-
-# class OwnerLogout(Resource):
-
-#     def delete(self):
-#         session.clear()
-#         response = make_response({'message': 'Logout successful'}, 200)
-#         unset_jwt_cookies(response)
-#         # response.delete_cookie('access_token') # May not need
-#         return response
-
-# api.add_resource(OwnerLogout, '/owner/logout')
-#------------------------------------------------------------------------------------------------------------------------------
-
-#------------------------------------ USER Check Session------------------------------------------------------------------------------
-
-# class CheckSession(Resource):
-
-#     @jwt_required()
-#     def get(self):
-#         current_user_id = get_jwt_identity()
-#         user = User.query.get(current_user_id)
-#         if user:
-#             return user.to_dict(rules=('-_password_hash',)), 200
-#         else:
-#             return {'message': 'User not found'}, 404
-
-# api.add_resource(CheckSession, '/check_session')
 class CheckSession(Resource):
     @jwt_required()
     def get(self):
@@ -167,21 +114,6 @@ class CheckSession(Resource):
         return {'message': 'Invalid session or role'}, 401
 
 api.add_resource(CheckSession, '/check_session')
-#------------------------------------------------------------------------------------------------------------------------------
-
-#------------------------------------ OWNER Check Session------------------------------------------------------------------------------
-
-class OwnerCheckSession(Resource):
-    @jwt_required()
-    def get(self):
-        current_owner_id = get_jwt_identity()
-        owner = EquipmentOwner.query.get(current_owner_id)
-        if owner:
-            return owner.to_dict(rules=('-_password_hash',)), 200
-        else:
-            return {'message': '401: Not Authorized'}, 401
-
-api.add_resource(OwnerCheckSession, '/owner/check_session')
 #------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -409,7 +341,7 @@ class Equipments(Resource):
     #get ALL equipment -- DONE
     def get(self):
         equipment = [equipment.to_dict(
-            only =('id','model','name','make','location', 'type','location','availability','delivery','quantity', 'owner', 'equipment_price', 'equipment_image' ) #needed to include all of this for when one patches
+            only =('id','model','name','make','location', 'type','location','availability','delivery','quantity', 'owner', 'equipment_price', 'equipment_image', 'featured_equipment' ) #needed to include all of this for when one patches
         ) for equipment in Equipment.query.all()]                                       # no longer need phone, email, and owner_name
 
         response = make_response(equipment, 200)

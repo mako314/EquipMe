@@ -38,8 +38,10 @@ class User(db.Model, SerializerMixin):
 
     cart = db.relationship('Cart', back_populates='user')
 
+    review = db.relationship ('Review', back_populates='user')
+
     #Serialization rules
-    serialize_rules = ('-agreements.user', '-user_inboxes.user', '-cart.user')
+    serialize_rules = ('-agreements.user', '-user_inboxes.user', '-cart.user', '-review.user', '-review.cart_item','-review_owner')
 
 
     #PROPERTIES
@@ -110,8 +112,10 @@ class EquipmentOwner(db.Model, SerializerMixin):
     owner_inboxes = db.relationship('OwnerInbox', back_populates='owner')
     #you can just do a query EquipmentOwner.query.get(1), or equipment = owner.equipment. Then you can do for equipment in owner.equipment print(equipment) for example
 
+    review = db.relationship ('Review', back_populates='owner')
+
     #Serialization rules
-    serialize_rules = ('-equipment.owner', '-agreements.owner', '-owner_inboxes.owner','-owner_inboxes.user' )
+    serialize_rules = ('-equipment.owner', '-agreements.owner', '-owner_inboxes.owner','-owner_inboxes.user', '-review.owner', '-review.cart_item', '-review.user' )
 
     #PROPERTIES
     @hybrid_property
@@ -181,8 +185,10 @@ class Equipment(db.Model, SerializerMixin):
 
     images = db.relationship('EquipmentImage', back_populates='equipment')
 
+    featured_equipment = db.relationship('FeaturedEquipment', back_populates='equipment')
+
     #Serialization rules
-    serialize_rules = ('-owner.equipment',  '-owner.agreements', '-images.equipment', '-cart_item.equipment','-equipment_price.equipment' )
+    serialize_rules = ('-owner.equipment',  '-owner.agreements', '-images.equipment', '-cart_item.equipment','-equipment_price.equipment', '-featured_equipment.equipment','-cart_item.review','-cart_item.agreements' )
     
     # '-agreements.equipment', # REMOVED DUE TO AGREEMENTS BEING TO CART ITEMS
     
@@ -230,6 +236,13 @@ class EquipmentImage(db.Model, SerializerMixin):
     #Serialization rules
     serialize_rules = ('-equipment.images', )
 
+class FeaturedEquipment(db.Model, SerializerMixin):
+    __tablename__="featured_equipments"
+    id = db.Column(db.Integer, primary_key = True)
+    equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
+    equipment = db.relationship('Equipment', back_populates='featured_equipment')
+    #Serialization rules
+    serialize_rules = ('-equipment.featured_equipment', )
 
 class RentalAgreement(db.Model, SerializerMixin):
     __tablename__ = "agreements"
@@ -329,7 +342,7 @@ class Cart(db.Model, SerializerMixin):
     items = db.relationship('CartItem', back_populates='cart', cascade="all, delete")
     user = db.relationship ('User', back_populates='cart')
 
-    serialize_rules = ('-items.cart','-items.cart_id','-items.equipment.agreements','-items.equipment.owner.owner_inboxes','-user.cart','-user.user_inboxes','-user.agreements')
+    serialize_rules = ('-items.cart','-items.cart_id','-items.equipment.agreements','-items.equipment.owner.owner_inboxes','-user.cart','-user.user_inboxes','-user.agreements', '-user.review','-items.review')
 
     def calculate_total(self):
         #Calculate the total price of all items in the cart
@@ -367,8 +380,9 @@ class CartItem(db.Model, SerializerMixin):
     cart = db.relationship('Cart', back_populates='items')
     equipment = db.relationship('Equipment', back_populates='cart_item')
     agreements = db.relationship('RentalAgreement', back_populates="items")
+    review = db.relationship('Review', back_populates="cart_item")
 
-    serialize_rules = ('-cart.items','-cart.user','-equipment.agreements','-equipment.cart_item','-equipment.owner.owner_inboxes', '-agreements.items', '-agreements.user', '-agreements.owner')
+    serialize_rules = ('-cart.items','-cart.user','-equipment.agreements','-equipment.cart_item','-equipment.owner.owner_inboxes', '-agreements.items', '-agreements.user', '-agreements.owner', '-review.cart_item')
 
     # _total = db.Column('total', db.Integer)
     #Need validations to test for positive integers,
@@ -395,6 +409,36 @@ class CartItem(db.Model, SerializerMixin):
         
 
     # Need to consider taxes, negative values, need validations here ASAP
+
+class Review(db.Model, SerializerMixin):
+    __tablename__ = "reviews"
+    id = db.Column(db.Integer, primary_key=True)
+
+    review_stars = db.Column(db.Integer)
+    review_comment = db.Column(db.String)
+    reviewer_type = db.Column(db.String) # Owner Or User 
+
+    created_at = db.Column(
+    db.DateTime, nullable=True,
+    default=datetime.utcnow,
+    )
+
+    updated_at = db.Column(
+    db.DateTime, nullable=True,
+    default=datetime.utcnow,
+    onupdate=datetime.utcnow
+    )
+
+    cart_item_id = db.Column(db.Integer, db.ForeignKey('cart_items.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'))
+
+    cart_item = db.relationship('CartItem', back_populates='review')
+    user = db.relationship ('User', back_populates='review')
+    owner = db.relationship("EquipmentOwner", back_populates="review")
+
+    #Serialize Rules
+    serialize_rules = ('-cart_item.review', '-user.review', '-owner.review')
 
 #-------------------------Message System---------------
 
