@@ -348,6 +348,17 @@ if __name__ == '__main__':
         db.session.add(owner_10)
 
         db.session.commit()
+
+        print(owner_1.id)
+        print(owner_2.id)
+        print(owner_3.id)
+        print(owner_4.id)
+        print(owner_5.id)
+        print(owner_6.id)
+        print(owner_7.id)
+        print(owner_8.id)
+        print(owner_9.id)
+        print(owner_10.id)
         #Adds owners with their passwords hashed. 
 
 #---------------------------------------------------------
