@@ -69,7 +69,7 @@ const displayEquipment = featuredEquipment.length > 0 ? featuredEquipment : <div
 //   console.log(owner)
 
 let userReviews = owner.review?.filter(reviewSubmission =>  reviewSubmission.reviewer_type === 'user')
-console.log(userReviews)
+console.log("userReviews:", userReviews )
 console.log("reviews:", owner.review)
 
   return (
@@ -192,7 +192,7 @@ console.log("reviews:", owner.review)
                             </div>
                             <ul class="mb-6 grid gap-5 sm:grid-cols-2 md:grid-cols-2 md:mb-16"> 
                         {userReviews?.map((item) => (
-                            <Reviews stars={item.review_stars} comment={item.review_comment}/>
+                            <Reviews stars={item.review_stars} comment={item.review_comment} image={item.user.profileImage} firstName={item.user.firstName} lastName={item.user.lastName} profession={item.user.profession}/>
                         ))}
                             </ul>
                         </div>

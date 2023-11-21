@@ -1,6 +1,6 @@
 import React from "react";
 
-function Reviews({stars, comment}){
+function Reviews({stars, comment, image, firstName, lastName, profession}){
 
   let starDisplayer = [];
 
@@ -25,10 +25,10 @@ function Reviews({stars, comment}){
         </div>
         <p className="text-[#647084] mb-4">{comment}</p>
         <div className="flex mt-auto">
-          <img src="https://assets.website-files.com/6357722e2a5f19121d37f84d/6358cb67bf1bca198e298c35_Ellipse%205-2.png" alt="" className="mr-4 h-16 w-16" />
+          <img src={image} alt="" className="mr-4 h-16 w-16 rounded-full" />
           <div className="flex flex-col justify-center">
-            <h6 className="font-bold">Laila Bahar</h6>
-            <p className="text-sm text-[#636262]">Designer</p>
+            <h6 className="font-bold">{firstName} {lastName}</h6>
+            <p className="text-sm text-[#636262]">{profession}</p>
           </div>
         </div>
       </div>
