@@ -11,9 +11,12 @@ function Reviews({stars, comment}){
     class="mr-1.5 w-4" />)
   }
 
+  {/* <div class="mb-6 grid gap-5 sm:grid-cols-2 md:grid-cols-2">
+    </div> */}
+
     return(
   
-    <div class="mb-6 grid gap-5 sm:grid-cols-2 md:grid-cols-2">
+    
       <div class="grid border border-solid border-[#dfdfdf] bg-white p-8 md:p-10">
         <div class="flex">
             {starDisplayer}
@@ -27,7 +30,8 @@ function Reviews({stars, comment}){
           </div>
         </div>
       </div>
-    </div>
+
+
 
 
     )

@@ -272,8 +272,11 @@ function App() {
 
 
   console.log("Equipment Array:", equipmentArray)
-  // I believe this is the search -----------------------
-  const filteredEquipmentArray = equipmentArray?.filter((item) => {
+  console.log("Type of equipment array:", Array.isArray(equipmentArray))
+  // So I've tested this with array is array, it comes true, but when I do typeof it seems to think its an object
+  //So I'm doing a work around
+  let actualEquipmentArray = Array.isArray(equipmentArray) ? equipmentArray : Object.values(equipmentArray)
+  const filteredEquipmentArray = actualEquipmentArray?.filter((item) => {
     return item.model?.toLowerCase().includes(searchTerm?.toLowerCase()) || item.location?.toLowerCase().includes(searchTerm?.toLowerCase()) || item.make?.toLowerCase().includes(searchTerm?.toLowerCase()) || item.name?.toLowerCase().includes(searchTerm?.toLowerCase())
   })
   //-----------------------------------------------------
