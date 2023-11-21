@@ -561,7 +561,7 @@ class RentalAgreements(Resource):
         cart = Cart.query.filter(Cart.id == cartId).first()
         
         
-        cart.items
+        cart.cart_item
         # If neither cart or equipment are found, return 404
         if not cart:
             return make_response({'error': 'Cart not found'}, 404)
@@ -929,7 +929,7 @@ class AddItemToCart(Resource):
         )
 
         # Append item to cart, after adding and comitting, calculcate total if wanting to do a group adding system can do for item in a new list made here, append, then calculate total at the end.
-        cart.items.append(new_item)
+        cart.cart_item.append(new_item)
 
         db.session.add(new_item)
         db.session.commit()

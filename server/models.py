@@ -32,6 +32,7 @@ class User(db.Model, SerializerMixin):
 
     #relationships 
     #do a cascade to make life easier
+    #may not even need agreements
     agreements = db.relationship('RentalAgreement', back_populates="user")
 
     user_inboxes = db.relationship("UserInbox", back_populates="user")
@@ -41,8 +42,17 @@ class User(db.Model, SerializerMixin):
     review = db.relationship ('Review', back_populates='user')
 
     #Serialization rules
-    serialize_rules = ('-agreements.user', '-user_inboxes.user', '-cart.user', '-review.user', '-review.cart_item','-review_owner')
+    # serialize_rules = ('-agreements.user', '-user_inboxes.user', '-cart.user', '-review.user', '-review.cart_item','-review_owner', )
+    # '-cart.items.review', '-agreements.items.review', '-agreements.owner.review','-review.user_id','-cart.items.agreement' 
+    # '-review', '-cart', '-agreements', '-user_inboxes'
 
+    # I may not need the relationship agreements to user directly, if it can be accessed inside of the cart_items, etc
+    serialize_rules = ('-review.user','-review.owner', '-review.cart_item','-cart.cart_item.equipment.featured_equipment','-cart.cart_item.equipment.equipment_price', '-cart.cart_item.equipment.owner','-cart.user' ,'-agreements', '-user_inboxes.user')
+
+    #'-review'
+    #'-review.cart_item.cart','-review.cart_item.agreements', '-review.cart_item.equipment'
+
+    #'-cart.items.agreements' I think I want the agreements for the items
 
     #PROPERTIES
     @hybrid_property
@@ -115,7 +125,7 @@ class EquipmentOwner(db.Model, SerializerMixin):
     review = db.relationship ('Review', back_populates='owner')
 
     #Serialization rules
-    serialize_rules = ('-equipment.owner', '-agreements.owner', '-owner_inboxes.owner','-owner_inboxes.user', '-review.owner', '-review.cart_item', '-review.user' )
+    serialize_rules = ('-equipment.owner', '-agreements.owner', '-owner_inboxes.owner','-owner_inboxes.user', '-review.owner', '-review.cart_item', '-review.user', '-equipment.cart_item.cart.cart_item'  )
 
     #PROPERTIES
     @hybrid_property
@@ -274,9 +284,6 @@ class RentalAgreement(db.Model, SerializerMixin):
     # rental_length = db.Column()
 
 
-    # legal_doc = db.Column(db.String) # need a way to upload documentation 
-    #need a way to grab the equipment
-
 #----------------------------------------------------------------
 
     #relationships
@@ -320,7 +327,8 @@ class RentalAgreement(db.Model, SerializerMixin):
     
     
     #Serialization rules
-    serialize_rules = ('-user.agreements', '-owner.equipment', '-owner.agreements', '-items.agreements')
+    # serialize_rules = ('-user.agreements', '-owner.equipment', '-owner.agreements', '-items.agreements', '-owner.review', '-user.review','-user.cart')
+    serialize_rules = ('-user.agreements', '-owner.equipment', '-owner.agreements', '-items.agreements', '-owner.review', '-user.review','-user.cart')
     # '-equipment.owner', '-equipment.agreements',
 
     def __repr__(self):
@@ -339,14 +347,14 @@ class Cart(db.Model, SerializerMixin):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     
     #We'll try this cascade delete first : https://docs.sqlalchemy.org/en/20/orm/cascades.html#cascade-delete-orphan
-    items = db.relationship('CartItem', back_populates='cart', cascade="all, delete")
+    cart_item = db.relationship('CartItem', back_populates='cart', cascade="all, delete")
     user = db.relationship ('User', back_populates='cart')
 
-    serialize_rules = ('-items.cart','-items.cart_id','-items.equipment.agreements','-items.equipment.owner.owner_inboxes','-user.cart','-user.user_inboxes','-user.agreements', '-user.review','-items.review')
+    serialize_rules = ('-cart_item.cart','-cart_item.cart_id','-cart_item.equipment.agreements','-cart_item.equipment.owner.owner_inboxes','-user.cart','-user.user_inboxes','-user.agreements', '-user.review','-cart_item.review')
 
     def calculate_total(self):
         #Calculate the total price of all items in the cart
-        self.total = sum(item.total_cost for item in self.items)
+        self.total = sum(cart_item.total_cost for cart_item in self.cart_item)
         db.session.add(self)  # Assuming you want to make the changes in the current session
         db.session.commit()   # Save the changes to the database
         return self.total
@@ -377,7 +385,7 @@ class CartItem(db.Model, SerializerMixin):
     cart_id = db.Column(db.Integer, db.ForeignKey('carts.id'))
     equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
 
-    cart = db.relationship('Cart', back_populates='items')
+    cart = db.relationship('Cart', back_populates='cart_item')
     equipment = db.relationship('Equipment', back_populates='cart_item')
     agreements = db.relationship('RentalAgreement', back_populates="items")
     review = db.relationship('Review', back_populates="cart_item")
@@ -438,7 +446,7 @@ class Review(db.Model, SerializerMixin):
     owner = db.relationship("EquipmentOwner", back_populates="review")
 
     #Serialize Rules
-    serialize_rules = ('-cart_item.review', '-user.review', '-owner.review')
+    serialize_rules = ('-cart_item.review', '-user.review', '-owner.review',)
 
 #-------------------------Message System---------------
 
