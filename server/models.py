@@ -94,7 +94,6 @@ class User(db.Model, SerializerMixin):
             raise ValueError("Sorry, but you must be 18 years or older to sign up.")
     
 
-
 class EquipmentOwner(db.Model, SerializerMixin):
     __tablename__ = "owners"
 
@@ -356,7 +355,7 @@ class Cart(db.Model, SerializerMixin):
     user = db.relationship ('User', back_populates='cart')
 
     serialize_rules = ('-cart_item.cart','-cart_item.cart_id','-cart_item.equipment.agreements','-cart_item.equipment.owner','-user.cart','-user.user_inboxes','-user.agreements', '-user.review','-cart_item.review')
-    
+
     # '-cart_item.equipment.owner.owner_inboxes',
     # Removed the whole owner, no need
 
@@ -395,10 +394,14 @@ class CartItem(db.Model, SerializerMixin):
 
     cart = db.relationship('Cart', back_populates='cart_item')
     equipment = db.relationship('Equipment', back_populates='cart_item')
-    agreements = db.relationship('RentalAgreement', back_populates="items")
+    agreements = db.relationship('RentalAgreement',back_populates="items")
     review = db.relationship('Review', back_populates="cart_item")
 
-    serialize_rules = ('-cart.items','-cart.user','-equipment.agreements','-equipment.cart_item','-equipment.owner.owner_inboxes', '-agreements.items', '-agreements.user', '-agreements.owner', '-review.cart_item')
+    # serialize_rules = ('-cart.items','-cart.user','-equipment.agreements','-equipment.cart_item','-equipment.owner.owner_inboxes', '-agreements.items', '-agreements.user', '-agreements.owner', '-review.cart_item')
+
+    serialize_rules = ('-cart.cart_item', '-equipment.cart_item', '-agreements,','-agreements.owner','-agreements.user','-review.cart_item','-review.user', '-review.owner' ,'-equipment.owner')
+
+    #not sure if user or owner required here really, they both are referenced in cart (USER) and equipment (OWNER)
 
     # _total = db.Column('total', db.Integer)
     #Need validations to test for positive integers,
@@ -454,7 +457,9 @@ class Review(db.Model, SerializerMixin):
     owner = db.relationship("EquipmentOwner", back_populates="review")
 
     #Serialize Rules
-    serialize_rules = ('-cart_item.review', '-user.review', '-owner.review',)
+    serialize_rules = ('-cart_item.review', '-user.review', '-owner.review')
+
+    # I may not need routes for this either, It's accesible with user.review or owner.review
 
 #-------------------------Message System---------------
 
@@ -497,7 +502,7 @@ class Thread(db.Model, SerializerMixin):
     user_inboxes = db.relationship("UserInbox", back_populates="thread")
     owner_inboxes = db.relationship("OwnerInbox", back_populates="thread")
 
-    serialize_rules = ('-user_inboxes.thread', '-owner_inboxes.thread', '-messages.thread')
+    serialize_rules = ('-user_inboxes.thread', '-owner_inboxes.thread','-user_inboxes.user', '-owner_inboxes.owner','-messages.thread')
 
 class UserInbox(db.Model, SerializerMixin):
     __tablename__ = "user_inboxes"
