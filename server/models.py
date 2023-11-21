@@ -198,7 +198,7 @@ class Equipment(db.Model, SerializerMixin):
     featured_equipment = db.relationship('FeaturedEquipment', back_populates='equipment')
 
     #Serialization rules
-    serialize_rules = ('-owner.equipment',  '-owner.agreements', '-images.equipment', '-cart_item.equipment','-equipment_price.equipment', '-featured_equipment.equipment','-cart_item.review','-cart_item.agreements' )
+    serialize_rules = ('-owner.equipment','-owner.owner_inboxes','-owner.agreements', '-images.equipment', '-cart_item.equipment','-equipment_price.equipment', '-featured_equipment.equipment','-cart_item.review','-cart_item.agreements', '-cart_item.cart')
     
     # '-agreements.equipment', # REMOVED DUE TO AGREEMENTS BEING TO CART ITEMS
     

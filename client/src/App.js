@@ -220,13 +220,13 @@ function App() {
   //------------------------------RENTAL AGREEMENTS----------------------------------------------
   //POST RENTAL AGREEMENTS
 
-  useEffect(() => {
-    fetch(`${apiUrl}rental_agreements`)
-      .then((resp) => resp.json())
-      .then((data) => {
-        setRentalAgreement(data)
-      })
-  }, [])
+  // useEffect(() => {
+  //   fetch(`${apiUrl}rental_agreements`)
+  //     .then((resp) => resp.json())
+  //     .then((data) => {
+  //       setRentalAgreement(data)
+  //     })
+  // }, [])
 
   const addRentalAgreement = (rentalAgreement) => {
     setRentalAgreement(rentalAgreements => [...rentalAgreements, rentalAgreement])

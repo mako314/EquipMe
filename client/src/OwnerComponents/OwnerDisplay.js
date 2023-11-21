@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import EquipmentMap from '../MapComponents/EquipmentMap'
 import ContactModal from '../MessagingComponents/ContactModal'
 import ProductCard from '../EquipmentComponents/ProductCard'
+import Reviews from '../CheckoutComponents/Reviews'
 import { UserSessionContext } from '../UserComponents/SessionContext'
 import ApiUrlContext from '../Api'
 
@@ -179,8 +180,7 @@ console.log("the role:", role)
                             <div className="flex justify-between">
                                 <span className="text-gray-600 font-bold">Reviews</span>
                             </div>
-                            <p className="mt-2">Reviews
-                            </p>
+                            {/* <Reviews/> */}
                         </div>
                         
                     </div>
