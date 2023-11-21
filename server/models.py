@@ -17,33 +17,42 @@ class User(db.Model, SerializerMixin):
     firstName = db.Column(db.String)
     lastName = db.Column(db.String)
     age = db.Column(db.Integer)
-    email = db.Column(db.String)
-    _password_hash = db.Column(db.String, nullable=False)
-    phone = db.Column(db.String)
-
-    age = db.Column(db.Integer)
     location = db.Column(db.String)
     profession = db.Column(db.String)
-    
+    bio = db.Column(db.String)
+    phone = db.Column(db.String)
+    email = db.Column(db.String)
     profileImage = db.Column(db.String)
+    _password_hash = db.Column(db.String, nullable=False)
+    
     # bannerImg = db.Column(db.String)
     # I don't think I'll be requiring / asking for banner images IMO
-
-    #Bio ? Don't think needed tbh.
 
     #Would I need a document attribute here? To hold a users document such as insurance and such
 
     #relationships 
     #do a cascade to make life easier
+    #may not even need agreements
     agreements = db.relationship('RentalAgreement', back_populates="user")
 
     user_inboxes = db.relationship("UserInbox", back_populates="user")
 
     cart = db.relationship('Cart', back_populates='user')
 
-    #Serialization rules
-    serialize_rules = ('-agreements.user', '-user_inboxes.user', '-cart.user')
+    review = db.relationship ('Review', back_populates='user')
 
+    #Serialization rules
+    # serialize_rules = ('-agreements.user', '-user_inboxes.user', '-cart.user', '-review.user', '-review.cart_item','-review_owner', )
+    # '-cart.items.review', '-agreements.items.review', '-agreements.owner.review','-review.user_id','-cart.items.agreement' 
+    # '-review', '-cart', '-agreements', '-user_inboxes'
+
+    # I may not need the relationship agreements to user directly, if it can be accessed inside of the cart_items, etc
+    serialize_rules = ('-review.user','-review.owner', '-review.cart_item','-cart.cart_item.equipment.featured_equipment','-cart.cart_item.equipment.equipment_price', '-cart.cart_item.equipment.owner','-cart.user' ,'-agreements', '-user_inboxes.user')
+
+    #'-review'
+    #'-review.cart_item.cart','-review.cart_item.agreements', '-review.cart_item.equipment'
+
+    #'-cart.items.agreements' I think I want the agreements for the items
 
     #PROPERTIES
     @hybrid_property
@@ -85,7 +94,6 @@ class User(db.Model, SerializerMixin):
             raise ValueError("Sorry, but you must be 18 years or older to sign up.")
     
 
-
 class EquipmentOwner(db.Model, SerializerMixin):
     __tablename__ = "owners"
 
@@ -95,6 +103,7 @@ class EquipmentOwner(db.Model, SerializerMixin):
     age = db.Column(db.Integer)
     location = db.Column(db.String)
     profession = db.Column(db.String)
+    bio = db.Column(db.String)
     phone = db.Column(db.String)
     email = db.Column(db.String)
     _password_hash = db.Column(db.String, nullable=False)
@@ -112,8 +121,10 @@ class EquipmentOwner(db.Model, SerializerMixin):
     owner_inboxes = db.relationship('OwnerInbox', back_populates='owner')
     #you can just do a query EquipmentOwner.query.get(1), or equipment = owner.equipment. Then you can do for equipment in owner.equipment print(equipment) for example
 
+    review = db.relationship ('Review', back_populates='owner')
+
     #Serialization rules
-    serialize_rules = ('-equipment.owner', '-agreements.owner', '-owner_inboxes.owner','-owner_inboxes.user' )
+    serialize_rules = ('-equipment.owner', '-agreements.owner', '-owner_inboxes.owner','-owner_inboxes.user', '-review.owner', '-review.cart_item', '-review.user', '-equipment.cart_item.cart.cart_item'  )
 
     #PROPERTIES
     @hybrid_property
@@ -183,8 +194,10 @@ class Equipment(db.Model, SerializerMixin):
 
     images = db.relationship('EquipmentImage', back_populates='equipment')
 
+    featured_equipment = db.relationship('FeaturedEquipment', back_populates='equipment')
+
     #Serialization rules
-    serialize_rules = ('-owner.equipment',  '-owner.agreements', '-images.equipment', '-cart_item.equipment','-equipment_price.equipment' )
+    serialize_rules = ('-owner.equipment','-owner.owner_inboxes','-owner.agreements', '-images.equipment', '-cart_item.equipment','-equipment_price.equipment', '-featured_equipment.equipment','-cart_item.review','-cart_item.agreements', '-cart_item.cart')
     
     # '-agreements.equipment', # REMOVED DUE TO AGREEMENTS BEING TO CART ITEMS
     
@@ -218,6 +231,8 @@ class EquipmentPrice(db.Model, SerializerMixin):
 
     serialize_rules = ('-equipment.equipment_price',)
 
+    #This and FeaturedEquipment don't necessarily have routes yet, so we'll wait to do more serialize rules
+
 class EquipmentImage(db.Model, SerializerMixin):
     __tablename__= "equipment_images"
 
@@ -232,6 +247,16 @@ class EquipmentImage(db.Model, SerializerMixin):
     #Serialization rules
     serialize_rules = ('-equipment.images', )
 
+class FeaturedEquipment(db.Model, SerializerMixin):
+    __tablename__="featured_equipments"
+    id = db.Column(db.Integer, primary_key = True)
+    equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
+    equipment = db.relationship('Equipment', back_populates='featured_equipment')
+
+    #Serialization rules
+    serialize_rules = ('-equipment.featured_equipment', )
+
+    #This and EquipmentPrice don't necessarily have routes yet, so we'll wait to do more serialize rules
 
 class RentalAgreement(db.Model, SerializerMixin):
     __tablename__ = "agreements"
@@ -261,13 +286,7 @@ class RentalAgreement(db.Model, SerializerMixin):
     # Ex. in progress, user-accepted, owner-accepted, both-accepted
 
     # rental_length = db.Column()
-
-
-    # legal_doc = db.Column(db.String) # need a way to upload documentation 
-    #need a way to grab the equipment
-
 #----------------------------------------------------------------
-
     #relationships
     #do a cascade to make life easier 
     # this is how everything gets linked up
@@ -277,8 +296,6 @@ class RentalAgreement(db.Model, SerializerMixin):
     owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     cart_item_id = db.Column(db.Integer, db.ForeignKey('cart_items.id'))
-    
-
 #----------------------------------------------------------------
     
     # Include a created at date, updated at.
@@ -293,7 +310,6 @@ class RentalAgreement(db.Model, SerializerMixin):
     onupdate=datetime.utcnow
     )
 #----------------------------------------------------------------
-
     #this hopefully connects it
     user = db.relationship(
         "User", back_populates="agreements"
@@ -304,16 +320,15 @@ class RentalAgreement(db.Model, SerializerMixin):
     owner = db.relationship(
         "EquipmentOwner", back_populates="agreements"
     )
-    items = db.relationship(
+    cart_item = db.relationship(
         'CartItem', back_populates='agreements', cascade="all, delete")
     
-    
     #Serialization rules
-    serialize_rules = ('-user.agreements', '-owner.equipment', '-owner.agreements', '-items.agreements')
-    # '-equipment.owner', '-equipment.agreements',
+    serialize_rules = ('-owner', '-user', '-cart_item.agreements', '-cart_item.cart.user')
 
-    def __repr__(self):
-        return f"<Rental Agreement: Equipment in {self.location}, Total Price: {self.total_price}, Rental Dates: {self.rental_dates}>"
+    # def __repr__(self):
+
+    #     return f"<Rental Agreement: Equipment in {self.location}, Total Price: {self.total_price}, Rental Dates: {self.rental_dates}>"
     
 #-------------------------Cart System---------------
 class Cart(db.Model, SerializerMixin):
@@ -328,14 +343,17 @@ class Cart(db.Model, SerializerMixin):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     
     #We'll try this cascade delete first : https://docs.sqlalchemy.org/en/20/orm/cascades.html#cascade-delete-orphan
-    items = db.relationship('CartItem', back_populates='cart', cascade="all, delete")
+    cart_item = db.relationship('CartItem', back_populates='cart', cascade="all, delete")
     user = db.relationship ('User', back_populates='cart')
 
-    serialize_rules = ('-items.cart','-items.cart_id','-items.equipment.agreements','-items.equipment.owner.owner_inboxes','-user.cart','-user.user_inboxes','-user.agreements')
+    serialize_rules = ('-cart_item.cart','-cart_item.cart_id','-cart_item.equipment.agreements','-cart_item.equipment.owner','-user.cart','-user.user_inboxes','-user.agreements', '-user.review','-cart_item.review')
+
+    # '-cart_item.equipment.owner.owner_inboxes',
+    # Removed the whole owner, no need
 
     def calculate_total(self):
         #Calculate the total price of all items in the cart
-        self.total = sum(item.total_cost for item in self.items)
+        self.total = sum(cart_item.total_cost for cart_item in self.cart_item)
         db.session.add(self)  # Assuming you want to make the changes in the current session
         db.session.commit()   # Save the changes to the database
         return self.total
@@ -366,11 +384,16 @@ class CartItem(db.Model, SerializerMixin):
     cart_id = db.Column(db.Integer, db.ForeignKey('carts.id'))
     equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
 
-    cart = db.relationship('Cart', back_populates='items')
+    cart = db.relationship('Cart', back_populates='cart_item')
     equipment = db.relationship('Equipment', back_populates='cart_item')
-    agreements = db.relationship('RentalAgreement', back_populates="items")
+    agreements = db.relationship('RentalAgreement',back_populates="cart_item")
+    review = db.relationship('Review', back_populates="cart_item")
 
-    serialize_rules = ('-cart.items','-cart.user','-equipment.agreements','-equipment.cart_item','-equipment.owner.owner_inboxes', '-agreements.items', '-agreements.user', '-agreements.owner')
+    # serialize_rules = ('-cart.items','-cart.user','-equipment.agreements','-equipment.cart_item','-equipment.owner.owner_inboxes', '-agreements.items', '-agreements.user', '-agreements.owner', '-review.cart_item')
+
+    serialize_rules = ('-cart.cart_item', '-equipment.cart_item', '-agreements,','-agreements.owner','-agreements.user','-review.cart_item','-review.user', '-review.owner' ,'-equipment.owner')
+
+    #not sure if user or owner required here really, they both are referenced in cart (USER) and equipment (OWNER)
 
     # _total = db.Column('total', db.Integer)
     #Need validations to test for positive integers,
@@ -397,6 +420,38 @@ class CartItem(db.Model, SerializerMixin):
         
 
     # Need to consider taxes, negative values, need validations here ASAP
+
+class Review(db.Model, SerializerMixin):
+    __tablename__ = "reviews"
+    id = db.Column(db.Integer, primary_key=True)
+
+    review_stars = db.Column(db.Integer)
+    review_comment = db.Column(db.String)
+    reviewer_type = db.Column(db.String) # Owner Or User 
+
+    created_at = db.Column(
+    db.DateTime, nullable=True,
+    default=datetime.utcnow,
+    )
+
+    updated_at = db.Column(
+    db.DateTime, nullable=True,
+    default=datetime.utcnow,
+    onupdate=datetime.utcnow
+    )
+
+    cart_item_id = db.Column(db.Integer, db.ForeignKey('cart_items.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'))
+
+    cart_item = db.relationship('CartItem', back_populates='review')
+    user = db.relationship ('User', back_populates='review')
+    owner = db.relationship("EquipmentOwner", back_populates="review")
+
+    #Serialize Rules
+    serialize_rules = ('-cart_item.review', '-user.review', '-owner.review')
+
+    # I may not need routes for this either, It's accesible with user.review or owner.review
 
 #-------------------------Message System---------------
 
@@ -439,7 +494,7 @@ class Thread(db.Model, SerializerMixin):
     user_inboxes = db.relationship("UserInbox", back_populates="thread")
     owner_inboxes = db.relationship("OwnerInbox", back_populates="thread")
 
-    serialize_rules = ('-user_inboxes.thread', '-owner_inboxes.thread', '-messages.thread')
+    serialize_rules = ('-user_inboxes.thread', '-owner_inboxes.thread','-user_inboxes.user', '-owner_inboxes.owner','-messages.thread')
 
 class UserInbox(db.Model, SerializerMixin):
     __tablename__ = "user_inboxes"

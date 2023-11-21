@@ -61,8 +61,8 @@ function Cart(){
 
   //Map over equipment price, and take the rates as options
   let rateOptions
-  if(Array.isArray(cartData[currentCart].items)){
-    cartData[currentCart].items?.forEach((item) => {
+  if(Array.isArray(cartData[currentCart].cart_item)){
+    cartData[currentCart].cart_item?.forEach((item) => {
       if (Array.isArray(item.equipment.equipment_price)) {
         item.equipment.equipment_price?.map((price) => {
           return(
@@ -120,10 +120,10 @@ function Cart(){
 
       {/* <CreateNewCart addCart={addCart}/> */}
 
-      { cartData[currentCart].items?.length === 0 ?
+      { cartData[currentCart].cart_item?.length === 0 ?
         <p> Cart is empty or loading...</p> 
         : 
-        cartData[currentCart]?.items.map((item) => (
+        cartData[currentCart]?.cart_item.map((item) => (
           // console.log("THE ITEM:", item),
           <CartItem 
           key={ `${item.equipment_id}_${item.created_at}`}

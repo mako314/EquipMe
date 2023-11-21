@@ -3,6 +3,8 @@ import { useContext, useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import EquipmentMap from '../MapComponents/EquipmentMap'
 import ContactModal from '../MessagingComponents/ContactModal'
+import ProductCard from '../EquipmentComponents/ProductCard'
+import Reviews from '../CheckoutComponents/Reviews'
 import { UserSessionContext } from '../UserComponents/SessionContext'
 import ApiUrlContext from '../Api'
 
@@ -10,9 +12,11 @@ function OwnerDisplay() {
     
   
   const [owner, setOwner] = useState([])
-  const { currentUser, role } = UserSessionContext() 
-  const { firstName, lastName, location, email, phone, equipment, profession, profileImage, website } = owner
+  const { currentUser, role } = UserSessionContext()
+  const [currentIndex, setCurrentIndex] = useState(0) // Tempted to make a scroller
+  const { firstName, lastName, location, bio, email, phone, equipment, profession, profileImage, website } = owner
 
+  console.log("THE OWNER:", owner)
   const { id } = useParams()
   // const navigate = useNavigate()
   const apiUrl = useContext(ApiUrlContext)
@@ -25,15 +29,46 @@ function OwnerDisplay() {
       })
   }, [])
 
+ 
+
   const equipmentNames = equipment?.map((equipment) => {
     return equipment.name + " " + equipment.make + " " + equipment.model
   })
 
   // console.log(equipmentNames)
+  const equipmentCards = owner.equipment?.map((item) => {
+    return(  <div key={item.id} className="flex-none flex-grow flex-shrink-0 basis-1/3 space-x-4"> 
+    <ProductCard key={item.id} id={item.id} name={item.name} model={item.model} make={item.make} location={item.location} item={item}  equipment_image={item.equipment_image}/>
+    </div>)
+  
+    
+})
+
+const [visibleCards, setVisibleCards] = useState(equipmentCards?.slice(0, 2)) // Tempted to make a scroller
+
+const featuredEquipment = owner.equipment?.filter(item => item.featured_equipment?.length > 0)
+.map((item) => (
+    <div key={item.id} className="flex-none flex-grow flex-shrink-0 basis-1/3 space-x-4">
+        <ProductCard 
+            key={item.id}
+            id={item.id}
+            name={item.name}
+            model={item.model}
+            make={item.make}
+            location={item.location}
+            item={item}
+            equipment_image={item.equipment_image}
+        />
+    </div>
+)) || []
+
+// Check if there are any featured equipment items, if not show a message
+const displayEquipment = featuredEquipment.length > 0 ? featuredEquipment : <div>No items currently featured</div>
+// handleEquipmentDelete={handleEquipmentDelete} handleEditEquipment={handleEditEquipment}
 
 //   console.log(owner)
 
-console.log("the role:", role)
+console.log("reviews:", owner.review)
 
   return (
 
@@ -66,7 +101,7 @@ console.log("the role:", role)
                             </ul> */}
                             {/* although it says equipmentMap, this map is really universal, so name may be prone to CHANGE */}
 
-                            {/* <EquipmentMap location={location}/>  */}
+                            <EquipmentMap location={location} ownerDisplayHeight={200} ownerDisplayWidth={250} ownerDisplayZoom={8}/> 
 
                         </div>
                     </div>
@@ -76,7 +111,7 @@ console.log("the role:", role)
                 <div className="col-span-4 sm:col-span-9">
                     <div className="bg-white shadow rounded-lg p-6">
                         <h2 className="text-xl font-bold mb-4">About Me</h2>
-                        <p className="text-gray-700"> Short biography about the company?
+                        <p className="text-gray-700"> {bio}
                         </p>
 
                         <h3 className="font-semibold text-center mt-3 -mb-2">
@@ -124,40 +159,40 @@ console.log("the role:", role)
                         </div>
 
                         {/* can possibly include the individuals featured equipment here, replacing the resume styled format */}
-                        <h2 className="text-xl font-bold mt-6 mb-4">Experience</h2>
+                        <h2 className="text-xl font-bold mt-6 mb-4"> More </h2>
                         <div className="mb-6">
                             <div className="flex justify-between">
-                                <span className="text-gray-600 font-bold">Web Developer</span>
-                                <p>
-                                    <span className="text-gray-600 mr-2">at ABC Company</span>
-                                    <span className="text-gray-600">2017 - 2019</span>
-                                </p>
+                                <span className="text-gray-600 font-bold"> All Equipment </span>
                             </div>
-                            <p className="mt-2">some of their featured listings here maybe?
-                            </p>
+                            <div className="flex overflow-x-auto space-x-4 py-4"> 
+                            {equipmentCards}
+                            </div>
                         </div>
+
                         <div className="mb-6">
                             <div className="flex justify-between">
-                                <span className="text-gray-600 font-bold">Web Developer</span>
-                                <p>
-                                    <span className="text-gray-600 mr-2">at ABC Company</span>
-                                    <span className="text-gray-600">2017 - 2019</span>
-                                </p>
+                                <span className="text-gray-600 font-bold"> Featured Equipment </span>
                             </div>
-                            <p className="mt-2">some of their featured listings here maybe?
-                            </p>
+                            <div className="flex overflow-x-auto space-x-4 py-4"> 
+                            {displayEquipment}
+                            </div>
                         </div>
+
                         <div className="mb-6">
-                            <div className="flex justify-between">
-                                <span className="text-gray-600 font-bold">Web Developer</span>
-                                <p>
-                                    <span className="text-gray-600 mr-2">at ABC Company</span>
-                                    <span className="text-gray-600">2017 - 2019</span>
-                                </p>
-                            </div>
-                            <p className="mt-2">some of their featured listings here maybe?
-                            </p>
+                            
+                          
+                            
                         </div>
+
+                        <div class="mx-auto w-full max-w-7xl px-5 py-16 md:px-10 md:py-24 lg:py-32">
+                        <div className="flex justify-between">
+                                <span className="text-gray-600 font-bold">Reviews</span>
+                            </div>
+                        {owner.review?.map((item) => (
+                            <Reviews stars={item.review_stars} comment={item.review_comment}/>
+                        ))}
+                        </div>
+                        
                     </div>
                 </div>
 
