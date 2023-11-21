@@ -124,7 +124,7 @@ class EquipmentOwner(db.Model, SerializerMixin):
     review = db.relationship ('Review', back_populates='owner')
 
     #Serialization rules
-    serialize_rules = ('-equipment.owner', '-agreements.owner', '-owner_inboxes.owner','-owner_inboxes.user', '-review.owner', '-review.cart_item', '-review.user', '-equipment.cart_item.cart.cart_item'  )
+    serialize_rules = ('-equipment.owner', '-agreements.owner', '-owner_inboxes.owner','-owner_inboxes.user', '-review.user.cart', '-review.user.user_inboxes','-review.owner.owner_inboxes', '-review.owner.equipment','-review.owner.agreements','-review.cart_item', '-equipment.cart_item.cart.cart_item'  )
 
     #PROPERTIES
     @hybrid_property
