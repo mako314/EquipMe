@@ -232,6 +232,8 @@ class EquipmentPrice(db.Model, SerializerMixin):
 
     serialize_rules = ('-equipment.equipment_price',)
 
+    #This and FeaturedEquipment don't necessarily have routes yet, so we'll wait to do more serialize rules
+
 class EquipmentImage(db.Model, SerializerMixin):
     __tablename__= "equipment_images"
 
@@ -251,8 +253,11 @@ class FeaturedEquipment(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key = True)
     equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
     equipment = db.relationship('Equipment', back_populates='featured_equipment')
+
     #Serialization rules
     serialize_rules = ('-equipment.featured_equipment', )
+
+    #This and EquipmentPrice don't necessarily have routes yet, so we'll wait to do more serialize rules
 
 class RentalAgreement(db.Model, SerializerMixin):
     __tablename__ = "agreements"
@@ -350,7 +355,10 @@ class Cart(db.Model, SerializerMixin):
     cart_item = db.relationship('CartItem', back_populates='cart', cascade="all, delete")
     user = db.relationship ('User', back_populates='cart')
 
-    serialize_rules = ('-cart_item.cart','-cart_item.cart_id','-cart_item.equipment.agreements','-cart_item.equipment.owner.owner_inboxes','-user.cart','-user.user_inboxes','-user.agreements', '-user.review','-cart_item.review')
+    serialize_rules = ('-cart_item.cart','-cart_item.cart_id','-cart_item.equipment.agreements','-cart_item.equipment.owner','-user.cart','-user.user_inboxes','-user.agreements', '-user.review','-cart_item.review')
+    
+    # '-cart_item.equipment.owner.owner_inboxes',
+    # Removed the whole owner, no need
 
     def calculate_total(self):
         #Calculate the total price of all items in the cart
