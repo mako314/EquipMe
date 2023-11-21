@@ -286,10 +286,7 @@ class RentalAgreement(db.Model, SerializerMixin):
     # Ex. in progress, user-accepted, owner-accepted, both-accepted
 
     # rental_length = db.Column()
-
-
 #----------------------------------------------------------------
-
     #relationships
     #do a cascade to make life easier 
     # this is how everything gets linked up
@@ -299,8 +296,6 @@ class RentalAgreement(db.Model, SerializerMixin):
     owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     cart_item_id = db.Column(db.Integer, db.ForeignKey('cart_items.id'))
-    
-
 #----------------------------------------------------------------
     
     # Include a created at date, updated at.
@@ -315,7 +310,6 @@ class RentalAgreement(db.Model, SerializerMixin):
     onupdate=datetime.utcnow
     )
 #----------------------------------------------------------------
-
     #this hopefully connects it
     user = db.relationship(
         "User", back_populates="agreements"
@@ -326,17 +320,15 @@ class RentalAgreement(db.Model, SerializerMixin):
     owner = db.relationship(
         "EquipmentOwner", back_populates="agreements"
     )
-    items = db.relationship(
+    cart_item = db.relationship(
         'CartItem', back_populates='agreements', cascade="all, delete")
     
-    
     #Serialization rules
-    # serialize_rules = ('-user.agreements', '-owner.equipment', '-owner.agreements', '-items.agreements', '-owner.review', '-user.review','-user.cart')
-    serialize_rules = ('-user.agreements', '-owner.equipment', '-owner.agreements', '-items.agreements', '-owner.review', '-user.review','-user.cart')
-    # '-equipment.owner', '-equipment.agreements',
+    serialize_rules = ('-owner', '-user', '-cart_item.agreements', '-cart_item.cart.user')
 
-    def __repr__(self):
-        return f"<Rental Agreement: Equipment in {self.location}, Total Price: {self.total_price}, Rental Dates: {self.rental_dates}>"
+    # def __repr__(self):
+
+    #     return f"<Rental Agreement: Equipment in {self.location}, Total Price: {self.total_price}, Rental Dates: {self.rental_dates}>"
     
 #-------------------------Cart System---------------
 class Cart(db.Model, SerializerMixin):
@@ -394,7 +386,7 @@ class CartItem(db.Model, SerializerMixin):
 
     cart = db.relationship('Cart', back_populates='cart_item')
     equipment = db.relationship('Equipment', back_populates='cart_item')
-    agreements = db.relationship('RentalAgreement',back_populates="items")
+    agreements = db.relationship('RentalAgreement',back_populates="cart_item")
     review = db.relationship('Review', back_populates="cart_item")
 
     # serialize_rules = ('-cart.items','-cart.user','-equipment.agreements','-equipment.cart_item','-equipment.owner.owner_inboxes', '-agreements.items', '-agreements.user', '-agreements.owner', '-review.cart_item')
