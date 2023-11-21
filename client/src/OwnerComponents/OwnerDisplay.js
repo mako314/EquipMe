@@ -13,7 +13,7 @@ function OwnerDisplay() {
   
   const [owner, setOwner] = useState([])
   const { currentUser, role } = UserSessionContext()
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0) // Tempted to make a scroller
   const { firstName, lastName, location, bio, email, phone, equipment, profession, profileImage, website } = owner
 
   console.log("THE OWNER:", owner)
@@ -29,6 +29,8 @@ function OwnerDisplay() {
       })
   }, [])
 
+ 
+
   const equipmentNames = equipment?.map((equipment) => {
     return equipment.name + " " + equipment.make + " " + equipment.model
   })
@@ -42,7 +44,7 @@ function OwnerDisplay() {
     
 })
 
-const [visibleCards, setVisibleCards] = useState(equipmentCards?.slice(0, 2));
+const [visibleCards, setVisibleCards] = useState(equipmentCards?.slice(0, 2)) // Tempted to make a scroller
 
 const featuredEquipment = owner.equipment?.filter(item => item.featured_equipment?.length > 0)
 .map((item) => (
@@ -66,7 +68,7 @@ const displayEquipment = featuredEquipment.length > 0 ? featuredEquipment : <div
 
 //   console.log(owner)
 
-console.log("the role:", role)
+console.log("reviews:", owner.review)
 
   return (
 
@@ -177,10 +179,18 @@ console.log("the role:", role)
                         </div>
 
                         <div className="mb-6">
-                            <div className="flex justify-between">
+                            
+                          
+                            
+                        </div>
+
+                        <div class="mx-auto w-full max-w-7xl px-5 py-16 md:px-10 md:py-24 lg:py-32">
+                        <div className="flex justify-between">
                                 <span className="text-gray-600 font-bold">Reviews</span>
                             </div>
-                            {/* <Reviews/> */}
+                        {owner.review?.map((item) => (
+                            <Reviews stars={item.review_stars} comment={item.review_comment}/>
+                        ))}
                         </div>
                         
                     </div>
