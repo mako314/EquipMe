@@ -185,10 +185,10 @@ console.log("reviews:", owner.review)
                           
                             
                         </div>
-
-                        <div class="mx-auto w-full max-w-7xl px-5 py-16 md:px-10 md:py-24 lg:py-32">
+                        {/* px-5 md:px-10  */}
+                        <div class="mx-auto w-full max-w-7xl py-16 md:py-24 lg:py-32">
                         <div className="flex justify-between">
-                                <span className="text-gray-600 font-bold">Reviews</span>
+                                <span className="text-gray-600 font-bold mb-4">Reviews</span>
                             </div>
                             <ul class="mb-6 grid gap-5 sm:grid-cols-2 md:grid-cols-2 md:mb-16"> 
                         {userReviews?.map((item) => (

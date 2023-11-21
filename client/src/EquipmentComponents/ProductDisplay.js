@@ -65,7 +65,8 @@ function EquipmentDisplay({}) {
     }
   }, [role, currentUser])
 
-  
+  //may need to include owner here (in models)
+  console.log(oneEquipment)
 
   // Need to make some onclicks for when a user clicks description, reviews, details etc. 
 
