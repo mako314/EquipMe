@@ -68,6 +68,8 @@ const displayEquipment = featuredEquipment.length > 0 ? featuredEquipment : <div
 
 //   console.log(owner)
 
+let userReviews = owner.review?.filter(reviewSubmission =>  reviewSubmission.reviewer_type === 'user')
+console.log("userReviews:", userReviews )
 console.log("reviews:", owner.review)
 
   return (
@@ -183,14 +185,16 @@ console.log("reviews:", owner.review)
                           
                             
                         </div>
-
-                        <div class="mx-auto w-full max-w-7xl px-5 py-16 md:px-10 md:py-24 lg:py-32">
+                        {/* px-5 md:px-10  */}
+                        <div class="mx-auto w-full max-w-7xl py-16 md:py-24 lg:py-32">
                         <div className="flex justify-between">
-                                <span className="text-gray-600 font-bold">Reviews</span>
+                                <span className="text-gray-600 font-bold mb-4">Reviews</span>
                             </div>
-                        {owner.review?.map((item) => (
-                            <Reviews stars={item.review_stars} comment={item.review_comment}/>
+                            <ul class="mb-6 grid gap-5 sm:grid-cols-2 md:grid-cols-2 md:mb-16"> 
+                        {userReviews?.map((item) => (
+                            <Reviews stars={item.review_stars} comment={item.review_comment} image={item.user.profileImage} firstName={item.user.firstName} lastName={item.user.lastName} profession={item.user.profession}/>
                         ))}
+                            </ul>
                         </div>
                         
                     </div>

@@ -165,6 +165,15 @@ const addCart = (newCart) => {
             toast.success(`🛒 Succesfully added ${quantity} ${oneEquipment.make} ${oneEquipment.name} ${oneEquipment.model}, to ${cartData[currentCart - 1].cart_name}`,{
               "autoClose" : 2000
             })
+            //WRITE FETCH TO RENTAL AGREEMENTS
+            fetch(`${apiUrl}cart/${currentCart}`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify( { rental_length, equipment_id, quantity, rental_rate } ),
+            }).then((resp) => {})
+          
           })
         }
       })
