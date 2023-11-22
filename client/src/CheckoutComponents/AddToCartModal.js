@@ -147,6 +147,12 @@ const addCart = (newCart) => {
   // console.log("This is the current cart ID:",currentCart)
 
   function handleAddToCartClick() {
+    if(startRental === '' || endRental === ''){
+      toast.warn(`📆 Please pick a date to add this item to your cart!`,
+        {
+        "autoClose" : 2000
+        })
+    }
     let newCartItem ={
       'rental_length' : rentalLength,
       'rental_rate' : selectedRate,
@@ -170,11 +176,7 @@ const addCart = (newCart) => {
             // console.log("New cart item ID:",resp.id)
             console.log(newCartData.id)
             //-1 in the cart_name, arrays index start at 0, but this grabs the correct ID. So If I select first cart, it's ID of 1. But in the array index it's 0.
-            //Take the below for the patch also
-            // let currentDate = new Date()
-            // let tzTime = currentDate.getTimezoneOffset() * 60000
-            // let localDate = new Date(currentDate - tzTime).toISOString()
-            
+            if(startRental && endRental){
             let cartAndEquipment = {
               'cart_id': cartData[currentCart - 1].id,
               'equipment_id': oneEquipment.id
@@ -188,6 +190,7 @@ const addCart = (newCart) => {
               'cart_item_id': newCartData.id,
             }
 
+            //Spread two above objects into the bodyData object
             let bodyData = {
               ...cartAndEquipment,
               ...newRentalAgreement
@@ -209,8 +212,9 @@ const addCart = (newCart) => {
                   })
                 })
               }
-            })
-          
+            })} else {
+              console.log("Start or End Rental Date is missing or invalid")
+            }
           })
         }
       })
