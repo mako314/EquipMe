@@ -553,13 +553,17 @@ class RentalAgreements(Resource):
         return response
     
     #post a rental agreement
+    # This post is different from the rest, as for some of the validations I'm using
     def post(self):
         data = request.get_json()
 
         #try:
-        cartId = data['cart_id']
-        cart = Cart.query.filter(Cart.id == cartId).first()
-        
+        cart_id = data.get('cart_id')
+        print(f"Cart ID: {cart_id}, Type: {type(cart_id)}")
+        cart = Cart.query.filter(Cart.id == cart_id).first()
+        cart_item_id = data.get('cart_item_id')
+        cart_item_received = Cart.query.filter(Cart.id == cart_item_id).first()
+
         
         cart.cart_item
         # If neither cart or equipment are found, return 404
@@ -570,9 +574,15 @@ class RentalAgreements(Resource):
         # load category and then from there display 
         #take the input
 
-        equipment_id = data['equipment_id']
-        start_date = data['rental_start_date']
-        end_date = data['rental_end_date']
+        equipment_id = data.get('equipment_id')
+        start_date = data.get('rental_start_date')
+        end_date = data.get('rental_end_date')
+        
+        print("Received start date:", start_date)
+        print("Received end date:", end_date)
+
+        # start_date_object = datetime.strptime(start_date, '%m/%d/%y %H:%M:%S')
+        # end_date_object = datetime.strptime(end_date, '%m/%d/%y %H:%M:%S')
 
         equipment = Equipment.query.filter(Equipment.id == equipment_id).first()
         
@@ -586,11 +596,11 @@ class RentalAgreements(Resource):
         new_rental_agreement = RentalAgreement(
             rental_start_date = start_date,
             rental_end_date = end_date,
-            owner_id = data['owner_id'],
-            user_id = data['user_id'],
-            cart_item_id = data['cart_item_id'],
+            owner_id = data.get('owner_id'),
+            user_id = data.get('user_id'),
+            cart_item_id = cart_item_id,
             created_at = datetime.utcnow(),
-            modified_on = datetime.utcnow(),
+            updated_at = datetime.utcnow(),
         )
         db.session.add(new_rental_agreement)
         db.session.commit()
@@ -936,7 +946,7 @@ class AddItemToCart(Resource):
         cart.calculate_total()
         db.session.commit()
 
-        response = make_response(new_item.to_dict(), 201)
+        response = make_response({'id': new_item.id,'details': new_item.to_dict()}, 201)
 
         return response
 

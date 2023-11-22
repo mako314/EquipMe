@@ -57,7 +57,7 @@ function Calendar({startRental, setStartRental, endRental, setEndRental, duratio
       console.error('Invalid date provided to formatDate:', date)
       return null
     }
-    // Adjust the date to local timezone
+    // Adjust the date to local timezone, .getTimeZoneOffset returns the difference in minutes. Most of this needs second / milliseconds so that's where the *60000 comes from
     let timezoneOffset = date.getTimezoneOffset() * 60000
     // To get the local date, you just take the date z(which we test to see if it was an instance of Date, since the useEffect makes it so it continues). When subtracting timezoneOffset, you just get the appropriate time, 24hr format.
     let localDate = new Date(date - timezoneOffset)
