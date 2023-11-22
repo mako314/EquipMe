@@ -591,7 +591,6 @@ class RentalAgreements(Resource):
             cart_item_id = data['cart_item_id'],
             created_at = datetime.utcnow(),
             modified_on = datetime.utcnow(),
-
         )
         db.session.add(new_rental_agreement)
         db.session.commit()
