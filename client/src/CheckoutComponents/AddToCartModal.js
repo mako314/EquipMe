@@ -137,6 +137,7 @@ const addCart = (newCart) => {
     }
 
   console.log("The start rental:", startRental)
+  console.log("The end rental:", endRental)
   // Handles adding item to cart, may need to create a cart first, haha...ha......ha.
   // So the post works, but you have to play around with it, I needto capture values prior to 
   // console.log("This is the rental length:",rentalLength)
@@ -169,14 +170,11 @@ const addCart = (newCart) => {
             // console.log("New cart item ID:",resp.id)
             console.log(newCartData.id)
             //-1 in the cart_name, arrays index start at 0, but this grabs the correct ID. So If I select first cart, it's ID of 1. But in the array index it's 0.
-            toast.success(`🛒 Succesfully added ${newCartItem.quantity} ${oneEquipment.make} ${oneEquipment.name} ${oneEquipment.model}, to ${cartData[currentCart - 1].cart_name}`,{
-              "autoClose" : 2000
-            })
             //Take the below for the patch also
-            let currentDate = new Date()
-            let tzTime = currentDate.getTimezoneOffset() * 60000
-            let localDate = new Date(currentDate - tzTime)
-
+            // let currentDate = new Date()
+            // let tzTime = currentDate.getTimezoneOffset() * 60000
+            // let localDate = new Date(currentDate - tzTime).toISOString()
+            
             let cartAndEquipment = {
               'cart_id': cartData[currentCart - 1].id,
               'equipment_id': oneEquipment.id
@@ -205,6 +203,10 @@ const addCart = (newCart) => {
               if (resp.ok) {
                 resp.json().then((rentalAgreementData) => {
                   console.log("The new rental agreement", rentalAgreementData)
+                  toast.success(`🛒 Succesfully added ${newCartItem.quantity} ${oneEquipment.make} ${oneEquipment.name} ${oneEquipment.model}, to ${cartData[currentCart - 1].cart_name}`,
+                  {
+                    "autoClose" : 2000
+                  })
                 })
               }
             })

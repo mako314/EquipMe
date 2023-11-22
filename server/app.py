@@ -542,6 +542,12 @@ api.add_resource(EquipmentImagesByID, '/equipment/image/<int:id>')
 
 #-----------------------------------------------Rental Agreement Classes-----------------------------------------------------------------------------
 #Rental agreements, need a post and a patch
+# WHEN DISPLAYING THESE TIMES IN THE FRONT END YOU WILL NEED TO CONVERT IT THERE, MUCH EASIER TO HOLD UTC HERE
+#  Take the below example (implement for patch also)
+#  let currentDate = new Date()
+#  let tzTime = currentDate.getTimezoneOffset() * 60000
+#  let localDate = new Date(currentDate - tzTime).toISOString()
+
 class RentalAgreements(Resource):
     #Get ALL rental agreements
     #list of all the renters and the equipment
@@ -558,36 +564,37 @@ class RentalAgreements(Resource):
         data = request.get_json()
 
         #try:
-        cart_id = data.get('cart_id')
-        print(f"Cart ID: {cart_id}, Type: {type(cart_id)}")
-        cart = Cart.query.filter(Cart.id == cart_id).first()
+        equipment_id = data.get('equipment_id')
+        start_date = data.get('rental_start_date')
+        end_date = data.get('rental_end_date')
         cart_item_id = data.get('cart_item_id')
-        cart_item_received = Cart.query.filter(Cart.id == cart_item_id).first()
+        cart_id = data.get('cart_id')
 
-        
-        cart.cart_item
+        print("Received start date:", start_date)
+        print("Received end date:", end_date)
+        print(f"Cart ID: {cart_id}, Type: {type(cart_id)}")
+
+
+        cart = Cart.query.filter(Cart.id == cart_id).first()
         # If neither cart or equipment are found, return 404
         if not cart:
             return make_response({'error': 'Cart not found'}, 404)
+        
+        cart_item_received = CartItem.query.filter(CartItem.id == cart_item_id).first()
+        if not cart_item_received or cart_item_received.cart_id != cart_id:
+            return make_response({'error': 'Cart item not found in the cart'}, 404)
+        
+        equipment = Equipment.query.filter(Equipment.id == equipment_id).first()
+        if not equipment:
+            return {"error": "Equipment not found"}, 404
 
         #need a way to grab equipment and owner
         # load category and then from there display 
         #take the input
 
-        equipment_id = data.get('equipment_id')
-        start_date = data.get('rental_start_date')
-        end_date = data.get('rental_end_date')
-        
-        print("Received start date:", start_date)
-        print("Received end date:", end_date)
 
         # start_date_object = datetime.strptime(start_date, '%m/%d/%y %H:%M:%S')
         # end_date_object = datetime.strptime(end_date, '%m/%d/%y %H:%M:%S')
-
-        equipment = Equipment.query.filter(Equipment.id == equipment_id).first()
-        
-        if not equipment:
-            return {"error": "Equipment not found"}, 404
         
         # if is_available_for_date_range(equipment, start_date, end_date) and equipment.quantity > 0:
         #     equipment.quantity -= 1
@@ -599,7 +606,7 @@ class RentalAgreements(Resource):
             owner_id = data.get('owner_id'),
             user_id = data.get('user_id'),
             cart_item_id = cart_item_id,
-            created_at = datetime.utcnow(),
+            created_at = data.get('created_at') or datetime.utcnow(),
             updated_at = datetime.utcnow(),
         )
         db.session.add(new_rental_agreement)
