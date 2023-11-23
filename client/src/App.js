@@ -10,7 +10,7 @@ import Footer from './HeaderFooterComponents/Footer'
 //---------------------Collections--------------------
 import ProductCollection from './EquipmentComponents/ProductCollection';
 import OwnerCollection from './OwnerComponents/OwnerCollection';
-import RentalCollection from './RentalComponents/RentalCollection'
+import RentalAgreementsCollection from './RentalComponents/RentalAgreementsCollection'
 import UserCollection from './UserComponents/UserCollection';
 
 //-------------------------Display Pages-----------------------------------
@@ -297,7 +297,7 @@ function App() {
             {/* COLLECTION ROUTES */}
             <Route path='/equipment' element={<ProductCollection equipmentArray={filteredEquipmentArray} handleEquipmentDelete={handleEquipmentDelete} handleEditEquipment={handleEditEquipment} />} />
             <Route path='/equipment_owners' element={<OwnerCollection searchTerm={searchTerm} handleEditOwner={handleEditOwner} handleOwnerDelete={handleOwnerDelete} equipmentOwnerArray={owners} />} />
-            <Route path='/rental_agreements' element={<RentalCollection />} />
+            <Route path='/rental_agreements' element={<RentalAgreementsCollection />} />
             <Route path='/users/extra' element={<UserCollection searchTerm={searchTerm} users={users}/>} />
     
             {/* ID / INDIVIDUAL / DISPLAY ROUTES */}

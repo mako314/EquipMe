@@ -1,9 +1,9 @@
 import React, { useState, useContext, useEffect } from "react";
-import RentalCard from "./RentalCard"
+import RentalCard from "./RentalAgreementCard"
 import UserContext from "../UserComponents/UserContext";
 import ApiUrlContext from "../Api";
 
-function RentalCollection({ }) {
+function RentalAgreementsCollection({ }) {
     const [rentalAgreementArray, setRentalAgreementArray] = useState([])
     const [user, setUser] = useContext(UserContext)
     const apiUrl = useContext(ApiUrlContext)
@@ -76,4 +76,4 @@ function RentalCollection({ }) {
     )
 }
 
-export default RentalCollection;
+export default RentalAgreementsCollection;

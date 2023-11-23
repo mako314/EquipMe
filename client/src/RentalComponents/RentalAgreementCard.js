@@ -1,6 +1,6 @@
 import React from "react";
 
-function RentalCard({ item, equipmentName, rentalDates, renterFirstName, renterLastName, location, ownerEmail, ownerName }) {
+function RentalAgreementCard({ item, equipmentName, rentalDates, renterFirstName, renterLastName, location, ownerEmail, ownerName }) {
 
     console.log(item)
     return (
@@ -48,7 +48,7 @@ function RentalCard({ item, equipmentName, rentalDates, renterFirstName, renterL
     )
 }
 
-export default RentalCard;
+export default RentalAgreementCard;
 
 
 
