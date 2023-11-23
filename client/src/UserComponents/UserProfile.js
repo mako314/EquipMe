@@ -166,7 +166,7 @@ function UserProfile() {
                   </div>
 
                 </div>
-                {/* <RentalCollection key={user?.id}/> */}
+                {/* <RentalAgreementsCollection key={user?.id}/> */}
               </div>
             </div>
           </div>
