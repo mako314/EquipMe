@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import ApiUrlContext from '../Api';
-import RentalCollection from '../RentalComponents/RentalCollection';
+import RentalAgreementsCollection from '../RentalComponents/RentalAgreementsCollection';
 import { UserSessionContext } from './SessionContext';
 import { useParams, useNavigate, useInRouterContext } from 'react-router-dom';
 
@@ -166,7 +166,7 @@ function UserProfile() {
                   </div>
 
                 </div>
-                {/* <RentalCollection key={user?.id}/> */}
+                {/* <RentalAgreementsCollection key={user?.id}/> */}
               </div>
             </div>
           </div>

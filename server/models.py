@@ -122,7 +122,7 @@ class EquipmentOwner(db.Model, SerializerMixin):
     #you can just do a query EquipmentOwner.query.get(1), or equipment = owner.equipment. Then you can do for equipment in owner.equipment print(equipment) for example
 
     review = db.relationship ('Review', back_populates='owner')
-
+    # I could include owner here, howeevr I'm not sure it's necessarily required.
     #Serialization rules
     serialize_rules = ('-equipment.owner', '-agreements.owner', '-owner_inboxes.owner','-owner_inboxes.user', '-review.user.cart', '-review.user.user_inboxes','-review.owner.owner_inboxes', '-review.owner.equipment','-review.owner.agreements','-review.cart_item', '-equipment.cart_item.cart.cart_item'  )
 

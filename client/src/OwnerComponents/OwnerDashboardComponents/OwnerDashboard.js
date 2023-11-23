@@ -21,16 +21,19 @@ function OwnerDashboard({ownerToEdit, updateOwner, fromOwnerDash, setFromOwnerDa
 
     const apiUrl = useContext(ApiUrlContext)
 
-    console.log("TESTING THIS CONTEXT SESSION CHECKING",currentUser)
+    console.log("USER INFO",currentUser)
     console.log("With a role of:", role)
     
-    //----- Variables in the order they appear -----
+    //----- Variables in the order they appear ----- These are ALL being moved to components shortly.
     let plannedDeals
     let potentialRenters
 
     let firstName
     let equipment
     let lastName
+    let rentalAgreements
+    
+
     if (currentUser){
          firstName  = currentUser.firstName
          lastName = currentUser.lastName

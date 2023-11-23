@@ -22,7 +22,6 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
   // const [isModalOpen, setIsModalOpen] = useState(false)
   const [isNewCartModalOpen, setIsNewCartModalOpen] = useState(false)
   
-
   //State for calendar
   const [startRental, setStartRental] = useState('')
   const [endRental, setEndRental] = useState('')
@@ -137,7 +136,8 @@ const addCart = (newCart) => {
       setEquipmentQuantity(prevequipmentQuantity => prevequipmentQuantity + 1)
     }
 
-
+  console.log("The start rental:", startRental)
+  console.log("The end rental:", endRental)
   // Handles adding item to cart, may need to create a cart first, haha...ha......ha.
   // So the post works, but you have to play around with it, I needto capture values prior to 
   // console.log("This is the rental length:",rentalLength)
@@ -147,33 +147,74 @@ const addCart = (newCart) => {
   // console.log("This is the current cart ID:",currentCart)
 
   function handleAddToCartClick() {
-    let rental_length = rentalLength
-    let rental_rate = selectedRate
-    let quantity = equipmentQuantity
-    let equipment_id = equip_id
+    if(startRental === '' || endRental === ''){
+      toast.warn(`📆 Please pick a date to add this item to your cart!`,
+        {
+        "autoClose" : 2000
+        })
+    }
+    let newCartItem ={
+      'rental_length' : rentalLength,
+      'rental_rate' : selectedRate,
+      'quantity' : equipmentQuantity,
+      'equipment_id' : equip_id
+    }
+    // let rental_length = rentalLength
+    // let rental_rate = selectedRate
+    // let quantity = equipmentQuantity
+    // let equipment_id = equip_id
 
     fetch(`${apiUrl}cart/${currentCart}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify( { rental_length, equipment_id, quantity, rental_rate } ),
+        body: JSON.stringify(newCartItem),
       }).then((resp) => {
         if (resp.ok) {
-          resp.json().then(() => {
+          resp.json().then((newCartData) => {
+            // console.log("New cart item ID:",resp.id)
+            console.log(newCartData.id)
             //-1 in the cart_name, arrays index start at 0, but this grabs the correct ID. So If I select first cart, it's ID of 1. But in the array index it's 0.
-            toast.success(`🛒 Succesfully added ${quantity} ${oneEquipment.make} ${oneEquipment.name} ${oneEquipment.model}, to ${cartData[currentCart - 1].cart_name}`,{
-              "autoClose" : 2000
-            })
-            //WRITE FETCH TO RENTAL AGREEMENTS
-            fetch(`${apiUrl}cart/${currentCart}`, {
+            if(startRental && endRental){
+            let cartAndEquipment = {
+              'cart_id': cartData[currentCart - 1].id,
+              'equipment_id': oneEquipment.id
+            }
+
+            let newRentalAgreement = {
+              'rental_start_date': new Date(startRental).toISOString(),
+              'rental_end_date': new Date(endRental).toISOString(),
+              'owner_id': oneEquipment.owner_id,
+              'user_id': currentUser.id,
+              'cart_item_id': newCartData.id,
+            }
+
+            //Spread two above objects into the bodyData object
+            let bodyData = {
+              ...cartAndEquipment,
+              ...newRentalAgreement
+            }
+
+            fetch(`${apiUrl}rental_agreements`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify( { rental_length, equipment_id, quantity, rental_rate } ),
-            }).then((resp) => {})
-          
+              body: JSON.stringify(bodyData),
+            }).then((resp) => {
+              if (resp.ok) {
+                resp.json().then((rentalAgreementData) => {
+                  console.log("The new rental agreement", rentalAgreementData)
+                  toast.success(`🛒 Succesfully added ${newCartItem.quantity} ${oneEquipment.make} ${oneEquipment.name} ${oneEquipment.model}, to ${cartData[currentCart - 1].cart_name}`,
+                  {
+                    "autoClose" : 2000
+                  })
+                })
+              }
+            })} else {
+              console.log("Start or End Rental Date is missing or invalid")
+            }
           })
         }
       })
