@@ -9,14 +9,28 @@ function RentalAgreementsCollection({ }) {
     const apiUrl = useContext(ApiUrlContext)
     console.log(currentUser)
     // Map over fetched rental data and make them into cards. This is ALL rental agreements.
-  //   const rentalCards = rentalAgreementArray?.map((item) => {
-  //       console.log(item)
-  //       if(item && item.equipment && item.user){
-  //       return (<RentalCard key={item.id} item={item} equipmentName={item.equipment.name} rentalDates={item.rental_dates} renterFirstName={item.user.firstName} renterLastName={item.user.lastName}/> )
-  //       }
-  //   })
+    // const rentalCards = rentalAgreementArray?.map((item) => {
+    //     console.log(item)
+    //     if(item && item.equipment && item.user){
+    //     return (<RentalCard key={item.id} item={item} equipmentName={item.equipment.name} rentalDates={item.rental_dates} renterFirstName={item.user.firstName} renterLastName={item.user.lastName}/> )
+    //     }
+    // })
 
-  console.log(currentUser.cart[0].cart_item[0].agreements)
+  // console.log(currentUser.cart[0].cart_item[0].agreements)
+
+
+
+ 
+  // let rentalCards = currentUser.cart?.flatMap(cart => {
+  //   if (Array.isArray(cart)) {
+  //     return cart.cart_item.map(item => item.agreements)
+  //   } else {
+  //     console.log('cart is not an array:', cart)
+  //     return []  // Return an empty array if it's not an array
+  //   }
+  // })
+
+  // console.log("The rental cards",rentalCards)
 
 
 
