@@ -9,6 +9,7 @@ import ApiUrlContext from '../../Api';
 
 //User Imports//
 import RentalAgreementsCollection from '../../RentalComponents/RentalAgreementsCollection';
+import OwnerCollection from '../OwnerCollection'
 
 
 import { UserSessionContext } from '../../UserComponents/SessionContext';
@@ -22,6 +23,7 @@ function OwnerDashboard({ownerToEdit, updateOwner, fromOwnerDash, setFromOwnerDa
     // Honestly with currentUser, we can just make this for both users and owners
     const [toggleHomeDash, setToggleHomeDash] = useState(null)
     const [potentialRentalUsers, setPotentialRentalUsers] = useState([])
+    const [potentialRentalOwners, setPotentialRentalOwners] = useState([])
 
     const apiUrl = useContext(ApiUrlContext)
 
@@ -39,6 +41,9 @@ function OwnerDashboard({ownerToEdit, updateOwner, fromOwnerDash, setFromOwnerDa
     //     profession = '',
     //     profileImg = ''
     //   } = source || {}
+
+    //--------------------user--------
+    let potentialOwners
     
     //----- Variables in the order they appear ----- These are ALL being moved to components shortly.
     let plannedDeals
@@ -67,6 +72,17 @@ function OwnerDashboard({ownerToEdit, updateOwner, fromOwnerDash, setFromOwnerDa
         </>)
     }
 
+    const handlePotentialOwners = () => {
+        fetch(`${apiUrl}owners/${currentUser?.profession}`)
+        .then((resp) => resp.json())
+        .then((data) => {
+            setPotentialRentalOwners(data)
+        })
+        potentialOwners =
+        <>
+            <OwnerCollection searchTerm={searchTerm} equipmentOwnerArray={potentialRentalOwners} setFromOwnerDash={setFromOwnerDash} fromOwnerDash={fromOwnerDash}/>
+        </>
+    }
 
 //-------------------------------------------------------------OWNER CONDITIONAL DATA --------------------------------------------------------------------
 
@@ -174,11 +190,24 @@ function AccountSettings() {
 
                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(plannedDeals)}> Planned Deals </span>
 
+                            {role === 'owner' ? 
                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {
                                 handlePotentialRenter()
                                 setFromOwnerDash(!fromOwnerDash)
                                 setToggleHomeDash(potentialRenters)
                             }}>Potential Renters</span>
+                            : <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {
+                                handlePotentialOwners()
+                                setFromOwnerDash(!fromOwnerDash)
+                                setToggleHomeDash(potentialOwners)
+                            }}> Potential Rental Interests </span>}
+                            {/* <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {
+                                handlePotentialRenter()
+                                setFromOwnerDash(!fromOwnerDash)
+                                setToggleHomeDash(potentialRenters)
+                            }}>Potential Renters</span> */}
+
+                            {/* handlePotentialOwners */}
 
                             <Link to='/messaging'>
                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {
