@@ -1,30 +1,30 @@
 import React from "react";
 
-function RentalAgreementCard({ item, equipmentName, rentalDates, renterFirstName, renterLastName, location, ownerEmail, ownerName }) {
+function RentalAgreementCard({ equipmentName, rentalStart, rentalEnd, renterFirstName, renterLastName, location, ownerEmail, ownerFirstName, ownerLastName, cartName }) {
 
-    console.log(item)
+    // console.log(item)
     return (
 
         <div className="w-full max-w-sm overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 mb-4 mt-3 m-auto">
         <div className="flex items-center px-6 py-3 bg-gray-900">
-            <svg aria-label="headphones icon" className="w-6 h-6 text-white fill-current" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path fillRule="evenodd" clipRule="evenodd" d="M17 21C15.8954 21 15 20.1046 15 19V15C15 13.8954 15.8954 13 17 13H19V12C19 8.13401 15.866 5 12 5C8.13401 5 5 8.13401 5 12V13H7C8.10457 13 9 13.8954 9 15V19C9 20.1046 8.10457 21 7 21H3V12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12V21H17ZM19 15H17V19H19V15ZM7 15H5V19H7V15Z"/>
-            </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="white" className="bi bi-cart4 ml-0" viewBox="0 0 16 16">
+        <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5M3.14 5l.5 2H5V5zM6 5v2h2V5zm3 0v2h2V5zm3 0v2h1.36l.5-2zm1.11 3H12v2h.61zM11 8H9v2h2zM8 8H6v2h2zM5 8H3.89l.5 2H5zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0m9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0"/>
+        </svg>
 
-            <h1 className="mx-3 text-lg font-semibold text-white">{equipmentName}</h1>
+            <h1 className="mx-3 text-lg font-semibold text-white"> Cart : {cartName} <br></br> Item : {equipmentName}</h1>
         </div>
 
         <div className="px-6 py-4">
-            <h1 className="text-xl font-semibold text-gray-800 dark:text-white">{ownerName}</h1>
+            <h1 className="text-xl font-semibold text-gray-800 dark:text-white">{ownerFirstName} {ownerLastName} </h1>
 
-            <p className="py-2 text-gray-700 dark:text-gray-400"> {rentalDates} </p>
+            <p className="py-2 text-gray-700 dark:text-gray-400"> {rentalStart} to {rentalEnd}</p>
 
             <div className="flex items-center mt-4 text-gray-700 dark:text-gray-200">
                 <svg aria-label="suitcase icon" className="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M14 11H10V13H14V11Z"/><path fillRule="evenodd" clipRule="evenodd" d="M7 5V4C7 2.89545 7.89539 2 9 2H15C16.1046 2 17 2.89545 17 4V5H20C21.6569 5 23 6.34314 23 8V18C23 19.6569 21.6569 21 20 21H4C2.34314 21 1 19.6569 1 18V8C1 6.34314 2.34314 5 4 5H7ZM9 4H15V5H9V4ZM4 7C3.44775 7 3 7.44769 3 8V14H21V8C21 7.44769 20.5522 7 20 7H4ZM3 18V16H21V18C21 18.5523 20.5522 19 20 19H4C3.44775 19 3 18.5523 3 18Z"/>
                 </svg>
 
-                <h1 className="px-2 text-sm">{renterFirstName} {renterLastName}</h1>
+                <h1 className="px-2 text-sm"> Renter : {renterFirstName} {renterLastName}</h1>
             </div>
 
             <div className="flex items-center mt-4 text-gray-700 dark:text-gray-200">
@@ -40,7 +40,7 @@ function RentalAgreementCard({ item, equipmentName, rentalDates, renterFirstName
                     <path fillRule="evenodd" clipRule="evenodd" d="M3.00977 5.83789C3.00977 5.28561 3.45748 4.83789 4.00977 4.83789H20C20.5523 4.83789 21 5.28561 21 5.83789V17.1621C21 18.2667 20.1046 19.1621 19 19.1621H5C3.89543 19.1621 3 18.2667 3 17.1621V6.16211C3 6.11449 3.00333 6.06765 3.00977 6.0218V5.83789ZM5 8.06165V17.1621H19V8.06199L14.1215 12.9405C12.9499 14.1121 11.0504 14.1121 9.87885 12.9405L5 8.06165ZM6.57232 6.80554H17.428L12.7073 11.5263C12.3168 11.9168 11.6836 11.9168 11.2931 11.5263L6.57232 6.80554Z"/>
                 </svg>
 
-                <h1 className="px-2 text-sm">{ownerEmail}</h1>
+                <h1 className="px-2 text-sm">Email: {ownerEmail}</h1>
             </div>
         </div>
     </div>

@@ -20,64 +20,37 @@ function RentalAgreementsCollection({ }) {
 
 
   // Need to find a way to map over an array that's nested inside of an array.
+  //Went with flat map, but since there's another nested array inside of cart.cart_item, I needed to flatten that also, and finally, I map over item.agreements to get the agreement dates.
+  //Luckily with flatmap, everything was available!
  
-  let rentalCards = currentUser.cart?.flatMap(cart => {
-    if (Array.isArray(cart.cart_item)) {
-      return cart.cart_item.map(item => 
+  let rentalCards = currentUser.cart?.flatMap(cart => 
+    cart.cart_item?.flatMap(item => 
+      item.agreements?.map(agreement=>
       <RentalAgreementCard
       key={item.id}
+      cartName={cart.cart_name}
       equipmentName={item.equipment.name}
-      rentalStart={item.agreements.rental_start_date}
-      rentalEnd={item.agreements.rental_end_date}
+      rentalStart={agreement.rental_start_date}
+      rentalEnd={agreement.rental_end_date}
       renterFirstName={currentUser.firstName}
       renterLastName={currentUser.lastName}
       location={item.equipment.location}
-      ownerEmail ={item.equipment.email}
-      ownerName = {item.equipment.owner_name}
+      ownerEmail ={item.equipment.owner.email}
+      ownerFirstName = {item.equipment.owner.firstName}
+      ownerLastName ={item.equipment.owner.lastName}
       />
-        )
-    } else {
-      console.log('cart is not an array:', cart)
-      return []  // Return an empty array if it's not an array
-    }
-  })
+        ) || []
+      ) || []
+  )
+
+  // if (Array.isArray(cart.cart_item)) {
+  //   return cart.cart_item.map(item => console.log(item.agreements.rental_start_date))
 
   // console.log("The rental cards",rentalCards)
 
-
-
-  //   // Filters the rental agreements based on whether or not the signed in Users ID matches the userID of the rental agreement.
-  //   let UserRentalCards
-  //   if (user){
-  //   UserRentalCards = rentalAgreementArray?.filter((item) => item.user.id === user.id)?.map((item) => (
-  //   <RentalCard
-  //     key={item.id}
-  //     equipmentName={item.equipment.name}
-  //     rentalDates={item.rental_dates}
-  //     renterFirstName={item.user.firstName}
-  //     renterLastName={item.user.lastName}
-  //     location={item.equipment.location}
-  //     ownerEmail ={item.equipment.email}
-  //     ownerName = {item.equipment.owner_name}
-  //   />
-  // ))}
-    
-  //   console.log(user)
-  //   console.log(UserRentalCards)
-
-    // let rentalCards
-
-    // rentalCards = rentalAgreementArray.map((item) => {
-    //     console.log(item)
-    //     // return(item.equipment.name)
-    //     return (<RentalAgreementCard key={item.id} equipmentName={item.equipment.name} rentalDates={item.rental_dates} renterFirstName={item.user.firstName} renterLastName={item.user.lastName} />)
-    // })
-
-    // console.log(rentalCards)
-
     return (
     <div>
-        {/* {UserRentalCards} */}
+        {rentalCards}
     </div>
     )
 }
