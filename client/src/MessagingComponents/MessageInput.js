@@ -92,7 +92,8 @@ const handleSendMessage = () => {
     return (
         <div className="mt-4 flex items-end">
         {/* NEEDS TO GO INSIDE OF MESSAGE CONTENT, NOT NEW MESSAGE THREADS */}
-          <input
+        {/* I think I like textarea here more than input */}
+          <textarea
             type="text"
             placeholder="Type your message..."
             className="flex-grow border rounded py-2 px-3"

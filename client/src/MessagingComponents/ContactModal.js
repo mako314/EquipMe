@@ -12,15 +12,6 @@ function ContactModal({recipientID}){
 
     const apiUrl = useContext(ApiUrlContext)
 
-    // useEffect(() => {
-    //   fetch("/check_session").then((response) => {
-    //     if (response.ok) {
-    //       response.json().then((user) => setUser(user))
-    //     }
-    //   })
-    // }, [])
-
-
     //Definitely need to set validations and such to prevent double subjects,
 
     const [isModalOpen, setIsModalOpen] = useState(false)

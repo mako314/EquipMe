@@ -1,13 +1,17 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
 
-//Imports//
+//Owner Imports//
 import ProductCollection from '../../EquipmentComponents/ProductCollection'
 import OwnerEditForm from '../OwnerEditForm';
 import UserCollection from '../../UserComponents/UserCollection';
 import ApiUrlContext from '../../Api';
-import { UserSessionContext } from '../../UserComponents/SessionContext';
 
+//User Imports//
+import RentalAgreementsCollection from '../../RentalComponents/RentalAgreementsCollection';
+
+
+import { UserSessionContext } from '../../UserComponents/SessionContext';
 import { ReactComponent as EquipMeLogo } from '../../Content/EquipMeLogo.svg'
 
 
@@ -23,6 +27,18 @@ function OwnerDashboard({ownerToEdit, updateOwner, fromOwnerDash, setFromOwnerDa
 
     console.log("USER INFO",currentUser)
     console.log("With a role of:", role)
+
+    //After a lot of consideration, users will also have a dashboard. Seems friendlier 
+
+    // const {
+    //     email = '',
+    //     firstName = '',
+    //     lastName = '',
+    //     location = '',
+    //     phone = '',
+    //     profession = '',
+    //     profileImg = ''
+    //   } = source || {}
     
     //----- Variables in the order they appear ----- These are ALL being moved to components shortly.
     let plannedDeals
@@ -31,9 +47,6 @@ function OwnerDashboard({ownerToEdit, updateOwner, fromOwnerDash, setFromOwnerDa
     let firstName
     let equipment
     let lastName
-    let rentalAgreements
-    
-
     if (currentUser){
          firstName  = currentUser.firstName
          lastName = currentUser.lastName
@@ -46,7 +59,16 @@ function OwnerDashboard({ownerToEdit, updateOwner, fromOwnerDash, setFromOwnerDa
         navigate('/temp/bulk_equipment_upload')
     }
 
-    
+
+
+    function RentalAgreements() {
+        return(<>
+            <RentalAgreementsCollection/>
+        </>)
+    }
+
+
+//-------------------------------------------------------------OWNER CONDITIONAL DATA --------------------------------------------------------------------
 
 //----------------------------------------activeListings------------------------------
 // Need to build out a back to dash button here for owners along with edit functionality 
@@ -77,15 +99,16 @@ function AccountSettings() {
     plannedDeals =
         <div> Planned Deals </div>
 //------------------------------------------------------------------------------------
-    useEffect(() => {
+// I'll be removing these useEffects soon enough: 
+// https://react.dev/learn/synchronizing-with-effects#fetching-data
+// https://store.steampowered.com/points/shop/c/backgrounds/cluster/0/reward/181174
+
+    const handlePotentialRenter = () => {
         fetch(`${apiUrl}users/${currentUser?.profession}`)
         .then((resp) => resp.json())
         .then((data) => {
             setPotentialRentalUsers(data)
         })
-    }, [currentUser])
-
-    const handlePotentialRenter = () => {
         potentialRenters =
         <>
             <UserCollection searchTerm={searchTerm} users={potentialRentalUsers} setFromOwnerDash={setFromOwnerDash} fromOwnerDash={fromOwnerDash}/>
@@ -100,8 +123,6 @@ function AccountSettings() {
                     <div className="grid grid-cols-3 gap-6">
                         <div className="h-24 col-span-3 bg-white border border-gray-300 text-center"> Welcome {firstName} </div>
                         <div className="h-96 col-span-1 bg-white border border-gray-300">
-
-                            
 
                         </div>
                         <div className="h-96 col-span-1 bg-white border border-gray-300"></div>
@@ -145,7 +166,11 @@ function AccountSettings() {
 
                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<DashHome/>)}> Home </span>
 
-                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<ActiveListings/>)}> Active listings </span>
+                            {role === 'owner' ? 
+                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<ActiveListings/>)}> Active listings </span> 
+                            : 
+                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<RentalAgreements/>)}> Rental Agreements  </span>}
+                            
 
                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(plannedDeals)}> Planned Deals </span>
 
