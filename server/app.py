@@ -238,7 +238,7 @@ class EquipmentOwners(Resource):
 
     #succesful get to display
     def get(self):
-        equip_owners = [owner.to_dict(only = ('id', 'profession', 'email', 'location', 'firstName', 'lastName', 'phone','equipment')) for owner in EquipmentOwner.query.all()]
+        equip_owners = [owner.to_dict(only = ('id', 'profession', 'email', 'location', 'firstName', 'lastName', 'phone','equipment', 'profileImage')) for owner in EquipmentOwner.query.all()]
         #had to allow ID also to grab it with link
         response = make_response(equip_owners, 200)
         #rules =('-agreements', 'equipment')
@@ -334,6 +334,20 @@ class EquipmentOwnerById(Resource):
 api.add_resource(EquipmentOwnerById, '/equipment_owner/<int:id>')
 
 
+class OwnerByProfession(Resource):
+    def get(self, userProfession):
+        owners = [owner.to_dict(rules =('-_password_hash',)) for owner in EquipmentOwner.query.filter(EquipmentOwner.profession == userProfession).all()]
+        if owners:
+            response = make_response(owners, 200)
+        else:
+            response = make_response({
+            "error": "Owners not found"
+            }, 404)
+
+        return response
+api.add_resource(OwnerByProfession, '/owners/<string:userProfession>')
+
+
 #-----------------------------------------------------EQUIPMENT Classes------------------------------------------------------------------
 
 class Equipments(Resource):
@@ -382,6 +396,7 @@ api.add_resource(Equipments, '/equipment')
 
 #-------------------------------
 #Search and or filter by Equipment type, i.e. Heavy Machinery or painting
+#I can't quite use this either atm, it'd need to be changed to handle cities maybe? so I may have to break up the data from location to actual address, city ,state
 class EquipmentByLocation(Resource):
 
     def get(self,location):
@@ -399,6 +414,20 @@ class EquipmentByLocation(Resource):
         #need to find a way to make all the locations easily inputtable, for example Heavy Machinery doesn't get picked up if you do /heavymachinery
 
 api.add_resource(EquipmentByLocation, '/equipment/location/<string:location>')
+
+#likely going to need to edit types, have like a generalized list of some sort. 
+# class EquipmentByProfession(Resource):
+#     def get(self, profession):
+#         equipments = [equipment.to_dict() for equipment in Equipment.query.filter(equipment.type == profession).all()]
+#         if equipments:
+#             response = make_response(equipments, 200)
+#         else:
+#             response = make_response({
+#             "error": "Equipments not found"
+#             }, 404)
+
+#         return response
+# api.add_resource(EquipmentByProfession, '/equipment/<string:profession>')
 
 class EquipmentByID(Resource):
 

@@ -47,7 +47,7 @@ class User(db.Model, SerializerMixin):
     # '-review', '-cart', '-agreements', '-user_inboxes'
 
     # I may not need the relationship agreements to user directly, if it can be accessed inside of the cart_items, etc
-    serialize_rules = ('-review.user.cart','-review.user.user_inboxes','-review.owner.owner_inboxes','-review.owner.equipment','-review.owner.agreements','-review.cart_item','-cart.cart_item.agreements.cart_item','-cart.cart_item.equipment.featured_equipment','-cart.cart_item.equipment.equipment_price', '-cart.cart_item.equipment.owner','-cart.user' ,'-agreements', '-user_inboxes.user')
+    serialize_rules = ('-review.user.cart','-review.user.user_inboxes','-review.owner.owner_inboxes','-review.owner.equipment','-review.owner.agreements','-review.cart_item','-cart.cart_item.agreements.cart_item','-cart.cart_item.equipment.featured_equipment','-cart.cart_item.equipment.equipment_price', '-cart.cart_item.equipment.owner.owner_inboxes','-cart.cart_item.equipment.owner.review','-cart.user' ,'-agreements', '-user_inboxes.user')
 
     #'-review'
     #'-review.cart_item.cart','-review.cart_item.agreements', '-review.cart_item.equipment'
@@ -255,6 +255,22 @@ class FeaturedEquipment(db.Model, SerializerMixin):
 
     #Serialization rules
     serialize_rules = ('-equipment.featured_equipment', )
+
+    #This and EquipmentPrice don't necessarily have routes yet, so we'll wait to do more serialize rules
+
+class Favorite(db.Model, SerializerMixin):
+    __tablename__="favorites"
+
+    id = db.Column(db.Integer, primary_key = True)
+
+    equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'))
+
+    equipment = db.relationship('Equipment', back_populates='favorite')
+
+    #Serialization rules
+    serialize_rules = ('-equipment.favorites', )
 
     #This and EquipmentPrice don't necessarily have routes yet, so we'll wait to do more serialize rules
 
