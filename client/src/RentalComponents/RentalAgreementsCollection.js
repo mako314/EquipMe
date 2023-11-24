@@ -21,14 +21,26 @@ function RentalAgreementsCollection({ }) {
 
   // Need to find a way to map over an array that's nested inside of an array.
  
-  // let rentalCards = currentUser.cart?.flatMap(cart => {
-  //   if (Array.isArray(cart)) {
-  //     return cart.cart_item.map(item => item.agreements)
-  //   } else {
-  //     console.log('cart is not an array:', cart)
-  //     return []  // Return an empty array if it's not an array
-  //   }
-  // })
+  let rentalCards = currentUser.cart?.flatMap(cart => {
+    if (Array.isArray(cart.cart_item)) {
+      return cart.cart_item.map(item => 
+      <RentalAgreementCard
+      key={item.id}
+      equipmentName={item.equipment.name}
+      rentalStart={item.agreements.rental_start_date}
+      rentalEnd={item.agreements.rental_end_date}
+      renterFirstName={currentUser.firstName}
+      renterLastName={currentUser.lastName}
+      location={item.equipment.location}
+      ownerEmail ={item.equipment.email}
+      ownerName = {item.equipment.owner_name}
+      />
+        )
+    } else {
+      console.log('cart is not an array:', cart)
+      return []  // Return an empty array if it's not an array
+    }
+  })
 
   // console.log("The rental cards",rentalCards)
 
