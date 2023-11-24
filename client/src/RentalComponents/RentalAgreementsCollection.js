@@ -19,7 +19,7 @@ function RentalAgreementsCollection({ }) {
   // console.log(currentUser.cart[0].cart_item[0].agreements)
 
 
-
+  // Need to find a way to map over an array that's nested inside of an array.
  
   // let rentalCards = currentUser.cart?.flatMap(cart => {
   //   if (Array.isArray(cart)) {

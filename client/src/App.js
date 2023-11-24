@@ -105,6 +105,9 @@ function App() {
   const apiUrl = process.env.REACT_APP_API_URL
   // console.log("this is the api url:", apiUrl)
   
+  // After reading some React docs, I don't think I need all this state and effect!
+  // https://react.dev/learn/you-might-not-need-an-effect
+
 
   //-------------------------------------------- FOR USER - CHECK SESSION TO STAY LOGGED IN ON REFRESH--------------------------
   useEffect(() => {
