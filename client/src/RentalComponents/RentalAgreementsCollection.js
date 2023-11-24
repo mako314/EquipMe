@@ -49,7 +49,7 @@ function RentalAgreementsCollection({ }) {
   // console.log("The rental cards",rentalCards)
 
     return (
-    <div>
+    <div className="flex flex-row flex-wrap justify-start ml-6">
         {rentalCards}
     </div>
     )
