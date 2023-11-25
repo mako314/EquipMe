@@ -196,18 +196,12 @@ function AccountSettings() {
                                 setFromOwnerDash(!fromOwnerDash)
                                 setToggleHomeDash(potentialRenters)
                             }}>Potential Renters</span>
-                            : <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {
+                            : //Need to figure out why the below takes 2 clicks
+                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {
                                 handlePotentialOwners()
                                 setFromOwnerDash(!fromOwnerDash)
                                 setToggleHomeDash(potentialOwners)
                             }}> Potential Rental Interests </span>}
-                            {/* <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {
-                                handlePotentialRenter()
-                                setFromOwnerDash(!fromOwnerDash)
-                                setToggleHomeDash(potentialRenters)
-                            }}>Potential Renters</span> */}
-
-                            {/* handlePotentialOwners */}
 
                             <Link to='/messaging'>
                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {

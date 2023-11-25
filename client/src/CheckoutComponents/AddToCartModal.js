@@ -9,7 +9,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
 
   //Grab apiUrl from context + user info
   const apiUrl = useContext(ApiUrlContext)
-  const { currentUser, role } = UserSessionContext()
+  const { currentUser, role, checkSession } = UserSessionContext()
 
   //States to capture info, day ranges, costs, length of rental, quantity, and track modal, cart
   const [selectedRate, setSelectedRate] = useState("hourly")
@@ -210,6 +210,7 @@ const addCart = (newCart) => {
                   {
                     "autoClose" : 2000
                   })
+                  checkSession()
                 })
               }
             })} else {

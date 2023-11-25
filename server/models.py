@@ -258,19 +258,19 @@ class FeaturedEquipment(db.Model, SerializerMixin):
 
     #This and EquipmentPrice don't necessarily have routes yet, so we'll wait to do more serialize rules
 
-class Favorite(db.Model, SerializerMixin):
-    __tablename__="favorites"
+# class Favorite(db.Model, SerializerMixin):
+#     __tablename__="favorites"
 
-    id = db.Column(db.Integer, primary_key = True)
+#     id = db.Column(db.Integer, primary_key = True)
 
-    equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'))
+#     equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
+#     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+#     owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'))
 
-    equipment = db.relationship('Equipment', back_populates='favorite')
+#     equipment = db.relationship('Equipment', back_populates='favorite')
 
-    #Serialization rules
-    serialize_rules = ('-equipment.favorites', )
+#     #Serialization rules
+#     serialize_rules = ('-equipment.favorites', )
 
     #This and EquipmentPrice don't necessarily have routes yet, so we'll wait to do more serialize rules
 
