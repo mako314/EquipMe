@@ -29,6 +29,7 @@ function RentalAgreementsCollection({ }) {
       <RentalAgreementCard
       key={item.id}
       cartName={cart.cart_name}
+      quantity={item.quantity}
       equipmentName={item.equipment.name}
       rentalStart={agreement.rental_start_date}
       rentalEnd={agreement.rental_end_date}
