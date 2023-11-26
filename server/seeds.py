@@ -1,4 +1,4 @@
-from models import db, User, EquipmentOwner, Equipment, RentalAgreement, EquipmentImage, Thread, UserInbox, OwnerInbox, Message, Cart, CartItem, EquipmentPrice, FeaturedEquipment, Review
+from models import db, User, EquipmentOwner, Equipment, RentalAgreement, EquipmentImage, Thread, UserInbox, OwnerInbox, Message, Cart, CartItem, EquipmentPrice, FeaturedEquipment, Review, UserFavorite, OwnerFavorite
 import pandas as pd
 from app import app
 from random import randint, choice as rc
@@ -26,6 +26,8 @@ if __name__ == '__main__':
         Cart.query.delete()
         EquipmentPrice.query.delete()
         FeaturedEquipment.query.delete()
+        UserFavorite.query.delete()
+        OwnerFavorite.query.delete()
         Review.query.delete()
         Equipment.query.delete()
         UserInbox.query.delete()
@@ -610,6 +612,22 @@ if __name__ == '__main__':
         ]
 
         db.session.add_all(reviews)
+        db.session.commit()
+
+#---------------------Favorite testing----------------
+        print("Creating Favorites...")
+        favorites = [
+            UserFavorite(
+                equipment_id= equipment_list[0].id,
+                user_id = user_1.id,
+            ),
+            OwnerFavorite(
+                user_id = user_1.id,
+                owner_id = owner_2.id,
+            )
+        ]
+
+        db.session.add_all(favorites)
         db.session.commit()
 
 #---------------------Message and Inbox testing----------------
