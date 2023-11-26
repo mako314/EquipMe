@@ -621,7 +621,7 @@ if __name__ == '__main__':
                 relationship_type = "userToEquipment",
                 user_id = user_1.id,
             ),
-            Thread(
+            Favorite(
                 relationship_type = "ownerToUser",
                 user_id = user_1.id,
                 owner_id = owner_2.id,

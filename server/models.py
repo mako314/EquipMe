@@ -277,7 +277,7 @@ class Favorite(db.Model, SerializerMixin):
 
     equipment = db.relationship('Equipment', back_populates='favorite')
     user = db.relationship('User', back_populates="favorite" )
-    owner = db.relationship("Owner", back_populates="favorite")
+    owner = db.relationship("EquipmentOwner", back_populates="favorite")
 
     #Serialization rules
     serialize_rules = ('-equipment.favorites','-user.favorite','-owner.favorite')
