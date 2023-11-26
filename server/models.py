@@ -269,9 +269,11 @@ class Favorite(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key = True)
 
-    equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'))
+    relationship_type = db.Column(db.String)
+
+    equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'), nullable= True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable= True)
+    owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'), nullable= True)
 
     equipment = db.relationship('Equipment', back_populates='favorite')
     user = db.relationship('User', back_populates="favorite" )
