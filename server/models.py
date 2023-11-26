@@ -196,6 +196,8 @@ class Equipment(db.Model, SerializerMixin):
 
     featured_equipment = db.relationship('FeaturedEquipment', back_populates='equipment')
 
+    favorite = db.relationship('Favorite', back_populates='equipment')
+
     #Serialization rules
     serialize_rules = ('-owner.equipment','-owner.owner_inboxes','-owner.agreements', '-images.equipment', '-cart_item.equipment','-equipment_price.equipment', '-featured_equipment.equipment','-cart_item.review','-cart_item.agreements', '-cart_item.cart')
     
@@ -258,19 +260,21 @@ class FeaturedEquipment(db.Model, SerializerMixin):
 
     #This and EquipmentPrice don't necessarily have routes yet, so we'll wait to do more serialize rules
 
-# class Favorite(db.Model, SerializerMixin):
-#     __tablename__="favorites"
+class Favorite(db.Model, SerializerMixin):
+    __tablename__="favorites"
 
-#     id = db.Column(db.Integer, primary_key = True)
+    id = db.Column(db.Integer, primary_key = True)
 
-#     equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
-#     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-#     owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'))
+    equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'))
 
-#     equipment = db.relationship('Equipment', back_populates='favorite')
+    equipment = db.relationship('Equipment', back_populates='favorite')
+    user = db.relationship('User', back_populates="favorite" )
+    owner = db.relationship("Owner", back_populates="favorite")
 
-#     #Serialization rules
-#     serialize_rules = ('-equipment.favorites', )
+    #Serialization rules
+    serialize_rules = ('-equipment.favorites','-user.favorite','-owner.favorite')
 
     #This and EquipmentPrice don't necessarily have routes yet, so we'll wait to do more serialize rules
 
