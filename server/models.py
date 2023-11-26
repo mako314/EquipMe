@@ -41,8 +41,8 @@ class User(db.Model, SerializerMixin):
 
     review = db.relationship ('Review', back_populates='user')
 
-    user_favorites = db.relationship('UserFavorite', back_populates='user')
-    owner_favorites = db.relationship('OwnerFavorite', back_populates='user')
+    user_favorite = db.relationship('UserFavorite', back_populates='user')
+    owner_favorite = db.relationship('OwnerFavorite', back_populates='user')
 
     #Serialization rules
     # serialize_rules = ('-agreements.user', '-user_inboxes.user', '-cart.user', '-review.user', '-review.cart_item','-review_owner', )
@@ -50,7 +50,7 @@ class User(db.Model, SerializerMixin):
     # '-review', '-cart', '-agreements', '-user_inboxes'
 
     # I may not need the relationship agreements to user directly, if it can be accessed inside of the cart_items, etc
-    serialize_rules = ('-review.user.cart','-review.user.user_inboxes','-review.owner.owner_inboxes','-review.owner.equipment','-review.owner.agreements','-review.cart_item','-cart.cart_item.agreements.cart_item','-cart.cart_item.equipment.featured_equipment','-cart.cart_item.equipment.equipment_price', '-cart.cart_item.equipment.owner.owner_inboxes','-cart.cart_item.equipment.owner.review','-cart.user' ,'-agreements', '-user_inboxes.user', '-user_favorites.user', '-user_favorites.owner', '-user_favorites.owner')
+    serialize_rules = ('-review.user.cart','-review.user.user_inboxes','-review.owner.owner_inboxes','-review.owner.equipment','-review.owner.agreements','-review.cart_item','-cart.cart_item.agreements.cart_item','-cart.cart_item.equipment.featured_equipment','-cart.cart_item.equipment.equipment_price', '-cart.cart_item.equipment.owner.owner_inboxes','-cart.cart_item.equipment.owner.review','-cart.user' ,'-agreements', '-user_inboxes.user', '-user_favorite.user', '-user_favorite.owner', '-user_favorite.owner')
 
     #'-review'
     #'-review.cart_item.cart','-review.cart_item.agreements', '-review.cart_item.equipment'
@@ -126,12 +126,12 @@ class EquipmentOwner(db.Model, SerializerMixin):
 
     review = db.relationship ('Review', back_populates='owner')
 
-    owner_favorites = db.relationship('OwnerFavorite', back_populates='owner')
+    owner_favorite = db.relationship('OwnerFavorite', back_populates='owner')
     # I could include owner here, howeevr I'm not sure it's necessarily required.
     #Serialization rules
-    serialize_rules = ('-equipment.owner', '-agreements.owner', '-owner_inboxes.owner','-owner_inboxes.user', '-review.user.cart', '-review.user.user_inboxes','-review.owner.owner_inboxes', '-review.owner.equipment','-review.owner.agreements','-review.cart_item', '-equipment.cart_item.cart.cart_item', '-owner_favorites.owner', '-owner_favorites.equipment', '-owner_favorites.user')
+    serialize_rules = ('-equipment.owner', '-agreements.owner', '-owner_inboxes.owner','-owner_inboxes.user', '-review.user.cart', '-review.user.user_inboxes','-review.owner.owner_inboxes', '-review.owner.equipment','-review.owner.agreements','-review.cart_item', '-equipment.cart_item.cart.cart_item', '-owner_favorite.owner', '-owner_favorite.equipment', '-owner_favorite.user')
 
-    # '-owner_favorites.equipment.owner','-owner_favorites.equipment.cart_item', '-owner_favorites.equipment.owner_inboxes','-owner_favorites.featured_equipment', '-owner_favorites.equipment.equipment_price',
+    # '-owner_favorite.equipment.owner','-owner_favorite.equipment.cart_item', '-owner_favorite.equipment.owner_inboxes','-owner_favorite.featured_equipment', '-owner_favorite.equipment.equipment_price',
 
     #PROPERTIES
     @hybrid_property
@@ -203,10 +203,10 @@ class Equipment(db.Model, SerializerMixin):
 
     featured_equipment = db.relationship('FeaturedEquipment', back_populates='equipment')
 
-    users_favorite = db.relationship('UserFavorite', back_populates='equipment')
+    user_favorite = db.relationship('UserFavorite', back_populates='equipment')
 
     #Serialization rules
-    serialize_rules = ('-owner.equipment','-owner.owner_inboxes','-owner.agreements', '-images.equipment', '-cart_item.equipment','-equipment_price.equipment', '-featured_equipment.equipment','-cart_item.review','-cart_item.agreements', '-cart_item.cart', '-users_favorite.equipment', '-users_favorite.owner', '-users_favorite.user.user_inboxes', '-users_favorite.user.agreement','-users_favorite.user.cart','-users_favorite.user.review')
+    serialize_rules = ('-owner.equipment','-owner.owner_inboxes','-owner.agreements', '-images.equipment', '-cart_item.equipment','-equipment_price.equipment', '-featured_equipment.equipment','-cart_item.review','-cart_item.agreements', '-cart_item.cart', '-user_favorite.equipment', '-user_favorite.owner', '-user_favorite.user.user_inboxes', '-user_favorite.user.agreement','-user_favorite.user.cart','-user_favorite.user.review')
     
     # '-agreements.equipment', # REMOVED DUE TO AGREEMENTS BEING TO CART ITEMS
     
@@ -275,8 +275,8 @@ class UserFavorite(db.Model, SerializerMixin):
     equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'), nullable= True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable= True)
 
-    equipment = db.relationship('Equipment', back_populates='user_favorites')
-    user = db.relationship('User', back_populates="user_favorites" )
+    equipment = db.relationship('Equipment', back_populates='user_favorite')
+    user = db.relationship('User', back_populates="user_favorite" )
 
     #Serialization rules
     serialize_rules = ('-equipment','-user')
@@ -290,14 +290,13 @@ class OwnerFavorite(db.Model, SerializerMixin):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable= True)
 
 
-    user = db.relationship('User', back_populates="owner_favorites" )
-    owner = db.relationship("EquipmentOwner", back_populates="owner_favorites")
+    user = db.relationship('User', back_populates="owner_favorite" )
+    owner = db.relationship("EquipmentOwner", back_populates="owner_favorite")
 
     #Serialization rules
     serialize_rules = ('-user','-owner')
 
-    
-
+#---------------Rental agreements
 class RentalAgreement(db.Model, SerializerMixin):
     __tablename__ = "agreements"
 
