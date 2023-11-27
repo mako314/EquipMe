@@ -50,10 +50,10 @@ class User(db.Model, SerializerMixin):
     # '-review', '-cart', '-agreements', '-user_inboxes'
 
     # I may not need the relationship agreements to user directly, if it can be accessed inside of the cart_items, etc
-    serialize_rules = ('-review.user.cart','-review.user.user_inboxes','-review.owner.owner_inboxes','-review.owner.equipment','-review.owner.agreements','-review.cart_item','-cart.cart_item.agreements.cart_item','-cart.cart_item.equipment.featured_equipment','-cart.cart_item.equipment.equipment_price', '-cart.cart_item.equipment.owner.owner_inboxes','-cart.cart_item.equipment.owner.review','-cart.user' ,'-agreements', '-user_inboxes.user', '-user_favorite.user', '-user_favorite.owner', '-user_favorite.owner')
+    serialize_rules = ('-review.user.cart','-review.user.user_inboxes','-review.owner.owner_inboxes','-review.owner.equipment','-review.owner.agreements','-review.cart_item','-cart.cart_item.agreements.cart_item','-cart.cart_item.equipment.featured_equipment','-cart.cart_item.equipment.equipment_price', '-cart.cart_item.equipment.owner.owner_inboxes','-cart.cart_item.equipment.owner.review','-cart.user','-agreements', '-user_inboxes.user', '-user_favorite', '-user_favorite.owner_favorite', '-cart.cart_item.equipment.user_favorite')
 
     #'-review'
-    #'-review.cart_item.cart','-review.cart_item.agreements', '-review.cart_item.equipment'
+    #'-review.cart_item.cart','-review.cart_item.agreements', '-review.cart_item.equipment','-cart.cart_item.user_favorite'
 
     #'-cart.items.agreements' I think I want the agreements for the items
 
@@ -294,7 +294,7 @@ class OwnerFavorite(db.Model, SerializerMixin):
     owner = db.relationship("EquipmentOwner", back_populates="owner_favorite")
 
     #Serialization rules
-    serialize_rules = ('-user','-owner')
+    serialize_rules = ('-user','-owner',)
 
 #---------------Rental agreements
 class RentalAgreement(db.Model, SerializerMixin):
