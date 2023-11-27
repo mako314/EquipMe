@@ -621,6 +621,10 @@ if __name__ == '__main__':
                 equipment_id= equipment_list[0].id,
                 user_id = user_1.id,
             ),
+            UserFavorite(
+                user_id = user_1.id,
+                owner_id = owner_2.id
+            ),
             OwnerFavorite(
                 user_id = user_1.id,
                 owner_id = owner_2.id,
