@@ -731,7 +731,7 @@ class UserFavoriteOwner(Resource):
         data = request.get_json()
         try:
         #need a way to input, owner_id and owner maybe a 2 step process?
-            new_favorite = Equipment(
+            new_favorite = UserFavorite(
                 user_id = data['user_id'],
                 owner_id = data['owner_id'],
             )
@@ -745,6 +745,30 @@ class UserFavoriteOwner(Resource):
             return make_response({"error": ["validations errors, check your input and try again"]} , 400)
 
 api.add_resource(UserFavoriteOwner, '/user/favorite/owner')
+
+# class RemoveUserFavorite(Resource):
+#     def delete(self):
+        
+
+
+class OwnerFavoriteUser(Resource):
+    def post(self):
+        data = request.get_json()
+        try:
+            new_favorite = OwnerFavorite(
+                owner_id = data['owner_id'],
+                user_id = data['user_id'],
+            )
+            db.session.add(new_favorite)
+            db.session.commit()
+
+            response = make_response(new_favorite.to_dict(), 201)
+            return response
+        except ValueError:
+            return make_response({"error": ["validations errors, check your input and try again"]} , 400)
+
+api.add_resource(OwnerFavoriteUser, '/owner/favorite/user')
+
 
 #-----------------------------------------------Bulk Equipment Upload Route-----------------------------------------------------------------------------#
 
