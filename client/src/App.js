@@ -301,7 +301,7 @@ function App() {
             <Route path='/equipment' element={<ProductCollection equipmentArray={filteredEquipmentArray} handleEquipmentDelete={handleEquipmentDelete} handleEditEquipment={handleEditEquipment} />} />
             <Route path='/equipment_owners' element={<OwnerCollection searchTerm={searchTerm} handleEditOwner={handleEditOwner} handleOwnerDelete={handleOwnerDelete} equipmentOwnerArray={owners} />} />
             <Route path='/rental_agreements' element={<RentalAgreementsCollection />} />
-            <Route path='/users/extra' element={<UserCollection searchTerm={searchTerm} users={users}/>} />
+            <Route path='/users' element={<UserCollection searchTerm={searchTerm} users={users}/>} />
     
             {/* ID / INDIVIDUAL / DISPLAY ROUTES */}
             <Route path='/equipment/:id' element={<ProductDisplay/>} />

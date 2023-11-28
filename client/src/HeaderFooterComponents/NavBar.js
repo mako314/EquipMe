@@ -31,20 +31,6 @@ function NavBar({ setSearchTerm }) {
     })
   }
 
-  // function ownerHandleLogout() {
-  //   fetch(`${apiUrl}owner/logout`, {
-  //       method: "DELETE",
-  //       credentials: 'include'
-  //   }).then( () => {
-  //     setOwner(null)
-  //     setCurrentUser(null); // Clearing the current user in session context
-  //     setRole(''); //  Clear the role
-  //     closeMobileView()
-  //   })
-  // }
-
-  // onClick = {handleLogout}
-
   function UserProfileClick() {
     navigate(`/user/profile/${currentUser.id}`)
 }
@@ -136,7 +122,7 @@ function NavBar({ setSearchTerm }) {
             </li>
             <li role="none" className="flex items-stretch">
                     <Link
-                    to="/equipment_owners" 
+                    to={role === 'user' ? "/equipment_owners" : "/users"} 
                     role="menuitem"
                     aria-haspopup="false"
                     tabIndex="0"
@@ -145,7 +131,7 @@ function NavBar({ setSearchTerm }) {
                         isToggleOpen ? "black" : "white"
                     } transition-colors duration-300 hover:text-amber-500 lg:px-8`}
                     >
-                    Rent from our Partners
+                    {role === 'user' ? "Rent from our Partners" : "Users"}
                     </Link>
             </li>
             </ul>
@@ -256,7 +242,7 @@ function NavBar({ setSearchTerm }) {
             </li>
             <li role="none" className="flex items-stretch">
                     <Link
-                    to="/equipment_owners" 
+                    to="/equipment_owners"
                     role="menuitem"
                     aria-haspopup="false"
                     tabIndex="0"
