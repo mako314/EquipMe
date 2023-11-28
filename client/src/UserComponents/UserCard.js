@@ -1,15 +1,14 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom"
-import OwnerContext from '../OwnerComponents/OwnerContext'
 import ContactModal from '../MessagingComponents/ContactModal'
+import { UserSessionContext } from './SessionContext'
 
-function UserCard({ id, email, name, location, phone, profileImage, item, profession, fromOwnerDash }) {
-    
-    const [owner, setOwner] = useContext(OwnerContext)
-
-    console.log(owner)
+function UserCard({ id, email, firstName, lastName, location, phone, profileImage, item, profession, fromOwnerDash }) {
+    const { currentUser, role, setCurrentUser, setRole } = UserSessionContext()
 
     console.log("WHAT ARE YOU",fromOwnerDash)
+
+    console.log(firstName)
 
     const navigate = useNavigate()
 
@@ -24,10 +23,10 @@ function UserCard({ id, email, name, location, phone, profileImage, item, profes
 
         <div className="flex items-center">
                 <div className="container mx-auto p-9 bg-white max-w-sm rounded-2xl border-2 border-solid border-gray-900 overflow-hidden shadow-outline hover:shadow-2xl transition duration-300">
-                <img className="rounded-xl" src={profileImage} alt="" />
+                <img className="rounded-xl object-contain h-48 w-full" src={profileImage} alt="" />
                 <div className="flex flex-col justify-between items-start mt-4"> {/* Use flex-col and items-start */}
                     <div>
-                        <h1 className="text-2xl font-semibold">{name}</h1>
+                        <h1 className="text-2xl font-semibold">{firstName} {lastName}</h1>
                         <p className="mt-2">{email}</p>
                         <p>{phone}</p>
                         <p>{location}</p>

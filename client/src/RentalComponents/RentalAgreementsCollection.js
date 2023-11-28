@@ -8,15 +8,23 @@ function RentalAgreementsCollection({ }) {
     const { currentUser, role} = UserSessionContext()
     const apiUrl = useContext(ApiUrlContext)
     console.log(currentUser)
-    // Map over fetched rental data and make them into cards. This is ALL rental agreements.
-    // const rentalCards = rentalAgreementArray?.map((item) => {
-    //     console.log(item)
-    //     if(item && item.equipment && item.user){
-    //     return (<RentalCard key={item.id} item={item} equipmentName={item.equipment.name} rentalDates={item.rental_dates} renterFirstName={item.user.firstName} renterLastName={item.user.lastName}/> )
-    //     }
-    // })
 
-  // console.log(currentUser.cart[0].cart_item[0].agreements)
+  const formatDate = (date) => {
+    // Was having a lot of issues and couldn't tell where from, so I wrote some validations to test what could be going wrong
+    let newDate = new Date(date)
+    if (!(newDate instanceof Date)) {
+      console.error('Invalid date provided to formatDate:', newDate)
+      return null
+    }
+    //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString
+    let options = {
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit',
+      hour12: true
+    }
+
+    return newDate.toLocaleDateString('en-US', options)
+  }
 
 
   // Need to find a way to map over an array that's nested inside of an array.
@@ -31,8 +39,8 @@ function RentalAgreementsCollection({ }) {
       cartName={cart.cart_name}
       quantity={item.quantity}
       equipmentName={item.equipment.name}
-      rentalStart={agreement.rental_start_date}
-      rentalEnd={agreement.rental_end_date}
+      rentalStart={formatDate(agreement.rental_start_date)}
+      rentalEnd={formatDate(agreement.rental_end_date)}
       renterFirstName={currentUser.firstName}
       renterLastName={currentUser.lastName}
       location={item.equipment.location}

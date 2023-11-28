@@ -148,7 +148,7 @@ const addCart = (newCart) => {
 
   function handleAddToCartClick() {
     if(startRental === '' || endRental === ''){
-      toast.warn(`📆 Please pick a date to add this item to your cart!`,
+      return toast.warn(`📆 Please pick a date to add this item to your cart!`,
         {
         "autoClose" : 2000
         })
