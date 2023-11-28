@@ -1,4 +1,4 @@
-from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement, Message, Thread,UserInbox, OwnerInbox, Cart, CartItem, EquipmentPrice
+from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement, Message, Thread,UserInbox, OwnerInbox, Cart, CartItem, EquipmentPrice, UserFavorite, OwnerFavorite
 # from flask_cors import CORS
 # from flask_migrate import Migrate
 # from flask import Flask, request, make_response, jsonify
@@ -703,6 +703,48 @@ class RentalAgreementsByID(Resource):
             }, 404)
             return response
 api.add_resource(RentalAgreementsByID, '/rental_agreements/<int:id>')
+
+#-----------------------------------------------Favoriting for Users and Owners Routes-----------------------------------------------------------------------------#
+class UserFavoriteEquipment(Resource):
+    def post(self):
+        data = request.get_json()
+        try:
+        #need a way to input, owner_id and owner maybe a 2 step process?
+            new_favorite = UserFavorite(
+                equipment_id = data['equipment_id'],
+                user_id = data['user_id'],
+            )
+            db.session.add(new_favorite)
+            db.session.commit()
+
+            response = make_response(new_favorite.to_dict(), 201)
+            return response
+        
+        except ValueError:
+            return make_response({"error": ["validations errors, check your input and try again"]} , 400)
+
+api.add_resource(UserFavoriteEquipment, '/user/favorite/equipment')
+
+
+class UserFavoriteOwner(Resource):
+    def post(self):
+        data = request.get_json()
+        try:
+        #need a way to input, owner_id and owner maybe a 2 step process?
+            new_favorite = Equipment(
+                user_id = data['user_id'],
+                owner_id = data['owner_id'],
+            )
+            db.session.add(new_favorite)
+            db.session.commit()
+
+            response = make_response(new_favorite.to_dict(), 201)
+            return response
+        
+        except ValueError:
+            return make_response({"error": ["validations errors, check your input and try again"]} , 400)
+
+api.add_resource(UserFavoriteOwner, '/user/favorite/owner')
 
 #-----------------------------------------------Bulk Equipment Upload Route-----------------------------------------------------------------------------#
 
