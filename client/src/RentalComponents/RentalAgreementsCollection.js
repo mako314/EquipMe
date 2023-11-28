@@ -8,15 +8,31 @@ function RentalAgreementsCollection({ }) {
     const { currentUser, role} = UserSessionContext()
     const apiUrl = useContext(ApiUrlContext)
     console.log(currentUser)
-    // Map over fetched rental data and make them into cards. This is ALL rental agreements.
-    // const rentalCards = rentalAgreementArray?.map((item) => {
-    //     console.log(item)
-    //     if(item && item.equipment && item.user){
-    //     return (<RentalCard key={item.id} item={item} equipmentName={item.equipment.name} rentalDates={item.rental_dates} renterFirstName={item.user.firstName} renterLastName={item.user.lastName}/> )
-    //     }
-    // })
 
-  // console.log(currentUser.cart[0].cart_item[0].agreements)
+  const formatDate = (date) => {
+    // Was having a lot of issues and couldn't tell where from, so I wrote some validations to test what could be going wrong
+    let newDate = new Date(date)
+    if (!(newDate instanceof Date)) {
+      console.error('Invalid date provided to formatDate:', newDate)
+      return null
+    }
+
+    let options = {
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit',
+      hour12: true
+    }
+
+    // Adjust the date to local timezone, .getTimeZoneOffset returns the difference in minutes. Most of this needs second / milliseconds so that's where the *60000 comes from
+    let timezoneOffset = newDate.getTimezoneOffset() * 60000
+    // To get the local date, you just take the date z(which we test to see if it was an instance of Date, since the useEffect makes it so it continues). When subtracting timezoneOffset, you just get the appropriate time, 24hr format.
+    let localDate = new Date(newDate - timezoneOffset)
+    // Slice so I don't get the very long info, can do -8 or 16. 
+    // https://stackoverflow.com/questions/67423091/react-jsx-add-min-date-time-to-datetime-local-input
+    // For some reason though my MIN did NOT work
+    console.log(localDate)
+    return localDate.toLocaleDateString('en-US', options)
+  }
 
 
   // Need to find a way to map over an array that's nested inside of an array.
@@ -31,8 +47,8 @@ function RentalAgreementsCollection({ }) {
       cartName={cart.cart_name}
       quantity={item.quantity}
       equipmentName={item.equipment.name}
-      rentalStart={agreement.rental_start_date}
-      rentalEnd={agreement.rental_end_date}
+      rentalStart={formatDate(agreement.rental_start_date)}
+      rentalEnd={formatDate(agreement.rental_end_date)}
       renterFirstName={currentUser.firstName}
       renterLastName={currentUser.lastName}
       location={item.equipment.location}

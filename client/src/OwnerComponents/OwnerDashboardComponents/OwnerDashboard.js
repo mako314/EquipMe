@@ -27,8 +27,8 @@ function OwnerDashboard({ownerToEdit, updateOwner, fromOwnerDash, setFromOwnerDa
 
     const apiUrl = useContext(ApiUrlContext)
 
-    console.log("USER INFO",currentUser)
-    console.log("With a role of:", role)
+    // console.log("USER INFO",currentUser)
+    // console.log("With a role of:", role)
 
     //After a lot of consideration, users will also have a dashboard. Seems friendlier 
 
