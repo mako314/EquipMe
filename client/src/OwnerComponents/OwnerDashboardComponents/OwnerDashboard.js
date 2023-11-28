@@ -24,7 +24,7 @@ function OwnerDashboard({ownerToEdit, updateOwner, fromOwnerDash, setFromOwnerDa
     const [toggleHomeDash, setToggleHomeDash] = useState(null)
     const [potentialRentalUsers, setPotentialRentalUsers] = useState([])
     const [potentialRentalOwners, setPotentialRentalOwners] = useState([])
-
+    
     const apiUrl = useContext(ApiUrlContext)
 
     // console.log("USER INFO",currentUser)
@@ -76,12 +76,15 @@ function OwnerDashboard({ownerToEdit, updateOwner, fromOwnerDash, setFromOwnerDa
         fetch(`${apiUrl}owners/${currentUser?.profession}`)
         .then((resp) => resp.json())
         .then((data) => {
-            setPotentialRentalOwners(data)
+            const ownerCollection = (
+                <OwnerCollection 
+                    searchTerm={searchTerm} 
+                    equipmentOwnerArray={data} 
+                    setFromOwnerDash={setFromOwnerDash} 
+                    fromOwnerDash={fromOwnerDash}/>
+            )
+            setToggleHomeDash(ownerCollection)
         })
-        potentialOwners =
-        <>
-            <OwnerCollection searchTerm={searchTerm} equipmentOwnerArray={potentialRentalOwners} setFromOwnerDash={setFromOwnerDash} fromOwnerDash={fromOwnerDash}/>
-        </>
     }
 
 //-------------------------------------------------------------OWNER CONDITIONAL DATA --------------------------------------------------------------------
@@ -200,7 +203,6 @@ function AccountSettings() {
                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {
                                 handlePotentialOwners()
                                 setFromOwnerDash(!fromOwnerDash)
-                                setToggleHomeDash(potentialOwners)
                             }}> Potential Rental Interests </span>}
 
                             <Link to='/messaging'>
