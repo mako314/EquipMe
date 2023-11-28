@@ -761,7 +761,7 @@ class RemoveUserFavorite(Resource):
             }, 404)
             return response
 
-api.add_resource(RemoveUserFavorite, '/remove/user/favorite')
+api.add_resource(RemoveUserFavorite, '/remove/user/favorite/<int:id>')
 
 class OwnerFavoriteUser(Resource):
     def post(self):
@@ -780,6 +780,23 @@ class OwnerFavoriteUser(Resource):
             return make_response({"error": ["validations errors, check your input and try again"]} , 400)
 
 api.add_resource(OwnerFavoriteUser, '/owner/favorite/user')
+
+class RemoveOwnerFavorite(Resource):
+    def delete(self, id):
+        favorite = OwnerFavorite.query.filter(OwnerFavorite.id == id).first()
+
+        if favorite:
+            db.session.delete(favorite)
+            db.session.commit()
+            response = make_response({"message":"Succesfully deleted!"}, 204)
+            return response
+        else:
+            response = make_response({
+            "error": "Favorite not found"
+            }, 404)
+            return response
+
+api.add_resource(RemoveOwnerFavorite, '/remove/owner/favorite/<int:id>')
 
 
 #-----------------------------------------------Bulk Equipment Upload Route-----------------------------------------------------------------------------#
