@@ -117,7 +117,7 @@ function EquipmentDisplay({}) {
             </div>
             <div className="flex border-t border-gray-800 py-2">
               <span className="text-gray-500">Owner</span>
-              <span className="ml-auto text-white">Owner Name</span>
+              <span className="ml-auto text-white">{oneEquipment.owner.firstName} {oneEquipment.owner.lastName}</span>
             </div>
             <div className="flex border-t border-b mb-6 border-gray-800 py-2">
               <span className="text-gray-500">Quantity</span>

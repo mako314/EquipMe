@@ -437,7 +437,7 @@ class EquipmentByID(Resource):
         #need a way to input, owner_id and owner maybe a 2 step process?
         #may be able to do rules to remove agreements, likely not needed information, or is it?
         if equipment:
-            return make_response(equipment.to_dict(rules = ('-owner',)),200)
+            return make_response(equipment.to_dict(),200)
         else:
             response = make_response({
             "error": "Equipment not found"
