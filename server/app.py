@@ -1074,13 +1074,19 @@ class AddItemToCart(Resource):
         db.session.add(new_item)
         db.session.commit()
 
-        cart.calculate_total()
-        db.session.commit()
+        if equipment.quantity >= data['quantity']:
+            equipment.quantity -= data['quantity']
+            db.session.commit()  # Commit the changes for both new_item and updated equipment quantity
+            cart.calculate_total()
+            db.session.commit()  # Commit changes after recalculating the total
+            response = make_response({'id': new_item.id,'details': new_item.to_dict()}, 201)
+            return response
+        else:
+            # If not enough equipment quantity, handle error 
+            return make_response({'error': 'Not enough equipment available'}, 400)
 
-        response = make_response({'id': new_item.id,'details': new_item.to_dict()}, 201)
-
-        return response
-
+        # cart.calculate_total()
+        # db.session.commit()
         #except ValueError ()
 
     def patch(self, cart_id):
