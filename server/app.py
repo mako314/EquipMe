@@ -1,4 +1,4 @@
-from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement, Message, Thread,UserInbox, OwnerInbox, Cart, CartItem, EquipmentPrice
+from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement, Message, Thread,UserInbox, OwnerInbox, Cart, CartItem, EquipmentPrice, UserFavorite, OwnerFavorite
 # from flask_cors import CORS
 # from flask_migrate import Migrate
 # from flask import Flask, request, make_response, jsonify
@@ -437,7 +437,7 @@ class EquipmentByID(Resource):
         #need a way to input, owner_id and owner maybe a 2 step process?
         #may be able to do rules to remove agreements, likely not needed information, or is it?
         if equipment:
-            return make_response(equipment.to_dict(rules = ('-owner',)),200)
+            return make_response(equipment.to_dict(),200)
         else:
             response = make_response({
             "error": "Equipment not found"
@@ -703,6 +703,101 @@ class RentalAgreementsByID(Resource):
             }, 404)
             return response
 api.add_resource(RentalAgreementsByID, '/rental_agreements/<int:id>')
+
+#-----------------------------------------------Favoriting for Users and Owners Routes-----------------------------------------------------------------------------#
+class UserFavoriteEquipment(Resource):
+    def post(self):
+        data = request.get_json()
+        try:
+        #need a way to input, owner_id and owner maybe a 2 step process?
+            new_favorite = UserFavorite(
+                equipment_id = data['equipment_id'],
+                user_id = data['user_id'],
+            )
+            db.session.add(new_favorite)
+            db.session.commit()
+
+            response = make_response(new_favorite.to_dict(), 201)
+            return response
+        
+        except ValueError:
+            return make_response({"error": ["validations errors, check your input and try again"]} , 400)
+
+api.add_resource(UserFavoriteEquipment, '/user/favorite/equipment')
+
+
+class UserFavoriteOwner(Resource):
+    def post(self):
+        data = request.get_json()
+        try:
+        #need a way to input, owner_id and owner maybe a 2 step process?
+            new_favorite = UserFavorite(
+                user_id = data['user_id'],
+                owner_id = data['owner_id'],
+            )
+            db.session.add(new_favorite)
+            db.session.commit()
+
+            response = make_response(new_favorite.to_dict(), 201)
+            return response
+        
+        except ValueError:
+            return make_response({"error": ["validations errors, check your input and try again"]} , 400)
+
+api.add_resource(UserFavoriteOwner, '/user/favorite/owner')
+
+class RemoveUserFavorite(Resource):
+    def delete(self, id):
+        favorite = UserFavorite.query.filter(UserFavorite.id == id).first()
+
+        if favorite:
+            db.session.delete(favorite)
+            db.session.commit()
+            response = make_response({"message":"Succesfully deleted!"}, 204)
+            return response
+        else:
+            response = make_response({
+            "error": "Favorite not found"
+            }, 404)
+            return response
+
+api.add_resource(RemoveUserFavorite, '/remove/user/favorite/<int:id>')
+
+class OwnerFavoriteUser(Resource):
+    def post(self):
+        data = request.get_json()
+        try:
+            new_favorite = OwnerFavorite(
+                owner_id = data['owner_id'],
+                user_id = data['user_id'],
+            )
+            db.session.add(new_favorite)
+            db.session.commit()
+
+            response = make_response(new_favorite.to_dict(), 201)
+            return response
+        except ValueError:
+            return make_response({"error": ["validations errors, check your input and try again"]} , 400)
+
+api.add_resource(OwnerFavoriteUser, '/owner/favorite/user')
+
+class RemoveOwnerFavorite(Resource):
+    def delete(self, id):
+        favorite = OwnerFavorite.query.filter(OwnerFavorite.id == id).first()
+
+        if favorite:
+            db.session.delete(favorite)
+            db.session.commit()
+            response = make_response({"message":"Succesfully deleted!"}, 204)
+            return response
+        else:
+            response = make_response({
+            "error": "Favorite not found"
+            }, 404)
+            return response
+
+api.add_resource(RemoveOwnerFavorite, '/remove/owner/favorite/<int:id>')
+
 
 #-----------------------------------------------Bulk Equipment Upload Route-----------------------------------------------------------------------------#
 
@@ -979,13 +1074,19 @@ class AddItemToCart(Resource):
         db.session.add(new_item)
         db.session.commit()
 
-        cart.calculate_total()
-        db.session.commit()
+        if equipment.quantity >= data['quantity']:
+            equipment.quantity -= data['quantity']
+            db.session.commit()  # Commit the changes for both new_item and updated equipment quantity
+            cart.calculate_total()
+            db.session.commit()  # Commit changes after recalculating the total
+            response = make_response({'id': new_item.id,'details': new_item.to_dict()}, 201)
+            return response
+        else:
+            # If not enough equipment quantity, handle error 
+            return make_response({'error': 'Not enough equipment available'}, 400)
 
-        response = make_response({'id': new_item.id,'details': new_item.to_dict()}, 201)
-
-        return response
-
+        # cart.calculate_total()
+        # db.session.commit()
         #except ValueError ()
 
     def patch(self, cart_id):

@@ -18,16 +18,19 @@ function EquipmentDisplay({}) {
   // const [owner, setOwner] = useContext(OwnerContext)
 
   const apiUrl = useContext(ApiUrlContext)
-  const { currentUser, role } = UserSessionContext()
+  const { currentUser, role, checkSession} = UserSessionContext()
   const [addToCartButton, setAddToCartButton] = useState(<span>Placeholder</span>);
   const [oneEquipment, setOneEquipment] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [heartColor, setHeartColor] = useState('white')
 
 
-  const { model, name, make, location, email, phone, quantity, equipment_image, equipment_price } = oneEquipment
+  const { model, name, make, location, email, phone, quantity, equipment_image, equipment_price, owner } = oneEquipment
+  const {firstName, lastName} = owner
 
 
   console.log("THE currentUser IS:", currentUser)
+  console.log("Current favorited:", currentUser.user_favorite)
   console.log("THE ROLE IS:", role)
   const navigate = useNavigate()
 
@@ -54,12 +57,15 @@ function EquipmentDisplay({}) {
       setIsModalOpen(!isModalOpen)
   }
 
-
+  //https://www.w3schools.com/jsref/jsref_some.asp
   useEffect( () => {
     if (role === 'user') {
       setAddToCartButton(
         <AddToCartModal equip_id={id} oneEquipment={oneEquipment} toggleModal={toggleModal} isModalOpen={isModalOpen}/>
       )
+      const isFavorited = currentUser.user_favorite?.some(favorite => favorite.equipment_id === parseInt(id, 10))
+      setHeartColor(isFavorited ? "red" : "white")
+
     } else {
       setAddToCartButton(<span>Placeholder</span>)
     }
@@ -67,6 +73,25 @@ function EquipmentDisplay({}) {
 
   //may need to include owner here (in models)
   console.log(oneEquipment)
+
+  // https://react.dev/learn/preserving-and-resetting-state
+  // https://react.dev/reference/react/useRef
+  const handleFavoriteSelection = () => {
+    fetch(`${apiUrl}user/favorite/equipment`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        "user_id": currentUser.id,
+        "equipment_id": id
+      })
+    }).then((resp) => {
+      console.log(resp)
+      setHeartColor("red")
+      checkSession()
+    })
+  }
 
   // Need to make some onclicks for when a user clicks description, reviews, details etc. 
 
@@ -86,14 +111,14 @@ function EquipmentDisplay({}) {
               <a className="flex-grow border-b-2 border-gray-800 py-1 text-lg px-1 mr-2">Reviews</a>
               <a className="flex-grow border-b-2 border-gray-800 py-1 text-lg px-1">Details</a>
             </div>
-            <p className="leading-relaxed mb-4">Fam locavore kickstarter distillery. Mixtape chillwave tumeric sriracha taximy chia microdosing tilde DIY. XOXO fam iligo juiceramps cornhole raw denim forage brooklyn. Everyday carry +1 seitan poutine tumeric. Gastropub blue bottle austin listicle pour-over, neutra jean.</p>
+            <p className="leading-relaxed mb-4">{oneEquipment.description}</p>
             <div className="flex border-t border-gray-800 py-2">
               <span className="text-gray-500">Location</span>
               <span className="ml-auto text-white">{location}</span>
             </div>
             <div className="flex border-t border-gray-800 py-2">
               <span className="text-gray-500">Owner</span>
-              <span className="ml-auto text-white">Owner Name</span>
+              <span className="ml-auto text-white">{firstName} {lastName}</span>
             </div>
             <div className="flex border-t border-b mb-6 border-gray-800 py-2">
               <span className="text-gray-500">Quantity</span>
@@ -105,7 +130,7 @@ function EquipmentDisplay({}) {
               {/* <button className="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded" >Rent Now</button> */}
               {role === 'user' ? <AddToCartModal equip_id={id} oneEquipment={oneEquipment} toggleModal={toggleModal} isModalOpen={isModalOpen}/> : <span>Placeholder</span> }
               <button className="rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
-                <svg fill="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-5 h-5" viewBox="0 0 24 24">
+                <svg fill={heartColor} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-5 h-5" viewBox="0 0 24 24" onClick={handleFavoriteSelection}>
                   <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
                 </svg>
               </button>

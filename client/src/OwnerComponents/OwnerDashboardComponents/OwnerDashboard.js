@@ -10,6 +10,7 @@ import ApiUrlContext from '../../Api';
 //User Imports//
 import RentalAgreementsCollection from '../../RentalComponents/RentalAgreementsCollection';
 import OwnerCollection from '../OwnerCollection'
+import ProductCard from '../../EquipmentComponents/ProductCard';
 
 
 import { UserSessionContext } from '../../UserComponents/SessionContext';
@@ -24,10 +25,11 @@ function OwnerDashboard({ownerToEdit, updateOwner, fromOwnerDash, setFromOwnerDa
     const [toggleHomeDash, setToggleHomeDash] = useState(null)
     const [potentialRentalUsers, setPotentialRentalUsers] = useState([])
     const [potentialRentalOwners, setPotentialRentalOwners] = useState([])
-
+    
     const apiUrl = useContext(ApiUrlContext)
 
-    // console.log("USER INFO",currentUser)
+    console.log("USER INFO",currentUser)
+    console.log("USER FAVORITE",currentUser.user_favorite)
     // console.log("With a role of:", role)
 
     //After a lot of consideration, users will also have a dashboard. Seems friendlier 
@@ -76,12 +78,38 @@ function OwnerDashboard({ownerToEdit, updateOwner, fromOwnerDash, setFromOwnerDa
         fetch(`${apiUrl}owners/${currentUser?.profession}`)
         .then((resp) => resp.json())
         .then((data) => {
-            setPotentialRentalOwners(data)
+            const ownerCollection = (
+                <OwnerCollection 
+                    searchTerm={searchTerm} 
+                    equipmentOwnerArray={data} 
+                    setFromOwnerDash={setFromOwnerDash} 
+                    fromOwnerDash={fromOwnerDash}/>
+            )
+            setToggleHomeDash(ownerCollection)
         })
-        potentialOwners =
-        <>
-            <OwnerCollection searchTerm={searchTerm} equipmentOwnerArray={potentialRentalOwners} setFromOwnerDash={setFromOwnerDash} fromOwnerDash={fromOwnerDash}/>
-        </>
+    }
+
+    function Favorites() {
+        return (
+            <div className="flex flex-wrap ml-4 pt-4">
+                {currentUser?.user_favorite.map((favorite) => {
+                    if (favorite.equipment_id && favorite.equipment) {
+                        return (
+                            <ProductCard
+                                key={favorite.id}
+                                id={favorite.equipment.id}
+                                name={favorite.equipment.name} 
+                                model={favorite.equipment.model}
+                                make={favorite.equipment.make}
+                                location={favorite.equipment.location}
+                                equipment_image={favorite.equipment.equipment_image}
+                            />
+                        )
+                    }
+                    return null
+                })}
+            </div>
+        )
     }
 
 //-------------------------------------------------------------OWNER CONDITIONAL DATA --------------------------------------------------------------------
@@ -130,6 +158,7 @@ function AccountSettings() {
             <UserCollection searchTerm={searchTerm} users={potentialRentalUsers} setFromOwnerDash={setFromOwnerDash} fromOwnerDash={fromOwnerDash}/>
         </>
     }
+
 
     function DashHome(){
         return(
@@ -185,10 +214,20 @@ function AccountSettings() {
                             {role === 'owner' ? 
                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<ActiveListings/>)}> Active listings </span> 
                             : 
-                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<RentalAgreements/>)}> Rental Agreements  </span>}
+                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(
+                            <RentalAgreements/>
+                            )}> Rental Agreements  </span>}
                             
+                            
+                            {/* <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(plannedDeals)}> Planned Deals </span> */}
 
-                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(plannedDeals)}> Planned Deals </span>
+                            {role === 'owner' ? 
+                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(plannedDeals)}> Planned Deals </span>
+                            :
+                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {
+                                setToggleHomeDash(<Favorites/>)
+                            }}> Favorites </span>}
+
 
                             {role === 'owner' ? 
                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {
@@ -200,7 +239,6 @@ function AccountSettings() {
                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {
                                 handlePotentialOwners()
                                 setFromOwnerDash(!fromOwnerDash)
-                                setToggleHomeDash(potentialOwners)
                             }}> Potential Rental Interests </span>}
 
                             <Link to='/messaging'>
