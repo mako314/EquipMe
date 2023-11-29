@@ -32,6 +32,8 @@ function EquipmentDisplay({}) {
     ({ firstName, lastName } = oneEquipment.owner)
   }
 
+  let isFavorited
+
   console.log("THE currentUser IS:", currentUser)
   console.log("Current favorited:", currentUser.user_favorite)
   console.log("THE ROLE IS:", role)
@@ -66,7 +68,7 @@ function EquipmentDisplay({}) {
       setAddToCartButton(
         <AddToCartModal equip_id={id} oneEquipment={oneEquipment} toggleModal={toggleModal} isModalOpen={isModalOpen}/>
       )
-      const isFavorited = currentUser.user_favorite?.some(favorite => favorite.equipment_id === parseInt(id, 10))
+      isFavorited = currentUser?.user_favorite?.some(favorite => favorite.equipment_id === parseInt(id, 10))
       setHeartColor(isFavorited ? "red" : "white")
 
     } else {
@@ -80,7 +82,7 @@ function EquipmentDisplay({}) {
   // https://react.dev/learn/preserving-and-resetting-state
   // https://react.dev/reference/react/useRef
   const handleFavoriteSelection = () => {
-    fetch(`${apiUrl}user/favorite/equipment`, {
+    fetch(`${apiUrl}user/${currentUser.id}/favorite/equipment/${id}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -90,9 +92,18 @@ function EquipmentDisplay({}) {
         "equipment_id": id
       })
     }).then((resp) => {
+      if (!resp.ok){
+        throw new Error("You have already favorited this equipment")
+      }
+      return resp.json()
+    })
+    .then(resp =>{
       console.log(resp)
       setHeartColor("red")
       checkSession()
+    })
+    .catch(error => {
+      console.error('Error:', error)
     })
   }
 
