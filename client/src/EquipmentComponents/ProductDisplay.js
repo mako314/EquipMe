@@ -26,8 +26,11 @@ function EquipmentDisplay({}) {
 
 
   const { model, name, make, location, email, phone, quantity, equipment_image, equipment_price, owner } = oneEquipment
-  const {firstName, lastName} = owner
-
+  
+  let firstName, lastName
+  if (oneEquipment && oneEquipment.owner) {
+    ({ firstName, lastName } = oneEquipment.owner)
+  }
 
   console.log("THE currentUser IS:", currentUser)
   console.log("Current favorited:", currentUser.user_favorite)
