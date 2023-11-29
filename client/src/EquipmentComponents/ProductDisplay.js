@@ -25,7 +25,8 @@ function EquipmentDisplay({}) {
   const [heartColor, setHeartColor] = useState('white')
 
 
-  const { model, name, make, location, email, phone, quantity, equipment_image, equipment_price } = oneEquipment
+  const { model, name, make, location, email, phone, quantity, equipment_image, equipment_price, owner } = oneEquipment
+  const {firstName, lastName} = owner
 
 
   console.log("THE currentUser IS:", currentUser)
@@ -110,14 +111,14 @@ function EquipmentDisplay({}) {
               <a className="flex-grow border-b-2 border-gray-800 py-1 text-lg px-1 mr-2">Reviews</a>
               <a className="flex-grow border-b-2 border-gray-800 py-1 text-lg px-1">Details</a>
             </div>
-            <p className="leading-relaxed mb-4">Fam locavore kickstarter distillery. Mixtape chillwave tumeric sriracha taximy chia microdosing tilde DIY. XOXO fam iligo juiceramps cornhole raw denim forage brooklyn. Everyday carry +1 seitan poutine tumeric. Gastropub blue bottle austin listicle pour-over, neutra jean.</p>
+            <p className="leading-relaxed mb-4">{oneEquipment.description}</p>
             <div className="flex border-t border-gray-800 py-2">
               <span className="text-gray-500">Location</span>
               <span className="ml-auto text-white">{location}</span>
             </div>
             <div className="flex border-t border-gray-800 py-2">
               <span className="text-gray-500">Owner</span>
-              <span className="ml-auto text-white">{oneEquipment.owner.firstName} {oneEquipment.owner.lastName}</span>
+              <span className="ml-auto text-white">{firstName} {lastName}</span>
             </div>
             <div className="flex border-t border-b mb-6 border-gray-800 py-2">
               <span className="text-gray-500">Quantity</span>

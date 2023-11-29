@@ -393,6 +393,7 @@ if __name__ == '__main__':
                 type = 'Heavy Machinery',
                 make = 'Caterpillar',
                 model = '336E L',
+                description = "Experience the power and precision of our top-of-the-line Caterpillar 336E L excavator. With its exceptional durability and advanced technology, this excavator is a game-changer for any construction or excavation project. It's well-maintained, ensuring reliable performance and efficiency. Rent it out to tackle your most demanding earthmoving tasks with confidence.",
                 equipment_image='https://s7d2.scene7.com/is/image/Caterpillar/C10123400',
                 location = '701 NW Street, St Lucie W Blvd, Port St. Lucie, FL 34986',
                 availability = 'True',
@@ -405,6 +406,7 @@ if __name__ == '__main__':
                 type = 'Industrial Vehicle',
                 make = 'Toyota Material Handling',
                 model = '8FGCU25',
+                description = "Get your hands on our Toyota 8FGCU25 forklift, the ultimate solution for your lifting needs. Renowned for its stability and robustness, this forklift is a staple in our rental fleet. It's been meticulously serviced to guarantee your safety and enhance productivity. Whether it's for a warehouse or a construction site, this forklift won't let you down.",
                 equipment_image='https://sielift.com/wp-content/uploads/2018/02/IMG_0837.jpg',
                 location = '701 NW Street, St Lucie W Blvd, Port St. Lucie, FL 34986',
                 availability = 'True',
@@ -417,6 +419,7 @@ if __name__ == '__main__':
                 type = 'Garden Lawnmower',
                 make = 'Honda',
                 model = 'HRX217VKA',
+                description = "Our Honda HRX217VKA lawnmower makes lawn care effortless and enjoyable. With its precise cutting and user-friendly features, it delivers a perfect trim every time. It's lightweight, easy to maneuver, and has been kept in pristine condition for your landscaping needs. Rent this and give your lawn the care it deserves.",
                 equipment_image='https://img.ksl.com/mx/mplace-classifieds.ksl.com/2962808-1691060871-602587.jpg?filter=marketplace/664x500',
                 location = '701 NW Street, St Lucie W Blvd, Port St. Lucie, FL 34986',
                 availability = 'True',
@@ -429,6 +432,7 @@ if __name__ == '__main__':
                 type = 'Farming Equipment',
                 make = 'John Deere',
                 model = '8R 410',
+                description = "Ready for the toughest farming tasks, our John Deere 8R 410 tractor combines strength with sophistication. It's been the backbone of our rental service due to its unmatched power and advanced features. We've taken great care to maintain it to the highest standards, ensuring it's ready to perform whenever you need it.",
                 equipment_image='https://www.deere.com/assets/images/region-4/products/tractors/row-crop-tractors/8r-8rt-row-crop-tractors/8r-410/8r_410_r4f063847_medium_b87e9556a84a3c95374c774923365e9425dd7f67.jpg',
                 location = '701 NW Street, St Lucie W Blvd, Port St. Lucie, FL 34986',
                 availability = 'True',
@@ -440,7 +444,7 @@ if __name__ == '__main__':
 
         db.session.add_all(equipment_list)
         db.session.commit()
-
+#------------------------------------------EQUIPMENT PRICES---------------------------------------
         print('Calculating price of Equipment...')
         equipment_prices = [
             EquipmentPrice(

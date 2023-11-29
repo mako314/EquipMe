@@ -183,6 +183,7 @@ class Equipment(db.Model, SerializerMixin):
     make = db.Column(db.String)
     model = db.Column(db.String)
     #THIS WILL BE TEMPORARY UNTIL I HAVE CLOUD HOSTING SET UP
+    description = db.Column(db.String)
     equipment_image = db.Column(db.String)
     location = db.Column(db.String)
     #base_of_operations = db.Column(db.String)
