@@ -90,22 +90,26 @@ function OwnerDashboard({ownerToEdit, updateOwner, fromOwnerDash, setFromOwnerDa
     }
 
     function Favorites() {
-        return currentUser?.user_favorite.map((favorite) => {
-            if (favorite.equipment_id && favorite.equipment) {
-                return (
-                    <ProductCard
-                        key={favorite.id}
-                        id={favorite.equipment.id}
-                        name={favorite.equipment.name} 
-                        model={favorite.equipment.model}
-                        make={favorite.equipment.make}
-                        location={favorite.equipment.location}
-                        equipment_image={favorite.equipment.equipment_image}
-                    />
-                )
-            }
-            return null
-        })
+        return (
+            <div className="flex flex-wrap ml-4 pt-4">
+                {currentUser?.user_favorite.map((favorite) => {
+                    if (favorite.equipment_id && favorite.equipment) {
+                        return (
+                            <ProductCard
+                                key={favorite.id}
+                                id={favorite.equipment.id}
+                                name={favorite.equipment.name} 
+                                model={favorite.equipment.model}
+                                make={favorite.equipment.make}
+                                location={favorite.equipment.location}
+                                equipment_image={favorite.equipment.equipment_image}
+                            />
+                        )
+                    }
+                    return null
+                })}
+            </div>
+        )
     }
 
 //-------------------------------------------------------------OWNER CONDITIONAL DATA --------------------------------------------------------------------
@@ -210,7 +214,9 @@ function AccountSettings() {
                             {role === 'owner' ? 
                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<ActiveListings/>)}> Active listings </span> 
                             : 
-                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<RentalAgreements/>)}> Rental Agreements  </span>}
+                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(
+                            <RentalAgreements/>
+                            )}> Rental Agreements  </span>}
                             
                             
                             {/* <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(plannedDeals)}> Planned Deals </span> */}

@@ -92,8 +92,6 @@ function EquipmentDisplay({}) {
     })
   }
 
-
-
   // Need to make some onclicks for when a user clicks description, reviews, details etc. 
 
   //What can I include in details? Possibly whether or not the vehicle is available for delivery? Deposit ? ETC?

@@ -13,9 +13,9 @@ function ProductCard({ id, name, model, make, location, equipment_image }) {
     }
 
     return (
-        <div className=" flex items-center">
+        <div className="flex items-center mt-10 ml-4">
             <div className="container mx-auto p-9 bg-white max-w-sm rounded-2xl border-2 border-solid border-gray-900 overflow-hidden shadow-outline hover:shadow-2xl transition duration-300">
-                <img className="rounded-xl" src={equipment_image} alt="" />
+                <img className="rounded-xl h-48 w-full object-contain" src={equipment_image} alt="" />
                 <div className="flex justify-between items-center p-4">
                     <div>
                         <h1 className="mt-5 text-2xl font-semibold">{model}</h1>
