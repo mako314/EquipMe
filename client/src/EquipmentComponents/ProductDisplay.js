@@ -18,7 +18,7 @@ function EquipmentDisplay({}) {
   // const [owner, setOwner] = useContext(OwnerContext)
 
   const apiUrl = useContext(ApiUrlContext)
-  const { currentUser, role } = UserSessionContext()
+  const { currentUser, role, checkSession} = UserSessionContext()
   const [addToCartButton, setAddToCartButton] = useState(<span>Placeholder</span>);
   const [oneEquipment, setOneEquipment] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -56,7 +56,7 @@ function EquipmentDisplay({}) {
       setIsModalOpen(!isModalOpen)
   }
 
-
+  //https://www.w3schools.com/jsref/jsref_some.asp
   useEffect( () => {
     if (role === 'user') {
       setAddToCartButton(
@@ -72,11 +72,10 @@ function EquipmentDisplay({}) {
 
   //may need to include owner here (in models)
   console.log(oneEquipment)
-  
+
   // https://react.dev/learn/preserving-and-resetting-state
   // https://react.dev/reference/react/useRef
   const handleFavoriteSelection = () => {
-
     fetch(`${apiUrl}user/favorite/equipment`, {
       method: "POST",
       headers: {
@@ -89,18 +88,11 @@ function EquipmentDisplay({}) {
     }).then((resp) => {
       console.log(resp)
       setHeartColor("red")
+      checkSession()
     })
   }
 
 
-  // https://www.w3schools.com/jsref/jsref_some.asp
-  // const checkFavorite = (equipment_id) => {
-  //   if (equipment_id === id){
-  //     setHeartColor("red")
-  //   }
-  // }
-
-  // currentUser.user_favorite?.filter(checkFavorite)
 
   // Need to make some onclicks for when a user clicks description, reviews, details etc. 
 
