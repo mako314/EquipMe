@@ -7,11 +7,13 @@ import { useParams, useNavigate, useInRouterContext } from 'react-router-dom';
 
 function UserProfile() {
   // User context, meaning if user is signed in, they get their data,
-  const { currentUser, role } = UserSessionContext() 
+  const { currentUser, role, checkSession } = UserSessionContext() 
   const apiUrl = useContext(ApiUrlContext)
 
   //This will be used to set the userProfile after it's been clicked from the owner, unsure if I want users to be able to view other users
   const [userProfile, setUserProfile] = useState([])
+  const [heartColor, setHeartColor] = useState('white')
+  const [isFavorited, setIsFavorited] = useState(null)
   const navigate = useNavigate();
   const { id } = useParams()
 
@@ -23,13 +25,16 @@ function UserProfile() {
   // }
 
   // User base is solely for renting I think at the moment, would be too much to allow random users to upload equipment
-
-
   useEffect(() => {
     fetch(`${apiUrl}user/${id}`)
       .then((resp) => resp.json())
       .then((data) => {
         setUserProfile(data)
+        const favoriteStatus = currentUser?.owner_favorite?.some(favorite => favorite.user_id === parseInt(id, 10))
+        console.log("Favorite Status:", favoriteStatus)
+        setHeartColor(favoriteStatus ? "red" : "white")
+        // I can't just set is favorited and try it with heart color, it's just too quick and defaults, so I make a variable that contains data and set it to that.
+        setIsFavorited(favoriteStatus)
       })
   }, [])
 
@@ -49,6 +54,35 @@ function UserProfile() {
   
   //May actually want to include a banner image so it looks nicer
 
+
+  const handleFavoriteSelection = () => {
+    console.log(isFavorited)
+    // Conditional method and URL based on whether is favorited doesn't exist off the useEffect
+    const method = !isFavorited ? "POST" : "DELETE"
+    const url = !isFavorited ? `${apiUrl}owner/${currentUser.id}/favorite/user/${id}` : `${apiUrl}remove/owner/${currentUser.id}/favorite/user/${id}`
+  
+    fetch(url, {
+      method: method,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ "owner_id": currentUser.id, "user_id": id})
+    })
+    .then(resp => {
+      if (!resp.ok) {
+        throw new Error("Favorite failed -- unable to favorite")
+      }
+      //Toggle the isFavorite (t or f if it exists), then set heartcolor based on that
+      setIsFavorited(!isFavorited)
+      setHeartColor(!isFavorited ? "red" : "white")
+      checkSession() // Update user data
+    })
+    .catch(error => {
+      console.error('Error:', error)
+      // Revert UI on error
+      setHeartColor(isFavorited ? "red" : "white")
+    })
+  }
 
   return (
     <>
@@ -91,8 +125,8 @@ function UserProfile() {
                 </div>
                 <div className="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center">
                   <div className="py-6 px-3 mt-32 sm:mt-0">
-                  <button className="rounded-full w-10 h-10 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
-                    <svg fill={heartColor} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-5 h-5" viewBox="0 0 24 24" onClick={handleFavoriteSelection}>
+                  <button className="rounded-full w-10 h-10 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4" onClick={handleFavoriteSelection}>
+                    <svg fill={heartColor} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-5 h-5" viewBox="0 0 24 24" >
                         <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
                     </svg>
                   </button>

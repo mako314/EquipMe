@@ -29,9 +29,9 @@ function OwnerDisplay() {
       .then((data) => {
         setOwner(data)
         const favoriteStatus = currentUser?.user_favorite?.some(favorite => favorite.owner_id === parseInt(id, 10))
-      setHeartColor(favoriteStatus ? "red" : "white")
-      // I can't just set is favorited and try it with heart color, it's just too quick and defaults, so I make a variable that contains data and set it to that.
-      setIsFavorited(favoriteStatus)
+        setHeartColor(favoriteStatus ? "red" : "white")
+        // I can't just set is favorited and try it with heart color, it's just too quick and defaults, so I make a variable that contains data and set it to that.
+        setIsFavorited(favoriteStatus)
       })
   }, [])
 
@@ -126,8 +126,8 @@ console.log("reviews:", owner.review)
                                 {role === 'user' || role === 'owner' ? <ContactModal recipientID={id}/> : <span className="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded"> Sign in to contact</span>}
                                 {/* <ContactModal recipientID={id}/> */}
                                 {/* <span className="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded"> {website} </span> */}
-                                <button className="rounded-full w-10 h-10 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
-                                    <svg fill={heartColor} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-5 h-5" viewBox="0 0 24 24" onClick={handleFavoriteSelection}>
+                                <button className="rounded-full w-10 h-10 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4" onClick={handleFavoriteSelection}>
+                                    <svg fill={heartColor} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-5 h-5" viewBox="0 0 24 24">
                                     <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
                                     </svg>
                                 </button>
