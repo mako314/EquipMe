@@ -752,9 +752,9 @@ class UserFavoriteOwner(Resource):
 
 api.add_resource(UserFavoriteOwner, '/user/favorite/owner')
 
-class RemoveUserFavorite(Resource):
-    def delete(self, id):
-        favorite = UserFavorite.query.filter(UserFavorite.id == id).first()
+class RemoveUserEquipmentFavorite(Resource):
+    def delete(self, user_id, equipment_id):
+        favorite = UserFavorite.query.filter_by(user_id=user_id, equipment_id=equipment_id).first()
 
         if favorite:
             db.session.delete(favorite)
@@ -767,7 +767,7 @@ class RemoveUserFavorite(Resource):
             }, 404)
             return response
 
-api.add_resource(RemoveUserFavorite, '/remove/user/favorite/<int:id>')
+api.add_resource(RemoveUserEquipmentFavorite, '/remove/user/<int:user_id>/favorite/<int:equipment_id>')
 
 class OwnerFavoriteUser(Resource):
     def post(self):

@@ -136,8 +136,8 @@ const addCart = (newCart) => {
       setEquipmentQuantity(prevequipmentQuantity => prevequipmentQuantity + 1)
     }
 
-  console.log("The start rental:", startRental)
-  console.log("The end rental:", endRental)
+  // console.log("The start rental:", startRental)
+  // console.log("The end rental:", endRental)
   // Handles adding item to cart, may need to create a cart first, haha...ha......ha.
   // So the post works, but you have to play around with it, I needto capture values prior to 
   // console.log("This is the rental length:",rentalLength)
