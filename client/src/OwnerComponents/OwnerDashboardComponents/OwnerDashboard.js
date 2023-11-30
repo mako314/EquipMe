@@ -10,7 +10,8 @@ import ApiUrlContext from '../../Api';
 //User Imports//
 import RentalAgreementsCollection from '../../RentalComponents/RentalAgreementsCollection';
 import OwnerCollection from '../OwnerCollection'
-import ProductCard from '../../EquipmentComponents/ProductCard';
+import ProductCard from '../../EquipmentComponents/ProductCard'
+import OwnerCard from '../OwnerCard';
 
 
 import { UserSessionContext } from '../../UserComponents/SessionContext';
@@ -25,6 +26,7 @@ function OwnerDashboard({ownerToEdit, updateOwner, fromOwnerDash, setFromOwnerDa
     const [toggleHomeDash, setToggleHomeDash] = useState(null)
     const [potentialRentalUsers, setPotentialRentalUsers] = useState([])
     const [potentialRentalOwners, setPotentialRentalOwners] = useState([])
+    
     
     const apiUrl = useContext(ApiUrlContext)
 
@@ -90,10 +92,38 @@ function OwnerDashboard({ownerToEdit, updateOwner, fromOwnerDash, setFromOwnerDa
     }
 
     function Favorites() {
+        const [selectedFavorite, setSelectedFavorite] = useState('equipment')
+
+        const handleRadioChange = (event) => {
+            setSelectedFavorite(event.target.value)
+        }
+
+        console.log(selectedFavorite)
+
         return (
             <div className="flex flex-wrap ml-4 pt-4">
-                {currentUser?.user_favorite.map((favorite) => {
-                    if (favorite.equipment_id && favorite.equipment) {
+                <form>
+                <input 
+                    type="radio" 
+                    name="fav_option" 
+                    value="equipment" 
+                    id="equipment" 
+                    onChange={handleRadioChange} 
+                    checked={selectedFavorite === 'equipment'}
+                />
+                <label htmlFor="equipment">Equipment</label>
+                <input 
+                    type="radio" 
+                    name="fav_option" 
+                    value="owner" 
+                    id="owner" 
+                    onChange={handleRadioChange} 
+                    checked={selectedFavorite === 'owner'}
+                />
+                <label htmlFor="owner">Owner</label>
+                </form>
+                {currentUser?.user_favorite?.map((favorite) => {
+                    if (selectedFavorite === 'equipment' && favorite.equipment_id && favorite.equipment) {
                         return (
                             <ProductCard
                                 key={favorite.id}
@@ -103,6 +133,18 @@ function OwnerDashboard({ownerToEdit, updateOwner, fromOwnerDash, setFromOwnerDa
                                 make={favorite.equipment.make}
                                 location={favorite.equipment.location}
                                 equipment_image={favorite.equipment.equipment_image}
+                            />
+                        )
+                    } else if (selectedFavorite === 'owner' && favorite.owner_id && favorite.owner){
+                        return (
+                            <OwnerCard
+                            key={favorite.id}
+                            id={favorite.owner.id}
+                            firstName={favorite.owner.firstName}
+                            lastName={favorite.owner.lastName} 
+                            location={favorite.owner.location}
+                            phone={favorite.owner.phone}
+                            profileImage={favorite.owner.profileImage} 
                             />
                         )
                     }
@@ -158,6 +200,14 @@ function AccountSettings() {
             <UserCollection searchTerm={searchTerm} users={potentialRentalUsers} setFromOwnerDash={setFromOwnerDash} fromOwnerDash={fromOwnerDash}/>
         </>
     }
+
+    const handleInboxNavigation = () => {
+        setFromOwnerDash(!fromOwnerDash)
+        // Use setTimeout to allow state update before navigation
+        setTimeout(() => {
+          navigate('/messaging')
+        }, 0)
+      }
 
 
     function DashHome(){
@@ -241,12 +291,9 @@ function AccountSettings() {
                                 setFromOwnerDash(!fromOwnerDash)
                             }}> Potential Rental Interests </span>}
 
-                            <Link to='/messaging'>
-                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {
-                                setFromOwnerDash(!fromOwnerDash)
-                            }}> Inbox </span>
-                            </Link>
-
+                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={handleInboxNavigation}
+                            > Inbox </span>
+                            
                             <span className="flex items-center flex-shrink-0 h-10 px-3 mt-auto text-sm font-medium bg-gray-200 rounded hover:bg-gray-300"
                                 href="#">
                                 <svg className="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">

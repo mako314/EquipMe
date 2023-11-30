@@ -19,10 +19,11 @@ function EquipmentDisplay({}) {
 
   const apiUrl = useContext(ApiUrlContext)
   const { currentUser, role, checkSession} = UserSessionContext()
-  const [addToCartButton, setAddToCartButton] = useState(<span>Placeholder</span>);
+  const [addToCartButton, setAddToCartButton] = useState(<span>Placeholder</span>)
   const [oneEquipment, setOneEquipment] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [heartColor, setHeartColor] = useState('white')
+  const [isFavorited, setIsFavorited] = useState(null)
 
 
   const { model, name, make, location, email, phone, quantity, equipment_image, equipment_price, owner } = oneEquipment
@@ -32,10 +33,14 @@ function EquipmentDisplay({}) {
     ({ firstName, lastName } = oneEquipment.owner)
   }
 
-  console.log("THE currentUser IS:", currentUser)
-  console.log("Current favorited:", currentUser.user_favorite)
-  console.log("THE ROLE IS:", role)
+
+
+  // console.log("THE currentUser IS:", currentUser)
+  // console.log("Current favorited:", currentUser.user_favorite)
+  // console.log("THE ROLE IS:", role)
   const navigate = useNavigate()
+
+  console.log("Is favorited Status:", isFavorited)
 
   useEffect(() => {
     fetch(`${apiUrl}equipment/${id}`)
@@ -59,15 +64,19 @@ function EquipmentDisplay({}) {
     const toggleModal = () => {
       setIsModalOpen(!isModalOpen)
   }
-
+  // console.log(typeof(id))
   //https://www.w3schools.com/jsref/jsref_some.asp
+  // Parse inst because the ues params makes it into a string
   useEffect( () => {
     if (role === 'user') {
       setAddToCartButton(
         <AddToCartModal equip_id={id} oneEquipment={oneEquipment} toggleModal={toggleModal} isModalOpen={isModalOpen}/>
       )
-      const isFavorited = currentUser.user_favorite?.some(favorite => favorite.equipment_id === parseInt(id, 10))
-      setHeartColor(isFavorited ? "red" : "white")
+      const favoriteStatus = currentUser?.user_favorite?.some(favorite => favorite.equipment_id === parseInt(id, 10))
+      console.log("FAVORITE STATUS:", favoriteStatus)
+      setHeartColor(favoriteStatus ? "red" : "white")
+      // I can't just set is favorited and try it with heart color, it's just too quick and defaults, so I make a variable that contains data and set it to that.
+      setIsFavorited(favoriteStatus)
 
     } else {
       setAddToCartButton(<span>Placeholder</span>)
@@ -75,24 +84,36 @@ function EquipmentDisplay({}) {
   }, [role, currentUser])
 
   //may need to include owner here (in models)
-  console.log(oneEquipment)
+  // console.log(oneEquipment)
 
   // https://react.dev/learn/preserving-and-resetting-state
   // https://react.dev/reference/react/useRef
   const handleFavoriteSelection = () => {
-    fetch(`${apiUrl}user/favorite/equipment`, {
-      method: "POST",
+    console.log(isFavorited)
+    // Conditional method and URL based on whether is favorited doesn't exist off the useEffect
+    const method = !isFavorited ? "POST" : "DELETE"
+    const url = !isFavorited ? `${apiUrl}user/${currentUser.id}/favorite/equipment/${id}` : `${apiUrl}remove/user/${currentUser.id}/favorite/equipment/${id}`
+  
+    fetch(url, {
+      method: method,
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        "user_id": currentUser.id,
-        "equipment_id": id
-      })
-    }).then((resp) => {
-      console.log(resp)
-      setHeartColor("red")
-      checkSession()
+      body: JSON.stringify({ "user_id": currentUser.id, "equipment_id": id })
+    })
+    .then(resp => {
+      if (!resp.ok) {
+        throw new Error("Favorite failed")
+      }
+      //Toggle the isFavorite (t or f if it exists), then set heartcolor based on that
+      setIsFavorited(!isFavorited)
+      setHeartColor(!isFavorited ? "red" : "white")
+      checkSession() // Update user data
+    })
+    .catch(error => {
+      console.error('Error:', error)
+      // Revert UI on error
+      setHeartColor(isFavorited ? "red" : "white")
     })
   }
 
@@ -100,12 +121,12 @@ function EquipmentDisplay({}) {
 
   //What can I include in details? Possibly whether or not the vehicle is available for delivery? Deposit ? ETC?
 
-
   let loggedOutDisplay
   loggedOutDisplay = (
     <section className="text-gray-400 bg-gray-900 body-font overflow-hidden" >
       <div className="container px-5 py-24 mx-auto">
-        <div className="lg:w-4/5 flex flex-wrap mb-5 ">
+      {/* Could afford some padding here below */}
+        <div className="lg:w-4/5 flex flex-wrap mb-5 "> 
           <div className="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">
             <h2 className="text-sm title-font text-gray-500 tracking-widest">{name}</h2>
             <h1 className="text-white text-3xl title-font font-medium mb-4">{make} {model}</h1>

@@ -706,10 +706,16 @@ api.add_resource(RentalAgreementsByID, '/rental_agreements/<int:id>')
 
 #-----------------------------------------------Favoriting for Users and Owners Routes-----------------------------------------------------------------------------#
 class UserFavoriteEquipment(Resource):
-    def post(self):
+    def post(self, user_id,equipment_id ):
         data = request.get_json()
         try:
+        #https://stackoverflow.com/questions/46173418/sqlalchemy-two-filters-vs-one-and
         #need a way to input, owner_id and owner maybe a 2 step process?
+            existing_favorite = UserFavorite.query.filter_by(user_id=user_id, equipment_id=equipment_id).first()
+            print(existing_favorite)
+            if existing_favorite:
+                raise ValueError("You have already favorited this equipment")
+            
             new_favorite = UserFavorite(
                 equipment_id = data['equipment_id'],
                 user_id = data['user_id'],
@@ -723,13 +729,17 @@ class UserFavoriteEquipment(Resource):
         except ValueError:
             return make_response({"error": ["validations errors, check your input and try again"]} , 400)
 
-api.add_resource(UserFavoriteEquipment, '/user/favorite/equipment')
+api.add_resource(UserFavoriteEquipment, '/user/<int:user_id>/favorite/equipment/<int:equipment_id>')
 
 
 class UserFavoriteOwner(Resource):
-    def post(self):
+    def post(self, user_id, owner_id):
         data = request.get_json()
         try:
+            existing_favorite = UserFavorite.query.filter_by(user_id=user_id, owner_id=owner_id).first()
+            print(existing_favorite)
+            if existing_favorite:
+                raise ValueError("You have already favorited this equipment")
         #need a way to input, owner_id and owner maybe a 2 step process?
             new_favorite = UserFavorite(
                 user_id = data['user_id'],
@@ -744,11 +754,11 @@ class UserFavoriteOwner(Resource):
         except ValueError:
             return make_response({"error": ["validations errors, check your input and try again"]} , 400)
 
-api.add_resource(UserFavoriteOwner, '/user/favorite/owner')
+api.add_resource(UserFavoriteOwner, '/user/<int:user_id>/favorite/owner/<int:owner_id>')
 
-class RemoveUserFavorite(Resource):
-    def delete(self, id):
-        favorite = UserFavorite.query.filter(UserFavorite.id == id).first()
+class RemoveUserEquipmentFavorite(Resource):
+    def delete(self, user_id, equipment_id):
+        favorite = UserFavorite.query.filter_by(user_id=user_id, equipment_id=equipment_id).first()
 
         if favorite:
             db.session.delete(favorite)
@@ -761,7 +771,24 @@ class RemoveUserFavorite(Resource):
             }, 404)
             return response
 
-api.add_resource(RemoveUserFavorite, '/remove/user/favorite/<int:id>')
+api.add_resource(RemoveUserEquipmentFavorite, '/remove/user/<int:user_id>/favorite/equipment/<int:equipment_id>')
+
+class RemoveUserOwnerFavorite(Resource):
+    def delete(self, user_id, owner_id):
+        favorite = UserFavorite.query.filter_by(user_id=user_id, owner_id=owner_id).first()
+
+        if favorite:
+            db.session.delete(favorite)
+            db.session.commit()
+            response = make_response({"message":"Succesfully deleted!"}, 204)
+            return response
+        else:
+            response = make_response({
+            "error": "Favorite not found"
+            }, 404)
+            return response
+
+api.add_resource(RemoveUserOwnerFavorite, '/remove/user/<int:user_id>/favorite/owner/<int:owner_id>')
 
 class OwnerFavoriteUser(Resource):
     def post(self):
