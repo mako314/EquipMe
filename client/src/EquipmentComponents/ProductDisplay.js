@@ -73,7 +73,8 @@ function EquipmentDisplay({}) {
         <AddToCartModal equip_id={id} oneEquipment={oneEquipment} toggleModal={toggleModal} isModalOpen={isModalOpen}/>
       )
       const favoriteStatus = currentUser?.user_favorite?.some(favorite => favorite.equipment_id === parseInt(id, 10))
-      setHeartColor(!favoriteStatus ? "red" : "white")
+      console.log("FAVORITE STATUS:", favoriteStatus)
+      setHeartColor(favoriteStatus ? "red" : "white")
       // I can't just set is favorited and try it with heart color, it's just too quick and defaults, so I make a variable that contains data and set it to that.
       setIsFavorited(favoriteStatus)
 
