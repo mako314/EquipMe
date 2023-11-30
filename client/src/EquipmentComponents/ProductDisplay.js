@@ -91,7 +91,7 @@ function EquipmentDisplay({}) {
     console.log(isFavorited)
     // Conditional method and URL based on whether is favorited doesn't exist off the useEffect
     const method = !isFavorited ? "POST" : "DELETE"
-    const url = !isFavorited ? `${apiUrl}user/${currentUser.id}/favorite/equipment/${id}` : `${apiUrl}remove/user/${currentUser.id}/favorite/${id}`
+    const url = !isFavorited ? `${apiUrl}user/${currentUser.id}/favorite/equipment/${id}` : `${apiUrl}remove/user/${currentUser.id}/favorite/equipment/${id}`
   
     fetch(url, {
       method: method,

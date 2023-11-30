@@ -771,7 +771,24 @@ class RemoveUserEquipmentFavorite(Resource):
             }, 404)
             return response
 
-api.add_resource(RemoveUserEquipmentFavorite, '/remove/user/<int:user_id>/favorite/<int:equipment_id>')
+api.add_resource(RemoveUserEquipmentFavorite, '/remove/user/<int:user_id>/favorite/equipment/<int:equipment_id>')
+
+class RemoveUserOwnerFavorite(Resource):
+    def delete(self, user_id, owner_id):
+        favorite = UserFavorite.query.filter_by(user_id=user_id, owner_id=owner_id).first()
+
+        if favorite:
+            db.session.delete(favorite)
+            db.session.commit()
+            response = make_response({"message":"Succesfully deleted!"}, 204)
+            return response
+        else:
+            response = make_response({
+            "error": "Favorite not found"
+            }, 404)
+            return response
+
+api.add_resource(RemoveUserOwnerFavorite, '/remove/user/<int:user_id>/favorite/owner/<int:owner_id>')
 
 class OwnerFavoriteUser(Resource):
     def post(self):
