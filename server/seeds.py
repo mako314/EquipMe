@@ -82,7 +82,7 @@ if __name__ == '__main__':
         location="Houston, Texas",
         profession="Industrial Cleaning Specialist",
         bio="An industrial cleaning specialist from Houston, I am dedicated to maintaining high standards of cleanliness and safety. My attention to detail is what sets me apart in this industry.",
-        profileImage="https://avatarfiles.alphacoders.com/119/119089.png",
+        profileImage="https://avatarfiles.alphacoders.com/325/325695.png",
         # bannerImg="banner_william.png"
     )
 

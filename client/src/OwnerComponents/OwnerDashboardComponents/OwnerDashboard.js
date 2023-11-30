@@ -274,9 +274,9 @@ function AccountSettings() {
 
                             
                              <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {
-                                {role === 'owner' ? setToggleHomeDash(plannedDeals) : setToggleHomeDash(<Favorites/>)} 
+                                {role === 'owner' ? setToggleHomeDash(<RentalAgreements/>) : setToggleHomeDash(<Favorites/>)} 
                              }}> 
-                                {role === 'owner' ? 'Planned Deals' : 'Favorites'} 
+                                {role === 'owner' ? 'Rental Agreements' : 'Favorites'} 
                              </span>
 
                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {

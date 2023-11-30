@@ -218,10 +218,10 @@ class UserByID(Resource):
             return response
 api.add_resource(UserByID, '/user/<int:id>')
 
-
+# MAY WANT TO INCLUDE MORE, BUT GOING TO TRY AND SPEED UP NETWORK BY DOING AN ONLY instead of RUles
 class UserByProfession(Resource):
     def get(self, ownerProfession):
-        users = [user.to_dict(rules =('-_password_hash',)) for user in User.query.filter(User.profession == ownerProfession).all()]
+        users = [user.to_dict(only =('id','email', 'firstName', 'lastName', 'location', 'phone', 'profileImage')) for user in User.query.filter(User.profession == ownerProfession).all()]
         if users:
             response = make_response(users, 200)
         else:

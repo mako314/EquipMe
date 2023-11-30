@@ -23,7 +23,7 @@ function UserCard({ id, email, firstName, lastName, location, phone, profileImag
 
         <div className="flex items-center">
                 <div className="container mx-auto p-9 bg-white max-w-sm rounded-2xl border-2 border-solid border-gray-900 overflow-hidden shadow-outline hover:shadow-2xl transition duration-300">
-                <img className="rounded-xl object-contain h-48 w-full" src={profileImage} alt="" />
+                <img className="w-96 h-64 rounded-sm bg-gray-300 mb-4 shrink-0 object-cover"src={profileImage} alt={`${firstName} ${lastName} Image`}  />
                 <div className="flex flex-col justify-between items-start mt-4"> {/* Use flex-col and items-start */}
                     <div>
                         <h1 className="text-2xl font-semibold">{firstName} {lastName}</h1>
