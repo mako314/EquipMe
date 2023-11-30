@@ -319,24 +319,23 @@ class RentalAgreement(db.Model, SerializerMixin):
 
     rental_end_date = db.Column(db.String)
 
-    # delivery = db.Column(db.String)
-    # delivery_address = db.Column(db.String, nullable= True)
+    # Yes / No
+    delivery = db.Column(db.String)
+    delivery_address = db.Column(db.String, nullable= True)
+
     # user_comments = db.Column(db.String)
-
-    # owner_decision = db.Column(db.String)
+    # accept - decline - pending
+    user_decision = db.Column(db.String)
+    owner_decision = db.Column(db.String)
     # owner_comments = db.Column(db.String)
-
-    
-    # revisions = db.Column(db.Integer, default=0)
+    revisions = db.Column(db.Integer, default=0)
 
     # proof_of_ownership = db.Column(db.String)
     # owner_insurance = db.Column(db.String)
     # user_insurance_proof = db.Column(db.String)
 
-    # agreement_stats = db.Column(db.String) 
+    agreement_status = db.Column(db.String)
     # Ex. in progress, user-accepted, owner-accepted, both-accepted
-
-    # rental_length = db.Column()
 #----------------------------------------------------------------
     #relationships
     #do a cascade to make life easier 
@@ -375,12 +374,31 @@ class RentalAgreement(db.Model, SerializerMixin):
     cart_item = db.relationship(
         'CartItem', back_populates='agreements', cascade="all, delete")
     
+    comment = db.relationship('AgreementComment', back_populates='agreements')
+    
     #Serialization rules
-    serialize_rules = ('-owner', '-user', '-cart_item.agreements', '-cart_item.cart.user.user_favorite', )
+    serialize_rules = ('-owner', '-user', '-cart_item.agreements', '-cart_item.cart.user.user_favorite','-comment.agreements')
 
     # def __repr__(self):
 
     #     return f"<Rental Agreement: Equipment in {self.location}, Total Price: {self.total_price}, Rental Dates: {self.rental_dates}>"
+
+#-------------------------Review Comment System---------------
+
+class AgreementComment(db.Model, SerializerMixin):
+    __tablename__="agreement_comments"
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    comment = db.Column(db.String)
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable= True)
+    owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'), nullable= True)
+    agreement_id = db.Column(db.Integer, db.ForeignKey('agreements.id'))
+
+    agreements = db.relationship('RentalAgreement', back_populates ='comment')
+
+    serialize_rules = ('-agreements.comment', )
     
 #-------------------------Cart System---------------
 class Cart(db.Model, SerializerMixin):
