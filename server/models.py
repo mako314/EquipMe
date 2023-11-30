@@ -136,7 +136,7 @@ class EquipmentOwner(db.Model, SerializerMixin):
 
     # I could include owner here, howeevr I'm not sure it's necessarily required.
     #Serialization rules
-    serialize_rules = ('-equipment.owner', '-agreements.owner', '-owner_inboxes.owner','-owner_inboxes.user','-review.owner', '-review.user.user_favorite','-review.user.cart', '-review.user.user_inboxes','-review.cart_item', '-equipment.cart_item.cart.cart_item', '-owner_favorite.owner', '-owner_favorite.equipment', '-owner_favorite.user.user_inboxes','-owner_favorite.user.cart','-owner_favorite.user.review','-owner_favorite.user.user_favorite','-user_favorite.owner', '-user_favorite.user','-agreements.cart_item.equipment.user_favorite', '-agreements.cart_item.review', '-equipment.cart_item.cart.user','-equipment.user_favorite.user', )
+    serialize_rules = ('-equipment.owner', '-agreements.owner', '-owner_inboxes.owner','-owner_inboxes.user','-review.owner', '-review.user.user_favorite','-review.user.cart', '-review.user.user_inboxes','-review.cart_item', '-equipment.cart_item.cart.cart_item', '-owner_favorite.owner', '-owner_favorite.equipment', '-owner_favorite.user.user_inboxes','-owner_favorite.user.cart','-owner_favorite.user.review','-owner_favorite.user.user_favorite','-user_favorite.owner', '-user_favorite.user','-agreements.cart_item.equipment.user_favorite', '-agreements.cart_item.review', '-equipment.cart_item.cart.user','-equipment.user_favorite.user', '-agreements.cart_item.equipment.featured_equipment')
 
     # '-owner_favorite.equipment.owner','-owner_favorite.equipment.cart_item', '-owner_favorite.equipment.owner_inboxes','-owner_favorite.featured_equipment', '-owner_favorite.equipment.equipment_price','-agreements.cart_item.equipment.user_favorite'
 
@@ -361,6 +361,7 @@ class RentalAgreement(db.Model, SerializerMixin):
     onupdate=datetime.utcnow
     )
 #----------------------------------------------------------------
+    # I need to change agreements back_populates to agreement, not good practice to have it as the table name
     #this hopefully connects it
     user = db.relationship(
         "User", back_populates="agreements"
@@ -375,7 +376,7 @@ class RentalAgreement(db.Model, SerializerMixin):
         'CartItem', back_populates='agreements', cascade="all, delete")
     
     #Serialization rules
-    serialize_rules = ('-owner', '-user', '-cart_item.agreements', '-cart_item.cart.user')
+    serialize_rules = ('-owner', '-user', '-cart_item.agreements', '-cart_item.cart.user.user_favorite', )
 
     # def __repr__(self):
 
