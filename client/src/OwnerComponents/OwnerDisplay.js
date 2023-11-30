@@ -12,9 +12,11 @@ function OwnerDisplay() {
     
   
   const [owner, setOwner] = useState([])
-  const { currentUser, role } = UserSessionContext()
+  const { currentUser, role, checkSession } = UserSessionContext()
   const [currentIndex, setCurrentIndex] = useState(0) // Tempted to make a scroller
   const { firstName, lastName, location, bio, email, phone, equipment, profession, profileImage, website } = owner
+  const [heartColor, setHeartColor] = useState('white')
+  const [isFavorited, setIsFavorited] = useState(null)
 
   console.log("THE OWNER:", owner)
   const { id } = useParams()
@@ -26,6 +28,10 @@ function OwnerDisplay() {
       .then((resp) => resp.json())
       .then((data) => {
         setOwner(data)
+        const favoriteStatus = currentUser?.user_favorite?.some(favorite => favorite.equipment_id === parseInt(id, 10))
+      setHeartColor(favoriteStatus ? "red" : "white")
+      // I can't just set is favorited and try it with heart color, it's just too quick and defaults, so I make a variable that contains data and set it to that.
+      setIsFavorited(favoriteStatus)
       })
   }, [])
 
@@ -72,6 +78,35 @@ let userReviews = owner.review?.filter(reviewSubmission =>  reviewSubmission.rev
 console.log("userReviews:", userReviews )
 console.log("reviews:", owner.review)
 
+const handleFavoriteSelection = () => {
+    console.log(isFavorited)
+    // Conditional method and URL based on whether is favorited doesn't exist off the useEffect
+    const method = !isFavorited ? "POST" : "DELETE"
+    const url = !isFavorited ? `${apiUrl}user/${currentUser.id}/favorite/equipment/${id}` : `${apiUrl}remove/user/${currentUser.id}/favorite/${id}`
+  
+    fetch(url, {
+      method: method,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ "user_id": currentUser.id, "equipment_id": id })
+    })
+    .then(resp => {
+      if (!resp.ok) {
+        throw new Error("Favorite failed")
+      }
+      //Toggle the isFavorite (t or f if it exists), then set heartcolor based on that
+      setIsFavorited(!isFavorited)
+      setHeartColor(!isFavorited ? "red" : "white")
+      checkSession() // Update user data
+    })
+    .catch(error => {
+      console.error('Error:', error)
+      // Revert UI on error
+      setHeartColor(isFavorited ? "red" : "white")
+    })
+  }
+
   return (
 
         <div className="bg-gray-100">
@@ -90,7 +125,7 @@ console.log("reviews:", owner.review)
                                 {/* <ContactModal recipientID={id}/> */}
                                 {/* <span className="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded"> {website} </span> */}
                                 <button className="rounded-full w-10 h-10 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
-                                    <svg fill="white" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-5 h-5" viewBox="0 0 24 24">
+                                    <svg fill={heartColor} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-5 h-5" viewBox="0 0 24 24" onClick={handleFavoriteSelection}>
                                     <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
                                     </svg>
                                 </button>

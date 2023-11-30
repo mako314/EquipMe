@@ -733,9 +733,13 @@ api.add_resource(UserFavoriteEquipment, '/user/<int:user_id>/favorite/equipment/
 
 
 class UserFavoriteOwner(Resource):
-    def post(self):
+    def post(self, user_id, owner_id):
         data = request.get_json()
         try:
+            existing_favorite = UserFavorite.query.filter_by(user_id=user_id, owner_id=owner_id).first()
+            print(existing_favorite)
+            if existing_favorite:
+                raise ValueError("You have already favorited this equipment")
         #need a way to input, owner_id and owner maybe a 2 step process?
             new_favorite = UserFavorite(
                 user_id = data['user_id'],
@@ -750,7 +754,7 @@ class UserFavoriteOwner(Resource):
         except ValueError:
             return make_response({"error": ["validations errors, check your input and try again"]} , 400)
 
-api.add_resource(UserFavoriteOwner, '/user/favorite/owner')
+api.add_resource(UserFavoriteOwner, '/user/<int:user_id>/favorite/owner/<int:owner_id>')
 
 class RemoveUserEquipmentFavorite(Resource):
     def delete(self, user_id, equipment_id):

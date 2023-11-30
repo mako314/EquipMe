@@ -73,7 +73,7 @@ function EquipmentDisplay({}) {
         <AddToCartModal equip_id={id} oneEquipment={oneEquipment} toggleModal={toggleModal} isModalOpen={isModalOpen}/>
       )
       const favoriteStatus = currentUser?.user_favorite?.some(favorite => favorite.equipment_id === parseInt(id, 10))
-      setHeartColor(favoriteStatus ? "red" : "white")
+      setHeartColor(!favoriteStatus ? "red" : "white")
       // I can't just set is favorited and try it with heart color, it's just too quick and defaults, so I make a variable that contains data and set it to that.
       setIsFavorited(favoriteStatus)
 
@@ -124,7 +124,8 @@ function EquipmentDisplay({}) {
   loggedOutDisplay = (
     <section className="text-gray-400 bg-gray-900 body-font overflow-hidden" >
       <div className="container px-5 py-24 mx-auto">
-        <div className="lg:w-4/5 flex flex-wrap mb-5 ">
+      {/* Could afford some padding here below */}
+        <div className="lg:w-4/5 flex flex-wrap mb-5 "> 
           <div className="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">
             <h2 className="text-sm title-font text-gray-500 tracking-widest">{name}</h2>
             <h1 className="text-white text-3xl title-font font-medium mb-4">{make} {model}</h1>
