@@ -23,7 +23,7 @@ function OwnerDashboard({ownerToEdit, updateOwner, fromOwnerDash, setFromOwnerDa
 
     const { currentUser, role} = UserSessionContext()
     // Honestly with currentUser, we can just make this for both users and owners
-    const [toggleHomeDash, setToggleHomeDash] = useState(null)
+    const [toggleHomeDash, setToggleHomeDash] = useState(<DashHome/>)
     const [potentialRentalUsers, setPotentialRentalUsers] = useState([])
     const [potentialRentalOwners, setPotentialRentalOwners] = useState([])
     
@@ -203,7 +203,7 @@ function AccountSettings() {
     }
 
     const handleInboxNavigation = () => {
-        setFromOwnerDash(!fromOwnerDash)
+        setFromOwnerDash(true)
         // Use setTimeout to allow state update before navigation
         setTimeout(() => {
           navigate('/messaging')
