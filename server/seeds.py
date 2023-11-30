@@ -562,6 +562,11 @@ if __name__ == '__main__':
         RentalAgreement(
             rental_start_date="2023-07-17",
             rental_end_date="2023-07-20",
+            delivery = "Yes",
+            delivery_address = user_1.location,
+            user_decision = "accept",
+            owner_decision = "accept",
+            agreement_status = "both-accepted",
             owner_id = owner_2.id, # Amy Wilson
             user_id=user_1.id,  # Benjamin Davis
             cart_item_id=cart_items[0].id,  # Excavator caterpillar thing
@@ -571,6 +576,11 @@ if __name__ == '__main__':
         RentalAgreement(
             rental_start_date="2023-07-17",
             rental_end_date="2023-07-20",
+            delivery = "No",
+            delivery_address = "",
+            user_decision = "accept",
+            owner_decision = "pending",
+            agreement_status = "user-accepted",
             owner_id = owner_2.id, # David Rodriguez
             user_id=user_1.id,  # Ethan Martinez
             cart_item_id=cart_items[1].id,  # Forklift
@@ -580,6 +590,11 @@ if __name__ == '__main__':
         RentalAgreement(
             rental_start_date="2023-07-17",
             rental_end_date="2023-07-20",
+            delivery = "Yes",
+            delivery_address = "",
+            user_decision = "accept",
+            owner_decision = "pending",
+            agreement_status = "in progress",
             owner_id = owner_2.id, # Henry Cavill
             user_id=user_1.id,  # Sarah Thompson
             cart_item_id=cart_items[2].id,  # Lawnmower
