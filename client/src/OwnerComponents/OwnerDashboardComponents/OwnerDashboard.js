@@ -31,7 +31,7 @@ function OwnerDashboard({ownerToEdit, updateOwner, fromOwnerDash, setFromOwnerDa
     const apiUrl = useContext(ApiUrlContext)
 
     console.log("USER INFO",currentUser)
-    console.log("USER FAVORITE",currentUser.user_favorite)
+    console.log("USER FAVORITE",currentUser?.user_favorite)
     // console.log("With a role of:", role)
 
     //After a lot of consideration, users will also have a dashboard. Seems friendlier 
@@ -188,17 +188,18 @@ function AccountSettings() {
 // I'll be removing these useEffects soon enough: 
 // https://react.dev/learn/synchronizing-with-effects#fetching-data
 // https://store.steampowered.com/points/shop/c/backgrounds/cluster/0/reward/181174
-
     const handlePotentialRenter = () => {
-        fetch(`${apiUrl}users/${currentUser?.profession}`)
-        .then((resp) => resp.json())
-        .then((data) => {
-            setPotentialRentalUsers(data)
+    fetch(`${apiUrl}users/${currentUser?.profession}`)
+    .then((resp) => resp.json())
+    .then((data) => {
+        setPotentialRentalUsers(data)
+        //can't use potentialRenters as the let, I was having issues with it taking two clicks, having a const like the other function seemed to fix it. It's funny because I built this one first, and then shallow copied it for handlePotentialOwner. Lord.
+        const updatedPotentialRenters = (
+            <UserCollection searchTerm={searchTerm} users={data} setFromOwnerDash={setFromOwnerDash} fromOwnerDash={fromOwnerDash}/>
+        )
+        setToggleHomeDash(updatedPotentialRenters)
+        setFromOwnerDash(!fromOwnerDash)
         })
-        potentialRenters =
-        <>
-            <UserCollection searchTerm={searchTerm} users={potentialRentalUsers} setFromOwnerDash={setFromOwnerDash} fromOwnerDash={fromOwnerDash}/>
-        </>
     }
 
     const handleInboxNavigation = () => {
@@ -271,25 +272,18 @@ function AccountSettings() {
                             
                             {/* <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(plannedDeals)}> Planned Deals </span> */}
 
-                            {role === 'owner' ? 
-                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(plannedDeals)}> Planned Deals </span>
-                            :
-                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {
-                                setToggleHomeDash(<Favorites/>)
-                            }}> Favorites </span>}
+                            
+                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {
+                                {role === 'owner' ? setToggleHomeDash(plannedDeals) : setToggleHomeDash(<Favorites/>)} 
+                             }}> 
+                                {role === 'owner' ? 'Planned Deals' : 'Favorites'} 
+                             </span>
 
+                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {
+                                (role === 'owner' ? handlePotentialRenter() : handlePotentialOwners())}}>
 
-                            {role === 'owner' ? 
-                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {
-                                handlePotentialRenter()
-                                setFromOwnerDash(!fromOwnerDash)
-                                setToggleHomeDash(potentialRenters)
-                            }}>Potential Renters</span>
-                            : //Need to figure out why the below takes 2 clicks
-                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {
-                                handlePotentialOwners()
-                                setFromOwnerDash(!fromOwnerDash)
-                            }}> Potential Rental Interests </span>}
+                                {role === 'owner' ? 'Potential Renters' : 'Potential Rental Interests'}
+                            </span>
 
                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={handleInboxNavigation}
                             > Inbox </span>
