@@ -562,7 +562,7 @@ if __name__ == '__main__':
         RentalAgreement(
             rental_start_date="2023-07-17",
             rental_end_date="2023-07-20",
-            delivery = "Yes",
+            delivery = True,
             delivery_address = user_1.location,
             user_decision = "accept",
             owner_decision = "accept",
@@ -576,7 +576,7 @@ if __name__ == '__main__':
         RentalAgreement(
             rental_start_date="2023-07-17",
             rental_end_date="2023-07-20",
-            delivery = "No",
+            delivery = False,
             delivery_address = "",
             user_decision = "accept",
             owner_decision = "pending",
@@ -590,7 +590,7 @@ if __name__ == '__main__':
         RentalAgreement(
             rental_start_date="2023-07-17",
             rental_end_date="2023-07-20",
-            delivery = "Yes",
+            delivery = True,
             delivery_address = "",
             user_decision = "accept",
             owner_decision = "pending",

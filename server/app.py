@@ -646,6 +646,8 @@ class RentalAgreements(Resource):
             updated_at = datetime.utcnow(),
         )
         db.session.add(new_rental_agreement)
+        print(data.get('delivery'))
+        print(type(data.get('delivery')))
         db.session.commit()
 
         response = make_response(new_rental_agreement.to_dict(), 201)
