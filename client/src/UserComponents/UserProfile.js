@@ -34,7 +34,7 @@ function UserProfile() {
   }, [])
 
   //Destructure for props
-  const source = currentUser || userProfile
+  const source = role === 'user' ? currentUser  : userProfile
 
   const {
     email = '',
@@ -43,8 +43,9 @@ function UserProfile() {
     location = '',
     phone = '',
     profession = '',
-    profileImg = ''
+    profileImage = ''
   } = source || {}
+
   
   //May actually want to include a banner image so it looks nicer
 
@@ -81,8 +82,8 @@ function UserProfile() {
                 <div className="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
                   <div className="relative">
                     <img
-                      alt="..."
-                      src="https://avatarfiles.alphacoders.com/328/328004.jpg"
+                      alt={`${firstName} ${lastName} Image`}
+                      src={profileImage}
                       className="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16"
                       style={{ maxWidth: "150px" }}
                     />

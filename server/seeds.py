@@ -1,4 +1,4 @@
-from models import db, User, EquipmentOwner, Equipment, RentalAgreement, EquipmentImage, Thread, UserInbox, OwnerInbox, Message, Cart, CartItem, EquipmentPrice, FeaturedEquipment, Review, UserFavorite, OwnerFavorite
+from models import db, User, EquipmentOwner, Equipment, RentalAgreement, EquipmentImage, Thread, UserInbox, OwnerInbox, Message, Cart, CartItem, EquipmentPrice, FeaturedEquipment, Review, UserFavorite, OwnerFavorite, AgreementComment
 import pandas as pd
 from app import app
 from random import randint, choice as rc
@@ -21,6 +21,7 @@ if __name__ == '__main__':
     with app.app_context():
         #Clear dbs
         print("Clearing db...")
+        AgreementComment.query.delete()
         RentalAgreement.query.delete()
         CartItem.query.delete()
         Cart.query.delete()
@@ -54,7 +55,7 @@ if __name__ == '__main__':
         location="Chicago, Illinois",
         profession="Construction Equipment Operator",
         bio="I have over 20 years of experience in construction equipment operation. Based in Chicago, I am committed to precision and expertise in handling complex machinery.",
-        profileImage="https://avatarfiles.alphacoders.com/325/thumb-325695.png",
+        profileImage="https://avatarfiles.alphacoders.com/224/224246.png",
         # bannerImg="banner_benjamin.png"
     )
 
@@ -68,7 +69,7 @@ if __name__ == '__main__':
         location="Miami, Florida",
         profession="Heavy Machine Operator",
         bio="As a heavy machine operator based in Miami, I specialize in managing and operating large-scale industrial equipment. My nearly two decades in the field have honed my skills and knowledge.",
-        profileImage="https://avatarfiles.alphacoders.com/325/thumb-325695.png",
+        profileImage="https://avatarfiles.alphacoders.com/366/366869.png",
         # bannerImg="banner_ethan.png"
     )
         
@@ -82,7 +83,7 @@ if __name__ == '__main__':
         location="Houston, Texas",
         profession="Industrial Cleaning Specialist",
         bio="An industrial cleaning specialist from Houston, I am dedicated to maintaining high standards of cleanliness and safety. My attention to detail is what sets me apart in this industry.",
-        profileImage="https://avatarfiles.alphacoders.com/119/119089.png",
+        profileImage="https://avatarfiles.alphacoders.com/325/325695.png",
         # bannerImg="banner_william.png"
     )
 
@@ -96,7 +97,7 @@ if __name__ == '__main__':
         location="Phoenix, Arizona",
         profession="Party and Event Equipment Organizer",
         bio="Organizing large-scale events and parties in Phoenix, I excel in coordinating and arranging event equipment. My creativity and organizational skills ensure every event is a success and memorable.",
-        profileImage="https://avatarfiles.alphacoders.com/325/thumb-325695.png",
+        profileImage="https://avatarfiles.alphacoders.com/368/368085.png",
         # bannerImg="banner_sofia.png"
     )
         
@@ -110,7 +111,7 @@ if __name__ == '__main__':
         location="Chicago, Illinois",
         profession="Painting Contractor",
         bio="As a seasoned painting contractor from Chicago, I combine artistic flair with technical expertise. I specialize in various painting techniques, ensuring quality and reliability in every project.",
-        profileImage="https://avatarfiles.alphacoders.com/325/thumb-325695.png",
+        profileImage="https://avatarfiles.alphacoders.com/368/368118.png",
         # bannerImg="banner_christian.png"
     )
 
@@ -124,7 +125,7 @@ if __name__ == '__main__':
         location="Seattle, Washington",
         profession="Landscape Designer",
         bio="As a landscape designer in Seattle, my passion lies in transforming outdoor spaces. My designs focus on sustainability and creating visually stunning landscapes that stand the test of time.",
-        profileImage="https://avatarfiles.alphacoders.com/325/thumb-325695.png",
+        profileImage="https://avatarfiles.alphacoders.com/327/327294.png",
         # bannerImg="banner_sarah.png"
     )
         user_6 = User(
@@ -137,7 +138,7 @@ if __name__ == '__main__':
         location="Houston, Texas",
         profession="Automotive Mechanic",
         bio="I am a skilled automotive mechanic from Houston with a passion for cars. My expertise lies in diagnostics and providing top-notch maintenance and repair services.",
-        profileImage="https://avatarfiles.alphacoders.com/325/thumb-325695.png",
+        profileImage="https://avatarfiles.alphacoders.com/359/359621.png",
         # bannerImg="banner_thomas.png"
     )
         #Add all users
@@ -196,7 +197,7 @@ if __name__ == '__main__':
             phone="312-555-6789",
             email="markdavis82@yahoo.com",
             _password_hash="", 
-            profileImage = "https://avatarfiles.alphacoders.com/322/thumb-322447.png",
+            profileImage = "https://avatarfiles.alphacoders.com/290/290163.png",
             website = " "
         )
         owner_2 = EquipmentOwner(
@@ -209,7 +210,7 @@ if __name__ == '__main__':
             phone="602-555-7891",
             email="ejohnson@live.com",
             _password_hash="",
-            profileImage = "https://avatarfiles.alphacoders.com/322/thumb-322447.png",
+            profileImage = "https://avatarfiles.alphacoders.com/352/352560.png",
             website = " "
         )
         owner_3 = EquipmentOwner(
@@ -222,7 +223,7 @@ if __name__ == '__main__':
             phone="713-555-0123",
             email="andrewjacobs93@gmail.com",
             _password_hash="",
-            profileImage = "https://avatarfiles.alphacoders.com/322/thumb-322447.png",
+            profileImage = "https://avatarfiles.alphacoders.com/263/263535.png",
             website = " "
         )
         owner_4 = EquipmentOwner(
@@ -235,7 +236,7 @@ if __name__ == '__main__':
             phone="206-555-3456",
             email="hcavill34@hotmail.com",
             _password_hash="",
-            profileImage = "https://avatarfiles.alphacoders.com/322/thumb-322447.png",
+            profileImage = "https://avatarfiles.alphacoders.com/162/162643.png",
             website = " "
         )
         owner_5 = EquipmentOwner(
@@ -248,7 +249,7 @@ if __name__ == '__main__':
             phone="305-555-1234",
             email="davidr83@gmail.com",
             _password_hash="",
-            profileImage = "https://avatarfiles.alphacoders.com/322/thumb-322447.png",
+            profileImage = "https://avatarfiles.alphacoders.com/322/322466.png",
             website = " "
         )
         owner_6 = EquipmentOwner(
@@ -261,7 +262,7 @@ if __name__ == '__main__':
             phone="312-555-5678",
             email="amywilson22@yahoo.com",
             _password_hash="",
-            profileImage = "https://avatarfiles.alphacoders.com/322/thumb-322447.png",
+            profileImage = "https://avatarfiles.alphacoders.com/327/327294.png",
             website = " "
         )
         owner_7 = EquipmentOwner(
@@ -274,7 +275,7 @@ if __name__ == '__main__':
             phone="713-555-4567",
             email="daniel.lee78@yahoo.com",
             _password_hash="",
-            profileImage = "https://avatarfiles.alphacoders.com/322/thumb-322447.png",
+            profileImage = "https://avatarfiles.alphacoders.com/947/94761.png",
             website = " "
         )
         owner_8 = EquipmentOwner(
@@ -287,7 +288,7 @@ if __name__ == '__main__':
             phone ="212-555-2345",
             email="jess.sanchez22@gmail.com",
             _password_hash="",
-            profileImage = "https://avatarfiles.alphacoders.com/322/thumb-322447.png",
+            profileImage = "https://avatarfiles.alphacoders.com/352/352560.png",
             website = " "
         )
         owner_9 = EquipmentOwner(
@@ -313,7 +314,7 @@ if __name__ == '__main__':
             phone="504-555-7890",
             email="madams90@gmail.com",
             _password_hash="",
-            profileImage = "https://avatarfiles.alphacoders.com/322/thumb-322447.png",
+            profileImage = "https://avatarfiles.alphacoders.com/330/330705.png",
             website = " "
         )
         
@@ -562,6 +563,11 @@ if __name__ == '__main__':
         RentalAgreement(
             rental_start_date="2023-07-17",
             rental_end_date="2023-07-20",
+            delivery = True,
+            delivery_address = user_1.location,
+            user_decision = "accept",
+            owner_decision = "accept",
+            agreement_status = "both-accepted",
             owner_id = owner_2.id, # Amy Wilson
             user_id=user_1.id,  # Benjamin Davis
             cart_item_id=cart_items[0].id,  # Excavator caterpillar thing
@@ -571,6 +577,11 @@ if __name__ == '__main__':
         RentalAgreement(
             rental_start_date="2023-07-17",
             rental_end_date="2023-07-20",
+            delivery = False,
+            delivery_address = "",
+            user_decision = "accept",
+            owner_decision = "pending",
+            agreement_status = "user-accepted",
             owner_id = owner_2.id, # David Rodriguez
             user_id=user_1.id,  # Ethan Martinez
             cart_item_id=cart_items[1].id,  # Forklift
@@ -580,6 +591,11 @@ if __name__ == '__main__':
         RentalAgreement(
             rental_start_date="2023-07-17",
             rental_end_date="2023-07-20",
+            delivery = False,
+            delivery_address = "",
+            user_decision = "accept",
+            owner_decision = "pending",
+            agreement_status = "in progress",
             owner_id = owner_2.id, # Henry Cavill
             user_id=user_1.id,  # Sarah Thompson
             cart_item_id=cart_items[2].id,  # Lawnmower
@@ -588,6 +604,27 @@ if __name__ == '__main__':
         )]
 
         db.session.add_all(rental_agreements)
+        db.session.commit()
+#---------------------Rental Comments---------------
+        print("Configuring our current rental agreement comments...")
+        agreement_comments = [
+        AgreementComment(
+            comment = " This looks good to me, I'll go ahead and accept it!",
+            owner_id = owner_2.id, # Emily Johnson
+            agreement_id = rental_agreements[0].id
+        ),
+        AgreementComment(
+            comment = " I'm so sorry, but I actually don't need this for delivery?",
+            user_id=user_1.id,  # Benjamin Davis
+            agreement_id = rental_agreements[0].id
+        ),
+        AgreementComment(
+            comment = "Sounds good, thanks for renting it!",
+            owner_id = owner_2.id, # Emily Johnson
+            agreement_id = rental_agreements[0].id
+        )]
+
+        db.session.add_all(agreement_comments)
         db.session.commit()
 
 #---------------------Review Testing----------------

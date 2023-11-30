@@ -117,7 +117,7 @@ console.log("reviews:", owner.review)
                 <div className="col-span-4 sm:col-span-3">
                     <div className="bg-white shadow rounded-lg p-6">
                         <div className="flex flex-col items-center">
-                            <img src={profileImage} className="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0">
+                            <img src={profileImage} className="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0 object-cover">
 
                             </img>
                             <h1 className="text-xl font-bold"> {firstName} {lastName}</h1>
@@ -144,8 +144,9 @@ console.log("reviews:", owner.review)
                                 <li className="mb-2">Tailwind Css</li>
                             </ul> */}
                             {/* although it says equipmentMap, this map is really universal, so name may be prone to CHANGE */}
-
-                            <EquipmentMap location={location} ownerDisplayHeight={200} ownerDisplayWidth={325} ownerDisplayZoom={8}/> 
+                            <div className="flex">
+                            <EquipmentMap location={location} ownerDisplayHeight={200} ownerDisplayWidth={325} ownerDisplayZoom={8}/>
+                            </div>
 
                         </div>
                     </div>
@@ -253,7 +254,7 @@ console.log("reviews:", owner.review)
 }
 
 
-export default OwnerDisplay;
+export default OwnerDisplay
 
 {/* <div>
 <div classNameName="card__title">Owner: {name}</div>

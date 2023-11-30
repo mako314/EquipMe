@@ -26,12 +26,12 @@ function RentalAgreementsCollection({ }) {
     return newDate.toLocaleDateString('en-US', options)
   }
 
-
+  let rentalCards
   // Need to find a way to map over an array that's nested inside of an array.
   //Went with flat map, but since there's another nested array inside of cart.cart_item, I needed to flatten that also, and finally, I map over item.agreements to get the agreement dates.
   //Luckily with flatmap, everything was available!
- 
-  let rentalCards = currentUser.cart?.flatMap(cart => 
+  if (role === 'user'){
+  rentalCards = currentUser.cart?.flatMap(cart => 
     cart.cart_item?.flatMap(item => 
       item.agreements?.map(agreement=>
       <RentalAgreementCard
@@ -41,6 +41,10 @@ function RentalAgreementsCollection({ }) {
       equipmentName={item.equipment.name}
       rentalStart={formatDate(agreement.rental_start_date)}
       rentalEnd={formatDate(agreement.rental_end_date)}
+      rentalDelivery={agreement.delivery}
+      rentalDeliveryAddress={agreement.delivery_address}
+      rentalRevisions={agreement.revisions}
+      rentalStatus={agreement.agreement_status}
       renterFirstName={currentUser.firstName}
       renterLastName={currentUser.lastName}
       location={item.equipment.location}
@@ -50,12 +54,27 @@ function RentalAgreementsCollection({ }) {
       />
         ) || []
       ) || []
-  )
-
-  // if (Array.isArray(cart.cart_item)) {
-  //   return cart.cart_item.map(item => console.log(item.agreements.rental_start_date))
-
-  // console.log("The rental cards",rentalCards)
+  )} else {
+    rentalCards = currentUser.agreements?.map(agreement => 
+      <RentalAgreementCard
+      key={agreement.id}
+      cartName={agreement.cart_item.cart.cart_name}
+      quantity={agreement.cart_item.quantity}
+      equipmentName={agreement.cart_item.equipment.name}
+      rentalStart={formatDate(agreement.rental_start_date)}
+      rentalEnd={formatDate(agreement.rental_end_date)}
+      rentalDelivery={agreement.delivery}
+      rentalDeliveryAddress={agreement.delivery_address}
+      rentalRevisions={agreement.revisions}
+      rentalStatus={agreement.agreement_status}
+      renterFirstName={agreement.cart_item.cart.user.firstName}
+      renterLastName={agreement.cart_item.cart.user.lastName}
+      location={currentUser.location}
+      ownerEmail ={currentUser.email}
+      ownerFirstName = {currentUser.firstName}
+      ownerLastName ={currentUser.lastName}
+      />)
+  }
 
     return (
     <div className="flex flex-row flex-wrap justify-start ml-6">

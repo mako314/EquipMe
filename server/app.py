@@ -218,10 +218,10 @@ class UserByID(Resource):
             return response
 api.add_resource(UserByID, '/user/<int:id>')
 
-
+# MAY WANT TO INCLUDE MORE, BUT GOING TO TRY AND SPEED UP NETWORK BY DOING AN ONLY instead of RUles
 class UserByProfession(Resource):
     def get(self, ownerProfession):
-        users = [user.to_dict(rules =('-_password_hash',)) for user in User.query.filter(User.profession == ownerProfession).all()]
+        users = [user.to_dict(only =('id','email', 'firstName', 'lastName', 'location', 'phone', 'profileImage')) for user in User.query.filter(User.profession == ownerProfession).all()]
         if users:
             response = make_response(users, 200)
         else:
@@ -589,6 +589,7 @@ class RentalAgreements(Resource):
     
     #post a rental agreement
     # This post is different from the rest, as for some of the validations I'm using
+    # I used get because I was having issue with data['name'] especially when it came time to get the rental dates, cart_item id, etc,
     def post(self):
         data = request.get_json()
 
@@ -632,6 +633,12 @@ class RentalAgreements(Resource):
         new_rental_agreement = RentalAgreement(
             rental_start_date = start_date,
             rental_end_date = end_date,
+            delivery = data.get('delivery', False),
+            delivery_address = data.get('delivery_address', False),
+            user_decision = 'pending',
+            owner_decision = 'pending',
+            revisions = 0,
+            agreement_status = 'in-progress',
             owner_id = data.get('owner_id'),
             user_id = data.get('user_id'),
             cart_item_id = cart_item_id,
@@ -639,6 +646,8 @@ class RentalAgreements(Resource):
             updated_at = datetime.utcnow(),
         )
         db.session.add(new_rental_agreement)
+        print(data.get('delivery'))
+        print(type(data.get('delivery')))
         db.session.commit()
 
         response = make_response(new_rental_agreement.to_dict(), 201)

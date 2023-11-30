@@ -12,12 +12,15 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
   const { currentUser, role, checkSession } = UserSessionContext()
 
   //States to capture info, day ranges, costs, length of rental, quantity, and track modal, cart
+  //This might be multiple states for now, but the plan is to convert it to one big state object.
   const [selectedRate, setSelectedRate] = useState("hourly")
   const [dayRange, setDayRange] = useState('')
   const [rentalLength, setRentalLength] = useState(1)
   const [equipmentQuantity, setEquipmentQuantity] = useState(1)
   const [currentCart, setCurrentCart] = useState(1)
   const [cartData, setCartData] = useState([])
+  const [isDelivery, setIsDelivery] = useState(false)
+  const [deliveryAddress, setDeliveryAddress] = useState('')
 
   // const [isModalOpen, setIsModalOpen] = useState(false)
   const [isNewCartModalOpen, setIsNewCartModalOpen] = useState(false)
@@ -30,7 +33,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
   const { equipment_price, equipment_image } = oneEquipment
 
   // console.log("Equipment price:", equipment_price)
-  // console.log("Your Equipment:",oneEquipment)
+  console.log("Your Equipment:",oneEquipment)
 
   useEffect(() => {
     if (role === 'user') {
@@ -188,6 +191,8 @@ const addCart = (newCart) => {
               'owner_id': oneEquipment.owner_id,
               'user_id': currentUser.id,
               'cart_item_id': newCartData.id,
+              'delivery' : isDelivery,
+              'delivery_address': deliveryAddress
             }
 
             //Spread two above objects into the bodyData object
@@ -269,6 +274,16 @@ const addCart = (newCart) => {
   }, [startRental, rentalLength, selectedRate]) 
   //toast
 
+  const handleCheckboxChange = (e) => {
+    if (e.target.checked) {
+        // If the checkbox is checked, set the delivery address to the user's address
+        setDeliveryAddress(currentUser?.location)
+    } else {
+        // If the checkbox is unchecked, clear the delivery address
+        setDeliveryAddress('')
+    }
+  }
+
     return(
       <> 
       <button onClick={toggleModal} className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
@@ -319,7 +334,7 @@ const addCart = (newCart) => {
                           {/* Grab this for the map */}
                           <div className="justify-between mb-6 rounded-lg bg-white p-6 shadow-md sm:flex sm:justify-start">
                               {/* Image Preview */}
-                              <img src={equipment_image} alt="product-image" className=" object-contain w-full rounded-lg sm:w-40 " />
+                              <img src={equipment_image} alt="product-image" className=" object-contain w-full rounded-lg sm:w-40" />
 
                               <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between">
                                   {/* Product Details */}
@@ -330,6 +345,59 @@ const addCart = (newCart) => {
                                       
                                       <Calendar startRental={startRental} setStartRental={setStartRental} endRental={endRental} setEndRental={setEndRental} durationType={dayRange} duration={rentalLength}/>
                                       
+                                      {/* THE BUTTONS TO TOGGLE DELIVERY AND OR PICK UP */}
+                                      <div className="mt-4">
+                                      <div className="mt-4 flex items-center">
+                                        <label className="inline-flex items-center">
+                                            <input
+                                                type="radio"
+                                                className="form-radio"
+                                                name="deliveryOption"
+                                                value="pickup"
+                                                onChange={() => setIsDelivery(false)}
+                                            />
+                                            <span className="ml-2 font-bold text-gray-900">Pickup</span>
+                                        </label>
+                                        
+                                        {oneEquipment.delivery === 'True' ? 
+                                        <label className="inline-flex items-center ml-6">
+                                            <input
+                                                type="radio"
+                                                className="form-radio"
+                                                name="deliveryOption"
+                                                value="delivery"
+                                                onChange={() => setIsDelivery(true)}
+                                            />
+                                            <span className="ml-2 font-bold text-gray-900">Delivery</span>
+                                        </label> 
+                                        : 
+                                        <span className="ml-4 font-bold text-gray-900">Delivery not Available</span>}
+                                        </div>
+                                        {isDelivery && (
+                                          <> 
+                                          {/* https://www.w3schools.com/jsref/prop_radio_defaultchecked.asp#:~:text=Description,default%2C%20otherwise%20it%20returns%20false. */}
+                                          <label className="inline-flex items-center">
+                                          <input
+                                              type="checkbox"
+                                              className="form-checkbox"
+                                              name="delivery_address"
+                                              checked={deliveryAddress === currentUser?.location}
+                                              onChange={handleCheckboxChange}
+                                          />
+                                            <span className="ml-2 font-bold text-gray-900">Use my Address on File</span>
+                                        </label> 
+                                            <input
+                                                type="text"
+                                                placeholder="Delivery Address"
+                                                name="delivery_address"
+                                                className="mt-2 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-black"
+                                                value={deliveryAddress}
+                                                onChange={(e) => setDeliveryAddress(e.target.value)}
+                                            />
+                                          </>
+                                        )}
+                                    </div>
+                                          {/* This is the div holding the calendar also */}
                                   </div>
 
                                   {/* Quantity and Price */}
@@ -400,7 +468,7 @@ const addCart = (newCart) => {
                           <br></br> 
                           The end date must be scheduled after the start date.
                           <br></br> 
-                          You will have the opportunity to review and edit your cart's contents before finalizing.
+                          You will have the opportunity to review and edit your cart's contents before checking out.
                           </p>
                               <button
                                 onClick={toggleCartCreationModal}
