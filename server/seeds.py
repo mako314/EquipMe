@@ -1,4 +1,4 @@
-from models import db, User, EquipmentOwner, Equipment, RentalAgreement, EquipmentImage, Thread, UserInbox, OwnerInbox, Message, Cart, CartItem, EquipmentPrice, FeaturedEquipment, Review, UserFavorite, OwnerFavorite
+from models import db, User, EquipmentOwner, Equipment, RentalAgreement, EquipmentImage, Thread, UserInbox, OwnerInbox, Message, Cart, CartItem, EquipmentPrice, FeaturedEquipment, Review, UserFavorite, OwnerFavorite, AgreementComment
 import pandas as pd
 from app import app
 from random import randint, choice as rc
@@ -603,6 +603,27 @@ if __name__ == '__main__':
         )]
 
         db.session.add_all(rental_agreements)
+        db.session.commit()
+#---------------------Rental Comments---------------
+        print("Configuring our current rental agreement comments...")
+        agreement_comments = [
+        AgreementComment(
+            comment = " This looks good to me, I'll go ahead and accept it!",
+            owner_id = owner_2.id, # Emily Johnson
+            agreement_id = rental_agreements[0].id
+        ),
+        AgreementComment(
+            comment = " I'm so sorry, but I actually don't need this for delivery?",
+            user_id=user_1.id,  # Benjamin Davis
+            agreement_id = rental_agreements[0].id
+        ),
+        AgreementComment(
+            comment = "Sounds good, thanks for renting it!",
+            owner_id = owner_2.id, # Emily Johnson
+            agreement_id = rental_agreements[0].id
+        )]
+
+        db.session.add_all(agreement_comments)
         db.session.commit()
 
 #---------------------Review Testing----------------
