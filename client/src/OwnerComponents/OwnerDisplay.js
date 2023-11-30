@@ -35,6 +35,35 @@ function OwnerDisplay() {
       })
   }, [])
 
+  const handleFavoriteSelection = () => {
+    console.log(isFavorited)
+    // Conditional method and URL based on whether is favorited doesn't exist off the useEffect
+    const method = !isFavorited ? "POST" : "DELETE"
+    const url = !isFavorited ? `${apiUrl}user/${currentUser.id}/favorite/owner/${id}` : `${apiUrl}remove/user/${currentUser.id}/favorite/owner/${id}`
+  
+    fetch(url, {
+      method: method,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ "user_id": currentUser.id, "owner_id": id })
+    })
+    .then(resp => {
+      if (!resp.ok) {
+        throw new Error("Favorite failed -- unable to favorite")
+      }
+      //Toggle the isFavorite (t or f if it exists), then set heartcolor based on that
+      setIsFavorited(!isFavorited)
+      setHeartColor(!isFavorited ? "red" : "white")
+      checkSession() // Update user data
+    })
+    .catch(error => {
+      console.error('Error:', error)
+      // Revert UI on error
+      setHeartColor(isFavorited ? "red" : "white")
+    })
+  }
+
  
 
   const equipmentNames = equipment?.map((equipment) => {
@@ -78,34 +107,7 @@ let userReviews = owner.review?.filter(reviewSubmission =>  reviewSubmission.rev
 console.log("userReviews:", userReviews )
 console.log("reviews:", owner.review)
 
-const handleFavoriteSelection = () => {
-    console.log(isFavorited)
-    // Conditional method and URL based on whether is favorited doesn't exist off the useEffect
-    const method = !isFavorited ? "POST" : "DELETE"
-    const url = !isFavorited ? `${apiUrl}user/${currentUser.id}/favorite/owner/${id}` : `${apiUrl}remove/user/${currentUser.id}/favorite/owner/${id}`
-  
-    fetch(url, {
-      method: method,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ "user_id": currentUser.id, "owner_id": id })
-    })
-    .then(resp => {
-      if (!resp.ok) {
-        throw new Error("Favorite failed")
-      }
-      //Toggle the isFavorite (t or f if it exists), then set heartcolor based on that
-      setIsFavorited(!isFavorited)
-      setHeartColor(!isFavorited ? "red" : "white")
-      checkSession() // Update user data
-    })
-    .catch(error => {
-      console.error('Error:', error)
-      // Revert UI on error
-      setHeartColor(isFavorited ? "red" : "white")
-    })
-  }
+
 
   return (
 

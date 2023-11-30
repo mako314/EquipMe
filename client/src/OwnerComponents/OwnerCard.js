@@ -21,7 +21,7 @@ function OwnerCard({ id, email, firstName, lastName, location, phone, profileIma
     // <div className="min-h-screen bg-gray-100 flex items-center"></div>
     return (
 
-        <div className="flex items-center">
+        <div className="flex items-center mt-10 ml-4">
                 <div className="container mx-auto p-9 bg-white max-w-sm rounded-2xl border-2 border-solid border-gray-900 overflow-hidden shadow-outline hover:shadow-2xl transition duration-300">
                 <img className="rounded-xl" src={profileImage} alt={`${firstName} ${lastName} Image`} />
                 <div className="flex flex-col justify-between items-start mt-4"> {/* Use flex-col and items-start */}
