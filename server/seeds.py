@@ -21,6 +21,7 @@ if __name__ == '__main__':
     with app.app_context():
         #Clear dbs
         print("Clearing db...")
+        AgreementComment.query.delete()
         RentalAgreement.query.delete()
         CartItem.query.delete()
         Cart.query.delete()
@@ -590,7 +591,7 @@ if __name__ == '__main__':
         RentalAgreement(
             rental_start_date="2023-07-17",
             rental_end_date="2023-07-20",
-            delivery = True,
+            delivery = False,
             delivery_address = "",
             user_decision = "accept",
             owner_decision = "pending",
