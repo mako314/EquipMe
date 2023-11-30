@@ -28,7 +28,7 @@ function OwnerDisplay() {
       .then((resp) => resp.json())
       .then((data) => {
         setOwner(data)
-        const favoriteStatus = currentUser?.user_favorite?.some(favorite => favorite.equipment_id === parseInt(id, 10))
+        const favoriteStatus = currentUser?.user_favorite?.some(favorite => favorite.owner_id === parseInt(id, 10))
       setHeartColor(favoriteStatus ? "red" : "white")
       // I can't just set is favorited and try it with heart color, it's just too quick and defaults, so I make a variable that contains data and set it to that.
       setIsFavorited(favoriteStatus)
@@ -82,14 +82,14 @@ const handleFavoriteSelection = () => {
     console.log(isFavorited)
     // Conditional method and URL based on whether is favorited doesn't exist off the useEffect
     const method = !isFavorited ? "POST" : "DELETE"
-    const url = !isFavorited ? `${apiUrl}user/${currentUser.id}/favorite/equipment/${id}` : `${apiUrl}remove/user/${currentUser.id}/favorite/${id}`
+    const url = !isFavorited ? `${apiUrl}user/${currentUser.id}/favorite/owner/${id}` : `${apiUrl}remove/user/${currentUser.id}/favorite/owner/${id}`
   
     fetch(url, {
       method: method,
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ "user_id": currentUser.id, "equipment_id": id })
+      body: JSON.stringify({ "user_id": currentUser.id, "owner_id": id })
     })
     .then(resp => {
       if (!resp.ok) {
