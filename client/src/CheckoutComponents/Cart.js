@@ -77,7 +77,7 @@ function Cart(){
     })
   }
 
-  console.log(cartData)
+  // console.log(cartData)
 
   // console.log("JUST CART:", cartData)
   // console.log("CART DATA:", cartData)
