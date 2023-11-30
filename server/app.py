@@ -749,7 +749,7 @@ class UserFavoriteOwner(Resource):
             print(existing_favorite)
             if existing_favorite:
                 raise ValueError("You have already favorited this equipment")
-        #need a way to input, owner_id and owner maybe a 2 step process?
+            
             new_favorite = UserFavorite(
                 user_id = data['user_id'],
                 owner_id = data['owner_id'],
@@ -800,9 +800,14 @@ class RemoveUserOwnerFavorite(Resource):
 api.add_resource(RemoveUserOwnerFavorite, '/remove/user/<int:user_id>/favorite/owner/<int:owner_id>')
 
 class OwnerFavoriteUser(Resource):
-    def post(self):
+    def post(self, owner_id, user_id):
         data = request.get_json()
         try:
+            existing_favorite = OwnerFavorite.query.filter_by(owner_id=owner_id, user_id=user_id).first()
+            print(existing_favorite)
+            if existing_favorite:
+                raise ValueError("You have already favorited this user")
+            
             new_favorite = OwnerFavorite(
                 owner_id = data['owner_id'],
                 user_id = data['user_id'],
@@ -815,11 +820,11 @@ class OwnerFavoriteUser(Resource):
         except ValueError:
             return make_response({"error": ["validations errors, check your input and try again"]} , 400)
 
-api.add_resource(OwnerFavoriteUser, '/owner/favorite/user')
+api.add_resource(OwnerFavoriteUser, '/owner/<int:owner_id>/favorite/user/<int:user_id>')
 
 class RemoveOwnerFavorite(Resource):
-    def delete(self, id):
-        favorite = OwnerFavorite.query.filter(OwnerFavorite.id == id).first()
+    def delete(self, owner_id, user_id):
+        favorite = OwnerFavorite.query.filter_by(owner_id=owner_id, user_id=user_id).first()
 
         if favorite:
             db.session.delete(favorite)
@@ -832,7 +837,7 @@ class RemoveOwnerFavorite(Resource):
             }, 404)
             return response
 
-api.add_resource(RemoveOwnerFavorite, '/remove/owner/favorite/<int:id>')
+api.add_resource(RemoveOwnerFavorite, '/remove/owner/<int:owner_id>/favorite/user/<int:user_id>')
 
 
 #-----------------------------------------------Bulk Equipment Upload Route-----------------------------------------------------------------------------#

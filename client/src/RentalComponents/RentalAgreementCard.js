@@ -2,6 +2,8 @@ import React from "react";
 
 function RentalAgreementCard({ equipmentName, rentalStart, rentalEnd, renterFirstName, renterLastName, location, ownerEmail, ownerFirstName, ownerLastName, cartName, quantity, rentalDelivery, rentalDeliveryAddress, rentalRevisions, rentalStatus }) {
     
+    // May be a good idea to draw how exactly status should work, 
+    // one side accepted, both, in progress, etc
     console.log("The rental status:", rentalStatus)
     console.log("The type of:", typeof(rentalDelivery))
     // console.log(item)

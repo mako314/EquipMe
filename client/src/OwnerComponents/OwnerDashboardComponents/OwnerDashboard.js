@@ -194,6 +194,7 @@ function AccountSettings() {
     .then((data) => {
         setPotentialRentalUsers(data)
         //can't use potentialRenters as the let, I was having issues with it taking two clicks, having a const like the other function seemed to fix it. It's funny because I built this one first, and then shallow copied it for handlePotentialOwner. Lord.
+        // Takes 314ms in network tab for this to load. Going to need a loading indicator :crY:
         const updatedPotentialRenters = (
             <UserCollection searchTerm={searchTerm} users={data} setFromOwnerDash={setFromOwnerDash} fromOwnerDash={fromOwnerDash}/>
         )
