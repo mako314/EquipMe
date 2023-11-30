@@ -104,7 +104,7 @@ function EquipmentDisplay({}) {
       if (!resp.ok) {
         throw new Error("Favorite failed")
       }
-      //Reset the isFavorite (t or f if it exists), then set heartcolor based on that
+      //Toggle the isFavorite (t or f if it exists), then set heartcolor based on that
       setIsFavorited(!isFavorited)
       setHeartColor(!isFavorited ? "red" : "white")
       checkSession() // Update user data
@@ -119,7 +119,6 @@ function EquipmentDisplay({}) {
   // Need to make some onclicks for when a user clicks description, reviews, details etc. 
 
   //What can I include in details? Possibly whether or not the vehicle is available for delivery? Deposit ? ETC?
-
 
   let loggedOutDisplay
   loggedOutDisplay = (

@@ -159,6 +159,14 @@ function AccountSettings() {
         </>
     }
 
+    const handleInboxNavigation = () => {
+        setFromOwnerDash(!fromOwnerDash)
+        // Use setTimeout to allow state update before navigation
+        setTimeout(() => {
+          navigate('/messaging')
+        }, 0)
+      }
+
 
     function DashHome(){
         return(
@@ -241,11 +249,10 @@ function AccountSettings() {
                                 setFromOwnerDash(!fromOwnerDash)
                             }}> Potential Rental Interests </span>}
 
-                            <Link to='/messaging'>
-                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {
-                                setFromOwnerDash(!fromOwnerDash)
-                            }}> Inbox </span>
-                            </Link>
+                            
+                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={handleInboxNavigation}
+                            > Inbox </span>
+                            
 
                             <span className="flex items-center flex-shrink-0 h-10 px-3 mt-auto text-sm font-medium bg-gray-200 rounded hover:bg-gray-300"
                                 href="#">
