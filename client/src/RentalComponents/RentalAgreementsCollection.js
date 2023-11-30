@@ -44,6 +44,7 @@ function RentalAgreementsCollection({ }) {
       rentalDelivery={agreement.delivery}
       rentalDeliveryAddress={agreement.delivery_address}
       rentalRevisions={agreement.revisions}
+      rentalStatus={agreement.agreement_status}
       renterFirstName={currentUser.firstName}
       renterLastName={currentUser.lastName}
       location={item.equipment.location}
@@ -62,6 +63,10 @@ function RentalAgreementsCollection({ }) {
       equipmentName={agreement.cart_item.equipment.name}
       rentalStart={formatDate(agreement.rental_start_date)}
       rentalEnd={formatDate(agreement.rental_end_date)}
+      rentalDelivery={agreement.delivery}
+      rentalDeliveryAddress={agreement.delivery_address}
+      rentalRevisions={agreement.revisions}
+      rentalStatus={agreement.agreement_status}
       renterFirstName={agreement.cart_item.cart.user.firstName}
       renterLastName={agreement.cart_item.cart.user.lastName}
       location={currentUser.location}
