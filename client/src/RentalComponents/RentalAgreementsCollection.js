@@ -41,6 +41,9 @@ function RentalAgreementsCollection({ }) {
       equipmentName={item.equipment.name}
       rentalStart={formatDate(agreement.rental_start_date)}
       rentalEnd={formatDate(agreement.rental_end_date)}
+      rentalDelivery={agreement.delivery}
+      rentalDeliveryAddress={agreement.delivery_address}
+      rentalRevisions={agreement.revisions}
       renterFirstName={currentUser.firstName}
       renterLastName={currentUser.lastName}
       location={item.equipment.location}
