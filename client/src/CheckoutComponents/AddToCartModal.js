@@ -12,12 +12,15 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
   const { currentUser, role, checkSession } = UserSessionContext()
 
   //States to capture info, day ranges, costs, length of rental, quantity, and track modal, cart
+  //This might be multiple states for now, but the plan is to convert it to one big state object.
   const [selectedRate, setSelectedRate] = useState("hourly")
   const [dayRange, setDayRange] = useState('')
   const [rentalLength, setRentalLength] = useState(1)
   const [equipmentQuantity, setEquipmentQuantity] = useState(1)
   const [currentCart, setCurrentCart] = useState(1)
   const [cartData, setCartData] = useState([])
+  const [isDelivery, setIsDelivery] = useState(false)
+  const [deliveryAddress, setDeliveryAddress] = useState('')
 
   // const [isModalOpen, setIsModalOpen] = useState(false)
   const [isNewCartModalOpen, setIsNewCartModalOpen] = useState(false)
@@ -30,7 +33,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
   const { equipment_price, equipment_image } = oneEquipment
 
   // console.log("Equipment price:", equipment_price)
-  // console.log("Your Equipment:",oneEquipment)
+  console.log("Your Equipment:",oneEquipment)
 
   useEffect(() => {
     if (role === 'user') {
@@ -330,6 +333,44 @@ const addCart = (newCart) => {
                                       
                                       <Calendar startRental={startRental} setStartRental={setStartRental} endRental={endRental} setEndRental={setEndRental} durationType={dayRange} duration={rentalLength}/>
                                       
+                                      {/* THE BUTTONS TO TOGGLE DELIVERY AND OR PICK UP */}
+                                      <div className="mt-4">
+                                      <div className="mt-4 flex items-center">
+                                        <label className="inline-flex items-center">
+                                            <input
+                                                type="radio"
+                                                className="form-radio"
+                                                name="deliveryOption"
+                                                value="pickup"
+                                                onChange={() => setIsDelivery(false)}
+                                            />
+                                            <span className="ml-2 font-bold text-gray-900">Pickup</span>
+                                        </label>
+                                        
+                                        {oneEquipment.delivery === 'True'? <label className="inline-flex items-center ml-6">
+                                            <input
+                                                type="radio"
+                                                className="form-radio"
+                                                name="deliveryOption"
+                                                value="delivery"
+                                                onChange={() => setIsDelivery(true)}
+                                            />
+                                            <span className="ml-2 font-bold text-gray-900">Delivery</span>
+                                        </label> : 
+                                        <span className="ml-4 font-bold text-gray-900">Delivery not Available</span>}
+                                        </div>
+                                        {isDelivery && (
+                                            <input
+                                                type="text"
+                                                placeholder="Delivery Address"
+                                                className="mt-2 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                                value={deliveryAddress}
+                                                onChange={(e) => setDeliveryAddress(e.target.value)}
+                                            />
+                                        )}
+                                    </div>
+
+
                                   </div>
 
                                   {/* Quantity and Price */}
@@ -400,7 +441,7 @@ const addCart = (newCart) => {
                           <br></br> 
                           The end date must be scheduled after the start date.
                           <br></br> 
-                          You will have the opportunity to review and edit your cart's contents before finalizing.
+                          You will have the opportunity to review and edit your cart's contents before checking out.
                           </p>
                               <button
                                 onClick={toggleCartCreationModal}

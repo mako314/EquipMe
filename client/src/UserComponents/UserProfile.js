@@ -34,7 +34,7 @@ function UserProfile() {
   }, [])
 
   //Destructure for props
-  const source = currentUser && role === 'user' || userProfile
+  const source = role === 'user' ? currentUser  : userProfile
 
   const {
     email = '',

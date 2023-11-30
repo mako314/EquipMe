@@ -320,7 +320,7 @@ class RentalAgreement(db.Model, SerializerMixin):
     rental_end_date = db.Column(db.String)
 
     # Yes / No
-    delivery = db.Column(db.String)
+    delivery = db.Column(db.String, nullable= True)
     delivery_address = db.Column(db.String, nullable= True)
 
     # user_comments = db.Column(db.String)

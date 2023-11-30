@@ -589,6 +589,7 @@ class RentalAgreements(Resource):
     
     #post a rental agreement
     # This post is different from the rest, as for some of the validations I'm using
+    # I used get because I was having issue with data['name'] especially when it came time to get the rental dates, cart_item id, etc,
     def post(self):
         data = request.get_json()
 
@@ -632,6 +633,12 @@ class RentalAgreements(Resource):
         new_rental_agreement = RentalAgreement(
             rental_start_date = start_date,
             rental_end_date = end_date,
+            delivery = data.get('delivery', False),
+            delivery_address = data.get('delivery_address', False),
+            user_decision = 'pending',
+            owner_decision = 'pending',
+            revisions = 0,
+            agreement_status = 'in-progress',
             owner_id = data.get('owner_id'),
             user_id = data.get('user_id'),
             cart_item_id = cart_item_id,
