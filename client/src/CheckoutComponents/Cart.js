@@ -62,11 +62,10 @@ function Cart(){
   //Map over equipment price, and take the rates as options
   let rateOptions
   if(Array.isArray(cartData[currentCart].cart_item)){
-    cartData[currentCart].cart_item?.forEach((item) => {
+    cartData[currentCart].cart_item?.flatMap(item => {
       if (Array.isArray(item.equipment.equipment_price)) {
         item.equipment.equipment_price?.map((price) => {
-          return(
-          rateOptions = 
+          return( rateOptions = 
           <Fragment key={price.id}>
             <option className="text-black"value="hourly">Hourly Rate: ${price.hourly_rate/100}</option>
             <option className="text-black"value="daily">Daily Rate: ${price.daily_rate/100}</option>
@@ -77,6 +76,8 @@ function Cart(){
       }
     })
   }
+
+  console.log(cartData)
 
   // console.log("JUST CART:", cartData)
   // console.log("CART DATA:", cartData)
