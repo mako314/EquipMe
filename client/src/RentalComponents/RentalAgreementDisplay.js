@@ -1,15 +1,22 @@
-import React, {useState} from "react"
+import React, {useState, useContext} from "react"
 import RentalAgreementCard from "./RentalAgreementCard";
 import { UserSessionContext } from "../UserComponents/SessionContext";
+import ApiUrlContext from "../Api";
 
 function RentalAgreementDisplay() {
+    const apiUrl = useContext(ApiUrlContext)
     const { currentUser, role} = UserSessionContext()
     
-    const [ownerResponse, setOwnerResponse] = useState({
-        owner_decision: '',
-        delivery: '',
-        delivery_address: ''
+    const [rentalComment, setRentalComment] = useState({
+        comment: '',
+        user_id: '',
+        owner_id: '',
+        agreement_id: '',
     })
+
+    // owner_decision: '',
+    // delivery: '',
+    // delivery_address: '',
     
 
     const formatDate = (date) => {
@@ -39,9 +46,9 @@ function RentalAgreementDisplay() {
         (rentalCard = currentUser?.cart?.flatMap(cart => 
         cart.cart_item?.flatMap(item => 
         item.agreements?.map(agreement=>{
-
         rentalCard = (<RentalAgreementCard
-        key={item.id}
+        key={agreement.id}
+        id={agreement.id}
         cartName={cart.cart_name}
         quantity={item.quantity}
         equipmentName={item.equipment.name}
@@ -68,6 +75,7 @@ function RentalAgreementDisplay() {
         currentUser?.agreements?.map(agreement => {
         rentalCard = <div className="ml-16"><RentalAgreementCard
         key={agreement.id}
+        id={agreement.id}
         cartName={agreement.cart_item.cart.cart_name}
         quantity={agreement.cart_item.quantity}
         equipmentName={agreement.cart_item.equipment.name}
@@ -90,6 +98,8 @@ function RentalAgreementDisplay() {
     })
     }
 
+    console.log(currentUser)
+
     console.log("The current rental card:", rentalCardDisplay[0])
     // console.log("currentUser agreements OWNER:", currentUser?.agreements[0])
     const comments = currentUser?.agreements?.[0]?.comment?.map((item) => (
@@ -104,9 +114,45 @@ function RentalAgreementDisplay() {
     </div>
     </div>
     ))
+
+    const handleAddComment = (e) => {
+        e.preventDefault()
+
+        // Need to just do const, cause state and asynchrous. I'll update this later.
+        if (role === 'user'){
+            setRentalComment(prevState => {
+                return {
+                    ...prevState,
+                    user_id: currentUser?.id,
+                    owner_id: "",
+                    agreement_id: currentUser?.agreements[0]?.id
+                }
+            })
+        } else if (role ==='owner'){
+            setRentalComment(prevState => {
+                return {
+                    ...prevState,
+                    user_id: currentUser?.agreements[0]?.user_id,
+                    owner_id: currentUser?.id,
+                    agreement_id: currentUser?.agreements[0]?.id
+                }
+            })
+        }
+        console.log( "RENTAL COMMENT:", rentalComment)
+
+        fetch(`${apiUrl}rental/comment`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(rentalComment),
+        }).then((resp) => {
+            if (resp.ok) {
+                console.log(resp)
+            }
+        })
+    }
     
-
-
     return(
         <section>
         <div className="py-16 md:py-24 lg:py-32 mx-auto w-full max-w-7xl px-5 md:px-10">
@@ -133,17 +179,21 @@ function RentalAgreementDisplay() {
                 <div className="mb-6 mt-8 h-[0.5px] w-full bg-[#a6a6a6]">
                     
                 </div>
-                    <div className="flex justify-end"> 
-                        <div className="flex flex-col space-y-2 w-full">
-                        <textarea 
-                            className="flex-1 h-12 p-3 text-sm border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" 
-                            placeholder="Type your comment here..."
+                    <form className="flex flex-col space-y-2 w-full" onSubmit={handleAddComment}>
+                        <textarea
+                        type="text"
+                        className="resize-y p-3 text-sm border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                        name="comment"
+                        value={rentalComment.comment}
+                        placeholder="Type your comment here..."
+                        onChange={(e) => setRentalComment({ ...rentalComment, comment: e.target.value })}
                         />
-                            <button className="bg-black text-white text-sm px-6 py-3 rounded-lg shadow transition duration-150 ease-in-out hover:bg-gray-700 focus:outline-none">
-                                Leave Comment
-                            </button>
-                        </div>
-                    </div>
+                        <button 
+                        type="submit"
+                        className="bg-black text-white text-sm px-6 py-3 rounded-lg shadow transition duration-150 ease-in-out hover:bg-gray-700 focus:outline-none">
+                        Leave Comment
+                        </button>
+                    </form>
                 </div>
             </div>
             </div>

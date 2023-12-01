@@ -720,12 +720,12 @@ class RentalAgreementComments(Resource):
         #try VALIDATIONS:
 
         new_comment = AgreementComment(
-            comment = data['comment'],
+            comment =  data.get('comment'),
             created_at = datetime.utcnow(),
             updated_at = datetime.utcnow(),
-            user_id = data['user_id'],
-            owner_id = data['owner_id'],
-            agreement_id = data['agreement_id']
+            user_id =  data.get('user_id'),
+            owner_id =  data.get('owner_id'),
+            agreement_id =  data.get('agreement_id')
         )
 
         db.session.add(new_comment)
@@ -736,7 +736,7 @@ class RentalAgreementComments(Resource):
 
         return response
 
-api.add_resource(RentalAgreementComments, '/rental_agreements/<int:id>')
+api.add_resource(RentalAgreementComments, '/rental/comment')
 #-----------------------------------------------Favoriting for Users and Owners Routes-----------------------------------------------------------------------------#
 class UserFavoriteEquipment(Resource):
     def post(self, user_id,equipment_id ):
