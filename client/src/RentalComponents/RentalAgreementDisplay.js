@@ -43,6 +43,8 @@ function RentalAgreementDisplay() {
         rentalDeliveryAddress={agreement.delivery_address}
         rentalRevisions={agreement.revisions}
         rentalStatus={agreement.agreement_status}
+        rentalCreatedAt={agreement.created_at}
+        rentalUpdatedAt={agreement.updated_at}
         renterFirstName={currentUser.firstName}
         renterLastName={currentUser.lastName}
         location={item.equipment.location}
@@ -113,7 +115,7 @@ function RentalAgreementDisplay() {
                     <div className="flex flex-col gap-1.5">
                     <h5 className="text-xl font-bold">Need a Rental Agreement revision?</h5>
                     <div className="max-w-[380px]">
-                        <p className="text-[#636262] max-[479px]:text-sm">Need to add delivery or require extra help? Post a comment to find a solution!</p>
+                        <p className="text-[#636262] max-[479px]:text-sm">Forgot to add delivery or require extra help? Post a comment to find a solution!</p>
                     </div>
                     </div>
                 </div>
