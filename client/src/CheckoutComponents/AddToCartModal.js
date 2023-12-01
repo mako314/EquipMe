@@ -155,6 +155,11 @@ const addCart = (newCart) => {
         {
         "autoClose" : 2000
         })
+    } if(deliveryAddress ===''){
+      return toast.warn(`📆 Please put a delivery address, or select for pickup.`,
+      {
+      "autoClose" : 2000
+      })
     }
     let newCartItem ={
       'rental_length' : rentalLength,
@@ -284,6 +289,13 @@ const addCart = (newCart) => {
     }
   }
 
+  const handlePickupChange = () => {
+        // If pickup selected setDelivery to false
+        setIsDelivery(false)
+        // If the checkbox is unchecked, clear the delivery address
+        setDeliveryAddress('Pickup')
+  }
+
     return(
       <> 
       <button onClick={toggleModal} className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
@@ -354,7 +366,7 @@ const addCart = (newCart) => {
                                                 className="form-radio"
                                                 name="deliveryOption"
                                                 value="pickup"
-                                                onChange={() => setIsDelivery(false)}
+                                                onChange={handlePickupChange}
                                             />
                                             <span className="ml-2 font-bold text-gray-900">Pickup</span>
                                         </label>

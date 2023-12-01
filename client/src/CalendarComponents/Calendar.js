@@ -101,6 +101,11 @@ function Calendar({startRental, setStartRental, endRental, setEndRental, duratio
     } else {
       // Alert the user that the end date must be at least one hour after the start date
       console.warn("Start date and time must be one hour ahead of local time to allow for a smoother process.")
+      return toast.warn(`📆 Start date and time must be one hour ahead of local time to allow for a smoother process.`,
+      {
+      "autoClose" : 2000
+      })
+      
       // toast.warn("Start date and time must be one hour ahead of local time to allow for a smoother process.")
     }
     
