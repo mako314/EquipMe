@@ -93,9 +93,10 @@ function RentalAgreementDisplay() {
     console.log("The current rental card:", rentalCardDisplay[0])
     // console.log("currentUser agreements OWNER:", currentUser?.agreements[0])
     const comments = currentUser?.agreements?.[0]?.comment?.map((item) => (
-    <div key={item.id} className="mb-6 w-full overflow-hidden bg-[#f2f2f7] p-8 rounded-sm">
+    <div key={item.id} className="mb-6 w-full overflow-hidden bg-[#f2f2f7] p-8 rounded-sm border-b border-black">
     <div className="flex items-start justify-between">
         <p className="text-xl font-bold">Comment Created At: <br></br> {item.created_at}</p>
+        <span> 👈👉 </span>
         <p className="text-xl font-bold">Comment Updated At: <br></br> {item.updated_at}</p>
     </div>
     <div className="w-full overflow-hidden mb-4 max-w-[640px] lg:max-w-[960px] mt-4">
@@ -115,28 +116,36 @@ function RentalAgreementDisplay() {
                 {rentalCardDisplay[0]}
                 </div>
             </div>
-            <div className="flex-[1_1_500px] max-[991px]:w-full max-[991px]:flex-none">
+            <div className="flex-[1_1_500px] max-[991px]:w-full max-[991px]:flex-none bg-[#f2f2f7]">
                 {comments}
                 <div className="mb-6 h-full w-full overflow-auto bg-[#f2f2f7] p-8 rounded-sm">
+
                 <div className="flex flex-row gap-4">
                     <img src={currentUser.profileImage} alt="" className="inline-block h-12 w-12 object-cover rounded-full"/>
                     <div className="flex flex-col gap-1.5">
-                    <h5 className="text-xl font-bold">Need a Rental Agreement revision?</h5>
+                    <h5 className="text-xl font-bold">Need an Agreement revision?</h5>
                     <div className="max-w-[380px]">
                         <p className="text-[#636262] max-[479px]:text-sm">Forgot to add delivery or require extra help? Post a comment to find a solution!</p>
                     </div>
                     </div>
                 </div>
+                
                 <div className="mb-6 mt-8 h-[0.5px] w-full bg-[#a6a6a6]">
                     
                 </div>
-                <div className="flex justify-end"> 
-
-                <button className="inline-block items-center bg-black px-6 py-3 text-center font-semibold text-white">Leave Comment</button>
-                </div>
+                    <div className="flex justify-end"> 
+                        <div className="flex flex-col space-y-2 w-full">
+                        <textarea 
+                            className="flex-1 h-12 p-3 text-sm border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" 
+                            placeholder="Type your comment here..."
+                        />
+                            <button className="bg-black text-white text-sm px-6 py-3 rounded-lg shadow transition duration-150 ease-in-out hover:bg-gray-700 focus:outline-none">
+                                Leave Comment
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
-
             </div>
             {/* <button className="inline-block items-center bg-black px-6 py-3 text-center font-semibold text-white">Leave Comment</button> */}
         </div>
