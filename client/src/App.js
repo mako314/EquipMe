@@ -70,6 +70,9 @@ import NewMessageThreads from './MessagingComponents/NewMessageThreads';
 import Checkout from './CheckoutComponents/Checkout';
 import Cart from './CheckoutComponents/Cart';
 
+//---------------------- Rental Agreement Display -----------------------------
+import RentalAgreementDisplay from './RentalComponents/RentalAgreementDisplay'
+
 //---------------------- Toastify -----------------------------
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
@@ -352,6 +355,9 @@ function App() {
             {/* Temporary Checkout Routing */}
             <Route path='/checkout' element={<Checkout/>} />
             <Route path='/cart' element={<Cart/>} />
+
+            {/* Rental Display */}
+            <Route path='/handle/agreements' element={<RentalAgreementDisplay/>} />
 
 
           </Routes>

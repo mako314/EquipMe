@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import ProductCollection from '../../EquipmentComponents/ProductCollection'
 import OwnerEditForm from '../OwnerEditForm';
 import UserCollection from '../../UserComponents/UserCollection';
+import UserCard from '../../UserComponents/UserCard';
 import ApiUrlContext from '../../Api';
 
 //User Imports//
@@ -91,7 +92,7 @@ function OwnerDashboard({ownerToEdit, updateOwner, fromOwnerDash, setFromOwnerDa
         })
     }
 
-    function Favorites() {
+    function UserFavorites() {
         const [selectedFavorite, setSelectedFavorite] = useState('equipment')
 
         const handleRadioChange = (event) => {
@@ -155,6 +156,31 @@ function OwnerDashboard({ownerToEdit, updateOwner, fromOwnerDash, setFromOwnerDa
     }
 
 //-------------------------------------------------------------OWNER CONDITIONAL DATA --------------------------------------------------------------------
+
+function OwnerFavorites() {
+
+    return (
+        <div className="flex flex-wrap ml-4 pt-4">
+            {currentUser?.owner_favorite?.map((favorite) => {
+
+            return (
+                <div className='ml-4'> 
+                <UserCard
+                    key={favorite.id}
+                    id={favorite.user.user_id}
+                    firstName={favorite.user.firstName}
+                    lastName={favorite.user.lastName}
+                    email={favorite.user.email}
+                    phone={favorite.user.phone}
+                    profileImage={favorite.user.profileImage}
+                />
+                </div>
+                    )
+            })}
+        </div>
+    )
+}
+
 
 //----------------------------------------activeListings------------------------------
 // Need to build out a back to dash button here for owners along with edit functionality 
@@ -263,21 +289,25 @@ function AccountSettings() {
 
                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<DashHome/>)}> Home </span>
 
-                            {role === 'owner' ? 
+                            {/* {role === 'owner' ? 
                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<ActiveListings/>)}> Active listings </span> 
                             : 
                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(
                             <RentalAgreements/>
-                            )}> Rental Agreements  </span>}
+                            )}> Rental Agreements  </span>} */}
+
+                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<ActiveListings/>)}> Active listings </span>
+
+                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<RentalAgreements/>)}> Rental Agreements</span> 
+ 
                             
-                            
+                            {/* <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<ActiveListings/>)}> Active listings </span>  */}
                             {/* <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(plannedDeals)}> Planned Deals </span> */}
 
-                            
                              <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {
-                                {role === 'owner' ? setToggleHomeDash(<RentalAgreements/>) : setToggleHomeDash(<Favorites/>)} 
+                                {role === 'owner' ? setToggleHomeDash(<OwnerFavorites/>) : setToggleHomeDash(<UserFavorites/>)} 
                              }}> 
-                                {role === 'owner' ? 'Rental Agreements' : 'Favorites'} 
+                                Favorites
                              </span>
 
                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {
