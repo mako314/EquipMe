@@ -1,4 +1,4 @@
-from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement, Message, Thread,UserInbox, OwnerInbox, Cart, CartItem, EquipmentPrice, UserFavorite, OwnerFavorite
+from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement, Message, Thread,UserInbox, OwnerInbox, Cart, CartItem, EquipmentPrice, UserFavorite, OwnerFavorite, AgreementComment
 # from flask_cors import CORS
 # from flask_migrate import Migrate
 # from flask import Flask, request, make_response, jsonify
@@ -713,6 +713,30 @@ class RentalAgreementsByID(Resource):
             return response
 api.add_resource(RentalAgreementsByID, '/rental_agreements/<int:id>')
 
+#-----------------------------------------------Agreement Comment Routes-----------------------------------------------------------------------------#
+class RentalAgreementComments(Resource):
+    def post(self):
+        data = request.get_json()
+        #try VALIDATIONS:
+
+        new_comment = AgreementComment(
+            comment = data['comment'],
+            created_at = datetime.utcnow(),
+            updated_at = datetime.utcnow(),
+            user_id = data['user_id'],
+            owner_id = data['owner_id'],
+            agreement_id = data['agreement_id']
+        )
+
+        db.session.add(new_comment)
+
+        db.session.commit()
+
+        response = make_response(new_comment.to_dict(), 201)
+
+        return response
+
+api.add_resource(RentalAgreementComments, '/rental_agreements/<int:id>')
 #-----------------------------------------------Favoriting for Users and Owners Routes-----------------------------------------------------------------------------#
 class UserFavoriteEquipment(Resource):
     def post(self, user_id,equipment_id ):
