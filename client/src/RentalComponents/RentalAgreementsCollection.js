@@ -31,7 +31,7 @@ function RentalAgreementsCollection({ }) {
   //Went with flat map, but since there's another nested array inside of cart.cart_item, I needed to flatten that also, and finally, I map over item.agreements to get the agreement dates.
   //Luckily with flatmap, everything was available!
   if (role === 'user'){
-  rentalCards = currentUser.cart?.flatMap(cart => 
+  rentalCards = currentUser?.cart?.flatMap(cart => 
     cart.cart_item?.flatMap(item => 
       item.agreements?.map(agreement=>
       <RentalAgreementCard
@@ -45,6 +45,8 @@ function RentalAgreementsCollection({ }) {
       rentalDeliveryAddress={agreement.delivery_address}
       rentalRevisions={agreement.revisions}
       rentalStatus={agreement.agreement_status}
+      rentalCreatedAt={agreement.created_at}
+      rentalUpdatedAt={agreement.updated_at}
       renterFirstName={currentUser.firstName}
       renterLastName={currentUser.lastName}
       location={item.equipment.location}
@@ -55,7 +57,7 @@ function RentalAgreementsCollection({ }) {
         ) || []
       ) || []
   )} else {
-    rentalCards = currentUser.agreements?.map(agreement => 
+    rentalCards = currentUser?.agreements?.map(agreement => 
       <RentalAgreementCard
       key={agreement.id}
       cartName={agreement.cart_item.cart.cart_name}
@@ -67,6 +69,8 @@ function RentalAgreementsCollection({ }) {
       rentalDeliveryAddress={agreement.delivery_address}
       rentalRevisions={agreement.revisions}
       rentalStatus={agreement.agreement_status}
+      rentalCreatedAt={agreement.created_at}
+      rentalUpdatedAt={agreement.updated_at}
       renterFirstName={agreement.cart_item.cart.user.firstName}
       renterLastName={agreement.cart_item.cart.user.lastName}
       location={currentUser.location}

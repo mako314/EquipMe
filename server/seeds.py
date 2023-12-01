@@ -615,7 +615,7 @@ if __name__ == '__main__':
             updated_at = datetime.utcnow()
         ),
         AgreementComment(
-            comment = " I'm so sorry, but I actually don't need this for delivery?",
+            comment = " I'm so sorry, but I actually don't need this for delivery!",
             user_id=user_1.id,  # Benjamin Davis
             agreement_id = rental_agreements[0].id,
             created_at = datetime.utcnow(),

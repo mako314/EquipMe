@@ -318,7 +318,6 @@ class RentalAgreement(db.Model, SerializerMixin):
     rental_start_date = db.Column(db.String) 
 
     rental_end_date = db.Column(db.String)
-
     # Yes / No
     delivery = db.Column(db.Boolean, nullable= True)
     delivery_address = db.Column(db.String, nullable= True)
@@ -329,11 +328,9 @@ class RentalAgreement(db.Model, SerializerMixin):
     owner_decision = db.Column(db.String)
     # owner_comments = db.Column(db.String)
     revisions = db.Column(db.Integer, default=0)
-
     # proof_of_ownership = db.Column(db.String)
     # owner_insurance = db.Column(db.String)
     # user_insurance_proof = db.Column(db.String)
-
     agreement_status = db.Column(db.String)
     # Ex. in progress, user-accepted, owner-accepted, both-accepted
 #----------------------------------------------------------------
@@ -341,13 +338,11 @@ class RentalAgreement(db.Model, SerializerMixin):
     #do a cascade to make life easier 
     # this is how everything gets linked up
     # So I likely still need to do the rental agreement form
-
     # equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
     owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     cart_item_id = db.Column(db.Integer, db.ForeignKey('cart_items.id'))
 #----------------------------------------------------------------
-    
     # Include a created at date, updated at.
     created_at = db.Column(
     db.DateTime, nullable=False,

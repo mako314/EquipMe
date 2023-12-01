@@ -1,9 +1,24 @@
-import React from "react"
+import React, {useState, useContext} from "react"
 import RentalAgreementCard from "./RentalAgreementCard";
 import { UserSessionContext } from "../UserComponents/SessionContext";
+import ApiUrlContext from "../Api";
 
 function RentalAgreementDisplay() {
+    const apiUrl = useContext(ApiUrlContext)
     const { currentUser, role} = UserSessionContext()
+    
+    const [rentalComment, setRentalComment] = useState({
+        comment: '',
+        user_id: '',
+        owner_id: '',
+        agreement_id: '',
+    })
+
+    // owner_decision: '',
+    // delivery: '',
+    // delivery_address: '',
+    
+
     const formatDate = (date) => {
         // Was having a lot of issues and couldn't tell where from, so I wrote some validations to test what could be going wrong
         let newDate = new Date(date)
@@ -28,12 +43,12 @@ function RentalAgreementDisplay() {
     //Went with flat map, but since there's another nested array inside of cart.cart_item, I needed to flatten that also, and finally, I map over item.agreements to get the agreement dates.
     //Luckily with flatmap, everything was available!
     if (role === 'user'){
-        (rentalCard = currentUser.cart?.flatMap(cart => 
+        (rentalCard = currentUser?.cart?.flatMap(cart => 
         cart.cart_item?.flatMap(item => 
         item.agreements?.map(agreement=>{
-
         rentalCard = (<RentalAgreementCard
-        key={item.id}
+        key={agreement.id}
+        id={agreement.id}
         cartName={cart.cart_name}
         quantity={item.quantity}
         equipmentName={item.equipment.name}
@@ -43,6 +58,8 @@ function RentalAgreementDisplay() {
         rentalDeliveryAddress={agreement.delivery_address}
         rentalRevisions={agreement.revisions}
         rentalStatus={agreement.agreement_status}
+        rentalCreatedAt={agreement.created_at}
+        rentalUpdatedAt={agreement.updated_at}
         renterFirstName={currentUser.firstName}
         renterLastName={currentUser.lastName}
         location={item.equipment.location}
@@ -55,9 +72,10 @@ function RentalAgreementDisplay() {
         }) || []
         ) || []
         ))} else {
-        currentUser.agreements?.map(agreement => {
-        rentalCard = <RentalAgreementCard
+        currentUser?.agreements?.map(agreement => {
+        rentalCard = <div className="ml-16"><RentalAgreementCard
         key={agreement.id}
+        id={agreement.id}
         cartName={agreement.cart_item.cart.cart_name}
         quantity={agreement.cart_item.quantity}
         equipmentName={agreement.cart_item.equipment.name}
@@ -67,21 +85,75 @@ function RentalAgreementDisplay() {
         rentalDeliveryAddress={agreement.delivery_address}
         rentalRevisions={agreement.revisions}
         rentalStatus={agreement.agreement_status}
+        rentalCreatedAt={agreement.created_at}
+        rentalUpdatedAt={agreement.updated_at}
         renterFirstName={agreement.cart_item.cart.user.firstName}
         renterLastName={agreement.cart_item.cart.user.lastName}
         location={currentUser.location}
         ownerEmail ={currentUser.email}
         ownerFirstName = {currentUser.firstName}
         ownerLastName ={currentUser.lastName}
-        /> 
+        />  </div>
         rentalCardDisplay.push(rentalCard)
     })
     }
 
+    console.log(currentUser)
 
+    console.log("The current rental card:", rentalCardDisplay[0])
+    // console.log("currentUser agreements OWNER:", currentUser?.agreements[0])
+    const comments = currentUser?.agreements?.[0]?.comment?.map((item) => (
+    <div key={item.id} className="mb-6 w-full overflow-hidden bg-[#f2f2f7] p-8 rounded-sm border-b border-black">
+    <div className="flex items-start justify-between">
+        <p className="text-xl font-bold">Comment Created At: <br></br> {item.created_at}</p>
+        <span> 👈👉 </span>
+        <p className="text-xl font-bold">Comment Updated At: <br></br> {item.updated_at}</p>
+    </div>
+    <div className="w-full overflow-hidden mb-4 max-w-[640px] lg:max-w-[960px] mt-4">
+        <p className="max-[479px]:text-sm">{item.comment}</p>
+    </div>
+    </div>
+    ))
+
+    const handleAddComment = (e) => {
+        e.preventDefault()
+
+        // Need to just do const, cause state and asynchrous. I'll update this later.
+        if (role === 'user'){
+            setRentalComment(prevState => {
+                return {
+                    ...prevState,
+                    user_id: currentUser?.id,
+                    owner_id: "",
+                    agreement_id: currentUser?.agreements[0]?.id
+                }
+            })
+        } else if (role ==='owner'){
+            setRentalComment(prevState => {
+                return {
+                    ...prevState,
+                    user_id: currentUser?.agreements[0]?.user_id,
+                    owner_id: currentUser?.id,
+                    agreement_id: currentUser?.agreements[0]?.id
+                }
+            })
+        }
+        console.log( "RENTAL COMMENT:", rentalComment)
+
+        fetch(`${apiUrl}rental/comment`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(rentalComment),
+        }).then((resp) => {
+            if (resp.ok) {
+                console.log(resp)
+            }
+        })
+    }
+    
     return(
-        
-        
         <section>
         <div className="py-16 md:py-24 lg:py-32 mx-auto w-full max-w-7xl px-5 md:px-10">
             <div className="flex flex-col items-start lg:flex-row lg:space-x-20">
@@ -89,73 +161,43 @@ function RentalAgreementDisplay() {
                 <div className="max-w-3xl mb-8 md:mb-12 lg:mb-16">
                 {rentalCardDisplay[0]}
                 </div>
+            </div>
+            <div className="flex-[1_1_500px] max-[991px]:w-full max-[991px]:flex-none bg-[#f2f2f7]">
+                {comments}
                 <div className="mb-6 h-full w-full overflow-auto bg-[#f2f2f7] p-8 rounded-sm">
+
                 <div className="flex flex-row gap-4">
-                    <img src="https://assets.website-files.com/6458c625291a94a195e6cf3a/64772e4ec124557640300fd8_Column.png" alt="" className="inline-block h-12 w-12 object-cover rounded-full"/>
+                    <img src={currentUser.profileImage} alt="" className="inline-block h-12 w-12 object-cover rounded-full"/>
                     <div className="flex flex-col gap-1.5">
-                    <h5 className="text-xl font-bold">Still have questions?</h5>
+                    <h5 className="text-xl font-bold">Need an Agreement revision?</h5>
                     <div className="max-w-[380px]">
-                        <p className="text-[#636262] max-[479px]:text-sm">Can’t find the answer you’re looking for? Please chat to lorem</p>
+                        <p className="text-[#636262] max-[479px]:text-sm">Forgot to add delivery or require extra help? Post a comment to find a solution!</p>
                     </div>
                     </div>
                 </div>
-                <div className="mb-6 mt-8 h-[0.5px] w-full bg-[#a6a6a6]"></div>
-                <a href="#" className="inline-block items-center bg-black px-6 py-3 text-center font-semibold text-white">Get In Touch</a>
+                
+                <div className="mb-6 mt-8 h-[0.5px] w-full bg-[#a6a6a6]">
+                    
+                </div>
+                    <form className="flex flex-col space-y-2 w-full" onSubmit={handleAddComment}>
+                        <textarea
+                        type="text"
+                        className="resize-y p-3 text-sm border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                        name="comment"
+                        value={rentalComment.comment}
+                        placeholder="Type your comment here..."
+                        onChange={(e) => setRentalComment({ ...rentalComment, comment: e.target.value })}
+                        />
+                        <button 
+                        type="submit"
+                        className="bg-black text-white text-sm px-6 py-3 rounded-lg shadow transition duration-150 ease-in-out hover:bg-gray-700 focus:outline-none">
+                        Leave Comment
+                        </button>
+                    </form>
                 </div>
             </div>
-            <div className="flex-[1_1_500px] max-[991px]:w-full max-[991px]:flex-none">
-                <div className="mb-6 w-full overflow-hidden bg-[#f2f2f7] p-8 rounded-sm">
-                <div className="flex cursor-pointer items-start justify-between">
-                    <p className="text-xl font-bold">What is your policy on distributon</p>
-                    <div className="relative ml-10 mt-1 flex h-5 w-5 items-center justify-center">
-                    <div className="absolute h-5 w-0.5 bg-[#0b0b1f]"></div>
-                    <div className="h-0.5 w-5 bg-[#0b0b1f]"></div>
-                    </div>
-                </div>
-                <div className="w-full overflow-hidden mb-4 max-w-[640px] lg:max-w-[960px]">
-                    <p className="max-[479px]:text-sm">Pellentesque in nisi aliquet, pellentesque purus eget, imperdiet turpis. Fusce at enim quis neque viverra convallis. Vivamus ut elementum leo, eget tempus nisl. Sed viverra enim ac turpis posuere consectetur. Sed enim nibh, consequat vitae lacus eu, ullamcorper ullamcorper massa. Pellentesque purus eget, imperdiet turpis.</p>
-                </div>
-                </div>
-                <div className="mb-6 w-full overflow-hidden bg-[#f2f2f7] p-8 rounded-sm">
-                <div className="flex cursor-pointer items-start justify-between">
-                    <p className="text-xl font-bold">How can I contribute to Flowspark?</p>
-                    <div className="relative ml-10 mt-1 flex h-5 w-5 items-center justify-center">
-                    <div className="absolute h-5 w-0.5 bg-[#0b0b1f]"></div>
-                    <div className="h-0.5 w-5 bg-[#0b0b1f]"></div>
-                    </div>
-                </div>
-                <div className="w-full overflow-hidden mb-4 max-w-[640px] lg:max-w-[960px]">
-                    <p className="max-[479px]:text-sm">Pellentesque in nisi aliquet, pellentesque purus eget, imperdiet turpis. Fusce at enim quis neque viverra convallis. Vivamus ut elementum leo, eget tempus nisl. Sed viverra enim ac turpis posuere consectetur. Sed enim nibh, consequat vitae lacus eu, ullamcorper ullamcorper massa. Pellentesque purus eget, imperdiet turpis.</p>
-                </div>
-                </div>
-                <div className="mb-6 w-full overflow-hidden bg-[#f2f2f7] p-8 rounded-sm">
-                <div className="flex cursor-pointer items-start justify-between">
-                    <p className="text-xl font-bold">What other themes do you have?</p>
-                    <div className="relative ml-10 mt-1 flex h-5 w-5 items-center justify-center">
-                    <div className="absolute h-5 w-0.5 bg-[#0b0b1f]"></div>
-                    <div className="h-0.5 w-5 bg-[#0b0b1f]"></div>
-                    </div>
-                </div>
-                <div className="w-full overflow-hidden mb-4 max-w-[640px] lg:max-w-[960px]">
-                    <p className="max-[479px]:text-sm">Pellentesque in nisi aliquet, pellentesque purus eget, imperdiet turpis. Fusce at enim quis neque viverra convallis. Vivamus ut elementum leo, eget tempus nisl. Sed viverra enim ac turpis posuere consectetur. Sed enim nibh, consequat vitae lacus eu, ullamcorper ullamcorper massa. Pellentesque purus eget, imperdiet turpis.</p>
-                </div>
-                </div>
-
-                <div className="mb-6 w-full overflow-hidden bg-[#f2f2f7] p-8 rounded-sm">
-                <div className="flex cursor-pointer items-start justify-between">
-                    <p className="text-xl font-bold">What is your policy on distributon</p>
-                    <div className="relative ml-10 mt-1 flex h-5 w-5 items-center justify-center">
-                    <div className="absolute h-5 w-0.5 bg-[#0b0b1f]"></div>
-                    <div className="h-0.5 w-5 bg-[#0b0b1f]"></div>
-                    </div>
-                </div>
-                <div className="w-full overflow-hidden mb-4 max-w-[640px] lg:max-w-[960px]">
-                    <p className="max-[479px]:text-sm">Pellentesque in nisi aliquet, pellentesque purus eget, imperdiet turpis. Fusce at enim quis neque viverra convallis. Vivamus ut elementum leo, eget tempus nisl. Sed viverra enim ac turpis posuere consectetur. Sed enim nibh, consequat vitae lacus eu, ullamcorper ullamcorper massa. Pellentesque purus eget, imperdiet turpis.</p>
-                </div>
-                </div>
-
             </div>
-            </div>
+            {/* <button className="inline-block items-center bg-black px-6 py-3 text-center font-semibold text-white">Leave Comment</button> */}
         </div>
         </section>
     )
