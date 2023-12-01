@@ -1,9 +1,17 @@
-import React from "react"
+import React, {useState} from "react"
 import RentalAgreementCard from "./RentalAgreementCard";
 import { UserSessionContext } from "../UserComponents/SessionContext";
 
 function RentalAgreementDisplay() {
     const { currentUser, role} = UserSessionContext()
+    
+    const [ownerResponse, setOwnerResponse] = useState({
+        owner_decision: '',
+        delivery: '',
+        delivery_address: ''
+    })
+    
+
     const formatDate = (date) => {
         // Was having a lot of issues and couldn't tell where from, so I wrote some validations to test what could be going wrong
         let newDate = new Date(date)
@@ -28,7 +36,7 @@ function RentalAgreementDisplay() {
     //Went with flat map, but since there's another nested array inside of cart.cart_item, I needed to flatten that also, and finally, I map over item.agreements to get the agreement dates.
     //Luckily with flatmap, everything was available!
     if (role === 'user'){
-        (rentalCard = currentUser.cart?.flatMap(cart => 
+        (rentalCard = currentUser?.cart?.flatMap(cart => 
         cart.cart_item?.flatMap(item => 
         item.agreements?.map(agreement=>{
 
@@ -57,7 +65,7 @@ function RentalAgreementDisplay() {
         }) || []
         ) || []
         ))} else {
-        currentUser.agreements?.map(agreement => {
+        currentUser?.agreements?.map(agreement => {
         rentalCard = <div className="ml-16"><RentalAgreementCard
         key={agreement.id}
         cartName={agreement.cart_item.cart.cart_name}

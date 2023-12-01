@@ -31,7 +31,7 @@ function RentalAgreementsCollection({ }) {
   //Went with flat map, but since there's another nested array inside of cart.cart_item, I needed to flatten that also, and finally, I map over item.agreements to get the agreement dates.
   //Luckily with flatmap, everything was available!
   if (role === 'user'){
-  rentalCards = currentUser.cart?.flatMap(cart => 
+  rentalCards = currentUser?.cart?.flatMap(cart => 
     cart.cart_item?.flatMap(item => 
       item.agreements?.map(agreement=>
       <RentalAgreementCard
@@ -57,7 +57,7 @@ function RentalAgreementsCollection({ }) {
         ) || []
       ) || []
   )} else {
-    rentalCards = currentUser.agreements?.map(agreement => 
+    rentalCards = currentUser?.agreements?.map(agreement => 
       <RentalAgreementCard
       key={agreement.id}
       cartName={agreement.cart_item.cart.cart_name}
