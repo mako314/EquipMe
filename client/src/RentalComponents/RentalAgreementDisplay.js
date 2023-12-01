@@ -78,10 +78,23 @@ function RentalAgreementDisplay() {
     })
     }
 
+    console.log("The current rental card:", rentalCardDisplay[0])
+    // console.log("currentUser agreements OWNER:", currentUser?.agreements[0])
+    const comments = currentUser?.agreements?.[0]?.comment?.map((item) => (
+    <div key={item.id} className="mb-6 w-full overflow-hidden bg-[#f2f2f7] p-8 rounded-sm">
+    <div className="flex items-start justify-between">
+        <p className="text-xl font-bold">Comment Created At: <br></br> {item.created_at}</p>
+        <p className="text-xl font-bold">Comment Updated At: <br></br> {item.updated_at}</p>
+    </div>
+    <div className="w-full overflow-hidden mb-4 max-w-[640px] lg:max-w-[960px] mt-4">
+        <p className="max-[479px]:text-sm">{item.comment}</p>
+    </div>
+    </div>
+    ))
+    
+
 
     return(
-        
-        
         <section>
         <div className="py-16 md:py-24 lg:py-32 mx-auto w-full max-w-7xl px-5 md:px-10">
             <div className="flex flex-col items-start lg:flex-row lg:space-x-20">
@@ -89,73 +102,30 @@ function RentalAgreementDisplay() {
                 <div className="max-w-3xl mb-8 md:mb-12 lg:mb-16">
                 {rentalCardDisplay[0]}
                 </div>
-                <div className="mb-6 h-full w-full overflow-auto bg-[#f2f2f7] p-8 rounded-sm">
-                <div className="flex flex-row gap-4">
-                    <img src="https://assets.website-files.com/6458c625291a94a195e6cf3a/64772e4ec124557640300fd8_Column.png" alt="" className="inline-block h-12 w-12 object-cover rounded-full"/>
-                    <div className="flex flex-col gap-1.5">
-                    <h5 className="text-xl font-bold">Still have questions?</h5>
-                    <div className="max-w-[380px]">
-                        <p className="text-[#636262] max-[479px]:text-sm">Can’t find the answer you’re looking for? Please chat to lorem</p>
-                    </div>
-                    </div>
-                </div>
-                <div className="mb-6 mt-8 h-[0.5px] w-full bg-[#a6a6a6]"></div>
-                <a href="#" className="inline-block items-center bg-black px-6 py-3 text-center font-semibold text-white">Get In Touch</a>
-                </div>
             </div>
             <div className="flex-[1_1_500px] max-[991px]:w-full max-[991px]:flex-none">
-                <div className="mb-6 w-full overflow-hidden bg-[#f2f2f7] p-8 rounded-sm">
-                <div className="flex cursor-pointer items-start justify-between">
-                    <p className="text-xl font-bold">What is your policy on distributon</p>
-                    <div className="relative ml-10 mt-1 flex h-5 w-5 items-center justify-center">
-                    <div className="absolute h-5 w-0.5 bg-[#0b0b1f]"></div>
-                    <div className="h-0.5 w-5 bg-[#0b0b1f]"></div>
+                {comments}
+                <div className="mb-6 h-full w-full overflow-auto bg-[#f2f2f7] p-8 rounded-sm">
+                <div className="flex flex-row gap-4">
+                    <img src={currentUser.profileImage} alt="" className="inline-block h-12 w-12 object-cover rounded-full"/>
+                    <div className="flex flex-col gap-1.5">
+                    <h5 className="text-xl font-bold">Need a Rental Agreement revision?</h5>
+                    <div className="max-w-[380px]">
+                        <p className="text-[#636262] max-[479px]:text-sm">Need to add delivery or require extra help? Post a comment to find a solution!</p>
+                    </div>
                     </div>
                 </div>
-                <div className="w-full overflow-hidden mb-4 max-w-[640px] lg:max-w-[960px]">
-                    <p className="max-[479px]:text-sm">Pellentesque in nisi aliquet, pellentesque purus eget, imperdiet turpis. Fusce at enim quis neque viverra convallis. Vivamus ut elementum leo, eget tempus nisl. Sed viverra enim ac turpis posuere consectetur. Sed enim nibh, consequat vitae lacus eu, ullamcorper ullamcorper massa. Pellentesque purus eget, imperdiet turpis.</p>
+                <div className="mb-6 mt-8 h-[0.5px] w-full bg-[#a6a6a6]">
+                    
+                </div>
+                <div className="flex justify-end"> 
+                <button className="inline-block items-center bg-black px-6 py-3 text-center font-semibold text-white">Leave Comment</button>
                 </div>
                 </div>
-                <div className="mb-6 w-full overflow-hidden bg-[#f2f2f7] p-8 rounded-sm">
-                <div className="flex cursor-pointer items-start justify-between">
-                    <p className="text-xl font-bold">How can I contribute to Flowspark?</p>
-                    <div className="relative ml-10 mt-1 flex h-5 w-5 items-center justify-center">
-                    <div className="absolute h-5 w-0.5 bg-[#0b0b1f]"></div>
-                    <div className="h-0.5 w-5 bg-[#0b0b1f]"></div>
-                    </div>
-                </div>
-                <div className="w-full overflow-hidden mb-4 max-w-[640px] lg:max-w-[960px]">
-                    <p className="max-[479px]:text-sm">Pellentesque in nisi aliquet, pellentesque purus eget, imperdiet turpis. Fusce at enim quis neque viverra convallis. Vivamus ut elementum leo, eget tempus nisl. Sed viverra enim ac turpis posuere consectetur. Sed enim nibh, consequat vitae lacus eu, ullamcorper ullamcorper massa. Pellentesque purus eget, imperdiet turpis.</p>
-                </div>
-                </div>
-                <div className="mb-6 w-full overflow-hidden bg-[#f2f2f7] p-8 rounded-sm">
-                <div className="flex cursor-pointer items-start justify-between">
-                    <p className="text-xl font-bold">What other themes do you have?</p>
-                    <div className="relative ml-10 mt-1 flex h-5 w-5 items-center justify-center">
-                    <div className="absolute h-5 w-0.5 bg-[#0b0b1f]"></div>
-                    <div className="h-0.5 w-5 bg-[#0b0b1f]"></div>
-                    </div>
-                </div>
-                <div className="w-full overflow-hidden mb-4 max-w-[640px] lg:max-w-[960px]">
-                    <p className="max-[479px]:text-sm">Pellentesque in nisi aliquet, pellentesque purus eget, imperdiet turpis. Fusce at enim quis neque viverra convallis. Vivamus ut elementum leo, eget tempus nisl. Sed viverra enim ac turpis posuere consectetur. Sed enim nibh, consequat vitae lacus eu, ullamcorper ullamcorper massa. Pellentesque purus eget, imperdiet turpis.</p>
-                </div>
-                </div>
-
-                <div className="mb-6 w-full overflow-hidden bg-[#f2f2f7] p-8 rounded-sm">
-                <div className="flex cursor-pointer items-start justify-between">
-                    <p className="text-xl font-bold">What is your policy on distributon</p>
-                    <div className="relative ml-10 mt-1 flex h-5 w-5 items-center justify-center">
-                    <div className="absolute h-5 w-0.5 bg-[#0b0b1f]"></div>
-                    <div className="h-0.5 w-5 bg-[#0b0b1f]"></div>
-                    </div>
-                </div>
-                <div className="w-full overflow-hidden mb-4 max-w-[640px] lg:max-w-[960px]">
-                    <p className="max-[479px]:text-sm">Pellentesque in nisi aliquet, pellentesque purus eget, imperdiet turpis. Fusce at enim quis neque viverra convallis. Vivamus ut elementum leo, eget tempus nisl. Sed viverra enim ac turpis posuere consectetur. Sed enim nibh, consequat vitae lacus eu, ullamcorper ullamcorper massa. Pellentesque purus eget, imperdiet turpis.</p>
-                </div>
-                </div>
+            </div>
 
             </div>
-            </div>
+            {/* <button className="inline-block items-center bg-black px-6 py-3 text-center font-semibold text-white">Leave Comment</button> */}
         </div>
         </section>
     )
