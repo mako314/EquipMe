@@ -1,6 +1,6 @@
 import React from "react";
 
-function RentalAgreementCard({ equipmentName, rentalStart, rentalEnd, renterFirstName, renterLastName, location, ownerEmail, ownerFirstName, ownerLastName, cartName, quantity, rentalDelivery, rentalDeliveryAddress, rentalRevisions, rentalStatus }) {
+function RentalAgreementCard({ equipmentName, rentalStart, rentalEnd, renterFirstName, renterLastName, location, ownerEmail, ownerFirstName, ownerLastName, cartName, quantity, rentalDelivery, rentalDeliveryAddress, rentalRevisions, rentalStatus, rentalUpdatedAt }) {
     
     // May be a good idea to draw how exactly status should work, 
     // one side accepted, both, in progress, etc
@@ -63,11 +63,16 @@ function RentalAgreementCard({ equipmentName, rentalStart, rentalEnd, renterFirs
             </div>
 
             <div className="flex items-center mt-4 text-gray-700 dark:text-gray-200">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-6 h-6 fill-current" viewBox="0 0 18 18">
+            <svg aria-label="person checkmark icon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-6 h-6 fill-current" viewBox="0 0 18 18">
             <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m1.679-4.493-1.335 2.226a.75.75 0 0 1-1.174.144l-.774-.773a.5.5 0 0 1 .708-.708l.547.548 1.17-1.951a.5.5 0 1 1 .858.514ZM11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
             <path d="M8.256 14a4.474 4.474 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10c.26 0 .507.009.74.025.226-.341.496-.65.804-.918C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
             </svg>
                 <h1 className="px-2 text-sm">Status: {rentalStatus}</h1>
+            </div>
+
+            <div className="flex items-center mt-4 text-gray-700 dark:text-gray-200">
+            <svg aria-label="refresh icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M10 11H7.101l.001-.009a4.956 4.956 0 0 1 .752-1.787 5.054 5.054 0 0 1 2.2-1.811c.302-.128.617-.226.938-.291a5.078 5.078 0 0 1 2.018 0 4.978 4.978 0 0 1 2.525 1.361l1.416-1.412a7.036 7.036 0 0 0-2.224-1.501 6.921 6.921 0 0 0-1.315-.408 7.079 7.079 0 0 0-2.819 0 6.94 6.94 0 0 0-1.316.409 7.04 7.04 0 0 0-3.08 2.534 6.978 6.978 0 0 0-1.054 2.505c-.028.135-.043.273-.063.41H2l4 4 4-4zm4 2h2.899l-.001.008a4.976 4.976 0 0 1-2.103 3.138 4.943 4.943 0 0 1-1.787.752 5.073 5.073 0 0 1-2.017 0 4.956 4.956 0 0 1-1.787-.752 5.072 5.072 0 0 1-.74-.61L7.05 16.95a7.032 7.032 0 0 0 2.225 1.5c.424.18.867.317 1.315.408a7.07 7.07 0 0 0 2.818 0 7.031 7.031 0 0 0 4.395-2.945 6.974 6.974 0 0 0 1.053-2.503c.027-.135.043-.273.063-.41H22l-4-4-4 4z"></path></svg>
+                <h1 className="px-2 text-sm">Updated At: {rentalUpdatedAt}</h1>
             </div>
 
 

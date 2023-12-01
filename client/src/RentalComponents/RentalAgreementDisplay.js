@@ -56,7 +56,7 @@ function RentalAgreementDisplay() {
         ) || []
         ))} else {
         currentUser.agreements?.map(agreement => {
-        rentalCard = <RentalAgreementCard
+        rentalCard = <div className="ml-16"><RentalAgreementCard
         key={agreement.id}
         cartName={agreement.cart_item.cart.cart_name}
         quantity={agreement.cart_item.quantity}
@@ -67,13 +67,15 @@ function RentalAgreementDisplay() {
         rentalDeliveryAddress={agreement.delivery_address}
         rentalRevisions={agreement.revisions}
         rentalStatus={agreement.agreement_status}
+        rentalCreatedAt={agreement.created_at}
+        rentalUpdatedAt={agreement.updated_at}
         renterFirstName={agreement.cart_item.cart.user.firstName}
         renterLastName={agreement.cart_item.cart.user.lastName}
         location={currentUser.location}
         ownerEmail ={currentUser.email}
         ownerFirstName = {currentUser.firstName}
         ownerLastName ={currentUser.lastName}
-        /> 
+        />  </div>
         rentalCardDisplay.push(rentalCard)
     })
     }
@@ -119,6 +121,7 @@ function RentalAgreementDisplay() {
                     
                 </div>
                 <div className="flex justify-end"> 
+
                 <button className="inline-block items-center bg-black px-6 py-3 text-center font-semibold text-white">Leave Comment</button>
                 </div>
                 </div>
