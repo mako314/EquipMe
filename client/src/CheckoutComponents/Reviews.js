@@ -2,7 +2,7 @@ import React from "react";
 
 function Reviews({stars, comment, image, firstName, lastName, profession}){
 
-  let starDisplayer = [];
+  let starDisplayer = []
 
   for (let i = 0; i < stars; i++) {
     starDisplayer.push (
@@ -17,8 +17,6 @@ function Reviews({stars, comment, image, firstName, lastName, profession}){
     </div> */}
 
     return(
-  
-      
       <div className="grid border border-solid border-[#dfdfdf] bg-white p-8 md:p-10">
         <div className="flex">
             {starDisplayer}
@@ -32,10 +30,6 @@ function Reviews({stars, comment, image, firstName, lastName, profession}){
           </div>
         </div>
       </div>
-
-
-
-
     )
 }
 

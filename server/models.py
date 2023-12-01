@@ -392,6 +392,17 @@ class AgreementComment(db.Model, SerializerMixin):
 
     comment = db.Column(db.String)
 
+    created_at = db.Column(
+    db.DateTime, nullable=True,
+    default=datetime.utcnow,
+    )
+
+    updated_at = db.Column(
+    db.DateTime, nullable=True,
+    default=datetime.utcnow,
+    onupdate=datetime.utcnow
+    )
+
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable= True)
     owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'), nullable= True)
     agreement_id = db.Column(db.Integer, db.ForeignKey('agreements.id'))
