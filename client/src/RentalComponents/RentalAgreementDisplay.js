@@ -152,7 +152,8 @@ function RentalAgreementDisplay() {
     }).then((resp) => {
         if (resp.ok) {
             console.log(resp)
-            checkSession()
+            // checkSession()
+            // Going to do a spread operator thing 
         }
     })
     }
