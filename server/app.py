@@ -703,7 +703,7 @@ class RentalAgreementsByID(Resource):
             for key in data:
                 setattr(agreement, key, data[key])
             db.session.add(agreement)
-            agreement.revisions + 1
+            agreement.revisions += 1
             db.session.commit()
             response = make_response(agreement.to_dict(), 202)
             return response

@@ -33,7 +33,7 @@ function RentalAgreementDisplay() {
     
     let rentalCardDisplay = []
     let allAgreements = []
-    console.log(rentalCardDisplay)
+    // console.log(rentalCardDisplay)
     let rentalCard
     // Need to find a way to map over an array that's nested inside of an array.
     //Went with flat map, but since there's another nested array inside of cart.cart_item, I needed to flatten that also, and finally, I map over item.agreements to get the agreement dates.
@@ -99,10 +99,10 @@ function RentalAgreementDisplay() {
     })
     }
 
-    console.log(currentUser)
-    console.log("RENTAL AGREEMENT ARRAY:",allAgreements)
+    // console.log(currentUser)
+    // console.log("RENTAL AGREEMENT ARRAY:",allAgreements)
 
-    console.log("The current rental card:", rentalCardDisplay[0])
+    // console.log("The current rental card:", rentalCardDisplay[0])
     // console.log("currentUser agreements OWNER:", currentUser?.agreements[0])
     const comments = allAgreements[currentAgreementIndex]?.comment?.map((item) => (
         <div key={item.id} className="mb-6 w-full overflow-hidden bg-[#f2f2f7] p-8 rounded-sm border-b border-black">
@@ -122,12 +122,16 @@ function RentalAgreementDisplay() {
     const handleAgreementEdit = () => {
         let decision = role === 'owner' ? 'owner_decision' : 'user_decision'
         let updatedAgreement
-        if(deliveryChoice && deliveryAddress){
+
+        console.log("DELIVERY CHOICE:", deliveryChoice)
+        console.log("DELIVERY ADDRESS:", deliveryAddress)
+
+        if(deliveryChoice || deliveryChoice === false && deliveryAddress){
         updatedAgreement = {
             [decision]: selectedDecision,
             delivery: deliveryChoice,
             delivery_address: deliveryAddress
-        }}else if (deliveryChoice){
+        }}else if (deliveryChoice || deliveryChoice === false){
         updatedAgreement = {
             [decision]: selectedDecision,
             delivery: deliveryChoice,
@@ -139,6 +143,8 @@ function RentalAgreementDisplay() {
         updatedAgreement = {
             [decision]: selectedDecision,}
         }
+
+        console.log("THE AGREEMENT:",updatedAgreement)
 
         fetch(`${apiUrl}rental/agreements/${allAgreements[currentAgreementIndex].id}`, {
             method: "PATCH",
@@ -229,16 +235,20 @@ function RentalAgreementDisplay() {
     const handleDeliveryToggle = () => {
         //seomthing like this, play around with it
         setIsDelivery(!isDelivery)
-        if(isDelivery === false){
-            setDeliveryChoice(false)
-        } 
-        
+        setDeliveryChoice(false)
     }
 
-    console.log(deliveryChoice)
-    console.log(typeof(deliveryChoice))
+    const handleDeliveryAddressToggle = ()  => {
+        //seomthing like this, play around with it
+        setIsDeliveryAddress(!isDeliveryAddress)
+        setDeliveryAddress('')
+    }
 
-    
+    // console.log(deliveryChoice)
+    // console.log(typeof(deliveryChoice))
+
+    // console.log("DELIVERY ADDRESS:",deliveryAddress)
+    // console.log("DELIVERY ADDRESS:", typeof(deliveryAddress))
     
     return(
         <section>
@@ -259,7 +269,7 @@ function RentalAgreementDisplay() {
                 value="delivery"
                 onChange={handleDeliveryToggle}
                 />
-                <label for="delivery_checkbox"> Edit delivery option</label>
+                <label htmlFor="delivery_checkbox"> Edit delivery option</label>
 
                 {isDelivery && (
 
@@ -301,9 +311,9 @@ function RentalAgreementDisplay() {
                 id="delivery_address_checkbox"
                 name="delivery_address"
                 value="delivery_address" 
-                onChange={() => setIsDeliveryAddress(!isDeliveryAddress)}
+                onChange={handleDeliveryAddressToggle}
                 />
-                <label for="delivery_address_checkbox"> Edit delivery address</label>
+                <label htmlFor="delivery_address_checkbox"> Edit delivery address</label>
 
                 {isDeliveryAddress && (
                     <> 
