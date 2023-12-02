@@ -1,4 +1,4 @@
-import React, {useState, useContext} from "react"
+import React, {useState, useContext, useEffect} from "react"
 import RentalAgreementCard from "./RentalAgreementCard";
 import { UserSessionContext } from "../UserComponents/SessionContext";
 import ApiUrlContext from "../Api";
@@ -87,8 +87,11 @@ function RentalAgreementDisplay() {
         ownerEmail ={currentUser.email}
         ownerFirstName = {currentUser.firstName}
         ownerLastName ={currentUser.lastName}
-        />  </div>
+        />  
+        </div>
         rentalCardDisplay.push(rentalCard)
+        const singleAgreement = agreement
+        allAgreements.push(singleAgreement)
     })
     }
 
@@ -97,7 +100,7 @@ function RentalAgreementDisplay() {
 
     console.log("The current rental card:", rentalCardDisplay[0])
     // console.log("currentUser agreements OWNER:", currentUser?.agreements[0])
-    const comments = currentUser?.agreements?.[0]?.comment?.map((item) => (
+    const comments = allAgreements[currentAgreementIndex]?.comment?.map((item) => (
         <div key={item.id} className="mb-6 w-full overflow-hidden bg-[#f2f2f7] p-8 rounded-sm border-b border-black">
         <div className="flex items-start justify-between">
             <p className="text-xl font-bold">Comment Created At: <br></br> {item.created_at}</p>
@@ -115,9 +118,9 @@ function RentalAgreementDisplay() {
 
     const newComment = {
         comment : rentalComment,
-        user_id: role === 'user' ? currentUser?.id : currentUser?.agreements[0]?.user_id,
-        owner_id: role === 'owner' ? currentUser?.id : currentUser?.agreements[0]?.owner_id,
-        agreement_id: currentUser?.agreements[0]?.id
+        user_id: role === 'user' ? currentUser?.id : allAgreements[currentAgreementIndex]?.user_id,
+        owner_id: role === 'owner' ? currentUser?.id : allAgreements[currentAgreementIndex]?.owner_id,
+        agreement_id: allAgreements[currentAgreementIndex]?.id
     }
 
     console.log( "RENTAL COMMENT:", rentalComment)
@@ -131,23 +134,39 @@ function RentalAgreementDisplay() {
     }).then((resp) => {
         if (resp.ok) {
             console.log(resp)
-            // checkSession()
+            setRentalComment('')
+            checkSession()
             // Going to do a spread operator thing 
         }
     })
     }
+    useEffect(() => {
+        const keyDownHandler = (e) => {
+        if(e.key === 'ArrowRight'){
+            goToNextAgreement()
+        } else if(e.key === 'ArrowLeft'){
+            goToPreviousAgreement()
+        }}
+        document.addEventListener("keydown", keyDownHandler)
+        // console.log(`You pressed ${e.code}.`)
+
+    
+        // clean up
+        return () => {
+          document.removeEventListener("keydown", keyDownHandler)
+        }
+      }, [])
 
     const goToNextAgreement = () => {
         if (role === 'user'){
-
         }
-        // setCurrentAgreementIndex((prevIndex) =>
-        //   prevIndex < allAgreements.length - 1 ? prevIndex + 1 : prevIndex
-        // )
+        setCurrentAgreementIndex((prevIndex) =>
+          prevIndex < allAgreements.length - 1 ? prevIndex + 1 : 0
+        )
       }
     
       const goToPreviousAgreement = () => {
-        setCurrentAgreementIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : prevIndex))
+        setCurrentAgreementIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : allAgreements.length - 1))
       }
     
     return(
@@ -156,7 +175,7 @@ function RentalAgreementDisplay() {
             <div className="flex flex-col items-start lg:flex-row lg:space-x-20">
             <div className="flex-[1_1_500px] max-[991px]:w-full max-[991px]:flex-none">
                 <div className="max-w-3xl mb-8 md:mb-12 lg:mb-16">
-                {rentalCardDisplay[0]}
+                {rentalCardDisplay[currentAgreementIndex]}
                 </div>
             </div>
             <div className="flex-[1_1_500px] max-[991px]:w-full max-[991px]:flex-none bg-[#f2f2f7]">
@@ -164,7 +183,7 @@ function RentalAgreementDisplay() {
                 <div className="mb-6 h-full w-full overflow-auto bg-[#f2f2f7] p-8 rounded-sm">
 
                 <div className="flex flex-row gap-4">
-                    <img src={currentUser.profileImage} alt="" className="inline-block h-12 w-12 object-cover rounded-full"/>
+                    <img src={currentUser?.profileImage} alt="" className="inline-block h-12 w-12 object-cover rounded-full"/>
                     <div className="flex flex-col gap-1.5">
                     <h5 className="text-xl font-bold">Need an Agreement revision?</h5>
                     <div className="max-w-[380px]">
@@ -193,7 +212,7 @@ function RentalAgreementDisplay() {
                     </form>
                 </div>
                 <div className="flex justify-center items-center space-x-4 mb-8">
-                    <button 
+                    <button
                         onClick={goToPreviousAgreement} 
                         className="p-2"
                         aria-label="Previous Agreement">
