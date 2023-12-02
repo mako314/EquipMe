@@ -112,7 +112,32 @@ function RentalAgreementDisplay() {
         </div>
         </div>
         ))
+    
 
+    
+    const handleAgreementEdit = () => {
+        let decision = role === 'owner' ? 'owner_decision' : 'user_decision'
+        const updatedAgreement = {
+            [decision]: '',
+            delivery: '',
+            delivery_address: ''
+        }
+
+        fetch(`${apiUrl}/rental/agreements/${allAgreements[currentAgreementIndex]}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updatedAgreement),
+        }).then((resp) => {
+            if (resp.ok) {
+                console.log(resp)
+                checkSession()
+                // Going to do a spread operator thing 
+            }
+        })}
+
+    
     const handleAddComment = (e) => {
         e.preventDefault()
 
@@ -177,7 +202,31 @@ function RentalAgreementDisplay() {
                 <div className="max-w-3xl mb-8 md:mb-12 lg:mb-16">
                 {rentalCardDisplay[currentAgreementIndex]}
                 </div>
+
+                {role === 'owner' &&(
+                <div> 
+
+                <input
+                type="checkbox"
+                id="delivery_checkbox"
+                name="delivery"
+                value="delivery" />
+                <label for="delivery_checkbox"> Edit delivery option</label>
+
+                
+
+                <br></br>
+                <input
+                type="checkbox"
+                id="delivery_address_checkbox"
+                name="delivery_address"
+                value="delivery_address" />
+                <label for="delivery_address_checkbox"> Edit delivery address</label>
+
+                </div>)}
             </div>
+
+
             <div className="flex-[1_1_500px] max-[991px]:w-full max-[991px]:flex-none bg-[#f2f2f7]">
                 {comments}
                 <div className="mb-6 h-full w-full overflow-auto bg-[#f2f2f7] p-8 rounded-sm">
