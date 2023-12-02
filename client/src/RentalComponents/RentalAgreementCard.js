@@ -4,8 +4,8 @@ function RentalAgreementCard({ equipmentName, rentalStart, rentalEnd, renterFirs
     
     // May be a good idea to draw how exactly status should work, 
     // one side accepted, both, in progress, etc
-    console.log("The rental status:", rentalStatus)
-    console.log("The type of:", typeof(rentalDelivery))
+    // console.log("The rental status:", rentalStatus)
+    // console.log("The type of:", typeof(rentalDelivery))
     // console.log(item)
     return (
 

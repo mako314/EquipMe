@@ -9,6 +9,7 @@ function RentalAgreementDisplay() {
     
     const [rentalComment, setRentalComment] = useState("")
     const [currentAgreementIndex, setCurrentAgreementIndex] = useState(0)
+    const [selectedDecision, setSelectedDecision] = useState('')
     const [isDelivery, setIsDelivery] = useState(false)
     const [isDeliveryAddress, setIsDeliveryAddress] = useState(false)
     const [deliveryAddress, setDeliveryAddress] = useState('')
@@ -192,9 +193,21 @@ function RentalAgreementDisplay() {
         )
       }
     
-      const goToPreviousAgreement = () => {
-        setCurrentAgreementIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : allAgreements.length - 1))
-      }
+    const goToPreviousAgreement = () => {
+    setCurrentAgreementIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : allAgreements.length - 1))
+    }
+
+    
+    const handleDecisionChange = (e) => {
+        // If pickup selected setDelivery to false
+        setSelectedDecision(e.target.value)
+        // If the checkbox is unchecked, clear the delivery address
+
+    }
+
+    console.log(selectedDecision)
+
+    
     
     return(
         <section>
@@ -254,6 +267,35 @@ function RentalAgreementDisplay() {
                     />
                     </>
                 )}
+                    <br></br>
+
+                    <div className="mt-6 flex justify-between"> 
+                    <label className="inline-flex items-center font-bold text-gray-900">
+                        <input
+                            type="radio"
+                            className="form-radio"
+                            name="accept_option"
+                            value="accept"
+                            checked={selectedDecision === 'accept'}
+                            onChange={handleDecisionChange}
+                        />
+
+                        <span className="ml-2"> Accept Agreement </span>
+                    </label>
+
+                    <label className="inline-flex items-center font-bold text-gray-900">
+                        <input
+                            type="radio"
+                            className="form-radio"
+                            name="decline_option"
+                            value="decline"
+                            checked={selectedDecision === 'decline'}
+                            onChange={handleDecisionChange}
+                        />
+                        <span className="ml-2"> Decline Agreement </span>
+                    </label>
+                    </div>
+
                     <div className="flex justify-end"> 
                         <button 
                         type="submit"
