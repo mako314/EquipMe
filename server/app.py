@@ -661,7 +661,7 @@ class RentalAgreements(Resource):
         # return response
 
 
-api.add_resource(RentalAgreements, '/rental_agreements')
+api.add_resource(RentalAgreements, '/rental/agreements')
 
 #Get a rental agreement by ID
 class RentalAgreementsByID(Resource):
@@ -703,6 +703,7 @@ class RentalAgreementsByID(Resource):
             for key in data:
                 setattr(agreement, key, data[key])
             db.session.add(agreement)
+            agreement.revisions + 1
             db.session.commit()
             response = make_response(agreement.to_dict(), 202)
             return response
@@ -711,7 +712,7 @@ class RentalAgreementsByID(Resource):
             "error": "Rental Agreement not found"
             }, 404)
             return response
-api.add_resource(RentalAgreementsByID, '/rental_agreements/<int:id>')
+api.add_resource(RentalAgreementsByID, '/rental/agreements/<int:id>')
 
 #-----------------------------------------------Agreement Comment Routes-----------------------------------------------------------------------------#
 class RentalAgreementComments(Resource):

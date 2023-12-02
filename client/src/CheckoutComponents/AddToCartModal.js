@@ -206,7 +206,7 @@ const addCart = (newCart) => {
               ...newRentalAgreement
             }
 
-            fetch(`${apiUrl}rental_agreements`, {
+            fetch(`${apiUrl}rental/agreements`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
