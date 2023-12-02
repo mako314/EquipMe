@@ -5,14 +5,9 @@ import ApiUrlContext from "../Api";
 
 function RentalAgreementDisplay() {
     const apiUrl = useContext(ApiUrlContext)
-    const { currentUser, role} = UserSessionContext()
+    const { currentUser, role, checkSession} = UserSessionContext()
     
-    const [rentalComment, setRentalComment] = useState({
-        comment: '',
-        user_id: '',
-        owner_id: '',
-        agreement_id: '',
-    })
+    const [rentalComment, setRentalComment] = useState("")
 
     // owner_decision: '',
     // delivery: '',
@@ -119,38 +114,48 @@ function RentalAgreementDisplay() {
         e.preventDefault()
 
         // Need to just do const, cause state and asynchrous. I'll update this later.
-        if (role === 'user'){
-            setRentalComment(prevState => {
-                return {
-                    ...prevState,
-                    user_id: currentUser?.id,
-                    owner_id: "",
-                    agreement_id: currentUser?.agreements[0]?.id
-                }
-            })
-        } else if (role ==='owner'){
-            setRentalComment(prevState => {
-                return {
-                    ...prevState,
-                    user_id: currentUser?.agreements[0]?.user_id,
-                    owner_id: currentUser?.id,
-                    agreement_id: currentUser?.agreements[0]?.id
-                }
-            })
-        }
-        console.log( "RENTAL COMMENT:", rentalComment)
+        // if (role === 'user'){
+        //     setRentalComment(prevState => {
+        //         return {
+        //             ...prevState,
+        //             user_id: currentUser?.id,
+        //             owner_id: "",
+        //             agreement_id: currentUser?.agreements[0]?.id
+        //         }
+        //     })
+        // } else if (role ==='owner'){
+        //     setRentalComment(prevState => {
+        //         return {
+        //             ...prevState,
+        //             user_id: currentUser?.agreements[0]?.user_id,
+        //             owner_id: currentUser?.id,
+        //             agreement_id: currentUser?.agreements[0]?.id
+        //         }
+        //     })
+        // }
 
-        fetch(`${apiUrl}rental/comment`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(rentalComment),
-        }).then((resp) => {
-            if (resp.ok) {
-                console.log(resp)
-            }
-        })
+    const newComment = {
+        comment : rentalComment,
+        user_id: role === 'user' ? currentUser?.id : currentUser?.agreements[0]?.user_id,
+        owner_id: role === 'owner' ? currentUser?.id : currentUser?.agreements[0]?.owner_id,
+        agreement_id: currentUser?.agreements[0]?.id
+    }
+
+    console.log( "RENTAL COMMENT:", rentalComment)
+
+    fetch(`${apiUrl}rental/comment`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newComment),
+    }).then((resp) => {
+        if (resp.ok) {
+            console.log(resp)
+            // checkSession()
+            // Going to do a spread operator thing 
+        }
+    })
     }
     
     return(
@@ -184,9 +189,9 @@ function RentalAgreementDisplay() {
                         type="text"
                         className="resize-y p-3 text-sm border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
                         name="comment"
-                        value={rentalComment.comment}
+                        value={rentalComment}
                         placeholder="Type your comment here..."
-                        onChange={(e) => setRentalComment({ ...rentalComment, comment: e.target.value })}
+                        onChange={(e) => setRentalComment(e.target.value)}
                         />
                         <button 
                         type="submit"
