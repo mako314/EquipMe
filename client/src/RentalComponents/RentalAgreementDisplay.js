@@ -8,11 +8,8 @@ function RentalAgreementDisplay() {
     const { currentUser, role, checkSession} = UserSessionContext()
     
     const [rentalComment, setRentalComment] = useState("")
+    const [currentAgreementIndex, setCurrentAgreementIndex] = useState(0)
 
-    // owner_decision: '',
-    // delivery: '',
-    // delivery_address: '',
-    
 
     const formatDate = (date) => {
         // Was having a lot of issues and couldn't tell where from, so I wrote some validations to test what could be going wrong
@@ -27,11 +24,11 @@ function RentalAgreementDisplay() {
           hour: '2-digit', minute: '2-digit',
           hour12: true
         }
-    
         return newDate.toLocaleDateString('en-US', options)
       }
     
     let rentalCardDisplay = []
+    let allAgreements = []
     console.log(rentalCardDisplay)
     let rentalCard
     // Need to find a way to map over an array that's nested inside of an array.
@@ -62,8 +59,10 @@ function RentalAgreementDisplay() {
         ownerFirstName = {item.equipment.owner.firstName}
         ownerLastName ={item.equipment.owner.lastName}
         />)
-
         rentalCardDisplay.push(rentalCard)
+        const singleAgreement = agreement
+        allAgreements.push(singleAgreement)
+
         }) || []
         ) || []
         ))} else {
@@ -94,45 +93,25 @@ function RentalAgreementDisplay() {
     }
 
     console.log(currentUser)
+    console.log("RENTAL AGREEMENT ARRAY:",allAgreements)
 
     console.log("The current rental card:", rentalCardDisplay[0])
     // console.log("currentUser agreements OWNER:", currentUser?.agreements[0])
     const comments = currentUser?.agreements?.[0]?.comment?.map((item) => (
-    <div key={item.id} className="mb-6 w-full overflow-hidden bg-[#f2f2f7] p-8 rounded-sm border-b border-black">
-    <div className="flex items-start justify-between">
-        <p className="text-xl font-bold">Comment Created At: <br></br> {item.created_at}</p>
-        <span> 👈👉 </span>
-        <p className="text-xl font-bold">Comment Updated At: <br></br> {item.updated_at}</p>
-    </div>
-    <div className="w-full overflow-hidden mb-4 max-w-[640px] lg:max-w-[960px] mt-4">
-        <p className="max-[479px]:text-sm">{item.comment}</p>
-    </div>
-    </div>
-    ))
+        <div key={item.id} className="mb-6 w-full overflow-hidden bg-[#f2f2f7] p-8 rounded-sm border-b border-black">
+        <div className="flex items-start justify-between">
+            <p className="text-xl font-bold">Comment Created At: <br></br> {item.created_at}</p>
+            <span> 👈👉 </span>
+            <p className="text-xl font-bold">Comment Updated At: <br></br> {item.updated_at}</p>
+        </div>
+        <div className="w-full overflow-hidden mb-4 max-w-[640px] lg:max-w-[960px] mt-4">
+            <p className="max-[479px]:text-sm">{item.comment}</p>
+        </div>
+        </div>
+        ))
 
     const handleAddComment = (e) => {
         e.preventDefault()
-
-        // Need to just do const, cause state and asynchrous. I'll update this later.
-        // if (role === 'user'){
-        //     setRentalComment(prevState => {
-        //         return {
-        //             ...prevState,
-        //             user_id: currentUser?.id,
-        //             owner_id: "",
-        //             agreement_id: currentUser?.agreements[0]?.id
-        //         }
-        //     })
-        // } else if (role ==='owner'){
-        //     setRentalComment(prevState => {
-        //         return {
-        //             ...prevState,
-        //             user_id: currentUser?.agreements[0]?.user_id,
-        //             owner_id: currentUser?.id,
-        //             agreement_id: currentUser?.agreements[0]?.id
-        //         }
-        //     })
-        // }
 
     const newComment = {
         comment : rentalComment,
@@ -157,6 +136,19 @@ function RentalAgreementDisplay() {
         }
     })
     }
+
+    const goToNextAgreement = () => {
+        if (role === 'user'){
+
+        }
+        // setCurrentAgreementIndex((prevIndex) =>
+        //   prevIndex < allAgreements.length - 1 ? prevIndex + 1 : prevIndex
+        // )
+      }
+    
+      const goToPreviousAgreement = () => {
+        setCurrentAgreementIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : prevIndex))
+      }
     
     return(
         <section>
@@ -200,12 +192,53 @@ function RentalAgreementDisplay() {
                         </button>
                     </form>
                 </div>
+                <div className="flex justify-center items-center space-x-4 mb-8">
+                    <button 
+                        onClick={goToPreviousAgreement} 
+                        className="p-2"
+                        aria-label="Previous Agreement">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-12 h-12" viewBox="0 0 16 16">
+                        <path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1"/>
+                        </svg>
+                    </button>
+
+                    <button 
+                        onClick={goToNextAgreement} 
+                        className="p-2"
+                        aria-label="Next Agreement">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-12 h-12" viewBox="0 0 16 16">
+                        <path d="M0 14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2zm4.5-6.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5a.5.5 0 0 1 0-1"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
             </div>
-            {/* <button className="inline-block items-center bg-black px-6 py-3 text-center font-semibold text-white">Leave Comment</button> */}
+
         </div>
         </section>
     )
 }
 
 export default RentalAgreementDisplay;
+
+
+        // Need to just do const, cause state and asynchrous. I'll update this later.
+        // if (role === 'user'){
+        //     setRentalComment(prevState => {
+        //         return {
+        //             ...prevState,
+        //             user_id: currentUser?.id,
+        //             owner_id: "",
+        //             agreement_id: currentUser?.agreements[0]?.id
+        //         }
+        //     })
+        // } else if (role ==='owner'){
+        //     setRentalComment(prevState => {
+        //         return {
+        //             ...prevState,
+        //             user_id: currentUser?.agreements[0]?.user_id,
+        //             owner_id: currentUser?.id,
+        //             agreement_id: currentUser?.agreements[0]?.id
+        //         }
+        //     })
+        // }
