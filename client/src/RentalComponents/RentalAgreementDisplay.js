@@ -9,7 +9,9 @@ function RentalAgreementDisplay() {
     
     const [rentalComment, setRentalComment] = useState("")
     const [currentAgreementIndex, setCurrentAgreementIndex] = useState(0)
-
+    const [isDelivery, setIsDelivery] = useState(false)
+    const [isDeliveryAddress, setIsDeliveryAddress] = useState(false)
+    const [deliveryAddress, setDeliveryAddress] = useState('')
 
     const formatDate = (date) => {
         // Was having a lot of issues and couldn't tell where from, so I wrote some validations to test what could be going wrong
@@ -210,20 +212,59 @@ function RentalAgreementDisplay() {
                 type="checkbox"
                 id="delivery_checkbox"
                 name="delivery"
-                value="delivery" />
+                value="delivery"
+                onChange={() => setIsDelivery(!isDelivery)}
+                />
                 <label for="delivery_checkbox"> Edit delivery option</label>
 
-                
+                {isDelivery && (
+                    <> 
+                    {/* https://www.w3schools.com/jsref/prop_radio_defaultchecked.asp#:~:text=Description,default%2C%20otherwise%20it%20returns%20false. */}
+                    <input
+                        type="text"
+                        placeholder="Delivery Address"
+                        name="delivery_address"
+                        className="mt-2 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-black"
+                        value={deliveryAddress}
+                        onChange={(e) => setDeliveryAddress(e.target.value)}
+                    />
+                    </>
+                )}
 
                 <br></br>
                 <input
                 type="checkbox"
                 id="delivery_address_checkbox"
                 name="delivery_address"
-                value="delivery_address" />
+                value="delivery_address" 
+                onChange={() => setIsDeliveryAddress(!isDeliveryAddress)}
+                />
                 <label for="delivery_address_checkbox"> Edit delivery address</label>
 
-                </div>)}
+                {isDeliveryAddress && (
+                    <> 
+                    {/* https://www.w3schools.com/jsref/prop_radio_defaultchecked.asp#:~:text=Description,default%2C%20otherwise%20it%20returns%20false. */}
+                    <input
+                        type="text"
+                        placeholder="Delivery Address"
+                        name="delivery_address"
+                        className="mt-2 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-black"
+                        value={deliveryAddress}
+                        onChange={(e) => setDeliveryAddress(e.target.value)}
+                    />
+                    </>
+                )}
+                    <div className="flex justify-end"> 
+                        <button 
+                        type="submit"
+                        className="bg-black text-white text-sm px-6 py-3 mt-8 rounded-lg shadow transition duration-150 ease-in-out hover:bg-gray-700 focus:outline-none">
+                        Submit Changes
+                        </button>
+                    </div>
+                </div>
+                
+                )}
+
             </div>
 
 
