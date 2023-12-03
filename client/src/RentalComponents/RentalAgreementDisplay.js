@@ -11,9 +11,9 @@ function RentalAgreementDisplay() {
     const [currentAgreementIndex, setCurrentAgreementIndex] = useState(0)
     const [selectedDecision, setSelectedDecision] = useState('')
     const [isDelivery, setIsDelivery] = useState(false)
-    const [deliveryChoice, setDeliveryChoice] = useState(false)
+    const [deliveryChoice, setDeliveryChoice] = useState(null)
     const [isDeliveryAddress, setIsDeliveryAddress] = useState(false)
-    const [deliveryAddress, setDeliveryAddress] = useState('')
+    const [deliveryAddress, setDeliveryAddress] = useState('unset')
 
     const formatDate = (date) => {
         // Was having a lot of issues and couldn't tell where from, so I wrote some validations to test what could be going wrong
@@ -100,7 +100,7 @@ function RentalAgreementDisplay() {
     }
 
     // console.log(currentUser)
-    // console.log("RENTAL AGREEMENT ARRAY:",allAgreements)
+    console.log("RENTAL AGREEMENT ARRAY:",allAgreements[currentAgreementIndex])
 
     // console.log("The current rental card:", rentalCardDisplay[0])
     // console.log("currentUser agreements OWNER:", currentUser?.agreements[0])
@@ -114,7 +114,9 @@ function RentalAgreementDisplay() {
         <div className="w-full overflow-hidden mb-4 max-w-[640px] lg:max-w-[960px] mt-4">
             <p className="max-[479px]:text-sm">{item.comment}</p>
         </div>
+        {console.log(item)}
         </div>
+        
         ))
     
 
@@ -203,18 +205,20 @@ function RentalAgreementDisplay() {
         return () => {
           document.removeEventListener("keydown", keyDownHandler)
         }
-      }, [])
+      }, [allAgreements.length])
 
     const goToNextAgreement = () => {
-        if (role === 'user'){
-        }
         setCurrentAgreementIndex((prevIndex) =>
           prevIndex < allAgreements.length - 1 ? prevIndex + 1 : 0
         )
+        resetAgreementForm()
       }
+
+
     
     const goToPreviousAgreement = () => {
-    setCurrentAgreementIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : allAgreements.length - 1))
+        setCurrentAgreementIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : allAgreements.length - 1))
+        resetAgreementForm()
     }
 
     
@@ -222,27 +226,35 @@ function RentalAgreementDisplay() {
         // If pickup selected setDelivery to false
         setSelectedDecision(e.target.value)
         // If the checkbox is unchecked, clear the delivery address
-
     }
     
     const handleDeliveryChange = (e) => {
         // IF IsDelivery set to false ( meaning it the checkbox was clicked again you set choice to false)
-        // if(isDelivery === false){deliveryChoice === false} 
-        //above won't work because it's not being clicked when I click the checkbox for delivery_checkbox, need to make it an onclick and have it handle
         setDeliveryChoice(e.target.value === 'true')
     }
 
     const handleDeliveryToggle = () => {
-        //seomthing like this, play around with it
+        //Toggle delivery field, then set delivery to false if you click it again
         setIsDelivery(!isDelivery)
-        setDeliveryChoice(false)
+        // setDeliveryChoice(false)
     }
 
     const handleDeliveryAddressToggle = ()  => {
-        //seomthing like this, play around with it
+        //Toggle delivery address field, then set delivery address to be blank if you unclick it
         setIsDeliveryAddress(!isDeliveryAddress)
         setDeliveryAddress('')
     }
+
+    const resetAgreementForm = () => {
+        setIsDelivery(false);
+        setIsDeliveryAddress(false);
+        setDeliveryAddress('');
+        setSelectedDecision('');
+        setDeliveryChoice('unset'); // Explicitly set to null
+    }
+
+    console.log(deliveryChoice)
+    console.log(typeof(deliveryChoice))
 
     // console.log(deliveryChoice)
     // console.log(typeof(deliveryChoice))
@@ -252,7 +264,7 @@ function RentalAgreementDisplay() {
     
     return(
         <section>
-        <div className="py-16 md:py-24 lg:py-32 mx-auto w-full max-w-7xl px-5 md:px-10">
+        <div key={currentAgreementIndex} className="py-16 md:py-24 lg:py-32 mx-auto w-full max-w-7xl px-5 md:px-10">
             <div className="flex flex-col items-start lg:flex-row lg:space-x-20">
             <div className="flex-[1_1_500px] max-[991px]:w-full max-[991px]:flex-none">
                 <div className="max-w-3xl mb-8 md:mb-12 lg:mb-16">
@@ -267,6 +279,7 @@ function RentalAgreementDisplay() {
                 id="delivery_checkbox"
                 name="delivery"
                 value="delivery"
+                checked={isDelivery}
                 onChange={handleDeliveryToggle}
                 />
                 <label htmlFor="delivery_checkbox"> Edit delivery option</label>
@@ -310,7 +323,8 @@ function RentalAgreementDisplay() {
                 type="checkbox"
                 id="delivery_address_checkbox"
                 name="delivery_address"
-                value="delivery_address" 
+                value="delivery_address"
+                checked={isDeliveryAddress}
                 onChange={handleDeliveryAddressToggle}
                 />
                 <label htmlFor="delivery_address_checkbox"> Edit delivery address</label>
