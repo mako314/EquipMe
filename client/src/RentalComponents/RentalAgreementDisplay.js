@@ -11,6 +11,7 @@ function RentalAgreementDisplay() {
     const [currentAgreementIndex, setCurrentAgreementIndex] = useState(0)
     const [selectedDecision, setSelectedDecision] = useState('')
     const [isDelivery, setIsDelivery] = useState(false)
+    const [deliveryChoice, setDeliveryChoice] = useState(false)
     const [isDeliveryAddress, setIsDeliveryAddress] = useState(false)
     const [deliveryAddress, setDeliveryAddress] = useState('')
 
@@ -32,7 +33,7 @@ function RentalAgreementDisplay() {
     
     let rentalCardDisplay = []
     let allAgreements = []
-    console.log(rentalCardDisplay)
+    // console.log(rentalCardDisplay)
     let rentalCard
     // Need to find a way to map over an array that's nested inside of an array.
     //Went with flat map, but since there's another nested array inside of cart.cart_item, I needed to flatten that also, and finally, I map over item.agreements to get the agreement dates.
@@ -98,10 +99,10 @@ function RentalAgreementDisplay() {
     })
     }
 
-    console.log(currentUser)
-    console.log("RENTAL AGREEMENT ARRAY:",allAgreements)
+    // console.log(currentUser)
+    // console.log("RENTAL AGREEMENT ARRAY:",allAgreements)
 
-    console.log("The current rental card:", rentalCardDisplay[0])
+    // console.log("The current rental card:", rentalCardDisplay[0])
     // console.log("currentUser agreements OWNER:", currentUser?.agreements[0])
     const comments = allAgreements[currentAgreementIndex]?.comment?.map((item) => (
         <div key={item.id} className="mb-6 w-full overflow-hidden bg-[#f2f2f7] p-8 rounded-sm border-b border-black">
@@ -120,14 +121,33 @@ function RentalAgreementDisplay() {
     
     const handleAgreementEdit = () => {
         let decision = role === 'owner' ? 'owner_decision' : 'user_decision'
-        const updatedAgreement = {
-            [decision]: '',
-            delivery: '',
-            delivery_address: ''
+        let updatedAgreement
+
+        console.log("DELIVERY CHOICE:", deliveryChoice)
+        console.log("DELIVERY ADDRESS:", deliveryAddress)
+
+        if(deliveryChoice || deliveryChoice === false && deliveryAddress){
+        updatedAgreement = {
+            [decision]: selectedDecision,
+            delivery: deliveryChoice,
+            delivery_address: deliveryAddress
+        }}else if (deliveryChoice || deliveryChoice === false){
+        updatedAgreement = {
+            [decision]: selectedDecision,
+            delivery: deliveryChoice,
+        }}else if (deliveryAddress){
+        updatedAgreement = {
+            [decision]: selectedDecision,
+            delivery_address: deliveryAddress
+        }}else{
+        updatedAgreement = {
+            [decision]: selectedDecision,}
         }
 
-        fetch(`${apiUrl}/rental/agreements/${allAgreements[currentAgreementIndex]}`, {
-            method: "POST",
+        console.log("THE AGREEMENT:",updatedAgreement)
+
+        fetch(`${apiUrl}rental/agreements/${allAgreements[currentAgreementIndex].id}`, {
+            method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
             },
@@ -204,10 +224,31 @@ function RentalAgreementDisplay() {
         // If the checkbox is unchecked, clear the delivery address
 
     }
-
-    console.log(selectedDecision)
-
     
+    const handleDeliveryChange = (e) => {
+        // IF IsDelivery set to false ( meaning it the checkbox was clicked again you set choice to false)
+        // if(isDelivery === false){deliveryChoice === false} 
+        //above won't work because it's not being clicked when I click the checkbox for delivery_checkbox, need to make it an onclick and have it handle
+        setDeliveryChoice(e.target.value === 'true')
+    }
+
+    const handleDeliveryToggle = () => {
+        //seomthing like this, play around with it
+        setIsDelivery(!isDelivery)
+        setDeliveryChoice(false)
+    }
+
+    const handleDeliveryAddressToggle = ()  => {
+        //seomthing like this, play around with it
+        setIsDeliveryAddress(!isDeliveryAddress)
+        setDeliveryAddress('')
+    }
+
+    // console.log(deliveryChoice)
+    // console.log(typeof(deliveryChoice))
+
+    // console.log("DELIVERY ADDRESS:",deliveryAddress)
+    // console.log("DELIVERY ADDRESS:", typeof(deliveryAddress))
     
     return(
         <section>
@@ -226,23 +267,43 @@ function RentalAgreementDisplay() {
                 id="delivery_checkbox"
                 name="delivery"
                 value="delivery"
-                onChange={() => setIsDelivery(!isDelivery)}
+                onChange={handleDeliveryToggle}
                 />
-                <label for="delivery_checkbox"> Edit delivery option</label>
+                <label htmlFor="delivery_checkbox"> Edit delivery option</label>
 
                 {isDelivery && (
-                    <> 
-                    {/* https://www.w3schools.com/jsref/prop_radio_defaultchecked.asp#:~:text=Description,default%2C%20otherwise%20it%20returns%20false. */}
-                    <input
-                        type="text"
-                        placeholder="Delivery Address"
-                        name="delivery_address"
-                        className="mt-2 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-black"
-                        value={deliveryAddress}
-                        onChange={(e) => setDeliveryAddress(e.target.value)}
-                    />
-                    </>
-                )}
+
+                    <div className="mt-6 flex justify-between"> 
+
+                    <label className="inline-flex items-center font-bold text-gray-900">
+                        <input
+                            type="radio"
+                            className="form-radio"
+                            name="decline_delivery"
+                            value="false"
+                            checked={deliveryChoice === false}
+                            onChange={handleDeliveryChange}
+                        />
+                        <span className="ml-2"> NO Delivery </span>
+                    </label>
+
+                    <label className="inline-flex items-center font-bold text-gray-900">
+                        <input
+                            type="radio"
+                            className="form-radio"
+                            name="allow_delivery"
+                            value="true"
+                            checked={deliveryChoice === true}
+                            onChange={handleDeliveryChange}
+                        />
+
+                        <span className="ml-2"> ALLOW Delivery </span>
+                    </label>
+
+                    </div>
+                )
+                
+                }
 
                 <br></br>
                 <input
@@ -250,9 +311,9 @@ function RentalAgreementDisplay() {
                 id="delivery_address_checkbox"
                 name="delivery_address"
                 value="delivery_address" 
-                onChange={() => setIsDeliveryAddress(!isDeliveryAddress)}
+                onChange={handleDeliveryAddressToggle}
                 />
-                <label for="delivery_address_checkbox"> Edit delivery address</label>
+                <label htmlFor="delivery_address_checkbox"> Edit delivery address</label>
 
                 {isDeliveryAddress && (
                     <> 
@@ -270,6 +331,19 @@ function RentalAgreementDisplay() {
                     <br></br>
 
                     <div className="mt-6 flex justify-between"> 
+
+                    <label className="inline-flex items-center font-bold text-gray-900">
+                        <input
+                            type="radio"
+                            className="form-radio"
+                            name="decline_option"
+                            value="decline"
+                            checked={selectedDecision === 'decline'}
+                            onChange={handleDecisionChange}
+                        />
+                        <span className="ml-2"> Decline Agreement </span>
+                    </label>
+
                     <label className="inline-flex items-center font-bold text-gray-900">
                         <input
                             type="radio"
@@ -283,22 +357,11 @@ function RentalAgreementDisplay() {
                         <span className="ml-2"> Accept Agreement </span>
                     </label>
 
-                    <label className="inline-flex items-center font-bold text-gray-900">
-                        <input
-                            type="radio"
-                            className="form-radio"
-                            name="decline_option"
-                            value="decline"
-                            checked={selectedDecision === 'decline'}
-                            onChange={handleDecisionChange}
-                        />
-                        <span className="ml-2"> Decline Agreement </span>
-                    </label>
                     </div>
 
                     <div className="flex justify-end"> 
                         <button 
-                        type="submit"
+                        onClick={handleAgreementEdit}
                         className="bg-black text-white text-sm px-6 py-3 mt-8 rounded-lg shadow transition duration-150 ease-in-out hover:bg-gray-700 focus:outline-none">
                         Submit Changes
                         </button>
