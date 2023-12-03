@@ -2,6 +2,7 @@ import React, {useState, useContext, useEffect} from "react"
 import RentalAgreementCard from "./RentalAgreementCard";
 import { UserSessionContext } from "../UserComponents/SessionContext";
 import ApiUrlContext from "../Api";
+import {toast} from 'react-toastify'
 
 function RentalAgreementDisplay() {
     const apiUrl = useContext(ApiUrlContext)
@@ -128,7 +129,8 @@ function RentalAgreementDisplay() {
         console.log("DELIVERY CHOICE:", deliveryChoice)
         console.log("DELIVERY ADDRESS:", deliveryAddress)
 
-        if(deliveryChoice || deliveryChoice === false && deliveryAddress){
+        //Handle agreement submission
+        if(deliveryChoice || deliveryChoice === true && deliveryAddress){
         updatedAgreement = {
             [decision]: selectedDecision,
             delivery: deliveryChoice,
@@ -145,6 +147,19 @@ function RentalAgreementDisplay() {
         updatedAgreement = {
             [decision]: selectedDecision,}
         }
+
+        if(deliveryChoice === true && deliveryAddress === '' ){
+            return toast.warn(`📆 It seems you've selected delivery, please submit a delivery address.`,
+            {
+            "autoClose" : 2000
+            })
+        } else if (selectedDecision === ''){
+            return toast.warn(`📝 Please DECLINE or ACCEPT the rental agreement.`,
+            {
+            "autoClose" : 2000
+            })
+        }
+
 
         console.log("THE AGREEMENT:",updatedAgreement)
 
@@ -214,18 +229,18 @@ function RentalAgreementDisplay() {
         resetAgreementForm()
       }
 
-
-    
     const goToPreviousAgreement = () => {
         setCurrentAgreementIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : allAgreements.length - 1))
         resetAgreementForm()
     }
 
-    
     const handleDecisionChange = (e) => {
         // If pickup selected setDelivery to false
         setSelectedDecision(e.target.value)
         // If the checkbox is unchecked, clear the delivery address
+        if (selectedDecision === e.target.value){
+            
+        }
     }
     
     const handleDeliveryChange = (e) => {
