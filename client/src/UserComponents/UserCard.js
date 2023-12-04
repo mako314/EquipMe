@@ -6,9 +6,9 @@ import { UserSessionContext } from './SessionContext'
 function UserCard({ id, email, firstName, lastName, location, phone, profileImage, item, profession, fromOwnerDash }) {
     const { currentUser, role, setCurrentUser, setRole } = UserSessionContext()
 
-    console.log("WHAT ARE YOU",fromOwnerDash)
+    // console.log("WHAT ARE YOU",fromOwnerDash)
 
-    console.log(firstName)
+    // console.log(firstName)
 
     const navigate = useNavigate()
 
