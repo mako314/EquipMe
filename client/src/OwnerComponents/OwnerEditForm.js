@@ -6,11 +6,13 @@ import { object, string, number} from 'yup'
 import ApiUrlContext from "../Api";
 import { UserSessionContext } from "../UserComponents/SessionContext";
 
-function OwnerEditForm({ownerToEdit, updateOwner}){
+function OwnerEditForm(){
 
     //Need a place in the ownerProfile / Display page to allocate for this, still need to build owner signup.
+    // Turns out, I can use this for both owner edit and user edit
     // https://avatarfiles.alphacoders.com/352/352560.png
     // https://avatarfiles.alphacoders.com/111/111689.jpg
+    // https://avatarfiles.alphacoders.com/224/224246.png
 
     const [error, setError] = useState()
     const navigate = useNavigate()
@@ -35,7 +37,7 @@ function OwnerEditForm({ownerToEdit, updateOwner}){
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
-            fetch(`${apiUrl}equipment_owner/${currentUser.id}` , {
+            fetch(`${apiUrl}${role === 'owner' ? 'equipment_owner/':'user/'}${currentUser.id}` , {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json"
@@ -126,10 +128,11 @@ function OwnerEditForm({ownerToEdit, updateOwner}){
                     <input type="text" name="profileImage" value={formik.values.profileImage} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
                 </div> */}
 
+                {role === 'owner' &&
                 <div className="sm:col-span-2">
                     <label htmlFor="website" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">Website</label>
                     <input type="text" name="website" value={formik.values.website} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
-                </div>
+                </div>}
 
 
 

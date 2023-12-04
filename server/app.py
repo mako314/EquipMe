@@ -146,7 +146,7 @@ class Users(Resource):
                 phone = data['phone'],
                 location = data['location'],
                 profession = data['profession'],
-                profileImg = data['profileImg'],
+                profileImage = data['profileImg'],
                 # bannerImg = data['bannerImg'],    
             )
 

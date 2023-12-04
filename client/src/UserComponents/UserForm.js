@@ -57,7 +57,7 @@ function UserForm({ addUser }){
             phone: '',
             location: '',
             profession: '',
-            profileImg: ' ',
+            profileImage: ' ',
         },
         validationSchema: formSchema,
         onSubmit: (values) => {

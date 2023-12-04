@@ -19,7 +19,7 @@ import { UserSessionContext } from '../../UserComponents/SessionContext';
 import { ReactComponent as EquipMeLogo } from '../../Content/EquipMeLogo.svg'
 
 
-function OwnerDashboard({ownerToEdit, updateOwner, fromOwnerDash, setFromOwnerDash, searchTerm}) {
+function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
 
 
     const { currentUser, role} = UserSessionContext()
@@ -201,7 +201,7 @@ function AccountSettings() {
 
     return (
         <>
-            <OwnerEditForm ownerToEdit={ownerToEdit || currentUser} updateOwner={updateOwner} />
+            <OwnerEditForm/>
         </>
     )
 }
@@ -285,8 +285,8 @@ function AccountSettings() {
                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(
                             <RentalAgreements/>
                             )}> Rental Agreements  </span>} */}
-
-                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<ActiveListings/>)}> Active listings </span>
+                            {role === 'owner' &&
+                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<ActiveListings/>)}> Active listings </span>}
 
                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<RentalAgreements/>)}> Rental Agreements</span> 
  
@@ -306,7 +306,8 @@ function AccountSettings() {
                                 {role === 'owner' ? 'Potential Renters' : 'Potential Rental Interests'}
                             </span>
 
-                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<AccountSettings/>)}
+                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" 
+                            onClick={() => setToggleHomeDash(<AccountSettings/>)}
                             > Account Settings </span>
 
                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={handleInboxNavigation}
