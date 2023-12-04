@@ -502,6 +502,34 @@ class AllEquipmentByOwnerID(Resource):
 
 api.add_resource(AllEquipmentByOwnerID, '/all_equipment/<int:id>')
 
+
+class SetEquipmentPrice(Resource):
+    def post(self):
+        data = request.get_json()
+        try:
+        #need a way to input, owner_id and owner maybe a 2 step process?
+            equipment_price = EquipmentPrice(
+                hourly_rate = data['hourly_rate'],
+                daily_rate = data['daily_rate'],
+                weekly_rate = data['weekly_rate'],
+                promo_rate = data['promo_rate'],
+                equipment_id = data['equipment_id'],
+            )
+            db.session.add(equipment_price)
+            db.session.commit()
+
+            response = make_response(equipment_price.to_dict(), 201)
+            return response
+        
+            #if data['availability] == 'yes'
+            #availability = True
+        
+        except ValueError:
+            return make_response({"error": ["validations errors, check your input and try again"]} , 400)
+        # NEED TO WRITE VALIDATIONS
+
+api.add_resource(SetEquipmentPrice, '/equipment/price')
+
 #-----------------------------------------------------EQUIPMENT IMAGE Classes------------------------------------------------------------------
 
 class EquipmentImages(Resource):
