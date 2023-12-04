@@ -635,7 +635,7 @@ class RentalAgreements(Resource):
             rental_end_date = end_date,
             delivery = data.get('delivery', False),
             delivery_address = data.get('delivery_address', False),
-            user_decision = 'pending',
+            user_decision = 'created',
             owner_decision = 'pending',
             revisions = 0,
             agreement_status = 'in-progress',
@@ -704,6 +704,16 @@ class RentalAgreementsByID(Resource):
                 setattr(agreement, key, data[key])
             db.session.add(agreement)
             agreement.revisions += 1
+            if agreement.user_decision == 'accept' and agreement.owner_decision == 'accept':
+                agreement.agreement_status = 'All Parties Accepted'
+            elif agreement.user_decision == 'accept' and agreement.owner_decision == 'decline':
+                agreement.agreement_status = 'Owner has DECLINED this agreement'
+            elif agreement.user_decision == 'decline' and agreement.owner_decision == 'accept':
+                agreement.agreement_status = 'User has DECLINED this agreement'
+            elif agreement.user_decision == 'decline' and agreement.owner_decision == 'decline':
+                agreement.agreement_status = 'Both Parties Declined'
+            elif agreement.user_decision == 'pending' and agreement.owner_decision == 'pending':
+                agreement.agreement_status = 'Pending' 
             db.session.commit()
             response = make_response(agreement.to_dict(), 202)
             return response

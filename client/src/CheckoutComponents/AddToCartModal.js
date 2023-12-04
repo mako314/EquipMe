@@ -147,7 +147,7 @@ const addCart = (newCart) => {
   // console.log("This is the selected rate:",selectedRate)
   // console.log("This is the equipment quantity:",equipmentQuantity)
   // console.log("This is the equipment ID:",equip_id)
-  // console.log("This is the current cart ID:",currentCart)
+  console.log("This is the current cart ID:",currentCart)
 
   function handleAddToCartClick() {
     if(startRental === '' || endRental === ''){

@@ -6,7 +6,7 @@ import { UserSessionContext } from "../UserComponents/SessionContext";
 
 function CreateNewCart({addCart, toggleModal}){
 
-  const { currentUser, role } = UserSessionContext() 
+  const { currentUser, role, checkSession } = UserSessionContext() 
   const [user, setUser] = useContext(UserContext)
   const apiUrl = useContext(ApiUrlContext)
   const [cartName, setCartName] = useState('')
@@ -51,6 +51,7 @@ function CreateNewCart({addCart, toggleModal}){
               console.log(new_cart)
               addCart(new_cart)
               toggleModal()
+              // checkSession()
             })
             toast.success(`🛒 ${cartName}, succesfully created!`,{
               "autoClose" : 2000
