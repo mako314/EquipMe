@@ -209,13 +209,13 @@ function App() {
 
   const updateOwner = (ownerToUpdate) => {
     setOwners(owners => owners.map(owner => {
+      // && currentUser.id === ownerToUpdate.id
       if (owner.id === ownerToUpdate.id) {
         return ownerToUpdate
       } else {
         return owner
       }
     }))
-
   }
 
   const handleEditOwner = (owner) => {
