@@ -507,13 +507,17 @@ class SetEquipmentPrice(Resource):
     def post(self):
         data = request.get_json()
         try:
+            submitted_hourly_rate = float((data.get('hourly_rate')) * 100)
+            submitted_daily_rate = float((data.get('daily_rate')) * 100)
+            submitted_weekly_rate = float((data.get('weekly_rate')) * 100)
+            submitted_promo_rate = float((data.get('promo_rate')) * 100)
         #need a way to input, owner_id and owner maybe a 2 step process?
             equipment_price = EquipmentPrice(
-                hourly_rate = data['hourly_rate'],
-                daily_rate = data['daily_rate'],
-                weekly_rate = data['weekly_rate'],
-                promo_rate = data['promo_rate'],
-                equipment_id = data['equipment_id'],
+                hourly_rate = submitted_hourly_rate,
+                daily_rate = submitted_daily_rate,
+                weekly_rate = submitted_weekly_rate,
+                promo_rate = submitted_promo_rate,
+                equipment_id = data.get('equipment_id'),
             )
             db.session.add(equipment_price)
             db.session.commit()

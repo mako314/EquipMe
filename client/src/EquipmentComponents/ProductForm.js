@@ -51,10 +51,20 @@ function ProductForm({ addEquipment }){
     const formSchema = object({
         name: string().required('Please enter a name'),
         quantity: number().positive().required('You cannot list less than 0 items.'),
+        hourly_rate: number().positive().required('Must be a positive dollar amount.'),
+        daily_rate: number().positive().required('Must be a positive dollar amount.'),
+        weekly_rate: number().positive().required('Must be a positive dollar amount.'),
+        promo_rate: number().positive().required('Must be a positive dollar amount.'),
         // email: string().required('Please enter an email address')
     })
 
-
+  useEffect(() => {
+      if (role === 'owner' && currentUser.id){
+      formik.setValues({
+        owner_id: currentUser.id,
+      })
+  }
+    }, [currentUser])
 
     //Equipment POST
     const formik = useFormik({
@@ -67,9 +77,12 @@ function ProductForm({ addEquipment }){
             availability: '',
             delivery: '',
             quantity: '',
-            owner_id: ' ',
-            // equipment_id: '',
+            owner_id: currentUser?.id,
             imageURL: '',
+            hourly_rate : '',
+            daily_rate : '',
+            weekly_rate : '',
+            promo_rate : '',
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
@@ -85,23 +98,30 @@ function ProductForm({ addEquipment }){
                         res.json().then(equipment => {
                             console.log(equipment)
                             addEquipment(equipment)
+
+                            // const equipment_pricing = {
+                            //   hourly_rate : '',
+                            //   daily_rate : '',
+                            //   weekly_rate : '',
+                            //   promo_rate: '',
+                            //   equipment_id: equipment.id
+                            // }
                             // navigate('/equipment')
-                            const equipmentImage = {
-                              equipment_id: equipment.id,
-                              imageURL: values.imageURL,
-                          };
-                          
-                            fetch (`${apiUrl}equipment/images` , {
+                          //   const equipmentImage = {
+                          //     equipment_id: equipment.id,
+                          //     imageURL: values.imageURL,
+                          // }
+                            fetch (`${apiUrl}equipment/price` , {
                               method: "POST",
                               headers: {
                                 "Content-Type": "application/json"
                               },
-                              body: JSON.stringify(equipmentImage)
+                              body: JSON.stringify(values)
                             })
                             .then(res => {
                               if (res.ok){
-                                res.json().then(equipmentImage =>{
-                                  console.log(equipmentImage)
+                                res.json().then(equipment_pricing =>{
+                                  console.log(equipment_pricing)
                                 })
                               }
                             })
@@ -114,26 +134,20 @@ function ProductForm({ addEquipment }){
         }
     })
 
-    useEffect(() => {
-      if (role === 'owner' && currentUser.id){
-      formik.setValues({
-        owner_id: currentUser.id,
-      })
-  }
-    }, [currentUser])
 
-    const uploadImage = () => {
-      if (imageUpload == null) return;
-      const imageRef = ref(storage, `equipmentImages/${imageUpload.name + v4()}`);
-      uploadBytes(imageRef, imageUpload).then((snapshot) =>{
-          getDownloadURL(snapshot.ref).then((url) => {
-              alert("Image Uploaded!")
-              // formik.handleChange()
-              formik.values.imageURL = url
-          })
+
+    // const uploadImage = () => {
+    //   if (imageUpload == null) return;
+    //   const imageRef = ref(storage, `equipmentImages/${imageUpload.name + v4()}`);
+    //   uploadBytes(imageRef, imageUpload).then((snapshot) =>{
+    //       getDownloadURL(snapshot.ref).then((url) => {
+    //           alert("Image Uploaded!")
+    //           // formik.handleChange()
+    //           formik.values.imageURL = url
+    //       })
           
-      })
-  }
+    //   })
+  // }
 
 
 
@@ -203,7 +217,31 @@ function ProductForm({ addEquipment }){
           <input type="text" name="quantity" value={formik.values.quantity} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
         </div>
 
-        <div>
+
+        <label htmlFor="format" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Format: 0000.00</label>
+
+
+        <div className="sm:col-span-2">
+          <label htmlFor="quantity" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Hourly Rate: *$ NOT REQUIRED</label>
+          <input type="number" name="hourly_rate" value={formik.values.hourly_rate} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+        </div>
+
+        <div className="sm:col-span-2">
+          <label htmlFor="quantity" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Daily Rate *$ NOT REQUIRED: </label>
+          <input type="number" name="daily_rate" value={formik.values.daily_rate} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+        </div>
+
+        <div className="sm:col-span-2">
+          <label htmlFor="quantity" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Weekly Rate: *$ NOT REQUIRED</label>
+          <input type="number" name="weekly_rate" value={formik.values.weekly_rate} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+        </div>
+
+        <div className="sm:col-span-2">
+          <label htmlFor="quantity" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Promo Rate: *$ NOT REQUIRED</label>
+          <input type="number" name="promo_rate" value={formik.values.promo_rate} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+        </div>
+
+        {/* <div>
           <label htmlFor="imageURL" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Picture </label>
           <input type="file" onChange={
                 (event) => { setImageUpload(event.target.files[0])
@@ -212,7 +250,7 @@ function ProductForm({ addEquipment }){
                 className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring"
                 />
             <button onClick={uploadImage}> Upload Image </button>
-        </div>
+        </div> */}
  
  
  
