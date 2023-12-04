@@ -65,9 +65,9 @@ function RentalAgreementDisplay() {
         ownerLastName ={item.equipment.owner.lastName}
         />)
         rentalCardDisplay.push(rentalCard)
-        console.log("LOOKING FOR USER",cart.user)
+        console.log("LOOKING FOR OWNER",item.equipment.owner)
         const singleAgreement = agreement
-        allAgreements.push({theAgreements : singleAgreement, user: cart.user})
+        allAgreements.push({theAgreement : singleAgreement, user: cart.user})
 
         }) || []
         ) || []
@@ -97,7 +97,7 @@ function RentalAgreementDisplay() {
         </div>
         rentalCardDisplay.push(rentalCard)
         const singleAgreement = agreement
-        console.log("LOOKING FOR OWNER", agreement.cart_item.cart.user)
+        console.log("LOOKING FOR USER", agreement.cart_item.cart.user)
         allAgreements.push({theAgreement : singleAgreement, user: agreement.cart_item.cart.user})
     })
     }
