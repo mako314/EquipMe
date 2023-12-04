@@ -98,19 +98,27 @@ function RentalAgreementDisplay() {
         rentalCardDisplay.push(rentalCard)
         const singleAgreement = agreement
         console.log("LOOKING FOR USER", agreement.cart_item.cart.user)
-        allAgreements.push({theAgreement : singleAgreement, user: agreement.cart_item.cart.user})
+        allAgreements.push({theAgreement : singleAgreement, owner: agreement.cart_item.cart.user})
     })
     }
 
     // console.log(currentUser)
-    console.log("RENTAL AGREEMENT ARRAY LENGTH:",allAgreements.length)
+    console.log("RENTAL AGREEMENT ARRAY LENGTH:",allAgreements)
 
     // console.log("The current rental card:", rentalCardDisplay[0])
     // console.log("currentUser agreements OWNER:", currentUser?.agreements[0])
 
+    let otherUser = allAgreements[currentAgreementIndex]?.user || allAgreements[currentAgreementIndex]?.owner
+
+    console.log("Other USER:", otherUser)
+
     //So I decided to make an object be pushed into AllAgreements, that way I'll have access to user information too, and it'll be much cleaner. It's one rental agreement per, so I didn't need to grab the currentAgreementIndex for it.
     const comments = allAgreements[currentAgreementIndex]?.theAgreement.comment?.map((item) => (
         <div key={item.id} className="mb-6 w-full overflow-hidden bg-[#f2f2f7] p-8 rounded-sm border-b border-black">
+        <div className="flex items-start mb-2">
+        <img src={item.owner_id ? currentUser?.profileImage : otherUser.profileImage} alt="" className="inline-block h-12 w-12 object-cover rounded-full mr-4"/>
+        <h5 className="text-xl font-bold mt-2">{item.owner_id ? currentUser.firstName :otherUser.firstName} {item.owner_id ? currentUser.lastName :otherUser.lastName}</h5>
+        </div>
         <div className="flex items-start justify-between">
             <p className="text-xl font-bold">Comment Created At: <br></br> {item.created_at}</p>
             <span> 👈👉 </span>
@@ -123,8 +131,6 @@ function RentalAgreementDisplay() {
         </div>
         
     ))
-    
-
     
     const handleAgreementEdit = () => {
         let decision = role === 'owner' ? 'owner_decision' : 'user_decision'
