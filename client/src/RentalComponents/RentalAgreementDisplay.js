@@ -117,7 +117,7 @@ function RentalAgreementDisplay() {
         <div key={item.id} className="mb-6 w-full overflow-hidden bg-[#f2f2f7] p-8 rounded-sm border-b border-black">
         <div className="flex items-start mb-2">
         <img src={item.owner_id ? currentUser?.profileImage : otherUser.profileImage} alt="" className="inline-block h-12 w-12 object-cover rounded-full mr-4"/>
-        <h5 className="text-xl font-bold mt-2">Need an Agreement revision?</h5>
+        <h5 className="text-xl font-bold mt-2">{item.owner_id ? currentUser.firstName :otherUser.firstName} {item.owner_id ? currentUser.lastName :otherUser.lastName}</h5>
         </div>
         <div className="flex items-start justify-between">
             <p className="text-xl font-bold">Comment Created At: <br></br> {item.created_at}</p>
