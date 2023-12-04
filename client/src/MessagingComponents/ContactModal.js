@@ -43,7 +43,7 @@ function ContactModal({recipientID}){
                 "Content-Type": "application/json"
             }
         })
-
+        console.log("THE RECIPIENT ID:", recipientID)
         let threadData = await response.json()
         if (response.ok && threadData) {
             // 2. Create two inboxes once the thread is successfully created.
