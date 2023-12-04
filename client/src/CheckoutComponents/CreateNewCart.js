@@ -11,6 +11,7 @@ function CreateNewCart({addCart, toggleModal}){
   const apiUrl = useContext(ApiUrlContext)
   const [cartName, setCartName] = useState('')
   // const [cartStatus, setCartStatus] = useState('')
+  
 
   console.log("CART CURRENT USER:",currentUser)
   console.log("CART CURRENT ROLE:",role)
@@ -48,7 +49,7 @@ function CreateNewCart({addCart, toggleModal}){
         }).then((resp) => {
           if (resp.ok) {
             resp.json().then((new_cart) => {
-              console.log(new_cart)
+              console.log("THE NEW CART:",new_cart)
               addCart(new_cart)
               toggleModal()
               // checkSession()
