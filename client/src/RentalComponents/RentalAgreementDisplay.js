@@ -14,7 +14,7 @@ function RentalAgreementDisplay() {
     const [isDelivery, setIsDelivery] = useState(false)
     const [deliveryChoice, setDeliveryChoice] = useState(null)
     const [isDeliveryAddress, setIsDeliveryAddress] = useState(false)
-    const [deliveryAddress, setDeliveryAddress] = useState('unset')
+    const [deliveryAddress, setDeliveryAddress] = useState(false)
 
     const formatDate = (date) => {
         // Was having a lot of issues and couldn't tell where from, so I wrote some validations to test what could be going wrong
@@ -65,8 +65,9 @@ function RentalAgreementDisplay() {
         ownerLastName ={item.equipment.owner.lastName}
         />)
         rentalCardDisplay.push(rentalCard)
+        console.log("LOOKING FOR USER",cart.user)
         const singleAgreement = agreement
-        allAgreements.push(singleAgreement)
+        allAgreements.push({theAgreements : singleAgreement, user: cart.user})
 
         }) || []
         ) || []
@@ -96,16 +97,19 @@ function RentalAgreementDisplay() {
         </div>
         rentalCardDisplay.push(rentalCard)
         const singleAgreement = agreement
-        allAgreements.push(singleAgreement)
+        console.log("LOOKING FOR OWNER", agreement.cart_item.cart.user)
+        allAgreements.push({theAgreement : singleAgreement, user: agreement.cart_item.cart.user})
     })
     }
 
     // console.log(currentUser)
-    console.log("RENTAL AGREEMENT ARRAY:",allAgreements[currentAgreementIndex])
+    console.log("RENTAL AGREEMENT ARRAY LENGTH:",allAgreements.length)
 
     // console.log("The current rental card:", rentalCardDisplay[0])
     // console.log("currentUser agreements OWNER:", currentUser?.agreements[0])
-    const comments = allAgreements[currentAgreementIndex]?.comment?.map((item) => (
+
+    //So I decided to make an object be pushed into AllAgreements, that way I'll have access to user information too, and it'll be much cleaner. It's one rental agreement per, so I didn't need to grab the currentAgreementIndex for it.
+    const comments = allAgreements[currentAgreementIndex]?.theAgreement.comment?.map((item) => (
         <div key={item.id} className="mb-6 w-full overflow-hidden bg-[#f2f2f7] p-8 rounded-sm border-b border-black">
         <div className="flex items-start justify-between">
             <p className="text-xl font-bold">Comment Created At: <br></br> {item.created_at}</p>
@@ -118,7 +122,7 @@ function RentalAgreementDisplay() {
         {console.log(item)}
         </div>
         
-        ))
+    ))
     
 
     
@@ -183,9 +187,9 @@ function RentalAgreementDisplay() {
 
     const newComment = {
         comment : rentalComment,
-        user_id: role === 'user' ? currentUser?.id : allAgreements[currentAgreementIndex]?.user_id,
-        owner_id: role === 'owner' ? currentUser?.id : allAgreements[currentAgreementIndex]?.owner_id,
-        agreement_id: allAgreements[currentAgreementIndex]?.id
+        user_id: role === 'user' ? currentUser?.id : allAgreements[currentAgreementIndex]?.theAgreement.user_id,
+        owner_id: role === 'owner' ? currentUser?.id : allAgreements[currentAgreementIndex]?.theAgreement.owner_id,
+        agreement_id: allAgreements[currentAgreementIndex]?.theAgreement.id
     }
 
     console.log( "RENTAL COMMENT:", rentalComment)
@@ -238,9 +242,6 @@ function RentalAgreementDisplay() {
         // If pickup selected setDelivery to false
         setSelectedDecision(e.target.value)
         // If the checkbox is unchecked, clear the delivery address
-        if (selectedDecision === e.target.value){
-            
-        }
     }
     
     const handleDeliveryChange = (e) => {
@@ -265,7 +266,7 @@ function RentalAgreementDisplay() {
         setIsDeliveryAddress(false);
         setDeliveryAddress('');
         setSelectedDecision('');
-        setDeliveryChoice('unset'); // Explicitly set to null
+        setDeliveryChoice(null); // Explicitly set to null
     }
 
     console.log(deliveryChoice)
