@@ -82,7 +82,8 @@ function OwnerDashboard({ownerToEdit, updateOwner, fromOwnerDash, setFromOwnerDa
         .then((resp) => resp.json())
         .then((data) => {
             const ownerCollection = (
-                <OwnerCollection 
+                <OwnerCollection
+                    key={"dash"}
                     searchTerm={searchTerm} 
                     equipmentOwnerArray={data} 
                     setFromOwnerDash={setFromOwnerDash} 
@@ -156,9 +157,8 @@ function OwnerDashboard({ownerToEdit, updateOwner, fromOwnerDash, setFromOwnerDa
     }
 
 //-------------------------------------------------------------OWNER CONDITIONAL DATA --------------------------------------------------------------------
-
 function OwnerFavorites() {
-
+    currentUser?.owner_favorite?.map((favorite) =>console.log("THE USER IDS:",favorite?.user.user_id))
     return (
         <div className="flex flex-wrap ml-4 pt-4">
             {currentUser?.owner_favorite?.map((favorite) => {
@@ -167,7 +167,7 @@ function OwnerFavorites() {
                 <div className='ml-4'> 
                 <UserCard
                     key={favorite.id}
-                    id={favorite.user.user_id}
+                    id={favorite.user_id}
                     firstName={favorite.user.firstName}
                     lastName={favorite.user.lastName}
                     email={favorite.user.email}
