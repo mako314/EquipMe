@@ -2,6 +2,7 @@ import React, {useState, useContext, useEffect} from "react"
 import RentalAgreementCard from "./RentalAgreementCard";
 import { UserSessionContext } from "../UserComponents/SessionContext";
 import ApiUrlContext from "../Api";
+import {toast} from 'react-toastify'
 
 function RentalAgreementDisplay() {
     const apiUrl = useContext(ApiUrlContext)
@@ -11,9 +12,9 @@ function RentalAgreementDisplay() {
     const [currentAgreementIndex, setCurrentAgreementIndex] = useState(0)
     const [selectedDecision, setSelectedDecision] = useState('')
     const [isDelivery, setIsDelivery] = useState(false)
-    const [deliveryChoice, setDeliveryChoice] = useState(false)
+    const [deliveryChoice, setDeliveryChoice] = useState(null)
     const [isDeliveryAddress, setIsDeliveryAddress] = useState(false)
-    const [deliveryAddress, setDeliveryAddress] = useState('')
+    const [deliveryAddress, setDeliveryAddress] = useState(false)
 
     const formatDate = (date) => {
         // Was having a lot of issues and couldn't tell where from, so I wrote some validations to test what could be going wrong
@@ -64,8 +65,9 @@ function RentalAgreementDisplay() {
         ownerLastName ={item.equipment.owner.lastName}
         />)
         rentalCardDisplay.push(rentalCard)
+        console.log("LOOKING FOR OWNER",item.equipment.owner)
         const singleAgreement = agreement
-        allAgreements.push(singleAgreement)
+        allAgreements.push({theAgreement : singleAgreement, user: cart.user})
 
         }) || []
         ) || []
@@ -95,16 +97,19 @@ function RentalAgreementDisplay() {
         </div>
         rentalCardDisplay.push(rentalCard)
         const singleAgreement = agreement
-        allAgreements.push(singleAgreement)
+        console.log("LOOKING FOR USER", agreement.cart_item.cart.user)
+        allAgreements.push({theAgreement : singleAgreement, user: agreement.cart_item.cart.user})
     })
     }
 
     // console.log(currentUser)
-    // console.log("RENTAL AGREEMENT ARRAY:",allAgreements)
+    console.log("RENTAL AGREEMENT ARRAY LENGTH:",allAgreements.length)
 
     // console.log("The current rental card:", rentalCardDisplay[0])
     // console.log("currentUser agreements OWNER:", currentUser?.agreements[0])
-    const comments = allAgreements[currentAgreementIndex]?.comment?.map((item) => (
+
+    //So I decided to make an object be pushed into AllAgreements, that way I'll have access to user information too, and it'll be much cleaner. It's one rental agreement per, so I didn't need to grab the currentAgreementIndex for it.
+    const comments = allAgreements[currentAgreementIndex]?.theAgreement.comment?.map((item) => (
         <div key={item.id} className="mb-6 w-full overflow-hidden bg-[#f2f2f7] p-8 rounded-sm border-b border-black">
         <div className="flex items-start justify-between">
             <p className="text-xl font-bold">Comment Created At: <br></br> {item.created_at}</p>
@@ -114,8 +119,10 @@ function RentalAgreementDisplay() {
         <div className="w-full overflow-hidden mb-4 max-w-[640px] lg:max-w-[960px] mt-4">
             <p className="max-[479px]:text-sm">{item.comment}</p>
         </div>
+        {console.log(item)}
         </div>
-        ))
+        
+    ))
     
 
     
@@ -126,7 +133,8 @@ function RentalAgreementDisplay() {
         console.log("DELIVERY CHOICE:", deliveryChoice)
         console.log("DELIVERY ADDRESS:", deliveryAddress)
 
-        if(deliveryChoice || deliveryChoice === false && deliveryAddress){
+        //Handle agreement submission
+        if(deliveryChoice || deliveryChoice === true && deliveryAddress){
         updatedAgreement = {
             [decision]: selectedDecision,
             delivery: deliveryChoice,
@@ -143,6 +151,19 @@ function RentalAgreementDisplay() {
         updatedAgreement = {
             [decision]: selectedDecision,}
         }
+
+        if(deliveryChoice === true && deliveryAddress === '' ){
+            return toast.warn(`📆 It seems you've selected delivery, please submit a delivery address.`,
+            {
+            "autoClose" : 2000
+            })
+        } else if (selectedDecision === ''){
+            return toast.warn(`📝 Please DECLINE or ACCEPT the rental agreement.`,
+            {
+            "autoClose" : 2000
+            })
+        }
+
 
         console.log("THE AGREEMENT:",updatedAgreement)
 
@@ -166,9 +187,9 @@ function RentalAgreementDisplay() {
 
     const newComment = {
         comment : rentalComment,
-        user_id: role === 'user' ? currentUser?.id : allAgreements[currentAgreementIndex]?.user_id,
-        owner_id: role === 'owner' ? currentUser?.id : allAgreements[currentAgreementIndex]?.owner_id,
-        agreement_id: allAgreements[currentAgreementIndex]?.id
+        user_id: role === 'user' ? currentUser?.id : allAgreements[currentAgreementIndex]?.theAgreement.user_id,
+        owner_id: role === 'owner' ? currentUser?.id : allAgreements[currentAgreementIndex]?.theAgreement.owner_id,
+        agreement_id: allAgreements[currentAgreementIndex]?.theAgreement.id
     }
 
     console.log( "RENTAL COMMENT:", rentalComment)
@@ -203,46 +224,53 @@ function RentalAgreementDisplay() {
         return () => {
           document.removeEventListener("keydown", keyDownHandler)
         }
-      }, [])
+      }, [allAgreements.length])
 
     const goToNextAgreement = () => {
-        if (role === 'user'){
-        }
         setCurrentAgreementIndex((prevIndex) =>
           prevIndex < allAgreements.length - 1 ? prevIndex + 1 : 0
         )
+        resetAgreementForm()
       }
-    
+
     const goToPreviousAgreement = () => {
-    setCurrentAgreementIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : allAgreements.length - 1))
+        setCurrentAgreementIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : allAgreements.length - 1))
+        resetAgreementForm()
     }
 
-    
     const handleDecisionChange = (e) => {
         // If pickup selected setDelivery to false
         setSelectedDecision(e.target.value)
         // If the checkbox is unchecked, clear the delivery address
-
     }
     
     const handleDeliveryChange = (e) => {
         // IF IsDelivery set to false ( meaning it the checkbox was clicked again you set choice to false)
-        // if(isDelivery === false){deliveryChoice === false} 
-        //above won't work because it's not being clicked when I click the checkbox for delivery_checkbox, need to make it an onclick and have it handle
         setDeliveryChoice(e.target.value === 'true')
     }
 
     const handleDeliveryToggle = () => {
-        //seomthing like this, play around with it
+        //Toggle delivery field, then set delivery to false if you click it again
         setIsDelivery(!isDelivery)
-        setDeliveryChoice(false)
+        // setDeliveryChoice(false)
     }
 
     const handleDeliveryAddressToggle = ()  => {
-        //seomthing like this, play around with it
+        //Toggle delivery address field, then set delivery address to be blank if you unclick it
         setIsDeliveryAddress(!isDeliveryAddress)
         setDeliveryAddress('')
     }
+
+    const resetAgreementForm = () => {
+        setIsDelivery(false);
+        setIsDeliveryAddress(false);
+        setDeliveryAddress('');
+        setSelectedDecision('');
+        setDeliveryChoice(null); // Explicitly set to null
+    }
+
+    console.log(deliveryChoice)
+    console.log(typeof(deliveryChoice))
 
     // console.log(deliveryChoice)
     // console.log(typeof(deliveryChoice))
@@ -252,7 +280,7 @@ function RentalAgreementDisplay() {
     
     return(
         <section>
-        <div className="py-16 md:py-24 lg:py-32 mx-auto w-full max-w-7xl px-5 md:px-10">
+        <div key={currentAgreementIndex} className="py-16 md:py-24 lg:py-32 mx-auto w-full max-w-7xl px-5 md:px-10">
             <div className="flex flex-col items-start lg:flex-row lg:space-x-20">
             <div className="flex-[1_1_500px] max-[991px]:w-full max-[991px]:flex-none">
                 <div className="max-w-3xl mb-8 md:mb-12 lg:mb-16">
@@ -267,6 +295,7 @@ function RentalAgreementDisplay() {
                 id="delivery_checkbox"
                 name="delivery"
                 value="delivery"
+                checked={isDelivery}
                 onChange={handleDeliveryToggle}
                 />
                 <label htmlFor="delivery_checkbox"> Edit delivery option</label>
@@ -310,7 +339,8 @@ function RentalAgreementDisplay() {
                 type="checkbox"
                 id="delivery_address_checkbox"
                 name="delivery_address"
-                value="delivery_address" 
+                value="delivery_address"
+                checked={isDeliveryAddress}
                 onChange={handleDeliveryAddressToggle}
                 />
                 <label htmlFor="delivery_address_checkbox"> Edit delivery address</label>
