@@ -7,6 +7,7 @@ import AddToCartModal from '../CheckoutComponents/AddToCartModal'
 // import OwnerContext from '../OwnerComponents/OwnerContext'
 import ApiUrlContext from '../Api'
 import { UserSessionContext } from '../UserComponents/SessionContext'
+import ProductEditForm from './ProductEditForm'
 
 
 function EquipmentDisplay({}) {
@@ -117,6 +118,12 @@ function EquipmentDisplay({}) {
     })
   }
 
+  // https://www.educative.io/answers/how-to-use-the-uselocation-hook-in-react
+  // https://stackoverflow.com/questions/72079923/how-to-use-uselocation-hook-of-react-router-dom-v6
+  const handleEditNavigation = (e) => {
+    navigate(`/equipment/${oneEquipment.id}/edit`, { state: { oneEquipment } })
+  }
+
   // Need to make some onclicks for when a user clicks description, reviews, details etc. 
 
   //What can I include in details? Possibly whether or not the vehicle is available for delivery? Deposit ? ETC?
@@ -152,13 +159,20 @@ function EquipmentDisplay({}) {
               {/* <span className="title-font font-medium text-2xl text-white">$58.00</span> */}
               {equip_prices}
               {/* <button className="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded" >Rent Now</button> */}
-              {role === 'user' ? <AddToCartModal equip_id={id} oneEquipment={oneEquipment} toggleModal={toggleModal} isModalOpen={isModalOpen}/> : <span>Placeholder</span> }
-              {role === 'owner'}
+              
+              {role === 'user' && 
+              <AddToCartModal equip_id={id} oneEquipment={oneEquipment} toggleModal={toggleModal} isModalOpen={isModalOpen}/>}
+              
+              {role === 'owner' && currentUser.id === oneEquipment.owner_id && 
+              <button type="submit" className="inline-block rounded-lg bg-orange-500 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 md:text-base" onClick={handleEditNavigation}>Edit Equipment</button>}
+              
+              {role === 'user' && 
               <button className="rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4" onClick={handleFavoriteSelection}>
                 <svg fill={heartColor} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-5 h-5" viewBox="0 0 24 24">
                   <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
                 </svg>
-              </button>
+              </button>}
+
 
             </div>
 

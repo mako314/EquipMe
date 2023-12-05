@@ -144,7 +144,7 @@ function ProductForm({ addEquipment }){
     })
 
     const handleFeaturingEquipment = (e) => {
-      // IF IsDelivery set to false ( meaning it the checkbox was clicked again you set choice to false)
+      // IF you are wanting to feature equipment, set it to true, otherwise set it to false
       setFeatureEquipment(e.target.value === 'true')
   }
 
