@@ -373,6 +373,8 @@ class Equipments(Resource):
                 type = data['type'],
                 make = data['make'],
                 model = data['model'],
+                equipment_image = data['equipment_image'],
+                description = data['description'],
                 location = data['location'],
                 availability = data['availability'],
                 delivery = data['delivery'],
@@ -512,13 +514,15 @@ class SetEquipmentPrice(Resource):
             submitted_daily_rate = float((data.get('daily_rate')) * 100)
             submitted_weekly_rate = float((data.get('weekly_rate')) * 100)
             submitted_promo_rate = float((data.get('promo_rate')) * 100)
+            submitted_equipment_id = data.get('equipment_id')
+            print("Submitted ID:",submitted_equipment_id)
         #need a way to input, owner_id and owner maybe a 2 step process?
             equipment_price = EquipmentPrice(
                 hourly_rate = submitted_hourly_rate,
                 daily_rate = submitted_daily_rate,
                 weekly_rate = submitted_weekly_rate,
                 promo_rate = submitted_promo_rate,
-                equipment_id = data.get('equipment_id'),
+                equipment_id = submitted_equipment_id,
             )
             db.session.add(equipment_price)
             db.session.commit()
