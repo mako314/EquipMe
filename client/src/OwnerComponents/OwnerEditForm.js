@@ -4,14 +4,20 @@ import { useNavigate } from "react-router-dom";
 import {useFormik} from "formik"
 import { object, string, number} from 'yup'
 import ApiUrlContext from "../Api";
+import { UserSessionContext } from "../UserComponents/SessionContext";
 
-function OwnerEditForm({ownerToEdit, updateOwner}){
+function OwnerEditForm(){
 
     //Need a place in the ownerProfile / Display page to allocate for this, still need to build owner signup.
+    // Turns out, I can use this for both owner edit and user edit
+    // https://avatarfiles.alphacoders.com/352/352560.png
+    // https://avatarfiles.alphacoders.com/111/111689.jpg
+    // https://avatarfiles.alphacoders.com/224/224246.png
 
     const [error, setError] = useState()
     const navigate = useNavigate()
     const apiUrl = useContext(ApiUrlContext)
+    const { currentUser, role, checkSession} = UserSessionContext()
 
     const formSchema = object({
         firstName: string().required('Please enter a name'),
@@ -20,28 +26,31 @@ function OwnerEditForm({ownerToEdit, updateOwner}){
 
     const formik = useFormik({
         initialValues: {
-            firstName: ownerToEdit.firstName,
-            lastName: ownerToEdit.lastName,
-            location: ownerToEdit.location,
-            profession: ownerToEdit.profession,
-            phone: ownerToEdit.phone,
-            email: ownerToEdit.email,
-            website: ownerToEdit.website
+            firstName: currentUser.firstName,
+            lastName: currentUser.lastName,
+            location: currentUser.location,
+            profession: currentUser.profession,
+            phone: currentUser.phone,
+            email: currentUser.email,
+            profileImage: currentUser.profileImage,
+            website: currentUser.website
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
-            fetch(`${apiUrl}equipment_owner/${ownerToEdit.id}` , {
+            fetch(`${apiUrl}${role === 'owner' ? 'equipment_owner/':'user/'}${currentUser.id}` , {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(values)
+                body: JSON.stringify(formik.values)
             })
               .then(res =>{
                 if (res.ok) {
                     res.json().then(owner => {
-                        updateOwner(owner)
-                        navigate('/equipment_owners')
+                        console.log("The UPDATED Owner:", owner)
+                        // updateOwner(owner)
+                        checkSession()
+                        // navigate('/equipment_owners')
                     })
                 } else {
                     res.json().then(error => setError(error)) //for backend errors
@@ -74,17 +83,17 @@ function OwnerEditForm({ownerToEdit, updateOwner}){
                 {/* Avatar Section */}
                 <div className="mr-10 flex flex-col items-center">
                 {/* The circle avatar placeholder */}
-                <div className="w-48 h-48 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 text-xl font-bold mb-4">
+                <img src={currentUser.profileImage}  className="w-48 h-48 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 text-xl font-bold mb-4"/>
                     {/* Placeholder initial/text, e.g., "A" */}
                     Profile Image
-                </div>
+
                 
                 <button className="block w-full rounded-lg bg-indigo-500 px-4 py-2 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 md:text-base mb-4">
                 Upload Avatar
                 </button>
 
                 {/* Input for image link */}
-                <input type="text" placeholder="Or enter image URL" className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring"/>
+                <input type="text" name="profileImage" value={formik.values.profileImage} onChange={formik.handleChange} placeholder="Or enter image URL" className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring"/>
                 </div>
                 
                 <div>
@@ -119,10 +128,11 @@ function OwnerEditForm({ownerToEdit, updateOwner}){
                     <input type="text" name="profileImage" value={formik.values.profileImage} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
                 </div> */}
 
+                {role === 'owner' &&
                 <div className="sm:col-span-2">
                     <label htmlFor="website" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">Website</label>
                     <input type="text" name="website" value={formik.values.website} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
-                </div>
+                </div>}
 
 
 

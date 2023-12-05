@@ -16,6 +16,7 @@ import {v4} from 'uuid';
 
 function ProductForm({ addEquipment }){
     const [error, setError] = useState()
+    const [featureEquipment, setFeatureEquipment] = useState(false)
     const navigate = useNavigate()
     const { currentUser, role } = UserSessionContext()
     // const [owner, setOwner] = useContext(OwnerContext)
@@ -51,10 +52,20 @@ function ProductForm({ addEquipment }){
     const formSchema = object({
         name: string().required('Please enter a name'),
         quantity: number().positive().required('You cannot list less than 0 items.'),
+        hourly_rate: number().positive().required('Must be a positive dollar amount.'),
+        daily_rate: number().positive().required('Must be a positive dollar amount.'),
+        weekly_rate: number().positive().required('Must be a positive dollar amount.'),
+        promo_rate: number().positive().required('Must be a positive dollar amount.'),
         // email: string().required('Please enter an email address')
     })
 
-
+  useEffect(() => {
+      if (role === 'owner' && currentUser.id){
+      formik.setValues({
+        owner_id: currentUser.id,
+      })
+  }
+    }, [currentUser])
 
     //Equipment POST
     const formik = useFormik({
@@ -67,9 +78,13 @@ function ProductForm({ addEquipment }){
             availability: '',
             delivery: '',
             quantity: '',
-            owner_id: ' ',
-            // equipment_id: '',
+            owner_id: currentUser?.id,
             imageURL: '',
+            hourly_rate : '',
+            daily_rate : '',
+            weekly_rate : '',
+            promo_rate : '',
+            equipment_id: '',
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
@@ -84,24 +99,42 @@ function ProductForm({ addEquipment }){
                     if (res.ok){
                         res.json().then(equipment => {
                             console.log(equipment)
+                            formik.setValues({
+                              equipment_id: equipment.id
+                            })
                             addEquipment(equipment)
+
+                            // const equipment_pricing = {
+                            //   hourly_rate : '',
+                            //   daily_rate : '',
+                            //   weekly_rate : '',
+                            //   promo_rate: '',
+                            //   equipment_id: equipment.id
+                            // }
                             // navigate('/equipment')
-                            const equipmentImage = {
-                              equipment_id: equipment.id,
-                              imageURL: values.imageURL,
-                          };
-                          
-                            fetch (`${apiUrl}equipment/images` , {
+                          //   const equipmentImage = {
+                          //     equipment_id: equipment.id,
+                          //     imageURL: values.imageURL,
+                          // }
+                            fetch (`${apiUrl}equipment/price` , {
                               method: "POST",
                               headers: {
                                 "Content-Type": "application/json"
                               },
-                              body: JSON.stringify(equipmentImage)
+                              body: JSON.stringify(values)
                             })
                             .then(res => {
                               if (res.ok){
-                                res.json().then(equipmentImage =>{
-                                  console.log(equipmentImage)
+                                res.json().then(values =>{
+                                  if(featureEquipment === true){
+                                  fetch (`${apiUrl}feature/equipment` , {
+                                    method: "POST",
+                                    headers: {
+                                      "Content-Type": "application/json"
+                                    },
+                                    body: JSON.stringify(values)
+                                  })}
+                                  console.log(res)
                                 })
                               }
                             })
@@ -114,28 +147,25 @@ function ProductForm({ addEquipment }){
         }
     })
 
-    useEffect(() => {
-      if (role === 'owner' && currentUser.id){
-      formik.setValues({
-        owner_id: currentUser.id,
-      })
+    const handleFeaturingEquipment = (e) => {
+      // IF IsDelivery set to false ( meaning it the checkbox was clicked again you set choice to false)
+      setFeatureEquipment(e.target.value === 'true')
   }
-    }, [currentUser])
 
-    const uploadImage = () => {
-      if (imageUpload == null) return;
-      const imageRef = ref(storage, `equipmentImages/${imageUpload.name + v4()}`);
-      uploadBytes(imageRef, imageUpload).then((snapshot) =>{
-          getDownloadURL(snapshot.ref).then((url) => {
-              alert("Image Uploaded!")
-              // formik.handleChange()
-              formik.values.imageURL = url
-          })
+
+
+    // const uploadImage = () => {
+    //   if (imageUpload == null) return;
+    //   const imageRef = ref(storage, `equipmentImages/${imageUpload.name + v4()}`);
+    //   uploadBytes(imageRef, imageUpload).then((snapshot) =>{
+    //       getDownloadURL(snapshot.ref).then((url) => {
+    //           alert("Image Uploaded!")
+    //           // formik.handleChange()
+    //           formik.values.imageURL = url
+    //       })
           
-      })
-  }
-
-
+    //   })
+  // }
 
     // <form className="form" onSubmit={formik.handleSubmit}> FOR THE LOVE OF GOD INCLUDE THE SUBMIT IN THE FORM
     // MAKE 2 FORM COMPONENTS, CONDITIONALLY RENDER THOSE 2
@@ -203,7 +233,31 @@ function ProductForm({ addEquipment }){
           <input type="text" name="quantity" value={formik.values.quantity} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
         </div>
 
-        <div>
+
+        <label htmlFor="format" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Format: 0000.00</label>
+
+
+        <div className="sm:col-span-2">
+          <label htmlFor="quantity" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Hourly Rate: *$ NOT REQUIRED</label>
+          <input type="number" name="hourly_rate" value={formik.values.hourly_rate} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+        </div>
+
+        <div className="sm:col-span-2">
+          <label htmlFor="quantity" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Daily Rate *$ NOT REQUIRED: </label>
+          <input type="number" name="daily_rate" value={formik.values.daily_rate} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+        </div>
+
+        <div className="sm:col-span-2">
+          <label htmlFor="quantity" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Weekly Rate: *$ NOT REQUIRED</label>
+          <input type="number" name="weekly_rate" value={formik.values.weekly_rate} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+        </div>
+
+        <div className="sm:col-span-2">
+          <label htmlFor="quantity" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Promo Rate: *$ NOT REQUIRED</label>
+          <input type="number" name="promo_rate" value={formik.values.promo_rate} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+        </div>
+
+        {/* <div>
           <label htmlFor="imageURL" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Picture </label>
           <input type="file" onChange={
                 (event) => { setImageUpload(event.target.files[0])
@@ -212,16 +266,41 @@ function ProductForm({ addEquipment }){
                 className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring"
                 />
             <button onClick={uploadImage}> Upload Image </button>
-        </div>
- 
- 
- 
+        </div> */}
+
+            <div className="mt-6 flex"> 
+
+            <label className="inline-flex items-center font-bold text-gray-900">
+                <input
+                    type="radio"
+                    className="form-radio"
+                    name="decline_feature"
+                    value="false"
+                    checked={featureEquipment === false}
+                    onChange={handleFeaturingEquipment}
+                />
+                <span className="ml-2"> I would not like to feature this Equipment. </span>
+            </label>
+
+            <label className="inline-flex items-center font-bold text-gray-900">
+                <input
+                    type="radio"
+                    className="form-radio"
+                    name="allow_feature"
+                    value="true"
+                    checked={featureEquipment === true}
+                    onChange={handleFeaturingEquipment}
+                />
+                <span className="ml-2"> I would like to feature this Equipment. </span>
+            </label>
+
+            </div>
+
         <div className="flex items-center justify-between sm:col-span-2">
  
           {/* NEED TO CHANGE COLOR */}
-          <button type="submit" className="inline-block rounded-lg bg-orange-500 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 md:text-base">Submit</button>
- 
           <span className="text-sm text-gray-500">*Required</span>
+          <button type="submit" className="inline-block rounded-lg bg-orange-500 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 md:text-base">Submit</button>
         </div>
       </form>
  

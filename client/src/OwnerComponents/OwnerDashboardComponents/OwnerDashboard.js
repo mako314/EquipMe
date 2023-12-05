@@ -19,7 +19,7 @@ import { UserSessionContext } from '../../UserComponents/SessionContext';
 import { ReactComponent as EquipMeLogo } from '../../Content/EquipMeLogo.svg'
 
 
-function OwnerDashboard({ownerToEdit, updateOwner, fromOwnerDash, setFromOwnerDash, searchTerm}) {
+function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
 
 
     const { currentUser, role} = UserSessionContext()
@@ -201,7 +201,7 @@ function AccountSettings() {
 
     return (
         <>
-            <OwnerEditForm ownerToEdit={ownerToEdit || currentUser} updateOwner={updateOwner} />
+            <OwnerEditForm/>
         </>
     )
 }
@@ -270,21 +270,11 @@ function AccountSettings() {
                     {/* <!-- Component Start --> */}
                     
                     <div className="flex flex-col w-56 border-r border-gray-300">
-                        <button className="relative text-sm focus:outline-none group">
-                            <div className="flex items-center justify-between w-full h-16 px-4 border-b border-gray-300 hover:bg-gray-300">
-                                <span className="font-medium">
-                                    Dropdown
-                                </span>
-                                <svg className="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                                </svg>
-                            </div>
-                            <div className="absolute z-10 flex-col items-start hidden w-full pb-1 bg-white shadow-lg group-focus:flex">
-                                <span className="w-full px-4 py-2 text-left hover:bg-gray-300" onClick={() => setToggleHomeDash(<AccountSettings/>)}> Account Settings </span>
-                                <span className="w-full px-4 py-2 text-left hover:bg-gray-300" > Possible Conversions </span>
-                                <span className="w-full px-4 py-2 text-left hover:bg-gray-300" > Graphs </span>
-                            </div>
-                        </button>
+                    <div className="flex items-center justify-between w-full h-16 px-4 border-b border-gray-300 hover:bg-gray-300">
+                        <span className="font-medium">
+                            {currentUser.firstName} {currentUser.lastName}
+                        </span>
+                    </div>
                         <div className="flex flex-col flex-grow p-4 overflow-auto">
 
                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<DashHome/>)}> Home </span>
@@ -295,8 +285,8 @@ function AccountSettings() {
                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(
                             <RentalAgreements/>
                             )}> Rental Agreements  </span>} */}
-
-                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<ActiveListings/>)}> Active listings </span>
+                            {role === 'owner' &&
+                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<ActiveListings/>)}> Active listings </span>}
 
                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<RentalAgreements/>)}> Rental Agreements</span> 
  
@@ -316,11 +306,14 @@ function AccountSettings() {
                                 {role === 'owner' ? 'Potential Renters' : 'Potential Rental Interests'}
                             </span>
 
+                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" 
+                            onClick={() => setToggleHomeDash(<AccountSettings/>)}
+                            > Account Settings </span>
+
                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={handleInboxNavigation}
                             > Inbox </span>
                             
-                            <span className="flex items-center flex-shrink-0 h-10 px-3 mt-auto text-sm font-medium bg-gray-200 rounded hover:bg-gray-300"
-                                href="#">
+                            <span className="flex items-center flex-shrink-0 h-10 px-3 mt-auto text-sm font-medium bg-gray-200 rounded hover:bg-gray-300">
                                 <svg className="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                                 </svg>
@@ -333,6 +326,7 @@ function AccountSettings() {
                         <div className="flex items-center flex-shrink-0 h-16 px-8 border-b border-gray-300">
 
                             <h1 className="text-lg font-medium">Page Title</h1>
+                            {role === 'owner' && <>
                             <button className="flex items-center justify-center h-10 px-4 ml-auto text-sm font-medium rounded hover:bg-gray-300" onClick={handleCsvClick}>
                                 Upload Equipment File
 
@@ -340,12 +334,12 @@ function AccountSettings() {
                             {/* <button className="flex items-center justify-center h-10 px-4 ml-auto text-sm font-medium bg-gray-200 rounded hover:bg-gray-300">
                                 Action 2
                             </button> */}
-
+                            
                             <Link to='/list_equipment'>
-
                                 <button type="submit" className="flex items-center justify-center h-10 px-4 ml-auto mr-2 rounded-lg bg-orange-500 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700" onClick={() => setFromOwnerDash(true)}> List an Item</button>
-
                             </Link>
+                            </>
+                            }
 
                             <button className="relative ml-2 text-sm focus:outline-none group">
                                 <div className="flex items-center justify-between w-10 h-10 rounded hover:bg-gray-300">
@@ -385,3 +379,23 @@ function AccountSettings() {
 }
 
 export default OwnerDashboard
+
+
+
+
+
+{/* <button className="relative text-sm focus:outline-none group">
+<div className="flex items-center justify-between w-full h-16 px-4 border-b border-gray-300 hover:bg-gray-300">
+    <span className="font-medium">
+        Dropdown
+    </span>
+    <svg className="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+    </svg>
+</div>
+<div className="absolute z-10 flex-col items-start hidden w-full pb-1 bg-white shadow-lg group-focus:flex">
+    <span className="w-full px-4 py-2 text-left hover:bg-gray-300" onClick={() => setToggleHomeDash(<AccountSettings/>)}> Account Settings </span>
+    <span className="w-full px-4 py-2 text-left hover:bg-gray-300" > Possible Conversions </span>
+    <span className="w-full px-4 py-2 text-left hover:bg-gray-300" > Graphs </span>
+</div>
+</button> */}

@@ -34,7 +34,7 @@ function UserForm({ addUser }){
               resp.json().then((data) => {
                 setCurrentUser(data.user)
                 setRole(data.role)
-                navigate(`/user/profile/${user.id}`); // <-------- navigates to the profile
+                navigate(`/dashboard`); // <-------- navigates to the profile
               });
             }
           });
@@ -57,7 +57,7 @@ function UserForm({ addUser }){
             phone: '',
             location: '',
             profession: '',
-            profileImg: ' ',
+            profileImage: ' ',
         },
         validationSchema: formSchema,
         onSubmit: (values) => {

@@ -65,7 +65,7 @@ function RentalAgreementDisplay() {
         ownerLastName ={item.equipment.owner.lastName}
         />)
         rentalCardDisplay.push(rentalCard)
-        console.log("LOOKING FOR OWNER",item.equipment.owner)
+        // console.log("LOOKING FOR OWNER",item.equipment.owner)
         const singleAgreement = agreement
         allAgreements.push({theAgreement : singleAgreement, user: cart.user})
 
@@ -97,20 +97,20 @@ function RentalAgreementDisplay() {
         </div>
         rentalCardDisplay.push(rentalCard)
         const singleAgreement = agreement
-        console.log("LOOKING FOR USER", agreement.cart_item.cart.user)
+        // console.log("LOOKING FOR USER", agreement.cart_item.cart.user)
         allAgreements.push({theAgreement : singleAgreement, owner: agreement.cart_item.cart.user})
     })
     }
 
     // console.log(currentUser)
-    console.log("RENTAL AGREEMENT ARRAY LENGTH:",allAgreements)
+    // console.log("RENTAL AGREEMENT ARRAY LENGTH:",allAgreements)
 
     // console.log("The current rental card:", rentalCardDisplay[0])
     // console.log("currentUser agreements OWNER:", currentUser?.agreements[0])
 
     let otherUser = allAgreements[currentAgreementIndex]?.user || allAgreements[currentAgreementIndex]?.owner
 
-    console.log("Other USER:", otherUser)
+    // console.log("Other USER:", otherUser)
 
     //So I decided to make an object be pushed into AllAgreements, that way I'll have access to user information too, and it'll be much cleaner. It's one rental agreement per, so I didn't need to grab the currentAgreementIndex for it.
     const comments = allAgreements[currentAgreementIndex]?.theAgreement.comment?.map((item) => (
@@ -127,10 +127,11 @@ function RentalAgreementDisplay() {
         <div className="w-full overflow-hidden mb-4 max-w-[640px] lg:max-w-[960px] mt-4">
             <p className="max-[479px]:text-sm">{item.comment}</p>
         </div>
-        {console.log(item)}
         </div>
         
     ))
+
+    console.log("All Agreements:", allAgreements[currentAgreementIndex])
     
     const handleAgreementEdit = () => {
         let decision = role === 'owner' ? 'owner_decision' : 'user_decision'
@@ -138,6 +139,8 @@ function RentalAgreementDisplay() {
 
         console.log("DELIVERY CHOICE:", deliveryChoice)
         console.log("DELIVERY ADDRESS:", deliveryAddress)
+
+
 
         //Handle agreement submission
         if(deliveryChoice || deliveryChoice === true && deliveryAddress){
@@ -173,7 +176,7 @@ function RentalAgreementDisplay() {
 
         console.log("THE AGREEMENT:",updatedAgreement)
 
-        fetch(`${apiUrl}rental/agreements/${allAgreements[currentAgreementIndex].id}`, {
+        fetch(`${apiUrl}rental/agreements/${allAgreements[currentAgreementIndex]?.theAgreement.id}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
@@ -198,7 +201,7 @@ function RentalAgreementDisplay() {
         agreement_id: allAgreements[currentAgreementIndex]?.theAgreement.id
     }
 
-    console.log( "RENTAL COMMENT:", rentalComment)
+    // console.log( "RENTAL COMMENT:", rentalComment)
 
     fetch(`${apiUrl}rental/comment`, {
         method: "POST",
@@ -275,12 +278,10 @@ function RentalAgreementDisplay() {
         setDeliveryChoice(null); // Explicitly set to null
     }
 
-    console.log(deliveryChoice)
-    console.log(typeof(deliveryChoice))
-
     // console.log(deliveryChoice)
     // console.log(typeof(deliveryChoice))
-
+    // console.log(deliveryChoice)
+    // console.log(typeof(deliveryChoice))
     // console.log("DELIVERY ADDRESS:",deliveryAddress)
     // console.log("DELIVERY ADDRESS:", typeof(deliveryAddress))
     
@@ -331,7 +332,6 @@ function RentalAgreementDisplay() {
                             checked={deliveryChoice === true}
                             onChange={handleDeliveryChange}
                         />
-
                         <span className="ml-2"> ALLOW Delivery </span>
                     </label>
 
@@ -365,46 +365,44 @@ function RentalAgreementDisplay() {
                     </>
                 )}
                     <br></br>
-
-                    <div className="mt-6 flex justify-between"> 
-
-                    <label className="inline-flex items-center font-bold text-gray-900">
-                        <input
-                            type="radio"
-                            className="form-radio"
-                            name="decline_option"
-                            value="decline"
-                            checked={selectedDecision === 'decline'}
-                            onChange={handleDecisionChange}
-                        />
-                        <span className="ml-2"> Decline Agreement </span>
-                    </label>
-
-                    <label className="inline-flex items-center font-bold text-gray-900">
-                        <input
-                            type="radio"
-                            className="form-radio"
-                            name="accept_option"
-                            value="accept"
-                            checked={selectedDecision === 'accept'}
-                            onChange={handleDecisionChange}
-                        />
-
-                        <span className="ml-2"> Accept Agreement </span>
-                    </label>
-
-                    </div>
-
-                    <div className="flex justify-end"> 
-                        <button 
-                        onClick={handleAgreementEdit}
-                        className="bg-black text-white text-sm px-6 py-3 mt-8 rounded-lg shadow transition duration-150 ease-in-out hover:bg-gray-700 focus:outline-none">
-                        Submit Changes
-                        </button>
-                    </div>
                 </div>
-                
-                )}
+            )}
+            <div className="mt-6 flex justify-between"> 
+
+                <label className="inline-flex items-center font-bold text-gray-900">
+                    <input
+                        type="radio"
+                        className="form-radio"
+                        name="decline_option"
+                        value="decline"
+                        checked={selectedDecision === 'decline'}
+                        onChange={handleDecisionChange}
+                    />
+                    <span className="ml-2"> Decline Agreement </span>
+                </label>
+
+                <label className="inline-flex items-center font-bold text-gray-900">
+                    <input
+                        type="radio"
+                        className="form-radio"
+                        name="accept_option"
+                        value="accept"
+                        checked={selectedDecision === 'accept'}
+                        onChange={handleDecisionChange}
+                    />
+
+                    <span className="ml-2"> Accept Agreement </span>
+                </label>
+
+                </div>
+
+                <div className="flex justify-end"> 
+                    <button 
+                    onClick={handleAgreementEdit}
+                    className="bg-black text-white text-sm px-6 py-3 mt-8 rounded-lg shadow transition duration-150 ease-in-out hover:bg-gray-700 focus:outline-none">
+                    Submit Changes
+                    </button>
+            </div>
 
             </div>
 

@@ -331,8 +331,9 @@ class RentalAgreement(db.Model, SerializerMixin):
     # proof_of_ownership = db.Column(db.String)
     # owner_insurance = db.Column(db.String)
     # user_insurance_proof = db.Column(db.String)
+
     agreement_status = db.Column(db.String)
-    # Ex. in progress, user-accepted, owner-accepted, both-accepted
+    # Ex. in progress, user-accepted, owner-accepted, both-accepted (All Parties Accepted)
 #----------------------------------------------------------------
     #relationships
     #do a cascade to make life easier 

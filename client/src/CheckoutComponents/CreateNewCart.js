@@ -6,11 +6,12 @@ import { UserSessionContext } from "../UserComponents/SessionContext";
 
 function CreateNewCart({addCart, toggleModal}){
 
-  const { currentUser, role } = UserSessionContext() 
+  const { currentUser, role, checkSession } = UserSessionContext() 
   const [user, setUser] = useContext(UserContext)
   const apiUrl = useContext(ApiUrlContext)
   const [cartName, setCartName] = useState('')
   // const [cartStatus, setCartStatus] = useState('')
+  
 
   console.log("CART CURRENT USER:",currentUser)
   console.log("CART CURRENT ROLE:",role)
@@ -48,9 +49,10 @@ function CreateNewCart({addCart, toggleModal}){
         }).then((resp) => {
           if (resp.ok) {
             resp.json().then((new_cart) => {
-              console.log(new_cart)
+              console.log("THE NEW CART:",new_cart)
               addCart(new_cart)
               toggleModal()
+              // checkSession()
             })
             toast.success(`🛒 ${cartName}, succesfully created!`,{
               "autoClose" : 2000

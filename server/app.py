@@ -1,4 +1,4 @@
-from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement, Message, Thread,UserInbox, OwnerInbox, Cart, CartItem, EquipmentPrice, UserFavorite, OwnerFavorite, AgreementComment
+from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement, Message, Thread,UserInbox, OwnerInbox, Cart, CartItem, EquipmentPrice, UserFavorite, OwnerFavorite, AgreementComment, FeaturedEquipment
 # from flask_cors import CORS
 # from flask_migrate import Migrate
 # from flask import Flask, request, make_response, jsonify
@@ -146,7 +146,7 @@ class Users(Resource):
                 phone = data['phone'],
                 location = data['location'],
                 profession = data['profession'],
-                profileImg = data['profileImg'],
+                profileImage = data['profileImg'],
                 # bannerImg = data['bannerImg'],    
             )
 
@@ -502,6 +502,64 @@ class AllEquipmentByOwnerID(Resource):
 
 api.add_resource(AllEquipmentByOwnerID, '/all_equipment/<int:id>')
 
+#-----------------------------------------------------EQUIPMENT PRICING Classes------------------------------------------------------------------
+
+class SetEquipmentPrice(Resource):
+    def post(self):
+        data = request.get_json()
+        try:
+            submitted_hourly_rate = float((data.get('hourly_rate')) * 100)
+            submitted_daily_rate = float((data.get('daily_rate')) * 100)
+            submitted_weekly_rate = float((data.get('weekly_rate')) * 100)
+            submitted_promo_rate = float((data.get('promo_rate')) * 100)
+        #need a way to input, owner_id and owner maybe a 2 step process?
+            equipment_price = EquipmentPrice(
+                hourly_rate = submitted_hourly_rate,
+                daily_rate = submitted_daily_rate,
+                weekly_rate = submitted_weekly_rate,
+                promo_rate = submitted_promo_rate,
+                equipment_id = data.get('equipment_id'),
+            )
+            db.session.add(equipment_price)
+            db.session.commit()
+
+            response = make_response(equipment_price.to_dict(), 201)
+            return response
+        
+            #if data['availability] == 'yes'
+            #availability = True
+        
+        except ValueError:
+            return make_response({"error": ["validations errors, check your input and try again"]} , 400)
+        # NEED TO WRITE VALIDATIONS
+
+api.add_resource(SetEquipmentPrice, '/equipment/price')
+
+#-----------------------------------------------------EQUIPMENT FEATURE Classes------------------------------------------------------------------
+
+class SetFeaturedEquipment(Resource):
+    def post(self):
+        data = request.get_json()
+        try:
+        #need a way to input, owner_id and owner maybe a 2 step process?
+            feature_equipment = FeaturedEquipment(
+                equipment_id = data.get('equipment_id'),
+            )
+            db.session.add(feature_equipment)
+            db.session.commit()
+
+            response = make_response(feature_equipment.to_dict(), 201)
+            return response
+        
+            #if data['availability] == 'yes'
+            #availability = True
+        
+        except ValueError:
+            return make_response({"error": ["validations errors, check your input and try again"]} , 400)
+        # NEED TO WRITE VALIDATIONS
+
+api.add_resource(SetFeaturedEquipment, '/feature/equipment')
+
 #-----------------------------------------------------EQUIPMENT IMAGE Classes------------------------------------------------------------------
 
 class EquipmentImages(Resource):
@@ -635,7 +693,7 @@ class RentalAgreements(Resource):
             rental_end_date = end_date,
             delivery = data.get('delivery', False),
             delivery_address = data.get('delivery_address', False),
-            user_decision = 'pending',
+            user_decision = 'created',
             owner_decision = 'pending',
             revisions = 0,
             agreement_status = 'in-progress',
@@ -704,6 +762,16 @@ class RentalAgreementsByID(Resource):
                 setattr(agreement, key, data[key])
             db.session.add(agreement)
             agreement.revisions += 1
+            if agreement.user_decision == 'accept' and agreement.owner_decision == 'accept':
+                agreement.agreement_status = 'All Parties Accepted'
+            elif agreement.user_decision == 'accept' and agreement.owner_decision == 'decline':
+                agreement.agreement_status = 'Owner has DECLINED this agreement'
+            elif agreement.user_decision == 'decline' and agreement.owner_decision == 'accept':
+                agreement.agreement_status = 'User has DECLINED this agreement'
+            elif agreement.user_decision == 'decline' and agreement.owner_decision == 'decline':
+                agreement.agreement_status = 'Both Parties Declined'
+            elif agreement.user_decision == 'pending' and agreement.owner_decision == 'pending':
+                agreement.agreement_status = 'Pending' 
             db.session.commit()
             response = make_response(agreement.to_dict(), 202)
             return response

@@ -41,12 +41,11 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
     } 
   }, [currentUser])
 
-  // console.log(role)
+  // console.log("THE CURRENT CART DATA:", currentUser.cart)
 
-
-const addCart = (newCart) => {
-  setCartData((cartData) => [...cartData, newCart])
-}
+  const addCart = (newCart) => {
+    setCartData((cartData) => [...cartData, newCart])
+  }
   // console.log("YOUR CART:", cartData)
   // console.log("This is the selected rate:", selectedRate)
   // console.log("this is the date range:", dayRange)
@@ -147,7 +146,7 @@ const addCart = (newCart) => {
   // console.log("This is the selected rate:",selectedRate)
   // console.log("This is the equipment quantity:",equipmentQuantity)
   // console.log("This is the equipment ID:",equip_id)
-  // console.log("This is the current cart ID:",currentCart)
+  console.log("This is the current cart ID:",cartData[currentCart - 1]?.id)
 
   function handleAddToCartClick() {
     if(startRental === '' || endRental === ''){
@@ -186,7 +185,7 @@ const addCart = (newCart) => {
             //-1 in the cart_name, arrays index start at 0, but this grabs the correct ID. So If I select first cart, it's ID of 1. But in the array index it's 0.
             if(startRental && endRental){
             let cartAndEquipment = {
-              'cart_id': cartData[currentCart - 1].id,
+              'cart_id': cartData[currentCart - 1]?.id,
               'equipment_id': oneEquipment.id
             }
 
