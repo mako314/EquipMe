@@ -544,7 +544,6 @@ class SetFeaturedEquipment(Resource):
         #need a way to input, owner_id and owner maybe a 2 step process?
             feature_equipment = FeaturedEquipment(
                 equipment_id = data.get('equipment_id'),
-                owner_id = data.get('owner_id')
             )
             db.session.add(feature_equipment)
             db.session.commit()
@@ -559,7 +558,7 @@ class SetFeaturedEquipment(Resource):
             return make_response({"error": ["validations errors, check your input and try again"]} , 400)
         # NEED TO WRITE VALIDATIONS
 
-api.add_resource(SetFeaturedEquipment, 'feature/equipment')
+api.add_resource(SetFeaturedEquipment, '/feature/equipment')
 
 #-----------------------------------------------------EQUIPMENT IMAGE Classes------------------------------------------------------------------
 

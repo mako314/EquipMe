@@ -125,16 +125,16 @@ function ProductForm({ addEquipment }){
                             })
                             .then(res => {
                               if (res.ok){
-                                res.json().then(equipment_pricing =>{
+                                res.json().then(values =>{
                                   if(featureEquipment === true){
-                                  fetch (`${apiUrl}equipment/price` , {
+                                  fetch (`${apiUrl}feature/equipment` , {
                                     method: "POST",
                                     headers: {
                                       "Content-Type": "application/json"
                                     },
                                     body: JSON.stringify(values)
                                   })}
-                                  console.log(equipment_pricing)
+                                  console.log(res)
                                 })
                               }
                             })
