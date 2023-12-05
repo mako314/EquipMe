@@ -16,6 +16,7 @@ import {v4} from 'uuid';
 
 function ProductForm({ addEquipment }){
     const [error, setError] = useState()
+    const [featureEquipment, setFeatureEquipment] = useState(false)
     const navigate = useNavigate()
     const { currentUser, role } = UserSessionContext()
     // const [owner, setOwner] = useContext(OwnerContext)
@@ -83,6 +84,7 @@ function ProductForm({ addEquipment }){
             daily_rate : '',
             weekly_rate : '',
             promo_rate : '',
+            equipment_id: '',
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
@@ -97,6 +99,9 @@ function ProductForm({ addEquipment }){
                     if (res.ok){
                         res.json().then(equipment => {
                             console.log(equipment)
+                            formik.setValues({
+                              equipment_id: equipment.id
+                            })
                             addEquipment(equipment)
 
                             // const equipment_pricing = {
@@ -121,6 +126,14 @@ function ProductForm({ addEquipment }){
                             .then(res => {
                               if (res.ok){
                                 res.json().then(equipment_pricing =>{
+                                  if(featureEquipment === true){
+                                  fetch (`${apiUrl}equipment/price` , {
+                                    method: "POST",
+                                    headers: {
+                                      "Content-Type": "application/json"
+                                    },
+                                    body: JSON.stringify(values)
+                                  })}
                                   console.log(equipment_pricing)
                                 })
                               }
@@ -133,6 +146,11 @@ function ProductForm({ addEquipment }){
                 
         }
     })
+
+    const handleFeaturingEquipment = (e) => {
+      // IF IsDelivery set to false ( meaning it the checkbox was clicked again you set choice to false)
+      setFeatureEquipment(e.target.value === 'true')
+  }
 
 
 
@@ -148,8 +166,6 @@ function ProductForm({ addEquipment }){
           
     //   })
   // }
-
-
 
     // <form className="form" onSubmit={formik.handleSubmit}> FOR THE LOVE OF GOD INCLUDE THE SUBMIT IN THE FORM
     // MAKE 2 FORM COMPONENTS, CONDITIONALLY RENDER THOSE 2
@@ -251,15 +267,40 @@ function ProductForm({ addEquipment }){
                 />
             <button onClick={uploadImage}> Upload Image </button>
         </div> */}
- 
- 
- 
+
+            <div className="mt-6 flex"> 
+
+            <label className="inline-flex items-center font-bold text-gray-900">
+                <input
+                    type="radio"
+                    className="form-radio"
+                    name="decline_feature"
+                    value="false"
+                    checked={featureEquipment === false}
+                    onChange={handleFeaturingEquipment}
+                />
+                <span className="ml-2"> I would not like to feature this Equipment. </span>
+            </label>
+
+            <label className="inline-flex items-center font-bold text-gray-900">
+                <input
+                    type="radio"
+                    className="form-radio"
+                    name="allow_feature"
+                    value="true"
+                    checked={featureEquipment === true}
+                    onChange={handleFeaturingEquipment}
+                />
+                <span className="ml-2"> I would like to feature this Equipment. </span>
+            </label>
+
+            </div>
+
         <div className="flex items-center justify-between sm:col-span-2">
  
           {/* NEED TO CHANGE COLOR */}
-          <button type="submit" className="inline-block rounded-lg bg-orange-500 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 md:text-base">Submit</button>
- 
           <span className="text-sm text-gray-500">*Required</span>
+          <button type="submit" className="inline-block rounded-lg bg-orange-500 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 md:text-base">Submit</button>
         </div>
       </form>
  

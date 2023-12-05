@@ -1,4 +1,4 @@
-from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement, Message, Thread,UserInbox, OwnerInbox, Cart, CartItem, EquipmentPrice, UserFavorite, OwnerFavorite, AgreementComment
+from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement, Message, Thread,UserInbox, OwnerInbox, Cart, CartItem, EquipmentPrice, UserFavorite, OwnerFavorite, AgreementComment, FeaturedEquipment
 # from flask_cors import CORS
 # from flask_migrate import Migrate
 # from flask import Flask, request, make_response, jsonify
@@ -502,6 +502,7 @@ class AllEquipmentByOwnerID(Resource):
 
 api.add_resource(AllEquipmentByOwnerID, '/all_equipment/<int:id>')
 
+#-----------------------------------------------------EQUIPMENT PRICING Classes------------------------------------------------------------------
 
 class SetEquipmentPrice(Resource):
     def post(self):
@@ -533,6 +534,32 @@ class SetEquipmentPrice(Resource):
         # NEED TO WRITE VALIDATIONS
 
 api.add_resource(SetEquipmentPrice, '/equipment/price')
+
+#-----------------------------------------------------EQUIPMENT FEATURE Classes------------------------------------------------------------------
+
+class SetFeaturedEquipment(Resource):
+    def post(self):
+        data = request.get_json()
+        try:
+        #need a way to input, owner_id and owner maybe a 2 step process?
+            feature_equipment = FeaturedEquipment(
+                equipment_id = data.get('equipment_id'),
+                owner_id = data.get('owner_id')
+            )
+            db.session.add(feature_equipment)
+            db.session.commit()
+
+            response = make_response(feature_equipment.to_dict(), 201)
+            return response
+        
+            #if data['availability] == 'yes'
+            #availability = True
+        
+        except ValueError:
+            return make_response({"error": ["validations errors, check your input and try again"]} , 400)
+        # NEED TO WRITE VALIDATIONS
+
+api.add_resource(SetFeaturedEquipment, 'feature/equipment')
 
 #-----------------------------------------------------EQUIPMENT IMAGE Classes------------------------------------------------------------------
 
