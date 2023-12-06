@@ -373,6 +373,8 @@ class Equipments(Resource):
                 type = data['type'],
                 make = data['make'],
                 model = data['model'],
+                equipment_image = data['equipment_image'],
+                description = data['description'],
                 location = data['location'],
                 availability = data['availability'],
                 delivery = data['delivery'],
@@ -512,13 +514,15 @@ class SetEquipmentPrice(Resource):
             submitted_daily_rate = float((data.get('daily_rate')) * 100)
             submitted_weekly_rate = float((data.get('weekly_rate')) * 100)
             submitted_promo_rate = float((data.get('promo_rate')) * 100)
+            submitted_equipment_id = data.get('equipment_id')
+            print("Submitted ID:",submitted_equipment_id)
         #need a way to input, owner_id and owner maybe a 2 step process?
             equipment_price = EquipmentPrice(
                 hourly_rate = submitted_hourly_rate,
                 daily_rate = submitted_daily_rate,
                 weekly_rate = submitted_weekly_rate,
                 promo_rate = submitted_promo_rate,
-                equipment_id = data.get('equipment_id'),
+                equipment_id = submitted_equipment_id,
             )
             db.session.add(equipment_price)
             db.session.commit()
@@ -534,6 +538,40 @@ class SetEquipmentPrice(Resource):
         # NEED TO WRITE VALIDATIONS
 
 api.add_resource(SetEquipmentPrice, '/equipment/price')
+
+class HandleEquipmentPricing(Resource):
+    def patch(self, id):
+        data = request.get_json()
+
+        equipment_pricing = EquipmentPrice.query.filter_by(equipment_id=id).first()
+        submitted_hourly_rate = data.get('hourly_rate')
+        submitted_daily_rate = data.get('daily_rate')
+        submitted_weekly_rate = data.get('weekly_rate')
+        submitted_promo_rate = data.get('promo_rate')
+        if equipment_pricing:
+            try:
+                if submitted_hourly_rate in data and not None:
+                    equipment_pricing.hourly_rate = float(submitted_hourly_rate) * 100
+                if submitted_daily_rate in data and not None:
+                    equipment_pricing.daily_rate = float(submitted_daily_rate) * 100
+                if submitted_weekly_rate in data and not None:
+                    equipment_pricing.weekly_rate = float(submitted_weekly_rate) * 100
+                if submitted_promo_rate in data and not None:
+                    equipment_pricing.promo_rate = float(submitted_promo_rate) * 100
+
+                db.session.commit()
+
+                response = make_response(equipment_pricing.to_dict(), 202)
+                return response
+            except ValueError:
+                return make_response({"error": ["validations errors, check your input and try again"]} , 400)
+        else:
+            response = make_response({
+            "error": "Equipment not found,"
+            }, 404)
+            return response
+        
+api.add_resource(HandleEquipmentPricing, '/equipment/<int:id>/price')
 
 #-----------------------------------------------------EQUIPMENT FEATURE Classes------------------------------------------------------------------
 
@@ -560,6 +598,25 @@ class SetFeaturedEquipment(Resource):
 
 api.add_resource(SetFeaturedEquipment, '/feature/equipment')
 
+class HandleFeaturedEquipment(Resource):
+    def delete(self, id):
+        featured_equipment = FeaturedEquipment.query.filter_by(equipment_id=id).first()
+        if featured_equipment:
+            try:
+                #going to need try and except if and when we do validations
+                db.session.delete(featured_equipment)
+                db.session.commit()
+                response = make_response({"message":"Succesfully deleted!"}, 204)
+                return response
+            except ValueError:
+                return make_response({"error": ["validations errors, check your input and try again"]} , 400)
+        else:
+            response = make_response({
+            "error": "Equipment not found,"
+            }, 404)
+            return response
+        
+api.add_resource(HandleFeaturedEquipment, '/feature/equipment/<int:id>')
 #-----------------------------------------------------EQUIPMENT IMAGE Classes------------------------------------------------------------------
 
 class EquipmentImages(Resource):

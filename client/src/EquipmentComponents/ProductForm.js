@@ -79,12 +79,14 @@ function ProductForm({ addEquipment }){
             delivery: '',
             quantity: '',
             owner_id: currentUser?.id,
+            equipment_image: '',
+            description: '',
             imageURL: '',
             hourly_rate : '',
             daily_rate : '',
             weekly_rate : '',
             promo_rate : '',
-            equipment_id: '',
+            // equipment_id: '',
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
@@ -99,18 +101,11 @@ function ProductForm({ addEquipment }){
                     if (res.ok){
                         res.json().then(equipment => {
                             console.log(equipment)
-                            formik.setValues({
+                            const updatedValues = {
+                              ...values,
                               equipment_id: equipment.id
-                            })
+                          }
                             addEquipment(equipment)
-
-                            // const equipment_pricing = {
-                            //   hourly_rate : '',
-                            //   daily_rate : '',
-                            //   weekly_rate : '',
-                            //   promo_rate: '',
-                            //   equipment_id: equipment.id
-                            // }
                             // navigate('/equipment')
                           //   const equipmentImage = {
                           //     equipment_id: equipment.id,
@@ -121,18 +116,19 @@ function ProductForm({ addEquipment }){
                               headers: {
                                 "Content-Type": "application/json"
                               },
-                              body: JSON.stringify(values)
+                              body: JSON.stringify(updatedValues)
                             })
                             .then(res => {
                               if (res.ok){
-                                res.json().then(values =>{
+                                res.json().then(updatedValues =>{
+                                  console.log(featureEquipment)
                                   if(featureEquipment === true){
                                   fetch (`${apiUrl}feature/equipment` , {
                                     method: "POST",
                                     headers: {
                                       "Content-Type": "application/json"
                                     },
-                                    body: JSON.stringify(values)
+                                    body: JSON.stringify(updatedValues)
                                   })}
                                   console.log(res)
                                 })
@@ -148,7 +144,7 @@ function ProductForm({ addEquipment }){
     })
 
     const handleFeaturingEquipment = (e) => {
-      // IF IsDelivery set to false ( meaning it the checkbox was clicked again you set choice to false)
+      // IF you are wanting to feature equipment, set it to true, otherwise set it to false
       setFeatureEquipment(e.target.value === 'true')
   }
 
@@ -208,6 +204,17 @@ function ProductForm({ addEquipment }){
           <label htmlFor="model" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">What's the Model of this Equipment? </label>
           <input type="text" name="model" value={formik.values.model} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
         </div>
+
+        <div className="sm:col-span-2">
+          <label htmlFor="description" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Description of the Equipment</label>
+          <textarea type="text" name="description" value={formik.values.description} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" 
+          > </textarea>
+        </div>
+
+        <div className="sm:col-span-2">
+          <label htmlFor="equipment_image" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Image URL</label>
+          <input type="text" name="equipment_image" value={formik.values.equipment_image} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+        </div>
  
         <div className="sm:col-span-2">
           <label htmlFor="location" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">location, I should give them option to select other locations
@@ -238,24 +245,25 @@ function ProductForm({ addEquipment }){
 
 
         <div className="sm:col-span-2">
-          <label htmlFor="quantity" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Hourly Rate: *$ NOT REQUIRED</label>
+          <label htmlFor="hourly_rate" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Hourly Rate: *$ NOT REQUIRED</label>
           <input type="number" name="hourly_rate" value={formik.values.hourly_rate} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
         </div>
 
         <div className="sm:col-span-2">
-          <label htmlFor="quantity" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Daily Rate *$ NOT REQUIRED: </label>
+          <label htmlFor="daily_rate" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Daily Rate *$ NOT REQUIRED: </label>
           <input type="number" name="daily_rate" value={formik.values.daily_rate} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
         </div>
 
         <div className="sm:col-span-2">
-          <label htmlFor="quantity" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Weekly Rate: *$ NOT REQUIRED</label>
+          <label htmlFor="weekly_rate" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Weekly Rate: *$ NOT REQUIRED</label>
           <input type="number" name="weekly_rate" value={formik.values.weekly_rate} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
         </div>
 
         <div className="sm:col-span-2">
-          <label htmlFor="quantity" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Promo Rate: *$ NOT REQUIRED</label>
+          <label htmlFor="promo_rate" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Promo Rate: *$ NOT REQUIRED</label>
           <input type="number" name="promo_rate" value={formik.values.promo_rate} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
         </div>
+
 
         {/* <div>
           <label htmlFor="imageURL" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Picture </label>
