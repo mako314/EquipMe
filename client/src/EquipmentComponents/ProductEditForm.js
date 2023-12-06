@@ -53,70 +53,68 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
             equipment_id: oneEquipment.id
         },
         validationSchema: formSchema,
-        onSubmit: (values) => {
-            fetch(`${apiUrl}equipment/${oneEquipment.id}` , {
+        onSubmit: async (values) => {
+          try{
+            const patchResponse = await fetch(`${apiUrl}equipment/${oneEquipment.id}` , {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify(values)
             })
-              .then(res =>{
-                if (res.ok) {
-                    res.json().then(equipment => {
-                        console.log("Equipment Edit PATCH:",equipment)
-                        console.log("EDIT RES:",res)
-                        fetch (`${apiUrl}equipment/${equipment.id}/price` , {
-                            method: "PATCH",
-                            headers: {
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify(equipment)
-                        })
-                        .then(res => {
-                            if (res.ok) {
-                                res.json().then(equipment =>{
-                                    console.log("Pricing Console PATCH:",equipment)
-                                    console.log("Pricing RES:",res)
-                                    const featureURL = featureEquipment === true ? '/feature/equipment' : `${apiUrl}feature/equipment/${equipment.id}` 
-                                    const featureMethod = featureEquipment === true ? 'POST' : 'DELETE'
-                                    
-                                    console.log("featureURL:",featureURL)
-                                    console.log("featureMethod:",featureMethod)
+            if (!patchResponse.ok){
+              const patchError = await patchResponse.json()
+              setError(patchError)
+              return 
+            }
 
-                                    if (featureEquipment === true || false){
-                                        fetch (featureURL, {
-                                            method: featureMethod,
-                                            headers:{
-                                                "Content-Type": "application/json"
-                                            },
-                                            body: JSON.stringify(equipment)
-                                        })
-                                        .then(res => {
-                                            if (res.ok){
-                                                console.log("Featuring Console PATCH:",equipment)
-                                                console.log("FEATURE RES:", res)
-                                                console.log("All Patches Succesful")
-                                                checkSession()
-                                            } else{
-                                                res.json().then(error => setError(error))
-                                            }
-                                        })
-                                    }
-                                })
-                            } else {
-                                res.json().then(error => setError(error))
-                            }
-                        })
-                        // updateEquipment(equipment)
-                        // navigate(`/equipment/${equipmentToEdit.id}`)
-                    })
-                } else {
-                    res.json().then(error => setError(error)) //for backend errors
-                }
+            const equipment = await patchResponse.json()
+            console.log("THE EQUIPMENT:", equipment)
+
+            const priceResponse = await fetch(`${apiUrl}equipment/${equipment.id}/price`, {
+              method: "PATCH",
+              headers: {
+                  "Content-Type": "application/json"
+              },
+              body: JSON.stringify(equipment)
+            })
+
+            if (!priceResponse.ok) {
+              const priceError = await priceResponse.json()
+              setError(priceError)
+              return
+            }
+
+            if (featureEquipment !== null){
+              const featureURL = featureEquipment === true 
+              ? '/feature/equipment' 
+              : `${apiUrl}feature/equipment/${equipment.id}`
+              const featureMethod = featureEquipment === true ? 'POST' : 'DELETE'
+
+              const featureResponse = await fetch(featureURL, {
+                method: featureMethod,
+                headers: {
+                  "Content-Type" : "application/json"
+                },
+                body: JSON.stringify(equipment)
               })
-        }
-    })
+
+              if(!featureResponse.ok){
+                const featureError = await featureResponse.json()
+                setError(featureError)
+                return
+              }
+            }
+            checkSession();
+            // navigate(`/equipment/${equipment.id}`);
+        } catch (error) {
+            console.error("Network error:", error);
+            setError("An unexpected error occurred");
+          }
+      }
+  })
+
+
 
     console.log(oneEquipment.featured_equipment?.equipment_id === oneEquipment.id)
 

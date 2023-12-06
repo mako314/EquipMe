@@ -600,9 +600,13 @@ api.add_resource(SetFeaturedEquipment, '/feature/equipment')
 
 class HandleFeaturedEquipment(Resource):
     def delete(self, id):
-        featured_equipment = FeaturedEquipment.query.filter_by(equipment_id=id).first()
+        featured_equipment = FeaturedEquipment.query.filter(FeaturedEquipment.equipment_id==id).first()
+
+        print("The featurd equipment",featured_equipment)
+
         if featured_equipment:
             try:
+                
                 #going to need try and except if and when we do validations
                 db.session.delete(featured_equipment)
                 db.session.commit()
