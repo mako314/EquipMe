@@ -87,7 +87,7 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
 
             if (featureEquipment !== null){
               const featureURL = featureEquipment === true 
-              ? '/feature/equipment' 
+              ? `/feature/equipment/${equipment.id}` 
               : `${apiUrl}feature/equipment/${equipment.id}`
               const featureMethod = featureEquipment === true ? 'POST' : 'DELETE'
 

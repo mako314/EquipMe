@@ -576,7 +576,11 @@ api.add_resource(HandleEquipmentPricing, '/equipment/<int:id>/price')
 #-----------------------------------------------------EQUIPMENT FEATURE Classes------------------------------------------------------------------
 
 class SetFeaturedEquipment(Resource):
-    def post(self):
+    def post(self, equipment_id):
+        existing_feature = FeaturedEquipment.query.filter_by(equipment_id=equipment_id).first()
+        if existing_feature:
+            raise ValueError("You have already featured this equipment")
+
         data = request.get_json()
         try:
         #need a way to input, owner_id and owner maybe a 2 step process?
@@ -589,14 +593,10 @@ class SetFeaturedEquipment(Resource):
             response = make_response(feature_equipment.to_dict(), 201)
             return response
         
-            #if data['availability] == 'yes'
-            #availability = True
-        
         except ValueError:
             return make_response({"error": ["validations errors, check your input and try again"]} , 400)
-        # NEED TO WRITE VALIDATIONS
 
-api.add_resource(SetFeaturedEquipment, '/feature/equipment')
+api.add_resource(SetFeaturedEquipment, '/feature/equipment/<int:equipment_id>')
 
 class HandleFeaturedEquipment(Resource):
     def delete(self, id):
@@ -606,7 +606,6 @@ class HandleFeaturedEquipment(Resource):
 
         if featured_equipment:
             try:
-                
                 #going to need try and except if and when we do validations
                 db.session.delete(featured_equipment)
                 db.session.commit()
