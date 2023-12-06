@@ -17,6 +17,7 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
     const apiUrl = useContext(ApiUrlContext)
     const { currentUser, role, checkSession } = UserSessionContext()
 
+    console.log(oneEquipment)
     // Going to need to pass owner and setOwner context here, and apply some ifs comparing the owner id to the equipment owner_id. If matching, it's the owners equipment and they'll be allowed to edit the equipment. IF the equipment is out for rent, I will have to not allow adjustment of certain things I believe? 
     // Will also need to hide this link in a good spot and make it a OWNER logged in display. Users should not be able to list equipment as they should be vetted.
 
@@ -77,9 +78,15 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
                                 res.json().then(equipment =>{
                                     console.log("Pricing Console PATCH:",equipment)
                                     console.log("Pricing RES:",res)
+                                    const featureURL = featureEquipment === true ? '/feature/equipment' : `${apiUrl}feature/equipment/${equipment.id}` 
+                                    const featureMethod = featureEquipment === true ? 'POST' : 'DELETE'
+                                    
+                                    console.log("featureURL:",featureURL)
+                                    console.log("featureMethod:",featureMethod)
+
                                     if (featureEquipment === true || false){
-                                        fetch (`${apiUrl}feature/equipment/${equipment.id}`, {
-                                            method: "PATCH",
+                                        fetch (featureURL, {
+                                            method: featureMethod,
                                             headers:{
                                                 "Content-Type": "application/json"
                                             },
@@ -90,6 +97,7 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
                                                 console.log("Featuring Console PATCH:",equipment)
                                                 console.log("FEATURE RES:", res)
                                                 console.log("All Patches Succesful")
+                                                checkSession()
                                             } else{
                                                 res.json().then(error => setError(error))
                                             }
@@ -110,7 +118,11 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
         }
     })
 
-    
+    console.log(oneEquipment.featured_equipment?.equipment_id === oneEquipment.id)
+
+    // console.log(oneEquipment.featured_equipment[0].equipment_id)
+    // console.log(oneEquipment.id)
+
     const handleFeaturingEquipment = (e) => {
         // IF you are wanting to feature equipment, set it to true, otherwise set it to false
         setFeatureEquipment(e.target.value === 'true')
@@ -226,8 +238,8 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
             <button onClick={uploadImage}> Upload Image </button>
         </div> */}
 
-            <div className="mt-6 flex"> 
-
+            <div className="mt-6 flex">     
+            <span> This item is {oneEquipment.featured_equipment[0]?.equipment_id === oneEquipment.id ? 'Currently Featured': 'Not Featured' }</span>
             <label className="inline-flex items-center font-bold text-gray-900">
                 <input
                     type="radio"
