@@ -55,9 +55,9 @@ function EquipmentDisplay({}) {
 
   const equip_prices = equipment_price?.map((price) => {
     return <Fragment key={oneEquipment.id}>
-    <span className="title-font font-medium text-2xl text-white">Hourly Rate: ${price.hourly_rate/100}</span>
-    <span className="title-font font-medium text-2xl text-white">Daily Rate: ${price.daily_rate/100}</span>
-    <span className="title-font font-medium text-2xl text-white">Weekly Rate: ${price.weekly_rate/100}</span>
+    <span className="title-font font-medium text-2xl text-white">Hourly Rate: <br></br>${price.hourly_rate/100}</span>
+    <span className="title-font font-medium text-2xl text-white">Daily Rate: <br></br>${price.daily_rate/100}</span>
+    <span className="title-font font-medium text-2xl text-white">Weekly Rate: <br></br>${price.weekly_rate/100}</span>
     </Fragment>
   })
 
@@ -164,7 +164,7 @@ function EquipmentDisplay({}) {
               <AddToCartModal equip_id={id} oneEquipment={oneEquipment} toggleModal={toggleModal} isModalOpen={isModalOpen}/>}
               
               {role === 'owner' && currentUser.id === oneEquipment.owner_id && 
-              <button type="submit" className="inline-block rounded-lg bg-orange-500 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 md:text-base" onClick={handleEditNavigation}>Edit Equipment</button>}
+              <button className="inline-block rounded-lg bg-orange-500 px-8 ml-2 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 md:text-base" onClick={handleEditNavigation}>Edit Equipment</button>}
               
               {role === 'user' && 
               <button className="rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4" onClick={handleFavoriteSelection}>

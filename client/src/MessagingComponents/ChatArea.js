@@ -82,8 +82,8 @@ function ChatArea({inboxes, SelectedThreadID, setNewMessage, newMessage, setInbo
                   <div className="flex items-center"> 
                     <img
                       src={
-                        message.sender_id === currentUser?.id && message.user_type === "user" ? 
-                        currentUser?.profileImage : message.sender_id === currentUser?.id && message.user_type === "owner" ? 
+                        message.sender_id === currentUser?.id && message.user_type === role ? 
+                        currentUser?.profileImage : message.sender_id === currentUser?.id && message.user_type === role ? 
                         currentUser?.profileImage : recipientInfo?.profileImage
                       }
                       alt="Avatar"
