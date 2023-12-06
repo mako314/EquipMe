@@ -9,7 +9,7 @@ import { UserSessionContext } from "../UserComponents/SessionContext";
 function ProductEditForm({equipmentToEdit, updateEquipment}){
     
     //Going to likely need owner context and check session here also
-    const [featureEquipment, setFeatureEquipment] = useState(false)
+    const [featureEquipment, setFeatureEquipment] = useState(null)
     const [error, setError] = useState()
     const navigate = useNavigate()
     const location = useLocation()
@@ -24,7 +24,11 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
     const formSchema = object({
         name: string().required('Please enter a name'),
         quantity: number().positive().required('You cannot list less than 0 items.'),
-        email: string().required('Please enter an email address')
+        quantity: number().positive().required('You cannot list less than 0 items.'),
+        hourly_rate: number().positive().required('Must be a positive dollar amount.'),
+        daily_rate: number().positive().required('Must be a positive dollar amount.'),
+        weekly_rate: number().positive().required('Must be a positive dollar amount.'),
+        promo_rate: number().positive().required('Must be a positive dollar amount.'),
     })
 
     const formik = useFormik({
@@ -41,15 +45,15 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
             equipment_image: oneEquipment.equipment_image,
             description: oneEquipment.description,
             imageURL: '',
-            hourly_rate : oneEquipment.equipment_price[0].hourly_rate,
-            daily_rate : oneEquipment.equipment_price[0].daily_rate,
-            weekly_rate : oneEquipment.equipment_price[0].weekly_rate,
-            promo_rate : oneEquipment.equipment_price[0].promo_rate,
+            hourly_rate : (oneEquipment.equipment_price[0].hourly_rate) / 100  ,
+            daily_rate : (oneEquipment.equipment_price[0].daily_rate ) / 100 ,
+            weekly_rate : (oneEquipment.equipment_price[0].weekly_rate) / 100  ,
+            promo_rate : (oneEquipment.equipment_price[0].promo_rate ) / 100 ,
             equipment_id: oneEquipment.id
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
-            fetch(`${apiUrl}equipment/${equipmentToEdit.id}` , {
+            fetch(`${apiUrl}equipment/${oneEquipment.id}` , {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json"
@@ -59,10 +63,10 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
               .then(res =>{
                 if (res.ok) {
                     res.json().then(equipment => {
-                        console.log("Pricing Console PATCH:",equipment)
-
-                        fetch (`${apiUrl}equipment/price` , {
-                            method: "POST",
+                        console.log("Equipment Edit PATCH:",equipment)
+                        console.log("EDIT RES:",res)
+                        fetch (`${apiUrl}equipment/${equipment.id}/price` , {
+                            method: "PATCH",
                             headers: {
                                 "Content-Type": "application/json"
                             },
@@ -71,10 +75,11 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
                         .then(res => {
                             if (res.ok) {
                                 res.json().then(equipment =>{
-                                    console.log("Featuring Console PATCH:",equipment)
+                                    console.log("Pricing Console PATCH:",equipment)
+                                    console.log("Pricing RES:",res)
                                     if (featureEquipment === true || false){
-                                        fetch (`${apiUrl}feature/equipment`, {
-                                            method: "POST",
+                                        fetch (`${apiUrl}feature/equipment/${equipment.id}`, {
+                                            method: "PATCH",
                                             headers:{
                                                 "Content-Type": "application/json"
                                             },
@@ -82,6 +87,8 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
                                         })
                                         .then(res => {
                                             if (res.ok){
+                                                console.log("Featuring Console PATCH:",equipment)
+                                                console.log("FEATURE RES:", res)
                                                 console.log("All Patches Succesful")
                                             } else{
                                                 res.json().then(error => setError(error))
@@ -150,7 +157,7 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
 
         <div className="sm:col-span-2">
           <label htmlFor="description" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Description of the Equipment</label>
-          <textarea type="text" name="description" value={formik.values.description} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" 
+          <textarea type="text" name="description" value={formik.values.description} onChange={formik.handleChange} className="w-full h-48  rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" 
           > </textarea>
         </div>
 
