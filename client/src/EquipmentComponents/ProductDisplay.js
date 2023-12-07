@@ -41,7 +41,7 @@ function EquipmentDisplay({}) {
   // console.log("THE ROLE IS:", role)
   const navigate = useNavigate()
 
-  console.log("Is favorited Status:", isFavorited)
+  // console.log("Is favorited Status:", isFavorited)
 
   useEffect(() => {
     fetch(`${apiUrl}equipment/${id}`)
@@ -51,7 +51,7 @@ function EquipmentDisplay({}) {
       })
   }, [])
 
-  console.log("Display Page one equipment:", oneEquipment)
+  // console.log("Display Page one equipment:", oneEquipment)
 
   const equip_prices = equipment_price?.map((price) => {
     return <Fragment key={oneEquipment.id}>
@@ -74,7 +74,7 @@ function EquipmentDisplay({}) {
         <AddToCartModal equip_id={id} oneEquipment={oneEquipment} toggleModal={toggleModal} isModalOpen={isModalOpen}/>
       )
       const favoriteStatus = currentUser?.user_favorite?.some(favorite => favorite.equipment_id === parseInt(id, 10))
-      console.log("FAVORITE STATUS:", favoriteStatus)
+      // console.log("FAVORITE STATUS:", favoriteStatus)
       setHeartColor(favoriteStatus ? "red" : "white")
       // I can't just set is favorited and try it with heart color, it's just too quick and defaults, so I make a variable that contains data and set it to that.
       setIsFavorited(favoriteStatus)
@@ -90,7 +90,7 @@ function EquipmentDisplay({}) {
   // https://react.dev/learn/preserving-and-resetting-state
   // https://react.dev/reference/react/useRef
   const handleFavoriteSelection = () => {
-    console.log(isFavorited)
+    // console.log(isFavorited)
     // Conditional method and URL based on whether is favorited doesn't exist off the useEffect
     const method = !isFavorited ? "POST" : "DELETE"
     const url = !isFavorited ? `${apiUrl}user/${currentUser.id}/favorite/equipment/${id}` : `${apiUrl}remove/user/${currentUser.id}/favorite/equipment/${id}`

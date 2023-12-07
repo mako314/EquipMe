@@ -4,7 +4,7 @@ import UserContext from "../UserComponents/UserContext";
 import ApiUrlContext from "../Api";
 import { UserSessionContext } from "../UserComponents/SessionContext";
 
-function RentalAgreementsCollection({ }) {
+function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
     const { currentUser, role} = UserSessionContext()
     const apiUrl = useContext(ApiUrlContext)
     console.log(currentUser)
@@ -36,6 +36,7 @@ function RentalAgreementsCollection({ }) {
       item.agreements?.map(agreement=>
       <RentalAgreementCard
       key={item.id}
+      rentalId={item.id}
       cartName={cart.cart_name}
       quantity={item.quantity}
       equipmentName={item.equipment.name}
@@ -53,6 +54,8 @@ function RentalAgreementsCollection({ }) {
       ownerEmail ={item.equipment.owner.email}
       ownerFirstName = {item.equipment.owner.firstName}
       ownerLastName ={item.equipment.owner.lastName}
+      setFromOwnerDash={setFromOwnerDash} 
+      fromOwnerDash={fromOwnerDash}
       />
         ) || []
       ) || []
@@ -60,6 +63,7 @@ function RentalAgreementsCollection({ }) {
     rentalCards = currentUser?.agreements?.map(agreement => 
       <RentalAgreementCard
       key={agreement.id}
+      rentalId={agreement.id}
       cartName={agreement.cart_item.cart.cart_name}
       quantity={agreement.cart_item.quantity}
       equipmentName={agreement.cart_item.equipment.name}
@@ -77,6 +81,8 @@ function RentalAgreementsCollection({ }) {
       ownerEmail ={currentUser.email}
       ownerFirstName = {currentUser.firstName}
       ownerLastName ={currentUser.lastName}
+      setFromOwnerDash={setFromOwnerDash} 
+      fromOwnerDash={fromOwnerDash}
       />)
   }
 

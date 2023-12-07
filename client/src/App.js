@@ -357,7 +357,7 @@ function App() {
             <Route path='/cart' element={<Cart/>} />
 
             {/* Rental Display */}
-            <Route path='/handle/agreements' element={<RentalAgreementDisplay/>} />
+            <Route path='/handle/agreements/:rental_agreement_id' element={<RentalAgreementDisplay/>} />
 
 
           </Routes>

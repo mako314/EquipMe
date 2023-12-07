@@ -334,6 +334,7 @@ class RentalAgreement(db.Model, SerializerMixin):
 
     agreement_status = db.Column(db.String)
     # Ex. in progress, user-accepted, owner-accepted, both-accepted (All Parties Accepted)
+    # Should I have it completed at a certain point? Like Rental Completed?
 #----------------------------------------------------------------
     #relationships
     #do a cascade to make life easier 

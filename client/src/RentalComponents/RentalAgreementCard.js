@@ -1,12 +1,24 @@
 import React from "react";
+import {useNavigate} from 'react-router-dom';
 
-function RentalAgreementCard({ equipmentName, rentalStart, rentalEnd, renterFirstName, renterLastName, location, ownerEmail, ownerFirstName, ownerLastName, cartName, quantity, rentalDelivery, rentalDeliveryAddress, rentalRevisions, rentalStatus,rentalCreatedAt, rentalUpdatedAt }) {
-    
+function RentalAgreementCard({ equipmentName, rentalId, rentalStart, rentalEnd, renterFirstName, renterLastName, location, ownerEmail, ownerFirstName, ownerLastName, cartName, quantity, rentalDelivery, rentalDeliveryAddress, rentalRevisions, rentalStatus,rentalCreatedAt, rentalUpdatedAt, setFromOwnerDash, fromOwnerDash }) {
+    const navigate = useNavigate()
     // May be a good idea to draw how exactly status should work, 
     // one side accepted, both, in progress, etc
     // console.log("The rental status:", rentalStatus)
     // console.log("The type of:", typeof(rentalDelivery))
     // console.log(item)
+
+    const rentalAgreementStatuses = ['in-progress', 'user-accepted', 'owner-accepted', 'both-accepted']
+
+    const showHandleButton = rentalAgreementStatuses.includes(rentalStatus)
+
+    const navigateToAgreementHandling = () => {
+        // setFromOwnerDash(!fromOwnerDash)
+        setFromOwnerDash(!fromOwnerDash)
+        navigate(`/handle/agreements/${rentalId}`)
+    }
+
     return (
 
             <div className="w-full max-w-sm overflow-hidden bg-white rounded-lg shadow-lg mb-4 mt-3 mx-2">
@@ -90,6 +102,10 @@ function RentalAgreementCard({ equipmentName, rentalStart, rentalEnd, renterFirs
             </div>
 
         </div>
+        {showHandleButton && fromOwnerDash && 
+        <button className="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded bg-amber-500 px-5 text-sm font-medium tracking-wide text-white shadow-md shadow-amber-200 transition duration-300 hover:bg-emerald-600 hover:shadow-sm hover:shadow-emerald-200 focus:bg-emerald-700 focus:shadow-sm focus:shadow-emerald-200 focus-visible:outline-none disabled:cursor-not-allowed disabled:border-emerald-300 disabled:bg-emerald-300 disabled:shadow-none"  onClick={navigateToAgreementHandling}>
+        Handle This Agreement
+        </button>}
     </div>
         
     )

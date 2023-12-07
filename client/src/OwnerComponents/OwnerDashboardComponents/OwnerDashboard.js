@@ -72,8 +72,10 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
 
 
     function RentalAgreements() {
+        setFromOwnerDash(true)
+        console.log("RENTAL AGREEMENTS IN OWNER DASH FROM OWNER DASH:", fromOwnerDash)
         return(<>
-            <RentalAgreementsCollection/>
+            <RentalAgreementsCollection setFromOwnerDash={setFromOwnerDash} fromOwnerDash={fromOwnerDash}/>
         </>)
     }
 
@@ -81,14 +83,15 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
         fetch(`${apiUrl}owners/${currentUser?.profession}`)
         .then((resp) => resp.json())
         .then((data) => {
-            const ownerCollection = (
+            
+            const ownerCollection = data.length > 0 ? (
                 <OwnerCollection
                     key={"dash"}
                     searchTerm={searchTerm} 
                     equipmentOwnerArray={data} 
                     setFromOwnerDash={setFromOwnerDash} 
                     fromOwnerDash={fromOwnerDash}/>
-            )
+            ) : <div> currently no Owners signed up with the same profession</div>
             setToggleHomeDash(ownerCollection)
         })
     }

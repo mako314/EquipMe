@@ -18,7 +18,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
   const [dayRange, setDayRange] = useState('')
   const [rentalLength, setRentalLength] = useState(1)
   const [equipmentQuantity, setEquipmentQuantity] = useState(1)
-  const [currentCart, setCurrentCart] = useState({}) // I need to work this out, like ASAP
+  const [currentCart, setCurrentCart] = useState({}) 
   const [cartData, setCartData] = useState([])
   const [isDelivery, setIsDelivery] = useState(false)
   const [deliveryAddress, setDeliveryAddress] = useState('')
@@ -34,7 +34,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
   const { equipment_price, equipment_image } = oneEquipment
 
   // console.log("Equipment price:", equipment_price)
-  console.log("Your Equipment:",oneEquipment)
+  // console.log("Your Equipment:",oneEquipment)
 
   useEffect(() => {
     if (role === 'user') {
@@ -74,7 +74,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
   <option className="text-black"value="promo">Promo</option>
   </>
 
-  // I need to work this out, like ASAP
+  // Cart options are mapped from a users cart data, using the value to find and set current cart
   const cartOptions = cartData?.map((item) => {
     return (
     <Fragment key={`${item.id} ${item.cart_name}`}>
@@ -83,7 +83,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
     </Fragment>)
   })
 
-  console.log("CART OPTIONS:",cartOptions)
+  // console.log("CART OPTIONS:",cartOptions)
   
   // //Toggles modal to ADD to cart
   // const toggleModal = () => {
@@ -98,9 +98,16 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
 
   //Selects which cart you're trying to add it to
   const handleCartChange = (e) => {
-    // this has been grabbing the ID. But I made currentCart an object, wonder if it is the best practice?
-    console.log("THE CART CHANGE",e.target.value)
-    setCurrentCart(e.target.value)
+    // this has been grabbing the ID. But I made currentCart an object, wonder if it is the best practice? I think so.
+    // Ended up using a variable to grab the target . value, state would set it in one go, and then you'd need to click again to get that state value.
+    const selectedCartId = e.target.value
+    console.log("THE CART ID",selectedCartId)
+
+    const selectedCart = cartData.find(item => item.id.toString() === selectedCartId)
+    console.log("THE CART CHANGE:",selectedCart)
+    if (selectedCart) {
+        setCurrentCart(selectedCart)
+    }
   }
 
   //Concide rate with rental length (dayRange)
@@ -152,9 +159,9 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
   // console.log("This is the selected rate:",selectedRate)
   // console.log("This is the equipment quantity:",equipmentQuantity)
   // console.log("This is the equipment ID:",equip_id)
-  console.log("This is the current cart ID:",currentCart.id)
-  console.log("ALL THE CART DATA:", cartData)
-  console.log("REAL CURRENT CART ID:", currentCart)
+  // console.log("This is the current cart ID:",currentCart.id)
+  // console.log("ALL THE CART DATA:", cartData)
+  console.log("REAL CURRENT CART:", currentCart)
 
   function handleAddToCartClick() {
     if(startRental === '' || endRental === ''){
@@ -174,12 +181,8 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
       'quantity' : equipmentQuantity,
       'equipment_id' : equip_id
     }
-    // let rental_length = rentalLength
-    // let rental_rate = selectedRate
-    // let quantity = equipmentQuantity
-    // let equipment_id = equip_id
 
-    fetch(`${apiUrl}cart/${currentCart}`, {
+    fetch(`${apiUrl}cart/${currentCart.id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -193,7 +196,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
             //-1 in the cart_name, arrays index start at 0, but this grabs the correct ID. So If I select first cart, it's ID of 1. But in the array index it's 0.
             if(startRental && endRental){
             let cartAndEquipment = {
-              'cart_id': currentCart,
+              'cart_id': currentCart.id,
               'equipment_id': oneEquipment.id
             }
 
@@ -223,7 +226,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
               if (resp.ok) {
                 resp.json().then((rentalAgreementData) => {
                   console.log("The new rental agreement", rentalAgreementData)
-                  toast.success(`🛒 Succesfully added ${newCartItem.quantity} ${oneEquipment.make} ${oneEquipment.name} ${oneEquipment.model}, to ${currentUser.cart_name}`,
+                  toast.success(`🛒 Succesfully added ${newCartItem.quantity} ${oneEquipment.make} ${oneEquipment.name} ${oneEquipment.model}, to ${currentCart.cart_name} `,
                   {
                     "autoClose" : 2000
                   })
@@ -336,7 +339,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
                                   {/* CART SELECTION*/}
                                   <select
                                         className="text-sm font-medium text-gray-900 dark:text-gray-300 border-2 border-black"
-                                        value={currentCart} 
+                                        value={currentCart.id} 
                                         onChange={handleCartChange}>
                                         {cartOptions}
                                   </select>
