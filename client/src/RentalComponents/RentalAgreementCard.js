@@ -1,7 +1,7 @@
 import React from "react";
 import {useNavigate} from 'react-router-dom';
 
-function RentalAgreementCard({ equipmentName, rentalStart, rentalEnd, renterFirstName, renterLastName, location, ownerEmail, ownerFirstName, ownerLastName, cartName, quantity, rentalDelivery, rentalDeliveryAddress, rentalRevisions, rentalStatus,rentalCreatedAt, rentalUpdatedAt, setFromOwnerDash, fromOwnerDash }) {
+function RentalAgreementCard({ equipmentName, rentalId, rentalStart, rentalEnd, renterFirstName, renterLastName, location, ownerEmail, ownerFirstName, ownerLastName, cartName, quantity, rentalDelivery, rentalDeliveryAddress, rentalRevisions, rentalStatus,rentalCreatedAt, rentalUpdatedAt, setFromOwnerDash, fromOwnerDash }) {
     const navigate = useNavigate()
     // May be a good idea to draw how exactly status should work, 
     // one side accepted, both, in progress, etc
@@ -16,7 +16,7 @@ function RentalAgreementCard({ equipmentName, rentalStart, rentalEnd, renterFirs
     const navigateToAgreementHandling = () => {
         // setFromOwnerDash(!fromOwnerDash)
         setFromOwnerDash(!fromOwnerDash)
-        navigate(`/handle/agreements`)
+        navigate(`/handle/agreements/${rentalId}`)
     }
 
     return (

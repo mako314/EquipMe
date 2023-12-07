@@ -1,6 +1,7 @@
 import React, {useState, useContext, useEffect} from "react"
 import RentalAgreementCard from "./RentalAgreementCard";
 import { UserSessionContext } from "../UserComponents/SessionContext";
+import { useParams, useNavigate } from 'react-router-dom'
 import ApiUrlContext from "../Api";
 import {toast} from 'react-toastify'
 
@@ -15,6 +16,8 @@ function RentalAgreementDisplay() {
     const [deliveryChoice, setDeliveryChoice] = useState(null)
     const [isDeliveryAddress, setIsDeliveryAddress] = useState(false)
     const [deliveryAddress, setDeliveryAddress] = useState(false)
+
+    const { rental_agreement_id } = useParams()
 
     const formatDate = (date) => {
         // Was having a lot of issues and couldn't tell where from, so I wrote some validations to test what could be going wrong
@@ -102,6 +105,39 @@ function RentalAgreementDisplay() {
     })
     }
 
+    // iterate over allAgreements and find the agreement within each theAgreement property, match it with useParams that was clicked on the card. 
+    const selectedAgreement = allAgreements.find(agreementObj => agreementObj.theAgreement.id.toString() === rental_agreement_id)?.theAgreement
+    // console.log("THE TYPE OF allAgreements.theAgreement:", typeof(allAgreements))
+    // console.log("THE RENTAL ID:", rental_agreement_id)
+    // console.log("THE SELECTED AGREEMENT:",selectedAgreement)
+
+    // https://www.w3schools.com/jsref/jsref_findindex.asp
+    // Take what we just did with find, but we're only really looking for the index since we have all the agreement information anyway.
+    // const selectedAgreementIndex = allAgreements.findIndex(agreementObj => 
+    //     agreementObj.theAgreement.id.toString() === rental_agreement_id
+    // )
+    // setCurrentAgreementIndex(selectedAgreementIndex)
+
+    // if(selectedAgreementIndex){
+    //  
+    // }
+
+    // Looping because issue where it causes an infinite loop
+    useEffect(() => {
+        const selectedAgreementIndex = allAgreements.findIndex(agreementObj => 
+            agreementObj.theAgreement.id.toString() === rental_agreement_id
+        )
+
+        console.log("THE SELECTED AGREEMENT INDEX:", selectedAgreementIndex)
+    
+        if (selectedAgreementIndex !== -1) {
+            setCurrentAgreementIndex(selectedAgreementIndex);
+        }
+
+    }, [rental_agreement_id])
+
+    
+
     // console.log(currentUser)
     // console.log("RENTAL AGREEMENT ARRAY LENGTH:",allAgreements)
 
@@ -112,7 +148,7 @@ function RentalAgreementDisplay() {
 
     // console.log("Other USER:", otherUser)
 
-    //So I decided to make an object be pushed into AllAgreements, that way I'll have access to user information too, and it'll be much cleaner. It's one rental agreement per, so I didn't need to grab the currentAgreementIndex for it.
+    //So I decided to make an object be pushed into AllAgreements, that way I'll have access to user information too, and it'll be much cleaner. It's one rental agreement per, so I didn't need to grab the currentAgreementIndex for it. This puts out all the comments
     const comments = allAgreements[currentAgreementIndex]?.theAgreement.comment?.map((item) => (
         <div key={item.id} className="mb-6 w-full overflow-hidden bg-[#f2f2f7] p-8 rounded-sm border-b border-black">
         <div className="flex items-start mb-2">
@@ -139,9 +175,6 @@ function RentalAgreementDisplay() {
 
         console.log("DELIVERY CHOICE:", deliveryChoice)
         console.log("DELIVERY ADDRESS:", deliveryAddress)
-
-
-
         //Handle agreement submission
         if(deliveryChoice || deliveryChoice === true && deliveryAddress){
         updatedAgreement = {
@@ -173,7 +206,6 @@ function RentalAgreementDisplay() {
             })
         }
 
-
         console.log("THE AGREEMENT:",updatedAgreement)
 
         fetch(`${apiUrl}rental/agreements/${allAgreements[currentAgreementIndex]?.theAgreement.id}`, {
@@ -191,6 +223,7 @@ function RentalAgreementDisplay() {
         })}
 
     
+    //HANDLES POSTING A COMMENT, 
     const handleAddComment = (e) => {
         e.preventDefault()
 
@@ -202,7 +235,6 @@ function RentalAgreementDisplay() {
     }
 
     // console.log( "RENTAL COMMENT:", rentalComment)
-
     fetch(`${apiUrl}rental/comment`, {
         method: "POST",
         headers: {
@@ -216,8 +248,9 @@ function RentalAgreementDisplay() {
             checkSession()
             // Going to do a spread operator thing 
         }
-    })
-    }
+    })}
+
+    // USEEFFECT FOR HAVING RIGHT ARROW NAD LEFT ARROW KEY trigger next and previous 
     useEffect(() => {
         const keyDownHandler = (e) => {
         if(e.key === 'ArrowRight'){
@@ -228,14 +261,15 @@ function RentalAgreementDisplay() {
         document.addEventListener("keydown", keyDownHandler)
         // console.log(`You pressed ${e.code}.`)
 
-    
         // clean up
         return () => {
           document.removeEventListener("keydown", keyDownHandler)
         }
       }, [allAgreements.length])
 
+
     const goToNextAgreement = () => {
+        //go to next agreement
         setCurrentAgreementIndex((prevIndex) =>
           prevIndex < allAgreements.length - 1 ? prevIndex + 1 : 0
         )
@@ -243,6 +277,7 @@ function RentalAgreementDisplay() {
       }
 
     const goToPreviousAgreement = () => {
+        //go to previous agreement
         setCurrentAgreementIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : allAgreements.length - 1))
         resetAgreementForm()
     }
@@ -341,6 +376,8 @@ function RentalAgreementDisplay() {
                 }
 
                 <br></br>
+                {deliveryChoice && 
+                <div> 
                 <input
                 type="checkbox"
                 id="delivery_address_checkbox"
@@ -350,8 +387,9 @@ function RentalAgreementDisplay() {
                 onChange={handleDeliveryAddressToggle}
                 />
                 <label htmlFor="delivery_address_checkbox"> Edit delivery address</label>
-
-                {isDeliveryAddress && (
+                </div>
+                }
+                {isDeliveryAddress && deliveryChoice && (
                     <> 
                     {/* https://www.w3schools.com/jsref/prop_radio_defaultchecked.asp#:~:text=Description,default%2C%20otherwise%20it%20returns%20false. */}
                     <input

@@ -36,6 +36,7 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
       item.agreements?.map(agreement=>
       <RentalAgreementCard
       key={item.id}
+      rentalId={item.id}
       cartName={cart.cart_name}
       quantity={item.quantity}
       equipmentName={item.equipment.name}
@@ -62,6 +63,7 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
     rentalCards = currentUser?.agreements?.map(agreement => 
       <RentalAgreementCard
       key={agreement.id}
+      rentalId={agreement.id}
       cartName={agreement.cart_item.cart.cart_name}
       quantity={agreement.cart_item.quantity}
       equipmentName={agreement.cart_item.equipment.name}
