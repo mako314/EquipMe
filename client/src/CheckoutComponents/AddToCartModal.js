@@ -18,8 +18,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
   const [dayRange, setDayRange] = useState('')
   const [rentalLength, setRentalLength] = useState(1)
   const [equipmentQuantity, setEquipmentQuantity] = useState(1)
-  const [currentCart, setCurrentCart] = useState({}) // I need to work this out, like ASAP
-  // const [cartId, setCartId] = useState(0)
+  const [currentCart, setCurrentCart] = useState({}) 
   const [cartData, setCartData] = useState([])
   const [isDelivery, setIsDelivery] = useState(false)
   const [deliveryAddress, setDeliveryAddress] = useState('')
@@ -75,7 +74,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
   <option className="text-black"value="promo">Promo</option>
   </>
 
-  // I need to work this out, like ASAP
+  // Cart options are mapped from a users cart data, using the value to find and set current cart
   const cartOptions = cartData?.map((item) => {
     return (
     <Fragment key={`${item.id} ${item.cart_name}`}>
@@ -99,7 +98,8 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
 
   //Selects which cart you're trying to add it to
   const handleCartChange = (e) => {
-    // this has been grabbing the ID. But I made currentCart an object, wonder if it is the best practice?
+    // this has been grabbing the ID. But I made currentCart an object, wonder if it is the best practice? I think so.
+    // Ended up using a variable to grab the target . value, state would set it in one go, and then you'd need to click again to get that state value.
     const selectedCartId = e.target.value
     console.log("THE CART ID",selectedCartId)
 
@@ -181,10 +181,6 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
       'quantity' : equipmentQuantity,
       'equipment_id' : equip_id
     }
-    // let rental_length = rentalLength
-    // let rental_rate = selectedRate
-    // let quantity = equipmentQuantity
-    // let equipment_id = equip_id
 
     fetch(`${apiUrl}cart/${currentCart.id}`, {
         method: "POST",

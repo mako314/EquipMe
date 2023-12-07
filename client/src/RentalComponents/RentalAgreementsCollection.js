@@ -4,7 +4,7 @@ import UserContext from "../UserComponents/UserContext";
 import ApiUrlContext from "../Api";
 import { UserSessionContext } from "../UserComponents/SessionContext";
 
-function RentalAgreementsCollection({ }) {
+function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
     const { currentUser, role} = UserSessionContext()
     const apiUrl = useContext(ApiUrlContext)
     console.log(currentUser)
@@ -53,6 +53,8 @@ function RentalAgreementsCollection({ }) {
       ownerEmail ={item.equipment.owner.email}
       ownerFirstName = {item.equipment.owner.firstName}
       ownerLastName ={item.equipment.owner.lastName}
+      setFromOwnerDash={setFromOwnerDash} 
+      fromOwnerDash={fromOwnerDash}
       />
         ) || []
       ) || []
@@ -77,6 +79,8 @@ function RentalAgreementsCollection({ }) {
       ownerEmail ={currentUser.email}
       ownerFirstName = {currentUser.firstName}
       ownerLastName ={currentUser.lastName}
+      setFromOwnerDash={setFromOwnerDash} 
+      fromOwnerDash={fromOwnerDash}
       />)
   }
 
