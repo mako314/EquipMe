@@ -576,7 +576,11 @@ api.add_resource(HandleEquipmentPricing, '/equipment/<int:id>/price')
 #-----------------------------------------------------EQUIPMENT FEATURE Classes------------------------------------------------------------------
 
 class SetFeaturedEquipment(Resource):
-    def post(self):
+    def post(self, equipment_id):
+        existing_feature = FeaturedEquipment.query.filter_by(equipment_id=equipment_id).first()
+        if existing_feature:
+            raise ValueError("You have already featured this equipment")
+
         data = request.get_json()
         try:
         #need a way to input, owner_id and owner maybe a 2 step process?
@@ -589,18 +593,17 @@ class SetFeaturedEquipment(Resource):
             response = make_response(feature_equipment.to_dict(), 201)
             return response
         
-            #if data['availability] == 'yes'
-            #availability = True
-        
         except ValueError:
             return make_response({"error": ["validations errors, check your input and try again"]} , 400)
-        # NEED TO WRITE VALIDATIONS
 
-api.add_resource(SetFeaturedEquipment, '/feature/equipment')
+api.add_resource(SetFeaturedEquipment, '/feature/equipment/<int:equipment_id>')
 
 class HandleFeaturedEquipment(Resource):
     def delete(self, id):
-        featured_equipment = FeaturedEquipment.query.filter_by(equipment_id=id).first()
+        featured_equipment = FeaturedEquipment.query.filter(FeaturedEquipment.equipment_id==id).first()
+
+        print("The featurd equipment",featured_equipment)
+
         if featured_equipment:
             try:
                 #going to need try and except if and when we do validations
@@ -731,7 +734,7 @@ class RentalAgreements(Resource):
         
         equipment = Equipment.query.filter(Equipment.id == equipment_id).first()
         if not equipment:
-            return {"error": "Equipment not found"}, 404
+            return make_response({"error": "Equipment not found"}, 404)
 
         #need a way to grab equipment and owner
         # load category and then from there display 
@@ -1153,9 +1156,9 @@ class CartByUserID(Resource):
         
 api.add_resource(CartByUserID, "/user/<int:user_id>/cart/")
 
-class CartByCartID(Resource):
-    def get(self,cart_id):
-        cart = Cart.query.filter(Cart.id == cart_id).first()
+class UserCartByCartID(Resource):
+    def get(self,cart_id, user_id):
+        cart = Cart.query.filter_by(id = cart_id, user_id = user_id).first()
         if cart:
             return make_response(cart.to_dict(),200)
         else:
@@ -1164,8 +1167,8 @@ class CartByCartID(Resource):
             }, 404)
             return response
         
-    def patch(self, cart_id):
-        cart = Cart.query.filter(Cart.id == cart_id).first()
+    def patch(self, cart_id, user_id):
+        cart = Cart.query.filter_by(id = cart_id, user_id = user_id).first()
 
         if cart:
             data = request.get_json()
@@ -1181,8 +1184,8 @@ class CartByCartID(Resource):
             }, 404)
             return response
     
-    def delete(self, cart_id):
-        cart = Cart.query.filter(Cart.id == cart_id).first()
+    def delete(self, cart_id, user_id):
+        cart = Cart.query.filter_by(id = cart_id, user_id = user_id).first()
 
         if cart:
             db.session.delete(cart)
@@ -1195,7 +1198,7 @@ class CartByCartID(Resource):
             }, 404)
             return response
         
-api.add_resource(CartByCartID, "/cart/<int:cart_id>")
+api.add_resource(UserCartByCartID, "/user/<int:user_id>/cart/<int:cart_id>")
 
 class AddItemToCart(Resource):
     def post(self,cart_id):

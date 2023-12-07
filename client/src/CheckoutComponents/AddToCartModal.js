@@ -4,6 +4,7 @@ import { UserSessionContext } from '../UserComponents/SessionContext'
 import Calendar from '../CalendarComponents/Calendar'
 import CreateNewCart from './CreateNewCart'
 import {toast} from 'react-toastify'
+import { object } from 'yup'
 
 function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
 
@@ -17,7 +18,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
   const [dayRange, setDayRange] = useState('')
   const [rentalLength, setRentalLength] = useState(1)
   const [equipmentQuantity, setEquipmentQuantity] = useState(1)
-  const [currentCart, setCurrentCart] = useState(1)
+  const [currentCart, setCurrentCart] = useState({}) // I need to work this out, like ASAP
   const [cartData, setCartData] = useState([])
   const [isDelivery, setIsDelivery] = useState(false)
   const [deliveryAddress, setDeliveryAddress] = useState('')
@@ -73,6 +74,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
   <option className="text-black"value="promo">Promo</option>
   </>
 
+  // I need to work this out, like ASAP
   const cartOptions = cartData?.map((item) => {
     return (
     <Fragment key={`${item.id} ${item.cart_name}`}>
@@ -80,6 +82,8 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
     
     </Fragment>)
   })
+
+  console.log("CART OPTIONS:",cartOptions)
   
   // //Toggles modal to ADD to cart
   // const toggleModal = () => {
@@ -94,6 +98,8 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
 
   //Selects which cart you're trying to add it to
   const handleCartChange = (e) => {
+    // this has been grabbing the ID. But I made currentCart an object, wonder if it is the best practice?
+    console.log("THE CART CHANGE",e.target.value)
     setCurrentCart(e.target.value)
   }
 
@@ -146,7 +152,9 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
   // console.log("This is the selected rate:",selectedRate)
   // console.log("This is the equipment quantity:",equipmentQuantity)
   // console.log("This is the equipment ID:",equip_id)
-  console.log("This is the current cart ID:",cartData[currentCart - 1]?.id)
+  console.log("This is the current cart ID:",currentCart.id)
+  console.log("ALL THE CART DATA:", cartData)
+  console.log("REAL CURRENT CART ID:", currentCart)
 
   function handleAddToCartClick() {
     if(startRental === '' || endRental === ''){
@@ -185,7 +193,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
             //-1 in the cart_name, arrays index start at 0, but this grabs the correct ID. So If I select first cart, it's ID of 1. But in the array index it's 0.
             if(startRental && endRental){
             let cartAndEquipment = {
-              'cart_id': cartData[currentCart - 1]?.id,
+              'cart_id': currentCart,
               'equipment_id': oneEquipment.id
             }
 
@@ -215,7 +223,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
               if (resp.ok) {
                 resp.json().then((rentalAgreementData) => {
                   console.log("The new rental agreement", rentalAgreementData)
-                  toast.success(`🛒 Succesfully added ${newCartItem.quantity} ${oneEquipment.make} ${oneEquipment.name} ${oneEquipment.model}, to ${cartData[currentCart - 1].cart_name}`,
+                  toast.success(`🛒 Succesfully added ${newCartItem.quantity} ${oneEquipment.make} ${oneEquipment.name} ${oneEquipment.model}, to ${currentUser.cart_name}`,
                   {
                     "autoClose" : 2000
                   })
@@ -223,6 +231,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
                 })
               }
             })} else {
+              console.log(resp.error)
               console.log("Start or End Rental Date is missing or invalid")
             }
           })
@@ -500,7 +509,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
                                         </svg>
                                         </div>
                                         <h3 className="text-lg leading-6 font-medium text-gray-900">Create New Cart</h3>
-                                        <CreateNewCart addCart={addCart} toggleModal={toggleCartCreationModal} />
+                                        <CreateNewCart addCart={addCart} toggleModal={toggleCartCreationModal} setCurrentCart={setCurrentCart}/>
                                       </div>
                                     </div>
                                   </div>

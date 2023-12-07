@@ -123,7 +123,7 @@ function ProductForm({ addEquipment }){
                                 res.json().then(updatedValues =>{
                                   console.log(featureEquipment)
                                   if(featureEquipment === true){
-                                  fetch (`${apiUrl}feature/equipment` , {
+                                  fetch (`${apiUrl}feature/equipment/${equipment.id}` , {
                                     method: "POST",
                                     headers: {
                                       "Content-Type": "application/json"
