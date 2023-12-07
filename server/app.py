@@ -734,7 +734,7 @@ class RentalAgreements(Resource):
         
         equipment = Equipment.query.filter(Equipment.id == equipment_id).first()
         if not equipment:
-            return {"error": "Equipment not found"}, 404
+            return make_response({"error": "Equipment not found"}, 404)
 
         #need a way to grab equipment and owner
         # load category and then from there display 
@@ -1156,9 +1156,9 @@ class CartByUserID(Resource):
         
 api.add_resource(CartByUserID, "/user/<int:user_id>/cart/")
 
-class CartByCartID(Resource):
-    def get(self,cart_id):
-        cart = Cart.query.filter(Cart.id == cart_id).first()
+class UserCartByCartID(Resource):
+    def get(self,cart_id, user_id):
+        cart = Cart.query.filter_by(id = cart_id, user_id = user_id).first()
         if cart:
             return make_response(cart.to_dict(),200)
         else:
@@ -1167,8 +1167,8 @@ class CartByCartID(Resource):
             }, 404)
             return response
         
-    def patch(self, cart_id):
-        cart = Cart.query.filter(Cart.id == cart_id).first()
+    def patch(self, cart_id, user_id):
+        cart = Cart.query.filter_by(id = cart_id, user_id = user_id).first()
 
         if cart:
             data = request.get_json()
@@ -1184,8 +1184,8 @@ class CartByCartID(Resource):
             }, 404)
             return response
     
-    def delete(self, cart_id):
-        cart = Cart.query.filter(Cart.id == cart_id).first()
+    def delete(self, cart_id, user_id):
+        cart = Cart.query.filter_by(id = cart_id, user_id = user_id).first()
 
         if cart:
             db.session.delete(cart)
@@ -1198,7 +1198,7 @@ class CartByCartID(Resource):
             }, 404)
             return response
         
-api.add_resource(CartByCartID, "/cart/<int:cart_id>")
+api.add_resource(UserCartByCartID, "/user/<int:user_id>/cart/<int:cart_id>")
 
 class AddItemToCart(Resource):
     def post(self,cart_id):

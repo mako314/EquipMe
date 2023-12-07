@@ -80,6 +80,8 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
     
     </Fragment>)
   })
+
+  console.log("CART OPTIONS:",cartOptions)
   
   // //Toggles modal to ADD to cart
   // const toggleModal = () => {
@@ -147,6 +149,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
   // console.log("This is the equipment quantity:",equipmentQuantity)
   // console.log("This is the equipment ID:",equip_id)
   console.log("This is the current cart ID:",cartData[currentCart - 1]?.id)
+  console.log("REAL CURRENT CART ID:", currentCart)
 
   function handleAddToCartClick() {
     if(startRental === '' || endRental === ''){
@@ -223,6 +226,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
                 })
               }
             })} else {
+              console.log(resp.error)
               console.log("Start or End Rental Date is missing or invalid")
             }
           })
@@ -500,7 +504,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
                                         </svg>
                                         </div>
                                         <h3 className="text-lg leading-6 font-medium text-gray-900">Create New Cart</h3>
-                                        <CreateNewCart addCart={addCart} toggleModal={toggleCartCreationModal} />
+                                        <CreateNewCart addCart={addCart} toggleModal={toggleCartCreationModal} setCurrentCart={setCurrentCart}/>
                                       </div>
                                     </div>
                                   </div>

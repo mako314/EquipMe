@@ -4,7 +4,7 @@ import ApiUrlContext from "../Api";
 import {toast} from 'react-toastify'
 import { UserSessionContext } from "../UserComponents/SessionContext";
 
-function CreateNewCart({addCart, toggleModal}){
+function CreateNewCart({addCart, toggleModal, setCurrentCart}){
 
   const { currentUser, role, checkSession } = UserSessionContext() 
   const [user, setUser] = useContext(UserContext)
@@ -19,48 +19,58 @@ function CreateNewCart({addCart, toggleModal}){
   // useEffect(() => {
   //     fetch(`${apiUrl}check_session`).then((response) => {
   //       if (response.ok) {
-  //         response.json().then((user) => setUser(user));
+  //         response.json().then((user) => setUser(user))
   //       }
-  //     });
-  //   }, []);
+  //     })
+  //   }, [])
 
 
-  const handleCartCreation = () => {
-    let new_cart
-    if (role === 'user') {
-      new_cart={
-          'total' : 0,
-          'cart_name' : cartName,
-          'cart_status' : 'ACTIVE',
-          'created_at': new Date().toISOString(),
-          'user_id' : currentUser?.id
-      }
-    } else if (role === 'owner'){
-      toast.warn(`🛒 We don't currently support owner cart creation`,{
-        "autoClose" : 30000
-      })
+  const handleCartCreation = async () => {
+    
+    if (role !== 'user') {
+    toast.warn(`🛒 We don't currently support owner cart creation`,{
+    "autoClose" : 30000
+    })
+    } 
+
+    const new_cart ={
+      'total' : 0,
+      'cart_name' : cartName,
+      'cart_status' : 'ACTIVE',
+      'created_at': new Date().toISOString(),
+      'user_id' : currentUser?.id
     }
-      fetch(`${apiUrl}carts`, {
-          method: "POST",
-          body: JSON.stringify(new_cart),
-          headers: {
-            "Content-Type": "application/json"
-          }
-        }).then((resp) => {
-          if (resp.ok) {
-            resp.json().then((new_cart) => {
-              console.log("THE NEW CART:",new_cart)
-              addCart(new_cart)
-              toggleModal()
-              // checkSession()
-            })
-            toast.success(`🛒 ${cartName}, succesfully created!`,{
-              "autoClose" : 2000
-            })
-          }
-          
+      try {
+        const resp = await fetch(`${apiUrl}carts`, {
+            method: "POST",
+            body: JSON.stringify(new_cart),
+            headers: {
+                "Content-Type": "application/json"
+            }
         })
+
+        if (!resp.ok) {
+            throw new Error('Failed to create new cart')
+        }
+        const createdCart = await resp.json()
+        console.log("THE NEW CART:", createdCart)
+        if (createdCart.id) {
+          console.log("DOES THIS CART ID EVEN EXIST",createdCart.id)
+          return
+      }
+        addCart(createdCart)
+        setCurrentCart(createdCart.id)
+        toggleModal()
+        checkSession()
+
+        toast.success(`🛒 ${cartName}, successfully created!`, {
+            "autoClose": 2000
+        })
+    } catch (error) {
+        console.error("Error creating cart:", error)
+
     }
+  }
 
   return(
       <div className="bg-white p-4 rounded-lg shadow w-full max-w-xs mx-auto">
