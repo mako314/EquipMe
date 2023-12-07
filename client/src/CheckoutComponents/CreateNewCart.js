@@ -13,8 +13,8 @@ function CreateNewCart({addCart, toggleModal, setCurrentCart}){
   // const [cartStatus, setCartStatus] = useState('')
   
 
-  console.log("CART CURRENT USER:",currentUser)
-  console.log("CART CURRENT ROLE:",role)
+//   console.log("CART CURRENT USER:",currentUser)
+//   console.log("CART CURRENT ROLE:",role)
 
   // useEffect(() => {
   //     fetch(`${apiUrl}check_session`).then((response) => {
