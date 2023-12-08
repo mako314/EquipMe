@@ -115,6 +115,7 @@ function SubmitReview({toggleReviewModal, isModalOpen, renterId, ownerId, rental
           onClick={() => {
             toggleReviewModal()
             setStarAmount(0)
+            setReviewComment('')
           }} 
           className="fixed top-0 left-0 right-0 bottom-0 z-50 flex justify-center items-center overflow-x-hidden overflow-y-auto"
       >
@@ -124,6 +125,7 @@ function SubmitReview({toggleReviewModal, isModalOpen, renterId, ownerId, rental
                       onClick={() => {
                         toggleReviewModal()
                         setStarAmount(0)
+                        setReviewComment('')
                       }} 
                       type="button" 
                       className="absolute top-3 right-2.5 text-white bg-blue-700 hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -133,7 +135,7 @@ function SubmitReview({toggleReviewModal, isModalOpen, renterId, ownerId, rental
         {/* ACTUAL CONTENT DIV */}
         <div className="px-6 py-6 lg:px-8 overflow-y-auto">
         <label htmlFor="stars" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Rating 1-5 </label>
-        <div className="flex">
+        <div className="flex mb-6">
             {starDisplayer}
         </div>
         
