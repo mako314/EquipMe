@@ -1073,7 +1073,7 @@ class ReviewHandling(Resource):
                 raise ValueError("You have already left a review for this agreement")
         try:
             new_review = Review(
-                review_stars = data['equipment_id'],
+                review_stars = data['review_stars'],
                 review_comment = data['review_comment'],
                 reviewer_type = data['reviewer_type'],
                 created_at = datetime.utcnow(),

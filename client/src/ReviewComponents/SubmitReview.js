@@ -4,7 +4,7 @@ import { UserSessionContext } from "../UserComponents/SessionContext";
 import {toast} from 'react-toastify'
 
 
-function SubmitReview({toggleReviewModal, isModalOpen, renterId, ownerId}){
+function SubmitReview({toggleReviewModal, isModalOpen, renterId, ownerId, rentalId}){
     const apiUrl = useContext(ApiUrlContext)
     const { currentUser, role, checkSession } = UserSessionContext()
 
@@ -24,8 +24,10 @@ function SubmitReview({toggleReviewModal, isModalOpen, renterId, ownerId}){
           })
         }
         let newReview ={
+          'review_stars': starAmount,
           'review_comment' : reviewComment,
           'reviewer_type' : role,
+          'agreement_id' : rentalId,
           'user_id' : renterId,
           'owner_id' : ownerId
         }
@@ -64,7 +66,7 @@ function SubmitReview({toggleReviewModal, isModalOpen, renterId, ownerId}){
       const starEmpty = "https://assets.website-files.com/6357722e2a5f19121d37f84d/6357722e2a5f195bcf37f880_Vector.svg" // Grey star image URL
 
       //Same one used in owner display reviews, just simply taking the amount of 5, and letting it push that many into star displayer. Test whether or not >= the index, and from there filling the star.
-      
+
       for (let i = 1; i <= 5; i++) {
         starDisplayer.push (
         <img src= {starAmount >= i ? starEmpty : starFull}
@@ -114,6 +116,7 @@ function SubmitReview({toggleReviewModal, isModalOpen, renterId, ownerId}){
         </button>
         {/* ACTUAL CONTENT DIV */}
         <div className="px-6 py-6 lg:px-8 overflow-y-auto">
+        <label htmlFor="stars" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Rating 1-5 </label>
         <div className="flex">
             {starDisplayer}
         </div>
