@@ -4,7 +4,7 @@ import { UserSessionContext } from "../UserComponents/SessionContext";
 import {toast} from 'react-toastify'
 
 
-function SubmitReview({toggleReviewModal, isModalOpen, renterId, ownerId, rentalId}){
+function SubmitReview({toggleReviewModal, isModalOpen, renterId, ownerId, rentalId, renterFirstName, renterLastName, ownerFirstName, ownerLastName}){
     const apiUrl = useContext(ApiUrlContext)
     const { currentUser, role, checkSession } = UserSessionContext()
 
@@ -23,6 +23,14 @@ function SubmitReview({toggleReviewModal, isModalOpen, renterId, ownerId, rental
           "autoClose" : 2000
           })
         }
+
+        if(starAmount === 0){
+            return toast.warn(`⭐ Star amount must be at least`,
+            {
+            "autoClose" : 2000
+            })
+          }
+
         let newReview ={
           'review_stars': starAmount,
           'review_comment' : reviewComment,
@@ -42,9 +50,17 @@ function SubmitReview({toggleReviewModal, isModalOpen, renterId, ownerId, rental
             if (resp.ok) {
               resp.json().then((newReviewData) => {
                 console.log(newReviewData)
+                toast.success(`✅ Succesfully left ${role === 'owner' ? `${renterFirstName} ${renterLastName}` : `${ownerFirstName} ${ownerLastName}` } a review`,
+                {
+                  "autoClose" : 2000
+                })
               })
             } else {
               console.log(resp.error)
+              return toast.warn(`2️⃣ We do not allow duplicate reviews, please update or delete your previous one.`,
+            {
+            "autoClose" : 2000
+            })
             }
           })
       }
@@ -87,7 +103,7 @@ function SubmitReview({toggleReviewModal, isModalOpen, renterId, ownerId, rental
     return(
         <> 
         <button onClick={toggleReviewModal} className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-        Submit Review
+        Leave a Review
         </button>
 
     <div>
