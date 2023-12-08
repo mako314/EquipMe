@@ -1,4 +1,4 @@
-from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement, Message, Thread,UserInbox, OwnerInbox, Cart, CartItem, EquipmentPrice, UserFavorite, OwnerFavorite, AgreementComment, FeaturedEquipment
+from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement, Message, Thread,UserInbox, OwnerInbox, Cart, CartItem, EquipmentPrice, Review, UserFavorite, OwnerFavorite, AgreementComment, FeaturedEquipment
 # from flask_cors import CORS
 # from flask_migrate import Migrate
 # from flask import Flask, request, make_response, jsonify
@@ -935,6 +935,8 @@ class RemoveUserEquipmentFavorite(Resource):
 
 api.add_resource(RemoveUserEquipmentFavorite, '/remove/user/<int:user_id>/favorite/equipment/<int:equipment_id>')
 
+
+#------------------------------------------OWNER FAVORITING------------------------------
 class RemoveUserOwnerFavorite(Resource):
     def delete(self, user_id, owner_id):
         favorite = UserFavorite.query.filter_by(user_id=user_id, owner_id=owner_id).first()
@@ -1055,27 +1057,107 @@ class BulkEquipmentUpload(Resource):
 
 api.add_resource(BulkEquipmentUpload, '/bulk_file_upload')
 
+#-----------------------------------------------REVIEWS-----------------------------------------------------------------------------
+
+class ReviewHandling(Resource):
+    def post(self):
+        data = request.get_json()
+        agreement_id = data['agreement_id']
+        user_id = data['user_id']
+        owner_id = data['owner_id']
+
+        user_review_existing = Review.query.filter_by(user_id = user_id, agreement_id = agreement_id).first()
+        owner_review_existing = Review.query.filter_by(user_id = user_id, agreement_id = agreement_id).first()
+        
+        if user_review_existing or owner_review_existing:
+                raise ValueError("You have already left a review for this agreement")
+        try:
+            new_review = Review(
+                review_stars = data['equipment_id'],
+                review_comment = data['review_comment'],
+                reviewer_type = data['reviewer_type'],
+                created_at = datetime.utcnow(),
+                updated_at = datetime.utcnow(),
+                agreement_id = data['agreement_id'],
+                user_id = data['user_id'],
+                owner_id = data['owner_id'],
+            )
+            db.session.add(new_review)
+            db.session.commit()
+
+            response = make_response(new_review.to_dict(), 201)
+            return response
+        
+        except ValueError:
+            return make_response({"error": ["validations errors, check your input and try again"]} , 400)
+
+api.add_resource(ReviewHandling, '/review')
+
+class UserReviewEditing(Resource):
+    def patch(self, user_id, review_id):
+        selected_review = Review.query.filter_by(user_id = user_id, id = review_id).first()
+        if selected_review:
+            #try VALIDATIONS:
+            data = request.get_json()
+            for key in data:
+                setattr(selected_review, key, data[key])
+                db.session.add(selected_review)
+                db.session.commit()
+                response = make_response(selected_review.to_dict(), 202)
+                return response
+            #except ValueError:
+        else:
+            response = make_response({
+            "error": "Review not found"
+            }, 404)
+            return response
+
+api.add_resource(UserReviewEditing, 'user/<int:user_id>/review/<int:review_id>/')
+
+
+class OwnerReviewEditing(Resource):
+    def patch(self, owner_id, review_id):
+        selected_review = Review.query.filter_by(owner_id = owner_id, id = review_id).first()
+        if selected_review:
+            #try VALIDATIONS:
+            data = request.get_json()
+            for key in data:
+                setattr(selected_review, key, data[key])
+                db.session.add(selected_review)
+                db.session.commit()
+                response = make_response(selected_review.to_dict(), 202)
+                return response
+            #except ValueError:
+        else:
+            response = make_response({
+            "error": "Review not found"
+            }, 404)
+            return response
+
+api.add_resource(OwnerReviewEditing, 'owner/<int:owner_id>/review/<int:review_id>/')
+
+
 #-----------------------------------------------Rental Agreement Classes - CHECKING FOR AVAILABILITY AND SUCH -----------------------------------------------------------------------------
 
 # Will need to make a call to this route I believe, to check whether or not the date and end date will be available for using the equipment. Need to find a way to also match the time. If someone's only renting a piece out for two hours, they have another 10 hours ahead in which the equipment can be rented.
-class AvailabilityChecker(Resource):
-    def get(self, equipment_id, start_date, end_date):
-        #Grab equipment with the equipment ID, declare an available quantity
-        equipment = Equipment.query.filter(Equipment.id == equipment_id).first()
-        available_quantity = equipment.quantity
+# class AvailabilityChecker(Resource):
+#     def get(self, equipment_id, start_date, end_date):
+#         #Grab equipment with the equipment ID, declare an available quantity
+#         equipment = Equipment.query.filter(Equipment.id == equipment_id).first()
+#         available_quantity = equipment.quantity
 
-        # Check if the equipment is available and if there's enough quantity
-        if is_available_for_date_range(equipment, start_date, end_date) and available_quantity > 0:
-            # Deduct quantity
-            equipment.quantity -= 1
-            db.session.commit()
-            return {"available": True, "available_quantity": equipment.quantity}
-        else:
-            return {"available": False, "available_quantity": equipment.quantity}
+#         # Check if the equipment is available and if there's enough quantity
+#         if is_available_for_date_range(equipment, start_date, end_date) and available_quantity > 0:
+#             # Deduct quantity
+#             equipment.quantity -= 1
+#             db.session.commit()
+#             return {"available": True, "available_quantity": equipment.quantity}
+#         else:
+#             return {"available": False, "available_quantity": equipment.quantity}
 
 
 
-api.add_resource(AvailabilityChecker, "/availability/<int:equipment_id>/<string:start_date>/<string:end_date>")
+# api.add_resource(AvailabilityChecker, "/availability/<int:equipment_id>/<string:start_date>/<string:end_date>")
 
 #----------------------------------------------- Cart / Item Routes -----------------------------------------------------------------------------
 class Carts(Resource):
