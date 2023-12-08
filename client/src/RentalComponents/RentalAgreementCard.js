@@ -12,7 +12,7 @@ function RentalAgreementCard({ equipmentName, rentalId, rentalStart, rentalEnd, 
 
     const [isModalOpen, setIsModalOpen] = useState(false)
 
-    console.log('OWNER ID:', ownerId)
+    // console.log('OWNER ID:', ownerId)
     const rentalAgreementStatuses = ['in-progress', 'user-accepted', 'owner-accepted', 'both-accepted']
 
     const showHandleButton = rentalAgreementStatuses.includes(rentalStatus)
@@ -29,7 +29,7 @@ function RentalAgreementCard({ equipmentName, rentalId, rentalStart, rentalEnd, 
     //     navigate(`/handle/agreements/${rentalId}`)
     // }
 
-    const toggleModal = () => {
+    const toggleReviewModal = () => {
         setIsModalOpen(!isModalOpen)
         console.log("Modal State: ", !isModalOpen)
     }
@@ -127,7 +127,7 @@ function RentalAgreementCard({ equipmentName, rentalId, rentalStart, rentalEnd, 
         RENTAL MODAL
         </button>} */}
 
-        {rentalStatus === 'completed' && <SubmitReview toggleModal={toggleModal} isModalOpen={isModalOpen} rentalStatus={rentalStatus} renterId={renterId} ownerId={ownerId}/>
+        {rentalStatus === 'completed' && <SubmitReview toggleReviewModal={toggleReviewModal} isModalOpen={isModalOpen} rentalStatus={rentalStatus} renterId={renterId} ownerId={ownerId}/>
         }
     </div>
         
