@@ -1062,16 +1062,19 @@ api.add_resource(BulkEquipmentUpload, '/bulk_file_upload')
 class ReviewHandling(Resource):
     def post(self):
         data = request.get_json()
-        agreement_id = data['agreement_id']
-        user_id = data['user_id']
-        owner_id = data['owner_id']
-
-        user_review_existing = Review.query.filter_by(user_id = user_id, agreement_id = agreement_id).first()
-        owner_review_existing = Review.query.filter_by(owner_id = owner_id, agreement_id = agreement_id).first()
-        
-        if user_review_existing or owner_review_existing:
-                raise ValueError("You have already left a review for this agreement")
         try:
+            agreement_id = data['agreement_id']
+            user_id = data['user_id']
+            owner_id = data['owner_id']
+
+            # Check for existing reviews
+            user_review_existing = Review.query.filter_by(user_id = user_id, agreement_id = agreement_id).first()
+            owner_review_existing = Review.query.filter_by(owner_id = owner_id, agreement_id = agreement_id).first()
+        
+            if user_review_existing or owner_review_existing:
+                response = {"error": "You have already left a review for this agreement"}
+                return make_response(response, 409) # 409 Conflict
+        
             new_review = Review(
                 review_stars = data['review_stars'],
                 review_comment = data['review_comment'],
@@ -1079,8 +1082,8 @@ class ReviewHandling(Resource):
                 created_at = datetime.utcnow(),
                 updated_at = datetime.utcnow(),
                 agreement_id = data['agreement_id'],
-                user_id = data['user_id'],
-                owner_id = data['owner_id'],
+                user_id = user_id,
+                owner_id = owner_id,
             )
             db.session.add(new_review)
             db.session.commit()
