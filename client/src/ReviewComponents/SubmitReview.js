@@ -8,6 +8,8 @@ function SubmitReview({toggleModal, isModalOpen, renterId, ownerId}){
     const apiUrl = useContext(ApiUrlContext)
     const { currentUser, role, checkSession } = UserSessionContext()
 
+
+
     const [starAmount, setStarAmount] = useState(0)
     const [reviewComment, setReviewComment] = useState('')
     
@@ -37,9 +39,7 @@ function SubmitReview({toggleModal, isModalOpen, renterId, ownerId}){
           }).then((resp) => {
             if (resp.ok) {
               resp.json().then((newReviewData) => {
-
                 console.log(newReviewData)
-
               })
             } else {
               console.log(resp.error)
@@ -50,6 +50,28 @@ function SubmitReview({toggleModal, isModalOpen, renterId, ownerId}){
       const reviewCommentHandler = (e) => {
         setReviewComment(e.target.value)
       }
+
+    //   const reviewStarHandler = (e) => {
+    //     setStarAmount(e.target.value)
+    //     console.log(e.target.value)
+    //     console.log(starAmount)
+    //   }
+
+      let starDisplayer = []
+
+      for (let i = 1; i <= 5; i++) {
+        starDisplayer.push (
+        <img src= {starAmount <= i ? "https://static.thenounproject.com/png/626304-200.png" : 'https://assets.website-files.com/6357722e2a5f19121d37f84d/6357722e2a5f195bcf37f880_Vector.svg'}
+        alt="" 
+        className="mr-1.5 w-4 cursor-pointer"
+        value = {i}
+        onClick={ () => setStarAmount(i)}
+        key={`star-${i}`} 
+        />)
+      }
+
+
+      console.log(starAmount)
 
 
 
@@ -78,8 +100,11 @@ function SubmitReview({toggleModal, isModalOpen, renterId, ownerId}){
                       X 
         </button>
         {/* ACTUAL CONTENT DIV */}
-        <div className="px-6 py-6 lg:px-8 overflow-y-auto"> 
-
+        <div className="px-6 py-6 lg:px-8 overflow-y-auto">
+        <div className="flex">
+            {starDisplayer}
+        </div>
+        
 
         <div className="sm:col-span-2">
           <label htmlFor="description" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Review Comment</label>
