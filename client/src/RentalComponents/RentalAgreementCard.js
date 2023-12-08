@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {useNavigate} from 'react-router-dom';
 import SubmitReview from "../ReviewComponents/SubmitReview";
 
-function RentalAgreementCard({ equipmentName, rentalId, rentalStart, rentalEnd, renterFirstName, renterLastName, location, ownerEmail, ownerFirstName, ownerLastName, cartName, quantity, rentalDelivery, rentalDeliveryAddress, rentalRevisions, rentalStatus,rentalCreatedAt, rentalUpdatedAt, setFromOwnerDash, fromOwnerDash }) {
+function RentalAgreementCard({ equipmentName, rentalId, rentalStart, rentalEnd, renterFirstName, renterLastName, location, ownerEmail, ownerFirstName, ownerLastName, cartName, quantity, rentalDelivery, rentalDeliveryAddress, rentalRevisions, rentalStatus,rentalCreatedAt, rentalUpdatedAt, setFromOwnerDash, fromOwnerDash, renterId, ownerId}) {
     const navigate = useNavigate()
     // May be a good idea to draw how exactly status should work, 
     // one side accepted, both, in progress, etc
@@ -12,6 +12,7 @@ function RentalAgreementCard({ equipmentName, rentalId, rentalStart, rentalEnd, 
 
     const [isModalOpen, setIsModalOpen] = useState(false)
 
+    console.log('OWNER ID:', ownerId)
     const rentalAgreementStatuses = ['in-progress', 'user-accepted', 'owner-accepted', 'both-accepted']
 
     const showHandleButton = rentalAgreementStatuses.includes(rentalStatus)
@@ -126,7 +127,7 @@ function RentalAgreementCard({ equipmentName, rentalId, rentalStart, rentalEnd, 
         RENTAL MODAL
         </button>} */}
 
-        {rentalStatus === 'completed' && <SubmitReview toggleModal={toggleModal} isModalOpen={isModalOpen} rentalStatus={rentalStatus}/>
+        {rentalStatus === 'completed' && <SubmitReview toggleModal={toggleModal} isModalOpen={isModalOpen} rentalStatus={rentalStatus} renterId={renterId} ownerId={ownerId}/>
         }
     </div>
         

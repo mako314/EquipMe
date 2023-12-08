@@ -4,12 +4,15 @@ import { UserSessionContext } from "../UserComponents/SessionContext";
 import {toast} from 'react-toastify'
 
 
-function SubmitReview({toggleModal, isModalOpen}){
+function SubmitReview({toggleModal, isModalOpen, renterId, ownerId}){
     const apiUrl = useContext(ApiUrlContext)
     const { currentUser, role, checkSession } = UserSessionContext()
 
     const [starAmount, setStarAmount] = useState(0)
     const [reviewComment, setReviewComment] = useState('')
+    
+    console.log("RENTER ID:", renterId)
+    console.log("OWNER ID:", ownerId)
 
     function handleReviewSubmission() {
          if(reviewComment ===''){
@@ -21,10 +24,8 @@ function SubmitReview({toggleModal, isModalOpen}){
         let newReview ={
           'review_comment' : reviewComment,
           'reviewer_type' : role,
-          'created_at': '',
-          'updated_at': '',
-          'user_id' : '',
-          'owner_id' : ''
+          'user_id' : renterId,
+          'owner_id' : ownerId
         }
     
         fetch(`${apiUrl}review`, {
@@ -109,8 +110,8 @@ function SubmitReview({toggleModal, isModalOpen}){
           
       </div>
       )}
-        </div>
-        </>
+    </div>
+    </>
     )
 }
 
