@@ -1067,13 +1067,13 @@ class ReviewHandling(Resource):
         owner_id = data['owner_id']
 
         user_review_existing = Review.query.filter_by(user_id = user_id, agreement_id = agreement_id).first()
-        owner_review_existing = Review.query.filter_by(user_id = user_id, agreement_id = agreement_id).first()
+        owner_review_existing = Review.query.filter_by(owner_id = owner_id, agreement_id = agreement_id).first()
         
         if user_review_existing or owner_review_existing:
                 raise ValueError("You have already left a review for this agreement")
         try:
             new_review = Review(
-                review_stars = data['equipment_id'],
+                review_stars = data['review_stars'],
                 review_comment = data['review_comment'],
                 reviewer_type = data['reviewer_type'],
                 created_at = datetime.utcnow(),
@@ -1112,7 +1112,7 @@ class UserReviewEditing(Resource):
             }, 404)
             return response
 
-api.add_resource(UserReviewEditing, 'user/<int:user_id>/review/<int:review_id>/')
+api.add_resource(UserReviewEditing, '/user/<int:user_id>/review/<int:review_id>/')
 
 
 class OwnerReviewEditing(Resource):
@@ -1134,7 +1134,7 @@ class OwnerReviewEditing(Resource):
             }, 404)
             return response
 
-api.add_resource(OwnerReviewEditing, 'owner/<int:owner_id>/review/<int:review_id>/')
+api.add_resource(OwnerReviewEditing, '/owner/<int:owner_id>/review/<int:review_id>/')
 
 
 #-----------------------------------------------Rental Agreement Classes - CHECKING FOR AVAILABILITY AND SUCH -----------------------------------------------------------------------------

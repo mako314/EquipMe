@@ -50,10 +50,12 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
       rentalUpdatedAt={agreement.updated_at}
       renterFirstName={currentUser.firstName}
       renterLastName={currentUser.lastName}
+      renterId = {currentUser.id}
       location={item.equipment.location}
       ownerEmail ={item.equipment.owner.email}
       ownerFirstName = {item.equipment.owner.firstName}
       ownerLastName ={item.equipment.owner.lastName}
+      ownerId = {item.equipment.owner.id}
       setFromOwnerDash={setFromOwnerDash} 
       fromOwnerDash={fromOwnerDash}
       />
@@ -77,10 +79,12 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
       rentalUpdatedAt={agreement.updated_at}
       renterFirstName={agreement.cart_item.cart.user.firstName}
       renterLastName={agreement.cart_item.cart.user.lastName}
+      renterId = {agreement.cart_item.cart.user.id}
       location={currentUser.location}
       ownerEmail ={currentUser.email}
       ownerFirstName = {currentUser.firstName}
       ownerLastName ={currentUser.lastName}
+      ownerId = {currentUser.id}
       setFromOwnerDash={setFromOwnerDash} 
       fromOwnerDash={fromOwnerDash}
       />)

@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import EquipmentMap from '../MapComponents/EquipmentMap'
 import ContactModal from '../MessagingComponents/ContactModal'
 import ProductCard from '../EquipmentComponents/ProductCard'
-import Reviews from '../CheckoutComponents/Reviews'
+import Reviews from '../ReviewComponents/Reviews'
 import { UserSessionContext } from '../UserComponents/SessionContext'
 import ApiUrlContext from '../Api'
 
