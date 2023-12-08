@@ -1,4 +1,4 @@
-from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement, Message, Thread,UserInbox, OwnerInbox, Cart, CartItem, EquipmentPrice, UserFavorite, OwnerFavorite, AgreementComment, FeaturedEquipment
+from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement, Message, Thread,UserInbox, OwnerInbox, Cart, CartItem, EquipmentPrice, Review, UserFavorite, OwnerFavorite, AgreementComment, FeaturedEquipment
 # from flask_cors import CORS
 # from flask_migrate import Migrate
 # from flask import Flask, request, make_response, jsonify
@@ -935,6 +935,8 @@ class RemoveUserEquipmentFavorite(Resource):
 
 api.add_resource(RemoveUserEquipmentFavorite, '/remove/user/<int:user_id>/favorite/equipment/<int:equipment_id>')
 
+
+#------------------------------------------OWNER FAVORITING------------------------------
 class RemoveUserOwnerFavorite(Resource):
     def delete(self, user_id, owner_id):
         favorite = UserFavorite.query.filter_by(user_id=user_id, owner_id=owner_id).first()
@@ -1055,26 +1057,75 @@ class BulkEquipmentUpload(Resource):
 
 api.add_resource(BulkEquipmentUpload, '/bulk_file_upload')
 
-#-----------------------------------------------Rental Agreement Classes - CHECKING FOR AVAILABILITY AND SUCH -----------------------------------------------------------------------------
+#-----------------------------------------------REVIEWS-----------------------------------------------------------------------------
 
 class ReviewHandling(Resource):
     def post(self):
         data = request.get_json()
         try:
-            new_favorite = UserFavorite(
-                equipment_id = data['equipment_id'],
+            new_review = Review(
+                review_stars = data['equipment_id'],
+                review_comment = data['review_comment'],
+                reviewer_type = data['reviewer_type'],
+                created_at = datetime.utcnow(),
+                updated_at = datetime.utcnow(),
+                agreement_id = data['agreement_id'],
                 user_id = data['user_id'],
+                owner_id = data['owner_id'],
             )
-            db.session.add(new_favorite)
+            db.session.add(new_review)
             db.session.commit()
 
-            response = make_response(new_favorite.to_dict(), 201)
+            response = make_response(new_review.to_dict(), 201)
             return response
         
         except ValueError:
             return make_response({"error": ["validations errors, check your input and try again"]} , 400)
 
 api.add_resource(ReviewHandling, '/review')
+
+class UserReviewEditing(Resource):
+    def patch(self, user_id, review_id):
+        selected_review = Review.query.filter_by(user_id = user_id, id = review_id).first()
+        if selected_review:
+            #try VALIDATIONS:
+            data = request.get_json()
+            for key in data:
+                setattr(selected_review, key, data[key])
+                db.session.add(selected_review)
+                db.session.commit()
+                response = make_response(selected_review.to_dict(), 202)
+                return response
+            #except ValueError:
+        else:
+            response = make_response({
+            "error": "Review not found"
+            }, 404)
+            return response
+
+api.add_resource(UserReviewEditing, 'user/<int:user_id>/review/<int:review_id>/')
+
+
+class OwnerReviewEditing(Resource):
+    def patch(self, owner_id, review_id):
+        selected_review = Review.query.filter_by(owner_id = owner_id, id = review_id).first()
+        if selected_review:
+            #try VALIDATIONS:
+            data = request.get_json()
+            for key in data:
+                setattr(selected_review, key, data[key])
+                db.session.add(selected_review)
+                db.session.commit()
+                response = make_response(selected_review.to_dict(), 202)
+                return response
+            #except ValueError:
+        else:
+            response = make_response({
+            "error": "Review not found"
+            }, 404)
+            return response
+
+api.add_resource(OwnerReviewEditing, 'owner/<int:owner_id>/review/<int:review_id>/')
 
 
 #-----------------------------------------------Rental Agreement Classes - CHECKING FOR AVAILABILITY AND SUCH -----------------------------------------------------------------------------
