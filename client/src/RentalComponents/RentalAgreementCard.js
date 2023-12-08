@@ -126,7 +126,8 @@ function RentalAgreementCard({ equipmentName, rentalId, rentalStart, rentalEnd, 
         RENTAL MODAL
         </button>} */}
 
-        <SubmitReview toggleModal={toggleModal} isModalOpen={isModalOpen}/>
+        {rentalStatus === 'completed' && <SubmitReview toggleModal={toggleModal} isModalOpen={isModalOpen} rentalStatus={rentalStatus}/>
+        }
     </div>
         
     )
