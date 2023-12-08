@@ -593,8 +593,8 @@ if __name__ == '__main__':
             delivery = False,
             delivery_address = "",
             user_decision = "accept",
-            owner_decision = "pending",
-            agreement_status = "in progress",
+            owner_decision = "accept",
+            agreement_status = "completed",
             owner_id = owner_2.id, # Henry Cavill
             user_id=user_1.id,  # Sarah Thompson
             cart_item_id=cart_items[2].id,  # Lawnmower
@@ -641,7 +641,7 @@ if __name__ == '__main__':
                 reviewer_type = "user",
                 created_at = datetime.utcnow(),
                 updated_at = datetime.utcnow(),
-                cart_item_id= cart_items[0].id,
+                agreement_id = rental_agreements[2].id,
                 user_id = user_1.id,
                 owner_id = owner_2.id
             ),
@@ -651,7 +651,7 @@ if __name__ == '__main__':
                 reviewer_type = "owner",
                 created_at = datetime.utcnow(),
                 updated_at = datetime.utcnow(),
-                cart_item_id= cart_items[0].id,
+                agreement_id = rental_agreements[2].id,
                 user_id = user_1.id,
                 owner_id =owner_2.id 
             )

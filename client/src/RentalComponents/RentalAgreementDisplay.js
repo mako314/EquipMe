@@ -389,6 +389,7 @@ function RentalAgreementDisplay() {
                 <label htmlFor="delivery_address_checkbox"> Edit delivery address</label>
                 </div>
                 }
+                {/* only show if deliveryAddress and choice exists. Basically if you don't choose to have delivery, you won't see the field */}
                 {isDeliveryAddress && deliveryChoice && (
                     <> 
                     {/* https://www.w3schools.com/jsref/prop_radio_defaultchecked.asp#:~:text=Description,default%2C%20otherwise%20it%20returns%20false. */}

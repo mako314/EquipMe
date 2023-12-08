@@ -1057,25 +1057,47 @@ api.add_resource(BulkEquipmentUpload, '/bulk_file_upload')
 
 #-----------------------------------------------Rental Agreement Classes - CHECKING FOR AVAILABILITY AND SUCH -----------------------------------------------------------------------------
 
-# Will need to make a call to this route I believe, to check whether or not the date and end date will be available for using the equipment. Need to find a way to also match the time. If someone's only renting a piece out for two hours, they have another 10 hours ahead in which the equipment can be rented.
-class AvailabilityChecker(Resource):
-    def get(self, equipment_id, start_date, end_date):
-        #Grab equipment with the equipment ID, declare an available quantity
-        equipment = Equipment.query.filter(Equipment.id == equipment_id).first()
-        available_quantity = equipment.quantity
-
-        # Check if the equipment is available and if there's enough quantity
-        if is_available_for_date_range(equipment, start_date, end_date) and available_quantity > 0:
-            # Deduct quantity
-            equipment.quantity -= 1
+class ReviewHandling(Resource):
+    def post(self):
+        data = request.get_json()
+        try:
+            new_favorite = UserFavorite(
+                equipment_id = data['equipment_id'],
+                user_id = data['user_id'],
+            )
+            db.session.add(new_favorite)
             db.session.commit()
-            return {"available": True, "available_quantity": equipment.quantity}
-        else:
-            return {"available": False, "available_quantity": equipment.quantity}
+
+            response = make_response(new_favorite.to_dict(), 201)
+            return response
+        
+        except ValueError:
+            return make_response({"error": ["validations errors, check your input and try again"]} , 400)
+
+api.add_resource(ReviewHandling, '/review')
+
+
+#-----------------------------------------------Rental Agreement Classes - CHECKING FOR AVAILABILITY AND SUCH -----------------------------------------------------------------------------
+
+# Will need to make a call to this route I believe, to check whether or not the date and end date will be available for using the equipment. Need to find a way to also match the time. If someone's only renting a piece out for two hours, they have another 10 hours ahead in which the equipment can be rented.
+# class AvailabilityChecker(Resource):
+#     def get(self, equipment_id, start_date, end_date):
+#         #Grab equipment with the equipment ID, declare an available quantity
+#         equipment = Equipment.query.filter(Equipment.id == equipment_id).first()
+#         available_quantity = equipment.quantity
+
+#         # Check if the equipment is available and if there's enough quantity
+#         if is_available_for_date_range(equipment, start_date, end_date) and available_quantity > 0:
+#             # Deduct quantity
+#             equipment.quantity -= 1
+#             db.session.commit()
+#             return {"available": True, "available_quantity": equipment.quantity}
+#         else:
+#             return {"available": False, "available_quantity": equipment.quantity}
 
 
 
-api.add_resource(AvailabilityChecker, "/availability/<int:equipment_id>/<string:start_date>/<string:end_date>")
+# api.add_resource(AvailabilityChecker, "/availability/<int:equipment_id>/<string:start_date>/<string:end_date>")
 
 #----------------------------------------------- Cart / Item Routes -----------------------------------------------------------------------------
 class Carts(Resource):
