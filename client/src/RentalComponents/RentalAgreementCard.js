@@ -10,7 +10,7 @@ function RentalAgreementCard({ equipmentName, rentalId, rentalStart, rentalEnd, 
     // console.log("The type of:", typeof(rentalDelivery))
     // console.log(item)
 
-    console.log(existingReviews)
+    console.log("THE REVIEWS:",existingReviews)
 
     const [isModalOpen, setIsModalOpen] = useState(false)
 
