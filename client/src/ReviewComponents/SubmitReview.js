@@ -4,7 +4,7 @@ import { UserSessionContext } from "../UserComponents/SessionContext";
 import {toast} from 'react-toastify'
 
 
-function SubmitReview({toggleReviewModal, isModalOpen, renterId, ownerId, rentalId, renterFirstName, renterLastName, ownerFirstName, ownerLastName}){
+function SubmitReview({toggleReviewModal, isModalOpen, renterId, ownerId, rentalId, renterFirstName, renterLastName, ownerFirstName, ownerLastName, existingReviews}){
     const apiUrl = useContext(ApiUrlContext)
     const { currentUser, role, checkSession } = UserSessionContext()
 
@@ -103,7 +103,7 @@ function SubmitReview({toggleReviewModal, isModalOpen, renterId, ownerId, rental
     return(
         <> 
         <button onClick={toggleReviewModal} className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-        Leave a Review
+        {existingReviews.length === 0 ? 'Leave a Review' : 'Edit my Review'}
         </button>
 
     <div>

@@ -1070,10 +1070,10 @@ class ReviewHandling(Resource):
             # Check for existing reviews
             user_review_existing = Review.query.filter_by(user_id = user_id, agreement_id = agreement_id).first()
             owner_review_existing = Review.query.filter_by(owner_id = owner_id, agreement_id = agreement_id).first()
-        
-            if  user_review_existing.reviewer_type == 'user' and owner_review_existing.reviewer_type =='owner' :
-                response = {"error": "You have already left a review for this agreement"}
-                return make_response(response, 409) # 409 Conflict
+            if user_review_existing or owner_review_existing:
+                if user_review_existing.reviewer_type == 'user' and owner_review_existing.reviewer_type =='owner' :
+                    response = {"error": "You have already left a review for this agreement"}
+                    return make_response(response, 409) # 409 Conflict
         
             new_review = Review(
                 review_stars = data['review_stars'],

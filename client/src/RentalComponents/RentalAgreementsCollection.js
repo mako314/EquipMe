@@ -34,62 +34,62 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
   rentalCards = currentUser?.cart?.flatMap(cart => 
     cart.cart_item?.flatMap(item => 
       item.agreements?.map(agreement=>
-        console.log("THE REVIEW:",agreement)
-      // <RentalAgreementCard
-      // key={item.id}
-      // rentalId={item.id}
-      // cartName={cart.cart_name}
-      // quantity={item.quantity}
-      // equipmentName={item.equipment.name}
-      // rentalStart={formatDate(agreement.rental_start_date)}
-      // rentalEnd={formatDate(agreement.rental_end_date)}
-      // rentalDelivery={agreement.delivery}
-      // rentalDeliveryAddress={agreement.delivery_address}
-      // rentalRevisions={agreement.revisions}
-      // rentalStatus={agreement.agreement_status}
-      // rentalCreatedAt={agreement.created_at}
-      // rentalUpdatedAt={agreement.updated_at}
-      // renterFirstName={currentUser.firstName}
-      // renterLastName={currentUser.lastName}
-      // renterId = {currentUser.id}
-      // location={item.equipment.location}
-      // ownerEmail ={item.equipment.owner.email}
-      // ownerFirstName = {item.equipment.owner.firstName}
-      // ownerLastName ={item.equipment.owner.lastName}
-      // ownerId = {item.equipment.owner.id}
-      // setFromOwnerDash={setFromOwnerDash} 
-      // fromOwnerDash={fromOwnerDash}
-      // />
+      <RentalAgreementCard
+      key={item.id}
+      rentalId={item.id}
+      cartName={cart.cart_name}
+      quantity={item.quantity}
+      equipmentName={item.equipment.name}
+      rentalStart={formatDate(agreement.rental_start_date)}
+      rentalEnd={formatDate(agreement.rental_end_date)}
+      rentalDelivery={agreement.delivery}
+      rentalDeliveryAddress={agreement.delivery_address}
+      rentalRevisions={agreement.revisions}
+      rentalStatus={agreement.agreement_status}
+      rentalCreatedAt={agreement.created_at}
+      rentalUpdatedAt={agreement.updated_at}
+      renterFirstName={currentUser.firstName}
+      renterLastName={currentUser.lastName}
+      renterId = {currentUser.id}
+      location={item.equipment.location}
+      ownerEmail ={item.equipment.owner.email}
+      ownerFirstName = {item.equipment.owner.firstName}
+      ownerLastName ={item.equipment.owner.lastName}
+      ownerId = {item.equipment.owner.id}
+      setFromOwnerDash={setFromOwnerDash} 
+      fromOwnerDash={fromOwnerDash}
+      existingReviews={agreement.review}
+      />
         ) || []
       ) || []
   )} else {
     rentalCards = currentUser?.agreements?.map(agreement => 
-      console.log("THE REVIEW:",agreement.review)
-      // <RentalAgreementCard
-      // key={agreement.id}
-      // rentalId={agreement.id}
-      // cartName={agreement.cart_item.cart.cart_name}
-      // quantity={agreement.cart_item.quantity}
-      // equipmentName={agreement.cart_item.equipment.name}
-      // rentalStart={formatDate(agreement.rental_start_date)}
-      // rentalEnd={formatDate(agreement.rental_end_date)}
-      // rentalDelivery={agreement.delivery}
-      // rentalDeliveryAddress={agreement.delivery_address}
-      // rentalRevisions={agreement.revisions}
-      // rentalStatus={agreement.agreement_status}
-      // rentalCreatedAt={agreement.created_at}
-      // rentalUpdatedAt={agreement.updated_at}
-      // renterFirstName={agreement.cart_item.cart.user.firstName}
-      // renterLastName={agreement.cart_item.cart.user.lastName}
-      // renterId = {agreement.cart_item.cart.user.id}
-      // location={currentUser.location}
-      // ownerEmail ={currentUser.email}
-      // ownerFirstName = {currentUser.firstName}
-      // ownerLastName ={currentUser.lastName}
-      // ownerId = {currentUser.id}
-      // setFromOwnerDash={setFromOwnerDash} 
-      // fromOwnerDash={fromOwnerDash}
-      // />
+      <RentalAgreementCard
+      key={agreement.id}
+      rentalId={agreement.id}
+      cartName={agreement.cart_item.cart.cart_name}
+      quantity={agreement.cart_item.quantity}
+      equipmentName={agreement.cart_item.equipment.name}
+      rentalStart={formatDate(agreement.rental_start_date)}
+      rentalEnd={formatDate(agreement.rental_end_date)}
+      rentalDelivery={agreement.delivery}
+      rentalDeliveryAddress={agreement.delivery_address}
+      rentalRevisions={agreement.revisions}
+      rentalStatus={agreement.agreement_status}
+      rentalCreatedAt={agreement.created_at}
+      rentalUpdatedAt={agreement.updated_at}
+      renterFirstName={agreement.cart_item.cart.user.firstName}
+      renterLastName={agreement.cart_item.cart.user.lastName}
+      renterId = {agreement.cart_item.cart.user.id}
+      location={currentUser.location}
+      ownerEmail ={currentUser.email}
+      ownerFirstName = {currentUser.firstName}
+      ownerLastName ={currentUser.lastName}
+      ownerId = {currentUser.id}
+      setFromOwnerDash={setFromOwnerDash} 
+      fromOwnerDash={fromOwnerDash}
+      existingReviews={agreement.review}
+      />
       )
   }
 
