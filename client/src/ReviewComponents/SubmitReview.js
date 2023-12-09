@@ -18,10 +18,13 @@ function SubmitReview({toggleReviewModal, isModalOpen, renterId, ownerId, rental
     // console.log("OWNER ID:", ownerId)
 
     console.log("THE REVIEW COMMENT:", reviewComment)
+    console.log("THE STAR AMOUNT:", starAmount)
 
     useEffect(() => {
-      setReviewComment(postedReview.review_comment)
-      setStarAmount(postedReview.review_stars)
+      if (postedReview && postedReview.review_comment !== undefined && postedReview.review_stars !== undefined) {
+        setReviewComment(postedReview.review_comment)
+        setStarAmount(postedReview.review_stars)
+      }
     }, [postedReview, toggleReviewModal])
 
     function handleReviewSubmission() {
@@ -57,7 +60,7 @@ function SubmitReview({toggleReviewModal, isModalOpen, renterId, ownerId, rental
 
         let reviewUrl = postedReview ? patchURLs : `${apiUrl}review`
 
-
+        console.log('REVIEW COMMENT INSIDE OF THE FETCH:', reviewComment)
     
         fetch(reviewUrl, {
             method: reviewMethod,

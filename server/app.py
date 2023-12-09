@@ -1107,6 +1107,7 @@ class UserReviewEditing(Resource):
         if selected_review:
             #try VALIDATIONS:
             data = request.get_json()
+            print("Received data:", data)
             for key in data:
                 setattr(selected_review, key, data[key])
                 db.session.add(selected_review)
@@ -1129,8 +1130,11 @@ class OwnerReviewEditing(Resource):
         if selected_review:
             #try VALIDATIONS:
             data = request.get_json()
+            print("Received data:", data)
             for key in data:
                 setattr(selected_review, key, data[key])
+                if 'review_comment' in data:
+                    selected_review.review_comment = data['review_comment']
                 db.session.add(selected_review)
                 db.session.commit()
                 response = make_response(selected_review.to_dict(), 202)
