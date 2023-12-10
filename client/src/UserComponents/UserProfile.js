@@ -53,17 +53,42 @@ function UserProfile() {
 
   console.log("The user Profile:", userProfile)
   let reviewCounter = 0
+  let agreementCounter = 0
 
   if (Array.isArray(userProfile.review)) {
     userProfile.review.forEach((element) => {
       if (element.reviewer_type === 'user'){
         reviewCounter +=1
       }
-      console.log("THE REVIEW COUNTER INSIDE THE IF:", reviewCounter)
+      // console.log("THE REVIEW COUNTER INSIDE THE IF:", reviewCounter)
     })
   } else {
     console.log('userProfile is not an array:', userProfile)
   }
+
+  
+  //Was having issues with the userProfile array not being able to identify my agreements array because of how deeply nested it is. A user can also have multiple carts. So it's important to consider this while I try to get deeper into the forEach
+
+  if (Array.isArray(userProfile.cart)) {
+    userProfile.cart.forEach(cart => {
+      if (Array.isArray(cart.cart_item)) {
+        cart.cart_item.forEach(cartItem => {
+          if (Array.isArray(cartItem.agreements)) {
+            cartItem.agreements.forEach(agreement => {
+              if(agreement.agreement_status === 'both-accepted'){
+                agreementCounter +=1
+              }
+              console.log(agreement)
+            })
+          }
+        })
+      }
+    })
+  }
+
+  console.log(userProfile)
+  
+
 
   
   //May actually want to include a banner image so it looks nicer
@@ -163,9 +188,9 @@ function UserProfile() {
                   <div className="flex justify-center py-4 lg:pt-4 pt-8">
                     <div className="mr-4 p-3 text-center">
                       <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
-                        22
+                      {agreementCounter}
                       </span>
-                      <span className="text-sm text-gray-500">Rentals</span>
+                      <span className="text-sm text-gray-500">Rental</span>
                     </div>
                     <div className="mr-4 p-3 text-center">
                       <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
