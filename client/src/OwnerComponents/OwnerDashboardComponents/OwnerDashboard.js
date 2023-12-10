@@ -18,6 +18,10 @@ import OwnerCard from '../OwnerCard';
 import { UserSessionContext } from '../../UserComponents/SessionContext';
 import { ReactComponent as EquipMeLogo } from '../../Content/EquipMeLogo.svg'
 
+//Chart imports
+import { Chart as ChartJS, ArcElement, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import { Doughnut, Bar } from 'react-chartjs-2';
+
 
 function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
 
@@ -242,6 +246,216 @@ function AccountSettings() {
         }, 0)
       }
 
+    
+    //-----------------------------------------------CHART CODE -------------------------
+    let totalEquipment = 0
+    let itemsInUserCart = 0
+    let totalFavorites = 0
+    let totalFeaturedEquipment = 0
+
+    let totalPendingAgreements = 0
+    const rentalAgreementStatuses = ['in-progress', 'user-accepted', 'owner-accepted']
+
+    let totalCompletedAgreements = 0
+
+    //Handles finding ALL equipment an owner has. Found in Equipment > Quantity property
+    if (Array.isArray(currentUser?.equipment)) {
+        currentUser.equipment.forEach(equip => {
+            totalEquipment += equip.quantity
+        })
+    }
+
+    //Handles finding ALL equipment in user carts, found in Cart > Quantity
+    if (Array.isArray(currentUser?.equipment)) {
+        currentUser.equipment.forEach(equip => {
+            if (Array.isArray(equip.cart_item)){
+                equip.cart_item.forEach(cartItem => {
+                    if(cartItem){
+                    itemsInUserCart += cartItem.quantity}
+                })
+            }
+        })
+    }
+
+    //Handles finding ALL FAVORITED equipment, found in Equipment > Favorite
+    if (Array.isArray(currentUser?.equipment)) {
+        currentUser.equipment.forEach(equip => {
+            if (Array.isArray(equip.user_favorite)){
+                equip.user_favorite.forEach(favorite => {
+                    if(favorite){
+                    totalFavorites += 1}
+                })
+            }
+        })
+    }
+
+    // Handles finding all FEATURED equipment, found in Equipment > Featured Equipment
+    if (Array.isArray(currentUser?.equipment)) {
+        currentUser.equipment.forEach(equip => {
+            if (Array.isArray(equip.featured_equipment)){
+                equip.featured_equipment.forEach(featuredEquipment => {
+                    if(featuredEquipment){
+                    totalFeaturedEquipment += 1}
+                })
+            }
+        })
+    }
+
+    // Handles finding all PENDING agreements, found in Agreements and their statuses ['in-progress', 'user-accepted', 'owner-accepted']
+    if (Array.isArray(currentUser?.agreements)) {
+        currentUser.agreements.forEach(agreement => {
+            if (rentalAgreementStatuses.includes(agreement.agreement_status)){
+                totalPendingAgreements +=1
+            }
+        })
+    }
+
+    // Handles finding all FINISHED agreements, meaning this equipment is rented out. Found in Agreements and their statuses
+    if (Array.isArray(currentUser?.agreements)) {
+        currentUser.agreements.forEach(agreement => {
+            if (agreement.agreement_status === 'completed'){
+                totalCompletedAgreements +=1
+            }
+        })
+    }
+
+    console.log("The length of all Equipments:", totalEquipment)
+    console.log("The length of all items in a user cart:", itemsInUserCart)
+    console.log("Total Favorites:", totalFavorites)
+    console.log("Total Featured Equipment:", totalFeaturedEquipment)
+    console.log("Total PENDING Agreements Equipment:", totalPendingAgreements)
+    console.log("Total COMPLETED Agreements Equipment:", totalCompletedAgreements)
+
+    ChartJS.register(
+        ArcElement, 
+        Tooltip, 
+        Legend, 
+        CategoryScale,
+        LinearScale,
+        BarElement,
+        Title,
+    )
+    // https://codesandbox.io/p/devbox/reactchartjs-react-chartjs-2-default-t64th?file=%2FApp.tsx%3A29%2C22
+    // https://stackoverflow.com/questions/59325426/how-to-resize-chart-js-element-in-react-js
+    // https://stackoverflow.com/questions/53872165/cant-resize-react-chartjs-2-doughnut-chart
+    let doughnutData = {
+        labels: ['All Equipment', 'In Renter Carts', 'Favorited By Renters', 'Featured Equipment', 'Equipment Pending Agreement', 'Equipment Rented Out'],
+        datasets: [
+          {
+            label: '# of Equipment',
+            data: [totalEquipment, itemsInUserCart, totalFavorites, totalFeaturedEquipment, totalPendingAgreements, totalCompletedAgreements],
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)',
+              'rgba(255, 159, 64, 0.2)',
+            ],
+            borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)',
+            ],
+            borderWidth: 1,
+          },
+        ],
+      }
+
+    //------------------------BAR CHART--------------------------------------
+    // https://codesandbox.io/p/devbox/reactchartjs-react-chartjs-2-vertical-jebqk?file=%2FApp.tsx%3A38%2C1-52%2C3
+    let barChartOptions = {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: true,
+            text: 'Chart.js Bar Chart',
+          },
+        },
+      };
+
+    
+
+
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+
+    // Function to get the month name from a date
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/getMonth
+    const getMonthName = (dateString) => {
+        const date = new Date(dateString)
+        const month = date.getMonth()
+        console.log("THE MONTH:", month)
+        return monthNames[month]
+      }
+
+    // Count agreements per month
+    // https://www.w3schools.com/jsref/jsref_reduce.asp
+    // https://www.youtube.com/watch?v=XKD0aIA3-yM&list=PLo63gcFIe8o0nnhu0F-PpsTc8nkhNe9yu
+    let totalIdle
+    let totalInCart = 0
+    let totalRentedOut = 0
+    const countAgreementsByMonth = (data) => {
+        const monthCounts = data.reduce((acc, item) => {
+        console.log("the item in the reducer:", item)
+        const month = getMonthName(item.created_at)
+        if (Array.isArray(item?.cart_item)){item?.cart_item.forEach(agreement => {
+            if(Array.isArray(agreement?.cart_item)){
+                agreement?.cart_item.forEach(cartItem => {
+                    if(cartItem){
+                        totalInCart +=1
+                    }
+                })
+            }
+        })}
+        if(item.agreement_status === 'completed'){
+            totalRentedOut +=1
+        }
+
+        if(totalRentedOut && totalInCart){
+            // need to get in agreement . cart_item . equipment.quantity, add it up, and then subtract total rented out and total in cart
+        }
+        acc[month] = (acc[month] || 0) + 1
+        return acc
+        }, {})
+    
+        return Object.keys(monthCounts).map(month => {
+        return { month, rentals: monthCounts[month] }
+        })
+    }
+
+    console.log("CURRENT USER AGREEMENTS:", currentUser.agreements)
+    const barChartRentalData = countAgreementsByMonth(currentUser?.agreements);
+    const barChartLabels = barChartRentalData.map(item => item.month)
+    const barChartDataPoints = barChartRentalData.map(item => item.rentals)
+
+    const barChartdata = {
+        labels: barChartLabels,
+        datasets: [
+          {
+            label: 'Equipment Rented Out',
+            data: barChartDataPoints ,
+            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+          },
+        //   {
+        //     label: 'Equipment In Cart',
+        //     data: labels.map(() => ),
+        //     backgroundColor: 'rgba(53, 162, 235, 0.5)',
+        //   },
+        //   {
+        //     label: 'Idle Equipment',
+        //     data: labels.map(() => ),
+        //     backgroundColor: 'rgba(53, 162, 235, 0.5)',
+        //   },
+        ],
+      }
+
+
 
     function DashHome(){
         return(
@@ -249,22 +463,37 @@ function AccountSettings() {
                 {/* CENTER OF PAGE , BLOCKS AND SUCH  */}
                 <div className="flex-grow p-6 overflow-auto bg-gray-200">
                     <div className="grid grid-cols-3 gap-6">
-                        <div className="h-24 col-span-3 bg-white border border-gray-300 text-center"> Welcome {firstName} </div>
-                        <div className="h-96 col-span-1 bg-white border border-gray-300">
-
+                        <div className="h-24 col-span-3 bg-white border border-gray-300 text-center"> Welcome {currentUser.firstName} </div>
+                        <div className="h-96 py-2 col-span-1 bg-white border border-gray-300">
+                        
+                        {role === 'owner' ? <Doughnut
+                            options={{
+                                responsive: true,
+                                maintainAspectRatio: false,
+                            }}
+                            data={doughnutData}
+                        /> : ""}
+                        
+                        
                         </div>
                         <div className="h-96 col-span-1 bg-white border border-gray-300"></div>
                         <div className="h-96 col-span-1 bg-white border border-gray-300"></div>
-                        <div className="h-96 col-span-2 bg-white border border-gray-300"></div>
-                        <div className="h-96 col-span-1 bg-white border border-gray-300"></div>
-                        <div className="h-24 col-span-1 bg-white border border-gray-300"></div>
-                        <div className="h-24 col-span-2 bg-white border border-gray-300"></div>
+                        <div className="h-96 w-500 col-span-2 bg-white border border-gray-300">
+                        <Bar options={barChartOptions} 
+                        data={barChartdata} />
 
+
+                        </div>
+                        
+                        <div className="h-96 col-span-1 bg-white border border-gray-300"></div>
                     </div>
                 </div>
             </div>
         )
     }
+    // Two empty divs that was above
+    // <div className="h-24 col-span-1 bg-white border border-gray-300"></div>
+    // <div className="h-24 col-span-2 bg-white border border-gray-300"></div>
     
 
     function LoggedInDisplay(){
@@ -282,40 +511,40 @@ function AccountSettings() {
                     </div>
                         <div className="flex flex-col flex-grow p-4 overflow-auto">
 
-                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<DashHome/>)}> Home </span>
+                            <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<DashHome/>)}> Home </span>
 
                             {/* {role === 'owner' ? 
-                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<ActiveListings/>)}> Active listings </span> 
+                            <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<ActiveListings/>)}> Active listings </span> 
                             : 
-                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(
+                            <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(
                             <RentalAgreements/>
                             )}> Rental Agreements  </span>} */}
                             {role === 'owner' &&
-                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<ActiveListings/>)}> Active listings </span>}
+                            <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<ActiveListings/>)}> Active listings </span>}
 
-                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<RentalAgreements/>)}> Rental Agreements</span> 
+                            <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<RentalAgreements/>)}> Rental Agreements</span> 
  
                             
-                            {/* <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<ActiveListings/>)}> Active listings </span>  */}
-                            {/* <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(plannedDeals)}> Planned Deals </span> */}
+                            {/* <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<ActiveListings/>)}> Active listings </span>  */}
+                            {/* <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(plannedDeals)}> Planned Deals </span> */}
 
-                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {
+                             <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {
                                 {role === 'owner' ? setToggleHomeDash(<OwnerFavorites/>) : setToggleHomeDash(<UserFavorites/>)} 
                              }}> 
                                 Favorites
                              </span>
 
-                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {
+                            <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {
                                 (role === 'owner' ? handlePotentialRenter() : handlePotentialOwners())}}>
 
                                 {role === 'owner' ? 'Potential Renters' : 'Potential Rental Interests'}
                             </span>
 
-                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" 
+                            <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" 
                             onClick={() => setToggleHomeDash(<AccountSettings/>)}
                             > Account Settings </span>
 
-                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={handleInboxNavigation}
+                            <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={handleInboxNavigation}
                             > Inbox </span>
                             
                             <span className="flex items-center flex-shrink-0 h-10 px-3 mt-auto text-sm font-medium bg-gray-200 rounded hover:bg-gray-300">
@@ -341,7 +570,7 @@ function AccountSettings() {
                             </button> */}
                             
                             <Link to='/list_equipment'>
-                                <button type="submit" className="flex items-center justify-center h-10 px-4 ml-auto mr-2 rounded-lg bg-orange-500 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700" onClick={() => setFromOwnerDash(true)}> List an Item</button>
+                                <button className="flex items-center justify-center h-10 px-4 ml-auto mr-2 rounded-lg bg-orange-500 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700" onClick={() => setFromOwnerDash(true)}> List an Item</button>
                             </Link>
                             </>
                             }
