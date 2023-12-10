@@ -11,7 +11,7 @@ function UserProfile() {
   const apiUrl = useContext(ApiUrlContext)
 
   //This will be used to set the userProfile after it's been clicked from the owner, unsure if I want users to be able to view other users
-  const [userProfile, setUserProfile] = useState([])
+  const [userProfile, setUserProfile] = useState({})
   const [heartColor, setHeartColor] = useState('white')
   const [isFavorited, setIsFavorited] = useState(null)
   const navigate = useNavigate();
@@ -50,6 +50,20 @@ function UserProfile() {
     profession = '',
     profileImage = ''
   } = source || {}
+
+  console.log("The user Profile:", userProfile)
+  let reviewCounter = 0
+
+  if (Array.isArray(userProfile.review)) {
+    userProfile.review.forEach((element) => {
+      if (element.reviewer_type === 'user'){
+        reviewCounter +=1
+      }
+      console.log("THE REVIEW COUNTER INSIDE THE IF:", reviewCounter)
+    })
+  } else {
+    console.log('userProfile is not an array:', userProfile)
+  }
 
   
   //May actually want to include a banner image so it looks nicer
@@ -161,9 +175,9 @@ function UserProfile() {
                     </div>
                     <div className="lg:mr-4 p-3 text-center">
                       <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
-                        89
+                      {reviewCounter}
                       </span>
-                      <span className="text-sm text-gray-500">Reviews</span>
+                      <span className="text-sm text-gray-500">Review</span>
                     </div>
                   </div>
                 </div>
