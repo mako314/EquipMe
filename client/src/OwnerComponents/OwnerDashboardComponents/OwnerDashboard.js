@@ -251,6 +251,12 @@ function AccountSettings() {
     let totalEquipment = 0
     let itemsInUserCart = 0
     let totalFavorites = 0
+    let totalFeaturedEquipment = 0
+
+    let totalPendingAgreements = 0
+    const rentalAgreementStatuses = ['in-progress', 'user-accepted', 'owner-accepted']
+
+    let totalCompletedAgreements = 0
 
     //Handles finding ALL equipment an owner has. Found in Equipment > Quantity property
     if (Array.isArray(currentUser?.equipment)) {
@@ -271,6 +277,7 @@ function AccountSettings() {
         })
     }
 
+    //Handles finding ALL FAVORITED equipment, found in Equipment > Favorite
     if (Array.isArray(currentUser?.equipment)) {
         currentUser.equipment.forEach(equip => {
             if (Array.isArray(equip.user_favorite)){
@@ -282,11 +289,42 @@ function AccountSettings() {
         })
     }
 
+    // Handles finding all FEATURED equipment, found in Equipment > Featured Equipment
+    if (Array.isArray(currentUser?.equipment)) {
+        currentUser.equipment.forEach(equip => {
+            if (Array.isArray(equip.featured_equipment)){
+                equip.featured_equipment.forEach(featuredEquipment => {
+                    if(featuredEquipment){
+                    totalFeaturedEquipment += 1}
+                })
+            }
+        })
+    }
+
+    // Handles finding all PENDING agreements, found in Agreements and their statuses ['in-progress', 'user-accepted', 'owner-accepted']
+    if (Array.isArray(currentUser?.agreements)) {
+        currentUser.agreements.forEach(agreement => {
+            if (rentalAgreementStatuses.includes(agreement.agreement_status)){
+                totalPendingAgreements +=1
+            }
+        })
+    }
+
+    // Handles finding all FINISHED agreements, meaning this equipment is rented out. Found in Agreements and their statuses
+    if (Array.isArray(currentUser?.agreements)) {
+        currentUser.agreements.forEach(agreement => {
+            if (agreement.agreement_status === 'completed'){
+                totalCompletedAgreements +=1
+            }
+        })
+    }
+
     console.log("The length of all Equipments:", totalEquipment)
     console.log("The length of all items in a user cart:", itemsInUserCart)
     console.log("Total Favorites:", totalFavorites)
-
-
+    console.log("Total Featured Equipment:", totalFeaturedEquipment)
+    console.log("Total PENDING Agreements Equipment:", totalPendingAgreements)
+    console.log("Total COMPLETED Agreements Equipment:", totalCompletedAgreements)
 
     ChartJS.register(ArcElement, Tooltip, Legend)
     // https://codesandbox.io/p/devbox/reactchartjs-react-chartjs-2-default-t64th?file=%2FApp.tsx%3A29%2C22
@@ -296,8 +334,8 @@ function AccountSettings() {
         labels: ['All Equipment', 'In Renter Carts', 'Favorited By Renters', 'Featured Equipment', 'Equipment Pending Agreement', 'Equipment Rented Out'],
         datasets: [
           {
-            label: '# of Votes',
-            data: [totalEquipment, itemsInUserCart, totalFavorites, 5, 2, 3],
+            label: '# of Equipment',
+            data: [totalEquipment, itemsInUserCart, totalFavorites, totalFeaturedEquipment, totalPendingAgreements, totalCompletedAgreements],
             backgroundColor: [
               'rgba(255, 99, 132, 0.2)',
               'rgba(54, 162, 235, 0.2)',
