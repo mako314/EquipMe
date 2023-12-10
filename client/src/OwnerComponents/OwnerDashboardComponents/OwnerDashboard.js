@@ -248,14 +248,56 @@ function AccountSettings() {
 
     
     //-----------------------------------------------CHART CODE -------------------------
-    ChartJS.register(ArcElement, Tooltip, Legend)
+    let totalEquipment = 0
+    let itemsInUserCart = 0
+    let totalFavorites = 0
 
+    //Handles finding ALL equipment an owner has. Found in Equipment > Quantity property
+    if (Array.isArray(currentUser?.equipment)) {
+        currentUser.equipment.forEach(equip => {
+            totalEquipment += equip.quantity
+        })
+    }
+
+    //Handles finding ALL equipment in user carts, found in Cart > Quantity
+    if (Array.isArray(currentUser?.equipment)) {
+        currentUser.equipment.forEach(equip => {
+            if (Array.isArray(equip.cart_item)){
+                equip.cart_item.forEach(cartItem => {
+                    if(cartItem){
+                    itemsInUserCart += cartItem.quantity}
+                })
+            }
+        })
+    }
+
+    if (Array.isArray(currentUser?.equipment)) {
+        currentUser.equipment.forEach(equip => {
+            if (Array.isArray(equip.user_favorite)){
+                equip.user_favorite.forEach(favorite => {
+                    if(favorite){
+                    totalFavorites += 1}
+                })
+            }
+        })
+    }
+
+    console.log("The length of all Equipments:", totalEquipment)
+    console.log("The length of all items in a user cart:", itemsInUserCart)
+    console.log("Total Favorites:", totalFavorites)
+
+
+
+    ChartJS.register(ArcElement, Tooltip, Legend)
+    // https://codesandbox.io/p/devbox/reactchartjs-react-chartjs-2-default-t64th?file=%2FApp.tsx%3A29%2C22
+    // https://stackoverflow.com/questions/59325426/how-to-resize-chart-js-element-in-react-js
+    // https://stackoverflow.com/questions/53872165/cant-resize-react-chartjs-2-doughnut-chart
     let doughnutData = {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        labels: ['All Equipment', 'In Renter Carts', 'Favorited By Renters', 'Featured Equipment', 'Equipment Pending Agreement', 'Equipment Rented Out'],
         datasets: [
           {
             label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
+            data: [totalEquipment, itemsInUserCart, totalFavorites, 5, 2, 3],
             backgroundColor: [
               'rgba(255, 99, 132, 0.2)',
               'rgba(54, 162, 235, 0.2)',
