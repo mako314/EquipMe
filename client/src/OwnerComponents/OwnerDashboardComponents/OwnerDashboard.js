@@ -227,7 +227,9 @@ function AccountSettings() {
         const updatedPotentialRenters = (
             <UserCollection searchTerm={searchTerm} users={data} setFromOwnerDash={setFromOwnerDash} fromOwnerDash={fromOwnerDash}/>
         )
-        setToggleHomeDash(updatedPotentialRenters)
+
+        const emptyData = <div> loading </div>
+        setToggleHomeDash(data.length > 0 ? updatedPotentialRenters: emptyData)
         setFromOwnerDash(!fromOwnerDash)
         })
     }

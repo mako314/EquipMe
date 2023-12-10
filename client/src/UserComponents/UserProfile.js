@@ -86,7 +86,7 @@ function UserProfile() {
     })
   }
 
-  console.log(source.user_inboxes.length)
+  console.log(source?.user_inboxes?.length)
   
 
 
@@ -194,7 +194,7 @@ function UserProfile() {
                     </div>
                     <div className="mr-4 p-3 text-center">
                       <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
-                        {userProfile.user_inboxes.length}
+                        {source?.user_inboxes?.length}
                       </span>
                       <span className="text-sm text-gray-500">Connections</span>
                     </div>
