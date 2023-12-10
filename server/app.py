@@ -1066,12 +1066,17 @@ class ReviewHandling(Resource):
             agreement_id = data['agreement_id']
             user_id = data['user_id']
             owner_id = data['owner_id']
+            reviewer_type = data['reviewer_type']
 
             # Check for existing reviews
-            user_review_existing = Review.query.filter_by(user_id = user_id, agreement_id = agreement_id).first()
-            owner_review_existing = Review.query.filter_by(owner_id = owner_id, agreement_id = agreement_id).first()
-        
-            if  user_review_existing.reviewer_type == 'user' and owner_review_existing.reviewer_type =='owner' :
+            user_review_existing = Review.query.filter_by(user_id = user_id, agreement_id = agreement_id, reviewer_type = reviewer_type).first()
+            owner_review_existing = Review.query.filter_by(owner_id = owner_id, agreement_id = agreement_id, reviewer_type = reviewer_type).first()
+            
+            if user_review_existing:
+                response = {"error": "You have already left a review for this agreement"}
+                return make_response(response, 409) # 409 Conflict
+            
+            if owner_review_existing:
                 response = {"error": "You have already left a review for this agreement"}
                 return make_response(response, 409) # 409 Conflict
         
@@ -1102,6 +1107,7 @@ class UserReviewEditing(Resource):
         if selected_review:
             #try VALIDATIONS:
             data = request.get_json()
+            print("Received data:", data)
             for key in data:
                 setattr(selected_review, key, data[key])
                 db.session.add(selected_review)
@@ -1124,8 +1130,11 @@ class OwnerReviewEditing(Resource):
         if selected_review:
             #try VALIDATIONS:
             data = request.get_json()
+            print("Received data:", data)
             for key in data:
                 setattr(selected_review, key, data[key])
+                if 'review_comment' in data:
+                    selected_review.review_comment = data['review_comment']
                 db.session.add(selected_review)
                 db.session.commit()
                 response = make_response(selected_review.to_dict(), 202)

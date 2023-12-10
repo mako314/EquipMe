@@ -2,13 +2,15 @@ import React, {useState} from "react";
 import {useNavigate} from 'react-router-dom';
 import SubmitReview from "../ReviewComponents/SubmitReview";
 
-function RentalAgreementCard({ equipmentName, rentalId, rentalStart, rentalEnd, renterFirstName, renterLastName, location, ownerEmail, ownerFirstName, ownerLastName, cartName, quantity, rentalDelivery, rentalDeliveryAddress, rentalRevisions, rentalStatus,rentalCreatedAt, rentalUpdatedAt, setFromOwnerDash, fromOwnerDash, renterId, ownerId}) {
+function RentalAgreementCard({ equipmentName, rentalId, rentalStart, rentalEnd, renterFirstName, renterLastName, location, ownerEmail, ownerFirstName, ownerLastName, cartName, quantity, rentalDelivery, rentalDeliveryAddress, rentalRevisions, rentalStatus,rentalCreatedAt, rentalUpdatedAt, setFromOwnerDash, fromOwnerDash, renterId, ownerId, existingReviews}) {
     const navigate = useNavigate()
     // May be a good idea to draw how exactly status should work, 
     // one side accepted, both, in progress, etc
     // console.log("The rental status:", rentalStatus)
     // console.log("The type of:", typeof(rentalDelivery))
     // console.log(item)
+
+    console.log("THE REVIEWS:",existingReviews)
 
     const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -127,7 +129,7 @@ function RentalAgreementCard({ equipmentName, rentalId, rentalStart, rentalEnd, 
         RENTAL MODAL
         </button>} */}
 
-        {rentalStatus === 'completed' && <SubmitReview toggleReviewModal={toggleReviewModal} isModalOpen={isModalOpen} rentalStatus={rentalStatus} renterId={renterId} ownerId={ownerId} rentalId={rentalId} renterFirstName={renterFirstName} renterLastName={renterLastName} ownerFirstName={ownerFirstName} ownerLastName={ownerLastName}/>
+        {rentalStatus === 'completed' && <SubmitReview toggleReviewModal={toggleReviewModal} isModalOpen={isModalOpen} rentalStatus={rentalStatus} renterId={renterId} ownerId={ownerId} rentalId={rentalId} renterFirstName={renterFirstName} renterLastName={renterLastName} ownerFirstName={ownerFirstName} ownerLastName={ownerLastName} existingReviews={existingReviews}/>
         }
     </div>
         

@@ -1,20 +1,31 @@
-import React, {useState, useContext} from "react";
+import React, {useState, useContext, useEffect} from "react";
 import ApiUrlContext from '../Api'
 import { UserSessionContext } from "../UserComponents/SessionContext";
 import {toast} from 'react-toastify'
 
 
-function SubmitReview({toggleReviewModal, isModalOpen, renterId, ownerId, rentalId, renterFirstName, renterLastName, ownerFirstName, ownerLastName}){
+function SubmitReview({toggleReviewModal, isModalOpen, renterId, ownerId, rentalId, renterFirstName, renterLastName, ownerFirstName, ownerLastName, existingReviews}){
     const apiUrl = useContext(ApiUrlContext)
     const { currentUser, role, checkSession } = UserSessionContext()
-
-
 
     const [starAmount, setStarAmount] = useState(0)
     const [reviewComment, setReviewComment] = useState('')
     
+
+    const postedReview = existingReviews.find((review) => review.reviewer_type === role)
+    // console.log("REVIEW THAT WAS POSTED:", postedReview)
     // console.log("RENTER ID:", renterId)
     // console.log("OWNER ID:", ownerId)
+
+    console.log("THE REVIEW COMMENT:", reviewComment)
+    console.log("THE STAR AMOUNT:", starAmount)
+
+    useEffect(() => {
+      if (postedReview && postedReview.review_comment !== undefined && postedReview.review_stars !== undefined) {
+        setReviewComment(postedReview.review_comment)
+        setStarAmount(postedReview.review_stars)
+      }
+    }, [postedReview, toggleReviewModal])
 
     function handleReviewSubmission() {
          if(reviewComment ===''){
@@ -30,7 +41,9 @@ function SubmitReview({toggleReviewModal, isModalOpen, renterId, ownerId, rental
             "autoClose" : 2000
             })
           }
+        
 
+        // I could probably also make this a ternary and make the patch smaller, but I don't think it'll be needed
         let newReview ={
           'review_stars': starAmount,
           'review_comment' : reviewComment,
@@ -39,9 +52,18 @@ function SubmitReview({toggleReviewModal, isModalOpen, renterId, ownerId, rental
           'user_id' : renterId,
           'owner_id' : ownerId
         }
+
+        //Conditional for fetchin
+        let reviewMethod = postedReview ? "PATCH" : "POST"
+
+        let patchURLs = postedReview && role === 'user' ? `user/${currentUser.id}/review/${postedReview.id}/` : `/owner/${currentUser.id}/review/${postedReview.id}/`
+
+        let reviewUrl = postedReview ? patchURLs : `${apiUrl}review`
+
+        console.log('REVIEW COMMENT INSIDE OF THE FETCH:', reviewComment)
     
-        fetch(`${apiUrl}review`, {
-            method: "POST",
+        fetch(reviewUrl, {
+            method: reviewMethod,
             headers: {
               "Content-Type": "application/json",
             },
@@ -50,10 +72,17 @@ function SubmitReview({toggleReviewModal, isModalOpen, renterId, ownerId, rental
             if (resp.ok) {
               resp.json().then((newReviewData) => {
                 console.log(newReviewData)
-                toast.success(`✅ Succesfully left ${role === 'owner' ? `${renterFirstName} ${renterLastName}` : `${ownerFirstName} ${ownerLastName}` } a review`,
+                postedReview ?                 toast.success(`✅ Succesfully edited the review you left ${role === 'owner' ? `${renterFirstName} ${renterLastName}` : `${ownerFirstName} ${ownerLastName}` } `,
                 {
                   "autoClose" : 2000
                 })
+                : 
+                toast.success(`✅ Succesfully left ${role === 'owner' ? `${renterFirstName} ${renterLastName}` : `${ownerFirstName} ${ownerLastName}` } a review`,
+                {
+                  "autoClose" : 2000
+                }) 
+
+                checkSession()
               })
             } else {
               console.log(resp.error)
@@ -67,7 +96,6 @@ function SubmitReview({toggleReviewModal, isModalOpen, renterId, ownerId, rental
 
       const reviewCommentHandler = (e) => {
         setReviewComment(e.target.value)
-        
       }
 
     //   const reviewStarHandler = (e) => {
@@ -103,7 +131,7 @@ function SubmitReview({toggleReviewModal, isModalOpen, renterId, ownerId, rental
     return(
         <> 
         <button onClick={toggleReviewModal} className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-        Leave a Review
+        {postedReview ? 'Edit my Review' : 'Leave a Review'}
         </button>
 
     <div>

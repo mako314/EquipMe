@@ -58,6 +58,7 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
       ownerId = {item.equipment.owner.id}
       setFromOwnerDash={setFromOwnerDash} 
       fromOwnerDash={fromOwnerDash}
+      existingReviews={agreement.review}
       />
         ) || []
       ) || []
@@ -87,7 +88,9 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
       ownerId = {currentUser.id}
       setFromOwnerDash={setFromOwnerDash} 
       fromOwnerDash={fromOwnerDash}
-      />)
+      existingReviews={agreement.review}
+      />
+      )
   }
 
     return (
