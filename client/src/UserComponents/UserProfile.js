@@ -55,22 +55,22 @@ function UserProfile() {
   let reviewCounter = 0
   let agreementCounter = 0
 
-  if (Array.isArray(userProfile.review)) {
-    userProfile.review.forEach((element) => {
+  if (Array.isArray(source.review)) {
+    source.review.forEach((element) => {
       if (element.reviewer_type === 'user'){
         reviewCounter +=1
       }
       // console.log("THE REVIEW COUNTER INSIDE THE IF:", reviewCounter)
     })
   } else {
-    console.log('userProfile is not an array:', userProfile)
+    console.log('source is not an array:', source)
   }
 
   
-  //Was having issues with the userProfile array not being able to identify my agreements array because of how deeply nested it is. A user can also have multiple carts. So it's important to consider this while I try to get deeper into the forEach
+  //Was having issues with the source array not being able to identify my agreements array because of how deeply nested it is. A user can also have multiple carts. So it's important to consider this while I try to get deeper into the forEach
 
-  if (Array.isArray(userProfile.cart)) {
-    userProfile.cart.forEach(cart => {
+  if (Array.isArray(source.cart)) {
+    source.cart.forEach(cart => {
       if (Array.isArray(cart.cart_item)) {
         cart.cart_item.forEach(cartItem => {
           if (Array.isArray(cartItem.agreements)) {
@@ -86,7 +86,7 @@ function UserProfile() {
     })
   }
 
-  console.log(userProfile)
+  console.log(source.user_inboxes.length)
   
 
 
@@ -194,7 +194,7 @@ function UserProfile() {
                     </div>
                     <div className="mr-4 p-3 text-center">
                       <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
-                        10
+                        {userProfile.user_inboxes.length}
                       </span>
                       <span className="text-sm text-gray-500">Connections</span>
                     </div>
