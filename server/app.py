@@ -1110,6 +1110,8 @@ class UserReviewEditing(Resource):
             print("Received data:", data)
             for key in data:
                 setattr(selected_review, key, data[key])
+                if 'review_comment' in data:
+                    selected_review.review_comment = data['review_comment']
                 db.session.add(selected_review)
                 db.session.commit()
                 response = make_response(selected_review.to_dict(), 202)

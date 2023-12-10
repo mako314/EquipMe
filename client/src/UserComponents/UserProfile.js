@@ -1,6 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react';
 import ApiUrlContext from '../Api';
 import RentalAgreementsCollection from '../RentalComponents/RentalAgreementsCollection';
+import Reviews from '../ReviewComponents/Reviews';
+import EquipmentMap from '../MapComponents/EquipmentMap';
 import { UserSessionContext } from './SessionContext';
 import { useParams, useNavigate, useInRouterContext } from 'react-router-dom';
 
@@ -11,7 +13,7 @@ function UserProfile() {
   const apiUrl = useContext(ApiUrlContext)
 
   //This will be used to set the userProfile after it's been clicked from the owner, unsure if I want users to be able to view other users
-  const [userProfile, setUserProfile] = useState([])
+  const [userProfile, setUserProfile] = useState({})
   const [heartColor, setHeartColor] = useState('white')
   const [isFavorited, setIsFavorited] = useState(null)
   const navigate = useNavigate();
@@ -51,6 +53,48 @@ function UserProfile() {
     profileImage = ''
   } = source || {}
 
+  // console.log("The user Profile:", userProfile)
+  let reviewCounter = 0
+  let agreementCounter = 0
+
+  if (Array.isArray(source.review)) {
+    source.review.forEach((element) => {
+      if (element.reviewer_type === 'user'){
+        reviewCounter +=1
+      }
+      // console.log("THE REVIEW COUNTER INSIDE THE IF:", reviewCounter)
+    })
+  } else {
+    console.log('source is not an array:', source)
+  }
+
+  
+  //Was having issues with the source array not being able to identify my agreements array because of how deeply nested it is. A user can also have multiple carts. So it's important to consider this while I try to get deeper into the forEach
+
+  if (Array.isArray(source.cart)) {
+    source.cart.forEach(cart => {
+      if (Array.isArray(cart.cart_item)) {
+        cart.cart_item.forEach(cartItem => {
+          if (Array.isArray(cartItem.agreements)) {
+            cartItem.agreements.forEach(agreement => {
+              if(agreement.agreement_status === 'both-accepted'){
+                agreementCounter +=1
+              }
+              // console.log(agreement)
+            })
+          } else {console.log("Agreements not an array")}
+        })
+      } else {console.log("Cart Items not an array")}
+    })
+  } else {console.log("Source cart not an array")}
+
+  // console.log(source?.user_inboxes?.length)
+  
+  console.log("THE REVIEWS:",source.review)
+  // Owner is the one leaving reviews
+  let ownerReviews = source.review?.filter(reviewSubmission => reviewSubmission.reviewer_type === 'user')
+
+  console.log("Owner Reviews:", ownerReviews)
   
   //May actually want to include a banner image so it looks nicer
 
@@ -149,21 +193,21 @@ function UserProfile() {
                   <div className="flex justify-center py-4 lg:pt-4 pt-8">
                     <div className="mr-4 p-3 text-center">
                       <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
-                        22
+                      {agreementCounter}
                       </span>
-                      <span className="text-sm text-gray-500">Rentals</span>
+                      <span className="text-sm text-gray-500">Rental</span>
                     </div>
                     <div className="mr-4 p-3 text-center">
                       <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
-                        10
+                        {source?.user_inboxes?.length}
                       </span>
                       <span className="text-sm text-gray-500">Connections</span>
                     </div>
                     <div className="lg:mr-4 p-3 text-center">
                       <span className="text-xl font-bold block uppercase tracking-wide text-gray-700">
-                        89
+                      {reviewCounter}
                       </span>
-                      <span className="text-sm text-gray-500">Reviews</span>
+                      <span className="text-sm text-gray-500">Review</span>
                     </div>
                   </div>
                 </div>
@@ -185,7 +229,23 @@ function UserProfile() {
                   Work Phone: {phone}
                 </div>
               </div>
-              <div className="mt-10 py-10 border-t border-gray-300 text-center">
+
+              <div class="mx-auto w-full max-w-7xl py-16">
+                        <div className="flex justify-between">
+                                <span className="text-gray-600 font-bold mb-4">Reviews</span>
+                        </div>
+                        <ul class="mb-6 grid gap-5 sm:grid-cols-2 md:grid-cols-2 md:mb-16"> 
+                        {ownerReviews?.map((item) => (
+                            <Reviews stars={item.review_stars} comment={item.review_comment} image={item.owner.profileImage} firstName={item.owner.firstName} lastName={item.owner.lastName} profession={item.owner.profession}/>
+                        ))}
+                        </ul>
+                </div>
+
+              <div className="flex mb-8">
+                <EquipmentMap location={source.location} userDisplayHeight={300} userDisplayWidth={1500} userDisplayZoom={8}/>
+              </div>
+
+              {/* <div className="mt-10 py-10 border-t border-gray-300 text-center">
                 <div className="flex flex-wrap justify-center">
                   <div className="w-full lg:w-9/12 px-4">
                     <p className="mb-4 text-lg leading-relaxed text-gray-800">
@@ -200,9 +260,9 @@ function UserProfile() {
                     </a>
                   </div>
 
-                </div>
+                </div> */}
                 {/* <RentalAgreementsCollection key={user?.id}/> */}
-              </div>
+              {/* </div> */}
             </div>
           </div>
         </div>

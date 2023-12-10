@@ -63,7 +63,7 @@ class EquipmentMap extends Component {
     if (this.props.location && mapDiv) {
       const geocoder = new window.google.maps.Geocoder()
       const mapOptions = {
-        zoom: this.props.ownerDisplayZoom ? this.props.ownerDisplayZoom : 12,
+        zoom: this.props.userDisplayZoom ? this.props.userDisplayZoom : 12,
         center: { lat: -34.397, lng: 150.644 },
       }
       if (mapDiv && !this.map) {
@@ -94,7 +94,7 @@ class EquipmentMap extends Component {
   render() {
     return (
         // <div className="map-container">
-          <div id="map" style={{ height: this.props.ownerDisplayHeight ? this.props.ownerDisplayHeight :'500px',  width: this.props.ownerDisplayWidth ? this.props.ownerDisplayWidth : '550px'}}></div>
+          <div id="map" style={{ height: this.props.userDisplayHeight ? this.props.userDisplayHeight :'500px',  width: this.props.userDisplayWidth ? this.props.userDisplayWidth : '550px'}}></div>
         // </div>
       )
   }

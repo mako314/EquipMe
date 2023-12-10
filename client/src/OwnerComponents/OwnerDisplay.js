@@ -145,7 +145,7 @@ console.log("reviews:", owner.review)
                             </ul> */}
                             {/* although it says equipmentMap, this map is really universal, so name may be prone to CHANGE */}
                             <div className="flex">
-                            <EquipmentMap location={location} ownerDisplayHeight={200} ownerDisplayWidth={325} ownerDisplayZoom={8}/>
+                            <EquipmentMap location={location} userDisplayHeight={200} userDisplayWidth={325} userDisplayZoom={8}/>
                             </div>
 
                         </div>
@@ -232,7 +232,7 @@ console.log("reviews:", owner.review)
                         <div class="mx-auto w-full max-w-7xl py-16 md:py-24 lg:py-32">
                         <div className="flex justify-between">
                                 <span className="text-gray-600 font-bold mb-4">Reviews</span>
-                            </div>
+                        </div>
                             <ul class="mb-6 grid gap-5 sm:grid-cols-2 md:grid-cols-2 md:mb-16"> 
                         {userReviews?.map((item) => (
                             <Reviews stars={item.review_stars} comment={item.review_comment} image={item.user.profileImage} firstName={item.user.firstName} lastName={item.user.lastName} profession={item.user.profession}/>
