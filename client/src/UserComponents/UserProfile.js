@@ -239,12 +239,14 @@ function UserProfile() {
                             <Reviews stars={item.review_stars} comment={item.review_comment} image={item.owner.profileImage} firstName={item.owner.firstName} lastName={item.owner.lastName} profession={item.owner.profession}/>
                         ))}
                         </ul>
+
+                        <div className="flex mb-8">
+                          <EquipmentMap location={source.location} userDisplayHeight={300} userDisplayWidth={1500} userDisplayZoom={8}/>
+                        </div>
+
                 </div>
 
-              <div className="flex mb-8">
-                <EquipmentMap location={source.location} userDisplayHeight={300} userDisplayWidth={1500} userDisplayZoom={8}/>
-              </div>
-
+              
               {/* <div className="mt-10 py-10 border-t border-gray-300 text-center">
                 <div className="flex flex-wrap justify-center">
                   <div className="w-full lg:w-9/12 px-4">
