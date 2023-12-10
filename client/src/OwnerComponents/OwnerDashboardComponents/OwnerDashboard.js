@@ -19,8 +19,8 @@ import { UserSessionContext } from '../../UserComponents/SessionContext';
 import { ReactComponent as EquipMeLogo } from '../../Content/EquipMeLogo.svg'
 
 //Chart imports
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import { Doughnut } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import { Doughnut, Bar } from 'react-chartjs-2';
 
 
 function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
@@ -326,7 +326,15 @@ function AccountSettings() {
     console.log("Total PENDING Agreements Equipment:", totalPendingAgreements)
     console.log("Total COMPLETED Agreements Equipment:", totalCompletedAgreements)
 
-    ChartJS.register(ArcElement, Tooltip, Legend)
+    ChartJS.register(
+        ArcElement, 
+        Tooltip, 
+        Legend, 
+        CategoryScale,
+        LinearScale,
+        BarElement,
+        Title,
+    )
     // https://codesandbox.io/p/devbox/reactchartjs-react-chartjs-2-default-t64th?file=%2FApp.tsx%3A29%2C22
     // https://stackoverflow.com/questions/59325426/how-to-resize-chart-js-element-in-react-js
     // https://stackoverflow.com/questions/53872165/cant-resize-react-chartjs-2-doughnut-chart
@@ -357,6 +365,97 @@ function AccountSettings() {
         ],
       }
 
+    //------------------------BAR CHART--------------------------------------
+    // https://codesandbox.io/p/devbox/reactchartjs-react-chartjs-2-vertical-jebqk?file=%2FApp.tsx%3A38%2C1-52%2C3
+    let barChartOptions = {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: true,
+            text: 'Chart.js Bar Chart',
+          },
+        },
+      };
+
+    
+
+
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+
+    // Function to get the month name from a date
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/getMonth
+    const getMonthName = (dateString) => {
+        const date = new Date(dateString)
+        const month = date.getMonth()
+        console.log("THE MONTH:", month)
+        return monthNames[month]
+      }
+
+    // Count agreements per month
+    // https://www.w3schools.com/jsref/jsref_reduce.asp
+    // https://www.youtube.com/watch?v=XKD0aIA3-yM&list=PLo63gcFIe8o0nnhu0F-PpsTc8nkhNe9yu
+    let totalIdle
+    let totalInCart = 0
+    let totalRentedOut = 0
+    const countAgreementsByMonth = (data) => {
+        const monthCounts = data.reduce((acc, item) => {
+        console.log("the item in the reducer:", item)
+        const month = getMonthName(item.created_at)
+        if (Array.isArray(item?.cart_item)){item?.cart_item.forEach(agreement => {
+            if(Array.isArray(agreement?.cart_item)){
+                agreement?.cart_item.forEach(cartItem => {
+                    if(cartItem){
+                        totalInCart +=1
+                    }
+                })
+            }
+        })}
+        if(item.agreement_status === 'completed'){
+            totalRentedOut +=1
+        }
+
+        if(totalRentedOut && totalInCart){
+            // need to get in agreement . cart_item . equipment.quantity, add it up, and then subtract total rented out and total in cart
+        }
+        acc[month] = (acc[month] || 0) + 1
+        return acc
+        }, {})
+    
+        return Object.keys(monthCounts).map(month => {
+        return { month, rentals: monthCounts[month] }
+        })
+    }
+
+    console.log("CURRENT USER AGREEMENTS:", currentUser.agreements)
+    const barChartRentalData = countAgreementsByMonth(currentUser?.agreements);
+    const barChartLabels = barChartRentalData.map(item => item.month)
+    const barChartDataPoints = barChartRentalData.map(item => item.rentals)
+
+    const barChartdata = {
+        labels: barChartLabels,
+        datasets: [
+          {
+            label: 'Equipment Rented Out',
+            data: barChartDataPoints ,
+            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+          },
+        //   {
+        //     label: 'Equipment In Cart',
+        //     data: labels.map(() => ),
+        //     backgroundColor: 'rgba(53, 162, 235, 0.5)',
+        //   },
+        //   {
+        //     label: 'Idle Equipment',
+        //     data: labels.map(() => ),
+        //     backgroundColor: 'rgba(53, 162, 235, 0.5)',
+        //   },
+        ],
+      }
+
+
 
     function DashHome(){
         return(
@@ -367,18 +466,22 @@ function AccountSettings() {
                         <div className="h-24 col-span-3 bg-white border border-gray-300 text-center"> Welcome {currentUser.firstName} </div>
                         <div className="h-96 py-2 col-span-1 bg-white border border-gray-300">
                         
-                        <Doughnut
+                        {role === 'owner' ? <Doughnut
                             options={{
                                 responsive: true,
                                 maintainAspectRatio: false,
                             }}
                             data={doughnutData}
-                        />
+                        /> : ""}
+                        
                         
                         </div>
                         <div className="h-96 col-span-1 bg-white border border-gray-300"></div>
                         <div className="h-96 col-span-1 bg-white border border-gray-300"></div>
                         <div className="h-96 w-500 col-span-2 bg-white border border-gray-300">
+                        <Bar options={barChartOptions} 
+                        data={barChartdata} />
+
 
                         </div>
                         
