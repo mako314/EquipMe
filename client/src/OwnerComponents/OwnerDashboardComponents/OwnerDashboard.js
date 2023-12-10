@@ -18,6 +18,10 @@ import OwnerCard from '../OwnerCard';
 import { UserSessionContext } from '../../UserComponents/SessionContext';
 import { ReactComponent as EquipMeLogo } from '../../Content/EquipMeLogo.svg'
 
+//Chart imports
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Doughnut } from 'react-chartjs-2';
+
 
 function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
 
@@ -242,6 +246,37 @@ function AccountSettings() {
         }, 0)
       }
 
+    
+    //-----------------------------------------------CHART CODE -------------------------
+    ChartJS.register(ArcElement, Tooltip, Legend)
+
+    let doughnutData = {
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        datasets: [
+          {
+            label: '# of Votes',
+            data: [12, 19, 3, 5, 2, 3],
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)',
+              'rgba(255, 159, 64, 0.2)',
+            ],
+            borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)',
+            ],
+            borderWidth: 1,
+          },
+        ],
+      }
+
 
     function DashHome(){
         return(
@@ -250,12 +285,23 @@ function AccountSettings() {
                 <div className="flex-grow p-6 overflow-auto bg-gray-200">
                     <div className="grid grid-cols-3 gap-6">
                         <div className="h-24 col-span-3 bg-white border border-gray-300 text-center"> Welcome {currentUser.firstName} </div>
-                        <div className="h-96 col-span-1 bg-white border border-gray-300">
-
+                        <div className="h-96 py-2 col-span-1 bg-white border border-gray-300">
+                        
+                        <Doughnut
+                            options={{
+                                responsive: true,
+                                maintainAspectRatio: false,
+                            }}
+                            data={doughnutData}
+                        />
+                        
                         </div>
                         <div className="h-96 col-span-1 bg-white border border-gray-300"></div>
                         <div className="h-96 col-span-1 bg-white border border-gray-300"></div>
-                        <div className="h-96 col-span-2 bg-white border border-gray-300"></div>
+                        <div className="h-96 w-500 col-span-2 bg-white border border-gray-300">
+
+                        </div>
+                        
                         <div className="h-96 col-span-1 bg-white border border-gray-300"></div>
                     </div>
                 </div>
@@ -282,40 +328,40 @@ function AccountSettings() {
                     </div>
                         <div className="flex flex-col flex-grow p-4 overflow-auto">
 
-                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<DashHome/>)}> Home </span>
+                            <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<DashHome/>)}> Home </span>
 
                             {/* {role === 'owner' ? 
-                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<ActiveListings/>)}> Active listings </span> 
+                            <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<ActiveListings/>)}> Active listings </span> 
                             : 
-                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(
+                            <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(
                             <RentalAgreements/>
                             )}> Rental Agreements  </span>} */}
                             {role === 'owner' &&
-                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<ActiveListings/>)}> Active listings </span>}
+                            <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<ActiveListings/>)}> Active listings </span>}
 
-                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<RentalAgreements/>)}> Rental Agreements</span> 
+                            <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<RentalAgreements/>)}> Rental Agreements</span> 
  
                             
-                            {/* <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<ActiveListings/>)}> Active listings </span>  */}
-                            {/* <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(plannedDeals)}> Planned Deals </span> */}
+                            {/* <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<ActiveListings/>)}> Active listings </span>  */}
+                            {/* <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(plannedDeals)}> Planned Deals </span> */}
 
-                             <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {
+                             <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {
                                 {role === 'owner' ? setToggleHomeDash(<OwnerFavorites/>) : setToggleHomeDash(<UserFavorites/>)} 
                              }}> 
                                 Favorites
                              </span>
 
-                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {
+                            <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {
                                 (role === 'owner' ? handlePotentialRenter() : handlePotentialOwners())}}>
 
                                 {role === 'owner' ? 'Potential Renters' : 'Potential Rental Interests'}
                             </span>
 
-                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" 
+                            <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" 
                             onClick={() => setToggleHomeDash(<AccountSettings/>)}
                             > Account Settings </span>
 
-                            <span className="flex items-center flex-shrink-0 h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={handleInboxNavigation}
+                            <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={handleInboxNavigation}
                             > Inbox </span>
                             
                             <span className="flex items-center flex-shrink-0 h-10 px-3 mt-auto text-sm font-medium bg-gray-200 rounded hover:bg-gray-300">

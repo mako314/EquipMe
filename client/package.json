@@ -13,6 +13,7 @@
     "formik": "^2.4.2",
     "proxy": "^2.1.1",
     "react": "^18.2.0",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-paginate": "^8.2.0",
     "react-router-dom": "^6.14.2",
