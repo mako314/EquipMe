@@ -1,6 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react';
 import ApiUrlContext from '../Api';
 import RentalAgreementsCollection from '../RentalComponents/RentalAgreementsCollection';
+import Reviews from '../ReviewComponents/Reviews';
+import EquipmentMap from '../MapComponents/EquipmentMap';
 import { UserSessionContext } from './SessionContext';
 import { useParams, useNavigate, useInRouterContext } from 'react-router-dom';
 
@@ -51,7 +53,7 @@ function UserProfile() {
     profileImage = ''
   } = source || {}
 
-  console.log("The user Profile:", userProfile)
+  // console.log("The user Profile:", userProfile)
   let reviewCounter = 0
   let agreementCounter = 0
 
@@ -78,18 +80,21 @@ function UserProfile() {
               if(agreement.agreement_status === 'both-accepted'){
                 agreementCounter +=1
               }
-              console.log(agreement)
+              // console.log(agreement)
             })
-          }
+          } else {console.log("Agreements not an array")}
         })
-      }
+      } else {console.log("Cart Items not an array")}
     })
-  }
+  } else {console.log("Source cart not an array")}
 
-  console.log(source?.user_inboxes?.length)
+  // console.log(source?.user_inboxes?.length)
   
+  console.log("THE REVIEWS:",source.review)
+  // Owner is the one leaving reviews
+  let ownerReviews = source.review?.filter(reviewSubmission => reviewSubmission.reviewer_type === 'user')
 
-
+  console.log("Owner Reviews:", ownerReviews)
   
   //May actually want to include a banner image so it looks nicer
 
@@ -224,7 +229,23 @@ function UserProfile() {
                   Work Phone: {phone}
                 </div>
               </div>
-              <div className="mt-10 py-10 border-t border-gray-300 text-center">
+
+              <div class="mx-auto w-full max-w-7xl py-16">
+                        <div className="flex justify-between">
+                                <span className="text-gray-600 font-bold mb-4">Reviews</span>
+                        </div>
+                        <ul class="mb-6 grid gap-5 sm:grid-cols-2 md:grid-cols-2 md:mb-16"> 
+                        {ownerReviews?.map((item) => (
+                            <Reviews stars={item.review_stars} comment={item.review_comment} image={item.owner.profileImage} firstName={item.owner.firstName} lastName={item.owner.lastName} profession={item.owner.profession}/>
+                        ))}
+                        </ul>
+                </div>
+
+              <div className="flex mb-8">
+                <EquipmentMap location={source.location} userDisplayHeight={300} userDisplayWidth={1500} userDisplayZoom={8}/>
+              </div>
+
+              {/* <div className="mt-10 py-10 border-t border-gray-300 text-center">
                 <div className="flex flex-wrap justify-center">
                   <div className="w-full lg:w-9/12 px-4">
                     <p className="mb-4 text-lg leading-relaxed text-gray-800">
@@ -239,9 +260,9 @@ function UserProfile() {
                     </a>
                   </div>
 
-                </div>
+                </div> */}
                 {/* <RentalAgreementsCollection key={user?.id}/> */}
-              </div>
+              {/* </div> */}
             </div>
           </div>
         </div>
