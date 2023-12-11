@@ -259,7 +259,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
       return localISOTime.substring(0, localISOTime.lastIndexOf(':'))
     }
   
-    // This function calculates the end date based on the start date and rental duration
+    // This function calculates the end date based on the start date and rental duration duration type is just weekly, hourly, etc
     const calculateEndDate = (startDate, duration, durationType) => {
       const endDate = new Date(startDate)
   
@@ -285,6 +285,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
         let duration = rentalLength
         let durationType = selectedRate // This # needs to correspond to 'hours', 'days', or 'weeks'
 
+        // take end date and then calculate it wit hthe above function
         const endDate = calculateEndDate(new Date(startRental), duration, durationType)
         const formattedEndDate = toLocalISOString(endDate)
         setEndRental(formattedEndDate) // Update the state with the formatted end date

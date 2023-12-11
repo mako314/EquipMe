@@ -285,7 +285,6 @@ function AccountSettings() {
             <p className='ml-4'>
             Owner Decision: {agreement.owner_decision}
             </p>
-
             ------------------------
         </>
     ))
@@ -301,18 +300,29 @@ function AccountSettings() {
     .sort((a, b) => new Date(b.date) - new Date(a.date))
     .map((agreement) => (
         <>
-            <p> 
-            Agreement Status: {agreement.agreement_status}
-            </p>
-            <br></br>
-            <p>
-            User Decision: {agreement.user_decision}
-            </p>
-            <br></br>
-            <p>
-            Owner Decision: {agreement.owner_decision}
-            </p>
-        </>
+        ---------------------------
+        <br></br>
+        <p className='ml-4'> 
+        For: {agreement.cart_item.cart.user.firstName} {agreement.cart_item.cart.user.lastName}
+        </p>
+        <br></br>
+        <p className='ml-4'> 
+        Created At: {agreement.created_at}
+        </p>
+        <br></br>
+        <p className='ml-4'> 
+        Agreement Status: {agreement.agreement_status}
+        </p>
+        <br></br>
+        <p className='ml-4'>
+        User Decision: {agreement.user_decision}
+        </p>
+        <br></br>
+        <p className='ml-4'>
+        Owner Decision: {agreement.owner_decision}
+        </p>
+        ------------------------
+    </>
     ))
     // console.log("SORTED AGREEMENTS DIV:", sortedDescendingAgreements)
 
