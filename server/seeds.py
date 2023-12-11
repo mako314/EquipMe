@@ -608,7 +608,36 @@ if __name__ == '__main__':
             cart_item_id=cart_items[2].id,  # Lawnmower
             created_at = datetime.utcnow(),
             updated_at = datetime.utcnow()
-        )]
+        ),
+        RentalAgreement(
+            rental_start_date="2023-07-17",
+            rental_end_date="2023-07-20",
+            delivery = False,
+            delivery_address = "",
+            user_decision = "accept",
+            owner_decision = "accept",
+            agreement_status = "completed",
+            owner_id = owner_2.id, # Henry Cavill
+            user_id=user_1.id,  # Sarah Thompson
+            cart_item_id=cart_items[2].id,  # Lawnmower
+            created_at = datetime(2023, 11, 15),  # Year, Month, Day
+            updated_at = datetime(2023, 11, 15)
+        ),
+        RentalAgreement(
+            rental_start_date="2023-07-17",
+            rental_end_date="2023-07-20",
+            delivery = False,
+            delivery_address = "",
+            user_decision = "accept",
+            owner_decision = "accept",
+            agreement_status = "completed",
+            owner_id = owner_2.id, # Henry Cavill
+            user_id=user_1.id,  # Sarah Thompson
+            cart_item_id=cart_items[2].id,  # Lawnmower
+            created_at = datetime(2023, 10, 15),  # Year, Month, Day
+            updated_at = datetime(2023, 10, 15)
+        )
+        ]
 
         db.session.add_all(rental_agreements)
         db.session.commit()

@@ -14,13 +14,15 @@ function BarChart({currentUser}){
     )
     
     let totalEquipment = 0
-    
+
     if (Array.isArray(currentUser?.equipment)) {
         currentUser.equipment.forEach(equip => {
             console.log("each equipment:",equip )
             totalEquipment += equip.quantity
         })
     }
+
+    console.log("TOTAL EQUIPMENT:", totalEquipment)
 
     //------------------------BAR CHART--------------------------------------
     // https://codesandbox.io/p/devbox/reactchartjs-react-chartjs-2-vertical-jebqk?file=%2FApp. tsx%3A38%2C1-52%2C3
@@ -174,7 +176,7 @@ function BarChart({currentUser}){
             borderWidth: 2, // Border width for this dataset
         },
         {
-            label: 'Equipment In Cart',
+            label: 'Equipment In User Carts',
             data: barChartCartTotalItems,
             backgroundColor: 'rgba(75, 181, 67, 0.5)',
             borderColor: 'rgba(34, 139, 34, 1)', // Border color for this dataset

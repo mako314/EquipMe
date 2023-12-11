@@ -56,7 +56,7 @@ function SubmitReview({toggleReviewModal, isModalOpen, renterId, ownerId, rental
         //Conditional for fetchin
         let reviewMethod = postedReview ? "PATCH" : "POST"
 
-        let patchURLs = postedReview && role === 'user' ? `user/${currentUser.id}/review/${postedReview.id}/` : `/owner/${currentUser.id}/review/${postedReview.id}/`
+        let patchURLs = postedReview && role === 'user' ? `user/${currentUser?.id}/review/${postedReview?.id}/` : `/owner/${currentUser?.id}/review/${postedReview?.id}/`
 
         let reviewUrl = postedReview ? patchURLs : `${apiUrl}review`
 
