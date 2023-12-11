@@ -23,7 +23,7 @@ function DoughnutChart({currentUser, role}) {
     // ALL EQUIPMENT TAKES INTO ACCOUNT JUST THE EQUIPMENT IN INVENTORY, 
     if (Array.isArray(currentUser?.equipment)) {
         currentUser.equipment.forEach(equip => {
-            console.log("each equipment:",equip )
+            // console.log("each equipment:",equip )
             totalEquipment += equip.quantity
         })
     }

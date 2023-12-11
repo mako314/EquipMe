@@ -112,9 +112,9 @@ function BarChart({currentUser}){
         const totalIdle = totalEquipment - monthData.totalRentedOut - monthData.totalInCart
 
         // console.log("TOTAL EQUIPMENT:",totalEquipment)
-        console.log("Total Equipment:", totalEquipment)
-        console.log("Total Rented Out for " + month + ":", monthData.totalRentedOut)
-        console.log("Total In Cart for " + month + ":", monthData.totalInCart)
+        // console.log("Total Equipment:", totalEquipment)
+        // console.log("Total Rented Out for " + month + ":", monthData.totalRentedOut)
+        // console.log("Total In Cart for " + month + ":", monthData.totalInCart)
         
         return {
             month, 
