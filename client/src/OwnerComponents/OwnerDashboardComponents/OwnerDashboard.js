@@ -247,14 +247,17 @@ function AccountSettings() {
       }
 
     
-    //-----------------------------------------------CHART CODE -------------------------
+//----------------------------------------------- DOUGHNUT CHART CODE -------------------------
+
+    // FOR USERS I CAN PROBABLY JUST TRACK THE AGREEMENTS FOR THEM, 
+    // THEN MAYBE 
     let totalEquipment = 0
     let itemsInUserCart = 0
     let totalFavorites = 0
     let totalFeaturedEquipment = 0
 
     let totalPendingAgreements = 0
-    const rentalAgreementStatuses = ['in-progress', 'user-accepted', 'owner-accepted']
+    const rentalAgreementStatuses = ['in-progress', 'user-accepted', 'owner-accepted'] // <--- CAN USE THIS FOR USERS ALSO
 
     let totalCompletedAgreements = 0
 
@@ -343,6 +346,7 @@ function AccountSettings() {
         datasets: [
           {
             label: '# of Equipment',
+            //Data is just x data for what I'd like, total equipment all, itemsInUserCart etc all captured with ifs above.
             data: [totalEquipment, itemsInUserCart, totalFavorites, totalFeaturedEquipment, totalPendingAgreements, totalCompletedAgreements],
             backgroundColor: [
               'rgba(255, 99, 132, 0.2)',
@@ -366,10 +370,9 @@ function AccountSettings() {
       }
 
     //------------------------BAR CHART--------------------------------------
-    // https://codesandbox.io/p/devbox/reactchartjs-react-chartjs-2-vertical-jebqk?file=%2FApp.tsx%3A38%2C1-52%2C3
+    // https://codesandbox.io/p/devbox/reactchartjs-react-chartjs-2-vertical-jebqk?file=%2FApp. tsx%3A38%2C1-52%2C3
     // https://www.chartjs.org/docs/latest/axes/cartesian/linear.html
     // https://www.chartjs.org/docs/latest/charts/bar.html
-
     //Options that are set to the Chart.js Bar, options prop, 
     let barChartOptions = {
         responsive: true,
@@ -379,13 +382,13 @@ function AccountSettings() {
           },
           title: {
             display: true,
-            text: 'Chart.js Bar Chart',
+            text: 'Monthly Rental Data',
           },
         },
         scales: {
             y: {
                 beginAtZero: true, // Start the y-axis from zero
-                max: totalEquipment ? (totalEquipment + 5) : 10, //  the maximum value for the y-axis
+                max: totalEquipment ? (totalEquipment + 5) : 10, // the maximum value for the y-axis
             }
         }
       }
@@ -558,15 +561,14 @@ function AccountSettings() {
                         
                         
                         </div>
-                        <div className="h-96 col-span-1 bg-white border border-gray-300"></div>
-                        <div className="h-96 col-span-1 bg-white border border-gray-300"></div>
+
                         <div className="h-96 w-500 col-span-2 bg-white border border-gray-300">
                         <Bar options={barChartOptions} 
                         data={barChartdata} />
-
-
                         </div>
-                        
+
+                        <div className="h-96 col-span-1 bg-white border border-gray-300"></div>
+                        <div className="h-96 col-span-1 bg-white border border-gray-300"></div>
                         <div className="h-96 col-span-1 bg-white border border-gray-300"></div>
                     </div>
                 </div>

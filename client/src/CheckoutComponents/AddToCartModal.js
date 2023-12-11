@@ -37,9 +37,10 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
   // console.log("Your Equipment:",oneEquipment)
 
   useEffect(() => {
-    if (role === 'user') {
+    if (role === 'user' && currentUser?.cart?.length > 0) {
       setCartData(currentUser.cart)
-    } 
+      setCurrentCart(currentUser.cart[0]) // Set the first cart as the current cart
+  }
   }, [currentUser])
 
   // console.log("THE CURRENT CART DATA:", currentUser.cart)
@@ -160,7 +161,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
   // console.log("This is the equipment quantity:",equipmentQuantity)
   // console.log("This is the equipment ID:",equip_id)
   // console.log("This is the current cart ID:",currentCart.id)
-  // console.log("ALL THE CART DATA:", cartData)
+  console.log("ALL THE CART DATA:", cartData)
   console.log("REAL CURRENT CART:", currentCart)
 
   function handleAddToCartClick() {
@@ -174,6 +175,14 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
       {
       "autoClose" : 2000
       })
+    } 
+    // The Object.keys() static method returns an array of a given object's own enumerable string-keyed property names.
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys
+    if (!currentCart || Object.keys(currentCart).length === 0) {
+      return toast.warn(`🛒 Please select a cart, or create a new one to add this item.`,
+      {
+      "autoClose" : 2000
+      })
     }
     let newCartItem ={
       'rental_length' : rentalLength,
@@ -182,7 +191,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
       'equipment_id' : equip_id
     }
 
-    fetch(`${apiUrl}cart/${currentCart.id}`, {
+    fetch(`${apiUrl}cart/${currentCart?.id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -339,7 +348,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
                                   {/* CART SELECTION*/}
                                   <select
                                         className="text-sm font-medium text-gray-900 dark:text-gray-300 border-2 border-black"
-                                        value={currentCart.id} 
+                                        value={currentCart?.id} 
                                         onChange={handleCartChange}>
                                         {cartOptions}
                                   </select>
