@@ -22,6 +22,8 @@ import { ReactComponent as EquipMeLogo } from '../../Content/EquipMeLogo.svg'
 import { Chart as ChartJS, ArcElement, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { Doughnut, Bar } from 'react-chartjs-2';
 
+import DoughnutChart from '../../ChartComponents/DoughnutChart';
+
 
 function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
 
@@ -554,13 +556,14 @@ function AccountSettings() {
                         <div className="h-24 col-span-3 bg-white border border-gray-300 text-center"> Welcome {currentUser.firstName} </div>
                         <div className="h-96 py-2 col-span-1 bg-white border border-gray-300">
                         
-                        {role === 'owner' ? <Doughnut
+                        {/* {role === 'owner' ? <Doughnut
                             options={{
                                 responsive: true,
                                 maintainAspectRatio: false,
                             }}
                             data={doughnutData}
-                        /> : ""}
+                        /> : ""} */}
+                        <DoughnutChart currentUser={currentUser} role={role}/>
                         
                         
                         </div>
