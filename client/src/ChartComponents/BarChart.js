@@ -17,12 +17,12 @@ function BarChart({currentUser}){
 
     if (Array.isArray(currentUser?.equipment)) {
         currentUser.equipment.forEach(equip => {
-            console.log("each equipment:",equip )
+            // console.log("each equipment:",equip )
             totalEquipment += equip.quantity
         })
     }
 
-    console.log("TOTAL EQUIPMENT:", totalEquipment)
+    // console.log("TOTAL EQUIPMENT:", totalEquipment)
 
     //------------------------BAR CHART--------------------------------------
     // https://codesandbox.io/p/devbox/reactchartjs-react-chartjs-2-vertical-jebqk?file=%2FApp. tsx%3A38%2C1-52%2C3
@@ -192,7 +192,7 @@ function BarChart({currentUser}){
         ]
     }
 
-    console.log("TRYING TO HAVE THIS BE THE MAX:", totalEquipment + 10)
+    // console.log("TRYING TO HAVE THIS BE THE MAX:", totalEquipment + 10)
 
     return(
         <>

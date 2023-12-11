@@ -27,7 +27,7 @@ function DoughnutChart({currentUser, role}) {
             totalEquipment += equip.quantity
         })
     }
-    console.log(totalEquipment)
+    // console.log(totalEquipment)
 
     //Handles finding ALL equipment in user carts, found in Cart > Quantity
     if (Array.isArray(currentUser?.equipment)) {

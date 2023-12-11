@@ -592,8 +592,10 @@ if __name__ == '__main__':
             owner_id = owner_2.id, # David Rodriguez
             user_id=user_1.id,  # Ethan Martinez
             cart_item_id=cart_items[1].id,  # Forklift
-            created_at = datetime.utcnow(),
-            updated_at = datetime.utcnow()
+            created_at = datetime(2023, 11, 30),  # Year, Month, Day
+            updated_at = datetime(2023, 11, 30)
+            # created_at = datetime.utcnow(),
+            # updated_at = datetime.utcnow()
         ),
         RentalAgreement(
             rental_start_date="2023-07-17",
@@ -606,8 +608,10 @@ if __name__ == '__main__':
             owner_id = owner_2.id, # Henry Cavill
             user_id=user_1.id,  # Sarah Thompson
             cart_item_id=cart_items[2].id,  # Lawnmower
-            created_at = datetime.utcnow(),
-            updated_at = datetime.utcnow()
+            created_at = datetime(2023, 11, 24),  # Year, Month, Day
+            updated_at = datetime(2023, 11, 24)
+            # created_at = datetime.utcnow(),
+            # updated_at = datetime.utcnow()
         ),
         RentalAgreement(
             rental_start_date="2023-07-17",
@@ -620,8 +624,8 @@ if __name__ == '__main__':
             owner_id = owner_2.id, # Henry Cavill
             user_id=user_1.id,  # Sarah Thompson
             cart_item_id=cart_items[2].id,  # Lawnmower
-            created_at = datetime(2023, 11, 15),  # Year, Month, Day
-            updated_at = datetime(2023, 11, 15)
+            created_at = datetime(2023, 12, 9),  # Year, Month, Day
+            updated_at = datetime(2023, 12, 9)
         ),
         RentalAgreement(
             rental_start_date="2023-07-17",

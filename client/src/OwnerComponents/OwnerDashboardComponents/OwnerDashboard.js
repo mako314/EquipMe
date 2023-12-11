@@ -249,13 +249,88 @@ function AccountSettings() {
         }, 0)
       }
 
+    // console.log("CURRENT USER AGREEMENTS:", currentUser?.agreements)
+
+    let agreementsForDateSorting = Array.isArray(currentUser?.agreements) ? [...currentUser.agreements] : []
+
+    
+    console.log("CURRENT USER AGREEMENTS:", currentUser?.agreements)
+    // ASCENDING ORDER
+    // agreementsForDateSorting.sort(function(a,b){
+    //     // to get a value that is either negative, positive, or zero.
+    //     return new Date(b.created_at) - new Date(a.created_at)
+    // })
+    let sortedAscendingAgreements = agreementsForDateSorting
+    .sort((a, b) => new Date(a.date) - new Date(b.date))
+    .map((agreement) => (
+        <>
+            ---------------------------
+            <br></br>
+            <p className='ml-4'> 
+            For: {agreement.cart_item.cart.user.firstName} {agreement.cart_item.cart.user.lastName}
+            </p>
+            <br></br>
+            <p className='ml-4'> 
+            Created At: {agreement.created_at}
+            </p>
+            <br></br>
+            <p className='ml-4'> 
+            Agreement Status: {agreement.agreement_status}
+            </p>
+            <br></br>
+            <p className='ml-4'>
+            User Decision: {agreement.user_decision}
+            </p>
+            <br></br>
+            <p className='ml-4'>
+            Owner Decision: {agreement.owner_decision}
+            </p>
+
+            ------------------------
+        </>
+    ))
+    
+    // DESCENDING ORDER
+    // agreementsForDateSorting.sort(function(a,b){
+    //     // to get a value that is either negative, positive, or zero.
+    //     return new Date(a.created_at) - new Date(b.created_at)
+    // })
+
+    // console.log("SORTED USER AGREEMENTS:", agreementsForDateSorting)
+    let sortedDescendingAgreements = agreementsForDateSorting
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
+    .map((agreement) => (
+        <>
+            <p> 
+            Agreement Status: {agreement.agreement_status}
+            </p>
+            <br></br>
+            <p>
+            User Decision: {agreement.user_decision}
+            </p>
+            <br></br>
+            <p>
+            Owner Decision: {agreement.owner_decision}
+            </p>
+        </>
+    ))
+    // console.log("SORTED AGREEMENTS DIV:", sortedDescendingAgreements)
+
+    // https://stackoverflow.com/questions/72193794/how-to-sort-array-of-objects-by-date-but-with-most-current-date-first
+    // https://stackoverflow.com/questions/72191289/sort-objects-by-datetime-in-javascript
+    // https://stackoverflow.com/questions/68136203/how-to-use-javascript-sort-to-order-by-year-month-day
+    // https://stackoverflow.com/questions/10123953/how-to-sort-an-object-array-by-date-property
+
+
     function DashHome(){
         return(
             <div>
                 {/* CENTER OF PAGE , BLOCKS AND SUCH  */}
                 <div className="flex-grow p-6 overflow-auto bg-gray-200">
                     <div className="grid grid-cols-3 gap-6">
+                        
                         <div className="h-24 col-span-3 bg-white border border-gray-300 text-center"> Welcome {currentUser.firstName} </div>
+
                         <div className="h-96 py-2 col-span-1 bg-white border border-gray-300">
                         
                         {/* {role === 'owner' ? <Doughnut
@@ -266,18 +341,17 @@ function AccountSettings() {
                             data={doughnutData}
                         /> : ""} */}
                         <DoughnutChart currentUser={currentUser} role={role}/>
-                        
-                        
                         </div>
-
                         <div className="h-96 w-500 col-span-2 bg-white border border-gray-300">
                         {/* <Bar options={barChartOptions} 
                         data={barChartdata} /> */}
-
                         <BarChart currentUser={currentUser}/>
                         </div>
 
-                        <div className="h-96 col-span-1 bg-white border border-gray-300"></div>
+                        <div className="h-96 col-span-1 bg-white border border-gray-300 overflow-y-auto">
+                        {sortedAscendingAgreements}
+
+                        </div>
                         <div className="h-96 col-span-1 bg-white border border-gray-300"></div>
                         <div className="h-96 col-span-1 bg-white border border-gray-300"></div>
                     </div>
