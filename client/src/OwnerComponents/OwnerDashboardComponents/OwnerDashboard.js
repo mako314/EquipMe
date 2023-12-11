@@ -262,11 +262,14 @@ function AccountSettings() {
     let totalCompletedAgreements = 0
 
     //Handles finding ALL equipment an owner has. Found in Equipment > Quantity property
+    // ALL EQUIPMENT TAKES INTO ACCOUNT JUST THE EQUIPMENT IN INVENTORY, 
     if (Array.isArray(currentUser?.equipment)) {
         currentUser.equipment.forEach(equip => {
+            console.log("each equipment:",equip )
             totalEquipment += equip.quantity
         })
     }
+    console.log(totalEquipment)
 
     //Handles finding ALL equipment in user carts, found in Cart > Quantity
     if (Array.isArray(currentUser?.equipment)) {

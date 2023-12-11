@@ -190,7 +190,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
       'quantity' : equipmentQuantity,
       'equipment_id' : equip_id
     }
-
+    // Have useEffect to fix initial load and selecting first in users cart array
     fetch(`${apiUrl}cart/${currentCart?.id}`, {
         method: "POST",
         headers: {
@@ -200,9 +200,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
       }).then((resp) => {
         if (resp.ok) {
           resp.json().then((newCartData) => {
-            // console.log("New cart item ID:",resp.id)
             console.log(newCartData.id)
-            //-1 in the cart_name, arrays index start at 0, but this grabs the correct ID. So If I select first cart, it's ID of 1. But in the array index it's 0.
             if(startRental && endRental){
             let cartAndEquipment = {
               'cart_id': currentCart.id,
