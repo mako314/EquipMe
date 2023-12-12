@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, Fragment } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
 
 //Owner Imports//
@@ -19,11 +19,11 @@ import { UserSessionContext } from '../../UserComponents/SessionContext';
 import { ReactComponent as EquipMeLogo } from '../../Content/EquipMeLogo.svg'
 
 //Chart imports
-import { Chart as ChartJS, ArcElement, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
-import { Doughnut, Bar } from 'react-chartjs-2';
-
 import DoughnutChart from '../../ChartComponents/DoughnutChart';
 import BarChart from '../../ChartComponents/BarChart';
+
+// AgreementFiltering 
+import AgreementFiltering from './AgreementFiltering';
 
 
 function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
@@ -34,6 +34,10 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
     const [toggleHomeDash, setToggleHomeDash] = useState(<DashHome/>)
     const [potentialRentalUsers, setPotentialRentalUsers] = useState([])
     const [potentialRentalOwners, setPotentialRentalOwners] = useState([])
+    const [pageTitle, setPageTitle] = useState('')
+    
+
+    
     
     
     const apiUrl = useContext(ApiUrlContext)
@@ -55,12 +59,8 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
     //   } = source || {}
 
     //--------------------user--------
-    let potentialOwners
-    
     //----- Variables in the order they appear ----- These are ALL being moved to components shortly.
     let plannedDeals
-    let potentialRenters
-
     let firstName
     let equipment
     let lastName
@@ -79,18 +79,37 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
 
 
     function RentalAgreements() {
+        // const [agreementFiltering, setAgreementFiltering] = useState('newest')
+        // const handleAgreementSelection = (event) => {
+        //     console.log('Selected value:', event.target.value);
+        //     setAgreementFiltering(event.target.value);
+        // }
+        // <div className="mb-4">
+        // <select 
+        //     className="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+        //     value={agreementFiltering}
+        //     onChange={handleAgreementSelection}
+        // >
+        //     <option value="" disabled>--Please choose an option--</option>
+        //     <option name="newest_option" value="newest" id="newest">Newest First</option>
+        //     <option name="oldest_option" value="oldest" id="oldest">Oldest First</option>
+        // </select>
+        // </div>
+        setPageTitle('Rental Agreements')
         fromOwnerDash = true
         console.log("RENTAL AGREEMENTS IN OWNER DASH FROM OWNER DASH:", fromOwnerDash)
+        // agreementFiltering={agreementFiltering}
         return(<>
-            <RentalAgreementsCollection setFromOwnerDash={setFromOwnerDash} fromOwnerDash={fromOwnerDash}/>
+            <RentalAgreementsCollection setFromOwnerDash={setFromOwnerDash} fromOwnerDash={fromOwnerDash} /> 
         </>)
     }
 
     const handlePotentialOwners = () => {
+        setPageTitle('Your Favorites')
         fetch(`${apiUrl}owners/${currentUser?.profession}`)
         .then((resp) => resp.json())
         .then((data) => {
-            
+        
             const ownerCollection = data.length > 0 ? (
                 <OwnerCollection
                     key={"dash"}
@@ -106,6 +125,7 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
     function UserFavorites() {
         const [selectedFavorite, setSelectedFavorite] = useState('equipment')
 
+        setPageTitle('Your Favorites')
         const handleRadioChange = (event) => {
             setSelectedFavorite(event.target.value)
         }
@@ -113,9 +133,13 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
         console.log(selectedFavorite)
 
         return (
-            <div className="flex flex-wrap ml-4 pt-4">
-                <form>
-                <input 
+            <div className="ml-6">
+
+                <form className="flex flex-row items-center mb-4">
+
+                <div className="flex items-center ml-4 mr-2 mt-4">
+                <input
+                    className="form-radio h-5 w-5 text-gray-600" 
                     type="radio" 
                     name="fav_option" 
                     value="equipment" 
@@ -123,8 +147,12 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
                     onChange={handleRadioChange} 
                     checked={selectedFavorite === 'equipment'}
                 />
-                <label htmlFor="equipment">Equipment</label>
-                <input 
+                <label htmlFor="equipment" className="ml-2 text-gray-700">Equipment</label>
+                </div>
+
+                <div className="flex items-center ml-4 mr-2 mt-4">
+                <input
+                    className="form-radio h-5 w-5 text-gray-600" 
                     type="radio" 
                     name="fav_option" 
                     value="owner" 
@@ -132,8 +160,12 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
                     onChange={handleRadioChange} 
                     checked={selectedFavorite === 'owner'}
                 />
-                <label htmlFor="owner">Owner</label>
+                <label htmlFor="owner" className="ml-2 text-gray-700">Owner</label>
+                </div>
+
                 </form>
+
+                <div className="flex flex-row flex-wrap justify-start"> 
                 {currentUser?.user_favorite?.map((favorite) => {
                     if (selectedFavorite === 'equipment' && favorite.equipment_id && favorite.equipment) {
                         return (
@@ -162,19 +194,19 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
                     }
                     return null
                 })}
+                </div>
             </div>
         )
     }
 
 //-------------------------------------------------------------OWNER CONDITIONAL DATA --------------------------------------------------------------------
 function OwnerFavorites() {
+    setPageTitle('Your Favorites')
     currentUser?.owner_favorite?.map((favorite) =>console.log("THE USER IDS:",favorite?.user.user_id))
     return (
-        <div className="flex flex-wrap ml-4 pt-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
             {currentUser?.owner_favorite?.map((favorite) => {
-
             return (
-                <div className='ml-4'> 
                 <UserCard
                     key={favorite.id}
                     id={favorite.user_id}
@@ -183,9 +215,8 @@ function OwnerFavorites() {
                     email={favorite.user.email}
                     phone={favorite.user.phone}
                     profileImage={favorite.user.profileImage}
-                />
-                </div>
-                    )
+                    location={favorite.user.location}
+                />)
             })}
         </div>
     )
@@ -196,7 +227,7 @@ function OwnerFavorites() {
 // Need to build out a back to dash button here for owners along with edit functionality 
 function ActiveListings(){
     if (!currentUser) return null
-
+    setPageTitle('Active Listings')
     return(
     <div>
         <ProductCollection equipmentArray={currentUser.equipment}/>
@@ -209,6 +240,7 @@ function ActiveListings(){
 function AccountSettings() {
     if (!currentUser) return null
 
+    setPageTitle('Account Settings')
     return (
         <>
             <OwnerEditForm/>
@@ -229,10 +261,13 @@ function AccountSettings() {
     .then((resp) => resp.json())
     .then((data) => {
         setPotentialRentalUsers(data)
+        setPageTitle('Potential Renters')
         //can't use potentialRenters as the let, I was having issues with it taking two clicks, having a const like the other function seemed to fix it. It's funny because I built this one first, and then shallow copied it for handlePotentialOwner. Lord.
         // Takes 314ms in network tab for this to load. Going to need a loading indicator :crY:
         const updatedPotentialRenters = (
+            
             <UserCollection searchTerm={searchTerm} users={data} setFromOwnerDash={setFromOwnerDash} fromOwnerDash={fromOwnerDash}/>
+            
         )
 
         const emptyData = <div> loading </div>
@@ -249,90 +284,12 @@ function AccountSettings() {
         }, 0)
       }
 
+//----------------------------------------------------------AGREEEMENT FILTERING----------------------------------------------------------------------------------------
+
     // console.log("CURRENT USER AGREEMENTS:", currentUser?.agreements)
-
-    let agreementsForDateSorting = Array.isArray(currentUser?.agreements) ? [...currentUser.agreements] : []
-
     
-    console.log("CURRENT USER AGREEMENTS:", currentUser?.agreements)
-    // ASCENDING ORDER
-    // agreementsForDateSorting.sort(function(a,b){
-    //     // to get a value that is either negative, positive, or zero.
-    //     return new Date(b.created_at) - new Date(a.created_at)
-    // })
-    let sortedAscendingAgreements = agreementsForDateSorting
-    .sort((a, b) => new Date(a.date) - new Date(b.date))
-    .map((agreement) => (
-        <>
-            ---------------------------
-            <br></br>
-            <p className='ml-4'> 
-            For: {agreement.cart_item.cart.user.firstName} {agreement.cart_item.cart.user.lastName}
-            </p>
-            <br></br>
-            <p className='ml-4'> 
-            Created At: {agreement.created_at}
-            </p>
-            <br></br>
-            <p className='ml-4'> 
-            Agreement Status: {agreement.agreement_status}
-            </p>
-            <br></br>
-            <p className='ml-4'>
-            User Decision: {agreement.user_decision}
-            </p>
-            <br></br>
-            <p className='ml-4'>
-            Owner Decision: {agreement.owner_decision}
-            </p>
-            ------------------------
-        </>
-    ))
-    
-    // DESCENDING ORDER
-    // agreementsForDateSorting.sort(function(a,b){
-    //     // to get a value that is either negative, positive, or zero.
-    //     return new Date(a.created_at) - new Date(b.created_at)
-    // })
-
-    // console.log("SORTED USER AGREEMENTS:", agreementsForDateSorting)
-    let sortedDescendingAgreements = agreementsForDateSorting
-    .sort((a, b) => new Date(b.date) - new Date(a.date))
-    .map((agreement) => (
-        <>
-        ---------------------------
-        <br></br>
-        <p className='ml-4'> 
-        For: {agreement.cart_item.cart.user.firstName} {agreement.cart_item.cart.user.lastName}
-        </p>
-        <br></br>
-        <p className='ml-4'> 
-        Created At: {agreement.created_at}
-        </p>
-        <br></br>
-        <p className='ml-4'> 
-        Agreement Status: {agreement.agreement_status}
-        </p>
-        <br></br>
-        <p className='ml-4'>
-        User Decision: {agreement.user_decision}
-        </p>
-        <br></br>
-        <p className='ml-4'>
-        Owner Decision: {agreement.owner_decision}
-        </p>
-        ------------------------
-    </>
-    ))
-    // console.log("SORTED AGREEMENTS DIV:", sortedDescendingAgreements)
-
-    // https://stackoverflow.com/questions/72193794/how-to-sort-array-of-objects-by-date-but-with-most-current-date-first
-    // https://stackoverflow.com/questions/72191289/sort-objects-by-datetime-in-javascript
-    // https://stackoverflow.com/questions/68136203/how-to-use-javascript-sort-to-order-by-year-month-day
-    // https://stackoverflow.com/questions/10123953/how-to-sort-an-object-array-by-date-property
-
-
     function DashHome(){
+        setPageTitle('Home')
         return(
             <div>
                 {/* CENTER OF PAGE , BLOCKS AND SUCH  */}
@@ -359,7 +316,11 @@ function AccountSettings() {
                         </div>
 
                         <div className="h-96 col-span-1 bg-white border border-gray-300 overflow-y-auto">
-                        {sortedAscendingAgreements}
+                        {/* // ----------------- agreement selection options ------------------- */}
+                       {/* {selectionAgreementForm} */}
+
+                        {/* {agreementFiltering === 'newest' ? sortedAscendingAgreements : sortedDescendingAgreements} */}
+                        <AgreementFiltering currentUser={currentUser}/>
 
                         </div>
                         <div className="h-96 col-span-1 bg-white border border-gray-300"></div>
@@ -387,7 +348,8 @@ function AccountSettings() {
                             {currentUser.firstName} {currentUser.lastName}
                         </span>
                     </div>
-                        <div className="flex flex-col flex-grow p-4 overflow-auto">
+                    {/* Made it a fixed width because it constantly changing sizes was irritating me  */}
+                        <div className="flex flex-col w-60 flex-grow p-4 overflow-auto">
 
                             <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<DashHome/>)}> Home </span>
 
@@ -437,7 +399,7 @@ function AccountSettings() {
                     <div className="flex flex-col overflow-auto flex-grow">
                         <div className="flex items-center flex-shrink-0 h-16 px-8 border-b border-gray-300">
 
-                            <h1 className="text-lg font-medium">Page Title</h1>
+                            <h1 className="text-lg font-medium">{pageTitle}</h1>
                             {role === 'owner' && <>
                             <button className="flex items-center justify-center h-10 px-4 ml-auto text-sm font-medium rounded hover:bg-gray-300" onClick={handleCsvClick}>
                                 Upload Equipment File

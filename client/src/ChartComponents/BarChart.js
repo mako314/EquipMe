@@ -14,7 +14,7 @@ function BarChart({currentUser}){
     )
     
     let totalEquipment = 0
-
+    // console.log("totalEquipment:",totalEquipment )
     if (Array.isArray(currentUser?.equipment)) {
         currentUser.equipment.forEach(equip => {
             // console.log("each equipment:",equip )
