@@ -12,7 +12,7 @@ function SubmitReview({toggleReviewModal, isModalOpen, renterId, ownerId, rental
     const [reviewComment, setReviewComment] = useState('')
     
 
-    const postedReview = existingReviews.find((review) => review.reviewer_type === role)
+    const postedReview = existingReviews?.find((review) => review.reviewer_type === role)
     // console.log("REVIEW THAT WAS POSTED:", postedReview)
     // console.log("RENTER ID:", renterId)
     // console.log("OWNER ID:", ownerId)
@@ -56,7 +56,7 @@ function SubmitReview({toggleReviewModal, isModalOpen, renterId, ownerId, rental
         //Conditional for fetchin
         let reviewMethod = postedReview ? "PATCH" : "POST"
 
-        let patchURLs = postedReview && role === 'user' ? `user/${currentUser.id}/review/${postedReview.id}/` : `/owner/${currentUser.id}/review/${postedReview.id}/`
+        let patchURLs = postedReview && role === 'user' ? `user/${currentUser?.id}/review/${postedReview?.id}/` : `/owner/${currentUser?.id}/review/${postedReview?.id}/`
 
         let reviewUrl = postedReview ? patchURLs : `${apiUrl}review`
 

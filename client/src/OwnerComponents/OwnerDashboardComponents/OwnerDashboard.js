@@ -22,6 +22,9 @@ import { ReactComponent as EquipMeLogo } from '../../Content/EquipMeLogo.svg'
 import { Chart as ChartJS, ArcElement, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { Doughnut, Bar } from 'react-chartjs-2';
 
+import DoughnutChart from '../../ChartComponents/DoughnutChart';
+import BarChart from '../../ChartComponents/BarChart';
+
 
 function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
 
@@ -35,8 +38,8 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
     
     const apiUrl = useContext(ApiUrlContext)
 
-    console.log("USER INFO",currentUser)
-    console.log("USER FAVORITE",currentUser?.user_favorite)
+    // console.log("USER INFO",currentUser)
+    // console.log("USER FAVORITE",currentUser?.user_favorite)
     // console.log("With a role of:", role)
 
     //After a lot of consideration, users will also have a dashboard. Seems friendlier 
@@ -246,215 +249,87 @@ function AccountSettings() {
         }, 0)
       }
 
-    
-    //-----------------------------------------------CHART CODE -------------------------
-    let totalEquipment = 0
-    let itemsInUserCart = 0
-    let totalFavorites = 0
-    let totalFeaturedEquipment = 0
+    // console.log("CURRENT USER AGREEMENTS:", currentUser?.agreements)
 
-    let totalPendingAgreements = 0
-    const rentalAgreementStatuses = ['in-progress', 'user-accepted', 'owner-accepted']
-
-    let totalCompletedAgreements = 0
-
-    //Handles finding ALL equipment an owner has. Found in Equipment > Quantity property
-    if (Array.isArray(currentUser?.equipment)) {
-        currentUser.equipment.forEach(equip => {
-            totalEquipment += equip.quantity
-        })
-    }
-
-    //Handles finding ALL equipment in user carts, found in Cart > Quantity
-    if (Array.isArray(currentUser?.equipment)) {
-        currentUser.equipment.forEach(equip => {
-            if (Array.isArray(equip.cart_item)){
-                equip.cart_item.forEach(cartItem => {
-                    if(cartItem){
-                    itemsInUserCart += cartItem.quantity}
-                })
-            }
-        })
-    }
-
-    //Handles finding ALL FAVORITED equipment, found in Equipment > Favorite
-    if (Array.isArray(currentUser?.equipment)) {
-        currentUser.equipment.forEach(equip => {
-            if (Array.isArray(equip.user_favorite)){
-                equip.user_favorite.forEach(favorite => {
-                    if(favorite){
-                    totalFavorites += 1}
-                })
-            }
-        })
-    }
-
-    // Handles finding all FEATURED equipment, found in Equipment > Featured Equipment
-    if (Array.isArray(currentUser?.equipment)) {
-        currentUser.equipment.forEach(equip => {
-            if (Array.isArray(equip.featured_equipment)){
-                equip.featured_equipment.forEach(featuredEquipment => {
-                    if(featuredEquipment){
-                    totalFeaturedEquipment += 1}
-                })
-            }
-        })
-    }
-
-    // Handles finding all PENDING agreements, found in Agreements and their statuses ['in-progress', 'user-accepted', 'owner-accepted']
-    if (Array.isArray(currentUser?.agreements)) {
-        currentUser.agreements.forEach(agreement => {
-            if (rentalAgreementStatuses.includes(agreement.agreement_status)){
-                totalPendingAgreements +=1
-            }
-        })
-    }
-
-    // Handles finding all FINISHED agreements, meaning this equipment is rented out. Found in Agreements and their statuses
-    if (Array.isArray(currentUser?.agreements)) {
-        currentUser.agreements.forEach(agreement => {
-            if (agreement.agreement_status === 'completed'){
-                totalCompletedAgreements +=1
-            }
-        })
-    }
-
-    console.log("The length of all Equipments:", totalEquipment)
-    console.log("The length of all items in a user cart:", itemsInUserCart)
-    console.log("Total Favorites:", totalFavorites)
-    console.log("Total Featured Equipment:", totalFeaturedEquipment)
-    console.log("Total PENDING Agreements Equipment:", totalPendingAgreements)
-    console.log("Total COMPLETED Agreements Equipment:", totalCompletedAgreements)
-
-    ChartJS.register(
-        ArcElement, 
-        Tooltip, 
-        Legend, 
-        CategoryScale,
-        LinearScale,
-        BarElement,
-        Title,
-    )
-    // https://codesandbox.io/p/devbox/reactchartjs-react-chartjs-2-default-t64th?file=%2FApp.tsx%3A29%2C22
-    // https://stackoverflow.com/questions/59325426/how-to-resize-chart-js-element-in-react-js
-    // https://stackoverflow.com/questions/53872165/cant-resize-react-chartjs-2-doughnut-chart
-    let doughnutData = {
-        labels: ['All Equipment', 'In Renter Carts', 'Favorited By Renters', 'Featured Equipment', 'Equipment Pending Agreement', 'Equipment Rented Out'],
-        datasets: [
-          {
-            label: '# of Equipment',
-            data: [totalEquipment, itemsInUserCart, totalFavorites, totalFeaturedEquipment, totalPendingAgreements, totalCompletedAgreements],
-            backgroundColor: [
-              'rgba(255, 99, 132, 0.2)',
-              'rgba(54, 162, 235, 0.2)',
-              'rgba(255, 206, 86, 0.2)',
-              'rgba(75, 192, 192, 0.2)',
-              'rgba(153, 102, 255, 0.2)',
-              'rgba(255, 159, 64, 0.2)',
-            ],
-            borderColor: [
-              'rgba(255, 99, 132, 1)',
-              'rgba(54, 162, 235, 1)',
-              'rgba(255, 206, 86, 1)',
-              'rgba(75, 192, 192, 1)',
-              'rgba(153, 102, 255, 1)',
-              'rgba(255, 159, 64, 1)',
-            ],
-            borderWidth: 1,
-          },
-        ],
-      }
-
-    //------------------------BAR CHART--------------------------------------
-    // https://codesandbox.io/p/devbox/reactchartjs-react-chartjs-2-vertical-jebqk?file=%2FApp.tsx%3A38%2C1-52%2C3
-    let barChartOptions = {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'top',
-          },
-          title: {
-            display: true,
-            text: 'Chart.js Bar Chart',
-          },
-        },
-      };
+    let agreementsForDateSorting = Array.isArray(currentUser?.agreements) ? [...currentUser.agreements] : []
 
     
-
-
-    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-
-    // Function to get the month name from a date
-    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/getMonth
-    const getMonthName = (dateString) => {
-        const date = new Date(dateString)
-        const month = date.getMonth()
-        console.log("THE MONTH:", month)
-        return monthNames[month]
-      }
-
-    // Count agreements per month
-    // https://www.w3schools.com/jsref/jsref_reduce.asp
-    // https://www.youtube.com/watch?v=XKD0aIA3-yM&list=PLo63gcFIe8o0nnhu0F-PpsTc8nkhNe9yu
-    let totalIdle
-    let totalInCart = 0
-    let totalRentedOut = 0
-    const countAgreementsByMonth = (data) => {
-        const monthCounts = data.reduce((acc, item) => {
-        console.log("the item in the reducer:", item)
-        const month = getMonthName(item.created_at)
-        if (Array.isArray(item?.cart_item)){item?.cart_item.forEach(agreement => {
-            if(Array.isArray(agreement?.cart_item)){
-                agreement?.cart_item.forEach(cartItem => {
-                    if(cartItem){
-                        totalInCart +=1
-                    }
-                })
-            }
-        })}
-        if(item.agreement_status === 'completed'){
-            totalRentedOut +=1
-        }
-
-        if(totalRentedOut && totalInCart){
-            // need to get in agreement . cart_item . equipment.quantity, add it up, and then subtract total rented out and total in cart
-        }
-        acc[month] = (acc[month] || 0) + 1
-        return acc
-        }, {})
+    console.log("CURRENT USER AGREEMENTS:", currentUser?.agreements)
+    // ASCENDING ORDER
+    // agreementsForDateSorting.sort(function(a,b){
+    //     // to get a value that is either negative, positive, or zero.
+    //     return new Date(b.created_at) - new Date(a.created_at)
+    // })
+    let sortedAscendingAgreements = agreementsForDateSorting
+    .sort((a, b) => new Date(a.date) - new Date(b.date))
+    .map((agreement) => (
+        <>
+            ---------------------------
+            <br></br>
+            <p className='ml-4'> 
+            For: {agreement.cart_item.cart.user.firstName} {agreement.cart_item.cart.user.lastName}
+            </p>
+            <br></br>
+            <p className='ml-4'> 
+            Created At: {agreement.created_at}
+            </p>
+            <br></br>
+            <p className='ml-4'> 
+            Agreement Status: {agreement.agreement_status}
+            </p>
+            <br></br>
+            <p className='ml-4'>
+            User Decision: {agreement.user_decision}
+            </p>
+            <br></br>
+            <p className='ml-4'>
+            Owner Decision: {agreement.owner_decision}
+            </p>
+            ------------------------
+        </>
+    ))
     
-        return Object.keys(monthCounts).map(month => {
-        return { month, rentals: monthCounts[month] }
-        })
-    }
+    // DESCENDING ORDER
+    // agreementsForDateSorting.sort(function(a,b){
+    //     // to get a value that is either negative, positive, or zero.
+    //     return new Date(a.created_at) - new Date(b.created_at)
+    // })
 
-    console.log("CURRENT USER AGREEMENTS:", currentUser.agreements)
-    const barChartRentalData = countAgreementsByMonth(currentUser?.agreements);
-    const barChartLabels = barChartRentalData.map(item => item.month)
-    const barChartDataPoints = barChartRentalData.map(item => item.rentals)
+    // console.log("SORTED USER AGREEMENTS:", agreementsForDateSorting)
+    let sortedDescendingAgreements = agreementsForDateSorting
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
+    .map((agreement) => (
+        <>
+        ---------------------------
+        <br></br>
+        <p className='ml-4'> 
+        For: {agreement.cart_item.cart.user.firstName} {agreement.cart_item.cart.user.lastName}
+        </p>
+        <br></br>
+        <p className='ml-4'> 
+        Created At: {agreement.created_at}
+        </p>
+        <br></br>
+        <p className='ml-4'> 
+        Agreement Status: {agreement.agreement_status}
+        </p>
+        <br></br>
+        <p className='ml-4'>
+        User Decision: {agreement.user_decision}
+        </p>
+        <br></br>
+        <p className='ml-4'>
+        Owner Decision: {agreement.owner_decision}
+        </p>
+        ------------------------
+    </>
+    ))
+    // console.log("SORTED AGREEMENTS DIV:", sortedDescendingAgreements)
 
-    const barChartdata = {
-        labels: barChartLabels,
-        datasets: [
-          {
-            label: 'Equipment Rented Out',
-            data: barChartDataPoints ,
-            backgroundColor: 'rgba(255, 99, 132, 0.5)',
-          },
-        //   {
-        //     label: 'Equipment In Cart',
-        //     data: labels.map(() => ),
-        //     backgroundColor: 'rgba(53, 162, 235, 0.5)',
-        //   },
-        //   {
-        //     label: 'Idle Equipment',
-        //     data: labels.map(() => ),
-        //     backgroundColor: 'rgba(53, 162, 235, 0.5)',
-        //   },
-        ],
-      }
-
+    // https://stackoverflow.com/questions/72193794/how-to-sort-array-of-objects-by-date-but-with-most-current-date-first
+    // https://stackoverflow.com/questions/72191289/sort-objects-by-datetime-in-javascript
+    // https://stackoverflow.com/questions/68136203/how-to-use-javascript-sort-to-order-by-year-month-day
+    // https://stackoverflow.com/questions/10123953/how-to-sort-an-object-array-by-date-property
 
 
     function DashHome(){
@@ -463,28 +338,31 @@ function AccountSettings() {
                 {/* CENTER OF PAGE , BLOCKS AND SUCH  */}
                 <div className="flex-grow p-6 overflow-auto bg-gray-200">
                     <div className="grid grid-cols-3 gap-6">
+                        
                         <div className="h-24 col-span-3 bg-white border border-gray-300 text-center"> Welcome {currentUser.firstName} </div>
+
                         <div className="h-96 py-2 col-span-1 bg-white border border-gray-300">
                         
-                        {role === 'owner' ? <Doughnut
+                        {/* {role === 'owner' ? <Doughnut
                             options={{
                                 responsive: true,
                                 maintainAspectRatio: false,
                             }}
                             data={doughnutData}
-                        /> : ""}
-                        
-                        
+                        /> : ""} */}
+                        <DoughnutChart currentUser={currentUser} role={role}/>
                         </div>
-                        <div className="h-96 col-span-1 bg-white border border-gray-300"></div>
-                        <div className="h-96 col-span-1 bg-white border border-gray-300"></div>
                         <div className="h-96 w-500 col-span-2 bg-white border border-gray-300">
-                        <Bar options={barChartOptions} 
-                        data={barChartdata} />
+                        {/* <Bar options={barChartOptions} 
+                        data={barChartdata} /> */}
+                        <BarChart currentUser={currentUser}/>
+                        </div>
 
+                        <div className="h-96 col-span-1 bg-white border border-gray-300 overflow-y-auto">
+                        {sortedAscendingAgreements}
 
                         </div>
-                        
+                        <div className="h-96 col-span-1 bg-white border border-gray-300"></div>
                         <div className="h-96 col-span-1 bg-white border border-gray-300"></div>
                     </div>
                 </div>

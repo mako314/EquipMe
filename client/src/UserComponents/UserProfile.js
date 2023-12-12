@@ -92,7 +92,7 @@ function UserProfile() {
   
   console.log("THE REVIEWS:",source.review)
   // Owner is the one leaving reviews
-  let ownerReviews = source.review?.filter(reviewSubmission => reviewSubmission.reviewer_type === 'user')
+  let ownerReviews = source.review?.filter(reviewSubmission => reviewSubmission.reviewer_type === 'owner')
 
   console.log("Owner Reviews:", ownerReviews)
   

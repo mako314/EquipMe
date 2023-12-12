@@ -13,12 +13,14 @@ import { storage } from "../CloudComponents/Firebase";
 import {v4} from 'uuid';
 //--------------------------------------------------------------------
 
+import {toast} from 'react-toastify'
+
 
 function ProductForm({ addEquipment }){
     const [error, setError] = useState()
     const [featureEquipment, setFeatureEquipment] = useState(false)
     const navigate = useNavigate()
-    const { currentUser, role } = UserSessionContext()
+    const { currentUser, role, checkSession } = UserSessionContext()
     // const [owner, setOwner] = useContext(OwnerContext)
     const apiUrl = useContext(ApiUrlContext)
 //----------------------------IMAGE UPLOAD----------------------------
@@ -120,6 +122,12 @@ function ProductForm({ addEquipment }){
                             })
                             .then(res => {
                               if (res.ok){
+                                if(featureEquipment != 'true'){
+                                toast.success(`🏗 Succesfully added ${equipment.make} ${equipment.name} as a rental equipment.`,
+                                {
+                                  "autoClose" : 2000
+                                })}
+                                checkSession()
                                 res.json().then(updatedValues =>{
                                   console.log(featureEquipment)
                                   if(featureEquipment === true){
@@ -129,8 +137,17 @@ function ProductForm({ addEquipment }){
                                       "Content-Type": "application/json"
                                     },
                                     body: JSON.stringify(updatedValues)
+                                  }).then(res => {
+                                    if(res.ok){
+                                      toast.success(`🏗 Succesfully added ${equipment.make} ${equipment.name} and set it as a featured equipment.`,
+                                      {
+                                        "autoClose" : 2000
+                                      })
+                                      checkSession()
+                                      console.log(res)
+                                    }
+                                    console.log(res)
                                   })}
-                                  console.log(res)
                                 })
                               }
                             })

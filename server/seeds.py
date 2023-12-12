@@ -519,7 +519,7 @@ if __name__ == '__main__':
             CartItem(
                 price_cents_at_addition = equipment_prices[0].hourly_rate,
                 price_cents_if_changed = None,
-                quantity = 3,
+                quantity = 2,
                 rental_rate="hourly",
                 rental_length = 6,
                 cart_id= cart1.id,
@@ -533,7 +533,7 @@ if __name__ == '__main__':
                 rental_rate="daily",
                 rental_length = 5,
                 cart_id= cart1.id,
-                equipment_id = equipment_list[0].id,
+                equipment_id = equipment_list[1].id,
                 created_at = random_time_30_days(),
             ),
             CartItem(
@@ -543,13 +543,21 @@ if __name__ == '__main__':
                 rental_rate="weekly",
                 rental_length = 2,
                 cart_id= cart1.id,
-                equipment_id = equipment_list[0].id,
+                equipment_id = equipment_list[2].id,
                 created_at = random_time_30_days(),
             ),
         ]
 
         db.session.add_all(cart_items)
         db.session.commit()
+        equipment_list[0].quantity -= cart_items[0].quantity
+        equipment_list[1].quantity -= cart_items[1].quantity
+        equipment_list[2].quantity -= cart_items[2].quantity
+
+        
+        # print(equipment_list[2].quantity)
+        # print(equipment_list[1].quantity)
+        # print(equipment_list[0].quantity)
 
         # Now that all items are added, calculate the total
         cart1.total = cart1.calculate_total()
@@ -584,8 +592,10 @@ if __name__ == '__main__':
             owner_id = owner_2.id, # David Rodriguez
             user_id=user_1.id,  # Ethan Martinez
             cart_item_id=cart_items[1].id,  # Forklift
-            created_at = datetime.utcnow(),
-            updated_at = datetime.utcnow()
+            created_at = datetime(2023, 11, 30),  # Year, Month, Day
+            updated_at = datetime(2023, 11, 30)
+            # created_at = datetime.utcnow(),
+            # updated_at = datetime.utcnow()
         ),
         RentalAgreement(
             rental_start_date="2023-07-17",
@@ -598,9 +608,40 @@ if __name__ == '__main__':
             owner_id = owner_2.id, # Henry Cavill
             user_id=user_1.id,  # Sarah Thompson
             cart_item_id=cart_items[2].id,  # Lawnmower
-            created_at = datetime.utcnow(),
-            updated_at = datetime.utcnow()
-        )]
+            created_at = datetime(2023, 11, 24),  # Year, Month, Day
+            updated_at = datetime(2023, 11, 24)
+            # created_at = datetime.utcnow(),
+            # updated_at = datetime.utcnow()
+        ),
+        RentalAgreement(
+            rental_start_date="2023-07-17",
+            rental_end_date="2023-07-20",
+            delivery = False,
+            delivery_address = "",
+            user_decision = "accept",
+            owner_decision = "accept",
+            agreement_status = "completed",
+            owner_id = owner_2.id, # Henry Cavill
+            user_id=user_1.id,  # Sarah Thompson
+            cart_item_id=cart_items[2].id,  # Lawnmower
+            created_at = datetime(2023, 12, 9),  # Year, Month, Day
+            updated_at = datetime(2023, 12, 9)
+        ),
+        RentalAgreement(
+            rental_start_date="2023-07-17",
+            rental_end_date="2023-07-20",
+            delivery = False,
+            delivery_address = "",
+            user_decision = "accept",
+            owner_decision = "accept",
+            agreement_status = "completed",
+            owner_id = owner_2.id, # Henry Cavill
+            user_id=user_1.id,  # Sarah Thompson
+            cart_item_id=cart_items[2].id,  # Lawnmower
+            created_at = datetime(2023, 10, 15),  # Year, Month, Day
+            updated_at = datetime(2023, 10, 15)
+        )
+        ]
 
         db.session.add_all(rental_agreements)
         db.session.commit()

@@ -37,9 +37,10 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
   // console.log("Your Equipment:",oneEquipment)
 
   useEffect(() => {
-    if (role === 'user') {
+    if (role === 'user' && currentUser?.cart?.length > 0) {
       setCartData(currentUser.cart)
-    } 
+      setCurrentCart(currentUser.cart[0]) // Set the first cart as the current cart
+  }
   }, [currentUser])
 
   // console.log("THE CURRENT CART DATA:", currentUser.cart)
@@ -160,7 +161,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
   // console.log("This is the equipment quantity:",equipmentQuantity)
   // console.log("This is the equipment ID:",equip_id)
   // console.log("This is the current cart ID:",currentCart.id)
-  // console.log("ALL THE CART DATA:", cartData)
+  console.log("ALL THE CART DATA:", cartData)
   console.log("REAL CURRENT CART:", currentCart)
 
   function handleAddToCartClick() {
@@ -174,6 +175,14 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
       {
       "autoClose" : 2000
       })
+    } 
+    // The Object.keys() static method returns an array of a given object's own enumerable string-keyed property names.
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys
+    if (!currentCart || Object.keys(currentCart).length === 0) {
+      return toast.warn(`🛒 Please select a cart, or create a new one to add this item.`,
+      {
+      "autoClose" : 2000
+      })
     }
     let newCartItem ={
       'rental_length' : rentalLength,
@@ -181,8 +190,8 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
       'quantity' : equipmentQuantity,
       'equipment_id' : equip_id
     }
-
-    fetch(`${apiUrl}cart/${currentCart.id}`, {
+    // Have useEffect to fix initial load and selecting first in users cart array
+    fetch(`${apiUrl}cart/${currentCart?.id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -191,9 +200,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
       }).then((resp) => {
         if (resp.ok) {
           resp.json().then((newCartData) => {
-            // console.log("New cart item ID:",resp.id)
             console.log(newCartData.id)
-            //-1 in the cart_name, arrays index start at 0, but this grabs the correct ID. So If I select first cart, it's ID of 1. But in the array index it's 0.
             if(startRental && endRental){
             let cartAndEquipment = {
               'cart_id': currentCart.id,
@@ -252,7 +259,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
       return localISOTime.substring(0, localISOTime.lastIndexOf(':'))
     }
   
-    // This function calculates the end date based on the start date and rental duration
+    // This function calculates the end date based on the start date and rental duration duration type is just weekly, hourly, etc
     const calculateEndDate = (startDate, duration, durationType) => {
       const endDate = new Date(startDate)
   
@@ -278,6 +285,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
         let duration = rentalLength
         let durationType = selectedRate // This # needs to correspond to 'hours', 'days', or 'weeks'
 
+        // take end date and then calculate it wit hthe above function
         const endDate = calculateEndDate(new Date(startRental), duration, durationType)
         const formattedEndDate = toLocalISOString(endDate)
         setEndRental(formattedEndDate) // Update the state with the formatted end date
@@ -339,7 +347,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
                                   {/* CART SELECTION*/}
                                   <select
                                         className="text-sm font-medium text-gray-900 dark:text-gray-300 border-2 border-black"
-                                        value={currentCart.id} 
+                                        value={currentCart?.id} 
                                         onChange={handleCartChange}>
                                         {cartOptions}
                                   </select>
