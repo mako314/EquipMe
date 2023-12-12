@@ -39,7 +39,7 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
     const [potentialRentalOwners, setPotentialRentalOwners] = useState([])
     const [pageTitle, setPageTitle] = useState('')
     
-
+    const navigate = useNavigate()
     
     
     
@@ -73,7 +73,7 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
          equipment = currentUser.equipment
     }
 
-    const navigate = useNavigate()
+   
 
     const handleCsvClick = (e) => {
         navigate('/temp/bulk_equipment_upload')
@@ -328,7 +328,7 @@ function AccountSettings() {
                         </div>
                         <div className="h-96 col-span-1 bg-white border border-gray-300">
 
-                        <FavoriteCarousel currentUser={currentUser}/>
+                        <FavoriteCarousel currentUser={currentUser} setFromOwnerDash={setFromOwnerDash}/>
                         </div>
                         <div className="h-96 col-span-1 bg-white border border-gray-300"></div>
                     </div>

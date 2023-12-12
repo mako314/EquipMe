@@ -1,23 +1,36 @@
 import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom'
 
-function FavoriteCarousel({currentUser}) {
+function FavoriteCarousel({currentUser, setFromOwnerDash}) {
 console.log("CAROUSEL:",currentUser)
+const navigate = useNavigate()
+
+const handleEquipmentNavigation = (equipmentId) => {
+  setFromOwnerDash(true)
+  // Use setTimeout to allow state update before navigation
+  setTimeout(() => {
+    navigate(`/equipment/${equipmentId}`)
+  }, 0)
+}
 
 let carouselItems = []
 currentUser?.equipment?.map((equipment) => {
-  if(equipment.user_favorite){ 
+  if(equipment?.user_favorite){ 
     carouselItems.push({
-    equipmentName: `${equipment.make} ${equipment.model}`,
+    equipmentName: `${equipment?.make} ${equipment?.model}`,
     image: <img
-          className="block w-auto"
-          src={equipment.equipment_image}
-          alt={equipment.make +' '+ equipment.model}
+          className="block w-auto cursor-pointer"
+          src={equipment?.equipment_image}
+          alt={equipment?.make +' '+ equipment?.model}
+          onClick={() => handleEquipmentNavigation(equipment?.id)}
         />}
         )
   }
 })
 
 console.log(carouselItems)
+
+
 
 // const carouselItems = [
 //     {
@@ -49,7 +62,7 @@ console.log(carouselItems)
     <div className="flex flex-col items-center justify-center p-4 space-y-4">
   <h2 className="text-lg font-medium">User Favorites</h2>
   <div className="w-full overflow-hidden"> {/* Container for the image */}
-    {carouselItems[currentIndex].image}
+    {carouselItems[currentIndex]?.image}
   </div>
   <div className="flex justify-between items-center w-full"> {/* Container for the buttons and description */}
     <button
@@ -58,8 +71,8 @@ console.log(carouselItems)
     >
       Previous
     </button>
-    <div className="text-center"> {/* Container for the image description */}
-    {carouselItems[currentIndex].equipmentName}
+    <div className="text-center truncate w-full px-4"> {/* Container for the image description */}
+    {carouselItems[currentIndex]?.equipmentName}
     </div>
     <button
       className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow"
