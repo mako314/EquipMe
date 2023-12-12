@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, Fragment } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
 
 //Owner Imports//
@@ -19,11 +19,11 @@ import { UserSessionContext } from '../../UserComponents/SessionContext';
 import { ReactComponent as EquipMeLogo } from '../../Content/EquipMeLogo.svg'
 
 //Chart imports
-import { Chart as ChartJS, ArcElement, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
-import { Doughnut, Bar } from 'react-chartjs-2';
-
 import DoughnutChart from '../../ChartComponents/DoughnutChart';
 import BarChart from '../../ChartComponents/BarChart';
+
+// AgreementFiltering 
+import AgreementFiltering from './AgreementFiltering';
 
 
 function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
@@ -34,6 +34,8 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
     const [toggleHomeDash, setToggleHomeDash] = useState(<DashHome/>)
     const [potentialRentalUsers, setPotentialRentalUsers] = useState([])
     const [potentialRentalOwners, setPotentialRentalOwners] = useState([])
+
+    
     
     
     const apiUrl = useContext(ApiUrlContext)
@@ -249,89 +251,10 @@ function AccountSettings() {
         }, 0)
       }
 
+//----------------------------------------------------------AGREEEMENT FILTERING----------------------------------------------------------------------------------------
+
     // console.log("CURRENT USER AGREEMENTS:", currentUser?.agreements)
-
-    let agreementsForDateSorting = Array.isArray(currentUser?.agreements) ? [...currentUser.agreements] : []
-
     
-    console.log("CURRENT USER AGREEMENTS:", currentUser?.agreements)
-    // ASCENDING ORDER
-    // agreementsForDateSorting.sort(function(a,b){
-    //     // to get a value that is either negative, positive, or zero.
-    //     return new Date(b.created_at) - new Date(a.created_at)
-    // })
-    let sortedAscendingAgreements = agreementsForDateSorting
-    .sort((a, b) => new Date(a.date) - new Date(b.date))
-    .map((agreement) => (
-        <>
-            ---------------------------
-            <br></br>
-            <p className='ml-4'> 
-            For: {agreement.cart_item.cart.user.firstName} {agreement.cart_item.cart.user.lastName}
-            </p>
-            <br></br>
-            <p className='ml-4'> 
-            Created At: {agreement.created_at}
-            </p>
-            <br></br>
-            <p className='ml-4'> 
-            Agreement Status: {agreement.agreement_status}
-            </p>
-            <br></br>
-            <p className='ml-4'>
-            User Decision: {agreement.user_decision}
-            </p>
-            <br></br>
-            <p className='ml-4'>
-            Owner Decision: {agreement.owner_decision}
-            </p>
-            ------------------------
-        </>
-    ))
-    
-    // DESCENDING ORDER
-    // agreementsForDateSorting.sort(function(a,b){
-    //     // to get a value that is either negative, positive, or zero.
-    //     return new Date(a.created_at) - new Date(b.created_at)
-    // })
-
-    // console.log("SORTED USER AGREEMENTS:", agreementsForDateSorting)
-    let sortedDescendingAgreements = agreementsForDateSorting
-    .sort((a, b) => new Date(b.date) - new Date(a.date))
-    .map((agreement) => (
-        <>
-        ---------------------------
-        <br></br>
-        <p className='ml-4'> 
-        For: {agreement.cart_item.cart.user.firstName} {agreement.cart_item.cart.user.lastName}
-        </p>
-        <br></br>
-        <p className='ml-4'> 
-        Created At: {agreement.created_at}
-        </p>
-        <br></br>
-        <p className='ml-4'> 
-        Agreement Status: {agreement.agreement_status}
-        </p>
-        <br></br>
-        <p className='ml-4'>
-        User Decision: {agreement.user_decision}
-        </p>
-        <br></br>
-        <p className='ml-4'>
-        Owner Decision: {agreement.owner_decision}
-        </p>
-        ------------------------
-    </>
-    ))
-    // console.log("SORTED AGREEMENTS DIV:", sortedDescendingAgreements)
-
-    // https://stackoverflow.com/questions/72193794/how-to-sort-array-of-objects-by-date-but-with-most-current-date-first
-    // https://stackoverflow.com/questions/72191289/sort-objects-by-datetime-in-javascript
-    // https://stackoverflow.com/questions/68136203/how-to-use-javascript-sort-to-order-by-year-month-day
-    // https://stackoverflow.com/questions/10123953/how-to-sort-an-object-array-by-date-property
-
-
     function DashHome(){
         return(
             <div>
@@ -359,7 +282,11 @@ function AccountSettings() {
                         </div>
 
                         <div className="h-96 col-span-1 bg-white border border-gray-300 overflow-y-auto">
-                        {sortedAscendingAgreements}
+                        {/* // ----------------- agreement selection options ------------------- */}
+                       {/* {selectionAgreementForm} */}
+
+                        {/* {agreementFiltering === 'newest' ? sortedAscendingAgreements : sortedDescendingAgreements} */}
+                        <AgreementFiltering currentUser={currentUser}/>
 
                         </div>
                         <div className="h-96 col-span-1 bg-white border border-gray-300"></div>

@@ -43,9 +43,11 @@ function RentalAgreementCard({ equipmentName, rentalId, rentalStart, rentalEnd, 
         const utcDate = new Date(utcDateTimeString)
       
         // Get the user's local time offset in hours from UTC
+        // getTimezoneOffset() method returns the time zone difference, in minutes, from current locale (host system settings) to UTC. This value is positive if the local timezone is behind UTC and negative if it's ahead. Since getTimezoneOffset() returns the value with the opposite sign, we divide by -60 to get the offset in hours
         const localTimeOffsetInHours = utcDate.getTimezoneOffset() / -60
       
         // Convert the date to the local timezone by adding the timezone offset
+        // adjust the hours of the UTC date using setHours() by adding the local time offset
         const localDate = new Date(utcDate.setHours(utcDate.getHours() + localTimeOffsetInHours))
       
         // Use toLocaleString to format the date in the local time zone

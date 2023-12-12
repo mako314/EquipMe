@@ -519,7 +519,7 @@ if __name__ == '__main__':
             CartItem(
                 price_cents_at_addition = equipment_prices[0].hourly_rate,
                 price_cents_if_changed = None,
-                quantity = 2,
+                quantity = 1,
                 rental_rate="hourly",
                 rental_length = 6,
                 cart_id= cart1.id,
@@ -529,7 +529,7 @@ if __name__ == '__main__':
             CartItem(
                 price_cents_at_addition = equipment_prices[1].daily_rate,
                 price_cents_if_changed = None,
-                quantity = 2,
+                quantity = 1,
                 rental_rate="daily",
                 rental_length = 5,
                 cart_id= cart1.id,
@@ -539,7 +539,7 @@ if __name__ == '__main__':
             CartItem(
                 price_cents_at_addition = equipment_prices[2].weekly_rate,
                 price_cents_if_changed = None,
-                quantity = 2,
+                quantity = 1,
                 rental_rate="weekly",
                 rental_length = 2,
                 cart_id= cart1.id,
