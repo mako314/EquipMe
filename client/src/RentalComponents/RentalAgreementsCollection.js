@@ -8,7 +8,7 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash, agreement
     const { currentUser, role} = UserSessionContext()
     const apiUrl = useContext(ApiUrlContext)
     const [sortedCards, setSortedCards] = useState([])
-    const [filterKeyWord, setFilterKeyWord] = useState('')
+    const [filterKeyWord, setFilterKeyWord] = useState('none')
 
   console.log(filterKeyWord)
   //This formatdate function takes the created_at and updated_at dates and changes them into a much simpler format. This reads like the following:
@@ -157,17 +157,17 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash, agreement
       <div className="ml-6">
         {/* Form that holds radio buttons for filter keyword */}
         <form className="flex flex-row items-center mb-4">
-          <div className="flex items-center mr-2">
+        <div className="flex items-center mr-2">
             <input 
               type="radio" 
               className="form-radio h-5 w-5 text-gray-600" 
               name="fav_option" 
-              value="completed" 
-              id="completed" 
+              value='none' 
+              id="none" 
               onChange={handleRadioChange} 
-              checked={filterKeyWord === 'completed'}
+              checked={filterKeyWord === 'none'}
             />
-            <label htmlFor="completed" className="ml-2 text-gray-700">Completed</label>
+            <label htmlFor="none" className="ml-2 text-gray-700">None</label>
           </div>
 
           <div className="flex items-center mr-2">
@@ -201,13 +201,15 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash, agreement
               type="radio" 
               className="form-radio h-5 w-5 text-gray-600" 
               name="fav_option" 
-              value='none' 
-              id="none" 
+              value="completed" 
+              id="completed" 
               onChange={handleRadioChange} 
-              checked={filterKeyWord === 'none'}
+              checked={filterKeyWord === 'completed'}
             />
-            <label htmlFor="none" className="ml-2 text-gray-700">None</label>
+            <label htmlFor="completed" className="ml-2 text-gray-700">Completed</label>
           </div>
+
+
         </form>
   
   <div className="flex flex-row flex-wrap justify-start"> 
@@ -221,77 +223,7 @@ export default RentalAgreementsCollection;
 
 
 
- // let rentalCards
-  // // Need to find a way to map over an array that's nested inside of an array.
-  // //Went with flat map, but since there's another nested array inside of cart.cart_item, I needed to flatten that also, and finally, I map over item.agreements to get the agreement dates.
-  // //Luckily with flatmap, everything was available!
-  // // OLD
-  // // rentalCards = currentUser?.cart?.flatMap(cart => 
-  // //   cart.cart_item?.flatMap(item => 
-  // //     item.agreements?.map(agreement=>
 
-  // if (role === 'user'){
-  // rentalCards = (currentUser?.cart ?? []).flatMap(cart => 
-  //   cart.cart_item?.flatMap(item => 
-  //     [...(item.agreements ?? [])].sort(userSortOption)
-  //     .map(agreement =>
-  //     <RentalAgreementCard
-  //     key={item.id}
-  //     rentalId={item.id}
-  //     cartName={cart.cart_name}
-  //     quantity={item.quantity}
-  //     equipmentName={item.equipment.name}
-  //     rentalStart={formatDate(agreement.rental_start_date)}
-  //     rentalEnd={formatDate(agreement.rental_end_date)}
-  //     rentalDelivery={agreement.delivery}
-  //     rentalDeliveryAddress={agreement.delivery_address}
-  //     rentalRevisions={agreement.revisions}
-  //     rentalStatus={agreement.agreement_status}
-  //     rentalCreatedAt={agreement.created_at}
-  //     rentalUpdatedAt={agreement.updated_at}
-  //     renterFirstName={currentUser.firstName}
-  //     renterLastName={currentUser.lastName}
-  //     renterId = {currentUser.id}
-  //     location={item.equipment.location}
-  //     ownerEmail ={item.equipment.owner.email}
-  //     ownerFirstName = {item.equipment.owner.firstName}
-  //     ownerLastName ={item.equipment.owner.lastName}
-  //     ownerId = {item.equipment.owner.id}
-  //     setFromOwnerDash={setFromOwnerDash} 
-  //     fromOwnerDash={fromOwnerDash}
-  //     existingReviews={agreement.review}
-  //     />
-  //       ) || []
-  //     ) || []
-  // )} else {
-  //   rentalCards = currentUser?.agreements?.map(agreement => 
-  //     <RentalAgreementCard
-  //     key={agreement.id}
-  //     rentalId={agreement.id}
-  //     cartName={agreement.cart_item.cart.cart_name}
-  //     quantity={agreement.cart_item.quantity}
-  //     equipmentName={agreement.cart_item.equipment.name}
-  //     rentalStart={formatDate(agreement.rental_start_date)}
-  //     rentalEnd={formatDate(agreement.rental_end_date)}
-  //     rentalDelivery={agreement.delivery}
-  //     rentalDeliveryAddress={agreement.delivery_address}
-  //     rentalRevisions={agreement.revisions}
-  //     rentalStatus={agreement.agreement_status}
-  //     rentalCreatedAt={agreement.created_at}
-  //     rentalUpdatedAt={agreement.updated_at}
-  //     renterFirstName={agreement.cart_item.cart.user.firstName}
-  //     renterLastName={agreement.cart_item.cart.user.lastName}
-  //     renterId = {agreement.cart_item.cart.user.id}
-  //     location={currentUser.location}
-  //     ownerEmail ={currentUser.email}
-  //     ownerFirstName = {currentUser.firstName}
-  //     ownerLastName ={currentUser.lastName}
-  //     ownerId = {currentUser.id}
-  //     setFromOwnerDash={setFromOwnerDash} 
-  //     fromOwnerDash={fromOwnerDash}
-  //     existingReviews={agreement.review}
-  //     />
-  //     )
-  // }
-
-  // rentalCards.sort(userSortOption)
+//Need to find a way to map over an array that's nested inside of an array.
+//Went with flat map, but since there's another nested array inside of cart.cart_item, I needed to flatten that also, and finally, I map over item.agreements to get the agreement dates.
+//Luckily with flatmap, everything was available!

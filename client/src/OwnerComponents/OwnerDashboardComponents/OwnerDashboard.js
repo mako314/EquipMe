@@ -221,6 +221,7 @@ function OwnerFavorites() {
                     email={favorite.user.email}
                     phone={favorite.user.phone}
                     profileImage={favorite.user.profileImage}
+                    location={favorite.user.location}
                 />
                 </div>
                     )
@@ -270,7 +271,9 @@ function AccountSettings() {
         //can't use potentialRenters as the let, I was having issues with it taking two clicks, having a const like the other function seemed to fix it. It's funny because I built this one first, and then shallow copied it for handlePotentialOwner. Lord.
         // Takes 314ms in network tab for this to load. Going to need a loading indicator :crY:
         const updatedPotentialRenters = (
+            <div className='ml-4'> 
             <UserCollection searchTerm={searchTerm} users={data} setFromOwnerDash={setFromOwnerDash} fromOwnerDash={fromOwnerDash}/>
+            </div>
         )
 
         const emptyData = <div> loading </div>
