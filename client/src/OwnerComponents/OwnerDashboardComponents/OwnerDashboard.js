@@ -79,32 +79,28 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
 
 
     function RentalAgreements() {
-        const [agreementFiltering, setAgreementFiltering] = useState('newest')
-        const handleAgreementSelection = (event) => {
-            console.log('Selected value:', event.target.value);
-            setAgreementFiltering(event.target.value);
-        }
+        // const [agreementFiltering, setAgreementFiltering] = useState('newest')
+        // const handleAgreementSelection = (event) => {
+        //     console.log('Selected value:', event.target.value);
+        //     setAgreementFiltering(event.target.value);
+        // }
+        // <div className="mb-4">
+        // <select 
+        //     className="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+        //     value={agreementFiltering}
+        //     onChange={handleAgreementSelection}
+        // >
+        //     <option value="" disabled>--Please choose an option--</option>
+        //     <option name="newest_option" value="newest" id="newest">Newest First</option>
+        //     <option name="oldest_option" value="oldest" id="oldest">Oldest First</option>
+        // </select>
+        // </div>
         setPageTitle('Rental Agreements')
         fromOwnerDash = true
         console.log("RENTAL AGREEMENTS IN OWNER DASH FROM OWNER DASH:", fromOwnerDash)
+        // agreementFiltering={agreementFiltering}
         return(<>
-        <div className="mb-4">
-            <select 
-                className="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                value={agreementFiltering}
-                onChange={handleAgreementSelection}
-            >
-                <option value="" disabled>--Please choose an option--</option>
-                <option name="newest_option" value="newest" id="newest">Newest First</option>
-                <option name="oldest_option" value="oldest" id="oldest">Oldest First</option>
-            </select>
-            {/* <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                <path d="M5.5 7l4.5 4.5L14.5 7z" />
-                </svg>
-            </div> */}
-        </div>
-            <RentalAgreementsCollection setFromOwnerDash={setFromOwnerDash} fromOwnerDash={fromOwnerDash} agreementFiltering={agreementFiltering}/>
+            <RentalAgreementsCollection setFromOwnerDash={setFromOwnerDash} fromOwnerDash={fromOwnerDash} /> 
         </>)
     }
 

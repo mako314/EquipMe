@@ -4,10 +4,11 @@ import UserContext from "../UserComponents/UserContext";
 import ApiUrlContext from "../Api";
 import { UserSessionContext } from "../UserComponents/SessionContext";
 
-function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash, agreementFiltering}) {
+function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
     const { currentUser, role} = UserSessionContext()
     const apiUrl = useContext(ApiUrlContext)
     const [sortedCards, setSortedCards] = useState([])
+    const [agreementFiltering, setAgreementFiltering] = useState('newest')
     const [filterKeyWord, setFilterKeyWord] = useState('none')
 
   console.log(filterKeyWord)
@@ -149,12 +150,27 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash, agreement
     setSortedCards(cards)
       //Refires whenever current user changes, agreementFiltering(prop brought in from the parent to decide what you're filtering by) and key word
   }, [currentUser, agreementFiltering, filterKeyWord])
+
+  const handleAgreementSelection = (event) => {
+    console.log('Selected value:', event.target.value);
+    setAgreementFiltering(event.target.value);
+  }
   
  
 
     return (
 
       <div className="ml-6">
+        <select 
+                className="block appearance-none w-auto bg-white border border-gray-300 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 my-2"
+                value={agreementFiltering}
+                onChange={handleAgreementSelection}
+            >
+                <option value="" disabled>--Please choose an option--</option>
+                <option name="newest_option" value="newest" id="newest">Newest First</option>
+                <option name="oldest_option" value="oldest" id="oldest">Oldest First</option>
+        </select>
+
         {/* Form that holds radio buttons for filter keyword */}
         <form className="flex flex-row items-center mb-4">
         <div className="flex items-center mr-2">
@@ -208,8 +224,6 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash, agreement
             />
             <label htmlFor="completed" className="ml-2 text-gray-700">Completed</label>
           </div>
-
-
         </form>
   
   <div className="flex flex-row flex-wrap justify-start"> 
