@@ -215,7 +215,7 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash, agreement
   <div className="flex flex-row flex-wrap justify-start"> 
     {sortedCards}
   </div>
-</div>
+  </div>
     )
 }
 

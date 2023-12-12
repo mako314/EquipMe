@@ -34,6 +34,7 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
     const [toggleHomeDash, setToggleHomeDash] = useState(<DashHome/>)
     const [potentialRentalUsers, setPotentialRentalUsers] = useState([])
     const [potentialRentalOwners, setPotentialRentalOwners] = useState([])
+    const [pageTitle, setPageTitle] = useState('')
     
 
     
@@ -58,12 +59,8 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
     //   } = source || {}
 
     //--------------------user--------
-    let potentialOwners
-    
     //----- Variables in the order they appear ----- These are ALL being moved to components shortly.
     let plannedDeals
-    let potentialRenters
-
     let firstName
     let equipment
     let lastName
@@ -87,7 +84,7 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
             console.log('Selected value:', event.target.value);
             setAgreementFiltering(event.target.value);
         }
-    
+        setPageTitle('Rental Agreements')
         fromOwnerDash = true
         console.log("RENTAL AGREEMENTS IN OWNER DASH FROM OWNER DASH:", fromOwnerDash)
         return(<>
@@ -112,10 +109,11 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
     }
 
     const handlePotentialOwners = () => {
+        setPageTitle('Your Favorites')
         fetch(`${apiUrl}owners/${currentUser?.profession}`)
         .then((resp) => resp.json())
         .then((data) => {
-            
+        
             const ownerCollection = data.length > 0 ? (
                 <OwnerCollection
                     key={"dash"}
@@ -131,6 +129,7 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
     function UserFavorites() {
         const [selectedFavorite, setSelectedFavorite] = useState('equipment')
 
+        setPageTitle('Your Favorites')
         const handleRadioChange = (event) => {
             setSelectedFavorite(event.target.value)
         }
@@ -206,13 +205,12 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
 
 //-------------------------------------------------------------OWNER CONDITIONAL DATA --------------------------------------------------------------------
 function OwnerFavorites() {
+    setPageTitle('Your Favorites')
     currentUser?.owner_favorite?.map((favorite) =>console.log("THE USER IDS:",favorite?.user.user_id))
     return (
-        <div className="flex flex-wrap ml-4 pt-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
             {currentUser?.owner_favorite?.map((favorite) => {
-
             return (
-                <div className='ml-4'> 
                 <UserCard
                     key={favorite.id}
                     id={favorite.user_id}
@@ -222,9 +220,7 @@ function OwnerFavorites() {
                     phone={favorite.user.phone}
                     profileImage={favorite.user.profileImage}
                     location={favorite.user.location}
-                />
-                </div>
-                    )
+                />)
             })}
         </div>
     )
@@ -235,7 +231,7 @@ function OwnerFavorites() {
 // Need to build out a back to dash button here for owners along with edit functionality 
 function ActiveListings(){
     if (!currentUser) return null
-
+    setPageTitle('Active Listings')
     return(
     <div>
         <ProductCollection equipmentArray={currentUser.equipment}/>
@@ -248,6 +244,7 @@ function ActiveListings(){
 function AccountSettings() {
     if (!currentUser) return null
 
+    setPageTitle('Account Settings')
     return (
         <>
             <OwnerEditForm/>
@@ -268,12 +265,13 @@ function AccountSettings() {
     .then((resp) => resp.json())
     .then((data) => {
         setPotentialRentalUsers(data)
+        setPageTitle('Potential Renters')
         //can't use potentialRenters as the let, I was having issues with it taking two clicks, having a const like the other function seemed to fix it. It's funny because I built this one first, and then shallow copied it for handlePotentialOwner. Lord.
         // Takes 314ms in network tab for this to load. Going to need a loading indicator :crY:
         const updatedPotentialRenters = (
-            <div className='ml-4'> 
+            
             <UserCollection searchTerm={searchTerm} users={data} setFromOwnerDash={setFromOwnerDash} fromOwnerDash={fromOwnerDash}/>
-            </div>
+            
         )
 
         const emptyData = <div> loading </div>
@@ -295,6 +293,7 @@ function AccountSettings() {
     // console.log("CURRENT USER AGREEMENTS:", currentUser?.agreements)
     
     function DashHome(){
+        setPageTitle('Home')
         return(
             <div>
                 {/* CENTER OF PAGE , BLOCKS AND SUCH  */}
@@ -404,7 +403,7 @@ function AccountSettings() {
                     <div className="flex flex-col overflow-auto flex-grow">
                         <div className="flex items-center flex-shrink-0 h-16 px-8 border-b border-gray-300">
 
-                            <h1 className="text-lg font-medium">Page Title</h1>
+                            <h1 className="text-lg font-medium">{pageTitle}</h1>
                             {role === 'owner' && <>
                             <button className="flex items-center justify-center h-10 px-4 ml-auto text-sm font-medium rounded hover:bg-gray-300" onClick={handleCsvClick}>
                                 Upload Equipment File
