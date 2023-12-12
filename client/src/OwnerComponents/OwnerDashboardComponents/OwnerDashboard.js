@@ -138,9 +138,13 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
         console.log(selectedFavorite)
 
         return (
-            <div className="flex flex-wrap ml-4 pt-4">
-                <form>
-                <input 
+            <div className="ml-6">
+
+                <form className="flex flex-row items-center mb-4">
+
+                <div className="flex items-center ml-4 mr-2 mt-4">
+                <input
+                    className="form-radio h-5 w-5 text-gray-600" 
                     type="radio" 
                     name="fav_option" 
                     value="equipment" 
@@ -148,8 +152,12 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
                     onChange={handleRadioChange} 
                     checked={selectedFavorite === 'equipment'}
                 />
-                <label htmlFor="equipment">Equipment</label>
-                <input 
+                <label htmlFor="equipment" className="ml-2 text-gray-700">Equipment</label>
+                </div>
+
+                <div className="flex items-center ml-4 mr-2 mt-4">
+                <input
+                    className="form-radio h-5 w-5 text-gray-600" 
                     type="radio" 
                     name="fav_option" 
                     value="owner" 
@@ -157,8 +165,12 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
                     onChange={handleRadioChange} 
                     checked={selectedFavorite === 'owner'}
                 />
-                <label htmlFor="owner">Owner</label>
+                <label htmlFor="owner" className="ml-2 text-gray-700">Owner</label>
+                </div>
+
                 </form>
+
+                <div className="flex flex-row flex-wrap justify-start"> 
                 {currentUser?.user_favorite?.map((favorite) => {
                     if (selectedFavorite === 'equipment' && favorite.equipment_id && favorite.equipment) {
                         return (
@@ -187,6 +199,7 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
                     }
                     return null
                 })}
+                </div>
             </div>
         )
     }
@@ -337,7 +350,8 @@ function AccountSettings() {
                             {currentUser.firstName} {currentUser.lastName}
                         </span>
                     </div>
-                        <div className="flex flex-col flex-grow p-4 overflow-auto">
+                    {/* Made it a fixed width because it constantly changing sizes was irritating me  */}
+                        <div className="flex flex-col w-60 flex-grow p-4 overflow-auto">
 
                             <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<DashHome/>)}> Home </span>
 
