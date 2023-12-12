@@ -33,14 +33,15 @@ function AgreementFiltering({currentUser}) {
 
       const handleAgreementSelection = (event) => {
         console.log('Selected value:', event.target.value);
-        setAgreementFiltering(previousValue => event.target.value);
+        setAgreementFiltering(event.target.value);
     }
 
+    let userSortOption = (a, b) => new Date(a.created_at) - new Date(b.created_at)
     let sortedAscendingAgreements = [...agreementsForDateSorting]
     .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
     .map((agreement) => (
         <Fragment key={agreement.id}>
-            <div className="max-w-sm rounded overflow-hidden shadow-lg bg-white text-gray-800">
+            <div className="w-full rounded overflow-hidden shadow-lg bg-white text-gray-800">
             <div className="px-6 py-4">
                 <div className="font-bold text-xl mb-2">Agreement Details For: <br></br>
                 {agreement.cart_item.cart.user.firstName} {agreement.cart_item.cart.user.lastName}</div>
@@ -66,7 +67,7 @@ function AgreementFiltering({currentUser}) {
     .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
     .map((agreement) => (
         <Fragment key={agreement.id}>
-        <div className="max-w-sm rounded overflow-hidden shadow-lg bg-white text-gray-800">
+        <div className="w-full rounded overflow-hidden shadow-lg bg-white text-gray-800">
             <div className="px-6 py-4">
                 <div className="font-bold text-xl mb-2">Agreement Details For: <br></br>
                 {agreement.cart_item.cart.user.firstName} {agreement.cart_item.cart.user.lastName}</div>

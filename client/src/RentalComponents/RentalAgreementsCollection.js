@@ -4,9 +4,10 @@ import UserContext from "../UserComponents/UserContext";
 import ApiUrlContext from "../Api";
 import { UserSessionContext } from "../UserComponents/SessionContext";
 
-function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
+function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash, agreementFiltering}) {
     const { currentUser, role} = UserSessionContext()
     const apiUrl = useContext(ApiUrlContext)
+    const [sortedCards, setSortedCards] = useState([])
     console.log(currentUser)
 
   const formatDate = (date) => {
@@ -26,14 +27,82 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
     return newDate.toLocaleDateString('en-US', options)
   }
 
+  let userSortOption = agreementFiltering === 'newest' ?
+  ((a, b) => new Date(b.created_at) - new Date(a.created_at)) : // Newest first
+  ((a, b) => new Date(a.created_at) - new Date(b.created_at)) // Oldest first
+
+  useEffect(() => {
+    // Flatten the agreements into a single array, I needed the cart, the cart_item for quantity etc, when everything is flattened, spread it into allAgreements
+    const allAgreements = role === 'user' ? (currentUser?.cart ?? []).flatMap(cart => 
+      (cart.cart_item ?? []).flatMap(item => 
+        (item.agreements ?? []).map(agreement => ({
+          ...agreement,
+          cartName: cart.cart_name,
+          item,
+        }))
+      )
+    ) : currentUser.agreements.map(agreement => ({
+      ...agreement,
+    }))
+  
+    // Sort all agreements based on the selected option
+    const sortedAgreements = allAgreements?.sort(userSortOption);
+  
+    // Map over sorted agreements to create the cards
+    
+    
+    const cards = sortedAgreements?.map(agreement => (
+      role === 'user' ? (
+        <RentalAgreementCard
+          key={`${agreement.id}-${agreement.created_at}`} // Unique key based on ID and created_at
+          rentalId={agreement.item.id}
+          cartName={agreement.cart_name}
+          quantity={agreement.item.quantity}
+          equipmentName={agreement.item.equipment.name}
+          rentalStart={formatDate(agreement.rental_start_date)}
+          rentalEnd={formatDate(agreement.rental_end_date)}
+          rentalDelivery={agreement.delivery}
+          rentalDeliveryAddress={agreement.delivery_address}
+          rentalRevisions={agreement.revisions}
+          rentalStatus={agreement.agreement_status}
+          rentalCreatedAt={agreement.created_at}
+          rentalUpdatedAt={agreement.updated_at}
+          renterFirstName={currentUser.firstName}
+          renterLastName={currentUser.lastName}
+          renterId={currentUser.id}
+          location={agreement.item.equipment.location}
+          ownerEmail={agreement.item.equipment.owner.email}
+          ownerFirstName={agreement.item.equipment.owner.firstName}
+          ownerLastName={agreement.item.equipment.owner.lastName}
+          ownerId={agreement.item.equipment.owner.id}
+          setFromOwnerDash={setFromOwnerDash}
+          fromOwnerDash={fromOwnerDash}
+          existingReviews={agreement.review}
+        />
+      ) : (
+        console.log(agreement)
+      )
+  ))
+  
+    // Update state to cause re-render
+    setSortedCards(cards)
+  
+  }, [currentUser, agreementFiltering])
+  
   let rentalCards
   // Need to find a way to map over an array that's nested inside of an array.
   //Went with flat map, but since there's another nested array inside of cart.cart_item, I needed to flatten that also, and finally, I map over item.agreements to get the agreement dates.
   //Luckily with flatmap, everything was available!
+  // OLD
+  // rentalCards = currentUser?.cart?.flatMap(cart => 
+  //   cart.cart_item?.flatMap(item => 
+  //     item.agreements?.map(agreement=>
+
   if (role === 'user'){
-  rentalCards = currentUser?.cart?.flatMap(cart => 
+  rentalCards = (currentUser?.cart ?? []).flatMap(cart => 
     cart.cart_item?.flatMap(item => 
-      item.agreements?.map(agreement=>
+      [...(item.agreements ?? [])].sort(userSortOption)
+      .map(agreement =>
       <RentalAgreementCard
       key={item.id}
       rentalId={item.id}
@@ -93,9 +162,11 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
       )
   }
 
+  rentalCards.sort(userSortOption)
+
     return (
     <div className="flex flex-row flex-wrap justify-start ml-6">
-        {rentalCards}
+        {sortedCards}
     </div>
     )
 }
