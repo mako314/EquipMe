@@ -25,6 +25,9 @@ import BarChart from '../../ChartComponents/BarChart';
 // AgreementFiltering 
 import AgreementFiltering from './AgreementFiltering';
 
+// Carousel Import
+import FavoriteCarousel from './FavoritedCarousel';
+
 
 function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
 
@@ -323,7 +326,10 @@ function AccountSettings() {
                         <AgreementFiltering currentUser={currentUser}/>
 
                         </div>
-                        <div className="h-96 col-span-1 bg-white border border-gray-300"></div>
+                        <div className="h-96 col-span-1 bg-white border border-gray-300">
+
+                        <FavoriteCarousel currentUser={currentUser}/>
+                        </div>
                         <div className="h-96 col-span-1 bg-white border border-gray-300"></div>
                     </div>
                 </div>
