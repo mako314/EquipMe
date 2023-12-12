@@ -604,7 +604,7 @@ if __name__ == '__main__':
             delivery_address = "",
             user_decision = "accept",
             owner_decision = "accept",
-            agreement_status = "completed",
+            agreement_status = "owner-accepted",
             owner_id = owner_2.id, # Henry Cavill
             user_id=user_1.id,  # Sarah Thompson
             cart_item_id=cart_items[2].id,  # Lawnmower

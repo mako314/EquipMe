@@ -39,8 +39,11 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash, agreement
     setFilterKeyWord(event.target.value)
   }
 
+  // https://stackoverflow.com/questions/72193794/how-to-sort-array-of-objects-by-date-but-with-most-current-date-first
+  // https://stackoverflow.com/questions/72191289/sort-objects-by-datetime-in-javascript
+  // https://stackoverflow.com/questions/68136203/how-to-use-javascript-sort-to-order-by-year-month-day
+  // https://stackoverflow.com/questions/10123953/how-to-sort-an-object-array-by-date-property
   // userSortOption, checks whether newest is selected, only other option here is oldest, and sorts by that
-  // source.review?.filter(reviewSubmission => reviewSubmission.reviewer_type === 'owner')
   let userSortOption = agreementFiltering === 'newest' ?
   ((a, b) => new Date(b.created_at) - new Date(a.created_at)) : // Newest first
   ((a, b) => new Date(a.created_at) - new Date(b.created_at)) // Oldest first
@@ -48,6 +51,7 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash, agreement
   //useEffect to track the agreementFiltering 
   useEffect(() => {
 
+    // take an agreement and filter it, it's called on all agreements which is an array with the agreement data we need. It's been flatmapped twice if it's a user, and then mapped over for the data we need. We compare it with the selected filter key word, which is decided by the radio buttons and compared with agreement_status of the agreement.
     const filterAgreements = (agreement) => {
       console.log("Agreement status: ", agreement.agreement_status, "Filter keyword: ", filterKeyWord)
       return filterKeyWord ? agreement.agreement_status === filterKeyWord : true
@@ -66,26 +70,19 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash, agreement
       ...agreement,
     }))
 
-    // let sortedAgreements
-    // if (filterKeyWord) {
-    //  // Apply the filter
-    // let filteredAgreements = allAgreements.filter(filterAgreements)
-    // // Sort the filtered agreements
-    // sortedAgreements = filteredAgreements.sort(userSortOption)
-    // }
-    // // Sort all agreements based on the selected option
-    // sortedAgreements = allAgreements?.sort(userSortOption)
+    // Check agreements before filtering
+    console.log("Agreements before filtering:", allAgreements) 
 
-    console.log("Agreements before filtering:", allAgreements) // Check agreements before filtering
-
+    //If filterKeyWord exists and is not equal to none, go ahead and filter with the function 
     if (filterKeyWord && filterKeyWord !== 'none') {
-      console.log("Agreements after filtering:", allAgreements) // Check agreements 
+      // Check agreements after filtering
+      console.log("Agreements after filtering:", allAgreements) 
       allAgreements = allAgreements.filter(filterAgreements)
     }
 
-    // Sort the (filtered) agreements
+    // Sort the ( possibly filtered) agreements. Agreements are always sorted regardless if filtering occurs or not.
     const sortedAgreements = allAgreements.sort(userSortOption)
-    console.log("Sorted agreements:", sortedAgreements)
+    // console.log("Sorted agreements:", sortedAgreements)
 
     // Map over sorted agreements to create the cards
     // Need to find a way to map over an array that's nested inside of an array.
@@ -150,53 +147,68 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash, agreement
   ))
     // Update state to cause re-render
     setSortedCards(cards)
-  
+      //Refires whenever current user changes, agreementFiltering(prop brought in from the parent to decide what you're filtering by) and key word
   }, [currentUser, agreementFiltering, filterKeyWord])
   
  
 
     return (
+
       <div className="ml-6">
-  <form className="flex flex-row items-center mb-4">
-    <div className="flex items-center mr-2">
-      <input 
-        type="radio" 
-        className="form-radio h-5 w-5 text-gray-600" 
-        name="fav_option" 
-        value="completed" 
-        id="completed" 
-        onChange={handleRadioChange} 
-        checked={filterKeyWord === 'completed'}
-      />
-      <label htmlFor="completed" className="ml-2 text-gray-700">Completed</label>
-    </div>
+        {/* Form that holds radio buttons for filter keyword */}
+        <form className="flex flex-row items-center mb-4">
+          <div className="flex items-center mr-2">
+            <input 
+              type="radio" 
+              className="form-radio h-5 w-5 text-gray-600" 
+              name="fav_option" 
+              value="completed" 
+              id="completed" 
+              onChange={handleRadioChange} 
+              checked={filterKeyWord === 'completed'}
+            />
+            <label htmlFor="completed" className="ml-2 text-gray-700">Completed</label>
+          </div>
 
-    <div className="flex items-center mr-2">
-      <input 
-        type="radio" 
-        className="form-radio h-5 w-5 text-gray-600" 
-        name="fav_option" 
-        value="user-accepted" 
-        id="user-accepted" 
-        onChange={handleRadioChange} 
-        checked={filterKeyWord === 'user-accepted'}
-      />
-      <label htmlFor="user-accepted" className="ml-2 text-gray-700">User Accepted</label>
-    </div>
+          <div className="flex items-center mr-2">
+            <input 
+              type="radio" 
+              className="form-radio h-5 w-5 text-gray-600" 
+              name="fav_option" 
+              value='owner-accepted' 
+              id="owner-accepted" 
+              onChange={handleRadioChange} 
+              checked={filterKeyWord === 'owner-accepted'}
+            />
+            <label htmlFor="owner-accepted" className="ml-2 text-gray-700">Owner Accepted</label>
+          </div>
 
-    <div className="flex items-center mr-2">
-      <input 
-        type="radio" 
-        className="form-radio h-5 w-5 text-gray-600" 
-        name="fav_option" 
-        value='none' 
-        id="none" 
-        onChange={handleRadioChange} 
-        checked={filterKeyWord === 'none'}
-      />
-      <label htmlFor="none" className="ml-2 text-gray-700">None</label>
-    </div>
-  </form>
+          <div className="flex items-center mr-2">
+            <input 
+              type="radio" 
+              className="form-radio h-5 w-5 text-gray-600" 
+              name="fav_option" 
+              value="user-accepted" 
+              id="user-accepted" 
+              onChange={handleRadioChange} 
+              checked={filterKeyWord === 'user-accepted'}
+            />
+            <label htmlFor="user-accepted" className="ml-2 text-gray-700">User Accepted</label>
+          </div>
+
+          <div className="flex items-center mr-2">
+            <input 
+              type="radio" 
+              className="form-radio h-5 w-5 text-gray-600" 
+              name="fav_option" 
+              value='none' 
+              id="none" 
+              onChange={handleRadioChange} 
+              checked={filterKeyWord === 'none'}
+            />
+            <label htmlFor="none" className="ml-2 text-gray-700">None</label>
+          </div>
+        </form>
   
   <div className="flex flex-row flex-wrap justify-start"> 
     {sortedCards}
