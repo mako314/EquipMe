@@ -63,7 +63,6 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
 
     //--------------------user--------
     //----- Variables in the order they appear ----- These are ALL being moved to components shortly.
-    let plannedDeals
     let firstName
     let equipment
     let lastName
@@ -252,9 +251,6 @@ function AccountSettings() {
 }
 
 //------------------------------------------------------------------------------------
-
-    plannedDeals =
-        <div> Planned Deals </div>
 //------------------------------------------------------------------------------------
 // I'll be removing these useEffects soon enough: 
 // https://react.dev/learn/synchronizing-with-effects#fetching-data
@@ -350,9 +346,14 @@ function AccountSettings() {
                     
                     <div className="flex flex-col w-56 border-r border-gray-300">
                     <div className="flex items-center justify-between w-full h-16 px-4 border-b border-gray-300 hover:bg-gray-300">
-                        <span className="font-medium">
+                    <img 
+                            src={currentUser.profileImage} 
+                            alt={`${currentUser.firstName}'s profile`}
+                            className="h-10 w-10 rounded-full object-cover ml-2" 
+                            />
+                            <span className="font-medium mr-4">
                             {currentUser.firstName} {currentUser.lastName}
-                        </span>
+                            </span>
                     </div>
                     {/* Made it a fixed width because it constantly changing sizes was irritating me  */}
                         <div className="flex flex-col w-60 flex-grow p-4 overflow-auto">
@@ -370,10 +371,6 @@ function AccountSettings() {
 
                             <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<RentalAgreements/>)}> Rental Agreements</span> 
  
-                            
-                            {/* <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<ActiveListings/>)}> Active listings </span>  */}
-                            {/* <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(plannedDeals)}> Planned Deals </span> */}
-
                              <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {
                                 {role === 'owner' ? setToggleHomeDash(<OwnerFavorites/>) : setToggleHomeDash(<UserFavorites/>)} 
                              }}> 
@@ -392,13 +389,7 @@ function AccountSettings() {
 
                             <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={handleInboxNavigation}
                             > Inbox </span>
-                            
-                            {/* <span className="flex items-center flex-shrink-0 h-10 px-3 mt-auto text-sm font-medium bg-gray-200 rounded hover:bg-gray-300">
-                                <svg className="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                </svg>
-                                <span className="ml-2 leading-none">New Item</span>
-                            </span> */}
+
                         </div>
 
                     </div>
