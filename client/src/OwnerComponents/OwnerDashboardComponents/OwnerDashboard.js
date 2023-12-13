@@ -28,6 +28,9 @@ import AgreementFiltering from './AgreementFiltering';
 // Carousel Import
 import FavoriteCarousel from './FavoritedCarousel';
 
+//404 Page Import
+import Page404 from '../../ErrorPageComponents/Page404';
+
 
 function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
 
@@ -432,16 +435,9 @@ function AccountSettings() {
         )
     }
 
-    function LoggedOutDisplay(){
-
-        return (
-            <div> you must be logged in to view this page </div>
-        )
-    }
-
     return (
         <>
-            {currentUser ? <LoggedInDisplay/> : <LoggedOutDisplay/>}
+            {currentUser ? <LoggedInDisplay/> : <Page404/>}
         </>
     )
 }
