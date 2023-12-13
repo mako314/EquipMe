@@ -267,6 +267,14 @@ function AccountSettings() {
         }, 0)
       }
 
+    const handlePublicProfileNav = () => {
+        setFromOwnerDash(true)
+        // Use setTimeout to allow state update before navigation
+        setTimeout(() => {
+            navigate( role === 'owner' ? `/equipment_owner/${currentUser.id}`: `/user/profile/${currentUser.id}`)
+        }, 0)
+      }
+
 //----------------------------------------------------------AGREEEMENT FILTERING----------------------------------------------------------------------------------------
 
     // console.log("CURRENT USER AGREEMENTS:", currentUser?.agreements)
@@ -352,6 +360,7 @@ function AccountSettings() {
                             )}> Rental Agreements  </span>} */}
                             {role === 'owner' &&
                             <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<ActiveListings/>)}> Active listings </span>}
+                            
 
                             <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<RentalAgreements/>)}> Rental Agreements</span> 
  
@@ -366,6 +375,8 @@ function AccountSettings() {
 
                                 {role === 'owner' ? 'Potential Renters' : 'Potential Rental Interests'}
                             </span>
+
+                            <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={handlePublicProfileNav}> Your Public Profile</span>
 
                             <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" 
                             onClick={() => setToggleHomeDash(<AccountSettings/>)}
