@@ -25,6 +25,9 @@ import BarChart from '../../ChartComponents/BarChart';
 // AgreementFiltering 
 import AgreementFiltering from './AgreementFiltering';
 
+// Carousel Import
+import FavoriteCarousel from './FavoritedCarousel';
+
 
 function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
 
@@ -36,7 +39,7 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
     const [potentialRentalOwners, setPotentialRentalOwners] = useState([])
     const [pageTitle, setPageTitle] = useState('')
     
-
+    const navigate = useNavigate()
     
     
     
@@ -70,7 +73,7 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
          equipment = currentUser.equipment
     }
 
-    const navigate = useNavigate()
+   
 
     const handleCsvClick = (e) => {
         navigate('/temp/bulk_equipment_upload')
@@ -323,7 +326,10 @@ function AccountSettings() {
                         <AgreementFiltering currentUser={currentUser}/>
 
                         </div>
-                        <div className="h-96 col-span-1 bg-white border border-gray-300"></div>
+                        <div className="h-96 col-span-1 bg-white border border-gray-300 p-4 overflow-hidden">
+
+                        <FavoriteCarousel currentUser={currentUser} setFromOwnerDash={setFromOwnerDash}/>
+                        </div>
                         <div className="h-96 col-span-1 bg-white border border-gray-300"></div>
                     </div>
                 </div>
