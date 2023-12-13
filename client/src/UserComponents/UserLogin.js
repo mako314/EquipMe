@@ -34,7 +34,8 @@ function UserLogin(){
                 if(data.role === 'user'){
                   setCurrentUser(data.user)
                   setRole(data.role)
-                  navigate(`/user/profile/${data.id}`); // <-------- navigates to the profile
+                  navigate(`/dashboard`) 
+                  // navigate(`/user/profile/${data.id}`); // <-------- navigates to the profile
                 } else if(data.role === 'owner'){
                   setCurrentUser(data.owner)
                   setRole(data.role)

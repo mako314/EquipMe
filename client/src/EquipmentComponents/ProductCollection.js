@@ -4,7 +4,8 @@ import Pagination from '../PaginationComponents/Pagination'
 
 function ProductCollection({ equipmentArray, handleEquipmentDelete, handleEditEquipment }) {
 
-    const [cardsPerPage] = useState(16)
+    //Can change this so show x amount of cards per page
+    const [cardsPerPage] = useState(8)
     const [cardOffset, setCardOffset] = useState(0)
     const endOffset = cardOffset + cardsPerPage;
     console.log(equipmentArray)
