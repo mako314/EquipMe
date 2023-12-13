@@ -28,7 +28,6 @@ function HomePage({ equipmentArray, setFeaturedRental }) {
     }
 
     const handleClickLawnmowerClick = () => {
-
         navigate(`/equipment/${3}`)
         window.scrollTo(0, 0)
     }

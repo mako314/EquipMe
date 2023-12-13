@@ -69,6 +69,7 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
     let firstName
     let equipment
     let lastName
+    const userLoggedOut='You Must be Logged in to view this Page'
     if (currentUser){
          firstName  = currentUser.firstName
          lastName = currentUser.lastName
@@ -437,7 +438,7 @@ function AccountSettings() {
 
     return (
         <>
-            {currentUser ? <LoggedInDisplay/> : <Page404/>}
+            {currentUser ? <LoggedInDisplay/> : <Page404 errorString={userLoggedOut}/>}
         </>
     )
 }

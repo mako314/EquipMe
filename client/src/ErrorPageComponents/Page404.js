@@ -1,14 +1,28 @@
 import React from "react";
+import { useNavigate } from 'react-router-dom'
 
-function Page404(){
+function Page404({errorString}){
 
+    const navigate = useNavigate();
+
+    const HandleHomeNavigation = () => {
+        navigate(`/`)
+        window.scrollTo(0, 0)
+    }
+
+    const HandleLoginNavigation = () => {
+        navigate(`/login`)
+        window.scrollTo(0, 0)
+    }
+
+    // We've Run into An Error!
     return(
             <section class="bg-white dark:bg-gray-900 ">
         <div class="container flex items-center justify-center min-h-screen px-6 py-12 mx-auto">
             <div class="w-full ">
                 <div class="flex flex-col items-center max-w-lg mx-auto text-center">
-                    <p class="text-sm font-medium text-blue-500 dark:text-blue-400">404 error</p>
-                    <h1 class="mt-3 text-2xl font-semibold text-gray-800 dark:text-white md:text-3xl">We lost this page</h1>
+                    <p class="text-sm font-medium text-blue-500 dark:text-blue-400"> We've Run into An Error! </p>
+                    <h1 class="mt-3 text-2xl font-semibold text-gray-800 dark:text-white md:text-3xl">{errorString}</h1>
                     <p class="mt-4 text-gray-500 dark:text-gray-400">We searched high and low, but couldn’t find what you’re looking for.Let’s find a better place for you to go.</p>
 
                     <div class="flex items-center w-full mt-6 gap-x-3 shrink-0 sm:w-auto">
@@ -21,7 +35,7 @@ function Page404(){
                             <span>Go back</span>
                         </button>
 
-                        <button class="w-1/2 px-5 py-2 text-sm tracking-wide text-white transition-colors duration-200 bg-blue-500 rounded-lg shrink-0 sm:w-auto hover:bg-blue-600 dark:hover:bg-blue-500 dark:bg-blue-600">
+                        <button class="w-1/2 px-5 py-2 text-sm tracking-wide text-white transition-colors duration-200 bg-blue-500 rounded-lg shrink-0 sm:w-auto hover:bg-blue-600 dark:hover:bg-blue-500 dark:bg-blue-600" onClick={HandleHomeNavigation}>
                             Take me home
                         </button>
                     </div>
@@ -55,17 +69,17 @@ function Page404(){
                             </svg>
                         </span>
                         
-                        <h3 class="mt-6 font-medium text-gray-700 dark:text-gray-200 ">Our blog</h3>
+                        <h3 class="mt-6 font-medium text-gray-700 dark:text-gray-200 ">Need to login again?</h3>
 
-                        <p class="mt-2 text-gray-500 dark:text-gray-400 ">Read the latest posts on our blog.</p>
+                        <p class="mt-2 text-gray-500 dark:text-gray-400" >Lets get you signed back in!</p>
 
-                        <a href="#" class="inline-flex items-center mt-4 text-sm text-blue-500 gap-x-2 dark:text-blue-400 hover:underline">
+                        <span class="inline-flex items-center mt-4 text-sm text-blue-500 gap-x-2 dark:text-blue-400 cursor-pointer hover:underline" onClick={HandleLoginNavigation}>
                             <span>View lastest posts</span>
 
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 rtl:rotate-180">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
                             </svg>
-                        </a>
+                        </span>
                     </div>
 
                     <div class="p-6 rounded-lg bg-blue-50 dark:bg-gray-800">
@@ -95,3 +109,25 @@ function Page404(){
 }
 
 export default Page404;
+
+
+// This one is good
+{/* <div class="p-6 rounded-lg bg-blue-50 dark:bg-gray-800">
+                        <span class="text-gray-500 dark:text-gray-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+                            </svg>
+                        </span>
+                        
+                        <h3 class="mt-6 font-medium text-gray-700 dark:text-gray-200 ">Need to login again?</h3>
+
+                        <p class="mt-2 text-gray-500 dark:text-gray-400" >Lets get you signed back in!</p>
+
+                        <span class="inline-flex items-center mt-4 text-sm text-blue-500 gap-x-2 dark:text-blue-400 cursor-pointer hover:underline" onClick={HandleLoginNavigation}>
+                            <span>View lastest posts</span>
+
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 rtl:rotate-180">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
+                            </svg>
+                        </span>
+</div> */}
