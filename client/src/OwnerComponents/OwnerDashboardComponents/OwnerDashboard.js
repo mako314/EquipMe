@@ -81,22 +81,6 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
 
 
     function RentalAgreements() {
-        // const [agreementFiltering, setAgreementFiltering] = useState('newest')
-        // const handleAgreementSelection = (event) => {
-        //     console.log('Selected value:', event.target.value);
-        //     setAgreementFiltering(event.target.value);
-        // }
-        // <div className="mb-4">
-        // <select 
-        //     className="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-        //     value={agreementFiltering}
-        //     onChange={handleAgreementSelection}
-        // >
-        //     <option value="" disabled>--Please choose an option--</option>
-        //     <option name="newest_option" value="newest" id="newest">Newest First</option>
-        //     <option name="oldest_option" value="oldest" id="oldest">Oldest First</option>
-        // </select>
-        // </div>
         setPageTitle('Rental Agreements')
         fromOwnerDash = true
         console.log("RENTAL AGREEMENTS IN OWNER DASH FROM OWNER DASH:", fromOwnerDash)
