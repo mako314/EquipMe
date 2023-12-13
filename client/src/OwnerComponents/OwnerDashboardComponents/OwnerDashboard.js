@@ -326,7 +326,7 @@ function AccountSettings() {
                         <AgreementFiltering currentUser={currentUser}/>
 
                         </div>
-                        <div className="h-96 col-span-1 bg-white border border-gray-300">
+                        <div className="h-96 col-span-1 bg-white border border-gray-300 p-4 overflow-hidden">
 
                         <FavoriteCarousel currentUser={currentUser} setFromOwnerDash={setFromOwnerDash}/>
                         </div>

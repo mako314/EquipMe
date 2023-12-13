@@ -15,11 +15,12 @@ const handleEquipmentNavigation = (equipmentId) => {
 
 let carouselItems = []
 currentUser?.equipment?.map((equipment) => {
-  if(equipment?.user_favorite){ 
+  if(equipment?.user_favorite){
     carouselItems.push({
     equipmentName: `${equipment?.make} ${equipment?.model}`,
     image: <img
-          className="block w-auto cursor-pointer"
+          key={equipment?.make +' '+ equipment?.model + '' + equipment?.id} 
+          className="w-[350px] h-[250px] object-fill"
           src={equipment?.equipment_image}
           alt={equipment?.make +' '+ equipment?.model}
           onClick={() => handleEquipmentNavigation(equipment?.id)}
@@ -59,31 +60,29 @@ console.log(carouselItems)
   }
 
   return (
-    <div className="flex flex-col items-center justify-center p-4 space-y-4">
-  <h2 className="text-lg font-medium">User Favorites</h2>
-  <div className="w-full overflow-hidden"> {/* Container for the image */}
-    {carouselItems[currentIndex]?.image}
-  </div>
-  <div className="flex justify-between items-center w-full"> {/* Container for the buttons and description */}
-    <button
-      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow"
-      onClick={goToPrevious}
-    >
-      Previous
-    </button>
-    <div className="text-center truncate w-full px-4"> {/* Container for the image description */}
-    {carouselItems[currentIndex]?.equipmentName}
-    </div>
-    <button
-      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow"
-      onClick={goToNext}
-    >
-      Next
-    </button>
-  </div>
-</div>
-
-
+      <>
+        <h2 className="text-lg font-medium text-center">User Favorites</h2>
+        <div className="flex-grow overflow-hidden w-full flex items-center justify-center"> {/* Container for the image */}
+          {carouselItems[currentIndex]?.image}
+        </div>
+        <div className="flex justify-between items-center w-full pt-4"> {/* Container for the buttons and description */}
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow"
+            onClick={goToPrevious}
+          >
+            Previous
+          </button>
+          <div className="text-center truncate px-4"> {/* Container for the image description */}
+            {carouselItems[currentIndex]?.equipmentName}
+          </div>
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow"
+            onClick={goToNext}
+          >
+            Next
+          </button>
+        </div>
+      </>
   )
 }
 
