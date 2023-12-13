@@ -1,13 +1,18 @@
-import React from "react";
+import React, {useState} from "react";
 
 function RentalMonitor({currentUser}){
-
+    
     const agreementsData = currentUser?.agreements 
 
     console.log("Testing AgreementsData to see if req data in there:", agreementsData)
     
     let totalRevenue = 0
 
+    const handleMonthSelection = (event) => {
+      console.log('Selected value:', event.target.value);
+      setMonthSelection(event.target.value);
+  }
+  
     // // console.log("TOTAL EQUIPMENT:", totalEquipment)
     // I wont lie use Reducer is pretty amazing
 
@@ -21,14 +26,21 @@ function RentalMonitor({currentUser}){
         const date = new Date(dateString)
         const month = date.getMonth()
         // console.log("THE MONTH:", month)
+        
         // Month gets a number, 0-11, from there I reference the month name array and get the name
         return monthNames[month]
       }
 
+    let todaysDate = new Date()
+    
+    const [monthSelection, setMonthSelection] = useState(getMonthName(todaysDate))
+
+    console.log("THIS SHOULD READ DECEMBER:", monthSelection)
+
     // Count agreements per month
     // https://www.w3schools.com/jsref/jsref_reduce.asp
     // https://www.youtube.com/watch?v=XKD0aIA3-yM&list=PLo63gcFIe8o0nnhu0F-PpsTc8nkhNe9yu
-    const countAgreementsByMonth = (data = [], totalRevenue) => {
+    const countAgreementsByMonth = (data = []) => {
         const monthCounts = data.reduce((acc, agreement) => {
         // console.log("the agreement in the reducer:", agreement)
         //Send the current month in created_at (the date string or date object really, and have it find the month)
@@ -55,7 +67,7 @@ function RentalMonitor({currentUser}){
 
         }, {})
         // Calculate monthly idle equipment and map results
-        return Object.keys(monthCounts).map(month => {
+        return Object.keys(monthCounts)?.map(month => {
         const monthData = monthCounts[month]
         
         return {
@@ -66,23 +78,6 @@ function RentalMonitor({currentUser}){
         })
     }
 
-    let monthlyRevenue
-    // let barChartEquipmentIdle
-
-    // if (agreementsData) {
-    //     const monthlyData = countAgreementsByMonth(agreementsData, totalRevenue)
-
-    //     // console.log(monthlyData)
-
-    //     monthlyRevenue = monthlyData.map(item => item.totalRevenuePerMonth)
-        
-    //     // barChartLabels = monthlyData.map(item => item.month)
-    //     // barChartEquipmentRentedOut = monthlyData.map(item => item.rentedOutItems)
-    //     // barChartCartTotalItems = monthlyData.map(item => item.cartTotalItems)
-    //     // barChartEquipmentIdle = monthlyData.map(item => item.idleItems)
-    //   } else {
-    //     console.log('Agreements data is undefined')
-    //   }
     let monthlyRevenueData
       if (agreementsData) {
         monthlyRevenueData = countAgreementsByMonth(agreementsData)
@@ -94,11 +89,20 @@ function RentalMonitor({currentUser}){
       
       return (
         <>
+          <select 
+          className="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          value={monthSelection}
+          onChange={handleMonthSelection}
+        >
+          <option value="" disabled>--Please choose an option--</option>
+          <option name="newest_option" value="newest" id="newest">Newest First</option>
+          <option name="oldest_option" value="oldest" id="oldest">Oldest First</option>
+        </select>
         {/* https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed 
         
         TODAY I LEARNED! I CAN MAKE MY NUMBERS PRETTY AGAIN
         */}
-          {monthlyRevenueData.map(({ month, totalRevenuePerMonth }) => (
+          {monthlyRevenueData?.map(({ month, totalRevenuePerMonth }) => (
             <div key={month}>
               {month}: ${totalRevenuePerMonth.toFixed(2)}
             </div>
