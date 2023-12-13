@@ -319,7 +319,7 @@ function App() {
             {/* Starting rentals, likely just going to use the prepop as it makes more sense than to do a "rental signup", in which a user sifts through all of the owners lol. This might not be the worst idea to incorporate into a search though. For example, filter by location, and then equipment type. The owner shouldn't really matter. But we can take into consideration the owners reviews / ratings and filter by lets say 3+ star renters. */}
             {/* I definitely don't need both of these. Likely going to remove OwnerEquipMentListing */}
             <Route path='/rental_signup' element={<RentalForm addRentalAgreement={addRentalAgreement} owners={owners} equipmentArray={equipmentArray} />} />
-            <Route path='/rental_signup_prepop' element={<OwnerEquipmentListing addRentalAgreement={addRentalAgreement} owners={owners} equipmentArray={equipmentArray} featuredRental={featuredRental} />} />
+            {/* <Route path='/rental_signup_prepop' element={<OwnerEquipmentListing addRentalAgreement={addRentalAgreement} owners={owners} equipmentArray={equipmentArray} featuredRental={featuredRental} />} /> */}
             {/* Rename this too ^^^ */}
 
             {/* Respective Edit Routes */}

@@ -34,7 +34,18 @@ function HomePage({ equipmentArray, setFeaturedRental }) {
         setFeaturedRental(test_item)
         navigate(`/rental_signup_prepop`)
         // Set a state from app.js that is within rental form, and only when set will it prepopulate the form
+    }
 
+    const handleClickLawnmowerClick = () => {
+        navigate(`/equipment/${3}`)
+    }
+
+    const handleForkLiftClick = () => {
+        navigate(`/equipment/${2}`)
+    }
+
+    const handleTractorClick = () => {
+        navigate(`/equipment/${4}`)
     }
 
     // console.log(equipmentArray[116])
@@ -81,15 +92,15 @@ function HomePage({ equipmentArray, setFeaturedRental }) {
                     <div className="flex flex-wrap sm:-m-4 -mx-4 -mb-10 -mt-4">
                         <div className="p-4 md:w-1/3 sm:mb-0 mb-6">
                             <div className="rounded-lg h-64 overflow-hidden">
-                                <img alt="content" className="object-cover object-center h-full w-full" src="https://i.ytimg.com/vi/QcUU78NLzPk/maxresdefault.jpg" />
+                                <img alt="Honda HRX217VKA Lawnmower" className="object-cover object-center h-full w-full" src="https://img.ksl.com/mx/mplace-classifieds.ksl.com/2962808-1691060871-602587.jpg?filter=marketplace/664x500" />
                             </div>
-                            <h2 className="text-xl font-medium title-font text-gray-900 mt-5">Toro 20339 Lawnmower</h2>
-                            <p className="text-base leading-relaxed mt-2">Toro 20339 Lawnmower, a powerful and efficient machine perfect for tackling any lawn size. Easy-to-use, it features self-propelled technology and a wide cutting deck for a seamless mowing experience.</p>
-                            <a className="text-purple-500 inline-flex items-center mt-3">Learn More
-                                <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-4 h-4 ml-2" viewBox="0 0 24 24">
-                                    <path d="M5 12h14M12 5l7 7-7 7"></path>
-                                </svg>
-                            </a>
+                            <h2 className="text-xl font-medium title-font text-gray-900 mt-5">Honda HRX217VKA Lawnmower</h2>
+                            <p className="text-base leading-relaxed mt-2"> The Honda HRX217VKA Lawnmower, a powerful and efficient machine perfect for tackling any lawn size. Easy-to-use, it features self-propelled technology and a wide cutting deck for a seamless mowing experience.</p>
+                            <span className="text-purple-500 inline-flex items-center mt-3 cursor-pointer" onClick={handleClickLawnmowerClick}>Learn More
+                            <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-4 h-4 ml-2" viewBox="0 0 24 24">
+                            <path d="M5 12h14M12 5l7 7-7 7"></path>
+                            </svg>
+                            </span>
                             {/* this needs to be a button */}
                         </div>
                         <div className="p-4 md:w-1/3 sm:mb-0 mb-6">
@@ -98,25 +109,26 @@ function HomePage({ equipmentArray, setFeaturedRental }) {
                             </div>
                             <h2 className="text-xl font-medium title-font text-gray-900 mt-5">Toyota Material Handling 8FGCU25</h2>
                             <p className="text-base leading-relaxed mt-2">Toyota Material Handling 8FGCU25, a reliable and versatile forklift with a maximum lifting capacity of 5,000 pounds. Equipped with advanced safety features and smooth maneuverability, it's the ideal choice for handling heavy loads in various industrial settings.</p>
-                            <a className="text-purple-500 inline-flex items-center mt-3">Learn More
-                                <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-4 h-4 ml-2" viewBox="0 0 24 24">
-                                    <path d="M5 12h14M12 5l7 7-7 7"></path>
-                                </svg>
-                            </a>
+                            <span className="text-purple-500 inline-flex items-center mt-3 cursor-pointer" onClick={handleForkLiftClick}>Learn More
+                            <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-4 h-4 ml-2" viewBox="0 0 24 24">
+                            <path d="M5 12h14M12 5l7 7-7 7"></path>
+                            </svg>
+                            </span>
                             {/* this needs to be a button */}
                         </div>
                         <div className="p-4 md:w-1/3 sm:mb-0 mb-6">
                             <div className="rounded-lg h-64 overflow-hidden">
-                                <img alt="content" className="object-cover object-center h-full w-full" src="https://m.media-amazon.com/images/I/51G5dELf0tL._AC_UF894,1000_QL80_.jpg" />
+                                <img alt="John Deere 8R 410 Tractor" className="object-cover object-center h-full w-full cursor-pointer" onClick={handleTractorClick} src="https://www.deere.com/assets/images/region-4/products/tractors/row-crop-tractors/8r-8rt-row-crop-tractors/8r-410/8r_410_r4f063847_medium_b87e9556a84a3c95374c774923365e9425dd7f67.jpg" />
                             </div>
-                            <h2 className="text-xl font-medium title-font text-gray-900 mt-5">Laguna Tools REVO 18|36</h2>
-                            <p className="text-base leading-relaxed mt-2">The Laguna Tools REVO 18|36 woodworking lathe for precision and versatility in your woodworking projects. With its spacious capacity and user-friendly controls, this lathe is perfect for both beginners and experienced woodworkers alike.
+                            <h2 className="text-xl font-medium title-font text-gray-900 mt-5">John Deere 8R 410 Tractor</h2>
+                            <p className="text-base leading-relaxed mt-2">
+                            The John Deere 8R 410 is a robust and reliable tractor, perfect for a variety of farming tasks. With its advanced engine and user-friendly interface, it's designed to boost efficiency and comfort, making it a top choice for everyday fieldwork.
                             </p>
-                            <a className="text-purple-500 inline-flex items-center mt-3">Learn More
-                                <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-4 h-4 ml-2" viewBox="0 0 24 24">
-                                    <path d="M5 12h14M12 5l7 7-7 7"></path>
-                                </svg>
-                            </a>
+                            <span className="text-purple-500 inline-flex items-center mt-3 cursor-pointer" onClick={handleTractorClick}>Learn More
+                            <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-4 h-4 ml-2" viewBox="0 0 24 24">
+                            <path d="M5 12h14M12 5l7 7-7 7"></path>
+                            </svg>
+                            </span>
                             {/* this needs to be a button */}
                         </div>
                     </div>
