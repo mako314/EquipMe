@@ -20,7 +20,7 @@ currentUser?.equipment?.map((equipment) => {
     equipmentName: `${equipment?.make} ${equipment?.model}`,
     image: <img
           key={equipment?.make +' '+ equipment?.model + '' + equipment?.id} 
-          className="w-[350px] h-[250px] object-fill"
+          className="w-[350px] h-[250px] object-fill rounded-lg"
           src={equipment?.equipment_image}
           alt={equipment?.make +' '+ equipment?.model}
           onClick={() => handleEquipmentNavigation(equipment?.id)}
@@ -61,7 +61,7 @@ console.log(carouselItems)
 
   return (
       <>
-        <h2 className="text-lg font-medium text-center">User Favorites</h2>
+        <h2 className="text-lg font-medium text-center mb-2">User Favorites</h2>
         <div className="flex-grow overflow-hidden w-full flex items-center justify-center"> {/* Container for the image */}
           {carouselItems[currentIndex]?.image}
         </div>
