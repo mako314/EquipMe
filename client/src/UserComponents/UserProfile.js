@@ -7,7 +7,7 @@ import { UserSessionContext } from './SessionContext';
 import { useParams, useNavigate, useInRouterContext } from 'react-router-dom';
 
 
-function UserProfile() {
+function UserProfile({fromOwnerDash, setFromOwnerDash}) {
   // User context, meaning if user is signed in, they get their data,
   const { currentUser, role, checkSession } = UserSessionContext() 
   const apiUrl = useContext(ApiUrlContext)
@@ -128,9 +128,14 @@ function UserProfile() {
     })
   }
 
+  const navigateBackToDash = () => {
+    setFromOwnerDash(!fromOwnerDash)
+    navigate(`/dashboard`)
+  }
+
   return (
     <>
-      <section className="relative block" style={{ height: "500px" }}>
+      <div className="relative block" style={{ height: "500px" }}>
 
         <div
           className="top-auto bottom-0 left-0 right-0 w-full absolute pointer-events-none overflow-hidden"
@@ -151,8 +156,8 @@ function UserProfile() {
             ></polygon>
           </svg>
         </div>
-      </section>
-      <section className="relative py-16 bg-gray-300">
+      </div>
+      <div className="relative py-16 bg-gray-300">
         <div className="container mx-auto px-4">
           <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg -mt-64">
             <div className="px-6">
@@ -243,6 +248,12 @@ function UserProfile() {
                         <div className="flex mb-8">
                           <EquipmentMap location={source.location} userDisplayHeight={300} userDisplayWidth={1500} userDisplayZoom={8}/>
                         </div>
+                        {fromOwnerDash === true && 
+        <div className="ml-auto flex items-center px-6 lg:ml-0 lg:p-0">
+            <button className="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded bg-amber-500 px-5 text-sm font-medium tracking-wide text-white shadow-md shadow-amber-200 transition duration-300 hover:bg-emerald-600 hover:shadow-sm hover:shadow-emerald-200 focus:bg-emerald-700 focus:shadow-sm focus:shadow-emerald-200 focus-visible:outline-none disabled:cursor-not-allowed disabled:border-emerald-300 disabled:bg-emerald-300 disabled:shadow-none"  onClick={navigateBackToDash}>
+               Return to Dashboard
+          </button>
+        </div>}
 
                 </div>
 
@@ -265,10 +276,14 @@ function UserProfile() {
                 </div> */}
                 {/* <RentalAgreementsCollection key={user?.id}/> */}
               {/* </div> */}
+              
             </div>
+            
           </div>
+        
         </div>
-      </section>
+
+      </div>
     </>
   )
 

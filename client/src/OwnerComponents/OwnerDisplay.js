@@ -8,7 +8,7 @@ import Reviews from '../ReviewComponents/Reviews'
 import { UserSessionContext } from '../UserComponents/SessionContext'
 import ApiUrlContext from '../Api'
 
-function OwnerDisplay() {
+function OwnerDisplay({fromOwnerDash, setFromOwnerDash}) {
     
   
   const [owner, setOwner] = useState([])
@@ -22,6 +22,7 @@ function OwnerDisplay() {
   const { id } = useParams()
   // const navigate = useNavigate()
   const apiUrl = useContext(ApiUrlContext)
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch(`${apiUrl}equipment_owner/${id}`)
@@ -103,10 +104,14 @@ const displayEquipment = featuredEquipment.length > 0 ? featuredEquipment : <div
 
 //   console.log(owner)
 
-let userReviews = owner.review?.filter(reviewSubmission =>  reviewSubmission.reviewer_type === 'user')
-console.log("userReviews:", userReviews )
-console.log("reviews:", owner.review)
+    let userReviews = owner.review?.filter(reviewSubmission =>  reviewSubmission.reviewer_type === 'user')
+    console.log("userReviews:", userReviews )
+    console.log("reviews:", owner.review)
 
+    const navigateBackToDash = () => {
+        setFromOwnerDash(!fromOwnerDash)
+        navigate(`/dashboard`)
+    }
 
 
   return (
@@ -239,8 +244,15 @@ console.log("reviews:", owner.review)
                         ))}
                             </ul>
                         </div>
+                        {fromOwnerDash === true && 
+                        <div className="ml-auto flex items-center px-6 lg:ml-0 lg:p-0">
+                            <button className="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded bg-amber-500 px-5 text-sm font-medium tracking-wide text-white shadow-md shadow-amber-200 transition duration-300 hover:bg-emerald-600 hover:shadow-sm hover:shadow-emerald-200 focus:bg-emerald-700 focus:shadow-sm focus:shadow-emerald-200 focus-visible:outline-none disabled:cursor-not-allowed disabled:border-emerald-300 disabled:bg-emerald-300 disabled:shadow-none"  onClick={navigateBackToDash}>
+                            Return to Dashboard
+                            </button>
+                        </div>}
                         
                     </div>
+                    
                 </div>
 
                 {/* --- right hand side content --- */}
@@ -248,6 +260,7 @@ console.log("reviews:", owner.review)
 
             </div>
         </div>
+
     </div>
 
   )

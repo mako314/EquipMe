@@ -308,7 +308,7 @@ function App() {
     
             {/* ID / INDIVIDUAL / DISPLAY ROUTES */}
             <Route path='/equipment/:id' element={<ProductDisplay/>} />
-            <Route path='/equipment_owner/:id' element={<OwnerDisplay />} />
+            <Route path='/equipment_owner/:id' element={<OwnerDisplay setFromOwnerDash={setFromOwnerDash} fromOwnerDash={fromOwnerDash}/>} />
 
             {/* Respective Posts */}
             <Route path='/renter_signup' element={<UserForm addUser={addUser} />} />
@@ -331,7 +331,7 @@ function App() {
             {/* <Route path='/owner/login' element={<OwnerLogin />} /> */}
 
             {/* User Profile Page*/}
-            <Route path='/user/profile/:id' element={<UserProfile/>} />
+            <Route path='/user/profile/:id' element={<UserProfile setFromOwnerDash={setFromOwnerDash} fromOwnerDash={fromOwnerDash}/>} />
 
             {/* Temp Route for CSV File Upload*/}
             <Route path='/temp/bulk_equipment_upload' element={<BulkEquipmentUpload />} />
