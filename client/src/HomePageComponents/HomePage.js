@@ -27,25 +27,20 @@ function HomePage({ equipmentArray, setFeaturedRental }) {
         navigate(`/equipment/${test_item[0].id}`)
     }
 
-    function handleClick2(e) {
-        const test_item = equipmentArray?.filter((item) => {
-            return item.model === featuredModel
-        })
-        setFeaturedRental(test_item)
-        navigate(`/rental_signup_prepop`)
-        // Set a state from app.js that is within rental form, and only when set will it prepopulate the form
-    }
-
     const handleClickLawnmowerClick = () => {
+
         navigate(`/equipment/${3}`)
+        window.scrollTo(0, 0)
     }
 
     const handleForkLiftClick = () => {
         navigate(`/equipment/${2}`)
+        window.scrollTo(0, 0)
     }
 
     const handleTractorClick = () => {
         navigate(`/equipment/${4}`)
+        window.scrollTo(0, 0)
     }
 
     // console.log(equipmentArray[116])
@@ -63,9 +58,7 @@ function HomePage({ equipmentArray, setFeaturedRental }) {
                         Looking to rent an excavator for your construction or mining project? Consider the 336E L Excavator by Caterpillar Inc. This robust and reliable model offers impressive digging capabilities and comes equipped with a comfortable operator cabin, ensuring efficiency and ease of operation. Rent the 336E L Excavator today to tackle your earth-moving tasks with confidence and precision
                     </p>
                     <div className="flex justify-center">
-                        <button className="inline-flex text-white bg-amber-500 border-0 py-2 px-6 focus:outline-none hover:bg-gray-600 rounded text-lg" onClick={handleClick2}>Rent</button>
-                        <button className="ml-4 inline-flex text-white bg-amber-500 border-0 py-2 px-6 focus:outline-none hover:bg-gray-600 rounded text-lg" onClick={handleClick}>Info</button>
-
+                        <button className="inline-flex text-white bg-amber-500 border-0 py-2 px-6 focus:outline-none hover:bg-gray-600 rounded text-lg" onClick={handleClick}>Rent</button>
                     </div>
                 </div>
                 <div className="lg:max-w-lg lg:w-full md:w-1/2 w-5/6">
@@ -92,7 +85,7 @@ function HomePage({ equipmentArray, setFeaturedRental }) {
                     <div className="flex flex-wrap sm:-m-4 -mx-4 -mb-10 -mt-4">
                         <div className="p-4 md:w-1/3 sm:mb-0 mb-6">
                             <div className="rounded-lg h-64 overflow-hidden">
-                                <img alt="Honda HRX217VKA Lawnmower" className="object-cover object-center h-full w-full" src="https://img.ksl.com/mx/mplace-classifieds.ksl.com/2962808-1691060871-602587.jpg?filter=marketplace/664x500" />
+                                <img alt="Honda HRX217VKA Lawnmower" className="object-cover object-center h-full w-full cursor-pointer" onClick={handleClickLawnmowerClick} src="https://img.ksl.com/mx/mplace-classifieds.ksl.com/2962808-1691060871-602587.jpg?filter=marketplace/664x500" />
                             </div>
                             <h2 className="text-xl font-medium title-font text-gray-900 mt-5">Honda HRX217VKA Lawnmower</h2>
                             <p className="text-base leading-relaxed mt-2"> The Honda HRX217VKA Lawnmower, a powerful and efficient machine perfect for tackling any lawn size. Easy-to-use, it features self-propelled technology and a wide cutting deck for a seamless mowing experience.</p>
@@ -105,7 +98,7 @@ function HomePage({ equipmentArray, setFeaturedRental }) {
                         </div>
                         <div className="p-4 md:w-1/3 sm:mb-0 mb-6">
                             <div className="rounded-lg h-64 overflow-hidden">
-                                <img alt="content" className="object-cover object-center h-full w-full" src="https://st.mascus.com/image/product/large/discountforklift/toyota-8fgcu25,383008840d5d4f9f.jpg" />
+                                <img alt="content" className="object-cover object-center h-full w-full cursor-pointer" onClick={handleForkLiftClick} src="https://st.mascus.com/image/product/large/discountforklift/toyota-8fgcu25,383008840d5d4f9f.jpg" />
                             </div>
                             <h2 className="text-xl font-medium title-font text-gray-900 mt-5">Toyota Material Handling 8FGCU25</h2>
                             <p className="text-base leading-relaxed mt-2">Toyota Material Handling 8FGCU25, a reliable and versatile forklift with a maximum lifting capacity of 5,000 pounds. Equipped with advanced safety features and smooth maneuverability, it's the ideal choice for handling heavy loads in various industrial settings.</p>
