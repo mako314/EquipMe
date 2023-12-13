@@ -249,34 +249,13 @@ function UserProfile({fromOwnerDash, setFromOwnerDash}) {
                           <EquipmentMap location={source.location} userDisplayHeight={300} userDisplayWidth={1500} userDisplayZoom={8}/>
                         </div>
                         {fromOwnerDash === true && 
-        <div className="ml-auto flex items-center px-6 lg:ml-0 lg:p-0">
-            <button className="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded bg-amber-500 px-5 text-sm font-medium tracking-wide text-white shadow-md shadow-amber-200 transition duration-300 hover:bg-emerald-600 hover:shadow-sm hover:shadow-emerald-200 focus:bg-emerald-700 focus:shadow-sm focus:shadow-emerald-200 focus-visible:outline-none disabled:cursor-not-allowed disabled:border-emerald-300 disabled:bg-emerald-300 disabled:shadow-none"  onClick={navigateBackToDash}>
-               Return to Dashboard
-          </button>
-        </div>}
+                        <div className="ml-auto flex items-center px-6 lg:ml-0 lg:p-0">
+                            <button className="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded bg-amber-500 px-5 text-sm font-medium tracking-wide text-white shadow-md shadow-amber-200 transition duration-300 hover:bg-emerald-600 hover:shadow-sm hover:shadow-emerald-200 focus:bg-emerald-700 focus:shadow-sm focus:shadow-emerald-200 focus-visible:outline-none disabled:cursor-not-allowed disabled:border-emerald-300 disabled:bg-emerald-300 disabled:shadow-none"  onClick={navigateBackToDash}>
+                              Return to Dashboard
+                          </button>
+                        </div>}
 
                 </div>
-
-              
-              {/* <div className="mt-10 py-10 border-t border-gray-300 text-center">
-                <div className="flex flex-wrap justify-center">
-                  <div className="w-full lg:w-9/12 px-4">
-                    <p className="mb-4 text-lg leading-relaxed text-gray-800">
-                      Possible interests relating to renting
-                    </p>
-                    <a
-                      href="#pablo"
-                      className="font-normal text-pink-500"
-                      onClick={e => e.preventDefault()}
-                    >
-                      Show more
-                    </a>
-                  </div>
-
-                </div> */}
-                {/* <RentalAgreementsCollection key={user?.id}/> */}
-              {/* </div> */}
-              
             </div>
             
           </div>
