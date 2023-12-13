@@ -55,9 +55,9 @@ function EquipmentDisplay({}) {
 
   const equip_prices = equipment_price?.map((price) => {
     return <Fragment key={oneEquipment.id}>
-    <span className="title-font font-medium text-2xl text-white">Hourly Rate: <br></br>${price.hourly_rate/100}</span>
-    <span className="title-font font-medium text-2xl text-white">Daily Rate: <br></br>${price.daily_rate/100}</span>
-    <span className="title-font font-medium text-2xl text-white">Weekly Rate: <br></br>${price.weekly_rate/100}</span>
+    <span className="title-font font-medium text-2xl text-white">Hourly Rate: <br></br>${(price.hourly_rate/100).toFixed(2)}</span>
+    <span className="title-font font-medium text-2xl text-white">Daily Rate: <br></br>${(price.daily_rate/100).toFixed(2)}</span>
+    <span className="title-font font-medium text-2xl text-white">Weekly Rate: <br></br>${(price.weekly_rate/100).toFixed(2)}</span>
     </Fragment>
   })
 
