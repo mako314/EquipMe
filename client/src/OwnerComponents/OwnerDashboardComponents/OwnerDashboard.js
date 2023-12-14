@@ -28,6 +28,9 @@ import AgreementFiltering from './AgreementFiltering';
 // Carousel Import
 import FavoriteCarousel from './FavoritedCarousel';
 
+//Rental Monitor
+import RentalMonitor from './RentalMonitor';
+
 //404 Page Import
 import Page404 from '../../ErrorPageComponents/Page404';
 
@@ -324,7 +327,9 @@ function AccountSettings() {
                         <FavoriteCarousel currentUser={currentUser} setFromOwnerDash={setFromOwnerDash}/>}
                         
                         </div>
-                        <div className="h-96 col-span-1 bg-white border border-gray-300"></div>
+                        <div className="h-96 col-span-1 bg-white border border-gray-300">
+                            <RentalMonitor currentUser={currentUser}/>
+                        </div>
                     </div>
                 </div>
             </div>
