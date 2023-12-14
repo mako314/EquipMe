@@ -180,8 +180,6 @@ class EquipmentOwner(db.Model, SerializerMixin):
     def __repr__(self):
         return f"My name is {self.firstName}"
 
-
-
 class Equipment(db.Model, SerializerMixin):
     __tablename__= "equipments"
 

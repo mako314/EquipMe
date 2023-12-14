@@ -22,7 +22,8 @@ function BarChart({currentUser}){
         })
     }
 
-    // console.log("TOTAL EQUIPMENT:", totalEquipment)
+
+    console.log("TOTAL EQUIPMENT:", totalEquipment)
 
     //------------------------BAR CHART--------------------------------------
     // https://codesandbox.io/p/devbox/reactchartjs-react-chartjs-2-vertical-jebqk?file=%2FApp. tsx%3A38%2C1-52%2C3
@@ -77,7 +78,8 @@ function BarChart({currentUser}){
         if (!acc[month]) {
             acc[month] = {
                 totalRentedOut: 0,
-                totalInCart: 0
+                totalInCart: 0,
+                totalMonthlyEquipment: 0
             }
         }
 
@@ -100,7 +102,11 @@ function BarChart({currentUser}){
         // console.log('TESTING TO SEE HOW MANY ITEMS:', acc[month])
         // console.log("THE TOTAL RENTED OUT PER MONTH:",acc[month].totalRentedOut)
         // console.log("THE TOTAL IN CART  PER MONTH:", acc[month].totalInCart += agreement.cart_item.quantity)
-
+        if (Array.isArray(agreement.cart_item.equipment)) {
+            console.log("THE EQUIPMENT QUANTITIES: ", agreement.cart_item.equipment.quantity)
+            console.log("MONTHLY TOTAL EQUIPMENT: ", agreement.cart_item.equipment.quantity)
+            acc[month].totalMonthlyEquipment +=  agreement.cart_item.equipment.quantity   
+        }
 
         // Update monthly count
         return acc
@@ -109,7 +115,9 @@ function BarChart({currentUser}){
         // Calculate monthly idle equipment and map results
         return Object.keys(monthCounts).map(month => {
         const monthData = monthCounts[month]
-        const totalIdle = totalEquipment - monthData.totalRentedOut - monthData.totalInCart
+        const totalIdle = monthData.totalMonthlyEquipment - monthData.totalRentedOut - monthData.totalInCart
+
+        // const totalIdle = (totalEquipment - monthData.totalRentedOut) - monthData.totalInCart
 
         // console.log("TOTAL EQUIPMENT:",totalEquipment)
         // console.log("Total Equipment:", totalEquipment)
@@ -121,7 +129,7 @@ function BarChart({currentUser}){
             rentals: monthData.rentals,
             cartTotalItems: monthData.totalInCart, 
             rentedOutItems: monthData.totalRentedOut,
-            idleItems: totalIdle
+            idleItems: totalIdle > 0 ? totalIdle : 0
         }
         })
     }

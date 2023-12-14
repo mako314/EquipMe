@@ -4,7 +4,7 @@ function RentalMonitor({currentUser}){
     
     const agreementsData = currentUser?.agreements 
 
-    console.log("Testing AgreementsData to see if req data in there:", agreementsData)
+    // console.log("Testing AgreementsData to see if req data in there:", agreementsData)
     
     let totalRevenue = 0
 
@@ -35,7 +35,7 @@ function RentalMonitor({currentUser}){
     
     const [monthSelection, setMonthSelection] = useState(getMonthName(todaysDate))
 
-    console.log("THIS SHOULD READ DECEMBER:", monthSelection)
+    // console.log("THIS SHOULD READ DECEMBER:", monthSelection)
 
     // Count agreements per month
     // https://www.w3schools.com/jsref/jsref_reduce.asp
@@ -58,7 +58,7 @@ function RentalMonitor({currentUser}){
             // console.log((agreement.cart_item.price_cents_at_addition) / 100 )
             acc[month].totalMoneyIn += (agreement.cart_item.price_cents_at_addition) / 100
             // totalRevenue += (agreement.cart_item.price_cents_at_addition) / 100
-            console.log(acc[month].totalMoneyIn)
+            // console.log(acc[month].totalMoneyIn)
             // console.log("HOW MANY ARE BEING RENTED OUT:", acc[month].totalRentedOut)
         }
 
@@ -133,7 +133,7 @@ function RentalMonitor({currentUser}){
                 monthSelection === month && (
                   <div key={month} className="flex justify-between items-center">
                     <span className="text-lg text-gray-500">{month}</span>
-                    <span className="text-lg font-semibold text-gray-800">${totalRevenuePerMonth.toFixed(2)}</span>
+                    <span className="text-lg font-semibold text-green-600">${totalRevenuePerMonth.toFixed(2)}</span>
                   </div>
                 )
               ))}
@@ -141,7 +141,7 @@ function RentalMonitor({currentUser}){
             <div className="border-t border-gray-200 mt-4 pt-4">
               <div className="flex justify-between items-center">
                 <span className="text-lg text-gray-500">Year to Date</span>
-                <span className="text-lg font-semibold text-gray-800">${totalRevenue.toFixed(2)}</span>
+                <span className="text-lg font-semibold text-green-600">${totalRevenue.toFixed(2)}</span>
               </div>
             </div>
         </div>
