@@ -35,11 +35,14 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
 
   // console.log("Equipment price:", equipment_price)
   // console.log("Your Equipment:",oneEquipment)
-
+  
+  // Swapped the ifs here to test whether the role is user (not really needed since button is hidden, but hey, better than not doing it?) and whether current cart exists. if it does, exit the if, and just set cart data.
   useEffect(() => {
-    if (role === 'user' && currentUser?.cart?.length > 0) {
-      setCartData(currentUser.cart)
-      setCurrentCart(currentUser.cart[0]) // Set the first cart as the current cart
+    if (role === 'user' && currentCart) {
+    setCartData(currentUser.cart)
+    } else if (role === 'user' && currentUser?.cart?.length > 0){
+    setCartData(currentUser.cart)
+    setCurrentCart(currentUser.cart[0]) // Set the first cart as the current cart
   }
   }, [currentUser])
 
@@ -80,7 +83,6 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
     return (
     <Fragment key={`${item.id} ${item.cart_name}`}>
     <option className="text-black"value={item.id}>{item.cart_name}</option> 
-    
     </Fragment>)
   })
 
