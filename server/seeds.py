@@ -1,4 +1,4 @@
-from models import db, User, EquipmentOwner, Equipment, RentalAgreement, EquipmentImage, Thread, UserInbox, OwnerInbox, Message, Cart, CartItem, EquipmentPrice, FeaturedEquipment, Review, UserFavorite, OwnerFavorite, AgreementComment, EquipmentStateHistory, EquipmentStateSummary
+from models import db, User, EquipmentOwner, Equipment, RentalAgreement, EquipmentImage, Thread, UserInbox, OwnerInbox, Message, Cart, CartItem, EquipmentPrice, FeaturedEquipment, Review, UserFavorite, OwnerFavorite, AgreementComment, EquipmentStateHistory, EquipmentStateSummary, EquipmentStatus
 import pandas as pd
 from app import app
 from random import randint, choice as rc
@@ -451,6 +451,39 @@ if __name__ == '__main__':
         # print('Accessing fourth element:', equipment_list[3])
         # print(len(equipment_list))
         db.session.commit()
+#--------------------------------------------Equipment Status---------------------------------------------------------------------
+        print("Uploading the current equipment list...")
+        equipment_statuses = [
+            EquipmentStatus(
+                equipment_id = equipment_list[0].id,
+                current_quantity = 3,
+                reserved_quantity = 0,
+                maintenance_quantity = 0
+            ),
+           EquipmentStatus(
+                equipment_id = equipment_list[1].id,
+                current_quantity = 3,
+                reserved_quantity = 0,
+                maintenance_quantity = 0
+            ),
+           EquipmentStatus(
+                equipment_id = equipment_list[2].id,
+                current_quantity = 3,
+                reserved_quantity = 0,
+                maintenance_quantity = 0
+            ),
+           EquipmentStatus(
+                equipment_id = equipment_list[3].id,
+                current_quantity = 3,
+                reserved_quantity = 0,
+                maintenance_quantity = 0
+            ),
+        ]
+
+        db.session.add_all(equipment_statuses)
+        db.session.commit()
+        # print(equipment_list)
+
 #--------------------------------------------Equipment State History----------------------------------------------------------------------
         print('Adding Equipment State History...')
 
