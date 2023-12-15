@@ -16,6 +16,8 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
     const { oneEquipment } = location.state || {}
     const apiUrl = useContext(ApiUrlContext)
     const { currentUser, role, checkSession } = UserSessionContext()
+    
+    // Need some toast notifications
 
     // https://reactrouter.com/en/main/hooks/use-location
     // https://www.educative.io/answers/how-to-use-the-uselocation-hook-in-react
@@ -26,7 +28,6 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
 
     const formSchema = object({
         name: string().required('Please enter a name'),
-        quantity: number().positive().required('You cannot list less than 0 items.'),
         quantity: number().positive().required('You cannot list less than 0 items.'),
         hourly_rate: number().positive().required('Must be a positive dollar amount.'),
         daily_rate: number().positive().required('Must be a positive dollar amount.'),
@@ -100,8 +101,8 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
 
             if (featureEquipment !== null){
               const featureURL = featureEquipment === true 
-              ? `/feature/equipment/${equipment.id}` 
-              : `${apiUrl}feature/equipment/${equipment.id}`
+              ? `/feature/equipment/${oneEquipment.id}` 
+              : `${apiUrl}feature/equipment/${oneEquipment.id}`
               const featureMethod = featureEquipment === true ? 'POST' : 'DELETE'
 
               const featureResponse = await fetch(featureURL, {
