@@ -29,7 +29,6 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
     const formSchema = object({
         name: string().required('Please enter a name'),
         quantity: number().positive().required('You cannot list less than 0 items.'),
-        quantity: number().positive().required('You cannot list less than 0 items.'),
         hourly_rate: number().positive().required('Must be a positive dollar amount.'),
         daily_rate: number().positive().required('Must be a positive dollar amount.'),
         weekly_rate: number().positive().required('Must be a positive dollar amount.'),

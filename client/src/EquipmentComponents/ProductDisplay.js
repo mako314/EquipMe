@@ -27,13 +27,14 @@ function EquipmentDisplay({}) {
   const [isFavorited, setIsFavorited] = useState(null)
 
 
-  const { model, name, make, location, email, phone, quantity, equipment_image, equipment_price, owner } = oneEquipment
+  const { model, name, make, location, email, phone, equipment_image, equipment_price, owner } = oneEquipment
   
   let firstName, lastName
   if (oneEquipment && oneEquipment.owner) {
     ({ firstName, lastName } = oneEquipment.owner)
   }
 
+ 
 
 
   // console.log("THE currentUser IS:", currentUser)
@@ -48,10 +49,18 @@ function EquipmentDisplay({}) {
       .then((resp) => resp.json())
       .then((data) => {
         setOneEquipment(data)
+        console.log(data)
       })
   }, [])
 
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing
+
+  const quantity = oneEquipment?.status?.[0]?.current_quantity ?? 0
+  
+  // const quantity = oneEquipment ? oneEquipment?.status[0]?.current_quantity : 0
   // console.log("Display Page one equipment:", oneEquipment)
+
+  console.log("EQUIPMENT STATUS:", quantity)
 
   const equip_prices = equipment_price?.map((price) => {
     return <Fragment key={oneEquipment.id}>

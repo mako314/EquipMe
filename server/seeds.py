@@ -452,7 +452,7 @@ if __name__ == '__main__':
         # print(len(equipment_list))
         db.session.commit()
 #--------------------------------------------Equipment Status---------------------------------------------------------------------
-        print("Uploading the current equipment list...")
+        print("Uploading the current Equipment statuses...")
         equipment_statuses = [
             EquipmentStatus(
                 equipment_id = equipment_list[0].id,
@@ -482,7 +482,7 @@ if __name__ == '__main__':
 
         db.session.add_all(equipment_statuses)
         db.session.commit()
-        # print(equipment_list)
+
 
 #--------------------------------------------Equipment State History----------------------------------------------------------------------
         print('Adding Equipment State History...')
@@ -633,11 +633,13 @@ if __name__ == '__main__':
 
         db.session.add_all(cart_items)
         db.session.commit()
-        equipment_list[0].quantity -= cart_items[0].quantity
-        equipment_list[1].quantity -= cart_items[1].quantity
-        equipment_list[2].quantity -= cart_items[2].quantity
+        equipment_list[0].status[0].current_quantity -= cart_items[0].quantity
+        equipment_list[1].status[0].current_quantity-= cart_items[1].quantity
+        equipment_list[2].status[0].current_quantity-= cart_items[2].quantity
 
-        
+        equipment_list[0].status[0].reserved_quantity-= cart_items[0].quantity
+        equipment_list[1].status[0].reserved_quantity-= cart_items[1].quantity
+        equipment_list[2].status[0].reserved_quantity-= cart_items[2].quantity
         # print(equipment_list[2].quantity)
         # print(equipment_list[1].quantity)
         # print(equipment_list[0].quantity)

@@ -1,4 +1,4 @@
-from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement, Message, Thread,UserInbox, OwnerInbox, Cart, CartItem, EquipmentPrice, Review, UserFavorite, OwnerFavorite, AgreementComment, FeaturedEquipment, EquipmentStateHistory
+from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement, Message, Thread,UserInbox, OwnerInbox, Cart, CartItem, EquipmentPrice, Review, UserFavorite, OwnerFavorite, AgreementComment, FeaturedEquipment, EquipmentStateHistory, EquipmentStatus
 # from flask_cors import CORS
 # from flask_migrate import Migrate
 # from flask import Flask, request, make_response, jsonify
@@ -378,12 +378,18 @@ class Equipments(Resource):
                 location = data['location'],
                 availability = data['availability'],
                 delivery = data['delivery'],
-                quantity = data['quantity'],
                 owner_id= data['owner_id']
             )
 
             db.session.add(new_equipment)
             db.session.commit()
+
+            new_equipment_status = EquipmentStatus(
+                equipment_id = new_equipment.id,
+                current_quantity = data['quantity'],
+                reserved_quantity = 0,
+                maintenance_quantity = 0
+            )
 
             new_state_history = EquipmentStateHistory(
             equipment_id = new_equipment.id,  # Lawnmower
@@ -394,6 +400,7 @@ class Equipments(Resource):
             changed_at = datetime.utcnow(),
             )
 
+            db.session.add(new_equipment_status)
             db.session.add(new_state_history)
             db.session.commit()
 
@@ -468,7 +475,7 @@ class EquipmentByID(Resource):
     #Patch equipment DONE
     def patch(self, id):
         equipment = Equipment.query.filter(Equipment.id == id).first()
-        previous_quantity = (equipment.quantity)
+        previous_quantity = (equipment.status[0].current_quantity)
         print('PREVIOUS QUANTITY:', previous_quantity)
 
         previous_state_history = EquipmentStateHistory.query.filter_by(
@@ -508,6 +515,15 @@ class EquipmentByID(Resource):
                     new_state= updated_new_state,  
                     changed_at=datetime.utcnow(),
                     )
+
+                    # new_equipment_status = EquipmentStatus(
+                    #     equipment_id = equipment.id,
+                    #     current_quantity = data['quantity'],
+                    #     reserved_quantity = 0,
+                    #     maintenance_quantity = 0
+                    # )
+
+                    equipment.status[0].current_quantity = updated_quantity
 
                     print(new_state_history)
 
@@ -808,8 +824,9 @@ class RentalAgreements(Resource):
         ).order_by(EquipmentStateHistory.changed_at.desc()).first()
 
 
-        if equipment.quantity >= cart_item_received.quantity:
-            equipment.quantity -= cart_item_received.quantity
+        if equipment.status[0].current_quantity >= cart_item_received.quantity:
+            equipment.status[0].current_quantity -= cart_item_received.quantity
+            equipment.status[0].reserved_quantity += cart_item_received.quantity
             db.session.commit()  # Commit the changes for both new_item and updated equipment quantity
             # response = make_response(response_data, 201)
             # return response
@@ -1468,11 +1485,11 @@ class AddItemToCart(Resource):
         db.session.add(new_item)
         db.session.commit()
         
-        print("EQUIPMENT QUANTITY WHEN ADDING TO CART", equipment.quantity)
+        print("EQUIPMENT QUANTITY WHEN ADDING TO CART", equipment.status[0].current_quantity)
         print('AMOUNT TRYING TO BE ADDED', data['quantity'])
-        print(equipment.quantity > data['quantity'])
+        print(equipment.status[0].current_quantity > data['quantity'])
 
-        if equipment.quantity < data['quantity']:
+        if equipment.status[0].current_quantity < data['quantity']:
             return make_response({'error': 'Not enough equipment available'}, 400)
 
         # May need to include this commit back
@@ -1715,17 +1732,18 @@ class CheckingOut(Resource):
 
         # Deduct the quantity from the equipment's available stock
         equipment = Equipment.query.get(equipment_id)
-        if equipment.quantity < quantity:
+        if equipment.status[0].current_quantity < quantity:
             raise ValueError("Not enough equipment available to fulfill this rental.")
 
-        equipment.quantity -= quantity
+        equipment.status[0].current_quantity -= quantity
+        equipment.status[0].reserved_quantity += quantity
         db.session.add(equipment)
 
         # Record the state change
         new_state_history = EquipmentStateHistory(
             equipment_id=equipment_id,
             previous_quantity=last_state.new_quantity,
-            new_quantity=equipment.quantity,
+            new_quantity=equipment.status[0].current_quantity,
             previous_state='reserved',
             new_state='rented',
             changed_at=datetime.utcnow(),

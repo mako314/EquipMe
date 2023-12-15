@@ -58,8 +58,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
   // console.log("YOUR CART:", cartData)
   // console.log("This is the selected rate:", selectedRate)
   // console.log("this is the date range:", dayRange)
-
-  console.log("The Cart CURRENTLY:", currentCart)
+  // console.log("The Cart CURRENTLY:", currentCart)
 
 
   //Map over equipment price, and take the rates as options
@@ -167,8 +166,8 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
   // console.log("This is the equipment quantity:",equipmentQuantity)
   // console.log("This is the equipment ID:",equip_id)
   // console.log("This is the current cart ID:",currentCart.id)
-  console.log("ALL THE CART DATA:", cartData)
-  console.log("REAL CURRENT CART:", currentCart)
+  // console.log("ALL THE CART DATA:", cartData)
+  // console.log("REAL CURRENT CART:", currentCart)
 
   function handleAddToCartClick() {
     if(startRental === '' || endRental === ''){
