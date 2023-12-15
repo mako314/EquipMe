@@ -390,7 +390,7 @@ class Equipments(Resource):
             previous_quantity = 0,
             new_quantity = data['quantity'],
             previous_state = 'non-existing',
-            new_state = 'added',
+            new_state = 'available',
             changed_at = datetime.utcnow(),
             )
 
@@ -468,7 +468,8 @@ class EquipmentByID(Resource):
     #Patch equipment DONE
     def patch(self, id):
         equipment = Equipment.query.filter(Equipment.id == id).first()
-
+        previous_state_history = EquipmentStateHistory.query.filter_by(
+        equipment_id=id).order_by(EquipmentStateHistory.changed_at.desc()).first()
         if equipment:
             try:
                 #going to need try and except if and when we do validations
@@ -478,8 +479,30 @@ class EquipmentByID(Resource):
                 db.session.add(equipment)
                 db.session.commit()
 
-                response = make_response(equipment.to_dict(), 202)
-                return response
+                updated_quantity = int(data['quantity'])
+                print(updated_quantity)
+                print(type(updated_quantity))
+
+                if 'quantity' in data and updated_quantity != equipment.quantity:
+                    # Add state history before committing the changes to the equipment
+                    if updated_quantity > equipment.quantity:
+                        updated_new_state = 'added'
+                    else:
+                        updated_new_state = 'removed'
+
+                    new_state_history = EquipmentStateHistory(
+                    equipment_id=id,
+                    previous_quantity=previous_state_history.new_quantity,
+                    new_quantity=updated_quantity,
+                    previous_state='available',  # or 'idle' or any other state your system uses
+                    new_state= updated_new_state,  
+                    changed_at=datetime.utcnow(),
+                    )
+
+                    db.session.add(new_state_history)
+                    db.session.commit()
+                    response = make_response(equipment.to_dict(), 202)
+                    return response
             except ValueError:
                 return make_response({"error": ["validations errors, check your input and try again"]} , 400)
         else:
@@ -563,20 +586,27 @@ class HandleEquipmentPricing(Resource):
         data = request.get_json()
 
         equipment_pricing = EquipmentPrice.query.filter_by(equipment_id=id).first()
-        submitted_hourly_rate = data.get('hourly_rate')
-        submitted_daily_rate = data.get('daily_rate')
-        submitted_weekly_rate = data.get('weekly_rate')
-        submitted_promo_rate = data.get('promo_rate')
+
+        if not data:
+            return make_response({"error": "No data provided"}, 400)
+        
+        # submitted_hourly_rate = data.get('hourly_rate')
+        # submitted_daily_rate = data.get('daily_rate')
+        # submitted_weekly_rate = data.get('weekly_rate')
+        # submitted_promo_rate = data.get('promo_rate')
+
+        #Prior had the float(submitted_hourly_rate) for example
+
         if equipment_pricing:
             try:
-                if submitted_hourly_rate in data and not None:
-                    equipment_pricing.hourly_rate = float(submitted_hourly_rate) * 100
-                if submitted_daily_rate in data and not None:
-                    equipment_pricing.daily_rate = float(submitted_daily_rate) * 100
-                if submitted_weekly_rate in data and not None:
-                    equipment_pricing.weekly_rate = float(submitted_weekly_rate) * 100
-                if submitted_promo_rate in data and not None:
-                    equipment_pricing.promo_rate = float(submitted_promo_rate) * 100
+                if 'hourly_rate' in data and not None:
+                    equipment_pricing.hourly_rate = float(data['hourly_rate']) * 100
+                if 'daily_rate' in data and not None:
+                    equipment_pricing.daily_rate = float(data['daily_rate']) * 100
+                if 'weekly_rate' in data and not None:
+                    equipment_pricing.weekly_rate = float(data['weekly_rate']) * 100
+                if 'promo_rate' in data and not None:
+                    equipment_pricing.promo_rate = float(data['promo_rate']) * 100
 
                 db.session.commit()
 
@@ -805,7 +835,7 @@ class RentalAgreements(Resource):
             equipment_id = cart_item_received.equipment_id,  # Lawnmower
             previous_quantity = previous_state_history.new_quantity,
             new_quantity = cart_item_received.quantity,
-            previous_state = 'idle',
+            previous_state = 'available',
             new_state = f' User added {cart_item_received.quantity} item or items to their cart, reserving',
             changed_at = datetime.utcnow(),
         )
