@@ -84,7 +84,7 @@ function HomePage({ equipmentArray, setFeaturedRental }) {
                     <div className="flex flex-wrap sm:-m-4 -mx-4 -mb-10 -mt-4">
                         <div className="p-4 md:w-1/3 sm:mb-0 mb-6">
                             <div className="rounded-lg h-64 overflow-hidden">
-                                <img alt="Honda HRX217VKA Lawnmower" className="object-cover object-center h-full w-full cursor-pointer" onClick={handleClickLawnmowerClick} src="https://img.ksl.com/mx/mplace-classifieds.ksl.com/2962808-1691060871-602587.jpg?filter=marketplace/664x500" />
+                                <img alt="Honda HRX217VKA Lawnmower" className="object-cover object-center h-full w-full cursor-pointer" onClick={handleClickLawnmowerClick} src="https://www.usatoday.com/gcdn/presto/2023/05/23/USAT/58538094-5018-47d0-8333-33d6835b9dbc-hondalawnmowerhero.png?crop=1436,1077,x349,y0" />
                             </div>
                             <h2 className="text-xl font-medium title-font text-gray-900 mt-5">Honda HRX217VKA Lawnmower</h2>
                             <p className="text-base leading-relaxed mt-2"> The Honda HRX217VKA Lawnmower, a powerful and efficient machine perfect for tackling any lawn size. Easy-to-use, it features self-propelled technology and a wide cutting deck for a seamless mowing experience.</p>
