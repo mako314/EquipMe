@@ -73,13 +73,24 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
             const equipment = await patchResponse.json()
             console.log("THE EQUIPMENT:", equipment)
 
+            const pricingData = {
+              hourly_rate: values.hourly_rate,
+              daily_rate: values.daily_rate,
+              weekly_rate: values.weekly_rate,
+              promo_rate: values.promo_rate,
+            }
+
+            console.log('PRICING DATA:',pricingData)
+
             const priceResponse = await fetch(`${apiUrl}equipment/${oneEquipment.id}/price`, {
               method: "PATCH",
               headers: {
                   "Content-Type": "application/json"
               },
-              body: JSON.stringify(equipment)
+              body: JSON.stringify(pricingData)
             })
+
+            console.log('I FIRED OFF')
 
             if (!priceResponse.ok) {
               const priceError = await priceResponse.json()
@@ -110,8 +121,8 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
             checkSession();
             // navigate(`/equipment/${equipment.id}`);
         } catch (error) {
-            console.error("Network error:", error);
-            setError("An unexpected error occurred");
+            console.error("Network error:", error)
+            setError("An unexpected error occurred")
           }
       }
   })
@@ -144,7 +155,7 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
             {/* display errors from formik/yup */}
             { formik.errors && Object.values(formik.errors).map(e => <p>{e}</p>) }
             {/* display errors from backend */}
-            {error && <p>{error}</p>}
+            {error && <p>{error.message}</p>}
           </div>
        
         <div>

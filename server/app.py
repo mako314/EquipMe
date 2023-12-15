@@ -505,6 +505,8 @@ class EquipmentByID(Resource):
                     return response
             except ValueError:
                 return make_response({"error": ["validations errors, check your input and try again"]} , 400)
+            except Exception as e:
+                return make_response({"error": f"An unexpected error occurred: {str(e)}"}, 500)
         else:
             response = make_response({
             "error": "Equipment not found"
@@ -585,27 +587,31 @@ class HandleEquipmentPricing(Resource):
     def patch(self, id):
         data = request.get_json()
 
+        print(data)
         equipment_pricing = EquipmentPrice.query.filter_by(equipment_id=id).first()
 
         if not data:
             return make_response({"error": "No data provided"}, 400)
         
-        # submitted_hourly_rate = data.get('hourly_rate')
-        # submitted_daily_rate = data.get('daily_rate')
-        # submitted_weekly_rate = data.get('weekly_rate')
-        # submitted_promo_rate = data.get('promo_rate')
+        # if data:
+        #     submitted_hourly_rate = data.get('hourly_rate')
+        #     submitted_daily_rate = data.get('daily_rate')
+        #     submitted_weekly_rate = data.get('weekly_rate')
+        #     submitted_promo_rate = data.get('promo_rate')
 
-        #Prior had the float(submitted_hourly_rate) for example
+        # So, originally I had the rates above and in data and is not none, but this way seemed to work better. I could probably set the above variables equal to data[variable] but it'd be more lines. This ended up working to patch the price.
+
+        # Guess I could track prices too
 
         if equipment_pricing:
             try:
-                if 'hourly_rate' in data and not None:
+                if 'hourly_rate' in data and data['hourly_rate'] is not None:
                     equipment_pricing.hourly_rate = float(data['hourly_rate']) * 100
-                if 'daily_rate' in data and not None:
+                if 'daily_rate' in data and data['daily_rate'] is not None:
                     equipment_pricing.daily_rate = float(data['daily_rate']) * 100
-                if 'weekly_rate' in data and not None:
+                if 'weekly_rate' in data and data['weekly_rate'] is not None:
                     equipment_pricing.weekly_rate = float(data['weekly_rate']) * 100
-                if 'promo_rate' in data and not None:
+                if 'promo_rate' in data and data['promo_rate'] is not None:
                     equipment_pricing.promo_rate = float(data['promo_rate']) * 100
 
                 db.session.commit()
