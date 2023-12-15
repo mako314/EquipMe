@@ -374,16 +374,16 @@ if __name__ == '__main__':
 
         db.session.commit()
 
-        print(owner_1.id)
-        print(owner_2.id)
-        print(owner_3.id)
-        print(owner_4.id)
-        print(owner_5.id)
-        print(owner_6.id)
-        print(owner_7.id)
-        print(owner_8.id)
-        print(owner_9.id)
-        print(owner_10.id)
+        # print(owner_1.id)
+        # print(owner_2.id)
+        # print(owner_3.id)
+        # print(owner_4.id)
+        # print(owner_5.id)
+        # print(owner_6.id)
+        # print(owner_7.id)
+        # print(owner_8.id)
+        # print(owner_9.id)
+        # print(owner_10.id)
         #Adds owners with their passwords hashed. 
 
 #---------------------------------------------------------
@@ -447,6 +447,9 @@ if __name__ == '__main__':
         ]
 
         db.session.add_all(equipment_list)
+        print(equipment_list)
+        # print('Accessing fourth element:', equipment_list[3])
+        # print(len(equipment_list))
         db.session.commit()
 #--------------------------------------------Equipment State History----------------------------------------------------------------------
         print('Adding Equipment State History...')
@@ -454,7 +457,7 @@ if __name__ == '__main__':
         equipment_state_history_1 = EquipmentStateHistory(
             equipment_id = equipment_list[0].id,  # Excavator
             previous_quantity = 0,
-            new_quantity = 3,
+            new_quantity = equipment_list[0].quantity,
             previous_state = 'non-existing',
             new_state = 'added',
             changed_at = datetime.utcnow(),
@@ -463,7 +466,7 @@ if __name__ == '__main__':
         equipment_state_history_2 = EquipmentStateHistory(
             equipment_id = equipment_list[1].id,  # Forklift
             previous_quantity = 0,
-            new_quantity = 2,
+            new_quantity = equipment_list[1].quantity,
             previous_state = 'non-existing',
             new_state = 'added',
             changed_at = datetime.utcnow(),
@@ -472,7 +475,7 @@ if __name__ == '__main__':
         equipment_state_history_3 = EquipmentStateHistory(
             equipment_id = equipment_list[2].id,  # Lawnmower
             previous_quantity = 0,
-            new_quantity = 5,
+            new_quantity = equipment_list[2].quantity,
             previous_state = 'non-existing',
             new_state = 'added',
             changed_at = datetime.utcnow(),
@@ -481,7 +484,7 @@ if __name__ == '__main__':
         equipment_state_history_4 = EquipmentStateHistory(
             equipment_id = equipment_list[3].id,  # Tractor
             previous_quantity = 0,
-            new_quantity = 4,
+            new_quantity = equipment_list[3].quantity,
             previous_state = 'non-existing',
             new_state = 'added',
             changed_at = datetime.utcnow(),
@@ -692,15 +695,15 @@ if __name__ == '__main__':
 
         db.session.add_all(rental_agreements)
         db.session.commit()
-#------------------------------------------Rental agreements---------------
+#------------------------------------------ NEW STATE HISTORY FOR A RENTAL AGREEMENT---------------
         print('Adding Equipment State History for Completed Rentals...')
 
         equipment_state_history_5 = EquipmentStateHistory(
             equipment_id = cart_items[2].id,  # Lawnmower
-            previous_quantity = 0,
-            new_quantity = 3,
+            previous_quantity = equipment_state_history_3.new_quantity,
+            new_quantity = equipment_state_history_3.new_quantity - cart_items[2].quantity,
             previous_state = 'non-existing',
-            new_state = 'added',
+            new_state = f'User added {cart_items[2].quantity} item or items to their cart, reserving',
             changed_at = datetime.utcnow(),
         )
 
@@ -715,6 +718,19 @@ if __name__ == '__main__':
         # equipment_state_history_6
 
         db.session.add_all([equipment_state_history_5,])
+
+        # if len(cart_items) == 3:
+        #     print('Tractor', cart_items[3].quantity)
+        # else:
+        #     print("Tractor item not found in cart_items")
+
+
+        # print(len(equipment_list))
+        print('Excavator',equipment_list[0].quantity)
+        print('Forklift',equipment_list[1].quantity)
+        print('Lawnmower',equipment_list[2].quantity)
+        print('Tractor',equipment_list[3].quantity)
+
         db.session.commit()
 
 #---------------------Rental Comments---------------
@@ -938,11 +954,11 @@ if __name__ == '__main__':
         db.session.add_all(owner_inbox)
         db.session.commit()
         
-        owner2 = EquipmentOwner.query.filter_by(id = owner_2.id).first()
-        if owner2:
-            print("Owner 2's Inboxes:")
-            for inbox in owner2.owner_inboxes:
-                print(f"Inbox ID: {inbox.id}, Thread ID: {inbox.thread_id}")
+        # owner2 = EquipmentOwner.query.filter_by(id = owner_2.id).first()
+        # if owner2:
+        #     print("Owner 2's Inboxes:")
+        #     for inbox in owner2.owner_inboxes:
+        #         print(f"Inbox ID: {inbox.id}, Thread ID: {inbox.thread_id}")
 
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------

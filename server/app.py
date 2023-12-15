@@ -852,9 +852,9 @@ class RentalAgreements(Resource):
         new_state_history = EquipmentStateHistory(
             equipment_id = cart_item_received.equipment_id,  # Lawnmower
             previous_quantity = previous_state_history.new_quantity,
-            new_quantity = cart_item_received.quantity,
+            new_quantity = previous_state_history.new_quantity - cart_item_received.quantity,
             previous_state = 'available',
-            new_state = f' User added {cart_item_received.quantity} item or items to their cart, reserving',
+            new_state = f'User added {cart_item_received.quantity} item or items to their cart, reserving',
             changed_at = datetime.utcnow(),
         )
 
@@ -1467,8 +1467,12 @@ class AddItemToCart(Resource):
 
         db.session.add(new_item)
         db.session.commit()
+        
+        print("EQUIPMENT QUANTITY WHEN ADDING TO CART", equipment.quantity)
+        print('AMOUNT TRYING TO BE ADDED', data['quantity'])
+        print(equipment.quantity > data['quantity'])
 
-        if equipment.quantity <= data['quantity']:
+        if equipment.quantity < data['quantity']:
             return make_response({'error': 'Not enough equipment available'}, 400)
 
         # May need to include this commit back
