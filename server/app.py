@@ -1,4 +1,4 @@
-from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement, Message, Thread,UserInbox, OwnerInbox, Cart, CartItem, EquipmentPrice, Review, UserFavorite, OwnerFavorite, AgreementComment, FeaturedEquipment
+from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement, Message, Thread,UserInbox, OwnerInbox, Cart, CartItem, EquipmentPrice, Review, UserFavorite, OwnerFavorite, AgreementComment, FeaturedEquipment, EquipmentStateHistory
 # from flask_cors import CORS
 # from flask_migrate import Migrate
 # from flask import Flask, request, make_response, jsonify
@@ -8,7 +8,7 @@ from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAg
 from flask import Flask, request, make_response, jsonify, session
 from flask_restful import Resource
 from config import db, app, api
-from sqlalchemy import asc
+from sqlalchemy import asc, desc
 import pandas as pd
 import xml.etree.ElementTree as ET
 
@@ -381,10 +381,29 @@ class Equipments(Resource):
                 quantity = data['quantity'],
                 owner_id= data['owner_id']
             )
+
             db.session.add(new_equipment)
             db.session.commit()
 
-            response = make_response(new_equipment.to_dict(), 201)
+            new_state_history = EquipmentStateHistory(
+            equipment_id = new_equipment.id,  # Lawnmower
+            previous_quantity = 0,
+            new_quantity = data['quantity'],
+            previous_state = 'non-existing',
+            new_state = 'added',
+            changed_at = datetime.utcnow(),
+            )
+
+            db.session.add(new_state_history)
+            db.session.commit()
+
+            # response = make_response(new_equipment.to_dict(), 201)
+            response_data = {
+                "equipment": new_equipment.to_dict(),
+                "state_history": new_state_history.to_dict()  # Assuming to_dict() method is defined for state history
+            }
+
+            response = make_response(response_data, 201)
             return response
         
             #if data['availability] == 'yes'
@@ -735,7 +754,21 @@ class RentalAgreements(Resource):
         equipment = Equipment.query.filter(Equipment.id == equipment_id).first()
         if not equipment:
             return make_response({"error": "Equipment not found"}, 404)
+        
+        previous_state_history = EquipmentStateHistory.query.filter_by(
+        equipment_id=cart_item_received.equipment_id
+        ).order_by(EquipmentStateHistory.changed_at.desc()).first()
 
+
+        if equipment.quantity >= cart_item_received.quality:
+            equipment.quantity -= cart_item_received.quality
+            db.session.commit()  # Commit the changes for both new_item and updated equipment quantity
+            # response = make_response(response_data, 201)
+            # return response
+        else:
+            # If not enough equipment quantity, handle error 
+            return make_response({'error': 'Not enough equipment available'}, 400)
+        
         #need a way to grab equipment and owner
         # load category and then from there display 
         #take the input
@@ -768,8 +801,29 @@ class RentalAgreements(Resource):
         print(type(data.get('delivery')))
         db.session.commit()
 
-        response = make_response(new_rental_agreement.to_dict(), 201)
+        new_state_history = EquipmentStateHistory(
+            equipment_id = cart_item_received.equipment_id,  # Lawnmower
+            previous_quantity = previous_state_history.new_quantity,
+            new_quantity = cart_item_received.quality,
+            previous_state = 'idle',
+            new_state = 'added',
+            changed_at = datetime.utcnow(),
+        )
+
+        db.session.add(new_state_history)
+        db.session.commit()
+
+        response_data = {
+            "equipment": new_rental_agreement.to_dict(),
+            "state_history": new_state_history.to_dict()  # Assuming to_dict() method is defined for state history
+        }
+
+        response = make_response(response_data, 201)
         return response
+
+        # response = make_response(new_rental_agreement.to_dict(), 201)
+        # return response
+
         # else:
         #     return {"error": "Equipment not available for the requested date range or quantity depleted"}, 400
         # db.session.add(new_rental_agreement)
@@ -1364,16 +1418,19 @@ class AddItemToCart(Resource):
         db.session.add(new_item)
         db.session.commit()
 
-        if equipment.quantity >= data['quantity']:
-            equipment.quantity -= data['quantity']
-            db.session.commit()  # Commit the changes for both new_item and updated equipment quantity
-            cart.calculate_total()
-            db.session.commit()  # Commit changes after recalculating the total
-            response = make_response({'id': new_item.id,'details': new_item.to_dict()}, 201)
-            return response
-        else:
-            # If not enough equipment quantity, handle error 
-            return make_response({'error': 'Not enough equipment available'}, 400)
+        # if equipment.quantity >= data['quantity']:
+        #     equipment.quantity -= data['quantity']
+
+        # May need to include this commit back
+        # db.session.commit()  # Commit the changes for both new_item and updated equipment quantity
+        cart.calculate_total()
+        db.session.commit()  # Commit changes after recalculating the total
+        response = make_response({'id': new_item.id,'details': new_item.to_dict()}, 201)
+        return response
+    
+        # else:
+        #     # If not enough equipment quantity, handle error 
+        #     return make_response({'error': 'Not enough equipment available'}, 400)
 
         # cart.calculate_total()
         # db.session.commit()
