@@ -468,21 +468,27 @@ class EquipmentByID(Resource):
     #Patch equipment DONE
     def patch(self, id):
         equipment = Equipment.query.filter(Equipment.id == id).first()
+        previous_quantity = (equipment.quantity)
+        print('PREVIOUS QUANTITY:', previous_quantity)
+
         previous_state_history = EquipmentStateHistory.query.filter_by(
         equipment_id=id).order_by(EquipmentStateHistory.changed_at.desc()).first()
         if equipment:
             try:
                 #going to need try and except if and when we do validations
                 data = request.get_json()
+        
                 for key in data:
                     setattr(equipment, key, data[key])
                 db.session.add(equipment)
-                db.session.commit()
+                # db.session.commit()
 
                 updated_quantity = int(data['quantity'])
-                print(updated_quantity)
+                print('updated QUANTITY:',updated_quantity)
                 print(type(updated_quantity))
-
+                print('quantity' in data and updated_quantity != previous_quantity)
+                print('quantity' in data)
+                print(updated_quantity != previous_quantity)
                 if 'quantity' in data and updated_quantity != equipment.quantity:
                     # Add state history before committing the changes to the equipment
                     if updated_quantity > equipment.quantity:
@@ -490,6 +496,7 @@ class EquipmentByID(Resource):
                     else:
                         updated_new_state = 'removed'
 
+                    print('YOU ARE IN THE PLACE TO POST NEW STATE_HISTORY')
                     new_state_history = EquipmentStateHistory(
                     equipment_id=id,
                     previous_quantity=previous_state_history.new_quantity,
@@ -498,6 +505,8 @@ class EquipmentByID(Resource):
                     new_state= updated_new_state,  
                     changed_at=datetime.utcnow(),
                     )
+
+                    print(new_state_history)
 
                     db.session.add(new_state_history)
                     db.session.commit()
