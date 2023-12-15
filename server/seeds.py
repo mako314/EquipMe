@@ -26,6 +26,7 @@ if __name__ == '__main__':
         Review.query.delete()
         CartItem.query.delete()
         Cart.query.delete()
+        EquipmentStatus.query.delete()
         EquipmentStateHistory.query.delete()
         EquipmentPrice.query.delete()
         FeaturedEquipment.query.delete()
@@ -637,9 +638,10 @@ if __name__ == '__main__':
         equipment_list[1].status[0].current_quantity-= cart_items[1].quantity
         equipment_list[2].status[0].current_quantity-= cart_items[2].quantity
 
-        equipment_list[0].status[0].reserved_quantity-= cart_items[0].quantity
-        equipment_list[1].status[0].reserved_quantity-= cart_items[1].quantity
-        equipment_list[2].status[0].reserved_quantity-= cart_items[2].quantity
+        equipment_list[0].status[0].reserved_quantity += cart_items[0].quantity
+        equipment_list[1].status[0].reserved_quantity += cart_items[1].quantity
+        equipment_list[2].status[0].reserved_quantity += cart_items[2].quantity
+
         # print(equipment_list[2].quantity)
         # print(equipment_list[1].quantity)
         # print(equipment_list[0].quantity)
