@@ -484,14 +484,17 @@ class EquipmentByID(Resource):
                 # db.session.commit()
 
                 updated_quantity = int(data['quantity'])
-                print('updated QUANTITY:',updated_quantity)
-                print(type(updated_quantity))
-                print('quantity' in data and updated_quantity != previous_quantity)
-                print('quantity' in data)
-                print(updated_quantity != previous_quantity)
-                if 'quantity' in data and updated_quantity != equipment.quantity:
+                # print('updated QUANTITY:',updated_quantity)
+                # print(type(updated_quantity))
+                # print('quantity' in data and updated_quantity != previous_quantity)
+                # print('quantity' in data)
+                # print(updated_quantity != previous_quantity)
+
+                # Can not use equipment.quantity, because it gets updated with the patch and the number was the same.
+
+                if 'quantity' in data and updated_quantity != previous_quantity:
                     # Add state history before committing the changes to the equipment
-                    if updated_quantity > equipment.quantity:
+                    if updated_quantity > previous_quantity:
                         updated_new_state = 'added'
                     else:
                         updated_new_state = 'removed'
