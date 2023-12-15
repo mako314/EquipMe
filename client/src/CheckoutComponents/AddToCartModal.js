@@ -4,7 +4,7 @@ import { UserSessionContext } from '../UserComponents/SessionContext'
 import Calendar from '../CalendarComponents/Calendar'
 import CreateNewCart from './CreateNewCart'
 import {toast} from 'react-toastify'
-import { object } from 'yup'
+import { mixed, object } from 'yup'
 
 function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
 
@@ -18,7 +18,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
   const [dayRange, setDayRange] = useState('')
   const [rentalLength, setRentalLength] = useState(1)
   const [equipmentQuantity, setEquipmentQuantity] = useState(1)
-  const [currentCart, setCurrentCart] = useState({}) 
+  const [currentCart, setCurrentCart] = useState(null) 
   const [cartData, setCartData] = useState([])
   const [isDelivery, setIsDelivery] = useState(false)
   const [deliveryAddress, setDeliveryAddress] = useState('')
@@ -38,13 +38,17 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
   
   // Swapped the ifs here to test whether the role is user (not really needed since button is hidden, but hey, better than not doing it?) and whether current cart exists. if it does, exit the if, and just set cart data.
   useEffect(() => {
-    if (role === 'user' && currentCart) {
+    if (role === 'user' && currentCart != null) {
     setCartData(currentUser.cart)
+    console.log(' first if ')
     } else if (role === 'user' && currentUser?.cart?.length > 0){
     setCartData(currentUser.cart)
     setCurrentCart(currentUser.cart[0]) // Set the first cart as the current cart
+    console.log(' second if ')
   }
   }, [currentUser])
+
+
 
   // console.log("THE CURRENT CART DATA:", currentUser.cart)
 
@@ -55,7 +59,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
   // console.log("This is the selected rate:", selectedRate)
   // console.log("this is the date range:", dayRange)
 
-  // console.log("The Cart ID:", currentCart)
+  console.log("The Cart CURRENTLY:", currentCart)
 
 
   //Map over equipment price, and take the rates as options
@@ -246,6 +250,11 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
               console.log(resp.error)
               console.log("Start or End Rental Date is missing or invalid")
             }
+          })
+        } else{
+          return toast.error(`There seems to be an error, it's likely that there's no more equipment available, or you're attempting to rent too high of a quantity. If you believe this to be an error, contact the owner of this equipment.`,
+          {
+          "autoClose" : 8000
           })
         }
       })

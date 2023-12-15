@@ -26,6 +26,7 @@ if __name__ == '__main__':
         Review.query.delete()
         CartItem.query.delete()
         Cart.query.delete()
+        EquipmentStateHistory.query.delete()
         EquipmentPrice.query.delete()
         FeaturedEquipment.query.delete()
         UserFavorite.query.delete()
@@ -38,6 +39,7 @@ if __name__ == '__main__':
         EquipmentImage.query.delete()
         Message.query.delete()
         Thread.query.delete()
+        
         
 
 #----------------------------------------------------------------------
@@ -422,7 +424,7 @@ if __name__ == '__main__':
                 make = 'Honda',
                 model = 'HRX217VKA',
                 description = "Our Honda HRX217VKA lawnmower makes lawn care effortless and enjoyable. With its precise cutting and user-friendly features, it delivers a perfect trim every time. It's lightweight, easy to maneuver, and has been kept in pristine condition for your landscaping needs. Rent this and give your lawn the care it deserves.",
-                equipment_image='https://img.ksl.com/mx/mplace-classifieds.ksl.com/2962808-1691060871-602587.jpg?filter=marketplace/664x500',
+                equipment_image='https://www.usatoday.com/gcdn/presto/2023/05/23/USAT/58538094-5018-47d0-8333-33d6835b9dbc-hondalawnmowerhero.png?crop=1436,1077,x349,y0',
                 location = '701 NW Street, St Lucie W Blvd, Port St. Lucie, FL 34986',
                 availability = 'True',
                 delivery = 'False',
