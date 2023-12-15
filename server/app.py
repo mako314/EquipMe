@@ -760,8 +760,8 @@ class RentalAgreements(Resource):
         ).order_by(EquipmentStateHistory.changed_at.desc()).first()
 
 
-        if equipment.quantity >= cart_item_received.quality:
-            equipment.quantity -= cart_item_received.quality
+        if equipment.quantity >= cart_item_received.quantity:
+            equipment.quantity -= cart_item_received.quantity
             db.session.commit()  # Commit the changes for both new_item and updated equipment quantity
             # response = make_response(response_data, 201)
             # return response
@@ -804,9 +804,9 @@ class RentalAgreements(Resource):
         new_state_history = EquipmentStateHistory(
             equipment_id = cart_item_received.equipment_id,  # Lawnmower
             previous_quantity = previous_state_history.new_quantity,
-            new_quantity = cart_item_received.quality,
+            new_quantity = cart_item_received.quantity,
             previous_state = 'idle',
-            new_state = 'added',
+            new_state = f' User added {cart_item_received.quantity} item or items to their cart, reserving',
             changed_at = datetime.utcnow(),
         )
 
@@ -877,7 +877,8 @@ class RentalAgreementsByID(Resource):
             db.session.add(agreement)
             agreement.revisions += 1
             if agreement.user_decision == 'accept' and agreement.owner_decision == 'accept':
-                agreement.agreement_status = 'All Parties Accepted'
+                agreement.agreement_status = 'Completed'
+                #All Parties Accepted
             elif agreement.user_decision == 'accept' and agreement.owner_decision == 'decline':
                 agreement.agreement_status = 'Owner has DECLINED this agreement'
             elif agreement.user_decision == 'decline' and agreement.owner_decision == 'accept':
@@ -887,6 +888,7 @@ class RentalAgreementsByID(Resource):
             elif agreement.user_decision == 'pending' and agreement.owner_decision == 'pending':
                 agreement.agreement_status = 'Pending' 
             db.session.commit()
+            # new_rental_agreement is created with an 'in-progress' status. could add another status like 'reserved' for state history
             response = make_response(agreement.to_dict(), 202)
             return response
         else:
@@ -1418,8 +1420,8 @@ class AddItemToCart(Resource):
         db.session.add(new_item)
         db.session.commit()
 
-        # if equipment.quantity >= data['quantity']:
-        #     equipment.quantity -= data['quantity']
+        if equipment.quantity <= data['quantity']:
+            return make_response({'error': 'Not enough equipment available'}, 400)
 
         # May need to include this commit back
         # db.session.commit()  # Commit the changes for both new_item and updated equipment quantity
