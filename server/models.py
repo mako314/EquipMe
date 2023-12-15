@@ -216,9 +216,11 @@ class Equipment(db.Model, SerializerMixin):
     featured_equipment = db.relationship('FeaturedEquipment', back_populates='equipment')
 
     user_favorite = db.relationship('UserFavorite', back_populates='equipment')
+    
+    state_history = db.relationship('EquipmentStateHistory', back_populates='equipment')
 
     #Serialization rules
-    serialize_rules = ('-owner.equipment','-owner.owner_inboxes','-owner.agreements', '-owner.owner_favorite','-owner.review','-owner.user_favorite','-images.equipment', '-cart_item.equipment','-equipment_price.equipment', '-featured_equipment.equipment','-cart_item.review','-cart_item.agreements', '-cart_item.cart', '-user_favorite.equipment', '-user_favorite.owner', '-user_favorite.user.user_inboxes', '-user_favorite.user.agreement','-user_favorite.user.cart','-user_favorite.user.review')
+    serialize_rules = ('-owner.equipment','-owner.owner_inboxes','-owner.agreements', '-owner.owner_favorite','-owner.review','-owner.user_favorite','-images.equipment', '-cart_item.equipment','-equipment_price.equipment', '-featured_equipment.equipment','-cart_item.review','-cart_item.agreements', '-cart_item.cart', '-user_favorite.equipment', '-user_favorite.owner', '-user_favorite.user.user_inboxes', '-user_favorite.user.agreement','-user_favorite.user.cart','-user_favorite.user.review', '-state_history.equipment')
     
     # '-agreements.equipment', # REMOVED DUE TO AGREEMENTS BEING TO CART ITEMS
     
@@ -267,6 +269,43 @@ class EquipmentImage(db.Model, SerializerMixin):
 
     #Serialization rules
     serialize_rules = ('-equipment.images', )
+
+class EquipmentStateHistory(db.Model, SerializerMixin):
+    __tablename__ = "equipment_state_history"
+
+    # can have different states for the equipment like 'Idle', 'Rented', 'Maintenance', 'Reserved', etc
+
+    id = db.Column(db.Integer, primary_key=True)
+    equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
+    previous_quantity = db.Column(db.Integer)
+    new_quantity = db.Column(db.Integer)
+    previous_state = db.Column(db.String)
+    new_state = db.Column(db.String)
+
+    changed_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    equipment = db.relationship('Equipment', back_populates='state_history')
+    # equipment_state_summary = db.relationship('EquipmentStateSummary', back_populates='state_history')
+
+    serialize_rules = ('-equipment.state_history', )
+
+
+class EquipmentStateSummary(db.Model, SerializerMixin):
+    __tablename__ = "equipment_state_summaries"
+    
+    id = db.Column(db.Integer, primary_key=True)
+    equipment_history_id = db.Column(db.Integer, db.ForeignKey('equipment_state_history.id'))
+    date = db.Column(db.Date)
+    state = db.Column(db.String)
+    total_quantity = db.Column(db.Integer, default=0)
+    total_idle = db.Column(db.Integer, default=0)
+    total_rented_out = db.Column(db.Integer, default=0)
+
+    # state_history = db.relationship('EquipmentStateHistory', back_populates='equipment_state_summary')
+
+    # serialize_rules = ('-equipment_state_summary.state_history', )
+
+
 
 class FeaturedEquipment(db.Model, SerializerMixin):
     __tablename__="featured_equipments"

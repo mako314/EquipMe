@@ -1,4 +1,4 @@
-from models import db, User, EquipmentOwner, Equipment, RentalAgreement, EquipmentImage, Thread, UserInbox, OwnerInbox, Message, Cart, CartItem, EquipmentPrice, FeaturedEquipment, Review, UserFavorite, OwnerFavorite, AgreementComment
+from models import db, User, EquipmentOwner, Equipment, RentalAgreement, EquipmentImage, Thread, UserInbox, OwnerInbox, Message, Cart, CartItem, EquipmentPrice, FeaturedEquipment, Review, UserFavorite, OwnerFavorite, AgreementComment, EquipmentStateHistory, EquipmentStateSummary
 import pandas as pd
 from app import app
 from random import randint, choice as rc
@@ -175,6 +175,7 @@ if __name__ == '__main__':
         db.session.add(user_4)
         db.session.add(user_5)
         db.session.add(user_6)
+        db.session.add_all([user_1,user_2,user_3,user_4,user_5,user_6])
 
 
         db.session.commit()
@@ -357,16 +358,17 @@ if __name__ == '__main__':
         owner_10.password_hash = owner_10_password
 
         #Re-add all owners
-        db.session.add(owner_1)
-        db.session.add(owner_2)
-        db.session.add(owner_3)
-        db.session.add(owner_4)
-        db.session.add(owner_5)
-        db.session.add(owner_6)
-        db.session.add(owner_7)
-        db.session.add(owner_8)
-        db.session.add(owner_9)
-        db.session.add(owner_10)
+        db.session.add_all([owner_1,owner_2,owner_3,owner_4,owner_5,owner_6,owner_7,owner_8,owner_9,owner_10,])
+        # db.session.add(owner_1)
+        # db.session.add(owner_2)
+        # db.session.add(owner_3)
+        # db.session.add(owner_4)
+        # db.session.add(owner_5)
+        # db.session.add(owner_6)
+        # db.session.add(owner_7)
+        # db.session.add(owner_8)
+        # db.session.add(owner_9)
+        # db.session.add(owner_10)
 
         db.session.commit()
 
@@ -444,6 +446,49 @@ if __name__ == '__main__':
 
         db.session.add_all(equipment_list)
         db.session.commit()
+#--------------------------------------------Equipment State History----------------------------------------------------------------------
+        print('Adding Equipment State History...')
+
+        equipment_state_history_1 = EquipmentStateHistory(
+            equipment_id = equipment_list[0].id,  # Excavator
+            previous_quantity = 0,
+            new_quantity = 3,
+            previous_state = 'non-existing',
+            new_state = 'added',
+            changed_at = datetime.utcnow(),
+        )
+
+        equipment_state_history_2 = EquipmentStateHistory(
+            equipment_id = equipment_list[1].id,  # Forklift
+            previous_quantity = 0,
+            new_quantity = 2,
+            previous_state = 'non-existing',
+            new_state = 'added',
+            changed_at = datetime.utcnow(),
+        )
+
+        equipment_state_history_3 = EquipmentStateHistory(
+            equipment_id = equipment_list[2].id,  # Lawnmower
+            previous_quantity = 0,
+            new_quantity = 5,
+            previous_state = 'non-existing',
+            new_state = 'added',
+            changed_at = datetime.utcnow(),
+        )
+
+        equipment_state_history_4 = EquipmentStateHistory(
+            equipment_id = equipment_list[3].id,  # Tractor
+            previous_quantity = 0,
+            new_quantity = 4,
+            previous_state = 'non-existing',
+            new_state = 'added',
+            changed_at = datetime.utcnow(),
+        )
+
+        db.session.add_all([equipment_state_history_1, equipment_state_history_2, equipment_state_history_3, equipment_state_history_4])
+        db.session.commit()
+
+        
 #------------------------------------------EQUIPMENT PRICES---------------------------------------
         print('Calculating price of Equipment...')
         equipment_prices = [
@@ -627,24 +672,49 @@ if __name__ == '__main__':
             created_at = datetime(2023, 12, 9),  # Year, Month, Day
             updated_at = datetime(2023, 12, 9)
         ),
-        RentalAgreement(
-            rental_start_date="2023-07-17",
-            rental_end_date="2023-07-20",
-            delivery = False,
-            delivery_address = "",
-            user_decision = "accept",
-            owner_decision = "accept",
-            agreement_status = "completed",
-            owner_id = owner_2.id, # Henry Cavill
-            user_id=user_1.id,  # Sarah Thompson
-            cart_item_id=cart_items[2].id,  # Lawnmower
-            created_at = datetime(2023, 10, 15),  # Year, Month, Day
-            updated_at = datetime(2023, 10, 15)
-        )
+        # RentalAgreement(
+        #     rental_start_date="2023-07-17",
+        #     rental_end_date="2023-07-20",
+        #     delivery = False,
+        #     delivery_address = "",
+        #     user_decision = "accept",
+        #     owner_decision = "accept",
+        #     agreement_status = "completed",
+        #     owner_id = owner_2.id, # Henry Cavill
+        #     user_id=user_1.id,  # Sarah Thompson
+        #     cart_item_id=cart_items[2].id,  # Lawnmower
+        #     created_at = datetime(2023, 10, 15),  # Year, Month, Day
+        #     updated_at = datetime(2023, 10, 15)
+        # )
         ]
 
         db.session.add_all(rental_agreements)
         db.session.commit()
+#------------------------------------------Rental agreements---------------
+        print('Adding Equipment State History for Completed Rentals...')
+
+        equipment_state_history_5 = EquipmentStateHistory(
+            equipment_id = cart_items[2].id,  # Lawnmower
+            previous_quantity = 0,
+            new_quantity = 3,
+            previous_state = 'non-existing',
+            new_state = 'added',
+            changed_at = datetime.utcnow(),
+        )
+
+        # equipment_state_history_6 = EquipmentStateHistory(
+        #     equipment_id = cart_items[2].id,  # Lawnmower
+        #     previous_quantity = 0,
+        #     new_quantity = 2,
+        #     previous_state = 'non-existing',
+        #     new_state = 'added',
+        #     changed_at = datetime.utcnow(),
+        # )
+        # equipment_state_history_6
+
+        db.session.add_all([equipment_state_history_5,])
+        db.session.commit()
+
 #---------------------Rental Comments---------------
         print("Configuring our current rental agreement comments...")
         agreement_comments = [
