@@ -462,19 +462,19 @@ if __name__ == '__main__':
             ),
            EquipmentStatus(
                 equipment_id = equipment_list[1].id,
-                current_quantity = 3,
+                current_quantity = 2,
                 reserved_quantity = 0,
                 maintenance_quantity = 0
             ),
            EquipmentStatus(
                 equipment_id = equipment_list[2].id,
-                current_quantity = 3,
+                current_quantity = 5,
                 reserved_quantity = 0,
                 maintenance_quantity = 0
             ),
            EquipmentStatus(
                 equipment_id = equipment_list[3].id,
-                current_quantity = 3,
+                current_quantity = 4,
                 reserved_quantity = 0,
                 maintenance_quantity = 0
             ),
