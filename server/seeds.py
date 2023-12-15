@@ -672,24 +672,49 @@ if __name__ == '__main__':
             created_at = datetime(2023, 12, 9),  # Year, Month, Day
             updated_at = datetime(2023, 12, 9)
         ),
-        RentalAgreement(
-            rental_start_date="2023-07-17",
-            rental_end_date="2023-07-20",
-            delivery = False,
-            delivery_address = "",
-            user_decision = "accept",
-            owner_decision = "accept",
-            agreement_status = "completed",
-            owner_id = owner_2.id, # Henry Cavill
-            user_id=user_1.id,  # Sarah Thompson
-            cart_item_id=cart_items[2].id,  # Lawnmower
-            created_at = datetime(2023, 10, 15),  # Year, Month, Day
-            updated_at = datetime(2023, 10, 15)
-        )
+        # RentalAgreement(
+        #     rental_start_date="2023-07-17",
+        #     rental_end_date="2023-07-20",
+        #     delivery = False,
+        #     delivery_address = "",
+        #     user_decision = "accept",
+        #     owner_decision = "accept",
+        #     agreement_status = "completed",
+        #     owner_id = owner_2.id, # Henry Cavill
+        #     user_id=user_1.id,  # Sarah Thompson
+        #     cart_item_id=cart_items[2].id,  # Lawnmower
+        #     created_at = datetime(2023, 10, 15),  # Year, Month, Day
+        #     updated_at = datetime(2023, 10, 15)
+        # )
         ]
 
         db.session.add_all(rental_agreements)
         db.session.commit()
+#------------------------------------------Rental agreements---------------
+        print('Adding Equipment State History for Completed Rentals...')
+
+        equipment_state_history_5 = EquipmentStateHistory(
+            equipment_id = cart_items[2].id,  # Lawnmower
+            previous_quantity = 0,
+            new_quantity = 3,
+            previous_state = 'non-existing',
+            new_state = 'added',
+            changed_at = datetime.utcnow(),
+        )
+
+        # equipment_state_history_6 = EquipmentStateHistory(
+        #     equipment_id = cart_items[2].id,  # Lawnmower
+        #     previous_quantity = 0,
+        #     new_quantity = 2,
+        #     previous_state = 'non-existing',
+        #     new_state = 'added',
+        #     changed_at = datetime.utcnow(),
+        # )
+        # equipment_state_history_6
+
+        db.session.add_all([equipment_state_history_5,])
+        db.session.commit()
+
 #---------------------Rental Comments---------------
         print("Configuring our current rental agreement comments...")
         agreement_comments = [
