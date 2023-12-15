@@ -703,7 +703,7 @@ if __name__ == '__main__':
             previous_quantity = equipment_state_history_3.new_quantity,
             new_quantity = equipment_state_history_3.new_quantity - cart_items[2].quantity,
             previous_state = 'non-existing',
-            new_state = f'User added {cart_items[2].quantity} item or items to their cart, reserving',
+            new_state = f'User added {cart_items[2].quantity} item or items to their cart, reserved',
             changed_at = datetime.utcnow(),
         )
 

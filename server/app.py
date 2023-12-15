@@ -854,7 +854,7 @@ class RentalAgreements(Resource):
             previous_quantity = previous_state_history.new_quantity,
             new_quantity = previous_state_history.new_quantity - cart_item_received.quantity,
             previous_state = 'available',
-            new_state = f'User added {cart_item_received.quantity} item or items to their cart, reserving',
+            new_state = f'User added {cart_item_received.quantity} item or items to their cart, reserved',
             changed_at = datetime.utcnow(),
         )
 
@@ -1702,6 +1702,39 @@ class MessageByID(Resource):
         
 api.add_resource(MessageByID, '/message/<int:id>')
 
+class CheckingOut(Resource):
+    def checkout_equipment(equipment_id, quantity):
+        # Fetch the most recent state history
+        last_state = EquipmentStateHistory.query.filter_by(
+            equipment_id=equipment_id
+        ).order_by(EquipmentStateHistory.changed_at.desc()).first()
+
+        # Ensure that the equipment is actually reserved before proceeding
+        if 'reserved' in last_state.new_state:
+            raise ValueError("Equipment must be in reserved state to check out.")
+
+        # Deduct the quantity from the equipment's available stock
+        equipment = Equipment.query.get(equipment_id)
+        if equipment.quantity < quantity:
+            raise ValueError("Not enough equipment available to fulfill this rental.")
+
+        equipment.quantity -= quantity
+        db.session.add(equipment)
+
+        # Record the state change
+        new_state_history = EquipmentStateHistory(
+            equipment_id=equipment_id,
+            previous_quantity=last_state.new_quantity,
+            new_quantity=equipment.quantity,
+            previous_state='reserved',
+            new_state='rented',
+            changed_at=datetime.utcnow(),
+        )
+        db.session.add(new_state_history)
+
+        db.session.commit()
+
+api.add_resource(CheckingOut, '/checkout/<int:equipment_id>/<int:quantity>')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
