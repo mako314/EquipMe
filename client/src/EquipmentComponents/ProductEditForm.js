@@ -17,10 +17,12 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
     const apiUrl = useContext(ApiUrlContext)
     const { currentUser, role, checkSession } = UserSessionContext()
 
+    // https://reactrouter.com/en/main/hooks/use-location
+    // https://www.educative.io/answers/how-to-use-the-uselocation-hook-in-react
+    // https://reactrouter.com/en/main/components/link#state IN PRODUCT DISPLAY
     console.log(oneEquipment)
-    // Going to need to pass owner and setOwner context here, and apply some ifs comparing the owner id to the equipment owner_id. If matching, it's the owners equipment and they'll be allowed to edit the equipment. IF the equipment is out for rent, I will have to not allow adjustment of certain things I believe? 
-    // Will also need to hide this link in a good spot and make it a OWNER logged in display. Users should not be able to list equipment as they should be vetted.
 
+    console.log("The location stuff:", location.state)
 
     const formSchema = object({
         name: string().required('Please enter a name'),
@@ -71,13 +73,24 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
             const equipment = await patchResponse.json()
             console.log("THE EQUIPMENT:", equipment)
 
-            const priceResponse = await fetch(`${apiUrl}equipment/${equipment.id}/price`, {
+            const pricingData = {
+              hourly_rate: values.hourly_rate,
+              daily_rate: values.daily_rate,
+              weekly_rate: values.weekly_rate,
+              promo_rate: values.promo_rate,
+            }
+
+            console.log('PRICING DATA:',pricingData)
+
+            const priceResponse = await fetch(`${apiUrl}equipment/${oneEquipment.id}/price`, {
               method: "PATCH",
               headers: {
                   "Content-Type": "application/json"
               },
-              body: JSON.stringify(equipment)
+              body: JSON.stringify(pricingData)
             })
+
+            console.log('I FIRED OFF')
 
             if (!priceResponse.ok) {
               const priceError = await priceResponse.json()
@@ -108,8 +121,8 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
             checkSession();
             // navigate(`/equipment/${equipment.id}`);
         } catch (error) {
-            console.error("Network error:", error);
-            setError("An unexpected error occurred");
+            console.error("Network error:", error)
+            setError("An unexpected error occurred")
           }
       }
   })
@@ -142,7 +155,7 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
             {/* display errors from formik/yup */}
             { formik.errors && Object.values(formik.errors).map(e => <p>{e}</p>) }
             {/* display errors from backend */}
-            {error && <p>{error}</p>}
+            {error && <p>{error.message}</p>}
           </div>
        
         <div>
@@ -197,7 +210,7 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
         <div className="sm:col-span-2">
           <label htmlFor="quantity" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Quantity of Equipment
            (placeholder) </label>
-          <input type="text" name="quantity" value={formik.values.quantity} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+          <input type="number" name="quantity" value={formik.values.quantity} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
         </div>
 
 

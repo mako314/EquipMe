@@ -390,7 +390,7 @@ class Equipments(Resource):
             previous_quantity = 0,
             new_quantity = data['quantity'],
             previous_state = 'non-existing',
-            new_state = 'added',
+            new_state = 'available',
             changed_at = datetime.utcnow(),
             )
 
@@ -468,20 +468,57 @@ class EquipmentByID(Resource):
     #Patch equipment DONE
     def patch(self, id):
         equipment = Equipment.query.filter(Equipment.id == id).first()
+        previous_quantity = (equipment.quantity)
+        print('PREVIOUS QUANTITY:', previous_quantity)
 
+        previous_state_history = EquipmentStateHistory.query.filter_by(
+        equipment_id=id).order_by(EquipmentStateHistory.changed_at.desc()).first()
         if equipment:
             try:
                 #going to need try and except if and when we do validations
                 data = request.get_json()
+        
                 for key in data:
                     setattr(equipment, key, data[key])
                 db.session.add(equipment)
-                db.session.commit()
+                # db.session.commit()
 
-                response = make_response(equipment.to_dict(), 202)
-                return response
+                updated_quantity = int(data['quantity'])
+                # print('updated QUANTITY:',updated_quantity)
+                # print(type(updated_quantity))
+                # print('quantity' in data and updated_quantity != previous_quantity)
+                # print('quantity' in data)
+                # print(updated_quantity != previous_quantity)
+
+                # Can not use equipment.quantity, because it gets updated with the patch and the number was the same.
+
+                if 'quantity' in data and updated_quantity != previous_quantity:
+                    # Add state history before committing the changes to the equipment
+                    if updated_quantity > previous_quantity:
+                        updated_new_state = 'added'
+                    else:
+                        updated_new_state = 'removed'
+
+                    print('YOU ARE IN THE PLACE TO POST NEW STATE_HISTORY')
+                    new_state_history = EquipmentStateHistory(
+                    equipment_id=id,
+                    previous_quantity=previous_state_history.new_quantity,
+                    new_quantity=updated_quantity,
+                    previous_state='available',  # or 'idle' or any other state your system uses
+                    new_state= updated_new_state,  
+                    changed_at=datetime.utcnow(),
+                    )
+
+                    print(new_state_history)
+
+                    db.session.add(new_state_history)
+                    db.session.commit()
+                    response = make_response(equipment.to_dict(), 202)
+                    return response
             except ValueError:
                 return make_response({"error": ["validations errors, check your input and try again"]} , 400)
+            except Exception as e:
+                return make_response({"error": f"An unexpected error occurred: {str(e)}"}, 500)
         else:
             response = make_response({
             "error": "Equipment not found"
@@ -562,21 +599,32 @@ class HandleEquipmentPricing(Resource):
     def patch(self, id):
         data = request.get_json()
 
+        print(data)
         equipment_pricing = EquipmentPrice.query.filter_by(equipment_id=id).first()
-        submitted_hourly_rate = data.get('hourly_rate')
-        submitted_daily_rate = data.get('daily_rate')
-        submitted_weekly_rate = data.get('weekly_rate')
-        submitted_promo_rate = data.get('promo_rate')
+
+        if not data:
+            return make_response({"error": "No data provided"}, 400)
+        
+        # if data:
+        #     submitted_hourly_rate = data.get('hourly_rate')
+        #     submitted_daily_rate = data.get('daily_rate')
+        #     submitted_weekly_rate = data.get('weekly_rate')
+        #     submitted_promo_rate = data.get('promo_rate')
+
+        # So, originally I had the rates above and in data and is not none, but this way seemed to work better. I could probably set the above variables equal to data[variable] but it'd be more lines. This ended up working to patch the price.
+
+        # Guess I could track prices too
+
         if equipment_pricing:
             try:
-                if submitted_hourly_rate in data and not None:
-                    equipment_pricing.hourly_rate = float(submitted_hourly_rate) * 100
-                if submitted_daily_rate in data and not None:
-                    equipment_pricing.daily_rate = float(submitted_daily_rate) * 100
-                if submitted_weekly_rate in data and not None:
-                    equipment_pricing.weekly_rate = float(submitted_weekly_rate) * 100
-                if submitted_promo_rate in data and not None:
-                    equipment_pricing.promo_rate = float(submitted_promo_rate) * 100
+                if 'hourly_rate' in data and data['hourly_rate'] is not None:
+                    equipment_pricing.hourly_rate = float(data['hourly_rate']) * 100
+                if 'daily_rate' in data and data['daily_rate'] is not None:
+                    equipment_pricing.daily_rate = float(data['daily_rate']) * 100
+                if 'weekly_rate' in data and data['weekly_rate'] is not None:
+                    equipment_pricing.weekly_rate = float(data['weekly_rate']) * 100
+                if 'promo_rate' in data and data['promo_rate'] is not None:
+                    equipment_pricing.promo_rate = float(data['promo_rate']) * 100
 
                 db.session.commit()
 
@@ -805,7 +853,7 @@ class RentalAgreements(Resource):
             equipment_id = cart_item_received.equipment_id,  # Lawnmower
             previous_quantity = previous_state_history.new_quantity,
             new_quantity = cart_item_received.quantity,
-            previous_state = 'idle',
+            previous_state = 'available',
             new_state = f' User added {cart_item_received.quantity} item or items to their cart, reserving',
             changed_at = datetime.utcnow(),
         )
