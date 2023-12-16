@@ -493,7 +493,7 @@ if __name__ == '__main__':
             previous_quantity = 0,
             new_quantity = equipment_list[0].quantity,
             previous_state = 'non-existing',
-            new_state = 'added',
+            new_state = 'available',
             changed_at = datetime.utcnow(),
         )
 
@@ -502,7 +502,7 @@ if __name__ == '__main__':
             previous_quantity = 0,
             new_quantity = equipment_list[1].quantity,
             previous_state = 'non-existing',
-            new_state = 'added',
+            new_state = 'available',
             changed_at = datetime.utcnow(),
         )
 
@@ -511,7 +511,7 @@ if __name__ == '__main__':
             previous_quantity = 0,
             new_quantity = equipment_list[2].quantity,
             previous_state = 'non-existing',
-            new_state = 'added',
+            new_state = 'available',
             changed_at = datetime.utcnow(),
         )
 
@@ -520,7 +520,7 @@ if __name__ == '__main__':
             previous_quantity = 0,
             new_quantity = equipment_list[3].quantity,
             previous_state = 'non-existing',
-            new_state = 'added',
+            new_state = 'available',
             changed_at = datetime.utcnow(),
         )
 
@@ -632,7 +632,36 @@ if __name__ == '__main__':
             ),
         ]
 
+        equipment_state_history_5 = EquipmentStateHistory(
+            equipment_id = equipment_list[0].id,  # Lawnmower
+            previous_quantity = equipment_state_history_1.new_quantity,
+            new_quantity = equipment_state_history_1.new_quantity - cart_items[2].quantity,
+            previous_state = equipment_state_history_1.new_state,
+            new_state = 'User reserved {cart_items[2].quantity} item or items to their cart',
+            changed_at = datetime.utcnow(),
+        )
+
+        equipment_state_history_6 = EquipmentStateHistory(
+            equipment_id = equipment_list[1].id,  # Lawnmower
+            previous_quantity = equipment_state_history_2.new_quantity,
+            new_quantity = equipment_state_history_2.new_quantity - cart_items[2].quantity,
+            previous_state = equipment_state_history_2.new_state,
+            new_state = 'User reserved {cart_items[2].quantity} item or items to their cart',
+            changed_at = datetime.utcnow(),
+        )
+
+        equipment_state_history_7 = EquipmentStateHistory(
+            equipment_id = equipment_list[2].id,  # Lawnmower
+            previous_quantity = equipment_state_history_3.new_quantity,
+            new_quantity = equipment_state_history_3.new_quantity - cart_items[2].quantity,
+            previous_state = equipment_state_history_3.new_state,
+            new_state = 'User reserved {cart_items[2].quantity} item or items to their cart',
+            changed_at = datetime.utcnow(),
+        )
+
         db.session.add_all(cart_items)
+        db.session.add_all(equipment_state_history_5, equipment_state_history_6, equipment_state_history_7)
+
         db.session.commit()
         equipment_list[0].status[0].current_quantity -= cart_items[0].quantity
         equipment_list[1].status[0].current_quantity-= cart_items[1].quantity
@@ -735,12 +764,12 @@ if __name__ == '__main__':
 #------------------------------------------ NEW STATE HISTORY FOR A RENTAL AGREEMENT---------------
         print('Adding Equipment State History for Completed Rentals...')
 
-        equipment_state_history_5 = EquipmentStateHistory(
+        equipment_state_history_8 = EquipmentStateHistory(
             equipment_id = cart_items[2].id,  # Lawnmower
             previous_quantity = equipment_state_history_3.new_quantity,
             new_quantity = equipment_state_history_3.new_quantity - cart_items[2].quantity,
-            previous_state = 'non-existing',
-            new_state = f'User added {cart_items[2].quantity} item or items to their cart, reserved',
+            previous_state = equipment_state_history_3.new_state,
+            new_state = 'User rented {cart_items[2].quantity} item or items',
             changed_at = datetime.utcnow(),
         )
 
@@ -754,7 +783,7 @@ if __name__ == '__main__':
         # )
         # equipment_state_history_6
 
-        db.session.add_all([equipment_state_history_5,])
+        db.session.add_all([equipment_state_history_8,])
 
         # if len(cart_items) == 3:
         #     print('Tractor', cart_items[3].quantity)
