@@ -660,7 +660,19 @@ if __name__ == '__main__':
         )
 
         db.session.add_all(cart_items)
-        db.session.add_all(equipment_state_history_5, equipment_state_history_6, equipment_state_history_7)
+        db.session.add_all([equipment_state_history_5, equipment_state_history_6, equipment_state_history_7])
+        print(' LOOK HERE ')
+        print(equipment_state_history_5.new_quantity)
+        print(equipment_state_history_6.new_quantity)
+        print(equipment_state_history_7.new_quantity)
+        equipment_statuses[0].current_quantity - equipment_state_history_5.new_quantity
+        equipment_statuses[0].reserved_quantity + equipment_state_history_5.new_quantity
+        equipment_statuses[1].current_quantity - equipment_state_history_6.new_quantity
+        equipment_statuses[1].reserved_quantity + equipment_state_history_6.new_quantity
+        equipment_statuses[2].current_quantity - equipment_state_history_7.new_quantity
+        equipment_statuses[2].reserved_quantity + equipment_state_history_7.new_quantity
+
+
 
         db.session.commit()
         equipment_list[0].status[0].current_quantity -= cart_items[0].quantity
