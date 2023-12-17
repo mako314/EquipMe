@@ -195,7 +195,7 @@ class Equipment(db.Model, SerializerMixin):
     #base_of_operations = db.Column(db.String)
     availability = db.Column(db.String)
     delivery = db.Column(db.String)
-    quantity = db.Column(db.Integer)
+    # quantity = db.Column(db.Integer)
 
     #Should add things like a deposit required, short description, condition to rent vehicle i.e. license required? Y/N? What else could be included needs to be brainstormed
 
@@ -278,11 +278,12 @@ class EquipmentStateHistory(db.Model, SerializerMixin):
     # can have different states for the equipment like 'Idle', 'Rented', 'Maintenance', 'Reserved', etc
     id = db.Column(db.Integer, primary_key=True)
     equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
-    previous_quantity = db.Column(db.Integer)
-    new_quantity = db.Column(db.Integer)
+    total_quantity = db.Column(db.Integer)
+    available_quantity = db.Column(db.Integer)
+    reserved_quantity = db.Column(db.Integer, default=0)
+    rented_quantity = db.Column(db.Integer, default=0)
     previous_state = db.Column(db.String)
     new_state = db.Column(db.String)
-    
     changed_at = db.Column(db.DateTime, default=datetime.utcnow)
     
     equipment = db.relationship('Equipment', back_populates='state_history')
@@ -302,6 +303,7 @@ class EquipmentStateSummary(db.Model, SerializerMixin):
     total_idle = db.Column(db.Integer, default=0)
     total_reserved = db.Column(db.Integer, default=0)
     total_rented_out = db.Column(db.Integer, default=0)
+    total_cancelled = db.Column(db.Integer, default=0)
 
     # state_history = db.relationship('EquipmentStateHistory', back_populates='equipment_state_summary')
 
@@ -312,8 +314,9 @@ class EquipmentStatus(db.Model, SerializerMixin):
     
     id = db.Column(db.Integer, primary_key=True)
     equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
-    current_quantity = db.Column(db.Integer)
+    available_quantity = db.Column(db.Integer)
     reserved_quantity = db.Column(db.Integer, default=0)
+    rented_quantity = db.Column(db.Integer, default=0)
     maintenance_quantity = db.Column(db.Integer, default=0)
 
     equipment = db.relationship('Equipment', back_populates='status')

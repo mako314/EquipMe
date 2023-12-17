@@ -400,6 +400,17 @@ class Equipments(Resource):
             changed_at = datetime.utcnow(),
             )
 
+            new_state_history = EquipmentStateHistory(
+                equipment_id = id,  # Lawnmower
+                total_quantity = data['quantity'],
+                available_quantity = data['quantity'],
+                reserved_quantity = 0,
+                rented_quantity = 0,
+                previous_state = 'non-existing',
+                new_state = 'available',
+                changed_at = datetime.utcnow(),
+            )
+
             db.session.add(new_equipment_status)
             db.session.add(new_state_history)
             db.session.commit()
@@ -515,6 +526,17 @@ class EquipmentByID(Resource):
                     new_state= updated_new_state,  
                     changed_at=datetime.utcnow(),
                     )
+
+                #     new_state_history = EquipmentStateHistory(
+                #     equipment_id = id,  # Lawnmower
+                #     total_quantity = previous_state_history.total_quantity,
+                #     available_quantity = previous_state_history.total_quantity - cart_item_received.quantity,
+                #     reserved_quantity = cart_item_received.quantity,
+                #     rented_quantity = 0,
+                #     previous_state = previous_state_history.new_state,
+                #     new_state = f'User added {cart_item_received.quantity} item or items to their cart, reserved',
+                #     changed_at = datetime.utcnow(),
+                # )
 
                     # new_equipment_status = EquipmentStatus(
                     #     equipment_id = equipment.id,
@@ -866,11 +888,22 @@ class RentalAgreements(Resource):
         print(type(data.get('delivery')))
         db.session.commit()
 
+        # new_state_history = EquipmentStateHistory(
+        #     equipment_id = cart_item_received.equipment_id,  # Lawnmower
+        #     previous_quantity = previous_state_history.new_quantity,
+        #     new_quantity = previous_state_history.new_quantity - cart_item_received.quantity,
+        #     previous_state = 'available',
+        #     new_state = f'User added {cart_item_received.quantity} item or items to their cart, reserved',
+        #     changed_at = datetime.utcnow(),
+        # )
+
         new_state_history = EquipmentStateHistory(
             equipment_id = cart_item_received.equipment_id,  # Lawnmower
-            previous_quantity = previous_state_history.new_quantity,
-            new_quantity = previous_state_history.new_quantity - cart_item_received.quantity,
-            previous_state = 'available',
+            total_quantity = previous_state_history.total_quantity,
+            available_quantity = previous_state_history.total_quantity - cart_item_received.quantity,
+            reserved_quantity = cart_item_received.quantity,
+            rented_quantity = 0,
+            previous_state = previous_state_history.new_state,
             new_state = f'User added {cart_item_received.quantity} item or items to their cart, reserved',
             changed_at = datetime.utcnow(),
         )
