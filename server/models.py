@@ -195,7 +195,7 @@ class Equipment(db.Model, SerializerMixin):
     #base_of_operations = db.Column(db.String)
     availability = db.Column(db.String)
     delivery = db.Column(db.String)
-    quantity = db.Column(db.Integer)
+    # quantity = db.Column(db.Integer)
 
     #Should add things like a deposit required, short description, condition to rent vehicle i.e. license required? Y/N? What else could be included needs to be brainstormed
 

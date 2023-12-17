@@ -659,7 +659,7 @@ if __name__ == '__main__':
             rented_quantity = 0,
             previous_state = equipment_state_history_1.new_state,
             new_state = f'User reserved {cart_items[0].quantity} item or items to their cart',
-            changed_at = datetime(2023, 12, 11),
+            changed_at = datetime(2023, 12, 12),
         )
 
         # equipment_state_history_6 = EquipmentStateHistory(
@@ -679,7 +679,7 @@ if __name__ == '__main__':
             rented_quantity = 0,
             previous_state = equipment_state_history_2.new_state,
             new_state = f'User reserved {cart_items[1].quantity} item or items to their cart',
-            changed_at = datetime(2023, 12, 11),
+            changed_at = datetime(2023, 12, 12),
         )
 
         # equipment_state_history_7 = EquipmentStateHistory(
@@ -695,11 +695,11 @@ if __name__ == '__main__':
             equipment_id = cart_items[2].equipment_id,  # Lawnmower
             total_quantity = equipment_state_history_3.total_quantity,
             available_quantity = equipment_state_history_3.total_quantity - cart_items[2].quantity,
-            reserved_quantity = equipment_state_history_3.total_quantity - cart_items[2].quantity,
+            reserved_quantity = cart_items[2].quantity,
             rented_quantity = 0,
             previous_state = equipment_state_history_3.new_state,
             new_state = f'User reserved {cart_items[2].quantity} item or items to their cart',
-            changed_at = datetime(2023, 12, 11),
+            changed_at = datetime(2023, 12, 12),
         )
 
         db.session.add_all(cart_items)
@@ -838,7 +838,7 @@ if __name__ == '__main__':
             rented_quantity = cart_items[2].quantity,
             previous_state = equipment_state_history_7.new_state,
             new_state = f'User rented {cart_items[2].quantity} item or items',
-            changed_at = datetime(2023, 12, 11),
+            changed_at = datetime(2023, 12, 13),
         )
 
         #new_quantity = equipment_state_history_3.new_quantity - cart_items[2].quantity,
