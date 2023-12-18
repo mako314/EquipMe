@@ -997,7 +997,6 @@ class RentalAgreementsByID(Resource):
     #delete a single rental agreement
     def delete(self, id):
         agreement = RentalAgreement.query.filter(RentalAgreement.id == id).first()
-
         if agreement:
             #may need to delete the renter id and equipment id
             db.session.delete(agreement)
@@ -1014,14 +1013,45 @@ class RentalAgreementsByID(Resource):
     def patch(self, id):
         agreement = RentalAgreement.query.filter(RentalAgreement.id == id).first()
 
+        cart_item_received = CartItem.query.filter(CartItem.id == agreement.cart_item_id).first()
+
+        equipment_status = EquipmentStatus.query.filter(EquipmentStatus.equipment_id == cart_item_received.equipment_id).first()
+
+        previous_state_history = EquipmentStateHistory.query.filter_by(
+        equipment_id=cart_item_received.equipment_id).order_by(EquipmentStateHistory.changed_at.desc()).first()
+
         if agreement:
             data = request.get_json()
             for key in data:
                 setattr(agreement, key, data[key])
             db.session.add(agreement)
             agreement.revisions += 1
+
+            new_equipment_status = EquipmentStatus(
+            equipment_id = cart_item_received.equipment_id,
+            total_quantity = equipment_status.total_quantity,
+            available_quantity = equipment_status.available_quantity,
+            reserved_quantity = equipment_status.available_quantity - cart_item_received,
+            rented_quantity = cart_item_received,
+            maintenance_quantity = 0
+            )
+
+            new_state_history = EquipmentStateHistory(
+            equipment_id = cart_item_received.equipment_id,  # Lawnmower
+            total_quantity = equipment_status.total_quantity,
+            available_quantity = equipment_status.available_quantity,
+            reserved_quantity = equipment_status.available_quantity - cart_item_received,
+            rented_quantity = cart_item_received,
+            previous_state = previous_state_history.new_state,
+            new_state = f'User rented {cart_item_received} item or items',
+            changed_at = datetime.utcnow(),
+            )
+            db.session.commit()
             if agreement.user_decision == 'accept' and agreement.owner_decision == 'accept':
                 agreement.agreement_status = 'Completed'
+                db.session.add(new_equipment_status)
+                db.session.add(new_state_history)
+                db.session.commit()
                 #All Parties Accepted
             elif agreement.user_decision == 'accept' and agreement.owner_decision == 'decline':
                 agreement.agreement_status = 'Owner has DECLINED this agreement'
@@ -1030,7 +1060,8 @@ class RentalAgreementsByID(Resource):
             elif agreement.user_decision == 'decline' and agreement.owner_decision == 'decline':
                 agreement.agreement_status = 'Both Parties Declined'
             elif agreement.user_decision == 'pending' and agreement.owner_decision == 'pending':
-                agreement.agreement_status = 'Pending' 
+                agreement.agreement_status = 'Pending'
+
             db.session.commit()
             # new_rental_agreement is created with an 'in-progress' status. could add another status like 'reserved' for state history
             response = make_response(agreement.to_dict(), 202)
