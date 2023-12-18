@@ -510,24 +510,34 @@ class EquipmentByID(Resource):
                 for key in data:
                     setattr(equipment, key, data[key])
 
-                print('Current Equipments TOTAL quantity:',equipment_status.total_quantity )
+                # print('Current Equipments TOTAL quantity:',equipment_status.total_quantity )
+                # print('Current Equipments AVAILABLE quantity:',equipment_status.available_quantity )
 
-                print('Current Equipments AVAILABLE quantity:',equipment_status.available_quantity )
-                
+                updated_available_quantity = int(data['availableQuantity'])
+                current_total_quantity = int(data['totalQuantity'])
+
+                #Going to write in an if where if you are trying to have 5 available for example, and have a total quantity of 3, it'll just update it to 5 total.
+                if updated_available_quantity > current_total_quantity:
+                    state_total = updated_available_quantity
+                else:
+                    state_total = current_total_quantity
+
+
                 if 'totalQuantity' in data and data['totalQuantity'] is not None:
                     equipment_status.total_quantity = data['totalQuantity']
                 if 'availableQuantity' in data and data['availableQuantity'] is not None:
-                    equipment_status.available_quantity = data['availableQuantity']
+                    equipment_status.available_quantity = updated_available_quantity
+
+                if 'availableQuantity' in data and updated_available_quantity > current_total_quantity:
+                    equipment_status.total_quantity = current_total_quantity
 
                 db.session.add(equipment)
 
-                print('Current Equipments TOTAL quantity:',equipment_status.total_quantity )
+                # print('Current Equipments TOTAL quantity:',equipment_status.total_quantity )
+                # print('Current Equipments AVAILABLE quantity:',equipment_status.available_quantity )
 
-                print('Current Equipments AVAILABLE quantity:',equipment_status.available_quantity )
+                db.session.commit()
 
-                # db.session.commit()
-
-                updated_available_quantity = int(data['availableQuantity'])
                 # print('updated QUANTITY:',updated_quantity)
                 # print(type(updated_quantity))
                 # print('quantity' in data and updated_quantity != previous_quantity)
@@ -548,10 +558,11 @@ class EquipmentByID(Resource):
                     previous_state = 'no_availability' if updated_available_quantity == 0 else 'available'
 
                     print('YOU ARE IN THE PLACE TO POST NEW STATE_HISTORY')
-                
+                    #Going to write in an if where if you are trying to have 5 available for example, and have a total quantity of 3, it'll just update it to 5 total.
+                    #Need to impelement what was implemented above also in here.
                     new_state_history = EquipmentStateHistory(
                     equipment_id = id,  # Lawnmower
-                    total_quantity = previous_state_history.total_quantity,
+                    total_quantity = state_total,
                     available_quantity = updated_available_quantity,
                     reserved_quantity = previous_state_history.reserved_quantity,
                     rented_quantity = previous_state_history.rented_quantity,
