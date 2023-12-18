@@ -227,12 +227,6 @@ class Equipment(db.Model, SerializerMixin):
     # '-agreements.equipment', # REMOVED DUE TO AGREEMENTS BEING TO CART ITEMS
     
     #VALIDATIONS BEGIN HERE
-    # @validates("email")
-    # def validates_email(self, key, email):
-    #     if len(email) > 0 and "@"  in email:
-    #         return email
-    #     else:
-    #         raise ValueError("Please check that you entered your email correctly")
         
     # @validates("quantity")
     # def validates_quanity(self, key, quantity):

@@ -422,6 +422,7 @@ class Equipments(Resource):
             db.session.commit()
 
             # response = make_response(new_equipment.to_dict(), 201)
+            # Since i am also returning state_history, my data object in the front end for ProductForm I needed to make an equipment const. Basically doing const equipment = data.equipment
             response_data = {
                 "equipment": new_equipment.to_dict(),
                 "state_history": new_state_history.to_dict()  # Assuming to_dict() method is defined for state history
@@ -492,20 +493,9 @@ class EquipmentByID(Resource):
     #Patch equipment DONE
     def patch(self, id):
         equipment = Equipment.query.filter(Equipment.id == id).first()
-        equipment_status = EquipmentStatus.query.filter(Equipment.id == id).first()
+        equipment_status = EquipmentStatus.query.filter(equipment.id == id).first()
         previous_quantity = (equipment.status[0].total_quantity)
         print('PREVIOUS QUANTITY:', previous_quantity)
-
-        # if equipment_pricing:
-        #     try:
-        #         if 'hourly_rate' in data and data['hourly_rate'] is not None:
-        #             equipment_pricing.hourly_rate = float(data['hourly_rate']) * 100
-        #         if 'daily_rate' in data and data['daily_rate'] is not None:
-        #             equipment_pricing.daily_rate = float(data['daily_rate']) * 100
-        #         if 'weekly_rate' in data and data['weekly_rate'] is not None:
-        #             equipment_pricing.weekly_rate = float(data['weekly_rate']) * 100
-        #         if 'promo_rate' in data and data['promo_rate'] is not None:
-        #             equipment_pricing.promo_rate = float(data['promo_rate']) * 100
 
         previous_state_history = EquipmentStateHistory.query.filter_by(
         equipment_id=id).order_by(EquipmentStateHistory.changed_at.desc()).first()
@@ -517,16 +507,16 @@ class EquipmentByID(Resource):
                 for key in data:
                     setattr(equipment, key, data[key])
                 
-                if 'total_quantity' in data and data['total_quantity'] is not None:
-                    equipment_status.total_quantity = data['total_quantity']
-                if 'available_quantity' in data and data['available_quantity'] is not None:
-                    equipment_status.available_quantity = data['available_quantity']
+                if 'totalQuantity' in data and data['totalQuantity'] is not None:
+                    equipment_status.total_quantity = data['totalQuantity']
+                if 'availableQuantity' in data and data['availableQuantity'] is not None:
+                    equipment_status.available_quantity = data['availableQuantity']
 
                 db.session.add(equipment)
 
                 # db.session.commit()
 
-                updated_quantity = int(data['quantity'])
+                updated_quantity = int(data['totalQuantity'])
                 # print('updated QUANTITY:',updated_quantity)
                 # print(type(updated_quantity))
                 # print('quantity' in data and updated_quantity != previous_quantity)
@@ -545,16 +535,6 @@ class EquipmentByID(Resource):
                     previous_state = 'no_availability' if updated_quantity == 0 else 'available'
 
                     print('YOU ARE IN THE PLACE TO POST NEW STATE_HISTORY')
-                    # new_state_history = EquipmentStateHistory(
-                    # equipment_id=id,
-                    # previous_quantity=previous_state_history.new_quantity,
-                    # new_quantity=updated_quantity,
-                    # previous_state=previous_state,  # or 'idle' or any other state your system uses
-                    # new_state= updated_new_state,  
-                    # changed_at=datetime.utcnow(),
-                    # )
-                    
-                    # available_quantity = if updated_quantity == 0 else 'available'
                 
                     new_state_history = EquipmentStateHistory(
                     equipment_id = id,  # Lawnmower
@@ -567,15 +547,6 @@ class EquipmentByID(Resource):
                     changed_at = datetime.utcnow(),
                 )
 
-                    # new_equipment_status = EquipmentStatus(
-                    #     equipment_id = equipment.id,
-                    #     current_quantity = data['quantity'],
-                    #     reserved_quantity = 0,
-                    #     maintenance_quantity = 0
-                    # )
-
-                    equipment.status[0].current_quantity = updated_quantity
-
                     print(new_state_history)
 
                     db.session.add(new_state_history)
@@ -585,6 +556,7 @@ class EquipmentByID(Resource):
             except ValueError:
                 return make_response({"error": ["validations errors, check your input and try again"]} , 400)
             except Exception as e:
+                print(f"An unexpected error occurred: {str(e)}")
                 return make_response({"error": f"An unexpected error occurred: {str(e)}"}, 500)
         else:
             response = make_response({

@@ -5,6 +5,7 @@ import {useFormik} from "formik"
 import { object, string, number} from 'yup'
 import ApiUrlContext from "../Api";
 import { UserSessionContext } from "../UserComponents/SessionContext";
+import {toast} from 'react-toastify'
 
 function ProductEditForm({equipmentToEdit, updateEquipment}){
     
@@ -22,13 +23,13 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
     // https://reactrouter.com/en/main/hooks/use-location
     // https://www.educative.io/answers/how-to-use-the-uselocation-hook-in-react
     // https://reactrouter.com/en/main/components/link#state IN PRODUCT DISPLAY
-    console.log(oneEquipment)
+    // I think the react route location stuff I did does not belong here, it seems to be somewhere else too
 
-    console.log("The location stuff:", location.state)
+    console.log("EQUIPMENT TO EDIT",oneEquipment)
 
     const formSchema = object({
         name: string().required('Please enter a name'),
-        quantity: number().positive().required('You cannot list less than 0 items.'),
+        totalQuantity: number().positive().required('You cannot list less than 0 items.'),
         hourly_rate: number().positive().required('Must be a positive dollar amount.'),
         daily_rate: number().positive().required('Must be a positive dollar amount.'),
         weekly_rate: number().positive().required('Must be a positive dollar amount.'),
@@ -44,8 +45,8 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
             location: oneEquipment.location,
             availability: oneEquipment.availability,
             delivery: oneEquipment.delivery,
-            totalQuantity: oneEquipment.status.total_quantity,
-            availableQuantity: oneEquipment.status.available_quantity,
+            totalQuantity: oneEquipment.status[0].total_quantity,
+            availableQuantity: oneEquipment.status[0].available_quantity,
             owner_id: currentUser?.id,
             equipment_image: oneEquipment.equipment_image,
             description: oneEquipment.description,
@@ -66,11 +67,19 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
                 },
                 body: JSON.stringify(values)
             })
+            console.log("I'VE FIRED")
+            console.log("THE VALUES", values)
+
             if (!patchResponse.ok){
               const patchError = await patchResponse.json()
               setError(patchError)
               return 
             }
+            toast.success(`🏗 Succesfully added ${values.make} ${values.name} as a rental equipment.`,
+            {
+              "autoClose" : 2000
+            })
+            
 
             const equipment = await patchResponse.json()
             console.log("THE EQUIPMENT:", equipment)
@@ -93,12 +102,13 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
             })
 
             console.log('I FIRED OFF')
-
+      
             if (!priceResponse.ok) {
               const priceError = await priceResponse.json()
               setError(priceError)
               return
             }
+
 
             if (featureEquipment !== null){
               const featureURL = featureEquipment === true 
@@ -210,13 +220,13 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
         </div>
  
         <div className="sm:col-span-2">
-          <label htmlFor="quantity" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Total Quantity of Equipment </label>
-          <input type="number" name="quantity" value={formik.values.quantity} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+          <label htmlFor="totalQuantity" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Total Quantity of Equipment </label>
+          <input type="number" name="totalQuantity" value={formik.values.totalQuantity} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
         </div>
 
         <div className="sm:col-span-2">
           <label htmlFor="availableQuantity" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Available Quantity </label>
-          <input type="text" name="availableQuantity" value={formik.values.availableQuantity} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+          <input type="number" name="availableQuantity" value={formik.values.availableQuantity} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
         </div>
 
 
