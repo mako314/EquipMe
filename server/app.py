@@ -493,6 +493,7 @@ class EquipmentByID(Resource):
     #Patch equipment DONE
     def patch(self, id):
         equipment = Equipment.query.filter(Equipment.id == id).first()
+
         equipment_status = EquipmentStatus.query.filter(equipment.id == id).first()
         previous_quantity = (equipment.status[0].total_quantity)
         print('PREVIOUS QUANTITY:', previous_quantity)
@@ -551,8 +552,10 @@ class EquipmentByID(Resource):
 
                     db.session.add(new_state_history)
                     db.session.commit()
-                    response = make_response(equipment.to_dict(), 202)
-                    return response
+
+                response = make_response(equipment.to_dict(), 202)
+                return response
+            
             except ValueError:
                 return make_response({"error": ["validations errors, check your input and try again"]} , 400)
             except Exception as e:
@@ -688,11 +691,14 @@ class SetFeaturedEquipment(Resource):
             raise ValueError("You have already featured this equipment")
 
         data = request.get_json()
+        print(data)
         try:
         #need a way to input, owner_id and owner maybe a 2 step process?
             feature_equipment = FeaturedEquipment(
                 equipment_id = data.get('equipment_id'),
             )
+            # data['promo_rate']
+            # data.get('equipment_id')
             db.session.add(feature_equipment)
             db.session.commit()
 

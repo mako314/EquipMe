@@ -19,13 +19,13 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
     const { currentUser, role, checkSession } = UserSessionContext()
     
     // Need some toast notifications
-
+    // STILL NEED TO WRITE THE DELETE
     // https://reactrouter.com/en/main/hooks/use-location
     // https://www.educative.io/answers/how-to-use-the-uselocation-hook-in-react
     // https://reactrouter.com/en/main/components/link#state IN PRODUCT DISPLAY
     // I think the react route location stuff I did does not belong here, it seems to be somewhere else too
 
-    console.log("EQUIPMENT TO EDIT",oneEquipment)
+    // console.log("EQUIPMENT TO EDIT",oneEquipment)
 
     const formSchema = object({
         name: string().required('Please enter a name'),
@@ -75,12 +75,7 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
               setError(patchError)
               return 
             }
-            toast.success(`🏗 Succesfully added ${values.make} ${values.name} as a rental equipment.`,
-            {
-              "autoClose" : 2000
-            })
             
-
             const equipment = await patchResponse.json()
             console.log("THE EQUIPMENT:", equipment)
 
@@ -101,6 +96,12 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
               body: JSON.stringify(pricingData)
             })
 
+            
+
+            // const equip_id = {
+            //   equipment_id: values.equipment_id
+            // }
+
             console.log('I FIRED OFF')
       
             if (!priceResponse.ok) {
@@ -108,8 +109,13 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
               setError(priceError)
               return
             }
+            if (featureEquipment == null){
+            toast.success(`🏗 Succesfully edited ${values.make} ${values.name} rental equipment.`,
+            {
+              "autoClose" : 2000
+            })}
 
-
+            console.log("FEATURED RESPONSE : ", featureEquipment)
             if (featureEquipment !== null){
               const featureURL = featureEquipment === true 
               ? `/feature/equipment/${oneEquipment.id}` 
@@ -129,7 +135,20 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
                 setError(featureError)
                 return
               }
+
+              if (featureEquipment === true){
+              toast.success(`🏗 Succesfully edited  ${equipment.make} ${equipment.name} and set it as a featured equipment.`,
+              {
+                "autoClose" : 2000
+              })
+            } else if (featureEquipment === false){
+                toast.success(`🏗 Succesfully edited ${equipment.make} ${equipment.name} and removed it as a featured equipment.`,
+                {
+                  "autoClose" : 2000
+                })
+              }
             }
+
             checkSession();
             // navigate(`/equipment/${equipment.id}`);
         } catch (error) {
@@ -140,8 +159,9 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
   })
 
 
+    
 
-    console.log(oneEquipment.featured_equipment?.equipment_id === oneEquipment.id)
+    // console.log(oneEquipment.featured_equipment?.equipment_id === oneEquipment.id)
 
     // console.log(oneEquipment.featured_equipment[0].equipment_id)
     // console.log(oneEquipment.id)
