@@ -459,24 +459,28 @@ if __name__ == '__main__':
         equipment_statuses = [
             EquipmentStatus(
                 equipment_id = equipment_list[0].id,
+                total_quantity = 3,
                 available_quantity = 3,
                 reserved_quantity = 0,
                 maintenance_quantity = 0
             ),
            EquipmentStatus(
                 equipment_id = equipment_list[1].id,
+                total_quantity = 2,
                 available_quantity = 2,
                 reserved_quantity = 0,
                 maintenance_quantity = 0
             ),
            EquipmentStatus(
                 equipment_id = equipment_list[2].id,
+                total_quantity = 5,
                 available_quantity = 5,
                 reserved_quantity = 0,
                 maintenance_quantity = 0
             ),
            EquipmentStatus(
                 equipment_id = equipment_list[3].id,
+                total_quantity = 4,
                 available_quantity = 4,
                 reserved_quantity = 0,
                 maintenance_quantity = 0

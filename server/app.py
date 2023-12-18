@@ -355,7 +355,7 @@ class Equipments(Resource):
     #get ALL equipment -- DONE
     def get(self):
         equipment = [equipment.to_dict(
-            only =('id','model','name','make','location', 'type','location','availability','delivery','quantity', 'owner', 'equipment_price', 'equipment_image', 'featured_equipment','cart_item' ) #needed to include all of this for when one patches
+            only =('id','model','name','make','location', 'type','location','availability','delivery', 'owner', 'equipment_price', 'equipment_image', 'featured_equipment','cart_item' ) #needed to include all of this for when one patches
         ) for equipment in Equipment.query.all()]                                       # no longer need phone, email, and owner_name
 
         response = make_response(equipment, 200)
@@ -383,27 +383,33 @@ class Equipments(Resource):
 
             db.session.add(new_equipment)
             db.session.commit()
-
+            # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseInt
+            print(data['totalQuantity'])
+            print(type(data['totalQuantity']))
+            total_quantity = int(data['totalQuantity'])
+            available_quantity = int(data['availableQuantity'])
             new_equipment_status = EquipmentStatus(
                 equipment_id = new_equipment.id,
-                current_quantity = data['quantity'],
+                total_quantity = total_quantity,
+                available_quantity = available_quantity,
                 reserved_quantity = 0,
+                rented_quantity = 0,
                 maintenance_quantity = 0
             )
 
-            new_state_history = EquipmentStateHistory(
-            equipment_id = new_equipment.id,  # Lawnmower
-            previous_quantity = 0,
-            new_quantity = data['quantity'],
-            previous_state = 'non-existing',
-            new_state = 'available',
-            changed_at = datetime.utcnow(),
-            )
+            # new_state_history = EquipmentStateHistory(
+            # equipment_id = new_equipment.id,  # Lawnmower
+            # previous_quantity = data['totalQuantity'],
+            # new_quantity = data['quantity'],
+            # previous_state = 'non-existing',
+            # new_state = 'available',
+            # changed_at = datetime.utcnow(),
+            # )
 
             new_state_history = EquipmentStateHistory(
-                equipment_id = id,  # Lawnmower
-                total_quantity = data['quantity'],
-                available_quantity = data['quantity'],
+                equipment_id = new_equipment.id,  # Lawnmower
+                total_quantity = total_quantity,
+                available_quantity = available_quantity,
                 reserved_quantity = 0,
                 rented_quantity = 0,
                 previous_state = 'non-existing',
@@ -486,8 +492,20 @@ class EquipmentByID(Resource):
     #Patch equipment DONE
     def patch(self, id):
         equipment = Equipment.query.filter(Equipment.id == id).first()
-        previous_quantity = (equipment.status[0].current_quantity)
+        equipment_status = EquipmentStatus.query.filter(Equipment.id == id).first()
+        previous_quantity = (equipment.status[0].total_quantity)
         print('PREVIOUS QUANTITY:', previous_quantity)
+
+        # if equipment_pricing:
+        #     try:
+        #         if 'hourly_rate' in data and data['hourly_rate'] is not None:
+        #             equipment_pricing.hourly_rate = float(data['hourly_rate']) * 100
+        #         if 'daily_rate' in data and data['daily_rate'] is not None:
+        #             equipment_pricing.daily_rate = float(data['daily_rate']) * 100
+        #         if 'weekly_rate' in data and data['weekly_rate'] is not None:
+        #             equipment_pricing.weekly_rate = float(data['weekly_rate']) * 100
+        #         if 'promo_rate' in data and data['promo_rate'] is not None:
+        #             equipment_pricing.promo_rate = float(data['promo_rate']) * 100
 
         previous_state_history = EquipmentStateHistory.query.filter_by(
         equipment_id=id).order_by(EquipmentStateHistory.changed_at.desc()).first()
@@ -495,10 +513,17 @@ class EquipmentByID(Resource):
             try:
                 #going to need try and except if and when we do validations
                 data = request.get_json()
-        
+
                 for key in data:
                     setattr(equipment, key, data[key])
+                
+                if 'total_quantity' in data and data['total_quantity'] is not None:
+                    equipment_status.total_quantity = data['total_quantity']
+                if 'available_quantity' in data and data['available_quantity'] is not None:
+                    equipment_status.available_quantity = data['available_quantity']
+
                 db.session.add(equipment)
+
                 # db.session.commit()
 
                 updated_quantity = int(data['quantity'])
@@ -516,27 +541,31 @@ class EquipmentByID(Resource):
                         updated_new_state = 'added'
                     else:
                         updated_new_state = 'removed'
+                    
+                    previous_state = 'no_availability' if updated_quantity == 0 else 'available'
 
                     print('YOU ARE IN THE PLACE TO POST NEW STATE_HISTORY')
+                    # new_state_history = EquipmentStateHistory(
+                    # equipment_id=id,
+                    # previous_quantity=previous_state_history.new_quantity,
+                    # new_quantity=updated_quantity,
+                    # previous_state=previous_state,  # or 'idle' or any other state your system uses
+                    # new_state= updated_new_state,  
+                    # changed_at=datetime.utcnow(),
+                    # )
+                    
+                    # available_quantity = if updated_quantity == 0 else 'available'
+                
                     new_state_history = EquipmentStateHistory(
-                    equipment_id=id,
-                    previous_quantity=previous_state_history.new_quantity,
-                    new_quantity=updated_quantity,
-                    previous_state='available',  # or 'idle' or any other state your system uses
-                    new_state= updated_new_state,  
-                    changed_at=datetime.utcnow(),
-                    )
-
-                #     new_state_history = EquipmentStateHistory(
-                #     equipment_id = id,  # Lawnmower
-                #     total_quantity = previous_state_history.total_quantity,
-                #     available_quantity = previous_state_history.total_quantity - cart_item_received.quantity,
-                #     reserved_quantity = cart_item_received.quantity,
-                #     rented_quantity = 0,
-                #     previous_state = previous_state_history.new_state,
-                #     new_state = f'User added {cart_item_received.quantity} item or items to their cart, reserved',
-                #     changed_at = datetime.utcnow(),
-                # )
+                    equipment_id = id,  # Lawnmower
+                    total_quantity = previous_state_history.total_quantity,
+                    available_quantity = updated_quantity,
+                    reserved_quantity = previous_state_history.reserved_quantity,
+                    rented_quantity = previous_state_history.rented_quantity,
+                    previous_state = previous_state,
+                    new_state = updated_new_state,
+                    changed_at = datetime.utcnow(),
+                )
 
                     # new_equipment_status = EquipmentStatus(
                     #     equipment_id = equipment.id,

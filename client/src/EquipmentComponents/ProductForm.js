@@ -53,7 +53,8 @@ function ProductForm({ addEquipment }){
 
     const formSchema = object({
         name: string().required('Please enter a name'),
-        quantity: number().positive().required('You cannot list less than 0 items.'),
+        totalQuantity: number().positive().required('You cannot list less than 0 items.'),
+        availableQuantity: number().positive().required('You cannot list less than 0 items.'),
         hourly_rate: number().positive().required('Must be a positive dollar amount.'),
         daily_rate: number().positive().required('Must be a positive dollar amount.'),
         weekly_rate: number().positive().required('Must be a positive dollar amount.'),
@@ -79,7 +80,8 @@ function ProductForm({ addEquipment }){
             location: '',
             availability: '',
             delivery: '',
-            quantity: '',
+            totalQuantity: '',
+            availableQuantity: '',
             owner_id: currentUser?.id,
             equipment_image: '',
             description: '',
@@ -101,8 +103,9 @@ function ProductForm({ addEquipment }){
             })
                 .then(res => {
                     if (res.ok){
-                        res.json().then(equipment => {
-                            console.log(equipment)
+                        res.json().then(data => {
+                            console.log(data)
+                            const equipment = data.equipment
                             const updatedValues = {
                               ...values,
                               equipment_id: equipment.id
@@ -113,6 +116,7 @@ function ProductForm({ addEquipment }){
                           //     equipment_id: equipment.id,
                           //     imageURL: values.imageURL,
                           // }
+                          console.log('THE EQUIPMENT:', equipment)
                             fetch (`${apiUrl}equipment/price` , {
                               method: "POST",
                               headers: {
@@ -252,9 +256,13 @@ function ProductForm({ addEquipment }){
         </div>
  
         <div className="sm:col-span-2">
-          <label htmlFor="quantity" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Quantity of Equipment
-           (placeholder) </label>
-          <input type="text" name="quantity" value={formik.values.quantity} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+          <label htmlFor="totalQuantity" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Total Quantity of Equipment </label>
+          <input type="text" name="totalQuantity" value={formik.values.totalQuantity} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+        </div>
+
+        <div className="sm:col-span-2">
+          <label htmlFor="availableQuantity" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Available Quantity </label>
+          <input type="text" name="availableQuantity" value={formik.values.availableQuantity} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
         </div>
 
 
@@ -467,8 +475,8 @@ export default ProductForm;
 //                     <label>Quantity</label>
 //                     <input
 //                         type="text"
-//                         name="quantity"
-//                         value={formik.values.quantity}
+//                         name="totalQuantity"
+//                         value={formik.values.totalQuantity}
 //                         onChange={formik.handleChange}
 //                     />
 //                     </div>

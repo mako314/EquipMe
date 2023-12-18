@@ -314,6 +314,7 @@ class EquipmentStatus(db.Model, SerializerMixin):
     
     id = db.Column(db.Integer, primary_key=True)
     equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
+    total_quantity = db.Column(db.Integer)
     available_quantity = db.Column(db.Integer)
     reserved_quantity = db.Column(db.Integer, default=0)
     rented_quantity = db.Column(db.Integer, default=0)
