@@ -47,7 +47,7 @@ function ProductForm({ addEquipment }){
     //   }, []);
     
     //   console.log(owner)
-
+    console.log(featureEquipment)
     
 
 
@@ -126,7 +126,7 @@ function ProductForm({ addEquipment }){
                             })
                             .then(res => {
                               if (res.ok){
-                                if(featureEquipment != 'true'){
+                                if(featureEquipment != true){
                                 toast.success(`🏗 Succesfully added ${equipment.make} ${equipment.name} as a rental equipment.`,
                                 {
                                   "autoClose" : 2000
