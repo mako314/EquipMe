@@ -388,14 +388,21 @@ class Equipments(Resource):
             print(type(data['totalQuantity']))
             total_quantity = int(data['totalQuantity'])
             available_quantity = int(data['availableQuantity'])
+
+            if available_quantity > total_quantity:
+                state_total = available_quantity
+            else:
+                state_total = total_quantity
+
             new_equipment_status = EquipmentStatus(
                 equipment_id = new_equipment.id,
-                total_quantity = total_quantity,
+                total_quantity = state_total,
                 available_quantity = available_quantity,
                 reserved_quantity = 0,
                 rented_quantity = 0,
                 maintenance_quantity = 0
             )
+            
 
             # new_state_history = EquipmentStateHistory(
             # equipment_id = new_equipment.id,  # Lawnmower
@@ -406,9 +413,11 @@ class Equipments(Resource):
             # changed_at = datetime.utcnow(),
             # )
 
+            
+
             new_state_history = EquipmentStateHistory(
                 equipment_id = new_equipment.id,  # Lawnmower
-                total_quantity = total_quantity,
+                total_quantity = state_total,
                 available_quantity = available_quantity,
                 reserved_quantity = 0,
                 rented_quantity = 0,
