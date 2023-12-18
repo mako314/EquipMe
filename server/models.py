@@ -227,12 +227,6 @@ class Equipment(db.Model, SerializerMixin):
     # '-agreements.equipment', # REMOVED DUE TO AGREEMENTS BEING TO CART ITEMS
     
     #VALIDATIONS BEGIN HERE
-    # @validates("email")
-    # def validates_email(self, key, email):
-    #     if len(email) > 0 and "@"  in email:
-    #         return email
-    #     else:
-    #         raise ValueError("Please check that you entered your email correctly")
         
     # @validates("quantity")
     # def validates_quanity(self, key, quantity):
@@ -314,6 +308,7 @@ class EquipmentStatus(db.Model, SerializerMixin):
     
     id = db.Column(db.Integer, primary_key=True)
     equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
+    total_quantity = db.Column(db.Integer)
     available_quantity = db.Column(db.Integer)
     reserved_quantity = db.Column(db.Integer, default=0)
     rented_quantity = db.Column(db.Integer, default=0)

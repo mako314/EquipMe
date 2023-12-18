@@ -24,7 +24,7 @@ function DoughnutChart({currentUser, role}) {
     if (Array.isArray(currentUser?.equipment)) {
         currentUser.equipment.forEach(equip => {
             // console.log("each equipment:",equip )
-            totalEquipment += equip.status[0].quantity
+            totalEquipment += equip.status[0]?.total_quantity
         })
     }
     // console.log(totalEquipment)

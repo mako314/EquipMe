@@ -355,7 +355,7 @@ class Equipments(Resource):
     #get ALL equipment -- DONE
     def get(self):
         equipment = [equipment.to_dict(
-            only =('id','model','name','make','location', 'type','location','availability','delivery','quantity', 'owner', 'equipment_price', 'equipment_image', 'featured_equipment','cart_item' ) #needed to include all of this for when one patches
+            only =('id','model','name','make','location', 'type','location','availability','delivery', 'owner', 'equipment_price', 'equipment_image', 'featured_equipment','cart_item' ) #needed to include all of this for when one patches
         ) for equipment in Equipment.query.all()]                                       # no longer need phone, email, and owner_name
 
         response = make_response(equipment, 200)
@@ -383,27 +383,33 @@ class Equipments(Resource):
 
             db.session.add(new_equipment)
             db.session.commit()
-
+            # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseInt
+            print(data['totalQuantity'])
+            print(type(data['totalQuantity']))
+            total_quantity = int(data['totalQuantity'])
+            available_quantity = int(data['availableQuantity'])
             new_equipment_status = EquipmentStatus(
                 equipment_id = new_equipment.id,
-                current_quantity = data['quantity'],
+                total_quantity = total_quantity,
+                available_quantity = available_quantity,
                 reserved_quantity = 0,
+                rented_quantity = 0,
                 maintenance_quantity = 0
             )
 
-            new_state_history = EquipmentStateHistory(
-            equipment_id = new_equipment.id,  # Lawnmower
-            previous_quantity = 0,
-            new_quantity = data['quantity'],
-            previous_state = 'non-existing',
-            new_state = 'available',
-            changed_at = datetime.utcnow(),
-            )
+            # new_state_history = EquipmentStateHistory(
+            # equipment_id = new_equipment.id,  # Lawnmower
+            # previous_quantity = data['totalQuantity'],
+            # new_quantity = data['quantity'],
+            # previous_state = 'non-existing',
+            # new_state = 'available',
+            # changed_at = datetime.utcnow(),
+            # )
 
             new_state_history = EquipmentStateHistory(
-                equipment_id = id,  # Lawnmower
-                total_quantity = data['quantity'],
-                available_quantity = data['quantity'],
+                equipment_id = new_equipment.id,  # Lawnmower
+                total_quantity = total_quantity,
+                available_quantity = available_quantity,
                 reserved_quantity = 0,
                 rented_quantity = 0,
                 previous_state = 'non-existing',
@@ -416,6 +422,7 @@ class Equipments(Resource):
             db.session.commit()
 
             # response = make_response(new_equipment.to_dict(), 201)
+            # Since i am also returning state_history, my data object in the front end for ProductForm I needed to make an equipment const. Basically doing const equipment = data.equipment
             response_data = {
                 "equipment": new_equipment.to_dict(),
                 "state_history": new_state_history.to_dict()  # Assuming to_dict() method is defined for state history
@@ -486,8 +493,12 @@ class EquipmentByID(Resource):
     #Patch equipment DONE
     def patch(self, id):
         equipment = Equipment.query.filter(Equipment.id == id).first()
-        previous_quantity = (equipment.status[0].current_quantity)
+
+        print('THE ID:', id)
+        equipment_status = EquipmentStatus.query.filter(EquipmentStatus.equipment_id == id).first()
+        previous_quantity = (equipment_status.total_quantity)
         print('PREVIOUS QUANTITY:', previous_quantity)
+        print('THE EQUIPMENT STATUS:', equipment_status)
 
         previous_state_history = EquipmentStateHistory.query.filter_by(
         equipment_id=id).order_by(EquipmentStateHistory.changed_at.desc()).first()
@@ -495,13 +506,38 @@ class EquipmentByID(Resource):
             try:
                 #going to need try and except if and when we do validations
                 data = request.get_json()
-        
+
                 for key in data:
                     setattr(equipment, key, data[key])
-                db.session.add(equipment)
-                # db.session.commit()
 
-                updated_quantity = int(data['quantity'])
+                # print('Current Equipments TOTAL quantity:',equipment_status.total_quantity )
+                # print('Current Equipments AVAILABLE quantity:',equipment_status.available_quantity )
+
+                updated_available_quantity = int(data['availableQuantity'])
+                current_total_quantity = int(data['totalQuantity'])
+
+                #Going to write in an if where if you are trying to have 5 available for example, and have a total quantity of 3, it'll just update it to 5 total.
+                if updated_available_quantity > current_total_quantity:
+                    state_total = updated_available_quantity
+                else:
+                    state_total = current_total_quantity
+
+
+                if 'totalQuantity' in data and data['totalQuantity'] is not None:
+                    equipment_status.total_quantity = data['totalQuantity']
+                if 'availableQuantity' in data and data['availableQuantity'] is not None:
+                    equipment_status.available_quantity = updated_available_quantity
+
+                if 'availableQuantity' in data and updated_available_quantity > current_total_quantity:
+                    equipment_status.total_quantity = current_total_quantity
+
+                db.session.add(equipment)
+
+                # print('Current Equipments TOTAL quantity:',equipment_status.total_quantity )
+                # print('Current Equipments AVAILABLE quantity:',equipment_status.available_quantity )
+
+                db.session.commit()
+
                 # print('updated QUANTITY:',updated_quantity)
                 # print(type(updated_quantity))
                 # print('quantity' in data and updated_quantity != previous_quantity)
@@ -510,52 +546,43 @@ class EquipmentByID(Resource):
 
                 # Can not use equipment.quantity, because it gets updated with the patch and the number was the same.
 
-                if 'quantity' in data and updated_quantity != previous_quantity:
+                print('TRUTH TEST:', updated_available_quantity != previous_quantity)
+
+                if 'availableQuantity' in data and updated_available_quantity != previous_quantity:
                     # Add state history before committing the changes to the equipment
-                    if updated_quantity > previous_quantity:
+                    if updated_available_quantity > previous_quantity:
                         updated_new_state = 'added'
                     else:
                         updated_new_state = 'removed'
+                    
+                    previous_state = 'no_availability' if updated_available_quantity == 0 else 'available'
 
                     print('YOU ARE IN THE PLACE TO POST NEW STATE_HISTORY')
+                    #Going to write in an if where if you are trying to have 5 available for example, and have a total quantity of 3, it'll just update it to 5 total.
+                    #Need to impelement what was implemented above also in here.
                     new_state_history = EquipmentStateHistory(
-                    equipment_id=id,
-                    previous_quantity=previous_state_history.new_quantity,
-                    new_quantity=updated_quantity,
-                    previous_state='available',  # or 'idle' or any other state your system uses
-                    new_state= updated_new_state,  
-                    changed_at=datetime.utcnow(),
-                    )
-
-                #     new_state_history = EquipmentStateHistory(
-                #     equipment_id = id,  # Lawnmower
-                #     total_quantity = previous_state_history.total_quantity,
-                #     available_quantity = previous_state_history.total_quantity - cart_item_received.quantity,
-                #     reserved_quantity = cart_item_received.quantity,
-                #     rented_quantity = 0,
-                #     previous_state = previous_state_history.new_state,
-                #     new_state = f'User added {cart_item_received.quantity} item or items to their cart, reserved',
-                #     changed_at = datetime.utcnow(),
-                # )
-
-                    # new_equipment_status = EquipmentStatus(
-                    #     equipment_id = equipment.id,
-                    #     current_quantity = data['quantity'],
-                    #     reserved_quantity = 0,
-                    #     maintenance_quantity = 0
-                    # )
-
-                    equipment.status[0].current_quantity = updated_quantity
+                    equipment_id = id,  # Lawnmower
+                    total_quantity = state_total,
+                    available_quantity = updated_available_quantity,
+                    reserved_quantity = previous_state_history.reserved_quantity,
+                    rented_quantity = previous_state_history.rented_quantity,
+                    previous_state = previous_state,
+                    new_state = updated_new_state,
+                    changed_at = datetime.utcnow(),
+                )
 
                     print(new_state_history)
 
                     db.session.add(new_state_history)
                     db.session.commit()
-                    response = make_response(equipment.to_dict(), 202)
-                    return response
+
+                response = make_response(equipment.to_dict(), 202)
+                return response
+            
             except ValueError:
                 return make_response({"error": ["validations errors, check your input and try again"]} , 400)
             except Exception as e:
+                print(f"An unexpected error occurred: {str(e)}")
                 return make_response({"error": f"An unexpected error occurred: {str(e)}"}, 500)
         else:
             response = make_response({
@@ -687,11 +714,14 @@ class SetFeaturedEquipment(Resource):
             raise ValueError("You have already featured this equipment")
 
         data = request.get_json()
+        # print(data)
         try:
         #need a way to input, owner_id and owner maybe a 2 step process?
             feature_equipment = FeaturedEquipment(
                 equipment_id = data.get('equipment_id'),
             )
+            # data['promo_rate']
+            # data.get('equipment_id')
             db.session.add(feature_equipment)
             db.session.commit()
 
