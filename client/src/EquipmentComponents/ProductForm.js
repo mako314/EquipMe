@@ -102,9 +102,9 @@ function ProductForm({ addEquipment }){
             })
                 .then(res => {
                     if (res.ok){
-                        res.json().then(equipment => {
-                            console.log(equipment)
-                            // const equipment = data.equipment
+                        res.json().then(data => {
+                            console.log(data)
+                            const equipment = data.equipment
                             const updatedValues = {
                               ...values,
                               equipment_id: equipment.id

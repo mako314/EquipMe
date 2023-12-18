@@ -882,10 +882,13 @@ class RentalAgreements(Resource):
         equipment_id=cart_item_received.equipment_id
         ).order_by(EquipmentStateHistory.changed_at.desc()).first()
 
+        equipment_status = EquipmentStatus.query.filter(EquipmentStatus.equipment_id == equipment_id).first()
 
-        if equipment.status[0].current_quantity >= cart_item_received.quantity:
-            equipment.status[0].current_quantity -= cart_item_received.quantity
-            equipment.status[0].reserved_quantity += cart_item_received.quantity
+        print("AMOUNT AVAILABLE:",equipment_status.available_quantity)
+        print("CART ITEMS ASKED:",cart_item_received)
+        if equipment_status.available_quantity >= cart_item_received.quantity:
+            equipment_status.available_quantity -= cart_item_received.quantity
+            equipment_status.reserved_quantity += cart_item_received.quantity
             db.session.commit()  # Commit the changes for both new_item and updated equipment quantity
             # response = make_response(response_data, 201)
             # return response
@@ -1537,6 +1540,9 @@ class AddItemToCart(Resource):
         equipment = Equipment.query.filter(Equipment.id == data['equipment_id']).first()
         equipment_status = EquipmentStatus.query.filter(EquipmentStatus.equipment_id == data['equipment_id']).first()
 
+        previous_state_history = EquipmentStateHistory.query.filter_by(
+        equipment_id=data['equipment_id']).order_by(EquipmentStateHistory.changed_at.desc()).first()
+
         # new_items = [] # Math here, need to add stuff to a list, call function on it, then calculate total. Something is going wrong somewhere. 
         # THE ABOVE MIGHT BEEN FIXED BY READING BELOOOOOOOOOOOOOOOOOOOOOW
 
@@ -1597,14 +1603,14 @@ class AddItemToCart(Resource):
         db.session.add(new_item)
         db.session.commit()
         
-        print("EQUIPMENT QUANTITY WHEN ADDING TO CART", equipment.status[0].current_quantity)
+        print("EQUIPMENT QUANTITY WHEN ADDING TO CART", equipment_status.available_quantity)
         print('AMOUNT TRYING TO BE ADDED', data['quantity'])
-        print(equipment_status.current_quantity > data['quantity'])
+        print(equipment_status.available_quantity > amount_added_to_cart)
 
-        if equipment_status.current_quantity < amount_added_to_cart:
+        if equipment_status.available_quantity < amount_added_to_cart:
             return make_response({'error': 'Not enough equipment available'}, 400)
-        elif equipment_status.current_quantity > amount_added_to_cart:
-            equipment_status.current_quantity -= amount_added_to_cart
+        elif equipment_status.available_quantity > amount_added_to_cart:
+            equipment_status.available_quantity -= amount_added_to_cart
             equipment_status.reserved_quantity += amount_added_to_cart
         
 
@@ -1614,13 +1620,14 @@ class AddItemToCart(Resource):
             available_quantity = equipment_status.available_quantity,
             reserved_quantity = amount_added_to_cart,
             rented_quantity = 0,
-            previous_state = new_state_history.new_state,
+            previous_state = previous_state_history.new_state,
             new_state = f'User added {amount_added_to_cart} item or items to their cart, reserved',
             changed_at = datetime.utcnow(),
         )
         # May need to include this commit back
         # db.session.commit()  # Commit the changes for both new_item and updated equipment quantity
         cart.calculate_total()
+        db.session.add(new_state_history)
         db.session.commit()  # Commit changes after recalculating the total
         response = make_response({'id': new_item.id,'details': new_item.to_dict()}, 201)
         return response
