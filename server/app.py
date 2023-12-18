@@ -494,9 +494,11 @@ class EquipmentByID(Resource):
     def patch(self, id):
         equipment = Equipment.query.filter(Equipment.id == id).first()
 
-        equipment_status = EquipmentStatus.query.filter(equipment.id == id).first()
-        previous_quantity = (equipment.status[0].total_quantity)
+        print('THE ID:', id)
+        equipment_status = EquipmentStatus.query.filter(EquipmentStatus.equipment_id == id).first()
+        previous_quantity = (equipment_status.total_quantity)
         print('PREVIOUS QUANTITY:', previous_quantity)
+        print('THE EQUIPMENT STATUS:', equipment_status)
 
         previous_state_history = EquipmentStateHistory.query.filter_by(
         equipment_id=id).order_by(EquipmentStateHistory.changed_at.desc()).first()
@@ -507,6 +509,10 @@ class EquipmentByID(Resource):
 
                 for key in data:
                     setattr(equipment, key, data[key])
+
+                print('Current Equipments TOTAL quantity:',equipment_status.total_quantity )
+
+                print('Current Equipments AVAILABLE quantity:',equipment_status.available_quantity )
                 
                 if 'totalQuantity' in data and data['totalQuantity'] is not None:
                     equipment_status.total_quantity = data['totalQuantity']
@@ -515,9 +521,13 @@ class EquipmentByID(Resource):
 
                 db.session.add(equipment)
 
+                print('Current Equipments TOTAL quantity:',equipment_status.total_quantity )
+
+                print('Current Equipments AVAILABLE quantity:',equipment_status.available_quantity )
+
                 # db.session.commit()
 
-                updated_quantity = int(data['totalQuantity'])
+                updated_available_quantity = int(data['availableQuantity'])
                 # print('updated QUANTITY:',updated_quantity)
                 # print(type(updated_quantity))
                 # print('quantity' in data and updated_quantity != previous_quantity)
@@ -526,21 +536,23 @@ class EquipmentByID(Resource):
 
                 # Can not use equipment.quantity, because it gets updated with the patch and the number was the same.
 
-                if 'quantity' in data and updated_quantity != previous_quantity:
+                print('TRUTH TEST:', updated_available_quantity != previous_quantity)
+
+                if 'availableQuantity' in data and updated_available_quantity != previous_quantity:
                     # Add state history before committing the changes to the equipment
-                    if updated_quantity > previous_quantity:
+                    if updated_available_quantity > previous_quantity:
                         updated_new_state = 'added'
                     else:
                         updated_new_state = 'removed'
                     
-                    previous_state = 'no_availability' if updated_quantity == 0 else 'available'
+                    previous_state = 'no_availability' if updated_available_quantity == 0 else 'available'
 
                     print('YOU ARE IN THE PLACE TO POST NEW STATE_HISTORY')
                 
                     new_state_history = EquipmentStateHistory(
                     equipment_id = id,  # Lawnmower
                     total_quantity = previous_state_history.total_quantity,
-                    available_quantity = updated_quantity,
+                    available_quantity = updated_available_quantity,
                     reserved_quantity = previous_state_history.reserved_quantity,
                     rented_quantity = previous_state_history.rented_quantity,
                     previous_state = previous_state,
@@ -691,7 +703,7 @@ class SetFeaturedEquipment(Resource):
             raise ValueError("You have already featured this equipment")
 
         data = request.get_json()
-        print(data)
+        # print(data)
         try:
         #need a way to input, owner_id and owner maybe a 2 step process?
             feature_equipment = FeaturedEquipment(

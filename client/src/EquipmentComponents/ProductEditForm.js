@@ -25,8 +25,9 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
     // https://reactrouter.com/en/main/components/link#state IN PRODUCT DISPLAY
     // I think the react route location stuff I did does not belong here, it seems to be somewhere else too
 
-    // console.log("EQUIPMENT TO EDIT",oneEquipment)
-
+    console.log("EQUIPMENT TO EDIT",oneEquipment)
+    console.log("ONE EQUIPMENT ID:", oneEquipment.id)
+    
     const formSchema = object({
         name: string().required('Please enter a name'),
         totalQuantity: number().positive().required('You cannot list less than 0 items.'),
