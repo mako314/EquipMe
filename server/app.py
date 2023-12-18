@@ -413,8 +413,6 @@ class Equipments(Resource):
             # changed_at = datetime.utcnow(),
             # )
 
-            
-
             new_state_history = EquipmentStateHistory(
                 equipment_id = new_equipment.id,  # Lawnmower
                 total_quantity = state_total,
@@ -905,6 +903,15 @@ class RentalAgreements(Resource):
         
         # if is_available_for_date_range(equipment, start_date, end_date) and equipment.quantity > 0:
         #     equipment.quantity -= 1
+
+        new_equipment_status = EquipmentStatus(
+            equipment_id = new_equipment.id,
+            total_quantity = state_total,
+            available_quantity = available_quantity,
+            reserved_quantity = 0,
+            rented_quantity = 0,
+            maintenance_quantity = 0
+        )
 
         #may need a way to write in validations
         new_rental_agreement = RentalAgreement(
@@ -1497,6 +1504,7 @@ class AddItemToCart(Resource):
         # Look for cart and equipment
         cart = Cart.query.filter(Cart.id == cart_id).first()
         equipment = Equipment.query.filter(Equipment.id == data['equipment_id']).first()
+        equipment_status = EquipmentStatus.query.filter(EquipmentStatus.equipment_id == data['equipment_id']).first()
 
         # new_items = [] # Math here, need to add stuff to a list, call function on it, then calculate total. Something is going wrong somewhere. 
         # THE ABOVE MIGHT BEEN FIXED BY READING BELOOOOOOOOOOOOOOOOOOOOOW
@@ -1554,16 +1562,31 @@ class AddItemToCart(Resource):
         # Append item to cart, after adding and comitting, calculcate total if wanting to do a group adding system can do for item in a new list made here, append, then calculate total at the end.
         cart.cart_item.append(new_item)
 
+        amount_added_to_cart = int(data['quantity'])
         db.session.add(new_item)
         db.session.commit()
         
         print("EQUIPMENT QUANTITY WHEN ADDING TO CART", equipment.status[0].current_quantity)
         print('AMOUNT TRYING TO BE ADDED', data['quantity'])
-        print(equipment.status[0].current_quantity > data['quantity'])
+        print(equipment_status.current_quantity > data['quantity'])
 
-        if equipment.status[0].current_quantity < data['quantity']:
+        if equipment_status.current_quantity < amount_added_to_cart:
             return make_response({'error': 'Not enough equipment available'}, 400)
+        elif equipment_status.current_quantity > amount_added_to_cart:
+            equipment_status.current_quantity -= amount_added_to_cart
+            equipment_status.reserved_quantity += amount_added_to_cart
+        
 
+        new_state_history = EquipmentStateHistory(
+            equipment_id = equipment.id,
+            total_quantity = equipment_status.total_quantity,
+            available_quantity = equipment_status.available_quantity,
+            reserved_quantity = amount_added_to_cart,
+            rented_quantity = 0,
+            previous_state = new_state_history.new_state,
+            new_state = f'User added {amount_added_to_cart} item or items to their cart, reserved',
+            changed_at = datetime.utcnow(),
+        )
         # May need to include this commit back
         # db.session.commit()  # Commit the changes for both new_item and updated equipment quantity
         cart.calculate_total()
