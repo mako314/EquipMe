@@ -904,14 +904,14 @@ class RentalAgreements(Resource):
         # if is_available_for_date_range(equipment, start_date, end_date) and equipment.quantity > 0:
         #     equipment.quantity -= 1
 
-        new_equipment_status = EquipmentStatus(
-            equipment_id = new_equipment.id,
-            total_quantity = state_total,
-            available_quantity = available_quantity,
-            reserved_quantity = 0,
-            rented_quantity = 0,
-            maintenance_quantity = 0
-        )
+        # new_equipment_status = EquipmentStatus(
+        #     equipment_id = new_equipment.id,
+        #     total_quantity = state_total,
+        #     available_quantity = available_quantity,
+        #     reserved_quantity = 0,
+        #     rented_quantity = 0,
+        #     maintenance_quantity = 0
+        # )
 
         #may need a way to write in validations
         new_rental_agreement = RentalAgreement(
@@ -943,30 +943,30 @@ class RentalAgreements(Resource):
         #     changed_at = datetime.utcnow(),
         # )
 
-        new_state_history = EquipmentStateHistory(
-            equipment_id = cart_item_received.equipment_id,  # Lawnmower
-            total_quantity = previous_state_history.total_quantity,
-            available_quantity = previous_state_history.total_quantity - cart_item_received.quantity,
-            reserved_quantity = cart_item_received.quantity,
-            rented_quantity = 0,
-            previous_state = previous_state_history.new_state,
-            new_state = f'User added {cart_item_received.quantity} item or items to their cart, reserved',
-            changed_at = datetime.utcnow(),
-        )
+        # new_state_history = EquipmentStateHistory(
+        #     equipment_id = cart_item_received.equipment_id,  # Lawnmower
+        #     total_quantity = previous_state_history.total_quantity,
+        #     available_quantity = previous_state_history.total_quantity - cart_item_received.quantity,
+        #     reserved_quantity = cart_item_received.quantity,
+        #     rented_quantity = 0,
+        #     previous_state = previous_state_history.new_state,
+        #     new_state = f'User added {cart_item_received.quantity} item or items to their cart, reserved',
+        #     changed_at = datetime.utcnow(),
+        # )
 
-        db.session.add(new_state_history)
-        db.session.commit()
+        # db.session.add(new_state_history)
+        # db.session.commit()
 
-        response_data = {
-            "equipment": new_rental_agreement.to_dict(),
-            "state_history": new_state_history.to_dict()  # Assuming to_dict() method is defined for state history
-        }
+        # response_data = {
+        #     "equipment": new_rental_agreement.to_dict(),
+        #     "state_history": new_state_history.to_dict()  # Assuming to_dict() method is defined for state history
+        # }
 
-        response = make_response(response_data, 201)
-        return response
-
-        # response = make_response(new_rental_agreement.to_dict(), 201)
+        # response = make_response(response_data, 201)
         # return response
+
+        response = make_response(new_rental_agreement.to_dict(), 201)
+        return response
 
         # else:
         #     return {"error": "Equipment not available for the requested date range or quantity depleted"}, 400
