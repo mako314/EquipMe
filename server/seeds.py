@@ -839,107 +839,107 @@ if __name__ == '__main__':
 
 #This will be an attempt to write a function that handles creating summaries of state history.
          
-        # print("ATTEMPTING TO CALCULATE MONTHLY STATE SUMMARY")
+        print("ATTEMPTING TO CALCULATE MONTHLY STATE SUMMARY")
 
-        # def calculate_monthly_summaries_for_all_equipment(month, year):
-        #     start_of_month = datetime(year, month, 1)
-        #     end_of_month = datetime(year, month + 1, 1) if month < 12 else datetime(year + 1, 1, 1)
+        def calculate_monthly_summaries_for_all_equipment(month, year):
+            start_of_month = datetime(year, month, 1)
+            end_of_month = datetime(year, month + 1, 1) if month < 12 else datetime(year + 1, 1, 1)
 
-        #     # print('start_of_month', start_of_month)
-        #     # print('end_of_month', end_of_month)
-        #     test_date = datetime(2023, 12, 11)
-        #     # print(start_of_month <= test_date < end_of_month)
-        #     # Fetch unique equipment IDs
-        #     unique_equipment_ids = EquipmentStateHistory.query.with_entities(EquipmentStateHistory.equipment_id).distinct().all()
-        #     # print("UNIQUE EQUIPMENT IDS",unique_equipment_ids)
+            # print('start_of_month', start_of_month)
+            # print('end_of_month', end_of_month)
+            test_date = datetime(2023, 12, 11)
+            # print(start_of_month <= test_date < end_of_month)
+            # Fetch unique equipment IDs
+            unique_equipment_ids = EquipmentStateHistory.query.with_entities(EquipmentStateHistory.equipment_id).distinct().all()
+            # print("UNIQUE EQUIPMENT IDS",unique_equipment_ids)
 
-        #     all_summaries = {}
+            all_summaries = {}
             
-        #     for equipment_id_tuple in unique_equipment_ids:
-        #         equipment_id = equipment_id_tuple[0]  # Extract ID from tuple, as its coming in as a tuple
+            for equipment_id_tuple in unique_equipment_ids:
+                equipment_id = equipment_id_tuple[0]  # Extract ID from tuple, as its coming in as a tuple
 
-        #         # print('THE ID:', equipment_id)
+                # print('THE ID:', equipment_id)
 
-        #         # Fetch the last state before the start of the month for this equipment
-        #         last_state_before_month = EquipmentStateHistory.query.filter(
-        #             EquipmentStateHistory.equipment_id == equipment_id,
-        #             EquipmentStateHistory.changed_at >= start_of_month,
-        #             EquipmentStateHistory.changed_at < end_of_month,
-        #         ).order_by(EquipmentStateHistory.changed_at.desc()).first()
+                # Fetch the last state before the start of the month for this equipment
+                last_state_before_month = EquipmentStateHistory.query.filter(
+                    EquipmentStateHistory.equipment_id == equipment_id,
+                    EquipmentStateHistory.changed_at >= start_of_month,
+                    EquipmentStateHistory.changed_at < end_of_month,
+                ).order_by(EquipmentStateHistory.changed_at.desc()).first()
 
                 
-        #         # print('THE QUERIED OBJECTS:', last_state_before_month)
+                # print('THE QUERIED OBJECTS:', last_state_before_month)
 
-        #         initial_quantity = last_state_before_month.new_quantity if last_state_before_month else 0
+                initial_quantity = last_state_before_month.new_quantity if last_state_before_month else 0
 
-        #         # Fetch all history records within the month for this equipment
-        #         history_records = EquipmentStateHistory.query.filter(
-        #             EquipmentStateHistory.equipment_id == equipment_id,
-        #             EquipmentStateHistory.changed_at >= start_of_month,
-        #             EquipmentStateHistory.changed_at < end_of_month
-        #         ).all()
+                # Fetch all history records within the month for this equipment
+                history_records = EquipmentStateHistory.query.filter(
+                    EquipmentStateHistory.equipment_id == equipment_id,
+                    EquipmentStateHistory.changed_at >= start_of_month,
+                    EquipmentStateHistory.changed_at < end_of_month
+                ).all()
 
-        #         print('HISTORY RECORDS:',history_records)
+                print('HISTORY RECORDS:',history_records)
 
-        #         # Initialize counters
-        #         # https://www.geeksforgeeks.org/defaultdict-in-python/
-        #         summary_data = defaultdict(int, {'total_quantity': initial_quantity})
+                # Initialize counters
+                # https://www.geeksforgeeks.org/defaultdict-in-python/
+                summary_data = defaultdict(int, {'total_quantity': initial_quantity})
 
-        #         for record in history_records:
-        #             # Adjust counts based on the state change
-        #             # Subtracting the new quantity by the previous, if you had 0 as previous, then 10 as new, would start with 10
+                for record in history_records:
+                    # Adjust counts based on the state change
+                    # Subtracting the new quantity by the previous, if you had 0 as previous, then 10 as new, would start with 10
                     
-        #             change_in_quantity =  record.previous_quantity - record.new_quantity
+                    change_in_quantity =  record.previous_quantity - record.new_quantity
 
-        #             print('record.new_quantity', record.new_quantity)
-        #             print('record.previous_quantity', record.previous_quantity)
+                    print('record.new_quantity', record.new_quantity)
+                    print('record.previous_quantity', record.previous_quantity)
                     
-        #             #See if reserved is in the new_state, the field that logs what is happening, if so, do the math of the change in quantity and add it to it, similarly check with all other req fields
-        #             if 'reserved' in record.new_state.lower():
-        #                 change_in_quantity = record.previous_quantity - record.new_quantity
-        #                 summary_data['total_reserved'] += change_in_quantity
-        #                 print('THE CURRENT ENTRY:', record)
-        #                 print(summary_data['total_reserved'])  
-        #                 print('THE QUANTITY CHANGE', change_in_quantity)
-        #             elif 'rented' in record.new_state.lower():
-        #                 change_in_quantity = record.previous_quantity - record.new_quantity
-        #                 summary_data['total_rented_out'] += change_in_quantity
-        #             elif 'added' in record.new_state.lower():
-        #                 summary_data['total_quantity'] += change_in_quantity
-        #             elif 'removed' in record.new_state.lower():
-        #                 summary_data['total_quantity'] -= change_in_quantity
-        #             elif 'cancelled' in record.new_state.lower():
-        #                 summary_data['total_cancelled'] += change_in_quantity
-        #             elif 'maintenance' in record.new_state.lower():
-        #                 summary_data['total_maintenance'] += change_in_quantity
+                    #See if reserved is in the new_state, the field that logs what is happening, if so, do the math of the change in quantity and add it to it, similarly check with all other req fields
+                    if 'reserved' in record.new_state.lower():
+                        change_in_quantity = record.previous_quantity - record.new_quantity
+                        summary_data['total_reserved'] += change_in_quantity
+                        print('THE CURRENT ENTRY:', record)
+                        print(summary_data['total_reserved'])  
+                        print('THE QUANTITY CHANGE', change_in_quantity)
+                    elif 'rented' in record.new_state.lower():
+                        change_in_quantity = record.previous_quantity - record.new_quantity
+                        summary_data['total_rented_out'] += change_in_quantity
+                    elif 'added' in record.new_state.lower():
+                        summary_data['total_quantity'] += change_in_quantity
+                    elif 'removed' in record.new_state.lower():
+                        summary_data['total_quantity'] -= change_in_quantity
+                    elif 'cancelled' in record.new_state.lower():
+                        summary_data['total_cancelled'] += change_in_quantity
+                    elif 'maintenance' in record.new_state.lower():
+                        summary_data['total_maintenance'] += change_in_quantity
 
-        #             # Idle equipment is what remains after accounting for other states
-        #             summary_data['total_idle'] = summary_data['total_quantity'] - summary_data['total_reserved'] - summary_data['total_rented_out'] - summary_data['total_maintenance']
+                    # Idle equipment is what remains after accounting for other states
+                    summary_data['total_idle'] = summary_data['total_quantity'] - summary_data['total_reserved'] - summary_data['total_rented_out'] - summary_data['total_maintenance']
 
-        #         # Create and add summary to database
-        #         new_summary = EquipmentStateSummary(
-        #             equipment_history_id = last_state_before_month.id if last_state_before_month else None,
-        #             date = start_of_month, 
-        #             state = 'summary',  
-        #             total_quantity = summary_data['total_quantity'],
-        #             total_idle = summary_data['total_idle'],
-        #             total_reserved = summary_data['total_reserved'],
-        #             total_rented_out = summary_data['total_rented_out'],
-        #             total_cancelled = summary_data['total_cancelled'],
-        #         )
-        #         db.session.add(new_summary)
+                # Create and add summary to database
+                new_summary = EquipmentStateSummary(
+                    equipment_history_id = last_state_before_month.id if last_state_before_month else None,
+                    date = start_of_month, 
+                    state = 'summary',  
+                    total_quantity = summary_data['total_quantity'],
+                    total_idle = summary_data['total_idle'],
+                    total_reserved = summary_data['total_reserved'],
+                    total_rented_out = summary_data['total_rented_out'],
+                    total_cancelled = summary_data['total_cancelled'],
+                )
+                db.session.add(new_summary)
 
-        #         # Commit all new summaries to database
-        #         db.session.commit()
+                # Commit all new summaries to database
+                db.session.commit()
 
 
-        #         all_summaries[equipment_id] = summary_data
+                all_summaries[equipment_id] = summary_data
 
-        #         # return all_summaries
+                # return all_summaries
 
-        #     # Example usage
-        # summaries_for_month = calculate_monthly_summaries_for_all_equipment(12, 2023)  # For December 2023
-        # print(summaries_for_month)
+            # Example usage
+        summaries_for_month = calculate_monthly_summaries_for_all_equipment(12, 2023)  # For December 2023
+        print(summaries_for_month)
 
 
 

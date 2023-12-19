@@ -39,6 +39,8 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
     // Honestly with currentUser, we can just make this for both users and owners
 
     const { currentUser, role} = UserSessionContext()
+    const apiUrl = useContext(ApiUrlContext)
+
     const [isLoading, setIsLoading] = useState(false)
     const [currentView, setCurrentView] = useState('home')
     const [potentialRentalUsers, setPotentialRentalUsers] = useState([])
@@ -47,25 +49,12 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
     
     const navigate = useNavigate()
     
-    
-    
-    const apiUrl = useContext(ApiUrlContext)
 
     // console.log("USER INFO",currentUser)
     // console.log("USER FAVORITE",currentUser?.user_favorite)
     // console.log("With a role of:", role)
 
     //After a lot of consideration, users will also have a dashboard. Seems friendlier 
-
-    // const {
-    //     email = '',
-    //     firstName = '',
-    //     lastName = '',
-    //     location = '',
-    //     phone = '',
-    //     profession = '',
-    //     profileImg = ''
-    //   } = source || {}
 
     //--------------------user--------
     //----- Variables in the order they appear ----- These are ALL being moved to components shortly.
@@ -79,13 +68,10 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
          equipment = currentUser.equipment
     }
 
-   
-
+    //Owner csv uploading
     const handleCsvClick = (e) => {
         navigate('/temp/bulk_equipment_upload')
     }
-
-
 
     function RentalAgreements() {
         // setPageTitle('Rental Agreements')
@@ -108,14 +94,6 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
             setPageTitle('Potential Owners')
             setIsLoading(false)
             setFromOwnerDash(prevState => !prevState)
-            // const ownerCollection = data.length > 0 ? (
-            //     <OwnerCollection
-            //         key={"dash"}
-            //         searchTerm={searchTerm} 
-            //         equipmentOwnerArray={data} 
-            //         setFromOwnerDash={setFromOwnerDash} 
-            //         fromOwnerDash={fromOwnerDash}/>
-            // ) : <div> currently no Owners signed up with the same profession</div>
         })
     }
 
@@ -258,16 +236,9 @@ function AccountSettings() {
         setCurrentView('Potential Renters')
         setPageTitle('Potential Renters')
         setPotentialRentalUsers(data)
-        // setFromOwnerDash(!fromOwnerDash)
         setFromOwnerDash(prevState => !prevState)
         setIsLoading(false)
-        //can't use potentialRenters as the let, I was having issues with it taking two clicks, having a const like the other function seemed to fix it. It's funny because I built this one first, and then shallow copied it for handlePotentialOwner. Lord.
         // Takes 314ms in network tab for this to load. Going to need a loading indicator :crY:
-        // const updatedPotentialRenters = ( 
-        //     <UserCollection searchTerm={searchTerm} users={data} setFromOwnerDash={setFromOwnerDash} fromOwnerDash={fromOwnerDash}/>
-        // )
-        // const emptyData = <div> loading </div>
-        // setFromOwnerDash(!fromOwnerDash)
         })
     }
 
@@ -354,7 +325,6 @@ function AccountSettings() {
                 return <RentalAgreements />
             case 'Potential Renters':
                 if (isLoading) {
-                    setFromOwnerDash(!fromOwnerDash)
                     return <div>Loading...</div> // Loading indicator
                 }
                 return (
