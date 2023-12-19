@@ -320,6 +320,7 @@ class EquipmentStatus(db.Model, SerializerMixin):
     reserved_quantity = db.Column(db.Integer, default=0)
     rented_quantity = db.Column(db.Integer, default=0)
     maintenance_quantity = db.Column(db.Integer, default=0)
+    transit_quantity = db.Column(db.Integer, default=0)
 
     equipment = db.relationship('Equipment', back_populates='status')
 

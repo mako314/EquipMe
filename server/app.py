@@ -505,7 +505,8 @@ class EquipmentByID(Resource):
         equipment_status = EquipmentStatus.query.filter(EquipmentStatus.equipment_id == id).first()
         previous_quantity = (equipment_status.total_quantity)
         previous_reserved_quantity = (equipment_status.reserved_quantity)
-        
+        previous_available_quantity = (equipment_status.available_quantity)
+
         print('PREVIOUS QUANTITY:', previous_quantity)
         print('THE EQUIPMENT STATUS:', equipment_status)
         print('PATCH RAN')
@@ -563,7 +564,12 @@ class EquipmentByID(Resource):
 
                 if 'availableQuantity' in data and updated_available_quantity != previous_quantity:
                     # Add state history before committing the changes to the equipment
-                    if updated_available_quantity > previous_quantity:
+                    if current_total_quantity > previous_quantity:
+                        updated_new_state = 'added'
+                    else:
+                        updated_new_state = 'removed'
+
+                    if updated_available_quantity > previous_available_quantity:
                         updated_new_state = 'added'
                     else:
                         updated_new_state = 'removed'

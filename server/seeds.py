@@ -463,7 +463,8 @@ if __name__ == '__main__':
                 available_quantity = 3,
                 reserved_quantity = 0,
                 rented_quantity = 0,
-                maintenance_quantity = 0
+                maintenance_quantity = 0,
+                transit_quantity = 0
             ),
            EquipmentStatus(
                 equipment_id = equipment_list[1].id, # Forklift
@@ -471,7 +472,8 @@ if __name__ == '__main__':
                 available_quantity = 2,
                 reserved_quantity = 0,
                 rented_quantity = 0,
-                maintenance_quantity = 0
+                maintenance_quantity = 0,
+                transit_quantity = 0
             ),
            EquipmentStatus(
                 equipment_id = equipment_list[2].id, # Lawnmower
@@ -479,7 +481,8 @@ if __name__ == '__main__':
                 available_quantity = 5,
                 reserved_quantity = 0,
                 rented_quantity = 0,
-                maintenance_quantity = 0
+                maintenance_quantity = 0,
+                transit_quantity = 0
             ),
            EquipmentStatus(
                 equipment_id = equipment_list[3].id, # Tractor
@@ -487,7 +490,8 @@ if __name__ == '__main__':
                 available_quantity = 4,
                 rented_quantity = 0,
                 reserved_quantity = 0,
-                maintenance_quantity = 0
+                maintenance_quantity = 0,
+                transit_quantity = 0
             ),
         ]
 
@@ -504,6 +508,9 @@ if __name__ == '__main__':
             available_quantity = equipment_statuses[0].available_quantity,
             reserved_quantity = 0,
             rented_quantity = 0,
+            maintenance_quantity = 0,
+            transit_quantity = 0,
+            damaged_quantity = 0,
             previous_state = 'non-existing',
             new_state = 'available',
             changed_at = datetime(2023, 12, 11),
@@ -515,6 +522,9 @@ if __name__ == '__main__':
             available_quantity = equipment_statuses[1].available_quantity,
             reserved_quantity = 0,
             rented_quantity = 0,
+            maintenance_quantity = 0,
+            transit_quantity = 0,
+            damaged_quantity = 0,
             previous_state = 'non-existing',
             new_state = 'available',
             changed_at = datetime(2023, 12, 11),
@@ -526,6 +536,9 @@ if __name__ == '__main__':
             available_quantity = equipment_statuses[2].available_quantity,
             reserved_quantity = 0,
             rented_quantity = 0,
+            maintenance_quantity = 0,
+            transit_quantity = 0,
+            damaged_quantity = 0,
             previous_state = 'non-existing',
             new_state = 'available',
             changed_at = datetime(2023, 12, 11),
@@ -537,6 +550,9 @@ if __name__ == '__main__':
             available_quantity = equipment_statuses[3].available_quantity,
             reserved_quantity = 0,
             rented_quantity = 0,
+            maintenance_quantity = 0,
+            transit_quantity = 0,
+            damaged_quantity = 0,
             previous_state = 'non-existing',
             new_state = 'available',
             changed_at = datetime(2023, 12, 11),
@@ -656,6 +672,9 @@ if __name__ == '__main__':
             available_quantity = equipment_state_history_1.total_quantity - cart_items[0].quantity,
             reserved_quantity = cart_items[0].quantity,
             rented_quantity = 0,
+            maintenance_quantity = 0,
+            transit_quantity = 0,
+            damaged_quantity = 0,
             previous_state = equipment_state_history_1.new_state,
             new_state = f'User reserved {cart_items[0].quantity} item or items to their cart',
             changed_at = datetime(2023, 12, 12),
@@ -667,6 +686,9 @@ if __name__ == '__main__':
             available_quantity = equipment_state_history_2.total_quantity - cart_items[1].quantity,
             reserved_quantity = cart_items[1].quantity,
             rented_quantity = 0,
+            maintenance_quantity = 0,
+            transit_quantity = 0,
+            damaged_quantity = 0,
             previous_state = equipment_state_history_2.new_state,
             new_state = f'User reserved {cart_items[1].quantity} item or items to their cart',
             changed_at = datetime(2023, 12, 12),
@@ -678,6 +700,9 @@ if __name__ == '__main__':
             available_quantity = equipment_state_history_3.total_quantity - cart_items[2].quantity,
             reserved_quantity = cart_items[2].quantity,
             rented_quantity = 0,
+            maintenance_quantity = 0,
+            transit_quantity = 0,
+            damaged_quantity = 0,
             previous_state = equipment_state_history_3.new_state,
             new_state = f'User reserved {cart_items[2].quantity} item or items to their cart',
             changed_at = datetime(2023, 12, 12),
@@ -812,6 +837,9 @@ if __name__ == '__main__':
             available_quantity = equipment_state_history_3.total_quantity - cart_items[2].quantity,
             reserved_quantity = equipment_state_history_3.total_quantity - cart_items[2].quantity,
             rented_quantity = cart_items[2].quantity,
+            maintenance_quantity = 0,
+            transit_quantity = 0,
+            damaged_quantity = 0,
             previous_state = equipment_state_history_7.new_state,
             new_state = f'User rented {cart_items[2].quantity} item or items',
             changed_at = datetime(2023, 12, 13),
@@ -870,7 +898,7 @@ if __name__ == '__main__':
                 
                 # print('THE QUERIED OBJECTS:', last_state_before_month)
 
-                initial_quantity = last_state_before_month.new_quantity if last_state_before_month else 0
+                initial_quantity = last_state_before_month.total_quantity if last_state_before_month else 0
 
                 # Fetch all history records within the month for this equipment
                 history_records = EquipmentStateHistory.query.filter(
@@ -883,38 +911,50 @@ if __name__ == '__main__':
 
                 # Initialize counters
                 # https://www.geeksforgeeks.org/defaultdict-in-python/
-                summary_data = defaultdict(int, {'total_quantity': initial_quantity})
+                summary_data = defaultdict(int, {
+                'total_quantity': initial_quantity,
+                'total_idle': initial_quantity,  # Assume all are idle initially
+                'total_reserved': 0,
+                'total_rented_out': 0,
+                'total_maintenance': 0,
+                'total_cancelled': 0,
+                #'total_in_transit': 0,  # Equipment being moved but not available for rent
+                #'total_damaged': 0,     # Equipment that is damaged and not available for use
+                })
 
                 for record in history_records:
                     # Adjust counts based on the state change
                     # Subtracting the new quantity by the previous, if you had 0 as previous, then 10 as new, would start with 10
                     
-                    change_in_quantity =  record.previous_quantity - record.new_quantity
+                    # change_in_quantity =  record.previous_quantity - record.new_quantity
 
-                    print('record.new_quantity', record.new_quantity)
-                    print('record.previous_quantity', record.previous_quantity)
+                    # print('record.new_quantity', record.new_quantity)
+                    # print('record.previous_quantity', record.previous_quantity)
                     
                     #See if reserved is in the new_state, the field that logs what is happening, if so, do the math of the change in quantity and add it to it, similarly check with all other req fields
                     if 'reserved' in record.new_state.lower():
-                        change_in_quantity = record.previous_quantity - record.new_quantity
-                        summary_data['total_reserved'] += change_in_quantity
-                        print('THE CURRENT ENTRY:', record)
-                        print(summary_data['total_reserved'])  
-                        print('THE QUANTITY CHANGE', change_in_quantity)
+                        summary_data['total_reserved'] += record.reserved_quantity
+                        # print('THE CURRENT ENTRY:', record)
+                        # print(summary_data['total_reserved'])  
+                        # print('THE QUANTITY CHANGE', change_in_quantity)
                     elif 'rented' in record.new_state.lower():
-                        change_in_quantity = record.previous_quantity - record.new_quantity
-                        summary_data['total_rented_out'] += change_in_quantity
+                        summary_data['total_rented_out'] +=  record.rented_quantity
                     elif 'added' in record.new_state.lower():
-                        summary_data['total_quantity'] += change_in_quantity
+                        quantity_added = record.total_quantity - summary_data['total_quantity']
+                        summary_data['total_quantity'] += quantity_added
+                        summary_data['total_idle'] += quantity_added  # Assuming added equipment is initially idle
                     elif 'removed' in record.new_state.lower():
-                        summary_data['total_quantity'] -= change_in_quantity
-                    elif 'cancelled' in record.new_state.lower():
-                        summary_data['total_cancelled'] += change_in_quantity
-                    elif 'maintenance' in record.new_state.lower():
-                        summary_data['total_maintenance'] += change_in_quantity
+                        summary_data['total_quantity'] -=  record.total_quantity
+                        summary_data['available_quantity'] -= record.available_quantity
+                    # elif 'cancelled' in record.new_state.lower():
+                    #     summary_data['total_cancelled'] +=  record.
+                    # elif 'maintenance' in record.new_state.lower():
+                    #     summary_data['total_maintenance'] +=  record.
 
                     # Idle equipment is what remains after accounting for other states
                     summary_data['total_idle'] = summary_data['total_quantity'] - summary_data['total_reserved'] - summary_data['total_rented_out'] - summary_data['total_maintenance']
+                    
+                    #summary_data['total_in_transit'] - summary_data['total_damaged']
 
                 # Create and add summary to database
                 new_summary = EquipmentStateSummary(
