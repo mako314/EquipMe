@@ -25,12 +25,16 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
     // https://reactrouter.com/en/main/components/link#state IN PRODUCT DISPLAY
     // I think the react route location stuff I did does not belong here, it seems to be somewhere else too
 
-    console.log("EQUIPMENT TO EDIT",oneEquipment)
-    console.log("ONE EQUIPMENT ID:", oneEquipment.id)
+    // console.log("EQUIPMENT TO EDIT",oneEquipment)
+    // console.log("ONE EQUIPMENT ID:", oneEquipment.id)
+
+    console.log(error)
     
     const formSchema = object({
         name: string().required('Please enter a name'),
-        totalQuantity: number().positive().required('You cannot list less than 0 items.'),
+        totalQuantity: number()
+        .positive('Total Quantity must be a positive number.')
+        .required('Total Quantity is required. You cannot list less than 0 items.'),
         hourly_rate: number().positive().required('Must be a positive dollar amount.'),
         daily_rate: number().positive().required('Must be a positive dollar amount.'),
         weekly_rate: number().positive().required('Must be a positive dollar amount.'),
@@ -73,6 +77,7 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
 
             if (!patchResponse.ok){
               const patchError = await patchResponse.json()
+              console.log(patchError)
               setError(patchError)
               return 
             }
@@ -96,12 +101,6 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
               },
               body: JSON.stringify(pricingData)
             })
-
-            
-
-            // const equip_id = {
-            //   equipment_id: values.equipment_id
-            // }
 
             console.log('I FIRED OFF')
       
@@ -186,7 +185,7 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
          
           <div className="sm:col-span-2">
             {/* display errors from formik/yup */}
-            { formik.errors && Object.values(formik.errors).map(e => <p>{e}</p>) }
+            { formik.errors && Object.values(formik.errors).map(e => <p key={e}>{e}</p>) }
             {/* display errors from backend */}
             {error && <p>{error.message}</p>}
           </div>

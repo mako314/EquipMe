@@ -92,20 +92,20 @@ class CheckSession(Resource):
     def get(self):
         identity = get_jwt_identity() #https://flask-jwt-extended.readthedocs.io/en/stable/api.html#flask_jwt_extended.get_jwt_identity
                                       # I use this to grab the access token identity information.
-        print(identity)
+        # print(identity)
         identity_id = identity['id']  # Extract the ID from the identity object by grabbing the ['id']
         identity_role = identity['role']       # Extract the role from the identity object by grabbing the ['role']
-        print("THE IDENTITY ID",identity_id)
+        # print("THE IDENTITY ID",identity_id)
         if identity_role == 'user':
             user = User.query.get(identity_id)
-            print(user)
+            # print(user)
             if user:
                 return {'role': identity_role, 'details': user.to_dict(rules=('-password_hash',))}, 200
             else:
                 return {'message': 'User not found'}, 404
         elif identity_role == 'owner':
             owner = EquipmentOwner.query.get(identity_id)
-            print(owner)
+            # print(owner)
             if owner:
                 return {'role': identity_role, 'details': owner.to_dict(rules=('-password_hash',))}, 200
             else:
@@ -505,8 +505,10 @@ class EquipmentByID(Resource):
         equipment_status = EquipmentStatus.query.filter(EquipmentStatus.equipment_id == id).first()
         previous_quantity = (equipment_status.total_quantity)
         previous_reserved_quantity = (equipment_status.reserved_quantity)
+        
         print('PREVIOUS QUANTITY:', previous_quantity)
         print('THE EQUIPMENT STATUS:', equipment_status)
+        print('PATCH RAN')
 
         previous_state_history = EquipmentStateHistory.query.filter_by(
         equipment_id=id).order_by(EquipmentStateHistory.changed_at.desc()).first()
@@ -524,6 +526,10 @@ class EquipmentByID(Resource):
                 updated_available_quantity = int(data['availableQuantity'])
                 current_total_quantity = int(data['totalQuantity'])
 
+                if current_total_quantity < previous_reserved_quantity:
+                    print('THE CURRENT TOTAL LESS THAN PREVIOUS RESERVED')
+                    return make_response({"error": "Total quantity cannot be less than reserved quantity"}, 400)
+
                 #Going to write in an if where if you are trying to have 5 available for example, and have a total quantity of 3, it'll just update it to 5 total.
                 if updated_available_quantity > current_total_quantity:
                     state_total = updated_available_quantity
@@ -539,8 +545,6 @@ class EquipmentByID(Resource):
                 if 'availableQuantity' in data and updated_available_quantity > current_total_quantity:
                     equipment_status.total_quantity = updated_available_quantity
 
-                if current_total_quantity < previous_reserved_quantity:
-                    return make_response({"error": "Total quantity cannot be less than reserved quantity"}, 400)
 
                 db.session.add(equipment)
                 db.session.commit()
