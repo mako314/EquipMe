@@ -109,6 +109,7 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
             setCurrentView('Potential Owners')
             setPageTitle('Potential Owners')
             setIsLoading(false)
+            setFromOwnerDash(prevState => !prevState)
             // const ownerCollection = data.length > 0 ? (
             //     <OwnerCollection
             //         key={"dash"}
@@ -117,7 +118,6 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
             //         setFromOwnerDash={setFromOwnerDash} 
             //         fromOwnerDash={fromOwnerDash}/>
             // ) : <div> currently no Owners signed up with the same profession</div>
-            // setToggleHomeDash(ownerCollection)
         })
     }
 
@@ -260,6 +260,8 @@ function AccountSettings() {
         setCurrentView('Potential Renters')
         setPageTitle('Potential Renters')
         setPotentialRentalUsers(data)
+        // setFromOwnerDash(!fromOwnerDash)
+        setFromOwnerDash(prevState => !prevState)
         setIsLoading(false)
         //can't use potentialRenters as the let, I was having issues with it taking two clicks, having a const like the other function seemed to fix it. It's funny because I built this one first, and then shallow copied it for handlePotentialOwner. Lord.
         // Takes 314ms in network tab for this to load. Going to need a loading indicator :crY:
@@ -267,7 +269,6 @@ function AccountSettings() {
         //     <UserCollection searchTerm={searchTerm} users={data} setFromOwnerDash={setFromOwnerDash} fromOwnerDash={fromOwnerDash}/>
         // )
         // const emptyData = <div> loading </div>
-        // setToggleHomeDash(data.length > 0 ? updatedPotentialRenters: emptyData)
         // setFromOwnerDash(!fromOwnerDash)
         })
     }
