@@ -36,12 +36,10 @@ import Page404 from '../../ErrorPageComponents/Page404';
 
 
 function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
-
+    // Honestly with currentUser, we can just make this for both users and owners
 
     const { currentUser, role} = UserSessionContext()
     const [isLoading, setIsLoading] = useState(false)
-    // Honestly with currentUser, we can just make this for both users and owners
-    const [toggleHomeDash, setToggleHomeDash] = useState(<DashHome/>)
     const [currentView, setCurrentView] = useState('home')
     const [potentialRentalUsers, setPotentialRentalUsers] = useState([])
     const [potentialRentalOwners, setPotentialRentalOwners] = useState([])
@@ -418,12 +416,6 @@ function AccountSettings() {
 
                             <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => handleViewClick('Home')}> Home </span>
 
-                            {/* {role === 'owner' ? 
-                            <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<ActiveListings/>)}> Active listings </span> 
-                            : 
-                            <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(
-                            <RentalAgreements/>
-                            )}> Rental Agreements  </span>} */}
                             {role === 'owner' &&
                             <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => handleViewClick('Active Listings')}> Active listings </span>}
                             
@@ -504,23 +496,3 @@ function AccountSettings() {
 }
 
 export default OwnerDashboard
-
-
-
-
-
-{/* <button className="relative text-sm focus:outline-none group">
-<div className="flex items-center justify-between w-full h-16 px-4 border-b border-gray-300 hover:bg-gray-300">
-    <span className="font-medium">
-        Dropdown
-    </span>
-    <svg className="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-    </svg>
-</div>
-<div className="absolute z-10 flex-col items-start hidden w-full pb-1 bg-white shadow-lg group-focus:flex">
-    <span className="w-full px-4 py-2 text-left hover:bg-gray-300" onClick={() => setToggleHomeDash(<AccountSettings/>)}> Account Settings </span>
-    <span className="w-full px-4 py-2 text-left hover:bg-gray-300" > Possible Conversions </span>
-    <span className="w-full px-4 py-2 text-left hover:bg-gray-300" > Graphs </span>
-</div>
-</button> */}
