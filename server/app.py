@@ -504,6 +504,7 @@ class EquipmentByID(Resource):
         print('THE ID:', id)
         equipment_status = EquipmentStatus.query.filter(EquipmentStatus.equipment_id == id).first()
         previous_quantity = (equipment_status.total_quantity)
+        previous_reserved_quantity = (equipment_status.reserved_quantity)
         print('PREVIOUS QUANTITY:', previous_quantity)
         print('THE EQUIPMENT STATUS:', equipment_status)
 
@@ -531,20 +532,21 @@ class EquipmentByID(Resource):
 
 
                 if 'totalQuantity' in data and data['totalQuantity'] is not None:
-                    equipment_status.total_quantity = data['totalQuantity']
+                    equipment_status.total_quantity = current_total_quantity
                 if 'availableQuantity' in data and data['availableQuantity'] is not None:
                     equipment_status.available_quantity = updated_available_quantity
 
                 if 'availableQuantity' in data and updated_available_quantity > current_total_quantity:
-                    equipment_status.total_quantity = current_total_quantity
+                    equipment_status.total_quantity = updated_available_quantity
+
+                if current_total_quantity < previous_reserved_quantity:
+                    return make_response({"error": "Total quantity cannot be less than reserved quantity"}, 400)
 
                 db.session.add(equipment)
+                db.session.commit()
 
                 # print('Current Equipments TOTAL quantity:',equipment_status.total_quantity )
                 # print('Current Equipments AVAILABLE quantity:',equipment_status.available_quantity )
-
-                db.session.commit()
-
                 # print('updated QUANTITY:',updated_quantity)
                 # print(type(updated_quantity))
                 # print('quantity' in data and updated_quantity != previous_quantity)
@@ -1554,13 +1556,11 @@ class AddItemToCart(Resource):
             price_when_added = pricing.promo_rate
         else:
             return make_response({'error': 'Invalid rental period'}, 400)
-        
 #----------------------------------------------------------------------------------------------------------------------------------
         # total_price_cents = (price_cents_at_addition * input_rental_length) * data['quantity']
         # This reads as it was doing the math, calculating how much was there, but then it re-does the math in cart.
         #^ I think this was messing it up, it's getting late now so I will test this more tomorrow
 #----------------------------------------------------------------------------------------------------------------------------------
-
         # print("Your cart is:",cart.cart_name)
         # print("Your equipment is:", equipment)
         # print("Your rental rate:", input_rental_rate)
@@ -1579,12 +1579,7 @@ class AddItemToCart(Resource):
         )
 
         # Append item to cart, after adding and comitting, calculcate total if wanting to do a group adding system can do for item in a new list made here, append, then calculate total at the end.
-        cart.cart_item.append(new_item)
-
         amount_added_to_cart = int(data['quantity'])
-        db.session.add(new_item)
-        db.session.commit()
-        
         print("EQUIPMENT QUANTITY WHEN ADDING TO CART", equipment_status.available_quantity)
         print('AMOUNT TRYING TO BE ADDED', amount_added_to_cart)
         print(equipment_status.available_quantity > amount_added_to_cart)
@@ -1603,11 +1598,13 @@ class AddItemToCart(Resource):
         if equipment_status.available_quantity < amount_added_to_cart:
             return make_response({'error': 'Not enough equipment available'}, 400)
         elif equipment_status.available_quantity >= amount_added_to_cart:
+            cart.cart_item.append(new_item)
+            db.session.add(new_item)
+            db.session.commit()
             equipment_status.available_quantity -= amount_added_to_cart
             equipment_status.reserved_quantity += amount_added_to_cart
-        print('NEW RESERVED QUANTITY', equipment_status.reserved_quantity)
 
-        
+        print('NEW RESERVED QUANTITY', equipment_status.reserved_quantity)
 
         new_state_history = EquipmentStateHistory(
             equipment_id = equipment.id,
