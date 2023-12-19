@@ -44,7 +44,7 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
     const [currentView, setCurrentView] = useState('home')
     const [potentialRentalUsers, setPotentialRentalUsers] = useState([])
     const [potentialRentalOwners, setPotentialRentalOwners] = useState([])
-    const [pageTitle, setPageTitle] = useState('')
+    const [pageTitle, setPageTitle] = useState('Home')
     
     const navigate = useNavigate()
     
@@ -89,7 +89,7 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
 
 
     function RentalAgreements() {
-        setPageTitle('Rental Agreements')
+        // setPageTitle('Rental Agreements')
         fromOwnerDash = true
         console.log("RENTAL AGREEMENTS IN OWNER DASH FROM OWNER DASH:", fromOwnerDash)
         // agreementFiltering={agreementFiltering}
@@ -99,7 +99,7 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
     }
 
     const handlePotentialOwners = () => {
-        setPageTitle('Your Favorites')
+        // setPageTitle('Your Favorites')
         fetch(`${apiUrl}owners/${currentUser?.profession}`)
         .then((resp) => resp.json())
         .then((data) => {
@@ -119,7 +119,7 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
     function UserFavorites() {
         const [selectedFavorite, setSelectedFavorite] = useState('equipment')
 
-        setPageTitle('Your Favorites')
+        // setPageTitle('Your Favorites')
         const handleRadioChange = (event) => {
             setSelectedFavorite(event.target.value)
         }
@@ -195,7 +195,7 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
 
 //-------------------------------------------------------------OWNER CONDITIONAL DATA --------------------------------------------------------------------
 function OwnerFavorites() {
-    setPageTitle('Your Favorites')
+    // setPageTitle('Your Favorites')
     currentUser?.owner_favorite?.map((favorite) =>console.log("THE USER IDS:",favorite?.user.user_id))
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
@@ -221,7 +221,7 @@ function OwnerFavorites() {
 // Need to build out a back to dash button here for owners along with edit functionality 
 function ActiveListings(){
     if (!currentUser) return null
-    setPageTitle('Active Listings')
+    // setPageTitle('Active Listings')
     return(
     <div>
         <ProductCollection equipmentArray={currentUser.equipment}/>
@@ -234,7 +234,7 @@ function ActiveListings(){
 function AccountSettings() {
     if (!currentUser) return null
 
-    setPageTitle('Account Settings')
+    // setPageTitle('Account Settings')
     return (
         <>
             <OwnerEditForm/>
@@ -251,8 +251,9 @@ function AccountSettings() {
     fetch(`${apiUrl}users/${currentUser?.profession}`)
     .then((resp) => resp.json())
     .then((data) => {
-        setPotentialRentalUsers(data)
+        setCurrentView('Potential Renters')
         setPageTitle('Potential Renters')
+        setPotentialRentalUsers(data)
         //can't use potentialRenters as the let, I was having issues with it taking two clicks, having a const like the other function seemed to fix it. It's funny because I built this one first, and then shallow copied it for handlePotentialOwner. Lord.
         // Takes 314ms in network tab for this to load. Going to need a loading indicator :crY:
         const updatedPotentialRenters = (
@@ -342,10 +343,12 @@ function AccountSettings() {
 
     const renderCurrentView = () => {
         switch (currentView) {
-            case 'home':
+            case 'Home':
                 return <DashHome />
-            case 'active listings':
+            case 'Active Listings':
                 return <ActiveListings />
+            case 'Rental Agreements':
+                return <RentalAgreements />
             default:
                 return <DashHome />
         }
@@ -354,7 +357,7 @@ function AccountSettings() {
 
     const handleViewClick = (viewName) => {
         setCurrentView(viewName)
-        setPageTitle(viewName.charAt(0).toUpperCase() + viewName.slice(1)) // Capitalizes the first letter
+        setPageTitle(viewName)
     }
     
 
@@ -379,7 +382,7 @@ function AccountSettings() {
                     {/* Made it a fixed width because it constantly changing sizes was irritating me  */}
                         <div className="flex flex-col w-60 flex-grow p-4 overflow-auto">
 
-                            <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => handleViewClick('home')}> Home </span>
+                            <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => handleViewClick('Home')}> Home </span>
 
                             {/* {role === 'owner' ? 
                             <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<ActiveListings/>)}> Active listings </span> 
@@ -388,10 +391,10 @@ function AccountSettings() {
                             <RentalAgreements/>
                             )}> Rental Agreements  </span>} */}
                             {role === 'owner' &&
-                            <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => handleViewClick('active listings')}> Active listings </span>}
+                            <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => handleViewClick('Active Listings')}> Active listings </span>}
                             
 
-                            <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<RentalAgreements/>)}> Rental Agreements</span> 
+                            <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => handleViewClick('Rental Agreements')}> Rental Agreements</span> 
  
                              <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {
                                 {role === 'owner' ? setToggleHomeDash(<OwnerFavorites/>) : setToggleHomeDash(<UserFavorites/>)} 
