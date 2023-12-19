@@ -413,8 +413,6 @@ class Equipments(Resource):
             # changed_at = datetime.utcnow(),
             # )
 
-            
-
             new_state_history = EquipmentStateHistory(
                 equipment_id = new_equipment.id,  # Lawnmower
                 total_quantity = state_total,
@@ -506,6 +504,7 @@ class EquipmentByID(Resource):
         print('THE ID:', id)
         equipment_status = EquipmentStatus.query.filter(EquipmentStatus.equipment_id == id).first()
         previous_quantity = (equipment_status.total_quantity)
+        previous_reserved_quantity = (equipment_status.reserved_quantity)
         print('PREVIOUS QUANTITY:', previous_quantity)
         print('THE EQUIPMENT STATUS:', equipment_status)
 
@@ -533,20 +532,21 @@ class EquipmentByID(Resource):
 
 
                 if 'totalQuantity' in data and data['totalQuantity'] is not None:
-                    equipment_status.total_quantity = data['totalQuantity']
+                    equipment_status.total_quantity = current_total_quantity
                 if 'availableQuantity' in data and data['availableQuantity'] is not None:
                     equipment_status.available_quantity = updated_available_quantity
 
                 if 'availableQuantity' in data and updated_available_quantity > current_total_quantity:
-                    equipment_status.total_quantity = current_total_quantity
+                    equipment_status.total_quantity = updated_available_quantity
+
+                if current_total_quantity < previous_reserved_quantity:
+                    return make_response({"error": "Total quantity cannot be less than reserved quantity"}, 400)
 
                 db.session.add(equipment)
+                db.session.commit()
 
                 # print('Current Equipments TOTAL quantity:',equipment_status.total_quantity )
                 # print('Current Equipments AVAILABLE quantity:',equipment_status.available_quantity )
-
-                db.session.commit()
-
                 # print('updated QUANTITY:',updated_quantity)
                 # print(type(updated_quantity))
                 # print('quantity' in data and updated_quantity != previous_quantity)
@@ -880,31 +880,25 @@ class RentalAgreements(Resource):
         if not equipment:
             return make_response({"error": "Equipment not found"}, 404)
         
-        previous_state_history = EquipmentStateHistory.query.filter_by(
-        equipment_id=cart_item_received.equipment_id
-        ).order_by(EquipmentStateHistory.changed_at.desc()).first()
+        # previous_state_history = EquipmentStateHistory.query.filter_by(
+        # equipment_id=cart_item_received.equipment_id
+        # ).order_by(EquipmentStateHistory.changed_at.desc()).first()
 
+        # equipment_status = EquipmentStatus.query.filter(EquipmentStatus.equipment_id == equipment_id).first()
 
-        if equipment.status[0].current_quantity >= cart_item_received.quantity:
-            equipment.status[0].current_quantity -= cart_item_received.quantity
-            equipment.status[0].reserved_quantity += cart_item_received.quantity
-            db.session.commit()  # Commit the changes for both new_item and updated equipment quantity
-            # response = make_response(response_data, 201)
-            # return response
-        else:
-            # If not enough equipment quantity, handle error 
-            return make_response({'error': 'Not enough equipment available'}, 400)
-        
-        #need a way to grab equipment and owner
-        # load category and then from there display 
-        #take the input
+        # print("AMOUNT AVAILABLE:",equipment_status.available_quantity)
+        # print("CART ITEMS ASKED:",cart_item_received)
 
-
-        # start_date_object = datetime.strptime(start_date, '%m/%d/%y %H:%M:%S')
-        # end_date_object = datetime.strptime(end_date, '%m/%d/%y %H:%M:%S')
-        
-        # if is_available_for_date_range(equipment, start_date, end_date) and equipment.quantity > 0:
-        #     equipment.quantity -= 1
+        #This block likely just going to the 
+        # if equipment_status.available_quantity >= cart_item_received.quantity:
+        #     equipment_status.available_quantity -= cart_item_received.quantity
+        #     equipment_status.reserved_quantity += cart_item_received.quantity
+        #     db.session.commit()  # Commit the changes for both new_item and updated equipment quantity
+        #     # response = make_response(response_data, 201)
+        #     # return response
+        # else:
+        #     # If not enough equipment quantity, handle error 
+        #     return make_response({'error': 'Not enough equipment available'}, 400)
 
         #may need a way to write in validations
         new_rental_agreement = RentalAgreement(
@@ -936,30 +930,30 @@ class RentalAgreements(Resource):
         #     changed_at = datetime.utcnow(),
         # )
 
-        new_state_history = EquipmentStateHistory(
-            equipment_id = cart_item_received.equipment_id,  # Lawnmower
-            total_quantity = previous_state_history.total_quantity,
-            available_quantity = previous_state_history.total_quantity - cart_item_received.quantity,
-            reserved_quantity = cart_item_received.quantity,
-            rented_quantity = 0,
-            previous_state = previous_state_history.new_state,
-            new_state = f'User added {cart_item_received.quantity} item or items to their cart, reserved',
-            changed_at = datetime.utcnow(),
-        )
+        # new_state_history = EquipmentStateHistory(
+        #     equipment_id = cart_item_received.equipment_id,  # Lawnmower
+        #     total_quantity = previous_state_history.total_quantity,
+        #     available_quantity = previous_state_history.total_quantity - cart_item_received.quantity,
+        #     reserved_quantity = cart_item_received.quantity,
+        #     rented_quantity = 0,
+        #     previous_state = previous_state_history.new_state,
+        #     new_state = f'User added {cart_item_received.quantity} item or items to their cart, reserved',
+        #     changed_at = datetime.utcnow(),
+        # )
 
-        db.session.add(new_state_history)
-        db.session.commit()
+        # db.session.add(new_state_history)
+        # db.session.commit()
 
-        response_data = {
-            "equipment": new_rental_agreement.to_dict(),
-            "state_history": new_state_history.to_dict()  # Assuming to_dict() method is defined for state history
-        }
+        # response_data = {
+        #     "equipment": new_rental_agreement.to_dict(),
+        #     "state_history": new_state_history.to_dict()  # Assuming to_dict() method is defined for state history
+        # }
 
-        response = make_response(response_data, 201)
-        return response
-
-        # response = make_response(new_rental_agreement.to_dict(), 201)
+        # response = make_response(response_data, 201)
         # return response
+
+        response = make_response(new_rental_agreement.to_dict(), 201)
+        return response
 
         # else:
         #     return {"error": "Equipment not available for the requested date range or quantity depleted"}, 400
@@ -990,7 +984,6 @@ class RentalAgreementsByID(Resource):
     #delete a single rental agreement
     def delete(self, id):
         agreement = RentalAgreement.query.filter(RentalAgreement.id == id).first()
-
         if agreement:
             #may need to delete the renter id and equipment id
             db.session.delete(agreement)
@@ -1007,14 +1000,45 @@ class RentalAgreementsByID(Resource):
     def patch(self, id):
         agreement = RentalAgreement.query.filter(RentalAgreement.id == id).first()
 
+        cart_item_received = CartItem.query.filter(CartItem.id == agreement.cart_item_id).first()
+
+        equipment_status = EquipmentStatus.query.filter(EquipmentStatus.equipment_id == cart_item_received.equipment_id).first()
+
+        previous_state_history = EquipmentStateHistory.query.filter_by(
+        equipment_id=cart_item_received.equipment_id).order_by(EquipmentStateHistory.changed_at.desc()).first()
+
         if agreement:
             data = request.get_json()
             for key in data:
                 setattr(agreement, key, data[key])
             db.session.add(agreement)
             agreement.revisions += 1
+
+            new_equipment_status = EquipmentStatus(
+            equipment_id = cart_item_received.equipment_id,
+            total_quantity = equipment_status.total_quantity,
+            available_quantity = equipment_status.available_quantity,
+            reserved_quantity = equipment_status.available_quantity - cart_item_received,
+            rented_quantity = cart_item_received,
+            maintenance_quantity = 0
+            )
+
+            new_state_history = EquipmentStateHistory(
+            equipment_id = cart_item_received.equipment_id,  # Lawnmower
+            total_quantity = equipment_status.total_quantity,
+            available_quantity = equipment_status.available_quantity,
+            reserved_quantity = equipment_status.available_quantity - cart_item_received,
+            rented_quantity = cart_item_received,
+            previous_state = previous_state_history.new_state,
+            new_state = f'User rented {cart_item_received} item or items',
+            changed_at = datetime.utcnow(),
+            )
+            db.session.commit()
             if agreement.user_decision == 'accept' and agreement.owner_decision == 'accept':
                 agreement.agreement_status = 'Completed'
+                db.session.add(new_equipment_status)
+                db.session.add(new_state_history)
+                db.session.commit()
                 #All Parties Accepted
             elif agreement.user_decision == 'accept' and agreement.owner_decision == 'decline':
                 agreement.agreement_status = 'Owner has DECLINED this agreement'
@@ -1023,7 +1047,8 @@ class RentalAgreementsByID(Resource):
             elif agreement.user_decision == 'decline' and agreement.owner_decision == 'decline':
                 agreement.agreement_status = 'Both Parties Declined'
             elif agreement.user_decision == 'pending' and agreement.owner_decision == 'pending':
-                agreement.agreement_status = 'Pending' 
+                agreement.agreement_status = 'Pending'
+
             db.session.commit()
             # new_rental_agreement is created with an 'in-progress' status. could add another status like 'reserved' for state history
             response = make_response(agreement.to_dict(), 202)
@@ -1497,6 +1522,10 @@ class AddItemToCart(Resource):
         # Look for cart and equipment
         cart = Cart.query.filter(Cart.id == cart_id).first()
         equipment = Equipment.query.filter(Equipment.id == data['equipment_id']).first()
+        equipment_status = EquipmentStatus.query.filter(EquipmentStatus.equipment_id == data['equipment_id']).first()
+
+        # previous_state_history = EquipmentStateHistory.query.filter_by(
+        # equipment_id=data['equipment_id']).order_by(EquipmentStateHistory.changed_at.desc()).first()
 
         # new_items = [] # Math here, need to add stuff to a list, call function on it, then calculate total. Something is going wrong somewhere. 
         # THE ABOVE MIGHT BEEN FIXED BY READING BELOOOOOOOOOOOOOOOOOOOOOW
@@ -1527,19 +1556,17 @@ class AddItemToCart(Resource):
             price_when_added = pricing.promo_rate
         else:
             return make_response({'error': 'Invalid rental period'}, 400)
-        
 #----------------------------------------------------------------------------------------------------------------------------------
         # total_price_cents = (price_cents_at_addition * input_rental_length) * data['quantity']
         # This reads as it was doing the math, calculating how much was there, but then it re-does the math in cart.
         #^ I think this was messing it up, it's getting late now so I will test this more tomorrow
 #----------------------------------------------------------------------------------------------------------------------------------
-
-        print("Your cart is:",cart.cart_name)
-        print("Your equipment is:", equipment)
-        print("Your rental rate:", input_rental_rate)
-        print("Your rental length:", input_rental_length)
-        print("Total price in CENTS:", price_when_added)
-        print("QUANTITY OF:", data['quantity'])
+        # print("Your cart is:",cart.cart_name)
+        # print("Your equipment is:", equipment)
+        # print("Your rental rate:", input_rental_rate)
+        # print("Your rental length:", input_rental_length)
+        # print("Total price in CENTS:", price_when_added)
+        # print("QUANTITY OF:", data['quantity'])
 
         #Create new CartItem with price calculated by $ * quantity (ALL IN CENTS)
         new_item = CartItem(
@@ -1552,21 +1579,47 @@ class AddItemToCart(Resource):
         )
 
         # Append item to cart, after adding and comitting, calculcate total if wanting to do a group adding system can do for item in a new list made here, append, then calculate total at the end.
-        cart.cart_item.append(new_item)
+        amount_added_to_cart = int(data['quantity'])
+        print("EQUIPMENT QUANTITY WHEN ADDING TO CART", equipment_status.available_quantity)
+        print('AMOUNT TRYING TO BE ADDED', amount_added_to_cart)
+        print(equipment_status.available_quantity > amount_added_to_cart)
+        print('PREVIOUS RESERVED QUANTITY', equipment_status.reserved_quantity) 
 
-        db.session.add(new_item)
-        db.session.commit()
-        
-        print("EQUIPMENT QUANTITY WHEN ADDING TO CART", equipment.status[0].current_quantity)
-        print('AMOUNT TRYING TO BE ADDED', data['quantity'])
-        print(equipment.status[0].current_quantity > data['quantity'])
+        # if equipment_status.available_quantity >= cart_item_received.quantity:
+        #     equipment_status.available_quantity -= cart_item_received.quantity
+        #     equipment_status.reserved_quantity += cart_item_received.quantity
+        #     db.session.commit()  # Commit the changes for both new_item and updated equipment quantity
+        #     # response = make_response(response_data, 201)
+        #     # return response
+        # else:
+        #     # If not enough equipment quantity, handle error 
+        #     return make_response({'error': 'Not enough equipment available'}, 400)
 
-        if equipment.status[0].current_quantity < data['quantity']:
+        if equipment_status.available_quantity < amount_added_to_cart:
             return make_response({'error': 'Not enough equipment available'}, 400)
+        elif equipment_status.available_quantity >= amount_added_to_cart:
+            cart.cart_item.append(new_item)
+            db.session.add(new_item)
+            db.session.commit()
+            equipment_status.available_quantity -= amount_added_to_cart
+            equipment_status.reserved_quantity += amount_added_to_cart
 
+        print('NEW RESERVED QUANTITY', equipment_status.reserved_quantity)
+
+        new_state_history = EquipmentStateHistory(
+            equipment_id = equipment.id,
+            total_quantity = equipment_status.total_quantity,
+            available_quantity = equipment_status.available_quantity,
+            reserved_quantity = amount_added_to_cart,
+            rented_quantity = 0,
+            previous_state = 'available',
+            new_state = f'User added {amount_added_to_cart} item or items to their cart, reserved',
+            changed_at = datetime.utcnow(),
+        )
         # May need to include this commit back
         # db.session.commit()  # Commit the changes for both new_item and updated equipment quantity
         cart.calculate_total()
+        db.session.add(new_state_history)
         db.session.commit()  # Commit changes after recalculating the total
         response = make_response({'id': new_item.id,'details': new_item.to_dict()}, 201)
         return response
