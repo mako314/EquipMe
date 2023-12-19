@@ -39,6 +39,7 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
 
 
     const { currentUser, role} = UserSessionContext()
+    const [isLoading, setIsLoading] = useState(false)
     // Honestly with currentUser, we can just make this for both users and owners
     const [toggleHomeDash, setToggleHomeDash] = useState(<DashHome/>)
     const [currentView, setCurrentView] = useState('home')
@@ -248,23 +249,25 @@ function AccountSettings() {
 // https://react.dev/learn/synchronizing-with-effects#fetching-data
 // https://store.steampowered.com/points/shop/c/backgrounds/cluster/0/reward/181174
     const handlePotentialRenter = () => {
+    setIsLoading(true)
     fetch(`${apiUrl}users/${currentUser?.profession}`)
     .then((resp) => resp.json())
     .then((data) => {
         setCurrentView('Potential Renters')
         setPageTitle('Potential Renters')
         setPotentialRentalUsers(data)
+        setIsLoading(false)
         //can't use potentialRenters as the let, I was having issues with it taking two clicks, having a const like the other function seemed to fix it. It's funny because I built this one first, and then shallow copied it for handlePotentialOwner. Lord.
         // Takes 314ms in network tab for this to load. Going to need a loading indicator :crY:
-        const updatedPotentialRenters = (
+        // const updatedPotentialRenters = (
             
-            <UserCollection searchTerm={searchTerm} users={data} setFromOwnerDash={setFromOwnerDash} fromOwnerDash={fromOwnerDash}/>
+        //     <UserCollection searchTerm={searchTerm} users={data} setFromOwnerDash={setFromOwnerDash} fromOwnerDash={fromOwnerDash}/>
             
-        )
+        // )
 
-        const emptyData = <div> loading </div>
-        setToggleHomeDash(data.length > 0 ? updatedPotentialRenters: emptyData)
-        setFromOwnerDash(!fromOwnerDash)
+        // const emptyData = <div> loading </div>
+        // setToggleHomeDash(data.length > 0 ? updatedPotentialRenters: emptyData)
+        // setFromOwnerDash(!fromOwnerDash)
         })
     }
 
@@ -349,6 +352,19 @@ function AccountSettings() {
                 return <ActiveListings />
             case 'Rental Agreements':
                 return <RentalAgreements />
+            case 'Potential Renters':
+                if (isLoading) {
+                    setFromOwnerDash(!fromOwnerDash)
+                    return <div>Loading...</div> // Loading indicator
+                }
+                return (
+                    <UserCollection
+                        searchTerm={searchTerm}
+                        users={potentialRentalUsers}
+                        setFromOwnerDash={setFromOwnerDash}
+                        fromOwnerDash={fromOwnerDash}
+                    />
+                )
             default:
                 return <DashHome />
         }
