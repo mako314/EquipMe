@@ -200,7 +200,7 @@ function ProductForm({ addEquipment }){
          
           <div className="sm:col-span-2">
             {/* display errors from formik/yup */}
-            { formik.errors && Object.values(formik.errors).map(e => <p>{e}</p>) }
+            { formik.errors && Object.values(formik.errors).map(e => <p key={e}>{e}</p>) }
             {/* display errors from backend */}
             {error && <p>{error}</p>}
           </div>
