@@ -35,10 +35,10 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
         totalQuantity: number()
         .positive('Total Quantity must be a positive number.')
         .required('Total Quantity is required. You cannot list less than 0 items.'),
-        hourly_rate: number().positive().required('Must be a positive dollar amount.'),
-        daily_rate: number().positive().required('Must be a positive dollar amount.'),
-        weekly_rate: number().positive().required('Must be a positive dollar amount.'),
-        promo_rate: number().positive().required('Must be a positive dollar amount.'),
+        hourly_rate: number().positive().required('Hourly rate must be a positive dollar amount.'),
+        daily_rate: number().positive().required('Daily rate Must be a positive dollar amount.'),
+        weekly_rate: number().positive().required('Weekly rate must be a positive dollar amount.'),
+        promo_rate: number().positive().required('Promo rate Must be a positive dollar amount.'),
     })
 
     const formik = useFormik({
