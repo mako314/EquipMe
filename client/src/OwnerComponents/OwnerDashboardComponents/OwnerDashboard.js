@@ -259,12 +259,9 @@ function AccountSettings() {
         setIsLoading(false)
         //can't use potentialRenters as the let, I was having issues with it taking two clicks, having a const like the other function seemed to fix it. It's funny because I built this one first, and then shallow copied it for handlePotentialOwner. Lord.
         // Takes 314ms in network tab for this to load. Going to need a loading indicator :crY:
-        // const updatedPotentialRenters = (
-            
+        // const updatedPotentialRenters = ( 
         //     <UserCollection searchTerm={searchTerm} users={data} setFromOwnerDash={setFromOwnerDash} fromOwnerDash={fromOwnerDash}/>
-            
         // )
-
         // const emptyData = <div> loading </div>
         // setToggleHomeDash(data.length > 0 ? updatedPotentialRenters: emptyData)
         // setFromOwnerDash(!fromOwnerDash)
@@ -365,6 +362,10 @@ function AccountSettings() {
                         fromOwnerDash={fromOwnerDash}
                     />
                 )
+            case 'Owner Favorites':
+                return <OwnerFavorites/>
+            case 'Account Settings':
+                return <AccountSettings/>
             default:
                 return <DashHome />
         }
@@ -413,7 +414,7 @@ function AccountSettings() {
                             <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => handleViewClick('Rental Agreements')}> Rental Agreements</span> 
  
                              <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => {
-                                {role === 'owner' ? setToggleHomeDash(<OwnerFavorites/>) : setToggleHomeDash(<UserFavorites/>)} 
+                                {role === 'owner' ? handleViewClick('Owner Favorites') : setToggleHomeDash(<UserFavorites/>)} 
                              }}> 
                                 Favorites
                              </span>
@@ -427,7 +428,7 @@ function AccountSettings() {
                             <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={handlePublicProfileNav}> Your Public Profile</span>
 
                             <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" 
-                            onClick={() => setToggleHomeDash(<AccountSettings/>)}
+                             onClick={() => handleViewClick('Account Settings')}
                             > Account Settings </span>
 
                             <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={handleInboxNavigation}
