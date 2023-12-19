@@ -8,6 +8,8 @@ import { UserSessionContext } from "../UserComponents/SessionContext";
 
 function OwnerEditForm(){
 
+    // THIS ALMOST CONFUSED ME, BUT THIS FORM  EDITS BOTH USERS AND OWNERS
+
     //Need a place in the ownerProfile / Display page to allocate for this, still need to build owner signup.
     // Turns out, I can use this for both owner edit and user edit
     // https://avatarfiles.alphacoders.com/352/352560.png
