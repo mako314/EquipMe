@@ -41,6 +41,7 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
     const { currentUser, role} = UserSessionContext()
     // Honestly with currentUser, we can just make this for both users and owners
     const [toggleHomeDash, setToggleHomeDash] = useState(<DashHome/>)
+    const [currentView, setCurrentView] = useState('home')
     const [potentialRentalUsers, setPotentialRentalUsers] = useState([])
     const [potentialRentalOwners, setPotentialRentalOwners] = useState([])
     const [pageTitle, setPageTitle] = useState('')
@@ -286,8 +287,8 @@ function AccountSettings() {
 
     // console.log("CURRENT USER AGREEMENTS:", currentUser?.agreements)
     
-    function DashHome(){
-        setPageTitle('Home')
+    function DashHome() {
+        // setPageTitle('Home')
         return(
             <div>
                 {/* CENTER OF PAGE , BLOCKS AND SUCH  */}
@@ -338,6 +339,23 @@ function AccountSettings() {
     // Two empty divs that was above
     // <div className="h-24 col-span-1 bg-white border border-gray-300"></div>
     // <div className="h-24 col-span-2 bg-white border border-gray-300"></div>
+
+    const renderCurrentView = () => {
+        switch (currentView) {
+            case 'home':
+                return <DashHome />
+            case 'active listings':
+                return <ActiveListings />
+            default:
+                return <DashHome />
+        }
+    }
+    // {renderCurrentView()}
+
+    const handleViewClick = (viewName) => {
+        setCurrentView(viewName)
+        setPageTitle(viewName.charAt(0).toUpperCase() + viewName.slice(1)) // Capitalizes the first letter
+    }
     
 
     function LoggedInDisplay(){
@@ -361,7 +379,7 @@ function AccountSettings() {
                     {/* Made it a fixed width because it constantly changing sizes was irritating me  */}
                         <div className="flex flex-col w-60 flex-grow p-4 overflow-auto">
 
-                            <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<DashHome/>)}> Home </span>
+                            <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => handleViewClick('home')}> Home </span>
 
                             {/* {role === 'owner' ? 
                             <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<ActiveListings/>)}> Active listings </span> 
@@ -370,7 +388,7 @@ function AccountSettings() {
                             <RentalAgreements/>
                             )}> Rental Agreements  </span>} */}
                             {role === 'owner' &&
-                            <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<ActiveListings/>)}> Active listings </span>}
+                            <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => handleViewClick('active listings')}> Active listings </span>}
                             
 
                             <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={() => setToggleHomeDash(<RentalAgreements/>)}> Rental Agreements</span> 
@@ -431,7 +449,7 @@ function AccountSettings() {
                                 </div>
                             </button>
                         </div>
-                        {toggleHomeDash}
+                        {renderCurrentView()}
                     </div>
                     
                     {/* <!-- Component End  --> */}
