@@ -23,8 +23,8 @@ function BarChart({currentUser}){
         })
     }
 
-
     console.log("TOTAL EQUIPMENT:", totalEquipment)
+    // console.log("")
 
     //------------------------BAR CHART--------------------------------------
     // https://codesandbox.io/p/devbox/reactchartjs-react-chartjs-2-vertical-jebqk?file=%2FApp. tsx%3A38%2C1-52%2C3
@@ -50,8 +50,6 @@ function BarChart({currentUser}){
         }
       }
 
-    
-
     // Set basic month names and identify it with the getMonthName function, 
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
@@ -69,45 +67,78 @@ function BarChart({currentUser}){
     // Count agreements per month
     // https://www.w3schools.com/jsref/jsref_reduce.asp
     // https://www.youtube.com/watch?v=XKD0aIA3-yM&list=PLo63gcFIe8o0nnhu0F-PpsTc8nkhNe9yu
-    const countAgreementsByMonth = (data = [], totalEquipment) => {
-        const monthCounts = data.reduce((acc, agreement) => {
+    const countAgreementsByMonth = (data = []) => {
+        const monthCounts = data.reduce((acc, equipment) => {
         // console.log("the agreement in the reducer:", agreement)
         //Send the current month in created_at (the date string or date object really, and have it find the month)
-        const month = getMonthName(agreement?.created_at)
+        // const month = getMonthName(equipment?.created_at)
         // console.log("AGREEMENT CREATED AT:", agreement?.created_at)
 
-        if (!acc[month]) {
-            acc[month] = {
+        equipment.state_history.forEach(history => {
+            // Send the current month in created_at (the date string or date object really, and have it find the month)
+            // console.log("THE FOR EACH HISTORY:", history)
+            const month = getMonthName(history.changed_at)
+            console.log(month)
+            if (!acc[month]) {
+              acc[month] = {
+                totalQuantity: 0,
+                totalIdle: 0,
+                // totalReserved: 0,
+                totalCancelled: 0,
+                totalMaintenanceQuantity: 0,
                 totalRentedOut: 0,
                 totalInCart: 0,
-                totalMonthlyEquipment: 0
+                // totalMonthlyEquipment: 0,
+              }
             }
-        }
+      
+           
+            history.equipment_state_summary.forEach(summary => {
+              console.log("THE FOR EACH summary:", summary)
+              console.log("THE MONTH", acc[month])
+                //console.log()
+              acc[month].totalQuantity = (acc[month].totalQuantity || 0) + summary.totalQuantity
+              acc[month].totalIdle = (acc[month].totalIdle || 0) + summary.total_idle
+            //   acc[month].totalReserved = (acc[month].totalReserved || 0) + summary.totalReserved
+              acc[month].totalCancelled = (acc[month].totalCancelled || 0) + summary.totalCancelled
+              acc[month].totalMaintenanceQuantity = (acc[month].totalMaintenanceQuantity || 0) + summary.totalMaintenanceQuantity
+              acc[month].totalRentedOut = (acc[month].totalRentedOut || 0) + summary.totalRentedOut
+              acc[month].totalInCart = (acc[month].totalInCart || 0) + summary.total_reserved
+            })
+          })
+
+        // if (!acc[month]) {
+        //     acc[month] = {
+        //         totalRentedOut: 0,
+        //         totalInCart: 0,
+        //         totalMonthlyEquipment: 0
+        //     }
+        // }
 
         // If agreement status is completed, it assumes an owner has succesfully rented out the equipment.
-        if (agreement?.agreement_status === 'completed') {
-            acc[month].totalRentedOut += 1
-            // console.log("HOW MANY ARE BEING RENTED OUT:", acc[month].totalRentedOut)
-        }
+        // if (agreement?.agreement_status === 'completed') {
+        //     acc[month].totalRentedOut += 1
+        //     // console.log("HOW MANY ARE BEING RENTED OUT:", acc[month].totalRentedOut)
+        // }
 
         
         // Check if cart_item exists and is an object, then add its quantity 
         // I was having so many issues with not being able to find the quantity, but doing typeof seems to have fixed it.
-        if (agreement?.cart_item && typeof agreement.cart_item === 'object') {
-            acc[month].totalInCart += agreement.cart_item.quantity
-            // console.log("ITEM:", agreement.cart_item)
-            // console.log("ITEM agreement.cart_item.quantity:", agreement.cart_item.quantity)
-        }
+        // if (agreement?.cart_item && typeof agreement.cart_item === 'object') {
+        //     acc[month].totalInCart += agreement.cart_item.quantity
+        //     // console.log("ITEM:", agreement.cart_item)
+        //     // console.log("ITEM agreement.cart_item.quantity:", agreement.cart_item.quantity)
+        // }
 
         // console.log("THE AGREEMENT CART ITEM:", agreement?.cart_item)
         // console.log('TESTING TO SEE HOW MANY ITEMS:', acc[month])
         // console.log("THE TOTAL RENTED OUT PER MONTH:",acc[month].totalRentedOut)
         // console.log("THE TOTAL IN CART  PER MONTH:", acc[month].totalInCart += agreement.cart_item.quantity)
-        if (Array.isArray(agreement.cart_item.equipment)) {
-            console.log("THE EQUIPMENT QUANTITIES: ", agreement.cart_item.equipment.quantity)
-            console.log("MONTHLY TOTAL EQUIPMENT: ", agreement.cart_item.equipment.quantity)
-            acc[month].totalMonthlyEquipment +=  agreement.cart_item.equipment.quantity   
-        }
+        // if (Array.isArray(agreement.cart_item.equipment)) {
+        //     // console.log("THE EQUIPMENT QUANTITIES: ", agreement.cart_item.equipment.quantity)
+        //     // console.log("MONTHLY TOTAL EQUIPMENT: ", agreement.cart_item.equipment.quantity)
+        //     acc[month].totalMonthlyEquipment +=  agreement.cart_item.equipment.quantity   
+        // }
 
         // Update monthly count
         return acc
@@ -116,7 +147,7 @@ function BarChart({currentUser}){
         // Calculate monthly idle equipment and map results
         return Object.keys(monthCounts).map(month => {
         const monthData = monthCounts[month]
-        const totalIdle = monthData.totalMonthlyEquipment - monthData.totalRentedOut - monthData.totalInCart
+        // const totalIdle = monthData.totalMonthlyEquipment - monthData.totalRentedOut - monthData.totalInCart
 
         // const totalIdle = (totalEquipment - monthData.totalRentedOut) - monthData.totalInCart
 
@@ -126,11 +157,15 @@ function BarChart({currentUser}){
         // console.log("Total In Cart for " + month + ":", monthData.totalInCart)
         
         return {
-            month, 
-            rentals: monthData.rentals,
-            cartTotalItems: monthData.totalInCart, 
+            month,
+            allEquipment: monthData.totalQuantity,
+            idleItems: monthData.totalIdle > 0 ? monthData.totalIdle : 0,
+            cartTotalItems: monthData.totalInCart,
+            // reservedEquipment: monthData.totalReserved,
+            cancelledEquipment: monthData.totalCancelled,
+            maintainedEquipment: monthData.totalMaintenanceQuantity,
             rentedOutItems: monthData.totalRentedOut,
-            idleItems: totalIdle > 0 ? totalIdle : 0
+             
         }
         })
     }
@@ -139,11 +174,14 @@ function BarChart({currentUser}){
     // totalIdle = totalEquipment -= totalInCart
 
     // Call the function with data and totalEquipment count
-    const agreementsData = currentUser?.agreements // I HAD AN ARRAY OF AN ARRAY AAAH
-    // console.log("AGREEMENTS DATA:", agreementsData)
+    const equipmentTotalData = currentUser?.equipment // I HAD AN ARRAY OF AN ARRAY AAAH
+    console.log("equipmentTotalData DATA:", equipmentTotalData)
     let barChartLabels
-    let barChartEquipmentRentedOut
+    let barChartAllEquipment
     let barChartEquipmentIdle
+    let barChartCancelledEquipments
+    let barChartMaintainedEquipments
+    let barChartEquipmentRentedOut
     let barChartCartTotalItems
 
     // console.log(barChartEquipmentRentedOut)
@@ -152,18 +190,25 @@ function BarChart({currentUser}){
 
 
 
-    if (agreementsData) {
-        const monthlyData = countAgreementsByMonth(agreementsData, totalEquipment)
+    if (equipmentTotalData) {
+        const monthlyData = countAgreementsByMonth(equipmentTotalData)
 
         // console.log(monthlyData)
-        
         barChartLabels = monthlyData.map(item => item.month)
-        barChartEquipmentRentedOut = monthlyData.map(item => item.rentedOutItems)
-        barChartCartTotalItems = monthlyData.map(item => item.cartTotalItems)
-        barChartEquipmentIdle = monthlyData.map(item => item.idleItems)
-      } else {
+        barChartAllEquipment = monthlyData.map(item => item.totalQuantity)
+        barChartEquipmentIdle = monthlyData.map(item => item.totalIdle)
+        barChartCancelledEquipments = monthlyData.map(item => item.totalCancelled)
+        barChartMaintainedEquipments = monthlyData.map(item => item.totalMaintenanceQuantity)
+        barChartEquipmentRentedOut = monthlyData.map(item => item.totalRentedOut)
+        barChartCartTotalItems = monthlyData.map(item => item.totalInCart)
+
+    } else {
         console.log('Agreements data is undefined')
-      }
+    }
+
+    console.log(barChartAllEquipment)
+
+    
 
     // console.log("TOTAL RENTED OUT:",totalRentedOut)
     // console.log("CURRENT USER AGREEMENTS:", currentUser.agreements)

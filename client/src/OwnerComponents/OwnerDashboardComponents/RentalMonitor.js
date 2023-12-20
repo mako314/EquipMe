@@ -9,8 +9,8 @@ function RentalMonitor({currentUser}){
     let totalRevenue = 0
 
     const handleMonthSelection = (event) => {
-      console.log('Selected value:', event.target.value);
-      setMonthSelection(event.target.value);
+      // console.log('Selected value:', event.target.value)
+      setMonthSelection(event.target.value)
   }
   
     // // console.log("TOTAL EQUIPMENT:", totalEquipment)

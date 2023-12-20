@@ -18,7 +18,7 @@ function HomePage({ equipmentArray, setFeaturedRental }) {
     // const[owner, setOwner] = useContext(OwnerContext)
     const apiUrl = useContext(ApiUrlContext)
 
-    console.log("Home Page User:",currentUser)
+    // console.log("Home Page User:",currentUser)
 
     function handleClick(e) {
         const test_item = equipmentArray?.filter((item) => {

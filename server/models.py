@@ -284,9 +284,9 @@ class EquipmentStateHistory(db.Model, SerializerMixin):
     changed_at = db.Column(db.DateTime, default=datetime.utcnow)
     
     equipment = db.relationship('Equipment', back_populates='state_history')
-    # equipment_state_summary = db.relationship('EquipmentStateSummary', back_populates='state_history')
+    equipment_state_summary = db.relationship('EquipmentStateSummary', back_populates='state_history')
 
-    serialize_rules = ('-equipment.state_history', )
+    serialize_rules = ('-equipment.state_history', '-equipment_state_summary.state_history')
 
 
 class EquipmentStateSummary(db.Model, SerializerMixin):
@@ -297,7 +297,7 @@ class EquipmentStateSummary(db.Model, SerializerMixin):
     date = db.Column(db.Date)
     state = db.Column(db.String)
     total_quantity = db.Column(db.Integer, default=0)
-    total_idle = db.Column(db.Integer, default=0)
+    total_available = db.Column(db.Integer, default=0)
     total_reserved = db.Column(db.Integer, default=0)
     total_rented_out = db.Column(db.Integer, default=0)
     total_cancelled = db.Column(db.Integer, default=0)
@@ -306,9 +306,9 @@ class EquipmentStateSummary(db.Model, SerializerMixin):
 
     # I think adding total available would be redundant, I can just take quantity - reserved / rented out / maintenance
 
-    # state_history = db.relationship('EquipmentStateHistory', back_populates='equipment_state_summary')
+    state_history = db.relationship('EquipmentStateHistory', back_populates='equipment_state_summary')
 
-    # serialize_rules = ('-equipment_state_summary.state_history', )
+    serialize_rules = ('-state_history.equipment_state_summary', )
 
 class EquipmentStatus(db.Model, SerializerMixin):
     __tablename__ = "equipment_status"
