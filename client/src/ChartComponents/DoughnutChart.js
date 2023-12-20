@@ -25,21 +25,22 @@ function DoughnutChart({currentUser, role}) {
         currentUser.equipment.forEach(equip => {
             // console.log("each equipment:",equip )
             totalEquipment += equip.status[0]?.total_quantity
+            itemsInUserCart += equip.status[0]?.reserved_quantity
         })
     }
     // console.log(totalEquipment)
 
     //Handles finding ALL equipment in user carts, found in Cart > Quantity
-    if (Array.isArray(currentUser?.equipment)) {
-        currentUser.equipment.forEach(equip => {
-            if (Array.isArray(equip.cart_item)){
-                equip.cart_item.forEach(cartItem => {
-                    if(cartItem){
-                    itemsInUserCart += cartItem.quantity}
-                })
-            }
-        })
-    }
+    // if (Array.isArray(currentUser?.equipment)) {
+    //     currentUser.equipment.forEach(equip => {
+    //         if (Array.isArray(equip.cart_item)){
+    //             equip.cart_item.forEach(cartItem => {
+    //                 if(cartItem){
+    //                 itemsInUserCart += cartItem.quantity}
+    //             })
+    //         }
+    //     })
+    // }
 
     //Handles finding ALL FAVORITED equipment, found in Equipment > Favorite
     if (Array.isArray(currentUser?.equipment)) {

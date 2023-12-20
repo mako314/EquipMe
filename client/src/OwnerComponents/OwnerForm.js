@@ -93,7 +93,7 @@ function OwnerForm({addOwner}){
         <div className="sm:col-span-2">
           {/* display errors from formik/yup */}
 
-          { formik.errors && Object.values(formik.errors).map(e => <p>{e}</p>) }
+          {formik.errors && Object.entries(formik.errors).map(([field, error]) => <p key={field + error}>{error}</p>)}
           {/* display errors from backend */}
 
           {error && <p>{error}</p>}

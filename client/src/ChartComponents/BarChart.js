@@ -3,6 +3,7 @@ import { Chart as ChartJS, ArcElement, CategoryScale, LinearScale, BarElement, T
 import { Bar } from 'react-chartjs-2';
 
 function BarChart({currentUser}){
+    console.log("CURRENT USER TO LOOK FOR EQUIPMENT STATE SUMMARIES FOR:", currentUser)
     ChartJS.register(
         ArcElement, 
         Tooltip, 
@@ -18,7 +19,7 @@ function BarChart({currentUser}){
     if (Array.isArray(currentUser?.equipment)) {
         currentUser.equipment.forEach(equip => {
             // console.log("each equipment:",equip )
-            totalEquipment += equip.quantity
+            totalEquipment += equip.status[0]?.total_quantity
         })
     }
 

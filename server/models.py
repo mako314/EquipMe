@@ -276,6 +276,9 @@ class EquipmentStateHistory(db.Model, SerializerMixin):
     available_quantity = db.Column(db.Integer)
     reserved_quantity = db.Column(db.Integer, default=0)
     rented_quantity = db.Column(db.Integer, default=0)
+    maintenance_quantity = db.Column(db.Integer, default=0)
+    transit_quantity = db.Column(db.Integer, default=0)
+    damaged_quantity = db.Column(db.Integer, default=0)
     previous_state = db.Column(db.String)
     new_state = db.Column(db.String)
     changed_at = db.Column(db.DateTime, default=datetime.utcnow)
@@ -298,6 +301,10 @@ class EquipmentStateSummary(db.Model, SerializerMixin):
     total_reserved = db.Column(db.Integer, default=0)
     total_rented_out = db.Column(db.Integer, default=0)
     total_cancelled = db.Column(db.Integer, default=0)
+    total_maintenance_quantity = db.Column(db.Integer, default=0)
+    total_transit_quantity = db.Column(db.Integer, default=0)
+
+    # I think adding total available would be redundant, I can just take quantity - reserved / rented out / maintenance
 
     # state_history = db.relationship('EquipmentStateHistory', back_populates='equipment_state_summary')
 
@@ -313,6 +320,7 @@ class EquipmentStatus(db.Model, SerializerMixin):
     reserved_quantity = db.Column(db.Integer, default=0)
     rented_quantity = db.Column(db.Integer, default=0)
     maintenance_quantity = db.Column(db.Integer, default=0)
+    transit_quantity = db.Column(db.Integer, default=0)
 
     equipment = db.relationship('Equipment', back_populates='status')
 

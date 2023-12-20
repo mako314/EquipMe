@@ -400,25 +400,19 @@ class Equipments(Resource):
                 available_quantity = available_quantity,
                 reserved_quantity = 0,
                 rented_quantity = 0,
-                maintenance_quantity = 0
+                maintenance_quantity = 0,
+                transit_quantity = 0
             )
             
-
-            # new_state_history = EquipmentStateHistory(
-            # equipment_id = new_equipment.id,  # Lawnmower
-            # previous_quantity = data['totalQuantity'],
-            # new_quantity = data['quantity'],
-            # previous_state = 'non-existing',
-            # new_state = 'available',
-            # changed_at = datetime.utcnow(),
-            # )
-
             new_state_history = EquipmentStateHistory(
                 equipment_id = new_equipment.id,  # Lawnmower
                 total_quantity = state_total,
                 available_quantity = available_quantity,
                 reserved_quantity = 0,
                 rented_quantity = 0,
+                maintenance_quantity = 0,
+                transit_quantity = 0,
+                damaged_quantity = 0,
                 previous_state = 'non-existing',
                 new_state = 'available',
                 changed_at = datetime.utcnow(),
@@ -505,7 +499,8 @@ class EquipmentByID(Resource):
         equipment_status = EquipmentStatus.query.filter(EquipmentStatus.equipment_id == id).first()
         previous_quantity = (equipment_status.total_quantity)
         previous_reserved_quantity = (equipment_status.reserved_quantity)
-        
+        previous_available_quantity = (equipment_status.available_quantity)
+
         print('PREVIOUS QUANTITY:', previous_quantity)
         print('THE EQUIPMENT STATUS:', equipment_status)
         print('PATCH RAN')
@@ -563,7 +558,12 @@ class EquipmentByID(Resource):
 
                 if 'availableQuantity' in data and updated_available_quantity != previous_quantity:
                     # Add state history before committing the changes to the equipment
-                    if updated_available_quantity > previous_quantity:
+                    if current_total_quantity > previous_quantity:
+                        updated_new_state = 'added'
+                    else:
+                        updated_new_state = 'removed'
+
+                    if updated_available_quantity > previous_available_quantity:
                         updated_new_state = 'added'
                     else:
                         updated_new_state = 'removed'
@@ -579,6 +579,9 @@ class EquipmentByID(Resource):
                     available_quantity = updated_available_quantity,
                     reserved_quantity = previous_state_history.reserved_quantity,
                     rented_quantity = previous_state_history.rented_quantity,
+                    maintenance_quantity = 0,
+                    transit_quantity = 0,
+                    damaged_quantity = 0,
                     previous_state = previous_state,
                     new_state = updated_new_state,
                     changed_at = datetime.utcnow(),
@@ -927,15 +930,6 @@ class RentalAgreements(Resource):
 
         # new_state_history = EquipmentStateHistory(
         #     equipment_id = cart_item_received.equipment_id,  # Lawnmower
-        #     previous_quantity = previous_state_history.new_quantity,
-        #     new_quantity = previous_state_history.new_quantity - cart_item_received.quantity,
-        #     previous_state = 'available',
-        #     new_state = f'User added {cart_item_received.quantity} item or items to their cart, reserved',
-        #     changed_at = datetime.utcnow(),
-        # )
-
-        # new_state_history = EquipmentStateHistory(
-        #     equipment_id = cart_item_received.equipment_id,  # Lawnmower
         #     total_quantity = previous_state_history.total_quantity,
         #     available_quantity = previous_state_history.total_quantity - cart_item_received.quantity,
         #     reserved_quantity = cart_item_received.quantity,
@@ -1024,7 +1018,8 @@ class RentalAgreementsByID(Resource):
             available_quantity = equipment_status.available_quantity,
             reserved_quantity = equipment_status.available_quantity - cart_item_received,
             rented_quantity = cart_item_received,
-            maintenance_quantity = 0
+            maintenance_quantity = 0,
+            transit_quantity = 0
             )
 
             new_state_history = EquipmentStateHistory(
@@ -1033,6 +1028,9 @@ class RentalAgreementsByID(Resource):
             available_quantity = equipment_status.available_quantity,
             reserved_quantity = equipment_status.available_quantity - cart_item_received,
             rented_quantity = cart_item_received,
+            maintenance_quantity = 0,
+            transit_quantity = 0,
+            damaged_quantity = 0,
             previous_state = previous_state_history.new_state,
             new_state = f'User rented {cart_item_received} item or items',
             changed_at = datetime.utcnow(),
@@ -1528,8 +1526,8 @@ class AddItemToCart(Resource):
         equipment = Equipment.query.filter(Equipment.id == data['equipment_id']).first()
         equipment_status = EquipmentStatus.query.filter(EquipmentStatus.equipment_id == data['equipment_id']).first()
 
-        # previous_state_history = EquipmentStateHistory.query.filter_by(
-        # equipment_id=data['equipment_id']).order_by(EquipmentStateHistory.changed_at.desc()).first()
+        previous_state_history = EquipmentStateHistory.query.filter_by(
+        equipment_id=data['equipment_id']).order_by(EquipmentStateHistory.changed_at.desc()).first()
 
         # new_items = [] # Math here, need to add stuff to a list, call function on it, then calculate total. Something is going wrong somewhere. 
         # THE ABOVE MIGHT BEEN FIXED BY READING BELOOOOOOOOOOOOOOOOOOOOOW
@@ -1616,10 +1614,16 @@ class AddItemToCart(Resource):
             available_quantity = equipment_status.available_quantity,
             reserved_quantity = amount_added_to_cart,
             rented_quantity = 0,
-            previous_state = 'available',
+            maintenance_quantity = 0,
+            transit_quantity = 0,
+            damaged_quantity = 0,
+            previous_state = previous_state_history.new_state,
             new_state = f'User added {amount_added_to_cart} item or items to their cart, reserved',
             changed_at = datetime.utcnow(),
         )
+
+        # Previous State used to be just 'available'
+
         # May need to include this commit back
         # db.session.commit()  # Commit the changes for both new_item and updated equipment quantity
         cart.calculate_total()
