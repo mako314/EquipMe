@@ -294,6 +294,7 @@ class EquipmentStateSummary(db.Model, SerializerMixin):
     
     id = db.Column(db.Integer, primary_key=True)
     equipment_history_id = db.Column(db.Integer, db.ForeignKey('equipment_state_history.id'))
+    equipment_id = db.Column(db.Integer, db.ForeignKey('equipment.id'))
     date = db.Column(db.Date)
     state = db.Column(db.String)
     total_quantity = db.Column(db.Integer, default=0)

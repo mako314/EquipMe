@@ -1140,10 +1140,26 @@ if __name__ == '__main__':
         )
         ]
 
+        one_rented_8_added = EquipmentStateHistory(
+            equipment_id = cart_items[2].equipment_id,  # Lawnmower
+            total_quantity = cart_item_equipment_state_histories[2].total_quantity + 8,
+            available_quantity = cart_item_equipment_state_histories[2].available_quantity + 8,
+            reserved_quantity = rental_agreements_state_history[0].reserved_quantity,
+            rented_quantity = cart_items[2].quantity,
+            maintenance_quantity = 0,
+            transit_quantity = 0,
+            damaged_quantity = 0,
+            previous_state = rental_agreements_state_history[0].new_state,
+            new_state = f'Owner added {8} items or item',
+            changed_at = datetime(2023, 12, 13),
+        )
+
         print('READ THIS PRINT:', cart_item_equipment_state_histories[4].total_quantity - cart_items[4].quantity)
 
         # db.session.add_all([equipment_state_history_8,])
         db.session.add_all(rental_agreements_state_history,)
+        db.session.add(one_rented_8_added)
+        
         db.session.commit()
 
         equipment_statuses[2].rented_quantity += rental_agreements_state_history[0].rented_quantity
@@ -1305,7 +1321,7 @@ if __name__ == '__main__':
                 if equipment_id not in all_summaries:
                     # Initialize summary data for new equipment
                     all_summaries[equipment_id] = defaultdict(int, {
-                        'total_quantity': 0,
+                        'total_quantity': 0,    
                         'total_available': 0,
                         'total_reserved': 0,
                         'total_rented_out': 0,
