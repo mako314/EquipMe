@@ -97,12 +97,12 @@ function DoughnutChart({currentUser, role}) {
     // https://stackoverflow.com/questions/59325426/how-to-resize-chart-js-element-in-react-js
     // https://stackoverflow.com/questions/53872165/cant-resize-react-chartjs-2-doughnut-chart
     let doughnutData = {
-        labels: ['All Equipment', 'In Renter Carts', 'Favorited By Renters', 'Featured Equipment', 'Equipment Pending Agreement', 'Equipment Rented Out'],
+        labels: ['All Equipment','Favorited By Renters', 'Featured Equipment', 'Equipment Pending Agreement', 'In Renter Carts', 'Equipment Rented Out'],
         datasets: [
           {
             label: '# of Equipment',
             //Data is just x data for what I'd like, total equipment all, itemsInUserCart etc all captured with ifs above.
-            data: [totalEquipment, itemsInUserCart, totalFavorites, totalFeaturedEquipment, totalPendingAgreements, totalCompletedAgreements],
+            data: [totalEquipment,  totalFavorites, totalFeaturedEquipment, totalPendingAgreements, itemsInUserCart, totalCompletedAgreements],
             backgroundColor: [
               'rgba(255, 99, 132, 0.2)',
               'rgba(75, 181, 67, 0.5)',

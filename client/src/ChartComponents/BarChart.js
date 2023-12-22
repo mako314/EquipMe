@@ -98,6 +98,7 @@ function BarChart({currentUser}){
 
             console.log("THE MONTH:", acc[month])
             console.log("THE TOTAL QUANTITY COUNT:", acc[month])
+
             acc[month].totalIdle = (acc[month].totalIdle || 0) + summary.total_quantity - summary.total_available
 
             acc[month].totalReserved = (acc[month].totalReserved || 0) + summary.total_reserved
@@ -149,13 +150,6 @@ function BarChart({currentUser}){
     // Call the function with data and totalEquipment count
     const equipmentTotalData = currentUser?.equipment // I HAD AN ARRAY OF AN ARRAY AAAH
     // console.log("equipmentTotalData DATA:", equipmentTotalData)
-    let barChartLabels
-    let barChartAllEquipment
-    let barChartEquipmentIdle
-    let barChartCancelledEquipments
-    let barChartMaintainedEquipments
-    let barChartEquipmentRentedOut
-    let barChartCartTotalItems
     let barChartdata
 
     if (equipmentTotalData) {
@@ -167,80 +161,51 @@ function BarChart({currentUser}){
               {
                   label: 'Total Equipment',
                   data: monthlyData.map(item => item.allEquipment),
-                  backgroundColor: 'rgba(53, 162, 235, 0.5)',
-                  borderColor: 'rgba(25, 99, 201, 1)', // Deeper blue
-                  borderWidth: 2, // Border width for this dataset
+                  backgroundColor: 'rgba(255, 99, 132, 0.2)', // Pink
+                  borderColor: 'rgba(255, 64, 129, 1)', // Deeper pink
+                  borderWidth: 2, // Border width dataset
               },
               {
                   label: 'Idle Items',
                   data: monthlyData.map(item => item.idleItems),
-                  backgroundColor: 'rgba(53, 162, 235, 0.5)',
+                  backgroundColor: 'rgba(53, 162, 235, 0.5)', // Blue
                   borderColor: 'rgba(25, 99, 201, 1)', // Deeper blue
-                  borderWidth: 2, // Border width for this dataset
+                  borderWidth: 2,
+              },
+              {
+                label: 'Rented Out',
+                data: monthlyData.map(item => item.rentedOutItems),
+                backgroundColor: 'rgba(75, 181, 67, 0.5)', // Green
+                borderColor: 'rgba(34, 139, 34, 1)', // Deeper green
+                borderWidth: 2,
+              },
+              {
+                label: 'In Carts',
+                data: monthlyData.map(item => item.cartTotalItems),
+                backgroundColor: 'rgba(255, 159, 64, 0.2)', // Green
+                borderColor: 'rgba(255, 159, 64, 1)', // Deeper green
+                borderWidth: 2,
+              },
+              {
+                label: 'Maintained Equipment (Repairs, Cleaning, ETC.)',
+                data: monthlyData.map(item => item.maintainedEquipment),
+                backgroundColor: 'rgba(255, 165, 0, 0.5)', // Orange
+                borderColor: 'rgba(255, 140, 0, 1)', // Darker Orange
+                borderWidth: 2,
+              },
+              {
+                label: 'Cancelled',
+                data: monthlyData.map(item => item.cancelledEquipment),
+                backgroundColor: 'rgba(128, 128, 128, 0.5)', // Gray
+                borderColor: 'rgba(105, 105, 105, 1)', // Darker Gray
+                borderWidth: 2,
               },
              
           ],
-      }
-
-
-        // console.log(monthlyData)
-        // barChartLabels = monthlyData.map(item => item.month)
-        // barChartAllEquipment = monthlyData.map(item => item.totalQuantity)
-        // barChartEquipmentIdle = monthlyData.map(item => item.totalIdle)
-        // barChartCancelledEquipments = monthlyData.map(item => item.totalCancelled)
-        // barChartMaintainedEquipments = monthlyData.map(item => item.totalMaintenanceQuantity)
-        // barChartEquipmentRentedOut = monthlyData.map(item => item.totalRentedOut)
-        // barChartCartTotalItems = monthlyData.map(item => item.totalInCart)
-
+    }
     } else {
         console.log('Agreements data is undefined')
     }
-
-    // console.log(barChartEquipmentRentedOut)
-    // console.log(barChartEquipmentIdle)
-    // console.log(barChartCartTotalItems)
-    // console.log(barChartAllEquipment)
-
-    
-
-    // console.log("TOTAL RENTED OUT:",totalRentedOut)
-    // console.log("CURRENT USER AGREEMENTS:", currentUser.agreements)
-    // const barChartRentalData = countAgreementsByMonth(currentUser?.agreements)
-    // const barChartLabels = barChartRentalData.map(item => item.month)
-    // const barChartEquipmentRentedOut = barChartRentalData.map(item => item.rentals)
-    // const barChartEquipmentIdle = barChartRentalData.map(item => item.allIdle)
-
-    // console.log(barChartEquipmentIdle)
-
-    // const barChartdata = {
-    //     // labels: barChartLabels,
-    //     // datasets: 
-    //     // datasets: [
-    //     // {
-    //     //     label: 'Idle Equipment',
-    //     //     data: monthlyData.map(item => item.idleItems),
-    //     //     backgroundColor: 'rgba(53, 162, 235, 0.5)',
-    //     //     borderColor: 'rgba(25, 99, 201, 1)', // Deeper blue
-    //     //     borderWidth: 2, // Border width for this dataset
-    //     // },
-    //     // {
-    //     //     label: 'Equipment In User Carts',
-    //     //     data: barChartCartTotalItems,
-    //     //     backgroundColor: 'rgba(75, 181, 67, 0.5)',
-    //     //     borderColor: 'rgba(34, 139, 34, 1)', // Border color for this dataset
-    //     //     borderWidth: 2, // Border width for this dataset
-    //     // },
-    //     // {
-    //     //     label: 'Equipment Rented Out',
-    //     //     data: barChartEquipmentRentedOut,
-    //     //     backgroundColor: 'rgba(255, 159, 64, 0.2)',
-    //     //     borderColor: 'rgba(255, 159, 64, 1)', // Border color for this dataset
-    //     //     borderWidth: 2, // Border width for this dataset
-    //     // },
-    //     // ]
-    // }
-
-    // console.log("TRYING TO HAVE THIS BE THE MAX:", totalEquipment + 10)
 
     return(
         <>
