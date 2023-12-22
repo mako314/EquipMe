@@ -80,46 +80,224 @@ function BarChart({currentUser}){
           equipment.equipment_state_summary.forEach(summary => {
 
             console.log("the EQUIPMENT STATE SUMMARY:", summary)
-            const testMonth = getMonthName(summary.date)
-            console.log("LETS SEE IF WE GET THE MONTHS:", testMonth)
+            const month = getMonthName(summary.date)
+            // console.log("LETS SEE IF WE GET THE MONTHS:", month)
+
+            if (!acc[month]) {
+              acc[month] = {
+                totalQuantity: 0,
+                totalIdle: 0,
+                totalReserved: 0,
+                totalCancelled: 0,
+                totalMaintenanceQuantity: 0,
+                totalRentedOut: 0,
+                totalInCart: 0,
+                // totalMonthlyEquipment: 0,
+            }}
+            acc[month].totalQuantity = (acc[month].totalQuantity || 0) + summary.total_quantity
+
+            console.log("THE MONTH:", acc[month])
+            console.log("THE TOTAL QUANTITY COUNT:", acc[month])
+            acc[month].totalIdle = (acc[month].totalIdle || 0) + summary.total_quantity - summary.total_available
+
+            acc[month].totalReserved = (acc[month].totalReserved || 0) + summary.total_reserved
+
+            acc[month].totalCancelled = (acc[month].totalCancelled || 0) + summary.total_cancelled
+
+            acc[month].totalMaintenanceQuantity = (acc[month].totalMaintenanceQuantity || 0) + summary.total_maintenance_quantity
+
+            acc[month].totalRentedOut = (acc[month].totalRentedOut || 0) + summary.total_rented_out
+
+            acc[month].totalInCart = (acc[month].totalInCart || 0) + summary.total_reserved
+
           })
         }
+        return acc
+        }, {})
+        // Calculate monthly idle equipment and map results
+        console.log("Month Counts:", monthCounts)
+        return Object.keys(monthCounts).map(month => {
+        const monthData = monthCounts[month]
+        // const totalIdle = monthData.totalMonthlyEquipment - monthData.totalRentedOut - monthData.totalInCart
+
+        // const totalIdle = (totalEquipment - monthData.totalRentedOut) - monthData.totalInCart
+
+        // console.log("TOTAL EQUIPMENT:",totalEquipment)
+        // console.log("Total Equipment:", totalEquipment)
+        console.log("Total QUANTITY for " + month + ":", monthData.totalQuantity)
+        console.log("Total IDLE for " + month + ":", monthData.totalIdle)
+        console.log("Total RENTED Out for " + month + ":", monthData.totalRentedOut)
+        console.log("Total IN CART for " + month + ":", monthData.totalInCart)
+        
+        return {
+            month,
+            allEquipment: monthData.totalQuantity,
+            idleItems: monthData.totalIdle > 0 ? monthData.totalIdle : 0,
+            cartTotalItems: monthData.totalInCart,
+            reservedEquipment: monthData.totalReserved,
+            cancelledEquipment: monthData.totalCancelled,
+            maintainedEquipment: monthData.totalMaintenanceQuantity,
+            rentedOutItems: monthData.totalRentedOut,
+             
+        }
+        })
+    }
+
+    // totalEquipment -= totalRentedOut
+    // totalIdle = totalEquipment -= totalInCart
+
+    // Call the function with data and totalEquipment count
+    const equipmentTotalData = currentUser?.equipment // I HAD AN ARRAY OF AN ARRAY AAAH
+    // console.log("equipmentTotalData DATA:", equipmentTotalData)
+    let barChartLabels
+    let barChartAllEquipment
+    let barChartEquipmentIdle
+    let barChartCancelledEquipments
+    let barChartMaintainedEquipments
+    let barChartEquipmentRentedOut
+    let barChartCartTotalItems
+    let barChartdata
+
+    if (equipmentTotalData) {
+        const monthlyData = countAgreementsByMonth(equipmentTotalData)
+
+        barChartdata = {
+          labels: monthlyData.map(item => item.month),
+          datasets: [
+              {
+                  label: 'Total Equipment',
+                  data: monthlyData.map(item => item.allEquipment),
+                  backgroundColor: 'rgba(53, 162, 235, 0.5)',
+                  borderColor: 'rgba(25, 99, 201, 1)', // Deeper blue
+                  borderWidth: 2, // Border width for this dataset
+              },
+              {
+                  label: 'Idle Items',
+                  data: monthlyData.map(item => item.idleItems),
+                  backgroundColor: 'rgba(53, 162, 235, 0.5)',
+                  borderColor: 'rgba(25, 99, 201, 1)', // Deeper blue
+                  borderWidth: 2, // Border width for this dataset
+              },
+             
+          ],
+      }
+
+
+        // console.log(monthlyData)
+        // barChartLabels = monthlyData.map(item => item.month)
+        // barChartAllEquipment = monthlyData.map(item => item.totalQuantity)
+        // barChartEquipmentIdle = monthlyData.map(item => item.totalIdle)
+        // barChartCancelledEquipments = monthlyData.map(item => item.totalCancelled)
+        // barChartMaintainedEquipments = monthlyData.map(item => item.totalMaintenanceQuantity)
+        // barChartEquipmentRentedOut = monthlyData.map(item => item.totalRentedOut)
+        // barChartCartTotalItems = monthlyData.map(item => item.totalInCart)
+
+    } else {
+        console.log('Agreements data is undefined')
+    }
+
+    // console.log(barChartEquipmentRentedOut)
+    // console.log(barChartEquipmentIdle)
+    // console.log(barChartCartTotalItems)
+    // console.log(barChartAllEquipment)
+
+    
+
+    // console.log("TOTAL RENTED OUT:",totalRentedOut)
+    // console.log("CURRENT USER AGREEMENTS:", currentUser.agreements)
+    // const barChartRentalData = countAgreementsByMonth(currentUser?.agreements)
+    // const barChartLabels = barChartRentalData.map(item => item.month)
+    // const barChartEquipmentRentedOut = barChartRentalData.map(item => item.rentals)
+    // const barChartEquipmentIdle = barChartRentalData.map(item => item.allIdle)
+
+    // console.log(barChartEquipmentIdle)
+
+    // const barChartdata = {
+    //     // labels: barChartLabels,
+    //     // datasets: 
+    //     // datasets: [
+    //     // {
+    //     //     label: 'Idle Equipment',
+    //     //     data: monthlyData.map(item => item.idleItems),
+    //     //     backgroundColor: 'rgba(53, 162, 235, 0.5)',
+    //     //     borderColor: 'rgba(25, 99, 201, 1)', // Deeper blue
+    //     //     borderWidth: 2, // Border width for this dataset
+    //     // },
+    //     // {
+    //     //     label: 'Equipment In User Carts',
+    //     //     data: barChartCartTotalItems,
+    //     //     backgroundColor: 'rgba(75, 181, 67, 0.5)',
+    //     //     borderColor: 'rgba(34, 139, 34, 1)', // Border color for this dataset
+    //     //     borderWidth: 2, // Border width for this dataset
+    //     // },
+    //     // {
+    //     //     label: 'Equipment Rented Out',
+    //     //     data: barChartEquipmentRentedOut,
+    //     //     backgroundColor: 'rgba(255, 159, 64, 0.2)',
+    //     //     borderColor: 'rgba(255, 159, 64, 1)', // Border color for this dataset
+    //     //     borderWidth: 2, // Border width for this dataset
+    //     // },
+    //     // ]
+    // }
+
+    // console.log("TRYING TO HAVE THIS BE THE MAX:", totalEquipment + 10)
+
+    return(
+        <>
+        <Bar options={barChartOptions} 
+        data={barChartdata} />
+        </>
+    )
+}
+
+export default BarChart
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         // console.log("THE CURRENT DATE:", equipment.equipment_state_summary.date)
 
-        const month = getMonthName(equipment.equipment_state_summary.date)
+        // const month = getMonthName(equipment.equipment_state_summary.date)
 
-        // console.log('THE CURRENT MONTH',month)
+        // // console.log('THE CURRENT MONTH',month)
 
-        if (!acc[month]) {
-          acc[month] = {
-            totalQuantity: 0,
-            totalIdle: 0,
-            totalReserved: 0,
-            totalCancelled: 0,
-            totalMaintenanceQuantity: 0,
-            totalRentedOut: 0,
-            totalInCart: 0,
-            // totalMonthlyEquipment: 0,
-        }}
+        // if (!acc[month]) {
+        //   acc[month] = {
+        //     totalQuantity: 0,
+        //     totalIdle: 0,
+        //     totalReserved: 0,
+        //     totalCancelled: 0,
+        //     totalMaintenanceQuantity: 0,
+        //     totalRentedOut: 0,
+        //     totalInCart: 0,
+        //     // totalMonthlyEquipment: 0,
+        // }}
 
-        acc[month].totalQuantity = (acc[month].totalQuantity || 0) + equipment.equipment_state_summary.totalQuantity
+        // acc[month].totalQuantity = (acc[month].totalQuantity || 0) + equipment.equipment_state_summary.totalQuantity
 
-        acc[month].totalIdle = (acc[month].totalIdle || 0) + equipment.equipment_state_summary.total_quantity - equipment.equipment_state_summary.total_available
+        // acc[month].totalIdle = (acc[month].totalIdle || 0) + equipment.equipment_state_summary.total_quantity - equipment.equipment_state_summary.total_available
 
-        acc[month].totalReserved = (acc[month].totalReserved || 0) + equipment.equipment_state_summary.totalReserved
+        // acc[month].totalReserved = (acc[month].totalReserved || 0) + equipment.equipment_state_summary.totalReserved
 
-        acc[month].totalCancelled = (acc[month].totalCancelled || 0) + equipment.equipment_state_summary.totalCancelled
+        // acc[month].totalCancelled = (acc[month].totalCancelled || 0) + equipment.equipment_state_summary.totalCancelled
 
-        acc[month].totalMaintenanceQuantity = (acc[month].totalMaintenanceQuantity || 0) + equipment.equipment_state_summary.totalMaintenanceQuantity
+        // acc[month].totalMaintenanceQuantity = (acc[month].totalMaintenanceQuantity || 0) + equipment.equipment_state_summary.totalMaintenanceQuantity
 
-        acc[month].totalRentedOut = (acc[month].totalRentedOut || 0) + equipment.equipment_state_summary.totalRentedOut
+        // acc[month].totalRentedOut = (acc[month].totalRentedOut || 0) + equipment.equipment_state_summary.totalRentedOut
 
-        acc[month].totalInCart = (acc[month].totalInCart || 0) + equipment.equipment_state_summary.total_reserved
-
-
-
-
+        // acc[month].totalInCart = (acc[month].totalInCart || 0) + equipment.equipment_state_summary.total_reserved
 
         // equipment.state_summary?.forEach(summary => {
         //   console.log("THE SUMMARY:", summary)
@@ -173,119 +351,4 @@ function BarChart({currentUser}){
         // }
 
         // Update monthly count
-        return acc
-
-        }, {})
-        // Calculate monthly idle equipment and map results
-        return Object.keys(monthCounts).map(month => {
-        const monthData = monthCounts[month]
-        // const totalIdle = monthData.totalMonthlyEquipment - monthData.totalRentedOut - monthData.totalInCart
-
-        // const totalIdle = (totalEquipment - monthData.totalRentedOut) - monthData.totalInCart
-
-        // console.log("TOTAL EQUIPMENT:",totalEquipment)
-        // console.log("Total Equipment:", totalEquipment)
-        // console.log("Total Rented Out for " + month + ":", monthData.totalRentedOut)
-        // console.log("Total In Cart for " + month + ":", monthData.totalInCart)
-        
-        return {
-            month,
-            allEquipment: monthData.totalQuantity,
-            idleItems: monthData.totalIdle > 0 ? monthData.totalIdle : 0,
-            cartTotalItems: monthData.totalInCart,
-            // reservedEquipment: monthData.totalReserved,
-            cancelledEquipment: monthData.totalCancelled,
-            maintainedEquipment: monthData.totalMaintenanceQuantity,
-            rentedOutItems: monthData.totalRentedOut,
-             
-        }
-        })
-    }
-
-    // totalEquipment -= totalRentedOut
-    // totalIdle = totalEquipment -= totalInCart
-
-    // Call the function with data and totalEquipment count
-    const equipmentTotalData = currentUser?.equipment // I HAD AN ARRAY OF AN ARRAY AAAH
-    // console.log("equipmentTotalData DATA:", equipmentTotalData)
-    let barChartLabels
-    let barChartAllEquipment
-    let barChartEquipmentIdle
-    let barChartCancelledEquipments
-    let barChartMaintainedEquipments
-    let barChartEquipmentRentedOut
-    let barChartCartTotalItems
-
-    // console.log(barChartEquipmentRentedOut)
-    // console.log(barChartEquipmentIdle)
-    // console.log(barChartCartTotalItems)
-
-
-
-    if (equipmentTotalData) {
-        const monthlyData = countAgreementsByMonth(equipmentTotalData)
-
-        // console.log(monthlyData)
-        barChartLabels = monthlyData.map(item => item.month)
-        barChartAllEquipment = monthlyData.map(item => item.totalQuantity)
-        barChartEquipmentIdle = monthlyData.map(item => item.totalIdle)
-        barChartCancelledEquipments = monthlyData.map(item => item.totalCancelled)
-        barChartMaintainedEquipments = monthlyData.map(item => item.totalMaintenanceQuantity)
-        barChartEquipmentRentedOut = monthlyData.map(item => item.totalRentedOut)
-        barChartCartTotalItems = monthlyData.map(item => item.totalInCart)
-
-    } else {
-        console.log('Agreements data is undefined')
-    }
-
-    // console.log(barChartAllEquipment)
-
-    
-
-    // console.log("TOTAL RENTED OUT:",totalRentedOut)
-    // console.log("CURRENT USER AGREEMENTS:", currentUser.agreements)
-    // const barChartRentalData = countAgreementsByMonth(currentUser?.agreements)
-    // const barChartLabels = barChartRentalData.map(item => item.month)
-    // const barChartEquipmentRentedOut = barChartRentalData.map(item => item.rentals)
-    // const barChartEquipmentIdle = barChartRentalData.map(item => item.allIdle)
-
-    // console.log(barChartEquipmentIdle)
-
-    const barChartdata = {
-        labels: barChartLabels,
-        datasets: [
-        {
-            label: 'Idle Equipment',
-            data: barChartEquipmentIdle,
-            backgroundColor: 'rgba(53, 162, 235, 0.5)',
-            borderColor: 'rgba(25, 99, 201, 1)', // Deeper blue
-            borderWidth: 2, // Border width for this dataset
-        },
-        {
-            label: 'Equipment In User Carts',
-            data: barChartCartTotalItems,
-            backgroundColor: 'rgba(75, 181, 67, 0.5)',
-            borderColor: 'rgba(34, 139, 34, 1)', // Border color for this dataset
-            borderWidth: 2, // Border width for this dataset
-        },
-        {
-            label: 'Equipment Rented Out',
-            data: barChartEquipmentRentedOut,
-            backgroundColor: 'rgba(255, 159, 64, 0.2)',
-            borderColor: 'rgba(255, 159, 64, 1)', // Border color for this dataset
-            borderWidth: 2, // Border width for this dataset
-        },
-        ]
-    }
-
-    // console.log("TRYING TO HAVE THIS BE THE MAX:", totalEquipment + 10)
-
-    return(
-        <>
-        <Bar options={barChartOptions} 
-        data={barChartdata} />
-        </>
-    )
-}
-
-export default BarChart
+        // return acc
