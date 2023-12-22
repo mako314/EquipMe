@@ -182,8 +182,8 @@ function BarChart({currentUser}){
               {
                 label: 'In Carts',
                 data: monthlyData.map(item => item.cartTotalItems),
-                backgroundColor: 'rgba(255, 159, 64, 0.2)', // Green
-                borderColor: 'rgba(255, 159, 64, 1)', // Deeper green
+                backgroundColor: 'rgba(153, 102, 255, 0.2)', // Purple
+                borderColor: 'rgba(153, 102, 255, 1)', // Deeper Purple
                 borderWidth: 2,
               },
               {
