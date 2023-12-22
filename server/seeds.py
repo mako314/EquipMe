@@ -1320,6 +1320,9 @@ if __name__ == '__main__':
 
                 if equipment_id not in all_summaries:
                     # Initialize summary data for new equipment
+                    # Initialize counters
+        #           # https://www.geeksforgeeks.org/defaultdict-in-python/
+                    # https://docs.python.org/3/library/collections.html#collections.defaultdict
                     all_summaries[equipment_id] = defaultdict(int, {
                         'total_quantity': 0,    
                         'total_available': 0,
@@ -1350,10 +1353,10 @@ if __name__ == '__main__':
                 if summary_data['total_available'] < 0:
                     summary_data['total_available'] = 0
 
-            # Now, create summary records for each equipment
+            # Create summary records for each equipment
             for equipment_id, summary_data in all_summaries.items():
                 new_summary = EquipmentStateSummary(
-                    equipment_history_id=equipment_id,  # Assuming this should be the equipment_id
+                    equipment_id=equipment_id,  # Linking directly to Equipment
                     date=start_of_month,
                     state='summary',
                     total_quantity=summary_data['total_quantity'],
@@ -1371,7 +1374,7 @@ if __name__ == '__main__':
         # Example usage
         summaries_for_november = calculate_monthly_summaries_for_all_equipment(11, 2023)
         summaries_for_december = calculate_monthly_summaries_for_all_equipment(12, 2023)
-        print(summaries_for_november, summaries_for_december)
+        # print(summaries_for_november, summaries_for_december)
 
 
 
