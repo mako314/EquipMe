@@ -1140,10 +1140,26 @@ if __name__ == '__main__':
         )
         ]
 
+        one_rented_8_added = EquipmentStateHistory(
+            equipment_id = cart_items[2].equipment_id,  # Lawnmower
+            total_quantity = cart_item_equipment_state_histories[2].total_quantity + 8,
+            available_quantity = cart_item_equipment_state_histories[2].available_quantity + 8,
+            reserved_quantity = rental_agreements_state_history[0].reserved_quantity,
+            rented_quantity = cart_items[2].quantity,
+            maintenance_quantity = 0,
+            transit_quantity = 0,
+            damaged_quantity = 0,
+            previous_state = rental_agreements_state_history[0].new_state,
+            new_state = f'Owner added {8} items or item',
+            changed_at = datetime(2023, 12, 13),
+        )
+
         print('READ THIS PRINT:', cart_item_equipment_state_histories[4].total_quantity - cart_items[4].quantity)
 
         # db.session.add_all([equipment_state_history_8,])
         db.session.add_all(rental_agreements_state_history,)
+        db.session.add(one_rented_8_added)
+        
         db.session.commit()
 
         equipment_statuses[2].rented_quantity += rental_agreements_state_history[0].rented_quantity
@@ -1304,8 +1320,11 @@ if __name__ == '__main__':
 
                 if equipment_id not in all_summaries:
                     # Initialize summary data for new equipment
+                    # Initialize counters
+        #           # https://www.geeksforgeeks.org/defaultdict-in-python/
+                    # https://docs.python.org/3/library/collections.html#collections.defaultdict
                     all_summaries[equipment_id] = defaultdict(int, {
-                        'total_quantity': 0,
+                        'total_quantity': 0,    
                         'total_available': 0,
                         'total_reserved': 0,
                         'total_rented_out': 0,
@@ -1334,10 +1353,10 @@ if __name__ == '__main__':
                 if summary_data['total_available'] < 0:
                     summary_data['total_available'] = 0
 
-            # Now, create summary records for each equipment
+            # Create summary records for each equipment
             for equipment_id, summary_data in all_summaries.items():
                 new_summary = EquipmentStateSummary(
-                    equipment_history_id=equipment_id,  # Assuming this should be the equipment_id
+                    equipment_id=equipment_id,  # Linking directly to Equipment
                     date=start_of_month,
                     state='summary',
                     total_quantity=summary_data['total_quantity'],
@@ -1355,7 +1374,7 @@ if __name__ == '__main__':
         # Example usage
         summaries_for_november = calculate_monthly_summaries_for_all_equipment(11, 2023)
         summaries_for_december = calculate_monthly_summaries_for_all_equipment(12, 2023)
-        print(summaries_for_november, summaries_for_december)
+        # print(summaries_for_november, summaries_for_december)
 
 
 
