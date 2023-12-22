@@ -23,7 +23,8 @@ function BarChart({currentUser}){
         })
     }
 
-    console.log("TOTAL EQUIPMENT:", totalEquipment)
+    // console.log("TOTAL EQUIPMENT:", totalEquipment)
+    // console.log("EQUIPMENT STATE SUMMARIES:", currentUser.equipment)
     // console.log("")
 
     //------------------------BAR CHART--------------------------------------
@@ -69,43 +70,74 @@ function BarChart({currentUser}){
     // https://www.youtube.com/watch?v=XKD0aIA3-yM&list=PLo63gcFIe8o0nnhu0F-PpsTc8nkhNe9yu
     const countAgreementsByMonth = (data = []) => {
         const monthCounts = data.reduce((acc, equipment) => {
-        // console.log("the agreement in the reducer:", agreement)
+        // console.log("the EQUIPMENT in the reducer:", equipment)
+        // console.log("the EQUIPMENT STATE SUMMARY:", data)
         //Send the current month in created_at (the date string or date object really, and have it find the month)
         // const month = getMonthName(equipment?.created_at)
         // console.log("AGREEMENT CREATED AT:", agreement?.created_at)
 
-        equipment.state_history.forEach(history => {
+        if (equipment.equipment_state_summary && Array.isArray(equipment.equipment_state_summary)) {
+          equipment.equipment_state_summary.forEach(summary => {
+
+            console.log("the EQUIPMENT STATE SUMMARY:", summary)
+            const testMonth = getMonthName(summary.date)
+            console.log("LETS SEE IF WE GET THE MONTHS:", testMonth)
+          })
+        }
+
+        // console.log("THE CURRENT DATE:", equipment.equipment_state_summary.date)
+
+        const month = getMonthName(equipment.equipment_state_summary.date)
+
+        // console.log('THE CURRENT MONTH',month)
+
+        if (!acc[month]) {
+          acc[month] = {
+            totalQuantity: 0,
+            totalIdle: 0,
+            totalReserved: 0,
+            totalCancelled: 0,
+            totalMaintenanceQuantity: 0,
+            totalRentedOut: 0,
+            totalInCart: 0,
+            // totalMonthlyEquipment: 0,
+        }}
+
+        acc[month].totalQuantity = (acc[month].totalQuantity || 0) + equipment.equipment_state_summary.totalQuantity
+
+        acc[month].totalIdle = (acc[month].totalIdle || 0) + equipment.equipment_state_summary.total_quantity - equipment.equipment_state_summary.total_available
+
+        acc[month].totalReserved = (acc[month].totalReserved || 0) + equipment.equipment_state_summary.totalReserved
+
+        acc[month].totalCancelled = (acc[month].totalCancelled || 0) + equipment.equipment_state_summary.totalCancelled
+
+        acc[month].totalMaintenanceQuantity = (acc[month].totalMaintenanceQuantity || 0) + equipment.equipment_state_summary.totalMaintenanceQuantity
+
+        acc[month].totalRentedOut = (acc[month].totalRentedOut || 0) + equipment.equipment_state_summary.totalRentedOut
+
+        acc[month].totalInCart = (acc[month].totalInCart || 0) + equipment.equipment_state_summary.total_reserved
+
+
+
+
+
+        // equipment.state_summary?.forEach(summary => {
+        //   console.log("THE SUMMARY:", summary)
             // Send the current month in created_at (the date string or date object really, and have it find the month)
             // console.log("THE FOR EACH HISTORY:", history)
-            const month = getMonthName(history.changed_at)
-            console.log(month)
-            if (!acc[month]) {
-              acc[month] = {
-                totalQuantity: 0,
-                totalIdle: 0,
-                // totalReserved: 0,
-                totalCancelled: 0,
-                totalMaintenanceQuantity: 0,
-                totalRentedOut: 0,
-                totalInCart: 0,
-                // totalMonthlyEquipment: 0,
-              }
-            }
-      
-           
-            history.equipment_state_summary.forEach(summary => {
-              console.log("THE FOR EACH summary:", summary)
-              console.log("THE MONTH", acc[month])
-                //console.log()
-              acc[month].totalQuantity = (acc[month].totalQuantity || 0) + summary.totalQuantity
-              acc[month].totalIdle = (acc[month].totalIdle || 0) + summary.total_idle
-            //   acc[month].totalReserved = (acc[month].totalReserved || 0) + summary.totalReserved
-              acc[month].totalCancelled = (acc[month].totalCancelled || 0) + summary.totalCancelled
-              acc[month].totalMaintenanceQuantity = (acc[month].totalMaintenanceQuantity || 0) + summary.totalMaintenanceQuantity
-              acc[month].totalRentedOut = (acc[month].totalRentedOut || 0) + summary.totalRentedOut
-              acc[month].totalInCart = (acc[month].totalInCart || 0) + summary.total_reserved
-            })
-          })
+            // history.equipment_state_summary?.forEach(summary => {
+            //   console.log("THE FOR EACH summary:", summary)
+            //   console.log("THE MONTH", acc[month])
+            //     //console.log()
+            //   acc[month].totalQuantity = (acc[month].totalQuantity || 0) + summary.totalQuantity
+            //   acc[month].totalIdle = (acc[month].totalIdle || 0) + summary.total_idle
+            // //   acc[month].totalReserved = (acc[month].totalReserved || 0) + summary.totalReserved
+            //   acc[month].totalCancelled = (acc[month].totalCancelled || 0) + summary.totalCancelled
+            //   acc[month].totalMaintenanceQuantity = (acc[month].totalMaintenanceQuantity || 0) + summary.totalMaintenanceQuantity
+            //   acc[month].totalRentedOut = (acc[month].totalRentedOut || 0) + summary.totalRentedOut
+            //   acc[month].totalInCart = (acc[month].totalInCart || 0) + summary.total_reserved
+            // })
+          // })
 
         // if (!acc[month]) {
         //     acc[month] = {
@@ -175,7 +207,7 @@ function BarChart({currentUser}){
 
     // Call the function with data and totalEquipment count
     const equipmentTotalData = currentUser?.equipment // I HAD AN ARRAY OF AN ARRAY AAAH
-    console.log("equipmentTotalData DATA:", equipmentTotalData)
+    // console.log("equipmentTotalData DATA:", equipmentTotalData)
     let barChartLabels
     let barChartAllEquipment
     let barChartEquipmentIdle
@@ -206,7 +238,7 @@ function BarChart({currentUser}){
         console.log('Agreements data is undefined')
     }
 
-    console.log(barChartAllEquipment)
+    // console.log(barChartAllEquipment)
 
     
 
