@@ -1154,6 +1154,20 @@ if __name__ == '__main__':
             changed_at = datetime(2023, 12, 13),
         )
 
+        one_maintained_9 = EquipmentStateHistory(
+            equipment_id = cart_items[2].equipment_id,  # Lawnmower
+            total_quantity = one_rented_8_added.total_quantity,
+            available_quantity = one_rented_8_added.available_quantity - 1,
+            reserved_quantity = one_rented_8_added.reserved_quantity,
+            rented_quantity = cart_items[2].quantity,
+            maintenance_quantity = 1,
+            transit_quantity = 0,
+            damaged_quantity = 0,
+            previous_state = one_rented_8_added.new_state,
+            new_state = f'Owner sent {1} items or item to maintenance',
+            changed_at = datetime(2023, 12, 15),
+        )
+
         print('READ THIS PRINT:', cart_item_equipment_state_histories[4].total_quantity - cart_items[4].quantity)
 
         # db.session.add_all([equipment_state_history_8,])
@@ -1162,8 +1176,8 @@ if __name__ == '__main__':
         db.session.add_all(rental_agreements_state_history,)
         db.session.commit()
 
-        equipment_statuses[2].rented_quantity += rental_agreements_state_history[0].rented_quantity
-        equipment_statuses[2].reserved_quantity -= rental_agreements_state_history[0].rented_quantity
+        # equipment_statuses[2].rented_quantity += rental_agreements_state_history[0].rented_quantity
+        # equipment_statuses[2].reserved_quantity -= rental_agreements_state_history[0].rented_quantity
 
         equipment_statuses[6].rented_quantity += rental_agreements_state_history[1].rented_quantity
         equipment_statuses[6].reserved_quantity -= rental_agreements_state_history[1].rented_quantity
@@ -1171,8 +1185,14 @@ if __name__ == '__main__':
         equipment_statuses[7].rented_quantity += rental_agreements_state_history[2].rented_quantity
         equipment_statuses[7].reserved_quantity -= rental_agreements_state_history[2].rented_quantity
 
-        db.session.add(one_rented_8_added)
+        db.session.add_all([one_rented_8_added, one_maintained_9])
         db.session.commit()
+
+        equipment_statuses[2].available_quantity = one_maintained_9.available_quantity
+        equipment_statuses[2].reserved_quantity -= one_maintained_9.rented_quantity
+        equipment_statuses[2].maintenance_quantity += one_maintained_9.maintenance_quantity
+
+        
 
         # if len(cart_items) == 3:
         #     print('Tractor', cart_items[3].quantity)
@@ -1192,120 +1212,6 @@ if __name__ == '__main__':
 #This will be an attempt to write a function that handles creating summaries of state history.
          
         print("ATTEMPTING TO CALCULATE MONTHLY STATE SUMMARY")
-
-        # def calculate_monthly_summaries_for_all_equipment(month, year):
-        #     start_of_month = datetime(year, month, 1)
-        #     end_of_month = datetime(year, month + 1, 1) if month < 12 else datetime(year + 1, 1, 1)
-
-        #     # print('start_of_month', start_of_month)
-        #     # print('end_of_month', end_of_month)
-        #     test_date = datetime(2023, 12, 11)
-        #     # print(start_of_month <= test_date < end_of_month)
-        #     # Fetch unique equipment IDs
-        #     unique_equipment_ids = EquipmentStateHistory.query.with_entities(EquipmentStateHistory.equipment_id).distinct().all()
-        #     # print("UNIQUE EQUIPMENT IDS",unique_equipment_ids)
-
-        #     all_summaries = {}
-            
-        #     for equipment_id_tuple in unique_equipment_ids:
-        #         equipment_id = equipment_id_tuple[0]  # Extract ID from tuple, as its coming in as a tuple
-
-        #         # print('THE ID:', equipment_id)
-
-        #         # Fetch the last state before the start of the month for this equipment
-        #         last_state_before_month = EquipmentStateHistory.query.filter(
-        #             EquipmentStateHistory.equipment_id == equipment_id,
-        #             EquipmentStateHistory.changed_at >= start_of_month,
-        #             EquipmentStateHistory.changed_at < end_of_month,
-        #         ).order_by(EquipmentStateHistory.changed_at.desc()).first()
-
-                
-        #         # print('THE QUERIED OBJECTS:', last_state_before_month)
-
-        #         initial_quantity = last_state_before_month.total_quantity if last_state_before_month else 0
-
-        #         # Fetch all history records within the month for this equipment
-        #         history_records = EquipmentStateHistory.query.filter(
-        #             EquipmentStateHistory.equipment_id == equipment_id,
-        #             EquipmentStateHistory.changed_at >= start_of_month,
-        #             EquipmentStateHistory.changed_at < end_of_month
-        #         ).all()
-
-        #         print('HISTORY RECORDS:',history_records)
-
-        #         # Initialize counters
-        #         # https://www.geeksforgeeks.org/defaultdict-in-python/
-        #         summary_data = defaultdict(int, {
-        #         'total_quantity': initial_quantity,
-        #         'total_idle': initial_quantity,  # Assume all are idle initially
-        #         'total_reserved': 0,
-        #         'total_rented_out': 0,
-        #         'total_maintenance': 0,
-        #         'total_cancelled': 0,
-        #         #'total_in_transit': 0,  # Equipment being moved but not available for rent
-        #         #'total_damaged': 0,     # Equipment that is damaged and not available for use
-        #         })
-
-        #         for record in history_records:
-        #             # Adjust counts based on the state change
-        #             # Subtracting the new quantity by the previous, if you had 0 as previous, then 10 as new, would start with 10
-                    
-        #             # change_in_quantity =  record.previous_quantity - record.new_quantity
-
-        #             # print('record.new_quantity', record.new_quantity)
-        #             # print('record.previous_quantity', record.previous_quantity)
-                    
-        #             #See if reserved is in the new_state, the field that logs what is happening, if so, do the math of the change in quantity and add it to it, similarly check with all other req fields
-        #             if 'reserved' in record.new_state.lower():
-        #                 summary_data['total_reserved'] += record.reserved_quantity
-        #                 # print('THE CURRENT ENTRY:', record)
-        #                 # print(summary_data['total_reserved'])  
-        #                 # print('THE QUANTITY CHANGE', change_in_quantity)
-        #             elif 'rented' in record.new_state.lower():
-        #                 summary_data['total_rented_out'] +=  record.rented_quantity
-        #             elif 'added' in record.new_state.lower():
-        #                 quantity_added = record.total_quantity - summary_data['total_quantity']
-        #                 summary_data['total_quantity'] += quantity_added
-        #                 summary_data['total_idle'] += quantity_added  # Assuming added equipment is initially idle
-        #             elif 'removed' in record.new_state.lower():
-        #                 summary_data['total_quantity'] -=  record.total_quantity
-        #                 summary_data['available_quantity'] -= record.available_quantity
-        #             # elif 'cancelled' in record.new_state.lower():
-        #             #     summary_data['total_cancelled'] +=  record.
-        #             # elif 'maintenance' in record.new_state.lower():
-        #             #     summary_data['total_maintenance'] +=  record.
-
-        #             # Idle equipment is what remains after accounting for other states
-        #             summary_data['total_idle'] = summary_data['total_quantity'] - summary_data['total_reserved'] - summary_data['total_rented_out'] - summary_data['total_maintenance']
-                    
-        #             #summary_data['total_in_transit'] - summary_data['total_damaged']
-
-        #         # Create and add summary to database
-        #         new_summary = EquipmentStateSummary(
-        #             equipment_history_id = last_state_before_month.id if last_state_before_month else None,
-        #             date = start_of_month, 
-        #             state = 'summary',  
-        #             total_quantity = summary_data['total_quantity'],
-        #             total_idle = summary_data['total_idle'],
-        #             total_reserved = summary_data['total_reserved'],
-        #             total_rented_out = summary_data['total_rented_out'],
-        #             total_cancelled = summary_data['total_cancelled'],
-        #         )
-        #         db.session.add(new_summary)
-
-        #         # Commit all new summaries to database
-        #         db.session.commit()
-
-
-        #         all_summaries[equipment_id] = summary_data
-
-        #         # return all_summaries
-
-        #     # Example usage
-        # summaries_for_month = calculate_monthly_summaries_for_all_equipment(11, 2023)  # For December 2023
-        # summaries_for_month = calculate_monthly_summaries_for_all_equipment(12, 2023)
-        # print(summaries_for_month)
-
         def calculate_monthly_summaries_for_all_equipment(month, year):
             start_of_month = datetime(year, month, 1)
             end_of_month = datetime(year, month + 1, 1) if month < 12 else datetime(year + 1, 1, 1)
@@ -1342,6 +1248,8 @@ if __name__ == '__main__':
                     summary_data['total_quantity'] = max(summary_data['total_quantity'], record.total_quantity)
                     summary_data['total_reserved'] += record.reserved_quantity
                     summary_data['total_rented_out'] += record.rented_quantity
+                    summary_data['total_available'] += record.available_quantity
+                    summary_data['total_maintenance'] += record.maintenance_quantity
                     # Add other relevant state changes here
 
                 # Calculate total available based on the last record of the month
@@ -1359,6 +1267,7 @@ if __name__ == '__main__':
                     total_reserved=summary_data['total_reserved'],
                     total_rented_out=summary_data['total_rented_out'],
                     total_cancelled=summary_data['total_cancelled'],
+                    total_maintenance_quantity=summary_data['total_maintenance'],
                     equipment_id=equipment_id
                 )
                 db.session.add(new_summary)
