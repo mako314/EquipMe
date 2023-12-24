@@ -1,4 +1,4 @@
-from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement, Message, Thread,UserInbox, OwnerInbox, Cart, CartItem, EquipmentPrice, Review, UserFavorite, OwnerFavorite, AgreementComment, FeaturedEquipment, EquipmentStateHistory, EquipmentStatus
+from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement, Message, Thread,UserInbox, OwnerInbox, Cart, CartItem, EquipmentPrice, Review, UserFavorite, OwnerFavorite, AgreementComment, FeaturedEquipment, EquipmentStateHistory, EquipmentStatus, EquipmentStateSummary
 # from flask_cors import CORS
 # from flask_migrate import Migrate
 # from flask import Flask, request, make_response, jsonify
@@ -574,7 +574,7 @@ class EquipmentByID(Resource):
                     #Going to write in an if where if you are trying to have 5 available for example, and have a total quantity of 3, it'll just update it to 5 total.
                     #Need to impelement what was implemented above also in here.
                     new_state_history = EquipmentStateHistory(
-                    equipment_id = id,  # Lawnmower
+                    equipment_id = id,
                     total_quantity = state_total,
                     available_quantity = updated_available_quantity,
                     reserved_quantity = previous_state_history.reserved_quantity,
@@ -1874,11 +1874,16 @@ class CheckingOut(Resource):
 
         # Record the state change
         new_state_history = EquipmentStateHistory(
-            equipment_id=equipment_id,
-            previous_quantity=last_state.new_quantity,
-            new_quantity=equipment.status[0].current_quantity,
-            previous_state='reserved',
-            new_state='rented',
+            equipment_id = equipment_id,
+            total_quantity = last_state.new_quantity,
+            available_quantity = last_state.available_quantity,
+            reserved_quantity = last_state.reserved_quantity,
+            rented_quantity = 0,
+            maintenance_quantity = 0,
+            transit_quantity = 0,
+            damaged_quantity = 0,
+            previous_state = last_state.new_state,
+            new_state = 'available',
             changed_at=datetime.utcnow(),
         )
         db.session.add(new_state_history)
@@ -1887,8 +1892,84 @@ class CheckingOut(Resource):
 
 api.add_resource(CheckingOut, '/checkout/<int:equipment_id>/<int:quantity>')
 
+class CalculateMonthlyTotals(Resource):
+        def get(self, month, year):
+            # def calculate_monthly_summaries_for_all_equipment(month, year):
+
+            intYear = int(year)
+            intMonth = int(month)
+            print("THE YEAR:", intYear)
+            print("THE MONTH:", intMonth)
+            start_of_month = datetime(intYear, intMonth, 1)
+            end_of_month = datetime(intYear, intMonth + 1, 1) if intMonth < 12 else datetime(intYear + 1, 1, 1)
+
+            unique_equipment_ids = EquipmentStateHistory.query.with_entities(EquipmentStateHistory.equipment_id).distinct().all()
+
+            all_summaries = {}
+
+            for equipment_id_tuple in unique_equipment_ids:
+                equipment_id = equipment_id_tuple[0]
+
+                # Fetch all state history records for this equipment in the specified month
+                monthly_history_records = EquipmentStateHistory.query.filter(
+                    EquipmentStateHistory.equipment_id == equipment_id,
+                    EquipmentStateHistory.changed_at >= start_of_month,
+                    EquipmentStateHistory.changed_at < end_of_month
+                ).order_by(EquipmentStateHistory.changed_at).all()
+
+                if not monthly_history_records:
+                    continue
+
+                # Initialize summary data for new equipment
+                summary_data = all_summaries.setdefault(equipment_id, {
+                    'total_quantity': 0,
+                    'total_available': 0,
+                    'total_reserved': 0,
+                    'total_rented_out': 0,
+                    'total_maintenance': 0,
+                    'total_cancelled': 0,
+                    'equipment_history_id': monthly_history_records[-1].id
+                })
+                # https://www.w3schools.com/python/ref_func_max.asp
+                for record in monthly_history_records:
+                    summary_data['total_quantity'] = max(summary_data['total_quantity'], record.total_quantity)
+                    summary_data['total_reserved'] += record.reserved_quantity
+                    summary_data['total_rented_out'] += record.rented_quantity
+                    summary_data['total_available'] += record.available_quantity
+                    summary_data['total_maintenance'] += record.maintenance_quantity
+                    # Add other relevant state changes here
+
+                # Calculate total available based on the last record of the month
+                last_record = monthly_history_records[-1]
+                summary_data['total_available'] = last_record.available_quantity
+
+            # Create summary records for each equipment
+            for equipment_id, summary_data in all_summaries.items():
+                new_summary = EquipmentStateSummary(
+                    equipment_history_id=summary_data['equipment_history_id'],
+                    date=start_of_month,
+                    state='summary',
+                    total_quantity=summary_data['total_quantity'],
+                    total_available=summary_data['total_available'],
+                    total_reserved=summary_data['total_reserved'],
+                    total_rented_out=summary_data['total_rented_out'],
+                    total_cancelled=summary_data['total_cancelled'],
+                    total_maintenance_quantity=summary_data['total_maintenance'],
+                    equipment_id=equipment_id
+                )
+                db.session.add(new_summary)
+
+            db.session.commit()
+
+            return all_summaries
+    
+api.add_resource(CalculateMonthlyTotals, '/summarize/<string:month>/<string:year>')
+
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
+
+
+
 
 #holy cow stop coding on main u gOOFY 
 
