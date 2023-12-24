@@ -636,7 +636,7 @@ if __name__ == '__main__':
             damaged_quantity = 0,
             previous_state = 'non-existing',
             new_state = 'available',
-            changed_at = datetime(2023, 12, 11),
+            changed_at = datetime(2023, 11, 11),
         ),
         EquipmentStateHistory(
             equipment_id = equipment_list[4].id,  # Dump Truck
@@ -812,7 +812,7 @@ if __name__ == '__main__':
                 rental_length = 6,
                 cart_id= cart1.id,
                 equipment_id = equipment_list[0].id, # Excavator
-                created_at = random_time_30_days(),
+                created_at = datetime(2023, 12, 9),
             ),
             CartItem(
                 price_cents_at_addition = equipment_prices[1].daily_rate,
@@ -822,7 +822,7 @@ if __name__ == '__main__':
                 rental_length = 5,
                 cart_id= cart1.id,
                 equipment_id = equipment_list[1].id, # Forklift
-                created_at = random_time_30_days(),
+                created_at = datetime(2023, 12, 9),
             ),
             CartItem(
                 price_cents_at_addition = equipment_prices[2].weekly_rate,
@@ -832,7 +832,17 @@ if __name__ == '__main__':
                 rental_length = 2,
                 cart_id= cart1.id,
                 equipment_id = equipment_list[2].id, # Lawnmower
-                created_at = random_time_30_days(),
+                created_at = datetime(2023, 12, 9),
+            ),
+            CartItem(
+                price_cents_at_addition = equipment_prices[2].weekly_rate,
+                price_cents_if_changed = None,
+                quantity = 2,
+                rental_rate="weekly",
+                rental_length = 2,
+                cart_id= cart1.id,
+                equipment_id = equipment_list[3].id, # JOHN DEERE
+                created_at = datetime(2023, 11, 11),
             ),
             CartItem(
                 price_cents_at_addition = equipment_prices[2].weekly_rate,
@@ -897,29 +907,42 @@ if __name__ == '__main__':
             changed_at = datetime(2023, 12, 12),
         ),
         EquipmentStateHistory(
-            equipment_id = equipment_list[6].id,  # Pressure Washer
-            total_quantity = initial_equipment_state_histories[6].total_quantity,
-            available_quantity = initial_equipment_state_histories[6].available_quantity - cart_items[3].quantity,
+            equipment_id = cart_items[3].equipment_id,  # John Deere
+            total_quantity = initial_equipment_state_histories[3].total_quantity,
+            available_quantity = initial_equipment_state_histories[3].available_quantity - cart_items[3].quantity,
             reserved_quantity = cart_items[3].quantity,
             rented_quantity = 0,
             maintenance_quantity = 0,
             transit_quantity = 0,
             damaged_quantity = 0,
-            previous_state = initial_equipment_state_histories[6].new_state,
+            previous_state = initial_equipment_state_histories[7].new_state,
             new_state = f'User reserved {cart_items[3].quantity} item or items to their cart',
             changed_at = datetime(2023, 11, 11),
         ),
         EquipmentStateHistory(
-            equipment_id = equipment_list[7].id,  # Generator
-            total_quantity = initial_equipment_state_histories[7].total_quantity,
-            available_quantity = initial_equipment_state_histories[7].available_quantity - cart_items[4].quantity,
+            equipment_id = cart_items[4].equipment_id,  # Pressure Washer
+            total_quantity = initial_equipment_state_histories[6].total_quantity,
+            available_quantity = initial_equipment_state_histories[6].available_quantity - cart_items[4].quantity,
             reserved_quantity = cart_items[4].quantity,
             rented_quantity = 0,
             maintenance_quantity = 0,
             transit_quantity = 0,
             damaged_quantity = 0,
-            previous_state = initial_equipment_state_histories[7].new_state,
+            previous_state = initial_equipment_state_histories[6].new_state,
             new_state = f'User reserved {cart_items[4].quantity} item or items to their cart',
+            changed_at = datetime(2023, 11, 11),
+        ),
+        EquipmentStateHistory(
+            equipment_id = cart_items[5].equipment_id,  # Generator
+            total_quantity = initial_equipment_state_histories[7].total_quantity,
+            available_quantity = initial_equipment_state_histories[7].available_quantity - cart_items[5].quantity,
+            reserved_quantity = cart_items[5].quantity,
+            rented_quantity = 0,
+            maintenance_quantity = 0,
+            transit_quantity = 0,
+            damaged_quantity = 0,
+            previous_state = initial_equipment_state_histories[7].new_state,
+            new_state = f'User reserved {cart_items[5].quantity} item or items to their cart',
             changed_at = datetime(2023, 11, 11),
         )
         
@@ -947,11 +970,14 @@ if __name__ == '__main__':
         equipment_statuses[2].available_quantity -= cart_item_equipment_state_histories[2].reserved_quantity
         equipment_statuses[2].reserved_quantity += cart_item_equipment_state_histories[2].reserved_quantity
 
-        equipment_statuses[6].available_quantity -= cart_item_equipment_state_histories[3].reserved_quantity
-        equipment_statuses[6].reserved_quantity += cart_item_equipment_state_histories[3].reserved_quantity
+        equipment_statuses[3].available_quantity -= cart_item_equipment_state_histories[3].reserved_quantity
+        equipment_statuses[3].reserved_quantity += cart_item_equipment_state_histories[3].reserved_quantity
 
-        equipment_statuses[7].available_quantity -= cart_item_equipment_state_histories[4].reserved_quantity
-        equipment_statuses[7].reserved_quantity += cart_item_equipment_state_histories[4].reserved_quantity
+        equipment_statuses[6].available_quantity -= cart_item_equipment_state_histories[4].reserved_quantity
+        equipment_statuses[6].reserved_quantity += cart_item_equipment_state_histories[4].reserved_quantity
+
+        equipment_statuses[7].available_quantity -= cart_item_equipment_state_histories[5].reserved_quantity
+        equipment_statuses[7].reserved_quantity += cart_item_equipment_state_histories[5].reserved_quantity
 
         
         # equipment_list[0].status[0].available_quantity -= cart_items[0].quantity
@@ -1034,6 +1060,20 @@ if __name__ == '__main__':
             created_at = datetime(2023, 12, 9),  # Year, Month, Day
             updated_at = datetime(2023, 12, 9)
         ),
+        RentalAgreement(
+            rental_start_date="2023-07-17",
+            rental_end_date="2023-07-20",
+            delivery = False,
+            delivery_address = "",
+            user_decision = "accept",
+            owner_decision = "accept",
+            agreement_status = "completed",
+            owner_id = owner_2.id, # Emily Johnson
+            user_id=user_1.id,  # Benjamin Davis
+            cart_item_id=cart_items[3].id,  # John Deere
+            created_at = datetime(2023, 12, 9),  # Year, Month, Day
+            updated_at = datetime(2023, 12, 9)
+        ),
         # RentalAgreement(
         #     rental_start_date="2023-07-17",
         #     rental_end_date="2023-07-20",
@@ -1113,7 +1153,7 @@ if __name__ == '__main__':
             changed_at = datetime(2023, 12, 13),
         ),
         EquipmentStateHistory(
-            equipment_id = cart_items[3].equipment_id,  # Pressure Washer
+            equipment_id = cart_items[3].equipment_id,  # John Deere
             total_quantity = cart_item_equipment_state_histories[3].total_quantity,
             available_quantity = cart_item_equipment_state_histories[3].available_quantity,
             reserved_quantity = cart_item_equipment_state_histories[3].reserved_quantity - cart_items[3].quantity,
@@ -1126,7 +1166,7 @@ if __name__ == '__main__':
             changed_at = datetime(2023, 11, 11),
         ),
         EquipmentStateHistory(
-            equipment_id = cart_items[4].equipment_id,  # Generator
+            equipment_id = cart_items[4].equipment_id,  # Pressure Washer
             total_quantity = cart_item_equipment_state_histories[4].total_quantity,
             available_quantity = cart_item_equipment_state_histories[4].available_quantity,
             reserved_quantity = cart_item_equipment_state_histories[4].reserved_quantity - cart_items[4].quantity,
@@ -1134,8 +1174,21 @@ if __name__ == '__main__':
             maintenance_quantity = 0,
             transit_quantity = 0,
             damaged_quantity = 0,
-            previous_state = cart_item_equipment_state_histories[4].new_state,
+            previous_state = cart_item_equipment_state_histories[3].new_state,
             new_state = f'User rented {cart_items[4].quantity} item or items',
+            changed_at = datetime(2023, 11, 11),
+        ),
+        EquipmentStateHistory(
+            equipment_id = cart_items[5].equipment_id,  # Generator
+            total_quantity = cart_item_equipment_state_histories[5].total_quantity,
+            available_quantity = cart_item_equipment_state_histories[5].available_quantity,
+            reserved_quantity = cart_item_equipment_state_histories[5].reserved_quantity - cart_items[5].quantity,
+            rented_quantity = cart_items[5].quantity,
+            maintenance_quantity = 0,
+            transit_quantity = 0,
+            damaged_quantity = 0,
+            previous_state = cart_item_equipment_state_histories[4].new_state,
+            new_state = f'User rented {cart_items[5].quantity} item or items',
             changed_at = datetime(2023, 11, 11),
         )
         ]
@@ -1172,18 +1225,22 @@ if __name__ == '__main__':
 
         # db.session.add_all([equipment_state_history_8,])
         
-        
         db.session.add_all(rental_agreements_state_history,)
         db.session.commit()
 
-        # equipment_statuses[2].rented_quantity += rental_agreements_state_history[0].rented_quantity
-        # equipment_statuses[2].reserved_quantity -= rental_agreements_state_history[0].rented_quantity
+        print("PLEASE BE 0:", cart_item_equipment_state_histories[3].reserved_quantity - cart_items[3].quantity,)
 
-        equipment_statuses[6].rented_quantity += rental_agreements_state_history[1].rented_quantity
-        equipment_statuses[6].reserved_quantity -= rental_agreements_state_history[1].rented_quantity
+        equipment_statuses[2].rented_quantity += rental_agreements_state_history[0].rented_quantity
+        equipment_statuses[2].reserved_quantity -= rental_agreements_state_history[0].rented_quantity
+
+        equipment_statuses[3].rented_quantity += rental_agreements_state_history[1].rented_quantity
+        equipment_statuses[3].reserved_quantity -= rental_agreements_state_history[1].rented_quantity
+
+        equipment_statuses[6].rented_quantity += rental_agreements_state_history[2].rented_quantity
+        equipment_statuses[6].reserved_quantity -= rental_agreements_state_history[2].rented_quantity
         
-        equipment_statuses[7].rented_quantity += rental_agreements_state_history[2].rented_quantity
-        equipment_statuses[7].reserved_quantity -= rental_agreements_state_history[2].rented_quantity
+        equipment_statuses[7].rented_quantity += rental_agreements_state_history[3].rented_quantity
+        equipment_statuses[7].reserved_quantity -= rental_agreements_state_history[3].rented_quantity
 
         db.session.add_all([one_rented_8_added, one_maintained_9])
         db.session.commit()

@@ -58,9 +58,13 @@ function BarChart({currentUser}){
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/getMonth
     const getMonthName = (dateString) => {
         // console.log("THE DATE COMING IN:",dateString)
+        console.log("THE DATE STRING:", dateString)
         const date = new Date(dateString)
-        const month = date.getMonth()
-        // console.log("THE MONTH:", month)
+        const userTimezoneOffset = date.getTimezoneOffset() * 60000
+        const correctedDate = new Date(date.getTime() + userTimezoneOffset)
+        console.log("THE CORRECTED DATE:", correctedDate)
+        const month = correctedDate.getMonth()
+        console.log("THE MONTH:", month)
         // Month gets a number, 0-11, from there I reference the month name array and get the name
         return monthNames[month]
       }
@@ -79,8 +83,9 @@ function BarChart({currentUser}){
         if (equipment.equipment_state_summary && Array.isArray(equipment.equipment_state_summary)) {
           equipment.equipment_state_summary.forEach(summary => {
 
-            console.log("the EQUIPMENT STATE SUMMARY:", summary)
             const month = getMonthName(summary.date)
+
+            // console.log("the EQUIPMENT STATE DATE:", summary.date)
             // console.log("LETS SEE IF WE GET THE MONTHS:", month)
 
             if (!acc[month]) {
@@ -96,10 +101,10 @@ function BarChart({currentUser}){
             }}
             acc[month].totalQuantity = (acc[month].totalQuantity || 0) + summary.total_quantity
 
-            console.log("THE MONTH:", acc[month])
-            console.log("THE TOTAL QUANTITY COUNT:", acc[month])
+            // console.log("THE MONTH:", acc[month])
+            // console.log("THE TOTAL QUANTITY COUNT:", acc[month])
 
-            acc[month].totalIdle = (acc[month].totalIdle || 0) + summary.total_quantity - summary.total_available
+            acc[month].totalIdle = (acc[month].totalIdle || 0) +  summary.total_available
 
             acc[month].totalReserved = (acc[month].totalReserved || 0) + summary.total_reserved
 
@@ -116,7 +121,7 @@ function BarChart({currentUser}){
         return acc
         }, {})
         // Calculate monthly idle equipment and map results
-        console.log("Month Counts:", monthCounts)
+        // console.log("Month Counts:", monthCounts)
         return Object.keys(monthCounts).map(month => {
         const monthData = monthCounts[month]
         // const totalIdle = monthData.totalMonthlyEquipment - monthData.totalRentedOut - monthData.totalInCart
@@ -125,10 +130,10 @@ function BarChart({currentUser}){
 
         // console.log("TOTAL EQUIPMENT:",totalEquipment)
         // console.log("Total Equipment:", totalEquipment)
-        console.log("Total QUANTITY for " + month + ":", monthData.totalQuantity)
-        console.log("Total IDLE for " + month + ":", monthData.totalIdle)
-        console.log("Total RENTED Out for " + month + ":", monthData.totalRentedOut)
-        console.log("Total IN CART for " + month + ":", monthData.totalInCart)
+        // console.log("Total QUANTITY for " + month + ":", monthData.totalQuantity)
+        // console.log("Total IDLE for " + month + ":", monthData.totalIdle)
+        // console.log("Total RENTED Out for " + month + ":", monthData.totalRentedOut)
+        // console.log("Total IN CART for " + month + ":", monthData.totalInCart)
         
         return {
             month,
@@ -150,11 +155,14 @@ function BarChart({currentUser}){
     // Call the function with data and totalEquipment count
     const equipmentTotalData = currentUser?.equipment // I HAD AN ARRAY OF AN ARRAY AAAH
     // console.log("equipmentTotalData DATA:", equipmentTotalData)
-    let barChartdata
+    let barChartdata = {
+      labels: [],
+      datasets: []
+    }
 
     if (equipmentTotalData) {
         const monthlyData = countAgreementsByMonth(equipmentTotalData)
-
+        if (monthlyData && monthlyData.length > 0) {
         barChartdata = {
           labels: monthlyData.map(item => item.month),
           datasets: [
@@ -173,21 +181,21 @@ function BarChart({currentUser}){
                   borderWidth: 2,
               },
               {
-                label: 'Rented Out',
+                label: '# of Times Rented Out',
                 data: monthlyData.map(item => item.rentedOutItems),
                 backgroundColor: 'rgba(75, 181, 67, 0.5)', // Green
                 borderColor: 'rgba(34, 139, 34, 1)', // Deeper green
                 borderWidth: 2,
               },
               {
-                label: 'In Carts',
+                label: '# of Times In Carts',
                 data: monthlyData.map(item => item.cartTotalItems),
                 backgroundColor: 'rgba(153, 102, 255, 0.2)', // Purple
                 borderColor: 'rgba(153, 102, 255, 1)', // Deeper Purple
                 borderWidth: 2,
               },
               {
-                label: 'Maintained Equipment (Repairs, Cleaning, ETC.)',
+                label: '# of Times Maintained Equipment (Repairs, Cleaning, ETC.)',
                 data: monthlyData.map(item => item.maintainedEquipment),
                 backgroundColor: 'rgba(255, 165, 0, 0.5)', // Orange
                 borderColor: 'rgba(255, 140, 0, 1)', // Darker Orange
@@ -202,7 +210,7 @@ function BarChart({currentUser}){
               },
              
           ],
-    }
+    }}
     } else {
         console.log('Agreements data is undefined')
     }
