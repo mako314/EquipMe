@@ -59,8 +59,9 @@ function BarChart({currentUser}){
     const getMonthName = (dateString) => {
         // console.log("THE DATE COMING IN:",dateString)
         const date = new Date(dateString)
+        console.log("THE DATE STRING:", dateString)
         const month = date.getMonth()
-        // console.log("THE MONTH:", month)
+        console.log("THE MONTH:", month)
         // Month gets a number, 0-11, from there I reference the month name array and get the name
         return monthNames[month]
       }
