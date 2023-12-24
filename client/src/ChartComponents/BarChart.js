@@ -87,7 +87,7 @@ function BarChart({currentUser}){
     const countAgreementsByMonth = (data = []) => {
         const monthCounts = data.reduce((acc, equipment) => {
         
-        // console.log("the EQUIPMENT in the reducer:", equipment)
+        console.log("the EQUIPMENT in the reducer:", equipment)
         // console.log("the EQUIPMENT STATE SUMMARY:", data)
         //Send the current month in created_at (the date string or date object really, and have it find the month)
         // const month = getMonthName(equipment?.created_at)
