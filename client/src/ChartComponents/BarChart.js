@@ -5,7 +5,7 @@ import { Bar } from 'react-chartjs-2';
 function BarChart({currentUser}){
 
     const [existingData, setExistingData] = useState(currentUser?.equipment); // initialData is existing data
-    const [newData, setNewData] = useState([]);
+    const [shouldRedraw, setShouldRedraw] = useState(false)
     const [chartData, setChartData] = useState({
       labels: [],
       datasets: []
@@ -195,6 +195,9 @@ function BarChart({currentUser}){
                   ...data[key]
               }
             })
+
+            console.log('THE NEW DATA ARRAY',newDataArray)
+            console.log("THE EXISTING DATA ARRAY:", existingData)
             const mergedData = [...existingData, ...newDataArray]
             console.log("THE MERGED DATA:", mergedData)
             const updatedData = countAgreementsByMonth(mergedData)
@@ -247,6 +250,7 @@ function BarChart({currentUser}){
     
               ],
             })
+            setShouldRedraw(true)
           })
           .catch(error => {
               console.error('Error fetching equipment summaries:', error)
@@ -318,7 +322,7 @@ function BarChart({currentUser}){
         Refresh Data
       </button>
       <div className="w-full h-full"> {/* Adjust height as needed */}
-        <Bar data={chartData} options={barChartOptions} />
+        <Bar data={chartData} options={barChartOptions} redraw={chartData}/>
       </div>
     </div>
         
