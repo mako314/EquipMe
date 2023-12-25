@@ -87,7 +87,7 @@ function BarChart({currentUser}){
     const countAgreementsByMonth = (data = []) => {
         const monthCounts = data.reduce((acc, equipment) => {
         
-        console.log("the EQUIPMENT in the reducer:", equipment)
+        // console.log("the EQUIPMENT in the reducer:", equipment)
         // console.log("the EQUIPMENT STATE SUMMARY:", data)
         //Send the current month in created_at (the date string or date object really, and have it find the month)
         // const month = getMonthName(equipment?.created_at)
@@ -136,6 +136,8 @@ function BarChart({currentUser}){
             acc[month].totalRentedOut = (acc[month].totalRentedOut || 0) + summary.total_rented_out
 
             acc[month].totalInCart = (acc[month].totalInCart || 0) + summary.total_reserved
+
+            console.log(`Month: ${month}, Idle Equipment: ${acc[month].totalIdle}, Total Equipment: ${acc[month].totalQuantity}`);
 
           })
         }
@@ -195,6 +197,7 @@ function BarChart({currentUser}){
             const mergedData = [...existingData, ...newDataArray]
             console.log("THE MERGED DATA:", mergedData)
             const updatedData = countAgreementsByMonth(mergedData)
+            // console.log("THE UPDATED DATA", updatedData)
             setChartData({
               labels: updatedData.map(item => item.month),
               datasets: [

@@ -1246,11 +1246,8 @@ if __name__ == '__main__':
         db.session.commit()
 
         equipment_statuses[2].total_quantity = one_maintained_9.total_quantity
-
         equipment_statuses[2].available_quantity = one_maintained_9.available_quantity
-
         equipment_statuses[2].reserved_quantity -= one_maintained_9.rented_quantity
-
         equipment_statuses[2].maintenance_quantity += one_maintained_9.maintenance_quantity
 
         # print("TOTAL QUANTITY CHECK:", one_maintained_9.available_quantity)
@@ -1343,9 +1340,11 @@ if __name__ == '__main__':
         # summaries_for_december = calculate_monthly_summaries_for_all_equipment(12, 2023)
 
         def calculate_monthly_summaries_for_all_equipment(month, year):
-            start_of_month = datetime(year, month, 1)
-            end_of_month = datetime(year, month + 1, 1) if month < 12 else datetime(year + 1, 1, 1)
+            start_of_month = datetime(year, month, 1).date()
+            end_of_month = datetime(year, month + 1, 1).date() if month < 12 else datetime(year + 1, 1, 1).date()
             
+            print("THE START OF THE MONTH:", start_of_month)
+            print("THE END OF THE MONTH:", end_of_month)
             unique_equipment_ids = EquipmentStateHistory.query.with_entities(EquipmentStateHistory.equipment_id).distinct().all()
             
             all_summaries = {}

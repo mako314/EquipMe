@@ -1895,11 +1895,16 @@ api.add_resource(CheckingOut, '/checkout/<int:equipment_id>/<int:quantity>')
 
 class CalculateMonthlyTotals(Resource):
     def get(self, month, year):
+        print(f"Processing summaries for month: {month}, year: {year}")
         intYear = int(year)
         intMonth = int(month)
-        start_of_month = datetime(intYear, intMonth, 1)
-        end_of_month = datetime(intYear, intMonth + 1, 1) if intMonth < 12 else datetime(intYear + 1, 1, 1)
+        start_of_month = datetime(intYear, intMonth, 1).date()
+        end_of_month = datetime(intYear, intMonth + 1, 1).date() if intMonth < 12 else datetime(intYear + 1, 1, 1).date()
         
+        print("Database datetime:", [summary.date for summary in EquipmentStateSummary.query.all()])
+        print("Query datetime:", start_of_month)
+        print("THE START OF THE MONTH:", start_of_month)
+        print("THE END OF THE MONTH:", end_of_month)
         unique_equipment_ids = EquipmentStateHistory.query.with_entities(EquipmentStateHistory.equipment_id).distinct().all()
         
         all_summaries = {}
@@ -1908,7 +1913,7 @@ class CalculateMonthlyTotals(Resource):
         
         for equipment_id_tuple in unique_equipment_ids:
             equipment_id = equipment_id_tuple[0]
-            
+            print(f"Processing equipment_id: {equipment_id}")
             monthly_history_records = EquipmentStateHistory.query.filter(
                 EquipmentStateHistory.equipment_id == equipment_id,
                 EquipmentStateHistory.changed_at >= start_of_month,
@@ -1927,27 +1932,39 @@ class CalculateMonthlyTotals(Resource):
                 'total_cancelled': 0,
                 'equipment_history_id': monthly_history_records[-1].id
             })
+
             
+
             for record in monthly_history_records:
                 summary_data['total_quantity'] = max(summary_data['total_quantity'], record.total_quantity)
-                summary_data['total_reserved'] += record.reserved_quantity
-                summary_data['total_rented_out'] += record.rented_quantity
-                summary_data['total_available'] = record.available_quantity - record.reserved_quantity - record.rented_quantity
-                summary_data['total_maintenance'] += record.maintenance_quantity
+                if 'reserved' in record.new_state.lower():
+                    summary_data['total_reserved'] += record.reserved_quantity
+                # summary_data['total_reserved'] += record.reserved_quantity
+                # summary_data['total_rented_out'] += record.rented_quantity
+                if 'rented' in record.new_state.lower():
+                    summary_data['total_rented_out'] += record.rented_quantity
+                summary_data['total_available'] = record.available_quantity 
+                if 'maintenance' in record.new_state.lower():
+                    summary_data['total_maintenance'] += record.maintenance_quantity
+
+                
             
             last_record = monthly_history_records[-1]
             summary_data['total_available'] = last_record.available_quantity
         
         for equipment_id, summary_data in all_summaries.items():
+            print(equipment_id)
             existing_summary = EquipmentStateSummary.query.filter_by(
                 equipment_id=equipment_id,
                 date=start_of_month
             ).first()
             
             if existing_summary:
+                print(f"Found existing summary for equipment_id: {equipment_id}")
                 for key, value in summary_data.items():
                     setattr(existing_summary, key, value)
             else:
+                print(f"Creating new summary for equipment_id: {equipment_id}")
                 new_summary = EquipmentStateSummary(
                     equipment_history_id=summary_data['equipment_history_id'],
                     date=start_of_month,
@@ -1961,14 +1978,16 @@ class CalculateMonthlyTotals(Resource):
                     equipment_id=equipment_id
                 )
                 db.session.add(new_summary)
-        
+        print(f"Committing changes to the database")
         try:
             db.session.commit()
+            print(f"Commit successful")
             all_summaries_serializable = {
                 str(equipment_id): summary_data for equipment_id, summary_data in all_summaries.items()
             }
             return jsonify(all_summaries_serializable)
         except IntegrityError:
+            print(f"Commit failed")
             db.session.rollback()
             return {"message": "An error occurred while calculating monthly totals."}, 500
 
