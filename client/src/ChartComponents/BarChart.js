@@ -55,6 +55,7 @@ function BarChart({currentUser}){
             text: 'Monthly Rental Data',
           },
         },
+        maintainAspectRatio: false,
         scales: {
             y: {
                 beginAtZero: true, // Start the y-axis from zero
@@ -308,16 +309,19 @@ function BarChart({currentUser}){
   }, [currentUser])
 
     return(
-        <>
-        <button 
-          className='border border-red-500 bg-white text-red-500 py-2 px-4 rounded hover:bg-red-500 hover:text-white transition duration-300'
-          onClick={updateChartData}
-        >
-          Refresh Data
-        </button>
-        <Bar options={barChartOptions} 
-        data={chartData} />
-        </>
+        
+      <div className="h-full w-full flex flex-col items-center justify-center p-4">
+      <button 
+        className='mb-4 text-lg font-semibold bg-orange-500 text-white py-2 px-6 rounded hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:ring-opacity-50 shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1'
+        onClick={updateChartData}
+      >
+        Refresh Data
+      </button>
+      <div className="w-full h-full"> {/* Adjust height as needed */}
+        <Bar data={chartData} options={barChartOptions} />
+      </div>
+    </div>
+        
     )
 }
 
