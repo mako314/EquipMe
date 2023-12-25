@@ -249,7 +249,7 @@ function BarChart({currentUser}){
           })
     }
 
-    console.log(typeof(newData))
+    // console.log(typeof(newData))
     useEffect(() => {
       if (currentUser?.equipment) {
           const initialProcessedData = countAgreementsByMonth(currentUser?.equipment)

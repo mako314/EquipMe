@@ -3,7 +3,7 @@ import pandas as pd
 from app import app
 from random import randint, choice as rc
 
-
+from sqlalchemy.exc import IntegrityError
 from datetime import datetime, timedelta
 from collections import defaultdict
 import random
@@ -1245,11 +1245,17 @@ if __name__ == '__main__':
         db.session.add_all([one_rented_8_added, one_maintained_9])
         db.session.commit()
 
+        equipment_statuses[2].total_quantity = one_maintained_9.total_quantity
+
         equipment_statuses[2].available_quantity = one_maintained_9.available_quantity
+
         equipment_statuses[2].reserved_quantity -= one_maintained_9.rented_quantity
+
         equipment_statuses[2].maintenance_quantity += one_maintained_9.maintenance_quantity
 
-        
+        # print("TOTAL QUANTITY CHECK:", one_maintained_9.available_quantity)
+        print("TOTAL QUANTITY CHECK:", equipment_statuses[2].total_quantity)
+        print("TOTAL AVAILABLE CHECK:", equipment_statuses[2].available_quantity)
 
         # if len(cart_items) == 3:
         #     print('Tractor', cart_items[3].quantity)
@@ -1268,29 +1274,94 @@ if __name__ == '__main__':
 
 #This will be an attempt to write a function that handles creating summaries of state history.
          
-        print("ATTEMPTING TO CALCULATE MONTHLY STATE SUMMARY")
+        # print("ATTEMPTING TO CALCULATE MONTHLY STATE SUMMARY")
+        # def calculate_monthly_summaries_for_all_equipment(month, year):
+        #     start_of_month = datetime(year, month, 1)
+        #     end_of_month = datetime(year, month + 1, 1) if month < 12 else datetime(year + 1, 1, 1)
+
+        #     unique_equipment_ids = EquipmentStateHistory.query.with_entities(EquipmentStateHistory.equipment_id).distinct().all()
+
+        #     all_summaries = {}
+
+        #     for equipment_id_tuple in unique_equipment_ids:
+        #         equipment_id = equipment_id_tuple[0]
+
+        #         # Fetch all state history records for this equipment in the specified month
+        #         monthly_history_records = EquipmentStateHistory.query.filter(
+        #             EquipmentStateHistory.equipment_id == equipment_id,
+        #             EquipmentStateHistory.changed_at >= start_of_month,
+        #             EquipmentStateHistory.changed_at < end_of_month
+        #         ).order_by(EquipmentStateHistory.changed_at).all()
+
+        #         if not monthly_history_records:
+        #             continue
+
+        #         # Initialize summary data for new equipment
+        #         summary_data = all_summaries.setdefault(equipment_id, {
+        #             'total_quantity': 0,
+        #             'total_available': 0,
+        #             'total_reserved': 0,
+        #             'total_rented_out': 0,
+        #             'total_maintenance': 0,
+        #             'total_cancelled': 0,
+        #             'equipment_history_id': monthly_history_records[-1].id
+        #         })
+        #         # https://www.w3schools.com/python/ref_func_max.asp
+        #         for record in monthly_history_records:
+        #             summary_data['total_quantity'] = max(summary_data['total_quantity'], record.total_quantity)
+        #             summary_data['total_reserved'] = record.reserved_quantity
+        #             summary_data['total_rented_out'] = record.rented_quantity
+        #             summary_data['total_available'] = record.available_quantity
+        #             summary_data['total_maintenance'] = record.maintenance_quantity
+        #             # Add other relevant state changes here
+
+        #         # Calculate total available based on the last record of the month
+        #         last_record = monthly_history_records[-1]
+        #         summary_data['total_available'] = last_record.available_quantity
+
+        #     # Create summary records for each equipment
+        #     for equipment_id, summary_data in all_summaries.items():
+        #         new_summary = EquipmentStateSummary(
+        #             equipment_history_id=summary_data['equipment_history_id'],
+        #             date=start_of_month,
+        #             state='summary',
+        #             total_quantity=summary_data['total_quantity'],
+        #             total_available=summary_data['total_available'],
+        #             total_reserved=summary_data['total_reserved'],
+        #             total_rented_out=summary_data['total_rented_out'],
+        #             total_cancelled=summary_data['total_cancelled'],
+        #             total_maintenance_quantity=summary_data['total_maintenance'],
+        #             equipment_id=equipment_id
+        #         )
+        #         db.session.add(new_summary)
+
+        #     db.session.commit()
+
+        #     return all_summaries
+        
+        # summaries_for_november = calculate_monthly_summaries_for_all_equipment(11, 2023)
+        # summaries_for_december = calculate_monthly_summaries_for_all_equipment(12, 2023)
+
         def calculate_monthly_summaries_for_all_equipment(month, year):
             start_of_month = datetime(year, month, 1)
             end_of_month = datetime(year, month + 1, 1) if month < 12 else datetime(year + 1, 1, 1)
-
+            
             unique_equipment_ids = EquipmentStateHistory.query.with_entities(EquipmentStateHistory.equipment_id).distinct().all()
-
+            
             all_summaries = {}
-
+            
             for equipment_id_tuple in unique_equipment_ids:
                 equipment_id = equipment_id_tuple[0]
-
-                # Fetch all state history records for this equipment in the specified month
+                
                 monthly_history_records = EquipmentStateHistory.query.filter(
                     EquipmentStateHistory.equipment_id == equipment_id,
                     EquipmentStateHistory.changed_at >= start_of_month,
                     EquipmentStateHistory.changed_at < end_of_month
                 ).order_by(EquipmentStateHistory.changed_at).all()
-
+                
                 if not monthly_history_records:
                     continue
-
-                # Initialize summary data for new equipment
+                
                 summary_data = all_summaries.setdefault(equipment_id, {
                     'total_quantity': 0,
                     'total_available': 0,
@@ -1300,40 +1371,47 @@ if __name__ == '__main__':
                     'total_cancelled': 0,
                     'equipment_history_id': monthly_history_records[-1].id
                 })
-                # https://www.w3schools.com/python/ref_func_max.asp
+                
                 for record in monthly_history_records:
                     summary_data['total_quantity'] = max(summary_data['total_quantity'], record.total_quantity)
-                    summary_data['total_reserved'] += record.reserved_quantity
-                    summary_data['total_rented_out'] += record.rented_quantity
-                    summary_data['total_available'] += record.available_quantity
-                    summary_data['total_maintenance'] += record.maintenance_quantity
-                    # Add other relevant state changes here
-
-                # Calculate total available based on the last record of the month
+                    summary_data['total_reserved'] = record.reserved_quantity
+                    summary_data['total_rented_out'] = record.rented_quantity
+                    summary_data['total_available'] = record.available_quantity
+                    summary_data['total_maintenance'] = record.maintenance_quantity
+                
                 last_record = monthly_history_records[-1]
                 summary_data['total_available'] = last_record.available_quantity
-
-            # Create summary records for each equipment
+            
             for equipment_id, summary_data in all_summaries.items():
-                new_summary = EquipmentStateSummary(
-                    equipment_history_id=summary_data['equipment_history_id'],
-                    date=start_of_month,
-                    state='summary',
-                    total_quantity=summary_data['total_quantity'],
-                    total_available=summary_data['total_available'],
-                    total_reserved=summary_data['total_reserved'],
-                    total_rented_out=summary_data['total_rented_out'],
-                    total_cancelled=summary_data['total_cancelled'],
-                    total_maintenance_quantity=summary_data['total_maintenance'],
-                    equipment_id=equipment_id
-                )
-                db.session.add(new_summary)
+                existing_summary = EquipmentStateSummary.query.filter_by(
+                    equipment_id=equipment_id,
+                    date=start_of_month
+                ).first()
+                
+                if existing_summary:
+                    for key, value in summary_data.items():
+                        setattr(existing_summary, key, value)
+                else:
+                    new_summary = EquipmentStateSummary(
+                        equipment_history_id=summary_data['equipment_history_id'],
+                        date=start_of_month,
+                        state='summary',
+                        total_quantity=summary_data['total_quantity'],
+                        total_available=summary_data['total_available'],
+                        total_reserved=summary_data['total_reserved'],
+                        total_rented_out=summary_data['total_rented_out'],
+                        total_cancelled=summary_data['total_cancelled'],
+                        total_maintenance_quantity=summary_data['total_maintenance'],
+                        equipment_id=equipment_id
+                    )
+                    db.session.add(new_summary)
+            
+            try:
+                db.session.commit()
+            except IntegrityError:
+                db.session.rollback()
+                raise
 
-            db.session.commit()
-
-            return all_summaries
-
-        # Example usage
         summaries_for_november = calculate_monthly_summaries_for_all_equipment(11, 2023)
         summaries_for_december = calculate_monthly_summaries_for_all_equipment(12, 2023)
         
