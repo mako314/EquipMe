@@ -46,6 +46,12 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
     const [potentialRentalUsers, setPotentialRentalUsers] = useState([])
     const [potentialRentalOwners, setPotentialRentalOwners] = useState([])
     const [pageTitle, setPageTitle] = useState('Home')
+    const [updateCounter, setUpdateCounter] = useState(0)
+
+    // const [chartData, setChartData] = useState({
+    //     labels: [],
+    //     datasets: []
+    //   })
     
     const navigate = useNavigate()
     
@@ -285,7 +291,7 @@ function AccountSettings() {
                         </div>
                         
                         <div className="h-96 w-full col-span-2 bg-white border border-gray-200 shadow-md rounded-lg p-4">
-                        <BarChart currentUser={currentUser}/>
+                        <BarChart currentUser={currentUser} setUpdateCounter={setUpdateCounter} updateCounter={updateCounter}/>
                         </div>
 
                         <div className="h-96 col-span-1 bg-white border border-gray-300 overflow-y-auto">

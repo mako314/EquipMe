@@ -1,18 +1,34 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef} from "react";
 import { Chart as ChartJS, ArcElement, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import BarChartDisplay from "./BarChartDisplay";
 import { Bar } from 'react-chartjs-2';
 
+// useRef
 function BarChart({currentUser}){
 
     const [existingData, setExistingData] = useState(currentUser?.equipment); // initialData is existing data
     const [shouldRedraw, setShouldRedraw] = useState(false)
+    const [updatedLabels, setUpdatedLabels] = useState([])
+    const [updatedDatasets, setUpdatedDatasets] = useState([])
+    const [updateCounter, setUpdateCounter] = useState(0)
+
     const [chartData, setChartData] = useState({
       labels: [],
       datasets: []
     })
+
+    const chartRef = useRef(null)
+    // console.log(shouldRedraw)
     // if (currentUser && currentUser?.equipment){
     //   setExistingData(currentUser?.equipment)
     // }
+
+    if (chartRef.current) {
+      // if(chartRef.current.data.datasets[3].data){
+      // console.log("WHAT IS THIS DATA # :", chartRef.current.data.datasets[3].data)
+      // }
+      console.log("LOOKING FOR CHART REF DATA:",chartRef?.current?.data)
+    }
 
     // console.log("CURRENT USER TO LOOK FOR EQUIPMENT STATE SUMMARIES FOR:", currentUser)
 
@@ -100,6 +116,8 @@ function BarChart({currentUser}){
         if (equipment.equipment_state_summary && Array.isArray(equipment.equipment_state_summary)) {
           equipment.equipment_state_summary.forEach(summary => {
 
+            // console.log(summary)
+
             const month = getMonthName(summary.date)
             const uniqueId = `${summary.equipment_history_id}-${summary.date}`
             // Skip if this state summary has already been processed
@@ -128,7 +146,7 @@ function BarChart({currentUser}){
 
             acc[month].totalIdle = (acc[month].totalIdle || 0) +  summary.total_available
 
-            acc[month].totalReserved = (acc[month].totalReserved || 0) + summary.total_reserved
+            // acc[month].totalReserved = (acc[month].totalReserved || 0) + summary.total_reserved
 
             acc[month].totalCancelled = (acc[month].totalCancelled || 0) + summary.total_cancelled
 
@@ -138,7 +156,7 @@ function BarChart({currentUser}){
 
             acc[month].totalInCart = (acc[month].totalInCart || 0) + summary.total_reserved
 
-            console.log(`Month: ${month}, Idle Equipment: ${acc[month].totalIdle}, Total Equipment: ${acc[month].totalQuantity}`);
+            // console.log(`Month: ${month}, Equipment ID: ${summary.equipment_id},Idle Equipment: ${acc[month].totalIdle}, Total Equipment: ${acc[month].totalQuantity}, Total In Cart: ${acc[month].totalInCart}`)
 
           })
         }
@@ -176,86 +194,108 @@ function BarChart({currentUser}){
     // Call the function with data and totalEquipment count
     // I HAD AN ARRAY OF AN ARRAY AAAH
 
-    function updateChartData() {
-     
-      const updateYear = new Date().getFullYear()
-      const updateMonth = new Date().getMonth() + 1
+      async function updateChartData() {
+          const updateYear = new Date().getFullYear();
+          const updateMonth = new Date().getMonth() + 1;
+      
+          try {
+              const response = await fetch(`/summarize/${updateMonth}/${updateYear}`);
+              const newDataObject = await response.json()
+              // console.log("Received data:", newDataObject)
+      
+              // Transform the object into an array
+              const newDataArray = Object.entries(newDataObject).map(([key, value]) => ({
+                  ...value,
+                  month: key // Assuming the key represents the month
+              }));
+      
+              // console.log("Transformed array:", newDataArray)
+      
+              // Merge with existing data
+              const mergedData = [...existingData, ...newDataArray]
+      
+              // Process merged data
+              const updatedData = countAgreementsByMonth(mergedData)
+      
+              console.log("Updated array:", updatedData)
+      
+              // Clear existing data in chart
+              // clearChartData(chartRef.current);
+              // const newChartData = {
+                const newLabels = updatedData.map(item => item.month)
+                const newDatasets = [
+                      {
+                          label: 'Total Equipment',
+                          data: updatedData.map(item => item.allEquipment),
+                          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                          borderColor: 'rgba(255, 64, 129, 1)',
+                          borderWidth: 2,
+                      },
+                      {
+                          label: 'Idle Items',
+                          data: updatedData.map(item => item.idleItems),
+                          backgroundColor: 'rgba(53, 162, 235, 0.5)',
+                          borderColor: 'rgba(25, 99, 201, 1)',
+                          borderWidth: 2,
+                      },
+                      {
+                          label: '# of Times Rented Out',
+                          data: updatedData.map(item => item.rentedOutItems),
+                          backgroundColor: 'rgba(75, 181, 67, 0.5)',
+                          borderColor: 'rgba(34, 139, 34, 1)',
+                          borderWidth: 2,
+                      },
+                      {
+                          label: '# of Times In Carts',
+                          data: updatedData.map(item => item.cartTotalItems),
+                          backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                          borderColor: 'rgba(153, 102, 255, 1)',
+                          borderWidth: 2,
+                      },
+                      {
+                          label: '# of Times Maintained Equipment (Repairs, Cleaning, ETC.)',
+                          data: updatedData.map(item => item.maintainedEquipment),
+                          backgroundColor: 'rgba(255, 165, 0, 0.5)',
+                          borderColor: 'rgba(255, 140, 0, 1)',
+                          borderWidth: 2,
+                      },
+                      {
+                          label: 'Cancelled',
+                          data: updatedData.map(item => item.cancelledEquipment),
+                          backgroundColor: 'rgba(128, 128, 128, 0.5)',
+                          borderColor: 'rgba(105, 105, 105, 1)',
+                          borderWidth: 2,
+                      }
+                  ]
+              // }
+            
+            // Update chart data state
+            // setChartData(newChartData);
 
-      console.log("YEAR:", updateYear)
-      console.log("MONTH:", updateMonth)
-  
-      fetch(`/summarize/${updateMonth}/${updateYear}`)
-          .then(response => response.json())
-          .then(data => {
-            console.log("UPDATED DATA:", data)
-            // Transform the object into an array
-            const newDataArray = Object.keys(data).map(key => {
-              return {
-                  equipmentId: key,
-                  ...data[key]
-              }
-            })
+            setUpdatedLabels(newLabels)
+            setUpdatedDatasets(newDatasets)
+            console.log('WHERE IS THIS DATA SET:',newDatasets[1].data[0])
+            console.log("this should be the # in carts, will look for 14:", newDatasets[3])
+      
+          //   setChartData({
+          //     labels: newLabels,
+          //     datasets: newDatasets
+          // })
 
-            console.log('THE NEW DATA ARRAY',newDataArray)
-            console.log("THE EXISTING DATA ARRAY:", existingData)
-            const mergedData = [...existingData, ...newDataArray]
-            console.log("THE MERGED DATA:", mergedData)
-            const updatedData = countAgreementsByMonth(mergedData)
-            // console.log("THE UPDATED DATA", updatedData)
-            setChartData({
-              labels: updatedData.map(item => item.month),
-              datasets: [
-                  {
-                      label: 'Total Equipment',
-                      data: updatedData.map(item => item.allEquipment),
-                      backgroundColor: 'rgba(255, 99, 132, 0.2)', // Pink
-                      borderColor: 'rgba(255, 64, 129, 1)', // Deeper pink
-                      borderWidth: 2, // Border width dataset
-                  },
-                  {
-                      label: 'Idle Items',
-                      data: updatedData.map(item => item.idleItems),
-                      backgroundColor: 'rgba(53, 162, 235, 0.5)', // Blue
-                      borderColor: 'rgba(25, 99, 201, 1)', // Deeper blue
-                      borderWidth: 2,
-                  },
-                  {
-                    label: '# of Times Rented Out',
-                    data: updatedData.map(item => item.rentedOutItems),
-                    backgroundColor: 'rgba(75, 181, 67, 0.5)', // Green
-                    borderColor: 'rgba(34, 139, 34, 1)', // Deeper green
-                    borderWidth: 2,
-                  },
-                  {
-                    label: '# of Times In Carts',
-                    data: updatedData.map(item => item.cartTotalItems),
-                    backgroundColor: 'rgba(153, 102, 255, 0.2)', // Purple
-                    borderColor: 'rgba(153, 102, 255, 1)', // Deeper Purple
-                    borderWidth: 2,
-                  },
-                  {
-                    label: '# of Times Maintained Equipment (Repairs, Cleaning, ETC.)',
-                    data: updatedData.map(item => item.maintainedEquipment),
-                    backgroundColor: 'rgba(255, 165, 0, 0.5)', // Orange
-                    borderColor: 'rgba(255, 140, 0, 1)', // Darker Orange
-                    borderWidth: 2,
-                  },
-                  {
-                    label: 'Cancelled',
-                    data: updatedData.map(item => item.cancelledEquipment),
-                    backgroundColor: 'rgba(128, 128, 128, 0.5)', // Gray
-                    borderColor: 'rgba(105, 105, 105, 1)', // Darker Gray
-                    borderWidth: 2,
-                  },
+            setUpdateCounter(count => count + 1)
     
-              ],
-            })
-            setShouldRedraw(true)
-          })
-          .catch(error => {
-              console.error('Error fetching equipment summaries:', error)
-          })
-    }
+            // setTimeout(() => {
+            //     if (chartRef.current) {
+            //         chartRef.current.update();
+            //     }
+            // }, 0);
+      
+          } catch (error) {
+              console.error('Error fetching equipment summaries:', error);
+          }
+      }
+
+    
 
     // console.log(typeof(newData))
     useEffect(() => {
@@ -312,6 +352,25 @@ function BarChart({currentUser}){
       }
   }, [currentUser])
 
+  // console.log("TYPE OF LABELS:", typeof(chartData.labels))
+  // console.log("TYPE OF DATASETS:", typeof(chartData.datasets))
+
+  // console.log("TYPE OF LABELS:", typeof(updatedDatasets))
+  // console.log("TYPE OF DATASETS:", typeof(updatedLabels))
+
+  // console.log("Is updatedLabels an array?:", Array.isArray(updatedLabels))
+  // console.log("Is updatedDatasets an array?:", Array.isArray(updatedDatasets))
+
+  useEffect(() => {
+    if (chartRef.current && updatedDatasets.length > 0) {
+     
+        if (chartRef.current.data && chartRef.current.data.datasets.length > 1) {
+          chartRef.current.data.datasets[3].data[0] = updatedDatasets[3].data
+            chartRef.current.update();
+        }
+    }
+}, [updatedDatasets, updateCounter]);
+
     return(
         
       <div className="h-full w-full flex flex-col items-center justify-center p-4">
@@ -322,27 +381,20 @@ function BarChart({currentUser}){
         Refresh Data
       </button>
       <div className="w-full h-full"> {/* Adjust height as needed */}
-        <Bar data={chartData} options={barChartOptions} redraw={chartData}/>
+        <Bar
+        key={updateCounter}
+        data={chartData} 
+        ref={chartRef} 
+        options={barChartOptions}  />
+        {/*   ref={chartRef} key={updateCounter} */}
       </div>
+
     </div>
         
     )
 }
 
 export default BarChart
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -431,3 +483,271 @@ export default BarChart
 
         // Update monthly count
         // return acc
+
+
+
+//---------------------------------ATTEMPT 2 ------------------------------
+
+        // function updateChartData() {
+     
+        //   const updateYear = new Date().getFullYear()
+        //   const updateMonth = new Date().getMonth() + 1
+    
+        //   console.log("YEAR:", updateYear)
+        //   console.log("MONTH:", updateMonth)
+      
+        //   fetch(`/summarize/${updateMonth}/${updateYear}`)
+        //       .then(response => response.json())
+        //       .then(data => {
+        //         console.log("UPDATED DATA:", data)
+        //         // Transform the object into an array
+        //         const newDataArray = Object.keys(data).map(key => {
+        //           return {
+        //               equipmentId: key,
+        //               ...data[key]
+        //           }
+        //         })
+    
+        //         console.log('THE NEW DATA ARRAY',newDataArray)
+        //         console.log("THE EXISTING DATA ARRAY:", existingData)
+        //         const mergedData = [...existingData, ...newDataArray]
+        //         console.log("THE MERGED DATA:", mergedData)
+        //         const updatedData = countAgreementsByMonth(mergedData)
+        //         // console.log("THE UPDATED DATA", updatedData)
+        //         const newChartData = {
+        //           labels: updatedData.map(item => item.month),
+        //           datasets: [
+        //               {
+        //                   label: 'Total Equipment',
+        //                   data: updatedData.map(item => item.allEquipment),
+        //                   backgroundColor: 'rgba(255, 99, 132, 0.2)', // Pink
+        //                   borderColor: 'rgba(255, 64, 129, 1)', // Deeper pink
+        //                   borderWidth: 2, // Border width dataset
+        //               },
+        //               {
+        //                   label: 'Idle Items',
+        //                   data: updatedData.map(item => item.idleItems),
+        //                   backgroundColor: 'rgba(53, 162, 235, 0.5)', // Blue
+        //                   borderColor: 'rgba(25, 99, 201, 1)', // Deeper blue
+        //                   borderWidth: 2,
+        //               },
+        //               {
+        //                 label: '# of Times Rented Out',
+        //                 data: updatedData.map(item => item.rentedOutItems),
+        //                 backgroundColor: 'rgba(75, 181, 67, 0.5)', // Green
+        //                 borderColor: 'rgba(34, 139, 34, 1)', // Deeper green
+        //                 borderWidth: 2,
+        //               },
+        //               {
+        //                 label: '# of Times In Carts',
+        //                 data: updatedData.map(item => item.cartTotalItems),
+        //                 backgroundColor: 'rgba(153, 102, 255, 0.2)', // Purple
+        //                 borderColor: 'rgba(153, 102, 255, 1)', // Deeper Purple
+        //                 borderWidth: 2,
+        //               },
+        //               {
+        //                 label: '# of Times Maintained Equipment (Repairs, Cleaning, ETC.)',
+        //                 data: updatedData.map(item => item.maintainedEquipment),
+        //                 backgroundColor: 'rgba(255, 165, 0, 0.5)', // Orange
+        //                 borderColor: 'rgba(255, 140, 0, 1)', // Darker Orange
+        //                 borderWidth: 2,
+        //               },
+        //               {
+        //                 label: 'Cancelled',
+        //                 data: updatedData.map(item => item.cancelledEquipment),
+        //                 backgroundColor: 'rgba(128, 128, 128, 0.5)', // Gray
+        //                 borderColor: 'rgba(105, 105, 105, 1)', // Darker Gray
+        //                 borderWidth: 2,
+        //               },
+        
+        //           ],
+        //         }
+        //         // setChartData(newChartData) // Update the chart data
+        //         // setUpdateCounter(count => count + 1) // Increment the counter to force re-render
+    
+        //         // setShouldRedraw(true)
+    
+        //         // // // Increment the update counter to force re-render
+        //         // // setUpdateCounter(count => count + 1)
+    
+        //         // // // Reset redraw flag after a short delay
+        //         // setTimeout(() => setShouldRedraw(false), 500)
+        //         // if (chartRef.current) {
+        //         //   chartRef.current.data = chartData
+        //         //   chartRef.current.update()
+        //         // }
+    
+        //       //   if (chartRef.current) {
+        //       //     chartRef.current.chartInstance.update();
+        //       // }
+    
+        //       setTimeout(() => {
+        //         if (chartRef.current) {
+        //             chartRef.current.chartInstance.update()
+        //         }
+        //     }, 0)
+    
+        //       })
+        //       .catch(error => {
+        //           console.error('Error fetching equipment summaries:', error)
+        //       })
+        // }
+
+
+//---------------------------------ATTEMPT 3 ------------------------------
+
+      //   async function updateChartData() {
+      //     const updateYear = new Date().getFullYear();
+      //     const updateMonth = new Date().getMonth() + 1;
+      
+      //     try {
+      //         const response = await fetch(`/summarize/${updateMonth}/${updateYear}`);
+      //         const newDataObject = await response.json();
+      //         console.log("Received data:", newDataObject);
+      
+      //         // Transform the object into an array
+      //         const newDataArray = Object.entries(newDataObject).map(([key, value]) => ({
+      //             ...value,
+      //             month: key // Assuming the key represents the month
+      //         }));
+      
+      //         console.log("Transformed array:", newDataArray);
+      
+      //         // Merge with existing data
+      //         const mergedData = [...existingData, ...newDataArray];
+      
+      //         // Process merged data
+      //         const updatedData = countAgreementsByMonth(mergedData);
+      
+      //         console.log("Updated array:", updatedData)
+      
+      //         // Clear existing data in chart
+      //         clearChartData(chartRef.current);
+      
+      //         // Add new data to the chart
+      //         updatedData.forEach(dataItem => {
+      //           console.log(dataItem)
+      //             const label = dataItem.month; // Modify as needed based on your data structure
+      //             const newDataPoints = [
+      //                 dataItem.total_quantity,        // Total Quantity
+      //                 dataItem.total_available,       // Total Available
+      //                 dataItem.total_rented_out,      // Total Rented Out
+      //                 dataItem.total_reserved,        // Total Reserved
+      //                 dataItem.total_maintenance,     // Total Maintenance
+      //                 dataItem.total_cancelled        // Total Cancelled
+      //             ];
+      
+      //             addData(chartRef.current, label, newDataPoints);
+      //         });
+      //         setUpdateCounter(prevCounter => prevCounter + 1)
+      
+      //     } catch (error) {
+      //         console.error('Error fetching equipment summaries:', error);
+      //     }
+      // }
+
+      //---------------------------------ATTEMPT 4 ------------------------------
+      
+      // function clearChartData(chart) {
+      //   chart.data.labels = [];
+      //   chart.data.datasets.forEach((dataset) => {
+      //       dataset.data = [];
+      //   });
+      //   chart.update();
+      // }
+      
+      // function addData(chart, label, newDataPoints) {
+      //   chart.data.labels.push(label);
+      //   chart.data.datasets.forEach((dataset, index) => {
+      //       dataset.data.push(newDataPoints[index] || 0);
+      //   });
+      //   chart.update();
+      // }
+
+    //   async function updateChartData() {
+    //     const updateYear = new Date().getFullYear();
+    //     const updateMonth = new Date().getMonth() + 1;
+    
+    //     console.log("YEAR:", updateYear);
+    //     console.log("MONTH:", updateMonth);
+    
+    //     try {
+    //         const response = await fetch(`/summarize/${updateMonth}/${updateYear}`);
+    //         const data = await response.json();
+    //         console.log("UPDATED DATA:", data);
+    
+    //         // Transform the object into an array
+    //         const newDataArray = Object.keys(data).map(key => ({
+    //             equipmentId: key,
+    //             ...data[key]
+    //         }));
+    
+    //         console.log('THE NEW DATA ARRAY', newDataArray);
+    //         console.log("THE EXISTING DATA ARRAY:", existingData);
+    
+    //         const mergedData = [...existingData, ...newDataArray];
+    //         console.log("THE MERGED DATA:", mergedData);
+    
+    //         const updatedData = countAgreementsByMonth(mergedData);
+    //         const newChartData = {
+    //             labels: updatedData.map(item => item.month),
+    //             datasets: [
+    //                 {
+    //                     label: 'Total Equipment',
+    //                     data: updatedData.map(item => item.allEquipment),
+    //                     backgroundColor: 'rgba(255, 99, 132, 0.2)',
+    //                     borderColor: 'rgba(255, 64, 129, 1)',
+    //                     borderWidth: 2,
+    //                 },
+    //                 {
+    //                     label: 'Idle Items',
+    //                     data: updatedData.map(item => item.idleItems),
+    //                     backgroundColor: 'rgba(53, 162, 235, 0.5)',
+    //                     borderColor: 'rgba(25, 99, 201, 1)',
+    //                     borderWidth: 2,
+    //                 },
+    //                 {
+    //                     label: '# of Times Rented Out',
+    //                     data: updatedData.map(item => item.rentedOutItems),
+    //                     backgroundColor: 'rgba(75, 181, 67, 0.5)',
+    //                     borderColor: 'rgba(34, 139, 34, 1)',
+    //                     borderWidth: 2,
+    //                 },
+    //                 {
+    //                     label: '# of Times In Carts',
+    //                     data: updatedData.map(item => item.cartTotalItems),
+    //                     backgroundColor: 'rgba(153, 102, 255, 0.2)',
+    //                     borderColor: 'rgba(153, 102, 255, 1)',
+    //                     borderWidth: 2,
+    //                 },
+    //                 {
+    //                     label: '# of Times Maintained Equipment (Repairs, Cleaning, ETC.)',
+    //                     data: updatedData.map(item => item.maintainedEquipment),
+    //                     backgroundColor: 'rgba(255, 165, 0, 0.5)',
+    //                     borderColor: 'rgba(255, 140, 0, 1)',
+    //                     borderWidth: 2,
+    //                 },
+    //                 {
+    //                     label: 'Cancelled',
+    //                     data: updatedData.map(item => item.cancelledEquipment),
+    //                     backgroundColor: 'rgba(128, 128, 128, 0.5)',
+    //                     borderColor: 'rgba(105, 105, 105, 1)',
+    //                     borderWidth: 2,
+    //                 }
+    //             ],
+    //         };
+    
+    //         // Update chart data state
+    //         setChartData(newChartData);
+    //         setUpdateCounter(count => count + 1)
+    
+    //         setTimeout(() => {
+    //             if (chartRef.current) {
+    //                 chartRef.current.update();
+    //             }
+    //         }, 0);
+    
+    //     } catch (error) {
+    //         console.error('Error fetching equipment summaries:', error);
+    //     }
+    // }
