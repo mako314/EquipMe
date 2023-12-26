@@ -283,9 +283,8 @@ function AccountSettings() {
                         /> : ""} */}
                         <DoughnutChart currentUser={currentUser} role={role}/>
                         </div>
-                        <div className="h-96 w-500 col-span-2 bg-white border border-gray-300">
-                        {/* <Bar options={barChartOptions} 
-                        data={barChartdata} /> */}
+                        
+                        <div className="h-96 w-full col-span-2 bg-white border border-gray-200 shadow-md rounded-lg p-4">
                         <BarChart currentUser={currentUser}/>
                         </div>
 

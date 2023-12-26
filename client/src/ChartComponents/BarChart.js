@@ -1,9 +1,21 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Chart as ChartJS, ArcElement, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 
 function BarChart({currentUser}){
-    console.log("CURRENT USER TO LOOK FOR EQUIPMENT STATE SUMMARIES FOR:", currentUser)
+
+    const [existingData, setExistingData] = useState(currentUser?.equipment); // initialData is existing data
+    const [shouldRedraw, setShouldRedraw] = useState(false)
+    const [chartData, setChartData] = useState({
+      labels: [],
+      datasets: []
+    })
+    // if (currentUser && currentUser?.equipment){
+    //   setExistingData(currentUser?.equipment)
+    // }
+
+    // console.log("CURRENT USER TO LOOK FOR EQUIPMENT STATE SUMMARIES FOR:", currentUser)
+
     ChartJS.register(
         ArcElement, 
         Tooltip, 
@@ -43,6 +55,7 @@ function BarChart({currentUser}){
             text: 'Monthly Rental Data',
           },
         },
+        maintainAspectRatio: false,
         scales: {
             y: {
                 beginAtZero: true, // Start the y-axis from zero
@@ -58,13 +71,13 @@ function BarChart({currentUser}){
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/getMonth
     const getMonthName = (dateString) => {
         // console.log("THE DATE COMING IN:",dateString)
-        console.log("THE DATE STRING:", dateString)
+        // console.log("THE DATE STRING:", dateString)
         const date = new Date(dateString)
         const userTimezoneOffset = date.getTimezoneOffset() * 60000
         const correctedDate = new Date(date.getTime() + userTimezoneOffset)
-        console.log("THE CORRECTED DATE:", correctedDate)
+        // console.log("THE CORRECTED DATE:", correctedDate)
         const month = correctedDate.getMonth()
-        console.log("THE MONTH:", month)
+        // console.log("THE MONTH:", month)
         // Month gets a number, 0-11, from there I reference the month name array and get the name
         return monthNames[month]
       }
@@ -74,17 +87,26 @@ function BarChart({currentUser}){
     // https://www.youtube.com/watch?v=XKD0aIA3-yM&list=PLo63gcFIe8o0nnhu0F-PpsTc8nkhNe9yu
     const countAgreementsByMonth = (data = []) => {
         const monthCounts = data.reduce((acc, equipment) => {
+        
         // console.log("the EQUIPMENT in the reducer:", equipment)
         // console.log("the EQUIPMENT STATE SUMMARY:", data)
         //Send the current month in created_at (the date string or date object really, and have it find the month)
         // const month = getMonthName(equipment?.created_at)
         // console.log("AGREEMENT CREATED AT:", agreement?.created_at)
 
+        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
+
+        const processedIds = new Set()
         if (equipment.equipment_state_summary && Array.isArray(equipment.equipment_state_summary)) {
           equipment.equipment_state_summary.forEach(summary => {
 
             const month = getMonthName(summary.date)
-
+            const uniqueId = `${summary.equipment_history_id}-${summary.date}`
+            // Skip if this state summary has already been processed
+            if (processedIds.has(uniqueId)) {
+              return
+            }
+            processedIds.add(uniqueId)
             // console.log("the EQUIPMENT STATE DATE:", summary.date)
             // console.log("LETS SEE IF WE GET THE MONTHS:", month)
 
@@ -115,6 +137,8 @@ function BarChart({currentUser}){
             acc[month].totalRentedOut = (acc[month].totalRentedOut || 0) + summary.total_rented_out
 
             acc[month].totalInCart = (acc[month].totalInCart || 0) + summary.total_reserved
+
+            console.log(`Month: ${month}, Idle Equipment: ${acc[month].totalIdle}, Total Equipment: ${acc[month].totalQuantity}`);
 
           })
         }
@@ -149,77 +173,159 @@ function BarChart({currentUser}){
         })
     }
 
-    // totalEquipment -= totalRentedOut
-    // totalIdle = totalEquipment -= totalInCart
-
     // Call the function with data and totalEquipment count
-    const equipmentTotalData = currentUser?.equipment // I HAD AN ARRAY OF AN ARRAY AAAH
-    // console.log("equipmentTotalData DATA:", equipmentTotalData)
-    let barChartdata = {
-      labels: [],
-      datasets: []
+    // I HAD AN ARRAY OF AN ARRAY AAAH
+
+    function updateChartData() {
+     
+      const updateYear = new Date().getFullYear()
+      const updateMonth = new Date().getMonth() + 1
+
+      console.log("YEAR:", updateYear)
+      console.log("MONTH:", updateMonth)
+  
+      fetch(`/summarize/${updateMonth}/${updateYear}`)
+          .then(response => response.json())
+          .then(data => {
+            console.log("UPDATED DATA:", data)
+            // Transform the object into an array
+            const newDataArray = Object.keys(data).map(key => {
+              return {
+                  equipmentId: key,
+                  ...data[key]
+              }
+            })
+
+            console.log('THE NEW DATA ARRAY',newDataArray)
+            console.log("THE EXISTING DATA ARRAY:", existingData)
+            const mergedData = [...existingData, ...newDataArray]
+            console.log("THE MERGED DATA:", mergedData)
+            const updatedData = countAgreementsByMonth(mergedData)
+            // console.log("THE UPDATED DATA", updatedData)
+            setChartData({
+              labels: updatedData.map(item => item.month),
+              datasets: [
+                  {
+                      label: 'Total Equipment',
+                      data: updatedData.map(item => item.allEquipment),
+                      backgroundColor: 'rgba(255, 99, 132, 0.2)', // Pink
+                      borderColor: 'rgba(255, 64, 129, 1)', // Deeper pink
+                      borderWidth: 2, // Border width dataset
+                  },
+                  {
+                      label: 'Idle Items',
+                      data: updatedData.map(item => item.idleItems),
+                      backgroundColor: 'rgba(53, 162, 235, 0.5)', // Blue
+                      borderColor: 'rgba(25, 99, 201, 1)', // Deeper blue
+                      borderWidth: 2,
+                  },
+                  {
+                    label: '# of Times Rented Out',
+                    data: updatedData.map(item => item.rentedOutItems),
+                    backgroundColor: 'rgba(75, 181, 67, 0.5)', // Green
+                    borderColor: 'rgba(34, 139, 34, 1)', // Deeper green
+                    borderWidth: 2,
+                  },
+                  {
+                    label: '# of Times In Carts',
+                    data: updatedData.map(item => item.cartTotalItems),
+                    backgroundColor: 'rgba(153, 102, 255, 0.2)', // Purple
+                    borderColor: 'rgba(153, 102, 255, 1)', // Deeper Purple
+                    borderWidth: 2,
+                  },
+                  {
+                    label: '# of Times Maintained Equipment (Repairs, Cleaning, ETC.)',
+                    data: updatedData.map(item => item.maintainedEquipment),
+                    backgroundColor: 'rgba(255, 165, 0, 0.5)', // Orange
+                    borderColor: 'rgba(255, 140, 0, 1)', // Darker Orange
+                    borderWidth: 2,
+                  },
+                  {
+                    label: 'Cancelled',
+                    data: updatedData.map(item => item.cancelledEquipment),
+                    backgroundColor: 'rgba(128, 128, 128, 0.5)', // Gray
+                    borderColor: 'rgba(105, 105, 105, 1)', // Darker Gray
+                    borderWidth: 2,
+                  },
+    
+              ],
+            })
+            setShouldRedraw(true)
+          })
+          .catch(error => {
+              console.error('Error fetching equipment summaries:', error)
+          })
     }
 
-    if (equipmentTotalData) {
-        const monthlyData = countAgreementsByMonth(equipmentTotalData)
-        if (monthlyData && monthlyData.length > 0) {
-        barChartdata = {
-          labels: monthlyData.map(item => item.month),
-          datasets: [
-              {
-                  label: 'Total Equipment',
-                  data: monthlyData.map(item => item.allEquipment),
-                  backgroundColor: 'rgba(255, 99, 132, 0.2)', // Pink
-                  borderColor: 'rgba(255, 64, 129, 1)', // Deeper pink
-                  borderWidth: 2, // Border width dataset
-              },
-              {
-                  label: 'Idle Items',
-                  data: monthlyData.map(item => item.idleItems),
-                  backgroundColor: 'rgba(53, 162, 235, 0.5)', // Blue
-                  borderColor: 'rgba(25, 99, 201, 1)', // Deeper blue
+    // console.log(typeof(newData))
+    useEffect(() => {
+      if (currentUser?.equipment) {
+          const initialProcessedData = countAgreementsByMonth(currentUser?.equipment)
+          setChartData({
+              labels: initialProcessedData.map(item => item.month),
+              datasets: [
+                {
+                    label: 'Total Equipment',
+                    data: initialProcessedData.map(item => item.allEquipment),
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)', // Pink
+                    borderColor: 'rgba(255, 64, 129, 1)', // Deeper pink
+                    borderWidth: 2, // Border width dataset
+                },
+                {
+                    label: 'Idle Items',
+                    data: initialProcessedData.map(item => item.idleItems),
+                    backgroundColor: 'rgba(53, 162, 235, 0.5)', // Blue
+                    borderColor: 'rgba(25, 99, 201, 1)', // Deeper blue
+                    borderWidth: 2,
+                },
+                {
+                  label: '# of Times Rented Out',
+                  data: initialProcessedData.map(item => item.rentedOutItems),
+                  backgroundColor: 'rgba(75, 181, 67, 0.5)', // Green
+                  borderColor: 'rgba(34, 139, 34, 1)', // Deeper green
                   borderWidth: 2,
-              },
-              {
-                label: '# of Times Rented Out',
-                data: monthlyData.map(item => item.rentedOutItems),
-                backgroundColor: 'rgba(75, 181, 67, 0.5)', // Green
-                borderColor: 'rgba(34, 139, 34, 1)', // Deeper green
-                borderWidth: 2,
-              },
-              {
-                label: '# of Times In Carts',
-                data: monthlyData.map(item => item.cartTotalItems),
-                backgroundColor: 'rgba(153, 102, 255, 0.2)', // Purple
-                borderColor: 'rgba(153, 102, 255, 1)', // Deeper Purple
-                borderWidth: 2,
-              },
-              {
-                label: '# of Times Maintained Equipment (Repairs, Cleaning, ETC.)',
-                data: monthlyData.map(item => item.maintainedEquipment),
-                backgroundColor: 'rgba(255, 165, 0, 0.5)', // Orange
-                borderColor: 'rgba(255, 140, 0, 1)', // Darker Orange
-                borderWidth: 2,
-              },
-              {
-                label: 'Cancelled',
-                data: monthlyData.map(item => item.cancelledEquipment),
-                backgroundColor: 'rgba(128, 128, 128, 0.5)', // Gray
-                borderColor: 'rgba(105, 105, 105, 1)', // Darker Gray
-                borderWidth: 2,
-              },
-             
-          ],
-    }}
-    } else {
-        console.log('Agreements data is undefined')
-    }
+                },
+                {
+                  label: '# of Times In Carts',
+                  data: initialProcessedData.map(item => item.cartTotalItems),
+                  backgroundColor: 'rgba(153, 102, 255, 0.2)', // Purple
+                  borderColor: 'rgba(153, 102, 255, 1)', // Deeper Purple
+                  borderWidth: 2,
+                },
+                {
+                  label: '# of Times Maintained Equipment (Repairs, Cleaning, ETC.)',
+                  data: initialProcessedData.map(item => item.maintainedEquipment),
+                  backgroundColor: 'rgba(255, 165, 0, 0.5)', // Orange
+                  borderColor: 'rgba(255, 140, 0, 1)', // Darker Orange
+                  borderWidth: 2,
+                },
+                {
+                  label: 'Cancelled',
+                  data: initialProcessedData.map(item => item.cancelledEquipment),
+                  backgroundColor: 'rgba(128, 128, 128, 0.5)', // Gray
+                  borderColor: 'rgba(105, 105, 105, 1)', // Darker Gray
+                  borderWidth: 2,
+                },
+               
+            ],
+          })
+      }
+  }, [currentUser])
 
     return(
-        <>
-        <Bar options={barChartOptions} 
-        data={barChartdata} />
-        </>
+        
+      <div className="h-full w-full flex flex-col items-center justify-center p-4">
+      <button 
+        className='mb-4 text-lg font-semibold bg-orange-500 text-white py-2 px-6 rounded hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:ring-opacity-50 shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1'
+        onClick={updateChartData}
+      >
+        Refresh Data
+      </button>
+      <div className="w-full h-full"> {/* Adjust height as needed */}
+        <Bar data={chartData} options={barChartOptions} redraw={chartData}/>
+      </div>
+    </div>
+        
     )
 }
 
