@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef} from "react";
 import { Chart as ChartJS, ArcElement, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import {toast} from 'react-toastify'
 import { Bar } from 'react-chartjs-2';
+import { useEquipmentData } from "./BarChartDataContext";
 
 // useRef
 function BarChart({currentUser}){
@@ -9,8 +10,11 @@ function BarChart({currentUser}){
     const [existingData, setExistingData] = useState(currentUser?.equipment); // initialData is existing data
     const [initialDataLoaded, setInititalDataLoaded] = useState(false)
     const [updateCounter, setUpdateCounter] = useState(0)
+    const [showAll, setShowAll] = useState(false)
 
-    const [chartData, setChartData] = useState({
+    const { barChartEquipmentData, setBarChartEquipmentData } = useEquipmentData()
+
+    const [monthlyData, setMonthlyData] = useState({
       labels: [],
       datasets: []
     })
@@ -157,8 +161,12 @@ function BarChart({currentUser}){
       // console.log(`Month: ${month}, Equipment ID: ${summary.equipment_id}, Equipment History ID: ${summary.equipment_history_id},Total In MAINTENANCE: ${acc[month].totalMaintenanceQuantity}, Idle Equipment: ${acc[month].totalIdle}, Total Equipment: ${acc[month].totalQuantity}, Total In Cart: ${acc[month].totalInCart}`)
     }
 
-      async function updateChartData() {
-      // setChartData({
+      async function updateChartData( allVisible = false ) {
+
+        console.log("THIS IS THE VISIBLE:", allVisible)
+        setShowAll(allVisible)
+        console.log("THIS IS THE SHOW ALL:", showAll)
+      // setMonthlyData({
       //     labels: [],
       //     datasets: []
       //   })
@@ -184,25 +192,25 @@ function BarChart({currentUser}){
               // updatedData
 
               // Merge with existing data
-              if (updateCounter > 0){
-                return toast.warn(`❌ Please limit refreshes to once per page load!`,
-                {
-                "autoClose" : 2000
-                })
-              // Process merged data
-              }
+              // if (updateCounter > 0){
+              //   return toast.warn(`❌ Please limit refreshes to once per page load!`,
+              //   {
+              //   "autoClose" : 2000
+              //   })
+              // // Process merged data
+              // }
 
               const mergedData = [...existingData, ...newDataArray]
 
               // const mergedData = initialDataLoaded ? [...existingData, ...newDataArray] : newDataArray
-              // console.log("Merged Array:", mergedData)
+              console.log("Merged Array:", mergedData)
 
 
-              // updatedData = countAgreementsByMonth(mergedData !== null ? mergedData : chartData)
+              // updatedData = countAgreementsByMonth(mergedData !== null ? mergedData : monthlyData)
 
               const updatedData = countAgreementsByMonth(mergedData)
 
-              // const updatedData = countAgreementsByMonth(newDataArray)
+              const currentMonthData = countAgreementsByMonth(newDataArray)
 
               console.log("Updated array:", updatedData)
       
@@ -255,15 +263,68 @@ function BarChart({currentUser}){
                       }
                   ]
               }
+
+              const currentMonthMappedData = {
+                labels: currentMonthData.map(item => item.month),
+                datasets : [
+                      {
+                          label: 'Total Equipment',
+                          data: currentMonthData.map(item => item.allEquipment),
+                          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                          borderColor: 'rgba(255, 64, 129, 1)',
+                          borderWidth: 2,
+                      },
+                      {
+                          label: 'Idle Items',
+                          data: currentMonthData.map(item => item.idleItems),
+                          backgroundColor: 'rgba(53, 162, 235, 0.5)',
+                          borderColor: 'rgba(25, 99, 201, 1)',
+                          borderWidth: 2,
+                      },
+                      {
+                          label: '# of Times Rented Out',
+                          data: currentMonthData.map(item => item.rentedOutItems),
+                          backgroundColor: 'rgba(75, 181, 67, 0.5)',
+                          borderColor: 'rgba(34, 139, 34, 1)',
+                          borderWidth: 2,
+                      },
+                      {
+                          label: '# of Times In Carts',
+                          data: currentMonthData.map(item => item.cartTotalItems),
+                          backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                          borderColor: 'rgba(153, 102, 255, 1)',
+                          borderWidth: 2,
+                      },
+                      {
+                          label: '# of Times Maintained Equipment (Repairs, Cleaning, ETC.)',
+                          data: currentMonthData.map(item => item.maintainedEquipment),
+                          backgroundColor: 'rgba(255, 165, 0, 0.5)',
+                          borderColor: 'rgba(255, 140, 0, 1)',
+                          borderWidth: 2,
+                      },
+                      {
+                          label: 'Cancelled',
+                          data: currentMonthData.map(item => item.cancelledEquipment),
+                          backgroundColor: 'rgba(128, 128, 128, 0.5)',
+                          borderColor: 'rgba(105, 105, 105, 1)',
+                          borderWidth: 2,
+                      }
+                  ]
+              }
     
 
             // setUpdatedLabels(newLabels)
             // setUpdatedDatasets(newDatasets)
             // console.log('WHERE IS THIS DATA SET:',newDatasets[1].data[0])
             // console.log("this should be the # in carts, will look for 14:", newDatasets[3])
-      
-            setChartData(newChartData)
-            console.log(chartData)
+            // console.log("THE SHOW ALL:", showAll)
+
+            if (allVisible){
+            setBarChartEquipmentData(newChartData)
+            }else{
+            setMonthlyData(currentMonthMappedData)
+            }
+            console.log(monthlyData)
 
             setUpdateCounter(count => count + 1)
       
@@ -278,7 +339,7 @@ function BarChart({currentUser}){
     useEffect(() => {
       if (currentUser?.equipment) {
           const initialProcessedData = countAgreementsByMonth(currentUser?.equipment)
-          setChartData({
+          setBarChartEquipmentData({
               labels: initialProcessedData.map(item => item.month),
               datasets: [
                 {
@@ -328,42 +389,38 @@ function BarChart({currentUser}){
           })
       }
       // setInititalDataLoaded(true)
+      setShowAll(true)
+      
   }, [currentUser])
 
-  // console.log("TYPE OF LABELS:", typeof(chartData.labels))
-  // console.log("TYPE OF DATASETS:", typeof(chartData.datasets))
-
-  // console.log("TYPE OF LABELS:", typeof(updatedDatasets))
-  // console.log("TYPE OF DATASETS:", typeof(updatedLabels))
-
-  // console.log("Is updatedLabels an array?:", Array.isArray(updatedLabels))
-  // console.log("Is updatedDatasets an array?:", Array.isArray(updatedDatasets))
-
-//   useEffect(() => {
-//     if (chartRef.current && updatedDatasets.length > 0) {
-     
-//         if (chartRef.current.data && chartRef.current.data.datasets.length > 1) {
-//           chartRef.current.data.datasets[3].data[0] = updatedDatasets[3].data
-//             chartRef.current.update()
-//         }
-//     }
-// }, [updatedDatasets, updateCounter])
-
+  console.log("THE CHART DATA:", monthlyData)
+  
     return(
         
       <div className="h-full w-full flex flex-col items-center justify-center p-4">
+        <div className="flex justify-center space-x-4 mb-4">
       <button 
         className='mb-4 text-lg font-semibold bg-orange-500 text-white py-2 px-6 rounded hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:ring-opacity-50 shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1'
-        onClick={updateChartData}
+        onClick={() => updateChartData(false)}
       >
         Refresh Data
       </button>
-      <div className="w-full h-full"> {/* Adjust height as needed */}
-        <Bar
-        data={chartData} 
-        options={barChartOptions}  />
-        {/*   ref={chartRef} key={updateCounter} */}
+
+      <button 
+        className='mb-4 text-lg font-semibold bg-orange-500 text-white py-2 px-6 rounded hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:ring-opacity-50 shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1'
+        onClick={() => updateChartData(true)}
+      >
+        Show All Data
+      </button>
       </div>
+
+      <div className="w-full h-full">
+      {showAll ? (
+          <Bar data={barChartEquipmentData} options={barChartOptions} />
+        ) : (
+          <Bar data={monthlyData} options={barChartOptions} />
+        )}
+    </div>
 
     </div>
         
@@ -371,8 +428,6 @@ function BarChart({currentUser}){
 }
 
 export default BarChart
-
-
 
         // console.log("THE CURRENT DATE:", equipment.equipment_state_summary.date)
 
@@ -538,7 +593,7 @@ export default BarChart
         
         //           ],
         //         }
-        //         // setChartData(newChartData) // Update the chart data
+        //         // setMonthlyData(newChartData) // Update the chart data
         //         // setUpdateCounter(count => count + 1) // Increment the counter to force re-render
     
         //         // setShouldRedraw(true)
@@ -549,7 +604,7 @@ export default BarChart
         //         // // // Reset redraw flag after a short delay
         //         // setTimeout(() => setShouldRedraw(false), 500)
         //         // if (chartRef.current) {
-        //         //   chartRef.current.data = chartData
+        //         //   chartRef.current.data = monthlyData
         //         //   chartRef.current.update()
         //         // }
     
@@ -714,7 +769,7 @@ export default BarChart
     //         };
     
     //         // Update chart data state
-    //         setChartData(newChartData);
+    //         setMonthlyData(newChartData);
     //         setUpdateCounter(count => count + 1)
     
     //         setTimeout(() => {

@@ -41,9 +41,11 @@ import { OwnerProvider } from './OwnerComponents/OwnerContext';
 //----------------------API Functionality-----------------------------
 import { ApiProvider } from './Api';
 
-//----------------------Testing a Check Session Context -----------------------------
+//----------------------Check Session Context -----------------------------
 import { SessionProvider } from './UserComponents/SessionContext';
 
+//----------------------Bar Chart Data Session Context -----------------------------
+import {EquipmentDataProvider} from './ChartComponents/BarChartDataContext';
 
 //----------------------User Functionality-----------------------------
 import UserProfile from './UserComponents/UserProfile';
@@ -290,8 +292,7 @@ function App() {
   return (
     // UseContext gets called here, allowing the entirety of my app access to the USER and OWNER information!
     <SessionProvider>
-    <OwnerProvider>
-      <UserProvider>
+      <EquipmentDataProvider>
         <ApiProvider>
         <>
           <NavBar setSearchTerm={setSearchTerm} />
@@ -377,8 +378,7 @@ function App() {
           <Footer />
         </>
         </ApiProvider>
-      </UserProvider>
-    </OwnerProvider>
+      </EquipmentDataProvider>
     </SessionProvider>
   );
 }
