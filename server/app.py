@@ -1933,8 +1933,6 @@ class CalculateMonthlyTotals(Resource):
                 'equipment_history_id': monthly_history_records[-1].id
             })
 
-            
-
             for record in monthly_history_records:
                 summary_data['total_quantity'] = max(summary_data['total_quantity'], record.total_quantity)
                 if 'reserved' in record.new_state.lower():
@@ -1946,9 +1944,7 @@ class CalculateMonthlyTotals(Resource):
                 summary_data['total_available'] = record.available_quantity 
                 if 'maintenance' in record.new_state.lower():
                     summary_data['total_maintenance'] += record.maintenance_quantity
-
-                
-            
+                    
             last_record = monthly_history_records[-1]
             summary_data['total_available'] = last_record.available_quantity
         
@@ -1983,8 +1979,19 @@ class CalculateMonthlyTotals(Resource):
             db.session.commit()
             print(f"Commit successful")
             all_summaries_serializable = {
-                str(equipment_id): summary_data for equipment_id, summary_data in all_summaries.items()
+                str(equipment_id): {
+                    'date': start_of_month,
+                    'total_quantity': summary_data['total_quantity'],
+                    'total_available': summary_data['total_available'],
+                    'total_reserved': summary_data['total_reserved'],
+                    'total_rented_out': summary_data['total_rented_out'],
+                    'total_maintenance': summary_data['total_maintenance'],
+                    'total_cancelled': summary_data['total_cancelled'],
+                    'equipment_history_id': summary_data['equipment_history_id'],
+                    'equipment_id': equipment_id
+                } for equipment_id, summary_data in all_summaries.items()
             }
+
             return jsonify(all_summaries_serializable)
         except IntegrityError:
             print(f"Commit failed")
