@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef} from "react";
 import { Chart as ChartJS, ArcElement, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
-import BarChartDisplay from "./BarChartDisplay";
+import {toast} from 'react-toastify'
 import { Bar } from 'react-chartjs-2';
 
 // useRef
@@ -175,30 +175,34 @@ function BarChart({currentUser}){
               const newDataArray = Object.entries(newDataObject).map(([key, value]) => ({
                   ...value,
                   month: key // Assuming the key represents the month
-              }));
+              }))
       
               console.log("Transformed array:", newDataArray)
-      
+             
               // let mergedData
               // console.log("THIS IS THE MERGED DATA:", mergedData)
               // updatedData
 
               // Merge with existing data
-              // if (initialDataLoaded === false){
-              // const mergedData = [...existingData, ...newDataArray]
-              // console.log("Merged ArraY:", mergedData)
+              if (updateCounter > 0){
+                return toast.warn(`❌ Please limit refreshes to once per page load!`,
+                {
+                "autoClose" : 2000
+                })
               // Process merged data
-              // }
+              }
+
+              const mergedData = [...existingData, ...newDataArray]
 
               // const mergedData = initialDataLoaded ? [...existingData, ...newDataArray] : newDataArray
-              // console.log("Merged Array:", mergedData);
+              // console.log("Merged Array:", mergedData)
 
 
               // updatedData = countAgreementsByMonth(mergedData !== null ? mergedData : chartData)
 
-              // const updatedData = countAgreementsByMonth(mergedData)
+              const updatedData = countAgreementsByMonth(mergedData)
 
-              const updatedData = countAgreementsByMonth(newDataArray)
+              // const updatedData = countAgreementsByMonth(newDataArray)
 
               console.log("Updated array:", updatedData)
       
