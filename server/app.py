@@ -1979,8 +1979,19 @@ class CalculateMonthlyTotals(Resource):
             db.session.commit()
             print(f"Commit successful")
             all_summaries_serializable = {
-                str(equipment_id): summary_data for equipment_id, summary_data in all_summaries.items()
+                str(equipment_id): {
+                    'date': start_of_month,
+                    'total_quantity': summary_data['total_quantity'],
+                    'total_available': summary_data['total_available'],
+                    'total_reserved': summary_data['total_reserved'],
+                    'total_rented_out': summary_data['total_rented_out'],
+                    'total_maintenance': summary_data['total_maintenance'],
+                    'total_cancelled': summary_data['total_cancelled'],
+                    'equipment_history_id': summary_data['equipment_history_id'],
+                    'equipment_id': equipment_id
+                } for equipment_id, summary_data in all_summaries.items()
             }
+
             return jsonify(all_summaries_serializable)
         except IntegrityError:
             print(f"Commit failed")

@@ -7,30 +7,13 @@ import { Bar } from 'react-chartjs-2';
 function BarChart({currentUser}){
 
     const [existingData, setExistingData] = useState(currentUser?.equipment); // initialData is existing data
-    const [shouldRedraw, setShouldRedraw] = useState(false)
-    const [updatedLabels, setUpdatedLabels] = useState([])
-    const [updatedDatasets, setUpdatedDatasets] = useState([])
+    const [initialDataLoaded, setInititalDataLoaded] = useState(false)
     const [updateCounter, setUpdateCounter] = useState(0)
 
     const [chartData, setChartData] = useState({
       labels: [],
       datasets: []
     })
-
-    const chartRef = useRef(null)
-    // console.log(shouldRedraw)
-    // if (currentUser && currentUser?.equipment){
-    //   setExistingData(currentUser?.equipment)
-    // }
-
-    if (chartRef.current) {
-      // if(chartRef.current.data.datasets[3].data){
-      // console.log("WHAT IS THIS DATA # :", chartRef.current.data.datasets[3].data)
-      // }
-      console.log("LOOKING FOR CHART REF DATA:",chartRef?.current?.data)
-    }
-
-    // console.log("CURRENT USER TO LOOK FOR EQUIPMENT STATE SUMMARIES FOR:", currentUser)
 
     ChartJS.register(
         ArcElement, 
@@ -95,113 +78,98 @@ function BarChart({currentUser}){
         const month = correctedDate.getMonth()
         // console.log("THE MONTH:", month)
         // Month gets a number, 0-11, from there I reference the month name array and get the name
+
+        // if(dateString ===)
+
         return monthNames[month]
       }
-
-    // Count agreements per month
-    // https://www.w3schools.com/jsref/jsref_reduce.asp
-    // https://www.youtube.com/watch?v=XKD0aIA3-yM&list=PLo63gcFIe8o0nnhu0F-PpsTc8nkhNe9yu
-    const countAgreementsByMonth = (data = []) => {
-        const monthCounts = data.reduce((acc, equipment) => {
-        
-        // console.log("the EQUIPMENT in the reducer:", equipment)
-        // console.log("the EQUIPMENT STATE SUMMARY:", data)
-        //Send the current month in created_at (the date string or date object really, and have it find the month)
-        // const month = getMonthName(equipment?.created_at)
-        // console.log("AGREEMENT CREATED AT:", agreement?.created_at)
-
-        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
-
-        const processedIds = new Set()
-        if (equipment.equipment_state_summary && Array.isArray(equipment.equipment_state_summary)) {
-          equipment.equipment_state_summary.forEach(summary => {
-
-            // console.log(summary)
-
-            const month = getMonthName(summary.date)
-            const uniqueId = `${summary.equipment_history_id}-${summary.date}`
-            // Skip if this state summary has already been processed
-            if (processedIds.has(uniqueId)) {
-              return
-            }
-            processedIds.add(uniqueId)
-            // console.log("the EQUIPMENT STATE DATE:", summary.date)
-            // console.log("LETS SEE IF WE GET THE MONTHS:", month)
-
-            if (!acc[month]) {
-              acc[month] = {
-                totalQuantity: 0,
-                totalIdle: 0,
-                totalReserved: 0,
-                totalCancelled: 0,
-                totalMaintenanceQuantity: 0,
-                totalRentedOut: 0,
-                totalInCart: 0,
-                // totalMonthlyEquipment: 0,
-            }}
-            acc[month].totalQuantity = (acc[month].totalQuantity || 0) + summary.total_quantity
-
-            // console.log("THE MONTH:", acc[month])
-            // console.log("THE TOTAL QUANTITY COUNT:", acc[month])
-
-            acc[month].totalIdle = (acc[month].totalIdle || 0) +  summary.total_available
-
-            // acc[month].totalReserved = (acc[month].totalReserved || 0) + summary.total_reserved
-
-            acc[month].totalCancelled = (acc[month].totalCancelled || 0) + summary.total_cancelled
-
-            acc[month].totalMaintenanceQuantity = (acc[month].totalMaintenanceQuantity || 0) + summary.total_maintenance_quantity
-
-            acc[month].totalRentedOut = (acc[month].totalRentedOut || 0) + summary.total_rented_out
-
-            acc[month].totalInCart = (acc[month].totalInCart || 0) + summary.total_reserved
-
-            // console.log(`Month: ${month}, Equipment ID: ${summary.equipment_id},Idle Equipment: ${acc[month].totalIdle}, Total Equipment: ${acc[month].totalQuantity}, Total In Cart: ${acc[month].totalInCart}`)
-
-          })
-        }
-        return acc
-        }, {})
-        // Calculate monthly idle equipment and map results
-        // console.log("Month Counts:", monthCounts)
-        return Object.keys(monthCounts).map(month => {
-        const monthData = monthCounts[month]
-        // const totalIdle = monthData.totalMonthlyEquipment - monthData.totalRentedOut - monthData.totalInCart
-
-        // const totalIdle = (totalEquipment - monthData.totalRentedOut) - monthData.totalInCart
-
-        // console.log("TOTAL EQUIPMENT:",totalEquipment)
-        // console.log("Total Equipment:", totalEquipment)
-        // console.log("Total QUANTITY for " + month + ":", monthData.totalQuantity)
-        // console.log("Total IDLE for " + month + ":", monthData.totalIdle)
-        // console.log("Total RENTED Out for " + month + ":", monthData.totalRentedOut)
-        // console.log("Total IN CART for " + month + ":", monthData.totalInCart)
-        
-        return {
-            month,
-            allEquipment: monthData.totalQuantity,
-            idleItems: monthData.totalIdle > 0 ? monthData.totalIdle : 0,
-            cartTotalItems: monthData.totalInCart,
-            reservedEquipment: monthData.totalReserved,
-            cancelledEquipment: monthData.totalCancelled,
-            maintainedEquipment: monthData.totalMaintenanceQuantity,
-            rentedOutItems: monthData.totalRentedOut,
-             
-        }
-        })
-    }
 
     // Call the function with data and totalEquipment count
     // I HAD AN ARRAY OF AN ARRAY AAAH
 
+    const countAgreementsByMonth = (data = []) => {
+      const monthCounts = data.reduce((acc, equipment) => {
+        // Check if the data item contains 'equipment_state_summary'
+        if (equipment.equipment_state_summary && Array.isArray(equipment.equipment_state_summary)) {
+          equipment.equipment_state_summary.forEach(summary => {
+            processSummary(acc, summary)
+          })
+        } else if (equipment.equipment_history_id) {
+          // Direct processing for new data structure
+          processSummary(acc, equipment)
+        }
+        return acc
+      }, {})
+    
+      return Object.keys(monthCounts).map(month => {
+        const monthData = monthCounts[month]
+        return {
+          month,
+          allEquipment: monthData.totalQuantity,
+          idleItems: monthData.totalIdle,
+          cartTotalItems: monthData.totalInCart,
+          reservedEquipment: monthData.totalReserved,
+          cancelledEquipment: monthData.totalCancelled,
+          maintainedEquipment: monthData.totalMaintenanceQuantity,
+          rentedOutItems: monthData.totalRentedOut,
+        }
+      })
+    }
+
+    function processSummary(acc, summary) {
+      const month = getMonthName(summary.date || summary.month); // Handle both date formats
+      // equipment?.created_at
+      const uniqueId = `${summary.equipment_history_id}-${summary.date || summary.month}`;
+    
+      if (!acc[month]) {
+        acc[month] = {
+          totalQuantity: 0,
+          totalIdle: 0,
+          totalReserved: 0,
+          totalCancelled: 0,
+          totalMaintenanceQuantity: 0,
+          totalRentedOut: 0,
+          totalInCart: 0,
+        };
+      }
+    
+      acc[month].totalQuantity = (acc[month].totalQuantity || 0) + summary.total_quantity
+
+      // console.log("THE MONTH:", acc[month])
+      // console.log("THE TOTAL QUANTITY COUNT:", acc[month])
+
+      acc[month].totalIdle = (acc[month].totalIdle || 0) +  summary.total_available
+
+      // acc[month].totalReserved = (acc[month].totalReserved || 0) + summary.total_reserved
+
+      acc[month].totalCancelled = (acc[month].totalCancelled || 0) + summary.total_cancelled
+
+      acc[month].totalMaintenanceQuantity = (acc[month].totalMaintenanceQuantity || 0) + summary.total_maintenance_quantity
+
+      acc[month].totalRentedOut = (acc[month].totalRentedOut || 0) + summary.total_rented_out
+
+      acc[month].totalInCart = (acc[month].totalInCart || 0) + summary.total_reserved
+    
+      // console.log("Processing data item:", summary)
+      // console.log("Month:", month, "UniqueId:", uniqueId)
+      // console.log("Accumulator after processing:", acc)
+
+      // console.log(`Month: ${month}, Equipment ID: ${summary.equipment_id}, Equipment History ID: ${summary.equipment_history_id},Total In MAINTENANCE: ${acc[month].totalMaintenanceQuantity}, Idle Equipment: ${acc[month].totalIdle}, Total Equipment: ${acc[month].totalQuantity}, Total In Cart: ${acc[month].totalInCart}`)
+    }
+
       async function updateChartData() {
+      // setChartData({
+      //     labels: [],
+      //     datasets: []
+      //   })
           const updateYear = new Date().getFullYear();
           const updateMonth = new Date().getMonth() + 1;
       
           try {
               const response = await fetch(`/summarize/${updateMonth}/${updateYear}`);
               const newDataObject = await response.json()
-              // console.log("Received data:", newDataObject)
+
+              console.log("Received data:", newDataObject)
       
               // Transform the object into an array
               const newDataArray = Object.entries(newDataObject).map(([key, value]) => ({
@@ -209,21 +177,36 @@ function BarChart({currentUser}){
                   month: key // Assuming the key represents the month
               }));
       
-              // console.log("Transformed array:", newDataArray)
+              console.log("Transformed array:", newDataArray)
       
+              // let mergedData
+              // console.log("THIS IS THE MERGED DATA:", mergedData)
+              // updatedData
+
               // Merge with existing data
-              const mergedData = [...existingData, ...newDataArray]
-      
+              // if (initialDataLoaded === false){
+              // const mergedData = [...existingData, ...newDataArray]
+              // console.log("Merged ArraY:", mergedData)
               // Process merged data
-              const updatedData = countAgreementsByMonth(mergedData)
-      
+              // }
+
+              // const mergedData = initialDataLoaded ? [...existingData, ...newDataArray] : newDataArray
+              // console.log("Merged Array:", mergedData);
+
+
+              // updatedData = countAgreementsByMonth(mergedData !== null ? mergedData : chartData)
+
+              // const updatedData = countAgreementsByMonth(mergedData)
+
+              const updatedData = countAgreementsByMonth(newDataArray)
+
               console.log("Updated array:", updatedData)
       
               // Clear existing data in chart
               // clearChartData(chartRef.current);
-              // const newChartData = {
-                const newLabels = updatedData.map(item => item.month)
-                const newDatasets = [
+              const newChartData = {
+                labels: updatedData.map(item => item.month),
+                datasets : [
                       {
                           label: 'Total Equipment',
                           data: updatedData.map(item => item.allEquipment),
@@ -267,28 +250,18 @@ function BarChart({currentUser}){
                           borderWidth: 2,
                       }
                   ]
-              // }
-            
-            // Update chart data state
-            // setChartData(newChartData);
+              }
+    
 
-            setUpdatedLabels(newLabels)
-            setUpdatedDatasets(newDatasets)
-            console.log('WHERE IS THIS DATA SET:',newDatasets[1].data[0])
-            console.log("this should be the # in carts, will look for 14:", newDatasets[3])
+            // setUpdatedLabels(newLabels)
+            // setUpdatedDatasets(newDatasets)
+            // console.log('WHERE IS THIS DATA SET:',newDatasets[1].data[0])
+            // console.log("this should be the # in carts, will look for 14:", newDatasets[3])
       
-          //   setChartData({
-          //     labels: newLabels,
-          //     datasets: newDatasets
-          // })
+            setChartData(newChartData)
+            console.log(chartData)
 
             setUpdateCounter(count => count + 1)
-    
-            // setTimeout(() => {
-            //     if (chartRef.current) {
-            //         chartRef.current.update();
-            //     }
-            // }, 0);
       
           } catch (error) {
               console.error('Error fetching equipment summaries:', error);
@@ -350,6 +323,7 @@ function BarChart({currentUser}){
             ],
           })
       }
+      // setInititalDataLoaded(true)
   }, [currentUser])
 
   // console.log("TYPE OF LABELS:", typeof(chartData.labels))
@@ -361,15 +335,15 @@ function BarChart({currentUser}){
   // console.log("Is updatedLabels an array?:", Array.isArray(updatedLabels))
   // console.log("Is updatedDatasets an array?:", Array.isArray(updatedDatasets))
 
-  useEffect(() => {
-    if (chartRef.current && updatedDatasets.length > 0) {
+//   useEffect(() => {
+//     if (chartRef.current && updatedDatasets.length > 0) {
      
-        if (chartRef.current.data && chartRef.current.data.datasets.length > 1) {
-          chartRef.current.data.datasets[3].data[0] = updatedDatasets[3].data
-            chartRef.current.update();
-        }
-    }
-}, [updatedDatasets, updateCounter]);
+//         if (chartRef.current.data && chartRef.current.data.datasets.length > 1) {
+//           chartRef.current.data.datasets[3].data[0] = updatedDatasets[3].data
+//             chartRef.current.update()
+//         }
+//     }
+// }, [updatedDatasets, updateCounter])
 
     return(
         
@@ -382,9 +356,7 @@ function BarChart({currentUser}){
       </button>
       <div className="w-full h-full"> {/* Adjust height as needed */}
         <Bar
-        key={updateCounter}
         data={chartData} 
-        ref={chartRef} 
         options={barChartOptions}  />
         {/*   ref={chartRef} key={updateCounter} */}
       </div>
@@ -750,4 +722,112 @@ export default BarChart
     //     } catch (error) {
     //         console.error('Error fetching equipment summaries:', error);
     //     }
+    // }
+
+      //---------------------------------ATTEMPT 5 ------------------------------
+
+    // Count agreements per month
+    // https://www.w3schools.com/jsref/jsref_reduce.asp
+    // https://www.youtube.com/watch?v=XKD0aIA3-yM&list=PLo63gcFIe8o0nnhu0F-PpsTc8nkhNe9yu
+    // const countAgreementsByMonth = (data = []) => {
+    //     const monthCounts = data.reduce((acc, equipment) => {
+    //       console.log("THE DATA COMING IN:", data)
+    //       console.log("THE EQUIPMENT ITEM :", equipment)
+        
+    //     // console.log("the EQUIPMENT in the reducer:", equipment)
+    //     // console.log("the EQUIPMENT STATE SUMMARY:", data)
+    //     //Send the current month in created_at (the date string or date object really, and have it find the month)
+    //     // const month = getMonthName(equipment?.created_at)
+    //     // console.log("AGREEMENT CREATED AT:", agreement?.created_at)
+
+    //     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
+
+    //     const processedIds = new Set()
+    //     let calculateForEach 
+    //     if (equipment.equipment_state_summary && Array.isArray(equipment.equipment_state_summary)){
+    //       calculateForEach = equipment.equipment_state_summary
+    //     } else if (equipment.equipment_history_id) {
+          
+    //     }
+
+    //     {
+    //       equipment.equipment_state_summary.forEach(summary => {
+
+    //         // console.log(summary)
+
+    //         const month = getMonthName(summary.date)
+    //         const uniqueId = `${summary.equipment_history_id}-${summary.date}`
+    //         // Skip if this state summary has already been processed
+    //         if (processedIds.has(uniqueId)) {
+    //           return
+    //         }
+    //         processedIds.add(uniqueId)
+    //         // console.log("the EQUIPMENT STATE DATE:", summary.date)
+    //         // console.log("LETS SEE IF WE GET THE MONTHS:", month)
+
+    //         if (!acc[month]) {
+    //           acc[month] = {
+    //             totalQuantity: 0,
+    //             totalIdle: 0,
+    //             totalReserved: 0,
+    //             totalCancelled: 0,
+    //             totalMaintenanceQuantity: 0,
+    //             totalRentedOut: 0,
+    //             totalInCart: 0,
+    //             // totalMonthlyEquipment: 0,
+    //         }}
+    //         acc[month].totalQuantity = (acc[month].totalQuantity || 0) + summary.total_quantity
+
+    //         // console.log("THE MONTH:", acc[month])
+    //         // console.log("THE TOTAL QUANTITY COUNT:", acc[month])
+
+    //         acc[month].totalIdle = (acc[month].totalIdle || 0) +  summary.total_available
+
+    //         // acc[month].totalReserved = (acc[month].totalReserved || 0) + summary.total_reserved
+
+    //         acc[month].totalCancelled = (acc[month].totalCancelled || 0) + summary.total_cancelled
+
+    //         acc[month].totalMaintenanceQuantity = (acc[month].totalMaintenanceQuantity || 0) + summary.total_maintenance_quantity
+
+    //         acc[month].totalRentedOut = (acc[month].totalRentedOut || 0) + summary.total_rented_out
+
+    //         acc[month].totalInCart = (acc[month].totalInCart || 0) + summary.total_reserved
+
+    //         // console.log(`Month: ${month}, Equipment ID: ${summary.equipment_id}, Equipment History ID: ${summary.equipment_history_id}, Idle Equipment: ${acc[month].totalIdle}, Total Equipment: ${acc[month].totalQuantity}, Total In Cart: ${acc[month].totalInCart}`)
+
+    //         console.log("Processing equipment state summary:", summary)
+    //         console.log("Month:", month, "UniqueId:", uniqueId)
+    //         console.log("Accumulator before processing:", acc)
+
+    //       })
+    //     }
+    //     return acc
+    //     }, {})
+    //     // Calculate monthly idle equipment and map results
+    //     // console.log("Month Counts:", monthCounts)
+    //     return Object.keys(monthCounts).map(month => {
+    //     const monthData = monthCounts[month]
+    //     // const totalIdle = monthData.totalMonthlyEquipment - monthData.totalRentedOut - monthData.totalInCart
+
+    //     // const totalIdle = (totalEquipment - monthData.totalRentedOut) - monthData.totalInCart
+
+    //     // console.log("TOTAL EQUIPMENT:",totalEquipment)
+    //     // console.log("Total Equipment:", totalEquipment)
+    //     // console.log("Total QUANTITY for " + month + ":", monthData.totalQuantity)
+    //     // console.log("Total IDLE for " + month + ":", monthData.totalIdle)
+    //     // console.log("Total RENTED Out for " + month + ":", monthData.totalRentedOut)
+    //     // console.log("Total IN CART for " + month + ":", monthData.totalInCart)
+        
+    //     return {
+    //         month,
+    //         allEquipment: monthData.totalQuantity,
+    //         idleItems: monthData.totalIdle > 0 ? monthData.totalIdle : 0,
+    //         cartTotalItems: monthData.totalInCart,
+    //         reservedEquipment: monthData.totalReserved,
+    //         cancelledEquipment: monthData.totalCancelled,
+    //         maintainedEquipment: monthData.totalMaintenanceQuantity,
+    //         rentedOutItems: monthData.totalRentedOut,
+             
+    //     }
+    //     })
     // }
