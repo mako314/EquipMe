@@ -3,7 +3,7 @@ import { useContext, useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import {useFormik} from "formik"
 import { object, string, number} from 'yup'
-import OwnerContext from './OwnerContext'
+// import OwnerContext from './OwnerContext'
 import ApiUrlContext from "../Api"
 import { UserSessionContext } from "../UserComponents/SessionContext";
 
@@ -12,7 +12,7 @@ function OwnerForm({addOwner}){
     const [error, setError] = useState()
     const navigate = useNavigate()
     const apiUrl = useContext(ApiUrlContext)
-    const [owner, setOwner] = useContext(OwnerContext)
+    // const [owner, setOwner] = useContext(OwnerContext)
     const { currentUser, role, setCurrentUser, setRole } = UserSessionContext()
 
     function handleLogin() {
