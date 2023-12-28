@@ -3,7 +3,7 @@ import { useState, useContext } from 'react'
 import { useNavigate } from "react-router-dom";
 import {useFormik} from "formik"
 import { object, string, number} from 'yup'
-import  UserContext  from './UserContext';
+// import  UserContext  from './UserContext';
 import { UserSessionContext } from "./SessionContext";
 import ApiUrlContext from "../Api";
 
@@ -12,7 +12,7 @@ function UserForm({ addUser }){
     const navigate = useNavigate()
 
 
-    const [user, setUser] = useContext(UserContext)
+    // const [user, setUser] = useContext(UserContext)
     const { currentUser, role, setCurrentUser, setRole } = UserSessionContext()
     const apiUrl = useContext(ApiUrlContext)
 
