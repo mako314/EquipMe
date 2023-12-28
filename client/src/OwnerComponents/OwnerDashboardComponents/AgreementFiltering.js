@@ -24,7 +24,7 @@ function AgreementFiltering({currentUser, role}) {
                     owner_decision: agreement.owner_decision,
                     created_at: agreement.created_at,
                     ownerFirstName: cartItem?.equipment.owner?.firstName,
-                    ownerLastName:  cartItem?.equipment.owner?.firstName
+                    ownerLastName:  cartItem?.equipment.owner?.lastName
             }
             })
         })
@@ -116,15 +116,23 @@ function AgreementFiltering({currentUser, role}) {
     ))
 
 
-    let sortedDescendingAgreements = [...agreementsForDateSorting]
+    let sortedDescendingAgreements = role === 'owner' ? [...agreementsForDateSorting] : [...userAgreementsForDateSorting]
     .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
     .map((agreement) => (
-        <Fragment key={agreement.id}>
+        <Fragment key={role === 'owner' ? agreement.id : agreement.agreementId}>
         <div className="w-full rounded overflow-hidden shadow-lg bg-white text-gray-800">
             <div className="px-6 py-4">
                 <div className="font-bold text-xl mb-2">Agreement Details For: <br/>
-                {agreement.cart_item.cart.user.firstName} {agreement.cart_item.cart.user.lastName}
-                
+                {role === 'owner' ?
+                    <>
+                        {agreement.cart_item.cart.user.firstName} {agreement.cart_item.cart.user.lastName}
+                    </> :
+
+                    <>
+                    {/* {console.log("trying to see",agreement)} */}
+                    {agreement.ownerFirstName} {agreement.ownerLastName}
+                    </> 
+                }
                 </div>
                 <p className="text-gray-700 text-base">
                 <span className="font-semibold">Created At:</span> {formatDateToLocalTimezone(agreement.created_at)}
