@@ -169,9 +169,9 @@ function BarChart({currentUser}){
 
       async function updateChartData( allVisible = false ) {
 
-        console.log("THIS IS THE VISIBLE:", allVisible)
+        // console.log("THIS IS THE VISIBLE:", allVisible)
         setShowAll(allVisible)
-        console.log("THIS IS THE SHOW ALL:", showAll)
+        // console.log("THIS IS THE SHOW ALL:", showAll)
 
         if (allVisible && updateCounter > 0) {
           // Data has already been fetched and is up-to-date
@@ -185,7 +185,7 @@ function BarChart({currentUser}){
               const response = await fetch(`/summarize/${updateMonth}/${updateYear}`);
               const newDataObject = await response.json()
 
-              console.log("Received data:", newDataObject)
+              // console.log("Received data:", newDataObject)
       
               // Transform the object into an array
               const newDataArray = Object.entries(newDataObject).map(([key, value]) => ({
@@ -193,7 +193,7 @@ function BarChart({currentUser}){
                   month: key // Assuming the key represents the month
               }))
       
-              console.log("Transformed array:", newDataArray)
+              // console.log("Transformed array:", newDataArray)
              
               // let mergedData
               // console.log("THIS IS THE MERGED DATA:", mergedData)
@@ -242,22 +242,22 @@ function BarChart({currentUser}){
 
               // console.log("THE EXISTING ARRAY:", existingData)
 
-              console.log("THE NEW DATA ARRAY:", newDataArray)
+              // console.log("THE NEW DATA ARRAY:", newDataArray)
 
               const mergedData = [...existingData, ...newDataArray]
 
               // const mergedData = initialDataLoaded ? [...existingData, ...newDataArray] : newDataArray
-              console.log("Merged Array:", mergedData)
+              // console.log("Merged Array:", mergedData)
 
 
               // updatedData = countAgreementsByMonth(mergedData !== null ? mergedData : monthlyData)
 
               const updatedData = countAgreementsByMonth(mergedData)
 
-              console.log("NEW DATA ARRAY:", newDataArray)
+              // console.log("NEW DATA ARRAY:", newDataArray)
 
               const currentMonthData = countAgreementsByMonth(newDataArray)
-              console.log("currentMonthData Array:", currentMonthData)
+              // console.log("currentMonthData Array:", currentMonthData)
 
               // console.log("Updated array:", updatedData)
       
@@ -311,7 +311,7 @@ function BarChart({currentUser}){
                   ]
               }
 
-              console.log("NEW CHART DATA FOR ALL THE CHARTS array:", newChartData)
+              // console.log("NEW CHART DATA FOR ALL THE CHARTS array:", newChartData)
 
               const currentMonthMappedData = {
                 labels: currentMonthData.map(item => item.month),
@@ -384,8 +384,8 @@ function BarChart({currentUser}){
           }
       }
 
-      console.log("THE BAR CHART EQUIPMENTDATA",barChartEquipmentData)
-      console.log("THE MONTHLY DATA:", monthlyData)
+      // console.log("THE BAR CHART EQUIPMENTDATA",barChartEquipmentData)
+      // console.log("THE MONTHLY DATA:", monthlyData)
 
 
     // console.log(typeof(newData))
@@ -448,7 +448,7 @@ function BarChart({currentUser}){
       
   }, [])
 
-  console.log("THE CHART DATA:", monthlyData)
+  // console.log("THE CHART DATA:", monthlyData)
   
     return(
         
@@ -492,7 +492,7 @@ export default BarChart
       // )
     
       // if (processedEquipmentIds?.has(uniqueId)) {
-      //   console.log(`Skipping duplicate entry for equipment ID: ${uniqueId}`)
+        // console.log(`Skipping duplicate entry for equipment ID: ${uniqueId}`)
       //    // Update existing data rather than skipping
       //   acc[month].totalInCart += summary.total_reserved
       //   return acc
@@ -519,8 +519,8 @@ export default BarChart
       // // Accumulate data
       // acc[month].totalQuantity = (acc[month].totalQuantity || 0) + summary.total_quantity
 
-      // // console.log("THE MONTH:", acc[month])
-      // // console.log("THE TOTAL QUANTITY COUNT:", acc[month])
+      // console.log("THE MONTH:", acc[month])
+      // console.log("THE TOTAL QUANTITY COUNT:", acc[month])
 
       // acc[month].totalIdle = (acc[month].totalIdle || 0) +  summary.total_available
 

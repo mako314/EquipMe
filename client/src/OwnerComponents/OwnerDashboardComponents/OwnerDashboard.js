@@ -291,7 +291,8 @@ function AccountSettings() {
                         </div>
                         
                         <div className="h-96 w-full col-span-2 bg-white border border-gray-200 shadow-md rounded-lg p-4">
-                        <BarChart currentUser={currentUser} setUpdateCounter={setUpdateCounter} updateCounter={updateCounter}/>
+                        {role === 'owner' &&
+                        <BarChart currentUser={currentUser} setUpdateCounter={setUpdateCounter} updateCounter={updateCounter}/>}
                         </div>
 
                         <div className="h-96 col-span-1 bg-white border border-gray-300 overflow-y-auto">
