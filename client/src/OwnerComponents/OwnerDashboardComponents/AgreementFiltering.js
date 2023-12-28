@@ -1,14 +1,49 @@
 import React, {useState, Fragment } from 'react';
 
-function AgreementFiltering({currentUser}) {
+function AgreementFiltering({currentUser, role}) {
     // https://stackoverflow.com/questions/72193794/how-to-sort-array-of-objects-by-date-but-with-most-current-date-first
     // https://stackoverflow.com/questions/72191289/sort-objects-by-datetime-in-javascript
     // https://stackoverflow.com/questions/68136203/how-to-use-javascript-sort-to-order-by-year-month-day
     // https://stackoverflow.com/questions/10123953/how-to-sort-an-object-array-by-date-property
 
+    // console.log("CURRENT USER IN AGREEMENT FILTERING:", currentUser.cart)
+
     const [agreementFiltering, setAgreementFiltering] = useState('newest')
 
     let agreementsForDateSorting = Array.isArray(currentUser?.agreements) ? [...currentUser.agreements] : []
+
+
+    let flatMappedUserAgreement = currentUser?.cart?.flatMap(item => {
+        return item.cart_item?.map(cartItem  => {
+            return cartItem.agreements.map(agreement => { 
+                console.log('Agreement:', agreement) 
+            return {
+                    agreementId : agreement.id,
+                    status: agreement.agreement_status,
+                    user_decision: agreement.user_decision,
+                    owner_decision: agreement.owner_decision,
+                    created_at: agreement.created_at,
+                    ownerFirstName: cartItem?.equipment.owner?.firstName,
+                    ownerLastName:  cartItem?.equipment.owner?.firstName
+            }
+            })
+        })
+    }) || []
+
+    let userAgreementsForDateSorting = flatMappedUserAgreement.flatMap(item => item)
+
+    
+
+        // return {
+        //     agreements: itemsInCart.agreements,
+        //     agreement_status: itemsInCart.agreements.agreement_status,
+        //     ownerFirstName: itemsInCart?.equipment.owner?.firstName,
+        //     ownerLastName:  itemsInCart?.equipment.owner?.firstName
+        // }
+
+    console.log("USER AGREEMENTS:", flatMappedUserAgreement)
+    console.log("HOPEFULLY FLATENNED MAP:",  userAgreementsForDateSorting)
+    
 
     const formatDateToLocalTimezone = (utcDateTimeString) => {
         // Create a date object for the UTC time
@@ -32,21 +67,39 @@ function AgreementFiltering({currentUser}) {
       }
 
       const handleAgreementSelection = (event) => {
-        console.log('Selected value:', event.target.value);
-        setAgreementFiltering(event.target.value);
+        console.log('Selected value:', event.target.value)
+        setAgreementFiltering(event.target.value)
     }
 
     let userSortOption = (a, b) => new Date(a.created_at) - new Date(b.created_at)
-    let sortedAscendingAgreements = [...agreementsForDateSorting]
+
+    let sortedAscendingAgreements = role === 'owner' ? [...agreementsForDateSorting] : [...userAgreementsForDateSorting]
     .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
     .map((agreement) => (
-        <Fragment key={agreement.id}>
+        <Fragment key={ role === 'owner' ? agreement.id : agreement.agreementId}>
             <div className="w-full rounded overflow-hidden shadow-lg bg-white text-gray-800">
             <div className="px-6 py-4">
-                <div className="font-bold text-xl mb-2">Agreement Details For: <br></br>
-                {agreement.cart_item.cart.user.firstName} {agreement.cart_item.cart.user.lastName}</div>
+
+                <div className="font-bold text-xl mb-2">Agreement Details For: <br/>
+
+                {role === 'owner' ?
+                    <>
+                        {agreement.cart_item.cart.user.firstName} {agreement.cart_item.cart.user.lastName}
+                    </> :
+
+                    <>
+                    {/* {console.log("trying to see",agreement)} */}
+                    {agreement.ownerFirstName} {agreement.ownerLastName}
+                    </> 
+                }
+                 
+                
+                
+                </div>
                 <p className="text-gray-700 text-base">
-                <span className="font-semibold">Created At:</span> {formatDateToLocalTimezone(agreement.created_at)}
+                <span className="font-semibold">Created At:</span> 
+                {console.log("AGREEMENT INSIDE DATA:", agreement)}
+                {formatDateToLocalTimezone(agreement.created_at)}
                 </p>
                 <p className="text-gray-700 text-base">
                 <span className="font-semibold">Agreement Status:</span> {agreement.agreement_status}
@@ -69,8 +122,10 @@ function AgreementFiltering({currentUser}) {
         <Fragment key={agreement.id}>
         <div className="w-full rounded overflow-hidden shadow-lg bg-white text-gray-800">
             <div className="px-6 py-4">
-                <div className="font-bold text-xl mb-2">Agreement Details For: <br></br>
-                {agreement.cart_item.cart.user.firstName} {agreement.cart_item.cart.user.lastName}</div>
+                <div className="font-bold text-xl mb-2">Agreement Details For: <br/>
+                {agreement.cart_item.cart.user.firstName} {agreement.cart_item.cart.user.lastName}
+                
+                </div>
                 <p className="text-gray-700 text-base">
                 <span className="font-semibold">Created At:</span> {formatDateToLocalTimezone(agreement.created_at)}
                 </p>
