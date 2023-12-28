@@ -10,6 +10,7 @@ function ProductCard({ id, name, model, make, location, equipment_image }) {
 
     function handleClick(e) {
         navigate(`/equipment/${id}`)
+        window.scrollTo(0, 0)
     }
 
     return (

@@ -8,7 +8,6 @@ import { useEquipmentData } from "./BarChartDataContext";
 function BarChart({currentUser}){
 
     const [existingData, setExistingData] = useState(currentUser?.equipment); // initialData is existing data
-    const [initialDataLoaded, setInititalDataLoaded] = useState(false)
     const [updateCounter, setUpdateCounter] = useState(0)
     const [showAll, setShowAll] = useState(false)
 
@@ -91,28 +90,26 @@ function BarChart({currentUser}){
     // Call the function wth data and totalEquipment count
 
     function countAgreementsByMonth(data = []) {
-      const latestSummaries = {}; // Map to store the latest summary for each equipment
-      const monthCounts = {};
+      const latestSummaries = {} // Map to store the latest summary for each equipment
+      const monthCounts = {}
     
-      // Determine the latest summary for each equipment ID
+      // Determine the latest summary for each equipment ID, the data that's coming in for the joint (all months overview, is currentUser.equipment, which has a .equipment_state_summary) and my fetched update, which has no item.equipment_state_summary
       data.forEach(item => {
-        let summaries = item.equipment_state_summary || [item];
+        let summaries = item.equipment_state_summary || [item]
         summaries.forEach(summary => {
-          const equipmentId = summary.equipment_id;
-          const historyId = summary.equipment_history_id;
+          const equipmentId = summary.equipment_id
+          const historyId = summary.equipment_history_id
           if (!latestSummaries[equipmentId] || latestSummaries[equipmentId].equipment_history_id < historyId) {
-            latestSummaries[equipmentId] = summary;
+            latestSummaries[equipmentId] = summary
           }
         });
       });
     
       // Process each latest summary
       Object.values(latestSummaries).forEach(summary => {
-        processSummary(monthCounts, summary);
-      });
+        processSummary(monthCounts, summary)
+      })
       
-      
-  
       // Map the accumulated data to the desired format
       return Object.keys(monthCounts).map(month => {
           const monthData = monthCounts[month];
@@ -125,24 +122,13 @@ function BarChart({currentUser}){
               cancelledEquipment: monthData.totalCancelled,
               maintainedEquipment: monthData.totalMaintenanceQuantity,
               rentedOutItems: monthData.totalRentedOut,
-          };
-      });
+          }
+      })
   }
 
-    function processSummary(acc, summary, latestHistoryIds) {
-      
-      // processedEquipmentIds
-      const month = getMonthName(summary.date || summary.month)
-      // console.log("THE DATE:", summary.date)
-      // const uniqueId = `${summary.equipment_id}-${month}`
-      // const equipmentId = summary.equipment_id
-      // const historyId = summary.equipment_history_id
+    function processSummary(acc, summary) {
 
-      // console.log("EQUIPMENT ID:", equipmentId, "EQUIPMENT HISTORY ID:", historyId, "MONTH", month, "TOTAL RESERVED QUANTITY:", summary.total_reserved,)
-
-      // Check if this equipment ID has been processed before
-      // if (latestHistoryIds[equipmentId] === historyId) {
-        // latestHistoryIds[equipmentId] = historyId  // Update with the latest history ID
+        const month = getMonthName(summary.date || summary.month)
 
         if (!acc[month]) {
           acc[month] = {
@@ -156,12 +142,10 @@ function BarChart({currentUser}){
           };
         }
 
-        // Update month data with the latest summary
-        // Accumulate data
+      // Update month data with the latest summary
+      // Accumulate data
       acc[month].totalQuantity = (acc[month].totalQuantity || 0) + summary.total_quantity
 
-      // console.log("THE MONTH:", acc[month])
-      // console.log("THE TOTAL QUANTITY COUNT:", acc[month])
 
       acc[month].totalIdle = (acc[month].totalIdle || 0) +  summary.total_available
 
@@ -174,61 +158,12 @@ function BarChart({currentUser}){
       acc[month].totalRentedOut = (acc[month].totalRentedOut || 0) + summary.total_rented_out
 
       acc[month].totalInCart = (acc[month].totalInCart || 0) + summary.total_reserved
-      // }
+      
 
-      return acc;
+      return acc
     }
 
-      // console.log("UNIQUE ID:", summary.equipment_id, "THE RESERVED QUANTITY:", summary.total_reserved
-      // )
-    
-      // if (processedEquipmentIds?.has(uniqueId)) {
-      //   console.log(`Skipping duplicate entry for equipment ID: ${uniqueId}`)
-      //    // Update existing data rather than skipping
-      //   acc[month].totalInCart += summary.total_reserved
-      //   return acc
-      // }
-    
-      // processedEquipmentIds?.add(uniqueId);
-      // console.log(`Processed entry for equipment ID: ${uniqueId}`);
 
-      // console.log(processedEquipmentIds)
-    
-      // // Ensure month data structure exists
-      // if (!acc[month]) {
-      //   acc[month] = {
-      //     totalQuantity: 0,
-      //     totalIdle: 0,
-      //     totalReserved: 0,
-      //     totalCancelled: 0,
-      //     totalMaintenanceQuantity: 0,
-      //     totalRentedOut: 0,
-      //     totalInCart: 0,
-      //   };
-      // }
-    
-      // // Accumulate data
-      // acc[month].totalQuantity = (acc[month].totalQuantity || 0) + summary.total_quantity
-
-      // // console.log("THE MONTH:", acc[month])
-      // // console.log("THE TOTAL QUANTITY COUNT:", acc[month])
-
-      // acc[month].totalIdle = (acc[month].totalIdle || 0) +  summary.total_available
-
-      // // acc[month].totalReserved = (acc[month].totalReserved || 0) + summary.total_reserved
-
-      // acc[month].totalCancelled = (acc[month].totalCancelled || 0) + summary.total_cancelled
-
-      // acc[month].totalMaintenanceQuantity = (acc[month].totalMaintenanceQuantity || 0) + summary.total_maintenance_quantity
-
-      // acc[month].totalRentedOut = (acc[month].totalRentedOut || 0) + summary.total_rented_out
-
-      // acc[month].totalInCart = (acc[month].totalInCart || 0) + summary.total_reserved
-
-      // console.log(`Month: ${month}, Equipment ID: ${summary.equipment_id}, Equipment History ID: ${summary.equipment_history_id},Total In MAINTENANCE: ${acc[month].totalMaintenanceQuantity}, Idle Equipment: ${acc[month].totalIdle}, Total Equipment: ${acc[month].totalQuantity}, Total In Cart: ${acc[month].totalInCart}`)
-    
-      // return acc // Return the updated accumulator
-    // }
 
     // const uniqueSummaries = new Set()
 
@@ -425,7 +360,6 @@ function BarChart({currentUser}){
                       }
                   ]
               }
-    
 
             // setUpdatedLabels(newLabels)
             // setUpdatedDatasets(newDatasets)
@@ -453,21 +387,6 @@ function BarChart({currentUser}){
       console.log("THE BAR CHART EQUIPMENTDATA",barChartEquipmentData)
       console.log("THE MONTHLY DATA:", monthlyData)
 
-
-      // function updateAllDataWithMonthlyChanges() {
-      //   const updatedAllData = { ...barChartEquipmentData } // Creating a copy of the existing data
-      
-      //   // Assuming the datasets are structured similarly in both data objects
-      //   monthlyData.datasets.forEach((monthlyDataset, index) => {
-      //     if (updatedAllData.datasets[index]) {
-      //       updatedAllData.datasets[index].data = monthlyDataset.data; // Update the corresponding dataset
-      //     }
-      //   })
-      
-      //   setBarChartEquipmentData(updatedAllData); // Set the updated data
-      // }
-
-    
 
     // console.log(typeof(newData))
     // console.log("CURRENT USER:", currentUser?.equipment)
@@ -567,94 +486,55 @@ export default BarChart
 
 
 
-    // const countAgreementsByMonth = (data = []) => {
-    //   const monthCounts = data.reduce((acc, equipment) => {
-    //     // Check if the data item contains 'equipment_state_summary'
-    //     if (equipment.equipment_state_summary && Array.isArray(equipment.equipment_state_summary)) {
-    //       equipment.equipment_state_summary.forEach(summary => {
-    //         processSummary(acc, summary)
-    //         sortDataByDate(summary)
-    //       })
-    //     } else if (equipment.equipment_history_id) {
-    //       // Direct processing for new data structure
-    //       processSummary(acc, equipment)
-    //       sortDataByDate(equipment)
-    //     }
-    //     return acc
-    //   }, {})
+
+
+      // console.log("UNIQUE ID:", summary.equipment_id, "THE RESERVED QUANTITY:", summary.total_reserved
+      // )
     
-    //   return Object.keys(monthCounts).map(month => {
-    //     const monthData = monthCounts[month]
-    //     return {
-    //       month,
-    //       allEquipment: monthData.totalQuantity,
-    //       idleItems: monthData.totalIdle,
-    //       cartTotalItems: monthData.totalInCart,
-    //       reservedEquipment: monthData.totalReserved,
-    //       cancelledEquipment: monthData.totalCancelled,
-    //       maintainedEquipment: monthData.totalMaintenanceQuantity,
-    //       rentedOutItems: monthData.totalRentedOut,
-    //     }
-    //   })
-    // }
-
-
-     // function processSummary(acc, summary) {
-    //   // const month = getMonthName(summary.date || summary.month); // Handle both date formats
-    //   // // equipment?.created_at
-    //   // const uniqueId = `${summary.equipment_history_id}-${summary.date || summary.month}`
-
-    //   const month = getMonthName(summary.date || summary.month);
-    //   const equipmentId = summary.equipment_id
-
-    //   if (processedEquipmentIds.has(equipmentId)) {
-    //     console.log(`Skipping duplicate entry for equipment ID: ${equipmentId}`);
-    //     return; // Skip this entry as it's a duplicate
-    // }
-    // processedEquipmentIds.add(equipmentId);
-
-    // console.log(`Processed entry for equipment ID: ${equipmentId}`)
-
-    //   console.log("THE UNIQUE ID:", uniqueId)
-
-    //   if (!acc[month]) {
-    //     acc[month] = {
-    //       totalQuantity: 0,
-    //       totalIdle: 0,
-    //       totalReserved: 0,
-    //       totalCancelled: 0,
-    //       totalMaintenanceQuantity: 0,
-    //       totalRentedOut: 0,
-    //       totalInCart: 0,
-    //     };
-    //   }
-
+      // if (processedEquipmentIds?.has(uniqueId)) {
+      //   console.log(`Skipping duplicate entry for equipment ID: ${uniqueId}`)
+      //    // Update existing data rather than skipping
+      //   acc[month].totalInCart += summary.total_reserved
+      //   return acc
+      // }
     
-    //   acc[month].totalQuantity = (acc[month].totalQuantity || 0) + summary.total_quantity
+      // processedEquipmentIds?.add(uniqueId);
+      // console.log(`Processed entry for equipment ID: ${uniqueId}`);
 
-    //   // console.log("THE MONTH:", acc[month])
-    //   // console.log("THE TOTAL QUANTITY COUNT:", acc[month])
-
-    //   acc[month].totalIdle = (acc[month].totalIdle || 0) +  summary.total_available
-
-    //   // acc[month].totalReserved = (acc[month].totalReserved || 0) + summary.total_reserved
-
-    //   acc[month].totalCancelled = (acc[month].totalCancelled || 0) + summary.total_cancelled
-
-    //   acc[month].totalMaintenanceQuantity = (acc[month].totalMaintenanceQuantity || 0) + summary.total_maintenance_quantity
-
-    //   acc[month].totalRentedOut = (acc[month].totalRentedOut || 0) + summary.total_rented_out
-
-    //   acc[month].totalInCart = (acc[month].totalInCart || 0) + summary.total_reserved
-
-    //   // console.log("THE MAINTENNANCE QUALITY TESt:", summary.total_maintenance
-    //   // )
+      // console.log(processedEquipmentIds)
     
-    //   // console.log("Processing data item:", summary)
-    //   // console.log("Month:", month, "UniqueId:", uniqueId)
-    //   // console.log("Accumulator after processing:", acc)
+      // // Ensure month data structure exists
+      // if (!acc[month]) {
+      //   acc[month] = {
+      //     totalQuantity: 0,
+      //     totalIdle: 0,
+      //     totalReserved: 0,
+      //     totalCancelled: 0,
+      //     totalMaintenanceQuantity: 0,
+      //     totalRentedOut: 0,
+      //     totalInCart: 0,
+      //   };
+      // }
+    
+      // // Accumulate data
+      // acc[month].totalQuantity = (acc[month].totalQuantity || 0) + summary.total_quantity
 
-    //   // console.log(`Month: ${month}, Equipment ID: ${summary.equipment_id}, Equipment History ID: ${summary.equipment_history_id},Total In MAINTENANCE: ${acc[month].totalMaintenanceQuantity}, Idle Equipment: ${acc[month].totalIdle}, Total Equipment: ${acc[month].totalQuantity}, Total In Cart: ${acc[month].totalInCart}`)
+      // // console.log("THE MONTH:", acc[month])
+      // // console.log("THE TOTAL QUANTITY COUNT:", acc[month])
+
+      // acc[month].totalIdle = (acc[month].totalIdle || 0) +  summary.total_available
+
+      // // acc[month].totalReserved = (acc[month].totalReserved || 0) + summary.total_reserved
+
+      // acc[month].totalCancelled = (acc[month].totalCancelled || 0) + summary.total_cancelled
+
+      // acc[month].totalMaintenanceQuantity = (acc[month].totalMaintenanceQuantity || 0) + summary.total_maintenance_quantity
+
+      // acc[month].totalRentedOut = (acc[month].totalRentedOut || 0) + summary.total_rented_out
+
+      // acc[month].totalInCart = (acc[month].totalInCart || 0) + summary.total_reserved
+
+      // console.log(`Month: ${month}, Equipment ID: ${summary.equipment_id}, Equipment History ID: ${summary.equipment_history_id},Total In MAINTENANCE: ${acc[month].totalMaintenanceQuantity}, Idle Equipment: ${acc[month].totalIdle}, Total Equipment: ${acc[month].totalQuantity}, Total In Cart: ${acc[month].totalInCart}`)
+    
+      // return acc // Return the updated accumulator
     // }
-
-    // const sortedData = sortDataByDate(yourDataArray)
