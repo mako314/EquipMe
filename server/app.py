@@ -1985,7 +1985,7 @@ class CalculateMonthlyTotals(Resource):
                     'total_available': summary_data['total_available'],
                     'total_reserved': summary_data['total_reserved'],
                     'total_rented_out': summary_data['total_rented_out'],
-                    'total_maintenance': summary_data['total_maintenance'],
+                    'total_maintenance_quantity': summary_data['total_maintenance'],
                     'total_cancelled': summary_data['total_cancelled'],
                     'equipment_history_id': summary_data['equipment_history_id'],
                     'equipment_id': equipment_id
