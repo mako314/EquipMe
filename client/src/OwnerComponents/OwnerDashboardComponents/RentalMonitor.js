@@ -5,6 +5,7 @@ function RentalMonitor({currentUser}){
     const agreementsData = currentUser?.agreements 
 
     // console.log("Testing AgreementsData to see if req data in there:", agreementsData)
+    // console.log("THE CURRENT USER, LOOKING FOR AGREEMENTS", currentUser.cart)
     
     let totalRevenue = 0
 

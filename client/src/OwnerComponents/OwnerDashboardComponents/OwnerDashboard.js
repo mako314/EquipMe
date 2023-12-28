@@ -300,7 +300,8 @@ function AccountSettings() {
                        {/* {selectionAgreementForm} */}
 
                         {/* {agreementFiltering === 'newest' ? sortedAscendingAgreements : sortedDescendingAgreements} */}
-                        <AgreementFiltering currentUser={currentUser}/>
+
+                        <AgreementFiltering currentUser={currentUser} role={role}/>
 
                         </div>
                         <div className="h-96 col-span-1 bg-white border border-gray-300 p-4 overflow-hidden">
