@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 function FavoriteCarousel({currentUser, setFromOwnerDash}) {
 
 const [currentIndex, setCurrentIndex] = useState(0)
-// console.log("CAROUSEL:",currentUser)
+console.log("CAROUSEL:",currentUser)
 const navigate = useNavigate()
 
 const handleEquipmentNavigation = (equipmentId) => {
@@ -31,6 +31,24 @@ currentUser?.equipment?.map((equipment) => {
         )
   }
 })
+
+// if(currentUser?.user_favorite > 0){
+currentUser?.user_favorite?.map((favorite) => {
+  console.log("FAVORITE FOR USER:",favorite)
+  // if(favorite?.user_favorite.length > 0){
+    carouselItems.push({
+    equipmentName: `${favorite?.equipment?.make} ${favorite?.equipment?.model}`,
+    image: <img
+          key={favorite?.equipment?.make +' '+ favorite?.equipment?.model + '' + favorite?.equipment?.id} 
+          className="w-[350px] h-[250px] object-fill rounded-lg"
+          src={favorite?.equipment?.equipment_image}
+          alt={favorite?.equipment?.make +' '+ favorite?.equipment?.model}
+          onClick={() => handleEquipmentNavigation(favorite?.equipment?.id)}
+        />}
+        )
+  // }
+})
+// }
 
   
   // Rather simple previous and next functions. Sets a variable to 0 to test if it's the first item in the array, from then it either adds one or removes one depending on whether or not which is being called.

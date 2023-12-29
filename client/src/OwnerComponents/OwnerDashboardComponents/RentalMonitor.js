@@ -68,7 +68,7 @@ function RentalMonitor({currentUser, role}){
     // https://www.youtube.com/watch?v=XKD0aIA3-yM&list=PLo63gcFIe8o0nnhu0F-PpsTc8nkhNe9yu
     const countAgreementsByMonth = (data = []) => {
         const monthCounts = data.reduce((acc, agreement) => {
-        console.log("the agreement in the reducer:", agreement)
+        // console.log("the agreement in the reducer:", agreement)
 
         const agreementPriceAtAddition = role === 'owner' ? agreement?.cart_item.price_cents_at_addition : agreement.price_cents_at_addition
 
@@ -110,7 +110,7 @@ function RentalMonitor({currentUser, role}){
     //my calculations aren't too expensive though. 
     let monthlyRevenueData
       if (agreementsData) {
-        console.log(agreementsData)
+        // console.log(agreementsData)
         monthlyRevenueData = countAgreementsByMonth(agreementsData)
         // Calculate the total revenue by summing up the totalMoneyIn for each month.
         totalRevenue = monthlyRevenueData.reduce((sum, { totalRevenuePerMonth }) => sum + totalRevenuePerMonth, 0)
