@@ -29,6 +29,9 @@ import AgreementFiltering from './AgreementFiltering';
 import FavoriteCarousel from './FavoritedCarousel';
 import RentedItemUserCarousel from './RentedItemUserCarousel';
 
+//Insurnace Recommendations for User import
+import InsuranceRecommendations from './InsuranceRecommendations';
+
 //Rental Monitor
 import RentalMonitor from './RentalMonitor';
 
@@ -289,7 +292,9 @@ function AccountSettings() {
                             }}
                             data={doughnutData}
                         /> : ""} */}
-                        <DoughnutChart currentUser={currentUser} role={role}/>
+                        {role === 'owner' && <DoughnutChart currentUser={currentUser} role={role}/>}
+                        
+                        {role === 'user' && <InsuranceRecommendations currentUser={currentUser} role={role}/>}
                         </div>
                         
                         <div className="h-96 w-full col-span-2 bg-white border border-gray-200 shadow-md rounded-lg p-4">
