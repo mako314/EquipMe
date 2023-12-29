@@ -18,8 +18,10 @@ const handleEquipmentNavigation = (equipmentId) => {
 //Just did something similar as to when I had the review submission stars, but instead I'm pushing an object into carouselItems, the image has an image element 
 let carouselItems = []
 
+//Also, I didn't need to map, as I don't have it set to a variable, I'm just pushing stuff inside of carouselItems instead of mapping and creating a new array. If I had done something like const thisData.map for example
+
 if(role ==='user'){
-currentUser?.user_favorite?.map((favorite) => {
+currentUser?.user_favorite?.forEach((favorite) => {
   console.log("FAVORITE FOR USER:",favorite)
   // if(favorite?.user_favorite.length > 0){
     // let ownerOrEquipmentFavorite
@@ -50,7 +52,7 @@ currentUser?.user_favorite?.map((favorite) => {
     }
   })
 } else {
-  currentUser?.equipment?.map((equipment) => {
+  currentUser?.equipment?.forEach((equipment) => {
     if(equipment?.user_favorite.length > 0){
       carouselItems.push({
       name: `${equipment?.make} ${equipment?.model}`,

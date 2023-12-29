@@ -9,7 +9,7 @@ import ApiUrlContext from "../Api";
 function BarChart({currentUser}){
 
     const [existingData, setExistingData] = useState(currentUser?.equipment); // initialData is existing data
-    const [updateCounter, setUpdateCounter] = useState(0)
+    // const [updateCounter, setUpdateCounter] = useState(0)
     const [showAll, setShowAll] = useState(false)
     const apiUrl = useContext(ApiUrlContext)
 
@@ -177,10 +177,10 @@ function BarChart({currentUser}){
         setShowAll(allVisible)
         // console.log("THIS IS THE SHOW ALL:", showAll)
 
-        if (allVisible && updateCounter > 0) {
-          // Data has already been fetched and is up-to-date
-          return
-        }
+        // if (allVisible && updateCounter > 0) {
+        //   // Data has already been fetched and is up-to-date
+        //   return
+        // }
 
           const updateYear = new Date().getFullYear()
           const updateMonth = new Date().getMonth() + 1
