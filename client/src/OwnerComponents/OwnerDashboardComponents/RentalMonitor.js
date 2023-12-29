@@ -1,8 +1,33 @@
-import React, {useState, useMemo} from "react";
+import React, {useState} from "react";
 
-function RentalMonitor({currentUser}){
+function RentalMonitor({currentUser, role}){
+
+  let userAgreementData = []
     
-    const agreementsData = currentUser?.agreements 
+    if (role === 'user'){
+     const flatMappedUserAgreement = currentUser?.cart?.flatMap(item => {
+        return item.cart_item?.map(cartItem  => {
+            return cartItem.agreements.map(agreement => { 
+                console.log('CART ITEM PRICE:', cartItem?.price_cents_at_addition) 
+                console.log('AGREEMENT STATUSES:', agreement.agreement_status)
+            return {
+                    id : agreement.id,
+                    agreement_status: agreement.agreement_status,
+                    user_decision: agreement.user_decision,
+                    owner_decision: agreement.owner_decision,
+                    created_at: agreement.created_at,
+                    ownerFirstName: cartItem?.equipment.owner?.firstName,
+                    ownerLastName:  cartItem?.equipment.owner?.lastName,
+                    price_cents_at_addition: cartItem?.price_cents_at_addition,
+            }
+            })
+        })
+    }) || []
+
+    userAgreementData = flatMappedUserAgreement.flatMap(item => item)
+}
+    
+    const agreementsData = role === 'owner' ? currentUser?.agreements :  userAgreementData
 
     // console.log("Testing AgreementsData to see if req data in there:", agreementsData)
     // console.log("THE CURRENT USER, LOOKING FOR AGREEMENTS", currentUser.cart)
@@ -44,6 +69,9 @@ function RentalMonitor({currentUser}){
     const countAgreementsByMonth = (data = []) => {
         const monthCounts = data.reduce((acc, agreement) => {
         // console.log("the agreement in the reducer:", agreement)
+
+        const agreementPriceAtAddition = role === 'owner' ? agreement?.cart_item.price_cents_at_addition : agreement.price_cents_at_addition
+
         //Send the current month in created_at (the date string or date object really, and have it find the month)
         const month = getMonthName(agreement?.created_at)
         // console.log("AGREEMENT CREATED AT:", agreement?.created_at)
@@ -57,7 +85,7 @@ function RentalMonitor({currentUser}){
         // If agreement status is completed, it assumes an owner has succesfully rented out the equipment.
         if (agreement?.agreement_status === 'completed') {
             // console.log((agreement.cart_item.price_cents_at_addition) / 100 )
-            acc[month].totalMoneyIn += (agreement.cart_item.price_cents_at_addition) / 100
+            acc[month].totalMoneyIn += (agreementPriceAtAddition) / 100
             // totalRevenue += (agreement.cart_item.price_cents_at_addition) / 100
             // console.log(acc[month].totalMoneyIn)
             // console.log("HOW MANY ARE BEING RENTED OUT:", acc[month].totalRentedOut)
@@ -82,6 +110,7 @@ function RentalMonitor({currentUser}){
     //my calculations aren't too expensive though. 
     let monthlyRevenueData
       if (agreementsData) {
+        // console.log(agreementsData)
         monthlyRevenueData = countAgreementsByMonth(agreementsData)
         // Calculate the total revenue by summing up the totalMoneyIn for each month.
         totalRevenue = monthlyRevenueData.reduce((sum, { totalRevenuePerMonth }) => sum + totalRevenuePerMonth, 0)
@@ -147,7 +176,7 @@ function RentalMonitor({currentUser}){
             </div>
         </div>
         </>
-      );
+      )
     }
 
 export default RentalMonitor

@@ -12,25 +12,34 @@ function AgreementFiltering({currentUser, role}) {
 
     let agreementsForDateSorting = Array.isArray(currentUser?.agreements) ? [...currentUser.agreements] : []
 
-
-    let flatMappedUserAgreement = currentUser?.cart?.flatMap(item => {
+    let userAgreementsForDateSorting = []
+    
+    if (role === 'user'){
+     const flatMappedUserAgreement = currentUser?.cart?.flatMap(item => {
+        // console.log('FULL ITEM:', item) 
         return item.cart_item?.map(cartItem  => {
+            // console.log('Cart Item:', cartItem) 
             return cartItem.agreements.map(agreement => { 
-                console.log('Agreement:', agreement) 
+                // console.log('Agreement:', agreement) 
             return {
-                    agreementId : agreement.id,
-                    status: agreement.agreement_status,
-                    user_decision: agreement.user_decision,
-                    owner_decision: agreement.owner_decision,
-                    created_at: agreement.created_at,
-                    ownerFirstName: cartItem?.equipment.owner?.firstName,
-                    ownerLastName:  cartItem?.equipment.owner?.lastName
+                id : agreement.id,
+                agreement_status: agreement.agreement_status,
+                user_decision: agreement.user_decision,
+                owner_decision: agreement.owner_decision,
+                created_at: agreement.created_at,
+                ownerFirstName: cartItem?.equipment.owner?.firstName,
+                ownerLastName:  cartItem?.equipment.owner?.lastName,
             }
             })
         })
     }) || []
 
-    let userAgreementsForDateSorting = flatMappedUserAgreement.flatMap(item => item)
+    userAgreementsForDateSorting = flatMappedUserAgreement.flatMap(item => item)
+}
+
+    // I couldn't do this directly inside of the sorting stuff for some reason, so I opted to make a const here and do it here
+    const conditionalAgreementData = role === 'owner' ? [...agreementsForDateSorting] : [...userAgreementsForDateSorting]
+
 
     
 
@@ -41,8 +50,8 @@ function AgreementFiltering({currentUser, role}) {
         //     ownerLastName:  itemsInCart?.equipment.owner?.firstName
         // }
 
-    console.log("USER AGREEMENTS:", flatMappedUserAgreement)
-    console.log("HOPEFULLY FLATENNED MAP:",  userAgreementsForDateSorting)
+    // console.log("USER AGREEMENTS:", flatMappedUserAgreement)
+    // console.log("HOPEFULLY FLATENNED MAP:",  userAgreementsForDateSorting)
     
 
     const formatDateToLocalTimezone = (utcDateTimeString) => {
@@ -73,10 +82,10 @@ function AgreementFiltering({currentUser, role}) {
 
     let userSortOption = (a, b) => new Date(a.created_at) - new Date(b.created_at)
 
-    let sortedAscendingAgreements = role === 'owner' ? [...agreementsForDateSorting] : [...userAgreementsForDateSorting]
+    let sortedAscendingAgreements = conditionalAgreementData
     .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
     .map((agreement) => (
-        <Fragment key={ role === 'owner' ? agreement.id : agreement.agreementId}>
+        <Fragment key={agreement.id}>
             <div className="w-full rounded overflow-hidden shadow-lg bg-white text-gray-800">
             <div className="px-6 py-4">
 
@@ -98,7 +107,7 @@ function AgreementFiltering({currentUser, role}) {
                 </div>
                 <p className="text-gray-700 text-base">
                 <span className="font-semibold">Created At:</span> 
-                {console.log("AGREEMENT INSIDE DATA:", agreement)}
+                {/* {console.log("AGREEMENT INSIDE DATA:", agreement)} */}
                 {formatDateToLocalTimezone(agreement.created_at)}
                 </p>
                 <p className="text-gray-700 text-base">
@@ -116,21 +125,21 @@ function AgreementFiltering({currentUser, role}) {
     ))
 
 
-    let sortedDescendingAgreements = role === 'owner' ? [...agreementsForDateSorting] : [...userAgreementsForDateSorting]
+    let sortedDescendingAgreements = conditionalAgreementData
     .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
     .map((agreement) => (
-        <Fragment key={role === 'owner' ? agreement.id : agreement.agreementId}>
+        <Fragment key={agreement.id}>
         <div className="w-full rounded overflow-hidden shadow-lg bg-white text-gray-800">
             <div className="px-6 py-4">
                 <div className="font-bold text-xl mb-2">Agreement Details For: <br/>
                 {role === 'owner' ?
                     <>
-                        {agreement.cart_item.cart.user.firstName} {agreement.cart_item.cart.user.lastName}
+                        {agreement?.cart_item?.cart?.user?.firstName} {agreement?.cart_item?.cart?.user?.lastName}
                     </> :
 
                     <>
                     {/* {console.log("trying to see",agreement)} */}
-                    {agreement.ownerFirstName} {agreement.ownerLastName}
+                    {agreement?.ownerFirstName} {agreement?.ownerLastName}
                     </> 
                 }
                 </div>
