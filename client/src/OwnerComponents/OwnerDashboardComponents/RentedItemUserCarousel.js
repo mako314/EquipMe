@@ -11,26 +11,27 @@ const navigate = useNavigate()
 let userAgreementsForDateSorting = []
 
 const flatMappedUserAgreement = currentUser?.cart?.flatMap(item => {
-  console.log('FULL ITEM:', item) 
-  return item.cart_item?.map(cartItem  => {
-      console.log('Cart Item:', cartItem) 
-      return cartItem.agreements.map(agreement => { 
-          console.log('Agreement:', agreement)
-          if(agreement.agreement_status === "in-progress"){
-      return {
-          id : agreement.id,
+  return item.cart_item?.flatMap(cartItem => {
+    return cartItem.agreements
+      .filter(agreement => agreement.agreement_status === "in-progress") // Filter first, forgot and tried to just do an if, but why use an if when you can filter
+      .map(agreement => { 
+        // Then map
+        // console.log('Agreement:', agreement)
+        return {
+          id: agreement.id,
           agreement_status: agreement.agreement_status,
           rental_start_date: agreement.rental_start_date,
           rental_end_date: agreement.rental_end_date,
           equipment_make: cartItem?.equipment.make,
-          equipment_model: cartItem?.equipment.make,
+          equipment_model: cartItem?.equipment.model,
+          equipment_image: cartItem?.equipment.equipment_image,
           rental_quantity: cartItem?.quantity,
           cart_total: item.total,
           ownerFirstName: cartItem?.equipment.owner?.firstName,
-          ownerLastName:  cartItem?.equipment.owner?.lastName,
-          ownerFirstName: cartItem?.equipment.owner?.email,
-          ownerLastName:  cartItem?.equipment.owner?.phone,
-      }}
+          ownerLastName: cartItem?.equipment.owner?.lastName,
+          ownerEmail: cartItem?.equipment.owner?.email, 
+          ownerPhone: cartItem?.equipment.owner?.phone,
+        }
       })
   })
 }) || []
@@ -43,11 +44,11 @@ console.log("THE DATA YOU'RE LOOKING FOR:", userAgreementsForDateSorting)
 to make the #'s pretty
 <span className="text-lg font-semibold text-green-600">${totalRevenuePerMonth.toFixed(2)}</span> */}
 
-const handleEquipmentNavigation = (equipmentId) => {
+const handleRentalAgreementNavigation = (rentalId) => {
   setFromOwnerDash(true)
   // Use setTimeout to allow state update before navigation
   setTimeout(() => {
-    navigate(`/equipment/${equipmentId}`)
+    navigate(`/handle/agreements/${rentalId}`)
   }, 0)
 }
 
@@ -55,18 +56,24 @@ const handleEquipmentNavigation = (equipmentId) => {
 let carouselItems = []
 
 
-userAgreementsForDateSorting.map((equipment) => {
+userAgreementsForDateSorting.forEach((equipment) => {
+    // console.log("THE EQUIPMENT:", equipment)
     carouselItems.push({
-    name: `${equipment?.make} ${equipment?.model}`,
+    name: `${equipment?.equipment_make} ${equipment?.equipment_model}`,
+    duration: `${equipment?.rental_start_date} to ${equipment?.rental_end_date}`,
+    ownerEmail: `${equipment.ownerEmail}`,
+    ownerPhone: `${equipment.ownerPhone}`,
     image: <img
-          key={equipment?.make +' '+ equipment?.model + '' + equipment?.id} 
+          key={equipment?.equipment_make +' '+ equipment?.equipment_model + '' + equipment?.id} 
           className="w-[350px] h-[250px] object-fill rounded-lg"
           src={equipment?.equipment_image}
-          alt={equipment?.make +' '+ equipment?.model}
-          onClick={() => handleEquipmentNavigation(equipment?.id)}
+          alt={equipment?.equipment_make +' '+ equipment?.equipment_model}
+          onClick={() => handleRentalAgreementNavigation(equipment?.id)}
         />}
     )
 })
+
+console.log(carouselItems)
   
   // Rather simple previous and next functions. Sets a variable to 0 to test if it's the first item in the array, from then it either adds one or removes one depending on whether or not which is being called.
   const goToPrevious = () => {
@@ -82,29 +89,46 @@ userAgreementsForDateSorting.map((equipment) => {
   }
 
   return (
-    <>
-    <h2 className="text-lg font-medium text-center mb-2 bg-gray-100 rounded-lg shadow-lg ">{role ==='owner' ? 'User Favorites' : 'Your Favorites' }</h2>
-    <div className="flex-grow overflow-hidden w-full flex items-center justify-center bg-gray-100 rounded-lg shadow-lg pt-4"> {/* Container for the image */}
+<>
+  <h2 className="text-lg font-medium text-center mb-2 bg-gray-100 rounded-lg shadow-lg p-2">
+    Your Current Rentals
+  </h2>
+  <div className="flex w-full bg-gray-100 rounded-lg shadow-lg p-2 items-center"> {/* Container for the image and details */}
+    <div className="w-1/2 p-4"> {/* Container for the image */}
       {carouselItems[currentIndex]?.image}
     </div>
-    <div className="flex justify-between items-center w-full pt-4 px-4 bg-gray-100 rounded-lg shadow-lg py-2"> {/* Container for the buttons and description */}
-      <button
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded shadow"
-        onClick={goToPrevious}
-      >
-        Previous
-      </button>
-      <div className="text-center truncate px-4 py-1 bg-white rounded-lg shadow"> {/* Container for the image description */}
-        {carouselItems[currentIndex]?.name}
+    <div className="w-1/2 p-4 flex flex-col justify-between"> {/* Container for the details and buttons */}
+      <div>
+        <div className="text-lg font-semibold">
+          {carouselItems[currentIndex]?.name}
+        </div>
+        <div className="text-sm">
+          {carouselItems[currentIndex]?.duration}
+        </div>
+        <div className="text-sm">
+          Owner Phone: {carouselItems[currentIndex]?.ownerPhone}
+        </div>
+        <div className="text-sm mb-4">
+          Owner Email: {carouselItems[currentIndex]?.ownerEmail}
+        </div>
       </div>
-      <button
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded shadow"
-        onClick={goToNext}
-      >
-        Next
-      </button>
+      <div className="flex justify-start space-x-4 mt-4"> {/* Adjusted Button container */}
+        <button
+          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow transition duration-300 ease-in-out"
+          onClick={goToPrevious}
+        >
+          Previous
+        </button>
+        <button
+          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow transition duration-300 ease-in-out"
+          onClick={goToNext}
+        >
+          Next
+        </button>
+      </div>
     </div>
-  </>
+  </div>
+</>
   )
 }
 
