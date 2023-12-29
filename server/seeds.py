@@ -1642,6 +1642,8 @@ if __name__ == '__main__':
         db.session.add_all(owner_inbox)
         db.session.commit()
         
+
+        print("FINISHED SEEDING")
         # owner2 = EquipmentOwner.query.filter_by(id = owner_2.id).first()
         # if owner2:
         #     print("Owner 2's Inboxes:")
