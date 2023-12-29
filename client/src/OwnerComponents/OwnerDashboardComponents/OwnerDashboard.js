@@ -25,14 +25,17 @@ import BarChart from '../../ChartComponents/BarChart';
 // AgreementFiltering 
 import AgreementFiltering from './AgreementFiltering';
 
-// Carousel Import
+// Carousels' Import
 import FavoriteCarousel from './FavoritedCarousel';
+import RentedItemUserCarousel from './RentedItemUserCarousel';
 
 //Rental Monitor
 import RentalMonitor from './RentalMonitor';
 
 //404 Page Import
 import Page404 from '../../ErrorPageComponents/Page404';
+
+
 
 
 function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
@@ -46,7 +49,6 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
     const [potentialRentalUsers, setPotentialRentalUsers] = useState([])
     const [potentialRentalOwners, setPotentialRentalOwners] = useState([])
     const [pageTitle, setPageTitle] = useState('Home')
-    const [updateCounter, setUpdateCounter] = useState(0)
 
     // const [chartData, setChartData] = useState({
     //     labels: [],
@@ -292,7 +294,10 @@ function AccountSettings() {
                         
                         <div className="h-96 w-full col-span-2 bg-white border border-gray-200 shadow-md rounded-lg p-4">
                         {role === 'owner' &&
-                        <BarChart currentUser={currentUser} setUpdateCounter={setUpdateCounter} updateCounter={updateCounter}/>}
+                        <BarChart currentUser={currentUser}/>}
+                        
+                        {role === 'user' && 
+                        <RentedItemUserCarousel currentUser={currentUser} setFromOwnerDash={setFromOwnerDash} role={role}/>}
                         </div>
 
                         <div className="h-96 col-span-1 bg-white border border-gray-300 overflow-y-auto">
