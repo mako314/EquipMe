@@ -3,6 +3,7 @@ import { Chart as ChartJS, ArcElement, CategoryScale, LinearScale, BarElement, T
 import {toast} from 'react-toastify'
 import { Bar } from 'react-chartjs-2';
 import { useEquipmentData } from "./BarChartDataContext";
+import ApiUrlContext from "../Api";
 
 // useRef
 function BarChart({currentUser}){
@@ -10,6 +11,7 @@ function BarChart({currentUser}){
     const [existingData, setExistingData] = useState(currentUser?.equipment); // initialData is existing data
     const [updateCounter, setUpdateCounter] = useState(0)
     const [showAll, setShowAll] = useState(false)
+    const apiUrl = useContext(ApiUrlContext)
 
     const { barChartEquipmentData, setBarChartEquipmentData } = useEquipmentData()
 
@@ -182,7 +184,7 @@ function BarChart({currentUser}){
           const updateMonth = new Date().getMonth() + 1
       
           try {
-              const response = await fetch(`/summarize/${updateMonth}/${updateYear}`);
+              const response = await fetch(`${apiUrl}summarize/${updateMonth}/${updateYear}`)
               const newDataObject = await response.json()
 
               // console.log("Received data:", newDataObject)
