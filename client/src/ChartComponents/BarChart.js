@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef} from "react";
+import React, { useState, useEffect, useRef, useContext} from "react";
 import { Chart as ChartJS, ArcElement, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import {toast} from 'react-toastify'
 import { Bar } from 'react-chartjs-2';
@@ -12,6 +12,8 @@ function BarChart({currentUser}){
     const [updateCounter, setUpdateCounter] = useState(0)
     const [showAll, setShowAll] = useState(false)
     const apiUrl = useContext(ApiUrlContext)
+
+    console.log("THE API URL:", apiUrl)
 
     const { barChartEquipmentData, setBarChartEquipmentData } = useEquipmentData()
 
@@ -187,7 +189,7 @@ function BarChart({currentUser}){
               const response = await fetch(`${apiUrl}summarize/${updateMonth}/${updateYear}`)
               const newDataObject = await response.json()
 
-              // console.log("Received data:", newDataObject)
+              console.log("Received data:", newDataObject)
       
               // Transform the object into an array
               const newDataArray = Object.entries(newDataObject).map(([key, value]) => ({
