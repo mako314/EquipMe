@@ -375,8 +375,16 @@ function AccountSettings() {
     // {renderCurrentView()}
 
     const handleViewClick = (viewName) => {
-        setCurrentView(viewName)
+    console.log("THE VIEW NAME:", viewName)
+
+    console.log("THE PAGE TITLE ", pageTitle)
+
+    if (viewName === 'Owner Favorites' || viewName === 'User Favorites') {
+        setPageTitle('Favorites')
+    } else {
         setPageTitle(viewName)
+    }
+        setCurrentView(viewName)  
     }
     
 
