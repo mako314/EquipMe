@@ -311,7 +311,7 @@ function AccountSettings() {
                         
                         </div>
                         <div className="h-96 col-span-1 bg-white border border-gray-300">
-                            <RentalMonitor currentUser={currentUser}/>
+                            <RentalMonitor currentUser={currentUser} role={role}/>
                         </div>
                     </div>
                 </div>

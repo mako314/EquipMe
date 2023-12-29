@@ -16,17 +16,19 @@ function AgreementFiltering({currentUser, role}) {
     
     if (role === 'user'){
      const flatMappedUserAgreement = currentUser?.cart?.flatMap(item => {
+        // console.log('FULL ITEM:', item) 
         return item.cart_item?.map(cartItem  => {
+            // console.log('Cart Item:', cartItem) 
             return cartItem.agreements.map(agreement => { 
-                console.log('Agreement:', agreement) 
+                // console.log('Agreement:', agreement) 
             return {
-                    id : agreement.id,
-                    status: agreement.agreement_status,
-                    user_decision: agreement.user_decision,
-                    owner_decision: agreement.owner_decision,
-                    created_at: agreement.created_at,
-                    ownerFirstName: cartItem?.equipment.owner?.firstName,
-                    ownerLastName:  cartItem?.equipment.owner?.lastName
+                id : agreement.id,
+                agreement_status: agreement.agreement_status,
+                user_decision: agreement.user_decision,
+                owner_decision: agreement.owner_decision,
+                created_at: agreement.created_at,
+                ownerFirstName: cartItem?.equipment.owner?.firstName,
+                ownerLastName:  cartItem?.equipment.owner?.lastName,
             }
             })
         })
@@ -105,7 +107,7 @@ function AgreementFiltering({currentUser, role}) {
                 </div>
                 <p className="text-gray-700 text-base">
                 <span className="font-semibold">Created At:</span> 
-                {console.log("AGREEMENT INSIDE DATA:", agreement)}
+                {/* {console.log("AGREEMENT INSIDE DATA:", agreement)} */}
                 {formatDateToLocalTimezone(agreement.created_at)}
                 </p>
                 <p className="text-gray-700 text-base">
