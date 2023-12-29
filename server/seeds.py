@@ -1053,7 +1053,7 @@ if __name__ == '__main__':
             delivery_address = "",
             user_decision = "accept",
             owner_decision = "accept",
-            agreement_status = "completed",
+            agreement_status = "in-progress",
             owner_id = owner_2.id, # Emily Johnson
             user_id=user_1.id,  # Benjamin Davis
             cart_item_id=cart_items[2].id,  # Lawnmower
@@ -1095,10 +1095,10 @@ if __name__ == '__main__':
             delivery_address = "",
             user_decision = "accept",
             owner_decision = "accept",
-            agreement_status = "in-progress",
+            agreement_status = "completed",
             owner_id = owner_2.id, # Emily Johnson
             user_id=user_1.id,  # Benjamin Davis
-            cart_item_id=cart_items[3].id,  # Pressure Washer
+            cart_item_id=cart_items[4].id,  # Pressure Washer
             created_at = datetime(2023, 11, 11),  # Year, Month, Day
             updated_at = datetime(2023, 11, 11)
         ),
@@ -1112,7 +1112,7 @@ if __name__ == '__main__':
             agreement_status = "completed",
             owner_id = owner_2.id, # Emily Johnson
             user_id=user_1.id,  # Benjamin Davis
-            cart_item_id=cart_items[4].id,  # Generator
+            cart_item_id=cart_items[5].id,  # Generator
             created_at = datetime(2023, 11, 11),  # Year, Month, Day
             updated_at = datetime(2023, 11, 11)
         ),

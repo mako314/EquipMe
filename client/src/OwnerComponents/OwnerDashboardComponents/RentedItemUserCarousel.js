@@ -26,7 +26,7 @@ const flatMappedUserAgreement = currentUser?.cart?.flatMap(item => {
           equipment_model: cartItem?.equipment.model,
           equipment_image: cartItem?.equipment.equipment_image,
           rental_quantity: cartItem?.quantity,
-          cart_total: item.total,
+          cart_total: (item.total.toFixed(2)) / 100,
           ownerFirstName: cartItem?.equipment.owner?.firstName,
           ownerLastName: cartItem?.equipment.owner?.lastName,
           ownerEmail: cartItem?.equipment.owner?.email, 
@@ -63,6 +63,8 @@ userAgreementsForDateSorting.forEach((equipment) => {
     duration: `${equipment?.rental_start_date} to ${equipment?.rental_end_date}`,
     ownerEmail: `${equipment.ownerEmail}`,
     ownerPhone: `${equipment.ownerPhone}`,
+    quantityRented: `${equipment.rental_quantity}`,
+    amountTotal: `${equipment.cart_total}`,
     image: <img
           key={equipment?.equipment_make +' '+ equipment?.equipment_model + '' + equipment?.id} 
           className="w-[350px] h-[250px] object-fill rounded-lg"
@@ -99,18 +101,24 @@ console.log(carouselItems)
     </div>
     <div className="w-1/2 p-4 flex flex-col justify-between"> {/* Container for the details and buttons */}
       <div>
-        <div className="text-lg font-semibold">
+        <p className="text-lg font-semibold">
           {carouselItems[currentIndex]?.name}
-        </div>
-        <div className="text-sm">
+        </p>
+        <p className="text-sm">
+          Quantity: {carouselItems[currentIndex]?.quantityRented}
+        </p>
+        <p className="text-sm">
+          Total Cost: {carouselItems[currentIndex]?.amountTotal}
+        </p>
+        <p className="text-sm">
           {carouselItems[currentIndex]?.duration}
-        </div>
-        <div className="text-sm">
+        </p>
+        <p className="text-sm">
           Owner Phone: {carouselItems[currentIndex]?.ownerPhone}
-        </div>
-        <div className="text-sm mb-4">
+        </p>
+        <p className="text-sm mb-4">
           Owner Email: {carouselItems[currentIndex]?.ownerEmail}
-        </div>
+        </p>
       </div>
       <div className="flex justify-start space-x-4 mt-4"> {/* Adjusted Button container */}
         <button
