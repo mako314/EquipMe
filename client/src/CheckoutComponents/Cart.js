@@ -33,11 +33,13 @@ useEffect(() => {
 
  // Sum up the costs of these items
  itemsInCurrentCart.forEach((item) => {
+    console.log(item)
    currentTotal += item.cost
  })
 }
-setCurrentCartTotal(currentTotal);
-console.log("THE CURRENT TOTAL FOR CART", cartData[currentCart]?.cart_name, ":", currentTotal);
+
+setCurrentCartTotal(currentTotal)
+console.log("THE CURRENT TOTAL FOR CART", cartData[currentCart]?.cart_name, ":", currentTotal)
 
 }, [cartData, individualTotal])
 
@@ -205,7 +207,7 @@ console.log("THE CURRENT TOTAL FOR CART", cartData[currentCart]?.cart_name, ":",
         <div className="flex justify-between">
           <p className="text-lg font-bold">Total</p>
           <div className="">
-            <p className="mb-1 text-lg font-bold">${(cartData[currentCart]?.total / 100).toFixed(2)}</p>
+            <p className="mb-1 text-lg font-bold">${(currentCartTotal).toFixed(2)}</p>
             <p className="text-sm text-gray-700">including VAT</p>
           </div>
         </div>

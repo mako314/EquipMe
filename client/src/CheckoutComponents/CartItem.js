@@ -55,7 +55,7 @@ function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate
             break
     }
 
-    console.log((currentRate * cartItemQuantity) * cartItemRentalLength)
+    console.log( "THE NEW COST:", (currentRate * cartItemQuantity * cartItemRentalLength))
     const newCost = (currentRate * cartItemQuantity) * cartItemRentalLength
 
     setIndividualTotal(prevTotals => {
@@ -110,9 +110,9 @@ function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate
     console.log("THE RATE VALUE:", rateValue)
 
     //Calculate the total cost
-    const newCost = rateValue * equipmentQuantity
+    const newCost = rateValue * equipmentQuantity * rentalLength
 
-    console.log("RATE VALUE * EQUIPMENT QUANTITY:", rateValue * equipmentQuantity)
+    // console.log("RATE VALUE * EQUIPMENT QUANTITY:", rateValue * equipmentQuantity)
 
 
     setIndividualTotal(prevTotals => {
@@ -163,7 +163,7 @@ function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate
     console.log("THE RATE VALUE:", rateValue)
 
     //Calculate the total cost
-    const newCost = (rateValue * equipmentQuantity) 
+    const newCost = rateValue * equipmentQuantity * rentalLength
 
     console.log("RATE VALUE * EQUIPMENT QUANTITY:", rateValue * equipmentQuantity)
 
