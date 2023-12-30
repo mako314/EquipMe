@@ -495,8 +495,9 @@ class Cart(db.Model, SerializerMixin):
     cart_item = db.relationship('CartItem', back_populates='cart', cascade="all, delete")
     user = db.relationship ('User', back_populates='cart')
 
-    serialize_rules = ('-cart_item.cart','-cart_item.cart_id','-cart_item.equipment.agreements','-cart_item.equipment.owner','-user.cart','-user.user_inboxes','-user.agreements', '-user.review','-cart_item.review')
+    serialize_rules = ('-cart_item.cart','-cart_item.equipment.agreements','-cart_item.equipment.owner','-user.cart','-user.user_inboxes','-user.agreements', '-user.review','-cart_item.review')
 
+# '-cart_item.cart_id'
     # '-cart_item.equipment.owner.owner_inboxes',
     # Removed the whole owner, no need
 

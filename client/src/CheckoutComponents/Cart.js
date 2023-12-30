@@ -14,11 +14,34 @@ function Cart(){
   const [cartData, setCartData] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   // const [selectedRate, setSelectedRate] = useState(0)
-  const [individualTotal, setIndividualTotal] = useState(0)
+  const [individualTotal, setIndividualTotal] = useState([])
+  const [currentCartTotal, setCurrentCartTotal] = useState(0)
 
 
   console.log("THE CART TOTAL:", individualTotal)
-  console.log("TEST:")
+
+
+  
+  console.log(Array.isArray(individualTotal))
+
+
+useEffect(() => {
+  let currentTotal = 0
+  if(Array.isArray(individualTotal)){
+    // Filter items belonging to the current cart, filter any time need something for x, so I'm trying to only track totals for this specific cart, filter by cart ID.
+ const itemsInCurrentCart = individualTotal.filter(item => item.cart_id === cartData[currentCart].id)
+
+ // Sum up the costs of these items
+ itemsInCurrentCart.forEach((item) => {
+   currentTotal += item.cost
+ })
+}
+setCurrentCartTotal(currentTotal);
+console.log("THE CURRENT TOTAL FOR CART", cartData[currentCart]?.cart_name, ":", currentTotal);
+
+}, [cartData, individualTotal])
+
+
   useEffect(() => {
     if (role === 'user') {
       setCartData(currentUser.cart)
@@ -158,6 +181,7 @@ function Cart(){
               cartItemQuantity={item.quantity}
               setIndividualTotal={setIndividualTotal}
               cartItemId={item.id}
+              cartId={item.cart_id}
               hourlyRate={hourlyRateValue}
               dailyRate={dailyRateValue}
               weeklyRate={weeklyRateValue}

@@ -1,7 +1,7 @@
 import React,{useContext, useEffect, useState} from "react";
 import ApiUrlContext from '../Api'
 
-function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate, cartItemRentalLength, cartItemQuantity, setIndividualTotal, hourlyRate, dailyRate, weeklyRate, promoRate, cartItemId}){
+function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate, cartItemRentalLength, cartItemQuantity, setIndividualTotal, hourlyRate, dailyRate, weeklyRate, promoRate, cartItemId, cartId}){
 
   // console.log("CART ITEM ID:", cartItemId)
   // console.log("Rental cartItemRate:", cartItemRate)
@@ -15,6 +15,7 @@ function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate
   const [equipmentQuantity, setEquipmentQuantity] = useState(cartItemQuantity)
   
   
+  console.log("THE WHOLE ITEM ",cartId)
   
   //Just basic day options, to track the amount of time they're trying to rent for
   const dayOptions = <>
@@ -36,12 +37,49 @@ function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate
     } else if (cartItemRate === "promo"){
       setDayRange("promo")
     }
+    let currentRate = ''
+    switch (selectedRate) {
+        case "hourly":
+            currentRate = hourlyRate
+            break
+        case "daily":
+            currentRate = dailyRate
+            break
+        case "weekly":
+            currentRate = weeklyRate
+            break
+        case "promo":
+            currentRate = promoRate
+            break
+        default:
+            break
+    }
+
+    console.log((currentRate * cartItemQuantity) * cartItemRentalLength)
+    const newCost = (currentRate * cartItemQuantity) * cartItemRentalLength
+
+    setIndividualTotal(prevTotals => {
+      // Find the index of the item with the same id
+      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex
+      const index = prevTotals.findIndex(item => item.id === cartItemId)
+  
+      if (index !== -1) {
+        // If found, update the cost of the existing item
+        return prevTotals.map((item, idx) => 
+          idx === index ? { ...item, cost: newCost } : item
+        )
+      } else {
+        // If not found, add a new item
+        return [...prevTotals, { id: cartItemId, cart_id: cartId,cost: newCost }]
+      }
+    })
+
   }, [])
 
   // console.log('THE RATE:',selectedRate)
 
   const handleRateChange = (e) => {
-    const newRate = e.target.value;
+    const newRate = e.target.value
     setSelectedRate(newRate)
 
     let newDayRange = ''
@@ -61,7 +99,7 @@ function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate
         default:
             break
     }
-    setDayRange(newDayRange);
+    setDayRange(newDayRange)
 
     // console.log("THE NEW RATE:", rateArray)
 
@@ -77,10 +115,21 @@ function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate
     console.log("RATE VALUE * EQUIPMENT QUANTITY:", rateValue * equipmentQuantity)
 
 
-    setIndividualTotal(prevTotals => ({
-      ...prevTotals,
-      [cartItemId]: newCost
-    }))
+    setIndividualTotal(prevTotals => {
+      // Find the index of the item with the same id
+      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex
+      const index = prevTotals.findIndex(item => item.id === cartItemId)
+  
+      if (index !== -1) {
+        // If found, update the cost of the existing item
+        return prevTotals.map((item, idx) => 
+          idx === index ? { ...item, cost: newCost } : item
+        )
+      } else {
+        // If not found, add a new item
+        return [...prevTotals, { id: cartItemId, cart_id: cartId,cost: newCost }]
+      }
+    })
 }
 
 
@@ -108,6 +157,32 @@ function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate
             break
     }
     setSelectedRate(newSelectedRate)
+
+    const rateValue = rateArray[e.target.options.selectedIndex]
+
+    console.log("THE RATE VALUE:", rateValue)
+
+    //Calculate the total cost
+    const newCost = (rateValue * equipmentQuantity) 
+
+    console.log("RATE VALUE * EQUIPMENT QUANTITY:", rateValue * equipmentQuantity)
+
+
+    setIndividualTotal(prevTotals => {
+      // Find the index of the item with the same id
+      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex
+      const index = prevTotals.findIndex(item => item.id === cartItemId)
+  
+      if (index !== -1) {
+        // If found, update the cost of the existing item
+        return prevTotals.map((item, idx) => 
+          idx === index ? { ...item, cost: newCost } : item
+        )
+      } else {
+        // If not found, add a new item
+        return [...prevTotals, { id: cartItemId, cart_id: cartId,cost: newCost }]
+      }
+    })
 }
 
     //----------------------
