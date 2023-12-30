@@ -59,7 +59,7 @@ const handleTotalChange = (rateValue = 0, totalQuantity = equipmentQuantity, tot
   // console.log("RATE VALUE * EQUIPMENT QUANTITY:", rateValue * equipmentQuantity)
 
 
-setIndividualTotal(prevTotals => {
+  setIndividualTotal(prevTotals => {
   // Find the index of the item with the same id
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex
   const index = prevTotals.findIndex(item => item.id === cartItemId)
@@ -75,7 +75,6 @@ setIndividualTotal(prevTotals => {
   }
 })
 }
-
 
   // Set a day range if cartItemRate exists, it should exist. This component will likely only be used inside of Cart. We'll see!
   useEffect(() => {
@@ -202,15 +201,35 @@ setIndividualTotal(prevTotals => {
     handleTotalChange(undefined, undefined, newLength)
   }
 
+  
+
+  const handleEquipmentQuantity = (e) =>{
+    // setRentalLength(parseInt(e.target.value, 10))
+    const newQuantity = parseInt(e.target.value, 10)
+
+    setEquipmentQuantity(newQuantity)
+
+    handleTotalChange(undefined, newQuantity, undefined)
+  }
+
     //----------------------
     // -1 on quantity
+    // Needed to set a new quantity to pass into handleTotal change for both of these functions, that way it can account for the new quantity and multiply it when the buttons are clicked to + or - 1 
     const decrementQuantity = () => {
-      setEquipmentQuantity((prevequipmentQuantity) => (prevequipmentQuantity > 1 ? prevequipmentQuantity - 1 : 1))
+      setEquipmentQuantity(prevequipmentQuantity => { 
+        const newQuantity = prevequipmentQuantity > 1 ? prevequipmentQuantity - 1 : 1
+        handleTotalChange(undefined, newQuantity, undefined)
+        return newQuantity
+        })
     }
 
     // +1 on quantity 
     const incrementQuantity = () => {
-      setEquipmentQuantity(prevequipmentQuantity => prevequipmentQuantity + 1)
+      setEquipmentQuantity(prevequipmentQuantity => {
+        const newQuantity = prevequipmentQuantity + 1
+        handleTotalChange(undefined, newQuantity, undefined)
+        return newQuantity
+      })
     }
 
     return(
@@ -244,7 +263,7 @@ setIndividualTotal(prevTotals => {
                                 className="h-8 w-8 border border-black bg-white text-black text-center text-xs outline-none"
                                 type="number"
                                 value={equipmentQuantity}
-                                onChange={(e) => setEquipmentQuantity(parseInt(e.target.value, 10))}
+                                onChange={handleEquipmentQuantity}
                                 min="1" />
                           <span
                             className="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-white"

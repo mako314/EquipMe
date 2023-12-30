@@ -497,7 +497,8 @@ class Cart(db.Model, SerializerMixin):
 
     serialize_rules = ('-cart_item.cart','-cart_item.equipment.agreements','-cart_item.equipment.owner','-user.cart','-user.user_inboxes','-user.agreements', '-user.review','-cart_item.review')
 
-# '-cart_item.cart_id'
+    # Removed this so I can have access to cart_id in cart
+    # '-cart_item.cart_id'
     # '-cart_item.equipment.owner.owner_inboxes',
     # Removed the whole owner, no need
 
