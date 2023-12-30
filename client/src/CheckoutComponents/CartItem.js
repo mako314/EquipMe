@@ -38,7 +38,7 @@ function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate
     }
   }, [])
 
-  console.log('THE RATE:',selectedRate)
+  // console.log('THE RATE:',selectedRate)
 
   const handleRateChange = (e) => {
     const newRate = e.target.value;
@@ -63,14 +63,18 @@ function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate
     }
     setDayRange(newDayRange);
 
-    console.log("THE NEW RATE:", rateArray)
+    // console.log("THE NEW RATE:", rateArray)
 
     //E.target.options.selected index finds the index of the selected option. I made an array with the values of the equipment cost
 
     const rateValue = rateArray[e.target.options.selectedIndex]
 
+    console.log("THE RATE VALUE:", rateValue)
+
     //Calculate the total cost
-    const newCost = rateValue * equipmentQuantity * rentalLength
+    const newCost = rateValue * equipmentQuantity
+
+    console.log("RATE VALUE * EQUIPMENT QUANTITY:", rateValue * equipmentQuantity)
 
 
     setIndividualTotal(prevTotals => ({
@@ -80,7 +84,7 @@ function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate
 }
 
 
-  console.log('THE DAY RANGE:', dayRange)
+  // console.log('THE DAY RANGE:', dayRange)
   //Concide rental length (dayRange) with rate
   const handleDayRangeChange = (e) => {
     const newDayRange = e.target.value

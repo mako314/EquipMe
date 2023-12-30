@@ -18,7 +18,7 @@ function Cart(){
 
 
   console.log("THE CART TOTAL:", individualTotal)
-
+  console.log("TEST:")
   useEffect(() => {
     if (role === 'user') {
       setCartData(currentUser.cart)
