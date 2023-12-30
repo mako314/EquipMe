@@ -1,5 +1,4 @@
 import React,{useState, useContext, useEffect} from "react";
-import UserContext from "../UserComponents/UserContext";
 import ApiUrlContext from "../Api";
 import {toast} from 'react-toastify'
 import { UserSessionContext } from "../UserComponents/SessionContext";
@@ -7,7 +6,6 @@ import { UserSessionContext } from "../UserComponents/SessionContext";
 function CreateNewCart({addCart, toggleModal, setCurrentCart}){
 
   const { currentUser, role, checkSession } = UserSessionContext() 
-  const [user, setUser] = useContext(UserContext)
   const apiUrl = useContext(ApiUrlContext)
   const [cartName, setCartName] = useState('')
   // const [cartStatus, setCartStatus] = useState('')

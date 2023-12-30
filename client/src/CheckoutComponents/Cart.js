@@ -13,9 +13,11 @@ function Cart(){
   const [currentCart, setCurrentCart] = useState(0)
   const [cartData, setCartData] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
+  // const [selectedRate, setSelectedRate] = useState(0)
+  const [individualTotal, setIndividualTotal] = useState(0)
 
 
-  // console.log(currentCart)
+  console.log("THE CART TOTAL:", individualTotal)
 
   useEffect(() => {
     if (role === 'user') {
@@ -47,6 +49,14 @@ function Cart(){
   }
 
   //-------------------------------------
+
+  //  cartData[currentCart].cart_item?.length === 0 ?
+  //   <p> Cart is empty or loading...</p> 
+  //   : 
+  //   cartData[currentCart]?.cart_item.forEach((item) => (
+  //     // console.log("THE ITEM:", item)
+  //   ))  
+    
 
 
   // Map over carts, present options
@@ -120,24 +130,42 @@ function Cart(){
         )}
 
       {/* <CreateNewCart addCart={addCart}/> */}
+        
+      {cartData[currentCart].cart_item?.length === 0 ?
+      <p>Cart is empty or loading...</p> 
+      : 
+      cartData[currentCart]?.cart_item.map((item) => {
+          // Extract rates
+          const { hourly_rate, daily_rate, weekly_rate, promo_rate } = item.equipment.equipment_price[0]
 
-      { cartData[currentCart].cart_item?.length === 0 ?
-        <p> Cart is empty or loading...</p> 
-        : 
-        cartData[currentCart]?.cart_item.map((item) => (
-          // console.log("THE ITEM:", item),
-          <CartItem 
-          key={ `${item.equipment_id}_${item.created_at}`}
-          equipment_image={item.equipment.equipment_image}
-          make={item.equipment.make}
-          model={item.equipment.model}
-          rateOptions={rateOptions}
-          cartItemRate={item.rental_rate}
-          cartItemRentalLength={item.rental_length}
-          cartItemQuantity={item.quantity}
-          />
-        ))  
-        }
+          // Calculate rate values
+          const hourlyRateValue = hourly_rate / 100
+          const dailyRateValue = daily_rate / 100
+          const weeklyRateValue = weekly_rate / 100
+          const promoRateValue = promo_rate / 100
+          
+          // console.log("HOURLY RATE VALUE COMING IN TO CART ITEM:", hourlyRateValue)
+
+          return (
+            <CartItem 
+              key={ `${item.equipment_id}_${item.created_at}_${item.equipment.make}_${item.equipment.model}`}
+              equipment_image={item.equipment.equipment_image}
+              make={item.equipment.make}
+              model={item.equipment.model}
+              rateOptions={rateOptions}
+              cartItemRate={item.rental_rate}
+              cartItemRentalLength={item.rental_length}
+              cartItemQuantity={item.quantity}
+              setIndividualTotal={setIndividualTotal}
+              cartItemId={item.id}
+              hourlyRate={hourlyRateValue}
+              dailyRate={dailyRateValue}
+              weeklyRate={weeklyRateValue}
+              promoRate={promoRateValue}
+            />
+          )
+      })
+  }
 
       </div>
       <div className="mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-0 md:w-1/3">

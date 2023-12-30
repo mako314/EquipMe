@@ -1,18 +1,21 @@
 import React,{useContext, useEffect, useState} from "react";
-import UserContext from '../UserComponents/UserContext'
 import ApiUrlContext from '../Api'
 
-function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate, cartItemRentalLength, cartItemQuantity}){
+function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate, cartItemRentalLength, cartItemQuantity, setIndividualTotal, hourlyRate, dailyRate, weeklyRate, promoRate, cartItemId}){
 
-  // console.log("Rental Length:", cartItemRentalLength)
+  // console.log("CART ITEM ID:", cartItemId)
   // console.log("Rental cartItemRate:", cartItemRate)
   // A lot of props and state. Can  likely move in "day options"
   const [selectedRate, setSelectedRate] = useState(cartItemRate)
+
+  const rateArray = [hourlyRate, dailyRate, weeklyRate, promoRate]
+
   const [dayRange, setDayRange] = useState('') //Can't set this to cartItemRate because this is hours, days, week. While cartItemRate is hourly, daily, weekly. 
   const [rentalLength, setRentalLength] = useState(cartItemRentalLength)
   const [equipmentQuantity, setEquipmentQuantity] = useState(cartItemQuantity)
   
-
+  
+  
   //Just basic day options, to track the amount of time they're trying to rent for
   const dayOptions = <>
   <option className="text-black"value="hours">Hours</option>
@@ -23,6 +26,7 @@ function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate
 
   // Set a day range if cartItemRate exists, it should exist. This component will likely only be used inside of Cart. We'll see!
   useEffect(() => {
+    // setSelectedRate(cartItemRate)
     if (cartItemRate === "hourly"){
       setDayRange("hours")
     } else if (cartItemRate === "daily"){
@@ -34,35 +38,73 @@ function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate
     }
   }, [])
 
-  //Concide rate with rental length (dayRange)
-  const handleRateChange = (e) => {
-    const newRate = e.target.value
-    setSelectedRate(newRate)
-    if (newRate === "hourly"){
-      setDayRange("hours")
-    } else if (newRate === "daily"){
-      setDayRange("days")
-    } else if (newRate === "weekly"){
-      setDayRange("week")
-    } else if (newRate === "promo"){
-      setDayRange("promo")
-    }
-  }
+  console.log('THE RATE:',selectedRate)
 
+  const handleRateChange = (e) => {
+    const newRate = e.target.value;
+    setSelectedRate(newRate)
+
+    let newDayRange = ''
+    switch (newRate) {
+        case "hourly":
+            newDayRange = "hours"
+            break
+        case "daily":
+            newDayRange = "days"
+            break
+        case "weekly":
+            newDayRange = "week"
+            break
+        case "promo":
+            newDayRange = "promo"
+            break
+        default:
+            break
+    }
+    setDayRange(newDayRange);
+
+    console.log("THE NEW RATE:", rateArray)
+
+    //E.target.options.selected index finds the index of the selected option. I made an array with the values of the equipment cost
+
+    const rateValue = rateArray[e.target.options.selectedIndex]
+
+    //Calculate the total cost
+    const newCost = rateValue * equipmentQuantity * rentalLength
+
+
+    setIndividualTotal(prevTotals => ({
+      ...prevTotals,
+      [cartItemId]: newCost
+    }))
+}
+
+
+  console.log('THE DAY RANGE:', dayRange)
   //Concide rental length (dayRange) with rate
   const handleDayRangeChange = (e) => {
     const newDayRange = e.target.value
     setDayRange(newDayRange)
-    if (newDayRange === "hours"){
-      setSelectedRate("hourly")
-    } else if (newDayRange === "days"){
-      setSelectedRate("daily")
-    } else if (newDayRange === "week"){
-      setSelectedRate("weekly")
-    } else if (newDayRange === "promo"){
-      setSelectedRate("promo")
+
+    let newSelectedRate = ''
+    switch (newDayRange) {
+        case "hours":
+            newSelectedRate = "hourly"
+            break
+        case "days":
+            newSelectedRate = "daily"
+            break
+        case "week":
+            newSelectedRate = "weekly"
+            break
+        case "promo":
+            newSelectedRate = "promo"
+            break
+        default:
+            break
     }
-  }
+    setSelectedRate(newSelectedRate)
+}
 
     //----------------------
     // -1 on quantity
@@ -154,3 +196,19 @@ function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate
 }
 
 export default CartItem
+
+
+  // //Concide rate with rental length (dayRange)
+  // const handleRateChange = (e) => {
+  //   const newRate = e.target.value
+  //   setSelectedRate(newRate)
+  //   if (newRate === "hourly"){
+  //     setDayRange("hours")
+  //   } else if (newRate === "daily"){
+  //     setDayRange("days")
+  //   } else if (newRate === "weekly"){
+  //     setDayRange("week")
+  //   } else if (newRate === "promo"){
+  //     setDayRange("promo")
+  //   }
+  // }
