@@ -25,6 +25,58 @@ function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate
   <option className="text-black"value="promo">Promo</option>
   </>
 
+
+const handleTotalChange = (rateValue = 0, totalQuantity = equipmentQuantity, totalLength = rentalLength) => {
+
+  // const rateValue = rateArray[e.target.options.selectedIndex]
+  let currentRate = ''
+  if (rateValue === 0){
+    switch (selectedRate) {
+        case "hourly":
+            currentRate = hourlyRate
+            break
+        case "daily":
+            currentRate = dailyRate
+            break
+        case "weekly":
+            currentRate = weeklyRate
+            break
+        case "promo":
+            currentRate = promoRate
+            break
+        default:
+            break
+    }
+  }
+
+  console.log("THE RATE VALUE:", rateValue)
+  console.log("THE CURRENT RATE VALUE:", currentRate)
+  console.log("THE TOTAL QUANTITY:", totalQuantity)
+  console.log("THE TOTAL LENGTH:", totalLength)
+  //Calculate the total cost
+  const newCost = rateValue ? rateValue : currentRate * totalQuantity * totalLength
+
+  // console.log("RATE VALUE * EQUIPMENT QUANTITY:", rateValue * equipmentQuantity)
+
+
+setIndividualTotal(prevTotals => {
+  // Find the index of the item with the same id
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex
+  const index = prevTotals.findIndex(item => item.id === cartItemId)
+
+  if (index !== -1) {
+    // If found, update the cost of the existing item
+    return prevTotals.map((item, idx) => 
+      idx === index ? { ...item, cost: newCost } : item
+    )
+  } else {
+    // If not found, add a new item
+    return [...prevTotals, { id: cartItemId, cart_id: cartId,cost: newCost }]
+  }
+})
+}
+
+
   // Set a day range if cartItemRate exists, it should exist. This component will likely only be used inside of Cart. We'll see!
   useEffect(() => {
     // setSelectedRate(cartItemRate)
@@ -56,7 +108,7 @@ function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate
     }
 
     console.log( "THE NEW COST:", (currentRate * cartItemQuantity * cartItemRentalLength))
-    const newCost = (currentRate * cartItemQuantity) * cartItemRentalLength
+    const newCost = currentRate * cartItemQuantity * cartItemRentalLength
 
     setIndividualTotal(prevTotals => {
       // Find the index of the item with the same id
@@ -107,29 +159,7 @@ function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate
 
     const rateValue = rateArray[e.target.options.selectedIndex]
 
-    console.log("THE RATE VALUE:", rateValue)
-
-    //Calculate the total cost
-    const newCost = rateValue * equipmentQuantity * rentalLength
-
-    // console.log("RATE VALUE * EQUIPMENT QUANTITY:", rateValue * equipmentQuantity)
-
-
-    setIndividualTotal(prevTotals => {
-      // Find the index of the item with the same id
-      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex
-      const index = prevTotals.findIndex(item => item.id === cartItemId)
-  
-      if (index !== -1) {
-        // If found, update the cost of the existing item
-        return prevTotals.map((item, idx) => 
-          idx === index ? { ...item, cost: newCost } : item
-        )
-      } else {
-        // If not found, add a new item
-        return [...prevTotals, { id: cartItemId, cart_id: cartId,cost: newCost }]
-      }
-    })
+    handleTotalChange(rateValue)
 }
 
 
@@ -160,30 +190,17 @@ function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate
 
     const rateValue = rateArray[e.target.options.selectedIndex]
 
-    console.log("THE RATE VALUE:", rateValue)
-
-    //Calculate the total cost
-    const newCost = rateValue * equipmentQuantity * rentalLength
-
-    console.log("RATE VALUE * EQUIPMENT QUANTITY:", rateValue * equipmentQuantity)
-
-
-    setIndividualTotal(prevTotals => {
-      // Find the index of the item with the same id
-      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex
-      const index = prevTotals.findIndex(item => item.id === cartItemId)
-  
-      if (index !== -1) {
-        // If found, update the cost of the existing item
-        return prevTotals.map((item, idx) => 
-          idx === index ? { ...item, cost: newCost } : item
-        )
-      } else {
-        // If not found, add a new item
-        return [...prevTotals, { id: cartItemId, cart_id: cartId,cost: newCost }]
-      }
-    })
+    handleTotalChange(rateValue)
 }
+
+  const handleRentalLength = (e) =>{
+    // setRentalLength(parseInt(e.target.value, 10))
+    const newLength = parseInt(e.target.value, 10)
+
+    setRentalLength(newLength)
+
+    handleTotalChange(undefined, undefined, newLength)
+  }
 
     //----------------------
     // -1 on quantity
@@ -243,7 +260,7 @@ function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate
                                 className="h-8 w-8 border border-black bg-white text-black text-center text-xs outline-none"
                                 type="number"
                                 value={rentalLength}
-                                onChange={(e) => setRentalLength(parseInt(e.target.value, 10))}
+                                onChange={handleRentalLength}
                                 min="1" />
                           <select
                           className="border-2 border-black text-sm text-black"
