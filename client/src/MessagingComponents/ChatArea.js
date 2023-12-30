@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState} from 'react'
-import OwnerContext from '../OwnerComponents/OwnerContext'
-import UserContext from '../UserComponents/UserContext'
+
 import ApiUrlContext from '../Api'
 import MessageInput from './MessageInput'
 import { UserSessionContext } from '../UserComponents/SessionContext'
@@ -8,9 +7,6 @@ import { UserSessionContext } from '../UserComponents/SessionContext'
 function ChatArea({inboxes, SelectedThreadID, setNewMessage, newMessage, setInboxes, recipientInfo }){
 
 // ---------------Detect whether or not an OWNER is logged in-------------------
-
-  const [owner, setOwner] = useContext(OwnerContext)
-  const [user, setUser] = useContext(UserContext)
   const { currentUser, role } = UserSessionContext()
   const apiUrl = useContext(ApiUrlContext)
 

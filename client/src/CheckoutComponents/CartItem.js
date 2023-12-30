@@ -1,18 +1,22 @@
 import React,{useContext, useEffect, useState} from "react";
-import UserContext from '../UserComponents/UserContext'
 import ApiUrlContext from '../Api'
 
-function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate, cartItemRentalLength, cartItemQuantity}){
+function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate, cartItemRentalLength, cartItemQuantity, setIndividualTotal, hourlyRate, dailyRate, weeklyRate, promoRate, cartItemId, cartId}){
 
-  // console.log("Rental Length:", cartItemRentalLength)
+  // console.log("CART ITEM ID:", cartItemId)
   // console.log("Rental cartItemRate:", cartItemRate)
   // A lot of props and state. Can  likely move in "day options"
   const [selectedRate, setSelectedRate] = useState(cartItemRate)
+
+  const rateArray = [hourlyRate, dailyRate, weeklyRate, promoRate]
+
   const [dayRange, setDayRange] = useState('') //Can't set this to cartItemRate because this is hours, days, week. While cartItemRate is hourly, daily, weekly. 
   const [rentalLength, setRentalLength] = useState(cartItemRentalLength)
   const [equipmentQuantity, setEquipmentQuantity] = useState(cartItemQuantity)
   
-
+  
+  console.log("THE WHOLE ITEM ",cartId)
+  
   //Just basic day options, to track the amount of time they're trying to rent for
   const dayOptions = <>
   <option className="text-black"value="hours">Hours</option>
@@ -21,8 +25,61 @@ function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate
   <option className="text-black"value="promo">Promo</option>
   </>
 
+
+const handleTotalChange = (rateValue = 0, totalQuantity = equipmentQuantity, totalLength = rentalLength) => {
+
+  // const rateValue = rateArray[e.target.options.selectedIndex]
+  let currentRate = ''
+  if (rateValue === 0){
+    switch (selectedRate) {
+        case "hourly":
+            currentRate = hourlyRate
+            break
+        case "daily":
+            currentRate = dailyRate
+            break
+        case "weekly":
+            currentRate = weeklyRate
+            break
+        case "promo":
+            currentRate = promoRate
+            break
+        default:
+            break
+    }
+  }
+
+  console.log("THE RATE VALUE:", rateValue)
+  console.log("THE CURRENT RATE VALUE:", currentRate)
+  console.log("THE TOTAL QUANTITY:", totalQuantity)
+  console.log("THE TOTAL LENGTH:", totalLength)
+  //Calculate the total cost
+  const newCost = rateValue ? rateValue : currentRate * totalQuantity * totalLength
+
+  // console.log("RATE VALUE * EQUIPMENT QUANTITY:", rateValue * equipmentQuantity)
+
+
+setIndividualTotal(prevTotals => {
+  // Find the index of the item with the same id
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex
+  const index = prevTotals.findIndex(item => item.id === cartItemId)
+
+  if (index !== -1) {
+    // If found, update the cost of the existing item
+    return prevTotals.map((item, idx) => 
+      idx === index ? { ...item, cost: newCost } : item
+    )
+  } else {
+    // If not found, add a new item
+    return [...prevTotals, { id: cartItemId, cart_id: cartId,cost: newCost }]
+  }
+})
+}
+
+
   // Set a day range if cartItemRate exists, it should exist. This component will likely only be used inside of Cart. We'll see!
   useEffect(() => {
+    // setSelectedRate(cartItemRate)
     if (cartItemRate === "hourly"){
       setDayRange("hours")
     } else if (cartItemRate === "daily"){
@@ -32,36 +89,117 @@ function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate
     } else if (cartItemRate === "promo"){
       setDayRange("promo")
     }
+    let currentRate = ''
+    switch (selectedRate) {
+        case "hourly":
+            currentRate = hourlyRate
+            break
+        case "daily":
+            currentRate = dailyRate
+            break
+        case "weekly":
+            currentRate = weeklyRate
+            break
+        case "promo":
+            currentRate = promoRate
+            break
+        default:
+            break
+    }
+
+    console.log( "THE NEW COST:", (currentRate * cartItemQuantity * cartItemRentalLength))
+    const newCost = currentRate * cartItemQuantity * cartItemRentalLength
+
+    setIndividualTotal(prevTotals => {
+      // Find the index of the item with the same id
+      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex
+      const index = prevTotals.findIndex(item => item.id === cartItemId)
+  
+      if (index !== -1) {
+        // If found, update the cost of the existing item
+        return prevTotals.map((item, idx) => 
+          idx === index ? { ...item, cost: newCost } : item
+        )
+      } else {
+        // If not found, add a new item
+        return [...prevTotals, { id: cartItemId, cart_id: cartId,cost: newCost }]
+      }
+    })
+
   }, [])
 
-  //Concide rate with rental length (dayRange)
+  // console.log('THE RATE:',selectedRate)
+
   const handleRateChange = (e) => {
     const newRate = e.target.value
     setSelectedRate(newRate)
-    if (newRate === "hourly"){
-      setDayRange("hours")
-    } else if (newRate === "daily"){
-      setDayRange("days")
-    } else if (newRate === "weekly"){
-      setDayRange("week")
-    } else if (newRate === "promo"){
-      setDayRange("promo")
-    }
-  }
 
+    let newDayRange = ''
+    switch (newRate) {
+        case "hourly":
+            newDayRange = "hours"
+            break
+        case "daily":
+            newDayRange = "days"
+            break
+        case "weekly":
+            newDayRange = "week"
+            break
+        case "promo":
+            newDayRange = "promo"
+            break
+        default:
+            break
+    }
+    setDayRange(newDayRange)
+
+    // console.log("THE NEW RATE:", rateArray)
+
+    //E.target.options.selected index finds the index of the selected option. I made an array with the values of the equipment cost
+
+    const rateValue = rateArray[e.target.options.selectedIndex]
+
+    handleTotalChange(rateValue)
+}
+
+
+  // console.log('THE DAY RANGE:', dayRange)
   //Concide rental length (dayRange) with rate
   const handleDayRangeChange = (e) => {
     const newDayRange = e.target.value
     setDayRange(newDayRange)
-    if (newDayRange === "hours"){
-      setSelectedRate("hourly")
-    } else if (newDayRange === "days"){
-      setSelectedRate("daily")
-    } else if (newDayRange === "week"){
-      setSelectedRate("weekly")
-    } else if (newDayRange === "promo"){
-      setSelectedRate("promo")
+
+    let newSelectedRate = ''
+    switch (newDayRange) {
+        case "hours":
+            newSelectedRate = "hourly"
+            break
+        case "days":
+            newSelectedRate = "daily"
+            break
+        case "week":
+            newSelectedRate = "weekly"
+            break
+        case "promo":
+            newSelectedRate = "promo"
+            break
+        default:
+            break
     }
+    setSelectedRate(newSelectedRate)
+
+    const rateValue = rateArray[e.target.options.selectedIndex]
+
+    handleTotalChange(rateValue)
+}
+
+  const handleRentalLength = (e) =>{
+    // setRentalLength(parseInt(e.target.value, 10))
+    const newLength = parseInt(e.target.value, 10)
+
+    setRentalLength(newLength)
+
+    handleTotalChange(undefined, undefined, newLength)
   }
 
     //----------------------
@@ -122,7 +260,7 @@ function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate
                                 className="h-8 w-8 border border-black bg-white text-black text-center text-xs outline-none"
                                 type="number"
                                 value={rentalLength}
-                                onChange={(e) => setRentalLength(parseInt(e.target.value, 10))}
+                                onChange={handleRentalLength}
                                 min="1" />
                           <select
                           className="border-2 border-black text-sm text-black"
@@ -154,3 +292,19 @@ function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate
 }
 
 export default CartItem
+
+
+  // //Concide rate with rental length (dayRange)
+  // const handleRateChange = (e) => {
+  //   const newRate = e.target.value
+  //   setSelectedRate(newRate)
+  //   if (newRate === "hourly"){
+  //     setDayRange("hours")
+  //   } else if (newRate === "daily"){
+  //     setDayRange("days")
+  //   } else if (newRate === "weekly"){
+  //     setDayRange("week")
+  //   } else if (newRate === "promo"){
+  //     setDayRange("promo")
+  //   }
+  // }

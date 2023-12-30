@@ -26,7 +26,7 @@ const flatMappedUserAgreement = currentUser?.cart?.flatMap(item => {
           equipment_model: cartItem?.equipment.model,
           equipment_image: cartItem?.equipment.equipment_image,
           rental_quantity: cartItem?.quantity,
-          cart_total: (item.total.toFixed(2)) / 100,
+          cart_total: (item.total) / 100,
           ownerFirstName: cartItem?.equipment.owner?.firstName,
           ownerLastName: cartItem?.equipment.owner?.lastName,
           ownerEmail: cartItem?.equipment.owner?.email, 

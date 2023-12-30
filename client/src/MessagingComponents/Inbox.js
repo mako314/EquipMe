@@ -1,6 +1,4 @@
 import React, { useContext, useEffect, useState} from 'react'
-import OwnerContext from '../OwnerComponents/OwnerContext'
-import UserContext from '../UserComponents/UserContext'
 import ApiUrlContext from '../Api';
 import {useNavigate} from 'react-router-dom';
 import { UserSessionContext } from '../UserComponents/SessionContext';
@@ -9,10 +7,6 @@ import { UserSessionContext } from '../UserComponents/SessionContext';
 function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRecipientInfo, fromOwnerDash, setFromOwnerDash }){
 
 // ---------------Detect whether or not an OWNER is logged in-------------------
- 
-
-  const [owner, setOwner] = useContext(OwnerContext)
-  const [user, setUser] = useContext(UserContext)
   const { currentUser, role } = UserSessionContext() 
   const apiUrl = useContext(ApiUrlContext)
 

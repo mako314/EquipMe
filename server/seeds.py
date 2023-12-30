@@ -799,7 +799,7 @@ if __name__ == '__main__':
             user_id = user_1.id,
         )
         
-        db.session.add_all([cart1, cart2])
+        db.session.add_all([cart1, cart2,cart3])
         
 
         print("Generating example cart items...")   
@@ -850,7 +850,7 @@ if __name__ == '__main__':
                 quantity = 4,
                 rental_rate="weekly",
                 rental_length = 2,
-                cart_id= cart1.id,
+                cart_id= cart3.id,
                 equipment_id = equipment_list[6].id, # Pressure Washer
                 created_at = datetime(2023, 11, 11),
             ),
@@ -860,7 +860,7 @@ if __name__ == '__main__':
                 quantity = 1,
                 rental_rate="weekly",
                 rental_length = 2,
-                cart_id= cart1.id,
+                cart_id= cart3.id,
                 equipment_id = equipment_list[7].id, # Generator
                 created_at = datetime(2023, 11, 11),
             ),
@@ -994,6 +994,7 @@ if __name__ == '__main__':
 
         # Now that all items are added, calculate the total
         cart1.total = cart1.calculate_total()
+        cart3.total = cart3.calculate_total()
         db.session.commit()
 
 #Seed rental agreements

@@ -13,9 +13,36 @@ function Cart(){
   const [currentCart, setCurrentCart] = useState(0)
   const [cartData, setCartData] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
+  // const [selectedRate, setSelectedRate] = useState(0)
+  const [individualTotal, setIndividualTotal] = useState([])
+  const [currentCartTotal, setCurrentCartTotal] = useState(0)
 
 
-  // console.log(currentCart)
+  console.log("THE CART TOTAL:", individualTotal)
+
+
+  
+  console.log(Array.isArray(individualTotal))
+
+
+useEffect(() => {
+  let currentTotal = 0
+  if(Array.isArray(individualTotal)){
+    // Filter items belonging to the current cart, filter any time need something for x, so I'm trying to only track totals for this specific cart, filter by cart ID.
+ const itemsInCurrentCart = individualTotal.filter(item => item.cart_id === cartData[currentCart].id)
+
+ // Sum up the costs of these items
+ itemsInCurrentCart.forEach((item) => {
+    console.log(item)
+   currentTotal += item.cost
+ })
+}
+
+setCurrentCartTotal(currentTotal)
+console.log("THE CURRENT TOTAL FOR CART", cartData[currentCart]?.cart_name, ":", currentTotal)
+
+}, [cartData, individualTotal])
+
 
   useEffect(() => {
     if (role === 'user') {
@@ -47,6 +74,14 @@ function Cart(){
   }
 
   //-------------------------------------
+
+  //  cartData[currentCart].cart_item?.length === 0 ?
+  //   <p> Cart is empty or loading...</p> 
+  //   : 
+  //   cartData[currentCart]?.cart_item.forEach((item) => (
+  //     // console.log("THE ITEM:", item)
+  //   ))  
+    
 
 
   // Map over carts, present options
@@ -120,24 +155,43 @@ function Cart(){
         )}
 
       {/* <CreateNewCart addCart={addCart}/> */}
+        
+      {cartData[currentCart].cart_item?.length === 0 ?
+      <p>Cart is empty or loading...</p> 
+      : 
+      cartData[currentCart]?.cart_item.map((item) => {
+          // Extract rates
+          const { hourly_rate, daily_rate, weekly_rate, promo_rate } = item.equipment.equipment_price[0]
 
-      { cartData[currentCart].cart_item?.length === 0 ?
-        <p> Cart is empty or loading...</p> 
-        : 
-        cartData[currentCart]?.cart_item.map((item) => (
-          // console.log("THE ITEM:", item),
-          <CartItem 
-          key={ `${item.equipment_id}_${item.created_at}`}
-          equipment_image={item.equipment.equipment_image}
-          make={item.equipment.make}
-          model={item.equipment.model}
-          rateOptions={rateOptions}
-          cartItemRate={item.rental_rate}
-          cartItemRentalLength={item.rental_length}
-          cartItemQuantity={item.quantity}
-          />
-        ))  
-        }
+          // Calculate rate values
+          const hourlyRateValue = hourly_rate / 100
+          const dailyRateValue = daily_rate / 100
+          const weeklyRateValue = weekly_rate / 100
+          const promoRateValue = promo_rate / 100
+          
+          // console.log("HOURLY RATE VALUE COMING IN TO CART ITEM:", hourlyRateValue)
+
+          return (
+            <CartItem 
+              key={ `${item.equipment_id}_${item.created_at}_${item.equipment.make}_${item.equipment.model}`}
+              equipment_image={item.equipment.equipment_image}
+              make={item.equipment.make}
+              model={item.equipment.model}
+              rateOptions={rateOptions}
+              cartItemRate={item.rental_rate}
+              cartItemRentalLength={item.rental_length}
+              cartItemQuantity={item.quantity}
+              setIndividualTotal={setIndividualTotal}
+              cartItemId={item.id}
+              cartId={item.cart_id}
+              hourlyRate={hourlyRateValue}
+              dailyRate={dailyRateValue}
+              weeklyRate={weeklyRateValue}
+              promoRate={promoRateValue}
+            />
+          )
+      })
+  }
 
       </div>
       <div className="mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-0 md:w-1/3">
@@ -153,7 +207,7 @@ function Cart(){
         <div className="flex justify-between">
           <p className="text-lg font-bold">Total</p>
           <div className="">
-            <p className="mb-1 text-lg font-bold">${(cartData[currentCart]?.total / 100)}</p>
+            <p className="mb-1 text-lg font-bold">${(currentCartTotal).toFixed(2)}</p>
             <p className="text-sm text-gray-700">including VAT</p>
           </div>
         </div>
