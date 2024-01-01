@@ -1,9 +1,12 @@
 import React,{useContext, useEffect, useState} from "react";
 import ApiUrlContext from '../Api'
+import {toast} from 'react-toastify'
 
-function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate, cartItemRentalLength, cartItemQuantity, setIndividualTotal, hourlyRate, dailyRate, weeklyRate, promoRate, cartItemId, cartId}){
+function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate, cartItemRentalLength, cartItemQuantity, setIndividualTotal, hourlyRate, dailyRate, weeklyRate, promoRate, cartItemId, cartId, agreementStatus, costChange}){
 
-  // console.log("CART ITEM ID:", cartItemId)
+  // console.log("LOOKING FOR THE AGREEMENT STATUS:", agreementStatus)
+  const apiUrl = useContext(ApiUrlContext)
+  // console.log("whole Item:", wholeItem)
   // console.log("Rental cartItemRate:", cartItemRate)
   // A lot of props and state. Can  likely move in "day options"
   const [selectedRate, setSelectedRate] = useState(cartItemRate)
@@ -15,7 +18,7 @@ function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate
   const [equipmentQuantity, setEquipmentQuantity] = useState(cartItemQuantity)
   
   
-  console.log("THE WHOLE ITEM ",cartId)
+  // console.log("THE WHOLE ITEM ",cartId)
   
   //Just basic day options, to track the amount of time they're trying to rent for
   const dayOptions = <>
@@ -26,8 +29,18 @@ function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate
   </>
 
 
-const handleTotalChange = (rateValue = 0, totalQuantity = equipmentQuantity, totalLength = rentalLength) => {
+const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantity, totalLength = rentalLength) => {
 
+  if(agreementStatus === 'both-accepted'){
+    return toast.warn(`🤝 Both Parties have Already Accepted, Unable to Edit this Item.`,
+      {
+      "autoClose" : 2000
+      })
+  }
+
+  // console.log(agreement_status)
+  // console.log('THE RENTAL LENGTH:', rentalLength)
+  // console.log('THE RATE VALUE:', rateValue)
   // const rateValue = rateArray[e.target.options.selectedIndex]
   let currentRate = ''
   if (rateValue === 0){
@@ -51,12 +64,43 @@ const handleTotalChange = (rateValue = 0, totalQuantity = equipmentQuantity, tot
 
   console.log("THE RATE VALUE:", rateValue)
   console.log("THE CURRENT RATE VALUE:", currentRate)
-  console.log("THE TOTAL QUANTITY:", totalQuantity)
-  console.log("THE TOTAL LENGTH:", totalLength)
-  //Calculate the total cost
-  const newCost = rateValue ? rateValue : currentRate * totalQuantity * totalLength
+  console.log("THE UPDATED RATE:", costChange)
+  // console.log("THE TOTAL QUANTITY:", totalQuantity)
+  // console.log("THE TOTAL LENGTH:", totalLength)
 
-  // console.log("RATE VALUE * EQUIPMENT QUANTITY:", rateValue * equipmentQuantity)
+  //Calculate the total cost
+  const newCost = ((rateValue ? rateValue : currentRate) * totalQuantity) * totalLength
+  // (currentRate || rateValue) * 100
+  // console.log("RATE:", newCost)
+  if(agreementStatus !== 'both-accepted'){
+  const dataToSend = {
+    price_cents_if_changed: (currentRate || rateValue) * 100,
+    rental_rate : selectedRate,
+    rental_length: rentalLength,
+    // cart_item_id: cartItemId,
+    quantity: equipmentQuantity,
+    agreement_status: agreementStatus,
+  }
+
+  try {
+    const response = await fetch(`${apiUrl}/cart/item/${cartItemId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(dataToSend),
+    });
+
+    if (response.ok) {
+      const updatedItem = await response.json()
+      console.log("THE UPDATED CART ITEM:",updatedItem)
+    } else {
+      console.error('Failed to update cart item:', await response.text())
+    }
+  } catch (error) {
+    console.error('Network error:', error)
+  }
+}
 
 
   setIndividualTotal(prevTotals => {
@@ -71,7 +115,8 @@ const handleTotalChange = (rateValue = 0, totalQuantity = equipmentQuantity, tot
     )
   } else {
     // If not found, add a new item
-    return [...prevTotals, { id: cartItemId, cart_id: cartId,cost: newCost }]
+    return [...prevTotals, { id: cartItemId, cart_id: cartId,cost: newCost, agreement_status: agreementStatus}]
+    // 
   }
 })
 }
@@ -106,9 +151,10 @@ const handleTotalChange = (rateValue = 0, totalQuantity = equipmentQuantity, tot
             break
     }
 
-    console.log( "THE NEW COST:", (currentRate * cartItemQuantity * cartItemRentalLength))
+    // console.log( "THE NEW COST:", (currentRate * cartItemQuantity * cartItemRentalLength))
     const newCost = currentRate * cartItemQuantity * cartItemRentalLength
 
+    // handleTotalChange(currentRate, equipmentQuantity, rentalLength)
     setIndividualTotal(prevTotals => {
       // Find the index of the item with the same id
       // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex
@@ -121,7 +167,7 @@ const handleTotalChange = (rateValue = 0, totalQuantity = equipmentQuantity, tot
         )
       } else {
         // If not found, add a new item
-        return [...prevTotals, { id: cartItemId, cart_id: cartId,cost: newCost }]
+        return [...prevTotals, { id: cartItemId, cart_id: cartId,cost: newCost, agreement_status: agreementStatus}]
       }
     })
 
@@ -130,9 +176,14 @@ const handleTotalChange = (rateValue = 0, totalQuantity = equipmentQuantity, tot
   // console.log('THE RATE:',selectedRate)
 
   const handleRateChange = (e) => {
+    if(agreementStatus === 'both-accepted'){
+      return toast.warn(`🤝 Both Parties have Already Accepted, Unable to Edit this Item.`,
+        {
+        "autoClose" : 2000
+        })
+    }
     const newRate = e.target.value
     setSelectedRate(newRate)
-
     let newDayRange = ''
     switch (newRate) {
         case "hourly":
@@ -165,6 +216,12 @@ const handleTotalChange = (rateValue = 0, totalQuantity = equipmentQuantity, tot
   // console.log('THE DAY RANGE:', dayRange)
   //Concide rental length (dayRange) with rate
   const handleDayRangeChange = (e) => {
+    if(agreementStatus === 'both-accepted'){
+      return toast.warn(`🤝 Both Parties have Already Accepted, Unable to Edit this Item.`,
+        {
+        "autoClose" : 2000
+        })
+    }
     const newDayRange = e.target.value
     setDayRange(newDayRange)
 
@@ -193,6 +250,12 @@ const handleTotalChange = (rateValue = 0, totalQuantity = equipmentQuantity, tot
 }
 
   const handleRentalLength = (e) =>{
+    if(agreementStatus === 'both-accepted'){
+      return toast.warn(`🤝 Both Parties have Already Accepted, Unable to Edit this Item.`,
+        {
+        "autoClose" : 2000
+        })
+    }
     // setRentalLength(parseInt(e.target.value, 10))
     const newLength = parseInt(e.target.value, 10)
 
@@ -204,6 +267,12 @@ const handleTotalChange = (rateValue = 0, totalQuantity = equipmentQuantity, tot
   
 
   const handleEquipmentQuantity = (e) =>{
+    if(agreementStatus === 'both-accepted'){
+      return toast.warn(`🤝 Both Parties have Already Accepted, Unable to Edit this Item.`,
+        {
+        "autoClose" : 2000
+        })
+    }
     // setRentalLength(parseInt(e.target.value, 10))
     const newQuantity = parseInt(e.target.value, 10)
 
@@ -216,6 +285,12 @@ const handleTotalChange = (rateValue = 0, totalQuantity = equipmentQuantity, tot
     // -1 on quantity
     // Needed to set a new quantity to pass into handleTotal change for both of these functions, that way it can account for the new quantity and multiply it when the buttons are clicked to + or - 1 
     const decrementQuantity = () => {
+      if(agreementStatus === 'both-accepted'){
+        return toast.warn(`🤝 Both Parties have Already Accepted, Unable to Edit this Item.`,
+          {
+          "autoClose" : 2000
+          })
+      }
       setEquipmentQuantity(prevequipmentQuantity => { 
         const newQuantity = prevequipmentQuantity > 1 ? prevequipmentQuantity - 1 : 1
         handleTotalChange(undefined, newQuantity, undefined)
@@ -225,6 +300,12 @@ const handleTotalChange = (rateValue = 0, totalQuantity = equipmentQuantity, tot
 
     // +1 on quantity 
     const incrementQuantity = () => {
+      if(agreementStatus === 'both-accepted'){
+        return toast.warn(`🤝 Both Parties have Already Accepted, Unable to Edit this Item.`,
+          {
+          "autoClose" : 2000
+          })
+      }
       setEquipmentQuantity(prevequipmentQuantity => {
         const newQuantity = prevequipmentQuantity + 1
         handleTotalChange(undefined, newQuantity, undefined)

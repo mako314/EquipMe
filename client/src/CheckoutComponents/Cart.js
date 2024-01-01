@@ -16,30 +16,40 @@ function Cart(){
   // const [selectedRate, setSelectedRate] = useState(0)
   const [individualTotal, setIndividualTotal] = useState([])
   const [currentCartTotal, setCurrentCartTotal] = useState(0)
+  const [availableToCheckOutTotal, setAvailableToCheckOutTotal] = useState(0)
 
 
-  console.log("THE CART TOTAL:", individualTotal)
+  // console.log("THE CART TOTAL:", individualTotal)
 
+  // console.log(Array.isArray(individualTotal))
+  useEffect(() => {
+    let itemsBothPartiesAgreedOn = 0
+    let allTotalCarts = 0 
 
-  
-  console.log(Array.isArray(individualTotal))
+    if(Array.isArray(individualTotal)){
+      // Filter items belonging to the current cart, filter any time need something for x, so I'm trying to only track totals for this specific cart, filter by cart ID.
+  const itemsInCurrentCartBothAgreed = individualTotal.filter(item => item.cart_id === cartData[currentCart].id && item.agreement_status === 'both-accepted')
 
+    // console.log("ITEMS IN CURRENT CART:", itemsInCurrentCart)
 
-useEffect(() => {
-  let currentTotal = 0
-  if(Array.isArray(individualTotal)){
-    // Filter items belonging to the current cart, filter any time need something for x, so I'm trying to only track totals for this specific cart, filter by cart ID.
- const itemsInCurrentCart = individualTotal.filter(item => item.cart_id === cartData[currentCart].id)
+  const itemsInCurrentCartAll = individualTotal.filter(item => item.cart_id === cartData[currentCart].id)
 
- // Sum up the costs of these items
- itemsInCurrentCart.forEach((item) => {
-    console.log(item)
-   currentTotal += item.cost
- })
-}
+  // Sum up the costs of these items
+  itemsInCurrentCartBothAgreed.forEach((item) => {
+      // console.log(item)
+      itemsBothPartiesAgreedOn += item.cost
+  })
 
-setCurrentCartTotal(currentTotal)
-console.log("THE CURRENT TOTAL FOR CART", cartData[currentCart]?.cart_name, ":", currentTotal)
+  itemsInCurrentCartAll.forEach((item) => {
+    // console.log(item)
+    allTotalCarts += item.cost
+})
+
+ }
+
+setCurrentCartTotal(itemsBothPartiesAgreedOn)
+setAvailableToCheckOutTotal(allTotalCarts)
+// console.log("THE CURRENT TOTAL FOR CART", cartData[currentCart]?.cart_name, ":", currentTotal)
 
 }, [cartData, individualTotal])
 
@@ -184,6 +194,8 @@ console.log("THE CURRENT TOTAL FOR CART", cartData[currentCart]?.cart_name, ":",
               setIndividualTotal={setIndividualTotal}
               cartItemId={item.id}
               cartId={item.cart_id}
+              costChange={item.price_cents_if_changed}
+              agreementStatus={item.agreements[0].agreement_status}
               hourlyRate={hourlyRateValue}
               dailyRate={dailyRateValue}
               weeklyRate={weeklyRateValue}
@@ -196,12 +208,12 @@ console.log("THE CURRENT TOTAL FOR CART", cartData[currentCart]?.cart_name, ":",
       </div>
       <div className="mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-0 md:w-1/3">
         <div className="mb-2 flex justify-between">
-          <p className="text-gray-700">Subtotal</p>
-          <p className="text-gray-700">$129.99</p>
+          <p className="text-gray-700">Total in Cart</p>
+          <p className="text-gray-700">${(availableToCheckOutTotal).toFixed(2)}</p>
         </div>
         <div className="flex justify-between">
-          <p className="text-gray-700">Shipping</p>
-          <p className="text-gray-700">$4.99</p>
+          <p className="text-gray-700">Available to Checkout, both Parties Accepted</p>
+          <p className="text-gray-700">${(currentCartTotal).toFixed(2)}</p>
         </div>
         <hr className="my-4" />
         <div className="flex justify-between">
