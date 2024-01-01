@@ -194,7 +194,7 @@ setAvailableToCheckOutTotal(allTotalCarts)
               setIndividualTotal={setIndividualTotal}
               cartItemId={item.id}
               cartId={item.cart_id}
-              wholeItem={item}
+              costChange={item.price_cents_if_changed}
               agreementStatus={item.agreements[0].agreement_status}
               hourlyRate={hourlyRateValue}
               dailyRate={dailyRateValue}
