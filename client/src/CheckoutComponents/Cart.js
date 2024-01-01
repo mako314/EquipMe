@@ -16,25 +16,39 @@ function Cart(){
   // const [selectedRate, setSelectedRate] = useState(0)
   const [individualTotal, setIndividualTotal] = useState([])
   const [currentCartTotal, setCurrentCartTotal] = useState(0)
+  const [availableToCheckOutTotal, setAvailableToCheckOutTotal] = useState(0)
 
 
   // console.log("THE CART TOTAL:", individualTotal)
 
   // console.log(Array.isArray(individualTotal))
   useEffect(() => {
-    let currentTotal = 0
+    let itemsBothPartiesAgreedOn = 0
+    let allTotalCarts = 0 
+
     if(Array.isArray(individualTotal)){
       // Filter items belonging to the current cart, filter any time need something for x, so I'm trying to only track totals for this specific cart, filter by cart ID.
-  const itemsInCurrentCart = individualTotal.filter(item => item.cart_id === cartData[currentCart].id)
-    console.log("ITEMS IN CURRENT CART:", itemsInCurrentCart)
-  // Sum up the costs of these items
-  itemsInCurrentCart.forEach((item) => {
-      // console.log(item)
-    currentTotal += item.cost
-  })
-  }
+  const itemsInCurrentCartBothAgreed = individualTotal.filter(item => item.cart_id === cartData[currentCart].id && item.agreement_status === 'both-accepted')
 
-setCurrentCartTotal(currentTotal)
+    // console.log("ITEMS IN CURRENT CART:", itemsInCurrentCart)
+
+  const itemsInCurrentCartAll = individualTotal.filter(item => item.cart_id === cartData[currentCart].id)
+
+  // Sum up the costs of these items
+  itemsInCurrentCartBothAgreed.forEach((item) => {
+      // console.log(item)
+      itemsBothPartiesAgreedOn += item.cost
+  })
+
+  itemsInCurrentCartAll.forEach((item) => {
+    // console.log(item)
+    allTotalCarts += item.cost
+})
+
+ }
+
+setCurrentCartTotal(itemsBothPartiesAgreedOn)
+setAvailableToCheckOutTotal(allTotalCarts)
 // console.log("THE CURRENT TOTAL FOR CART", cartData[currentCart]?.cart_name, ":", currentTotal)
 
 }, [cartData, individualTotal])
@@ -193,12 +207,12 @@ setCurrentCartTotal(currentTotal)
       </div>
       <div className="mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-0 md:w-1/3">
         <div className="mb-2 flex justify-between">
-          <p className="text-gray-700">Subtotal</p>
-          <p className="text-gray-700">$129.99</p>
+          <p className="text-gray-700">Total in Cart</p>
+          <p className="text-gray-700">${(availableToCheckOutTotal).toFixed(2)}</p>
         </div>
         <div className="flex justify-between">
-          <p className="text-gray-700">Shipping</p>
-          <p className="text-gray-700">$4.99</p>
+          <p className="text-gray-700">Available to Checkout, both Parties Accepted</p>
+          <p className="text-gray-700">${(currentCartTotal).toFixed(2)}</p>
         </div>
         <hr className="my-4" />
         <div className="flex justify-between">
