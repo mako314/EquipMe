@@ -4,7 +4,7 @@ import ApiUrlContext from '../Api'
 function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate, cartItemRentalLength, cartItemQuantity, setIndividualTotal, hourlyRate, dailyRate, weeklyRate, promoRate, cartItemId, cartId, agreementStatus}){
 
   // console.log("LOOKING FOR THE AGREEMENT STATUS:", agreementStatus)
-
+  const apiUrl = useContext(ApiUrlContext)
   // console.log("CART ITEM ID:", cartItemId)
   // console.log("Rental cartItemRate:", cartItemRate)
   // A lot of props and state. Can  likely move in "day options"
@@ -28,7 +28,7 @@ function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate
   </>
 
 
-const handleTotalChange = (rateValue = 0, totalQuantity = equipmentQuantity, totalLength = rentalLength, agreement_status = agreementStatus) => {
+const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantity, totalLength = rentalLength, agreement_status = agreementStatus) => {
 
   console.log(agreement_status)
   console.log('THE RENTAL LENGTH:', rentalLength)
@@ -62,7 +62,36 @@ const handleTotalChange = (rateValue = 0, totalQuantity = equipmentQuantity, tot
   //Calculate the total cost
   const newCost = ((rateValue ? rateValue : currentRate) * totalQuantity) * totalLength
 
-  console.log("RATE:", newCost)
+  // console.log("RATE:", newCost)
+  if(agreementStatus !== 'both-accepted'){
+  const dataToSend = {
+    price_cents_if_changed: newCost,
+    rental_rate : currentRate || rateValue,
+    rental_length: rentalLength,
+    // cart_item_id: cartItemId,
+    quantity: equipmentQuantity,
+    agreement_status: agreementStatus,
+  }
+
+  try {
+    const response = await fetch(`${apiUrl}/cart/item/${cartItemId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(dataToSend),
+    });
+
+    if (response.ok) {
+      const updatedItem = await response.json()
+      console.log("THE UPDATED CART ITEM:",updatedItem)
+    } else {
+      console.error('Failed to update cart item:', await response.text())
+    }
+  } catch (error) {
+    console.error('Network error:', error)
+  }
+}
 
 
   setIndividualTotal(prevTotals => {
