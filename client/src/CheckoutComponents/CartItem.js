@@ -1,7 +1,9 @@
 import React,{useContext, useEffect, useState} from "react";
 import ApiUrlContext from '../Api'
 
-function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate, cartItemRentalLength, cartItemQuantity, setIndividualTotal, hourlyRate, dailyRate, weeklyRate, promoRate, cartItemId, cartId}){
+function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate, cartItemRentalLength, cartItemQuantity, setIndividualTotal, hourlyRate, dailyRate, weeklyRate, promoRate, cartItemId, cartId, agreementStatus}){
+
+  // console.log("LOOKING FOR THE AGREEMENT STATUS:", agreementStatus)
 
   // console.log("CART ITEM ID:", cartItemId)
   // console.log("Rental cartItemRate:", cartItemRate)
@@ -15,7 +17,7 @@ function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate
   const [equipmentQuantity, setEquipmentQuantity] = useState(cartItemQuantity)
   
   
-  console.log("THE WHOLE ITEM ",cartId)
+  // console.log("THE WHOLE ITEM ",cartId)
   
   //Just basic day options, to track the amount of time they're trying to rent for
   const dayOptions = <>
@@ -26,7 +28,9 @@ function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate
   </>
 
 
-const handleTotalChange = (rateValue = 0, totalQuantity = equipmentQuantity, totalLength = rentalLength) => {
+const handleTotalChange = (rateValue = 0, totalQuantity = equipmentQuantity, totalLength = rentalLength, agreement_status = agreementStatus) => {
+
+  console.log(agreement_status)
 
   // const rateValue = rateArray[e.target.options.selectedIndex]
   let currentRate = ''
@@ -49,10 +53,11 @@ const handleTotalChange = (rateValue = 0, totalQuantity = equipmentQuantity, tot
     }
   }
 
-  console.log("THE RATE VALUE:", rateValue)
-  console.log("THE CURRENT RATE VALUE:", currentRate)
-  console.log("THE TOTAL QUANTITY:", totalQuantity)
-  console.log("THE TOTAL LENGTH:", totalLength)
+  // console.log("THE RATE VALUE:", rateValue)
+  // console.log("THE CURRENT RATE VALUE:", currentRate)
+  // console.log("THE TOTAL QUANTITY:", totalQuantity)
+  // console.log("THE TOTAL LENGTH:", totalLength)
+
   //Calculate the total cost
   const newCost = rateValue ? rateValue : currentRate * totalQuantity * totalLength
 
@@ -71,7 +76,8 @@ const handleTotalChange = (rateValue = 0, totalQuantity = equipmentQuantity, tot
     )
   } else {
     // If not found, add a new item
-    return [...prevTotals, { id: cartItemId, cart_id: cartId,cost: newCost }]
+    return [...prevTotals, { id: cartItemId, cart_id: cartId,cost: newCost, agreement_status: agreementStatus}]
+    // 
   }
 })
 }
@@ -106,24 +112,25 @@ const handleTotalChange = (rateValue = 0, totalQuantity = equipmentQuantity, tot
             break
     }
 
-    console.log( "THE NEW COST:", (currentRate * cartItemQuantity * cartItemRentalLength))
+    // console.log( "THE NEW COST:", (currentRate * cartItemQuantity * cartItemRentalLength))
     const newCost = currentRate * cartItemQuantity * cartItemRentalLength
 
-    setIndividualTotal(prevTotals => {
-      // Find the index of the item with the same id
-      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex
-      const index = prevTotals.findIndex(item => item.id === cartItemId)
+    handleTotalChange(currentRate, undefined, undefined)
+    // setIndividualTotal(prevTotals => {
+    //   // Find the index of the item with the same id
+    //   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex
+    //   const index = prevTotals.findIndex(item => item.id === cartItemId)
   
-      if (index !== -1) {
-        // If found, update the cost of the existing item
-        return prevTotals.map((item, idx) => 
-          idx === index ? { ...item, cost: newCost } : item
-        )
-      } else {
-        // If not found, add a new item
-        return [...prevTotals, { id: cartItemId, cart_id: cartId,cost: newCost }]
-      }
-    })
+    //   if (index !== -1) {
+    //     // If found, update the cost of the existing item
+    //     return prevTotals.map((item, idx) => 
+    //       idx === index ? { ...item, cost: newCost } : item
+    //     )
+    //   } else {
+    //     // If not found, add a new item
+    //     return [...prevTotals, { id: cartItemId, cart_id: cartId,cost: newCost }]
+    //   }
+    // })
 
   }, [])
 
