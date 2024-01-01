@@ -31,6 +31,7 @@ function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate
 const handleTotalChange = (rateValue = 0, totalQuantity = equipmentQuantity, totalLength = rentalLength, agreement_status = agreementStatus) => {
 
   console.log(agreement_status)
+  console.log('THE RENTAL LENGTH:', rentalLength)
 
   // const rateValue = rateArray[e.target.options.selectedIndex]
   let currentRate = ''
@@ -59,9 +60,9 @@ const handleTotalChange = (rateValue = 0, totalQuantity = equipmentQuantity, tot
   // console.log("THE TOTAL LENGTH:", totalLength)
 
   //Calculate the total cost
-  const newCost = rateValue ? rateValue : currentRate * totalQuantity * totalLength
+  const newCost = ((rateValue ? rateValue : currentRate) * totalQuantity) * totalLength
 
-  // console.log("RATE VALUE * EQUIPMENT QUANTITY:", rateValue * equipmentQuantity)
+  console.log("RATE:", newCost)
 
 
   setIndividualTotal(prevTotals => {
@@ -115,7 +116,7 @@ const handleTotalChange = (rateValue = 0, totalQuantity = equipmentQuantity, tot
     // console.log( "THE NEW COST:", (currentRate * cartItemQuantity * cartItemRentalLength))
     const newCost = currentRate * cartItemQuantity * cartItemRentalLength
 
-    handleTotalChange(currentRate, undefined, undefined)
+    handleTotalChange(currentRate, equipmentQuantity, rentalLength)
     // setIndividualTotal(prevTotals => {
     //   // Find the index of the item with the same id
     //   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex
