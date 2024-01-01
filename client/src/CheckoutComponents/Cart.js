@@ -20,23 +20,19 @@ function Cart(){
 
   // console.log("THE CART TOTAL:", individualTotal)
 
-
-  
   // console.log(Array.isArray(individualTotal))
-
-
-useEffect(() => {
-  let currentTotal = 0
-  if(Array.isArray(individualTotal)){
-    // Filter items belonging to the current cart, filter any time need something for x, so I'm trying to only track totals for this specific cart, filter by cart ID.
- const itemsInCurrentCart = individualTotal.filter(item => item.cart_id === cartData[currentCart].id)
-  console.log("ITEMS IN CURRENT CART:", itemsInCurrentCart)
- // Sum up the costs of these items
- itemsInCurrentCart.forEach((item) => {
-    // console.log(item)
-   currentTotal += item.cost
- })
-}
+  useEffect(() => {
+    let currentTotal = 0
+    if(Array.isArray(individualTotal)){
+      // Filter items belonging to the current cart, filter any time need something for x, so I'm trying to only track totals for this specific cart, filter by cart ID.
+  const itemsInCurrentCart = individualTotal.filter(item => item.cart_id === cartData[currentCart].id)
+    console.log("ITEMS IN CURRENT CART:", itemsInCurrentCart)
+  // Sum up the costs of these items
+  itemsInCurrentCart.forEach((item) => {
+      // console.log(item)
+    currentTotal += item.cost
+  })
+  }
 
 setCurrentCartTotal(currentTotal)
 // console.log("THE CURRENT TOTAL FOR CART", cartData[currentCart]?.cart_name, ":", currentTotal)

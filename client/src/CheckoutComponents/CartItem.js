@@ -116,22 +116,22 @@ const handleTotalChange = (rateValue = 0, totalQuantity = equipmentQuantity, tot
     // console.log( "THE NEW COST:", (currentRate * cartItemQuantity * cartItemRentalLength))
     const newCost = currentRate * cartItemQuantity * cartItemRentalLength
 
-    handleTotalChange(currentRate, equipmentQuantity, rentalLength)
-    // setIndividualTotal(prevTotals => {
-    //   // Find the index of the item with the same id
-    //   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex
-    //   const index = prevTotals.findIndex(item => item.id === cartItemId)
+    // handleTotalChange(currentRate, equipmentQuantity, rentalLength)
+    setIndividualTotal(prevTotals => {
+      // Find the index of the item with the same id
+      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex
+      const index = prevTotals.findIndex(item => item.id === cartItemId)
   
-    //   if (index !== -1) {
-    //     // If found, update the cost of the existing item
-    //     return prevTotals.map((item, idx) => 
-    //       idx === index ? { ...item, cost: newCost } : item
-    //     )
-    //   } else {
-    //     // If not found, add a new item
-    //     return [...prevTotals, { id: cartItemId, cart_id: cartId,cost: newCost }]
-    //   }
-    // })
+      if (index !== -1) {
+        // If found, update the cost of the existing item
+        return prevTotals.map((item, idx) => 
+          idx === index ? { ...item, cost: newCost } : item
+        )
+      } else {
+        // If not found, add a new item
+        return [...prevTotals, { id: cartItemId, cart_id: cartId,cost: newCost, agreement_status: agreementStatus}]
+      }
+    })
 
   }, [])
 

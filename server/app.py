@@ -1644,7 +1644,13 @@ class AddItemToCart(Resource):
     def patch(self, cart_id):
         cart = Cart.query.filter(Cart.id == cart_id).first()
 
-        cart_item = cart.query.filter(Equipment.id == data['equipment_id']).first()
+        cart_item = cart.query.filter(CartItem.id == data['cart_item_id']).first()
+
+        # if cart_item.agreements[0].agreement_status == 'both-accepted':
+        #     response = make_response({
+        #     "error": "Both parties have accepted, no longer able to edit this agreement."
+        #     }, 405 )
+        #     return response
 
         if cart_item:
             data = request.get_json()
@@ -1677,6 +1683,12 @@ class CartItemByID(Resource):
         
     def patch(self, id):
         cart_item = CartItem.query.filter(CartItem.id == id).first()
+
+        if cart_item.agreements[0].agreement_status == 'both-accepted':
+            response = make_response({
+            "error": "Both parties have accepted, no longer able to edit this agreement."
+            }, 405 )
+            return response
 
         if cart_item:
             data = request.get_json()
