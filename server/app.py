@@ -189,7 +189,7 @@ class UserByID(Resource):
                 data = request.get_json()
                 for key in data:
                     setattr(user, key, data[key])
-                db.session.add(user)
+                # db.session.add(user)
                 db.session.commit()
 
                 response = make_response(user.to_dict(), 202)
@@ -302,7 +302,7 @@ class EquipmentOwnerById(Resource):
                 data = request.get_json()
                 for key in data:
                     setattr(equip_owner, key, data[key])
-                db.session.add(equip_owner)
+                # db.session.add(equip_owner)
                 db.session.commit()
 
                 response = make_response(equip_owner.to_dict(), 202)
@@ -542,7 +542,7 @@ class EquipmentByID(Resource):
                     equipment_status.total_quantity = updated_available_quantity
 
 
-                db.session.add(equipment)
+                # db.session.add(equipment)
                 db.session.commit()
 
                 # print('Current Equipments TOTAL quantity:',equipment_status.total_quantity )
@@ -826,7 +826,7 @@ class EquipmentImagesByID(Resource):
             data = request.get_json()
             for key in data:
                 setattr(equipment_image, key, data[key])
-                db.session.add(equipment_image)
+                # db.session.add(equipment_image)
                 db.session.commit()
                 response = make_response(equipment_image.to_dict(), 202)
                 return response
@@ -1010,7 +1010,7 @@ class RentalAgreementsByID(Resource):
             data = request.get_json()
             for key in data:
                 setattr(agreement, key, data[key])
-            db.session.add(agreement)
+            # db.session.add(agreement)
             agreement.revisions += 1
 
             new_equipment_status = EquipmentStatus(
@@ -1333,7 +1333,7 @@ class UserReviewEditing(Resource):
                 setattr(selected_review, key, data[key])
                 if 'review_comment' in data:
                     selected_review.review_comment = data['review_comment']
-                db.session.add(selected_review)
+                # db.session.add(selected_review)
                 db.session.commit()
                 response = make_response(selected_review.to_dict(), 202)
                 return response
@@ -1358,7 +1358,7 @@ class OwnerReviewEditing(Resource):
                 setattr(selected_review, key, data[key])
                 if 'review_comment' in data:
                     selected_review.review_comment = data['review_comment']
-                db.session.add(selected_review)
+                # db.session.add(selected_review)
                 db.session.commit()
                 response = make_response(selected_review.to_dict(), 202)
                 return response
@@ -1447,7 +1447,7 @@ class CartByUserID(Resource):
             data = request.get_json()
             for key in data:
                 setattr(cart, key, data[key])
-            db.session.add(cart)
+            # db.session.add(cart)
             db.session.commit()
             response = make_response(cart.to_dict(), 202)
             return response
@@ -1491,7 +1491,7 @@ class UserCartByCartID(Resource):
             data = request.get_json()
             for key in data:
                 setattr(cart, key, data[key])
-            db.session.add(cart)
+            # db.session.add(cart)
             db.session.commit()
             response = make_response(cart.to_dict(), 202)
             return response
@@ -1642,6 +1642,7 @@ class AddItemToCart(Resource):
         #except ValueError ()
 
     def patch(self, cart_id):
+        data = request.get_json()
         cart = Cart.query.filter(Cart.id == cart_id).first()
 
         cart_item = cart.query.filter(CartItem.id == data['cart_item_id']).first()
@@ -1656,7 +1657,7 @@ class AddItemToCart(Resource):
             data = request.get_json()
             for key in data:
                 setattr(cart_item, key, data[key])
-            db.session.add(cart_item)
+            # db.session.add(cart_item)
             db.session.commit()
             response = make_response(cart_item.to_dict(), 202)
             return response
@@ -1670,8 +1671,8 @@ class AddItemToCart(Resource):
 api.add_resource(AddItemToCart, '/cart/<int:cart_id>')
 
 class CartItemByID(Resource):
-    def get(self,id):
-        cart_item = CartItem.query.filter(CartItem.id == id).first()
+    def get(self,cart_item_id):
+        cart_item = CartItem.query.filter(CartItem.id == cart_item_id).first()
 
         if cart_item:
             return make_response(cart_item.to_dict(),200)
@@ -1681,9 +1682,15 @@ class CartItemByID(Resource):
             }, 404)
             return response
         
-    def patch(self, id):
-        cart_item = CartItem.query.filter(CartItem.id == id).first()
+    def patch(self, cart_id, cart_item_id):
+        cart = Cart.query.filter(Cart.id == cart_id).first()
+        cart_item = CartItem.query.filter(CartItem.id == cart_item_id).first()
 
+        # print("THE CART ITEM ID:", cart_item_id)
+        # print("THE CART ITEM:", cart_item)
+        # print('THE CART ITEM PRICE CENTS IF CHANGED BEFORE:', cart_item.price_cents_if_changed)
+        # print("THE CART ID:", cart_id)
+        # print("THE CART NAME:", cart.cart_name)
         if cart_item.agreements[0].agreement_status == 'both-accepted':
             response = make_response({
             "error": "Both parties have accepted, no longer able to edit this agreement."
@@ -1692,11 +1699,34 @@ class CartItemByID(Resource):
 
         if cart_item:
             data = request.get_json()
+            print("THE DATA",data)
             for key in data:
+                # if key == 'price_cents_if_changed':
+                #     cart_item.price_cents_if_changed = data['price_cents_if_changed']
+                #     print('THE CHANGED PRICE INCOMING',data['price_cents_if_changed'])
+                print("THE KEYS:", key)
                 setattr(cart_item, key, data[key])
-            db.session.add(cart_item)
+                # db.session.commit()
+            # db.session.add(cart_item)
             db.session.commit()
-            response = make_response(cart_item.to_dict(), 202)
+
+            print('THE CHANGED PRICE FIN', cart_item.price_cents_if_changed)
+
+            
+            for cart_item in cart.cart_item:
+                # print("inital cart item rates:",cart_item.total_cost)
+                cart_item.total_cost
+                # print("after cart item rates:",cart_item.total_cost)
+            
+            cart.calculate_total()
+            db.session.commit()
+            # print(cart_item.to_dict())
+
+            # Had to re-fetch the updated cart_item to send it in the response after committing the changes. It was having difficulty handling the changes and sending it in the existing one.
+            updated_cart_item = CartItem.query.filter(CartItem.id == cart_item_id).first()
+
+            response = make_response(updated_cart_item.to_dict(), 202)
+            print(cart.total)
             return response
         else:
             response = make_response({
@@ -1704,8 +1734,8 @@ class CartItemByID(Resource):
             }, 404)
             return response
     
-    def delete(self, id):
-        cart_item = CartItem.query.filter(CartItem.id == id).first()
+    def delete(self, cart_item_id):
+        cart_item = CartItem.query.filter(CartItem.id == cart_item_id).first()
 
         if cart_item:
             db.session.delete(cart_item)
@@ -1718,7 +1748,7 @@ class CartItemByID(Resource):
             }, 404)
             return response
         
-api.add_resource(CartItemByID, "/cart/item/<int:id>")
+api.add_resource(CartItemByID, "/cart/<int:cart_id>/item/<int:cart_item_id>")
 
 #----------------------------------------------- Messaging Routes -----------------------------------------------------------------------------
 
@@ -1838,7 +1868,7 @@ class MessageByID(Resource):
             data = request.get_json()
             for key in data:
                 setattr(message, key, data[key])
-            db.session.add(message)
+            # db.session.add(message)
             db.session.commit()
             response = make_response(message.to_dict(), 202)
             return response
