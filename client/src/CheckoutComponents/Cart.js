@@ -19,7 +19,7 @@ function Cart(){
   const [availableToCheckOutTotal, setAvailableToCheckOutTotal] = useState(0)
 
 
-  // console.log("THE CART TOTAL:", individualTotal)
+  console.log("THE CART TOTAL:", individualTotal)
 
   // console.log(Array.isArray(individualTotal))
   useEffect(() => {

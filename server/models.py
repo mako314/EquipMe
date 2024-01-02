@@ -561,14 +561,25 @@ class CartItem(db.Model, SerializerMixin):
     #     else:
     #         raise Exception
 
+    # @property
+    # def total_cost(self):
+    #     price = self.price_cents_if_changed if self.price_cents_if_changed else self.price_cents_at_addition
+    #     if isinstance(price, int) and price > 0:
+    #         return (price * self.rental_length) * self.quantity
+    #     else:
+    #     # Handle the case where price is not an int.
+    #         raise ValueError("The price must be an integer.")
+
     @property
     def total_cost(self):
-        price = self.price_cents_if_changed if self.price_cents_if_changed else self.price_cents_at_addition
-        if isinstance(price, int) and price > 0:
+        # Use price_cents_if_changed if it exists and is a valid integer, otherwise use price_cents_at_addition
+        price = self.price_cents_if_changed if self.price_cents_if_changed is not None else self.price_cents_at_addition
+
+        # Ensure all components are integers and greater than 0
+        if all(isinstance(value, int) and value > 0 for value in [price, self.rental_length, self.quantity]):
             return (price * self.rental_length) * self.quantity
         else:
-        # Handle the case where price is not an int.
-            raise ValueError("The price must be an integer.")
+            raise ValueError("Invalid values for price, rental length, or quantity. All must be positive integers.")
         
 
     # Need to consider taxes, negative values, need validations here ASAP

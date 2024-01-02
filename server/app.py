@@ -1642,6 +1642,7 @@ class AddItemToCart(Resource):
         #except ValueError ()
 
     def patch(self, cart_id):
+        data = request.get_json()
         cart = Cart.query.filter(Cart.id == cart_id).first()
 
         cart_item = cart.query.filter(CartItem.id == data['cart_item_id']).first()
@@ -1685,6 +1686,11 @@ class CartItemByID(Resource):
         cart = Cart.query.filter(Cart.id == cart_id).first()
         cart_item = CartItem.query.filter(CartItem.id == cart_item_id).first()
 
+        print("THE CART ITEM ID:", cart_item_id)
+        print("THE CART ITEM:", cart_item)
+        print('THE CART ITEM PRICE CENTS IF CHANGED BEFORE:', cart_item.price_cents_if_changed)
+        print("THE CART ID:", cart_id)
+        print("THE CART NAME:", cart.cart_name)
         if cart_item.agreements[0].agreement_status == 'both-accepted':
             response = make_response({
             "error": "Both parties have accepted, no longer able to edit this agreement."
@@ -1693,11 +1699,34 @@ class CartItemByID(Resource):
 
         if cart_item:
             data = request.get_json()
+            print("THE DATA",data)
             for key in data:
+                # if key == 'price_cents_if_changed':
+                #     cart_item.price_cents_if_changed = data['price_cents_if_changed']
+                #     print('THE CHANGED PRICE INCOMING',data['price_cents_if_changed'])
+                print("THE KEYS:", key)
                 setattr(cart_item, key, data[key])
-            db.session.add(cart_item)
+                # db.session.commit()
+            # db.session.add(cart_item)
             db.session.commit()
-            response = make_response(cart_item.to_dict(), 202)
+
+            print('THE CHANGED PRICE FIN', cart_item.price_cents_if_changed)
+
+            
+            for cart_item in cart.cart_item:
+                # print("inital cart item rates:",cart_item.total_cost)
+                cart_item.total_cost
+                # print("after cart item rates:",cart_item.total_cost)
+            
+            cart.calculate_total()
+            db.session.commit()
+            # print(cart_item.to_dict())
+
+            # Had to re-fetch the updated cart_item to send it in the response after committing the changes. It was having difficulty handling the changes and sending it in the existing one.
+            updated_cart_item = CartItem.query.filter(CartItem.id == cart_item_id).first()
+
+            response = make_response(updated_cart_item.to_dict(), 202)
+            print(cart.total)
             return response
         else:
             response = make_response({
