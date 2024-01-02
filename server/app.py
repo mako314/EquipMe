@@ -1670,8 +1670,8 @@ class AddItemToCart(Resource):
 api.add_resource(AddItemToCart, '/cart/<int:cart_id>')
 
 class CartItemByID(Resource):
-    def get(self,id):
-        cart_item = CartItem.query.filter(CartItem.id == id).first()
+    def get(self,cart_item_id):
+        cart_item = CartItem.query.filter(CartItem.id == cart_item_id).first()
 
         if cart_item:
             return make_response(cart_item.to_dict(),200)
@@ -1681,8 +1681,9 @@ class CartItemByID(Resource):
             }, 404)
             return response
         
-    def patch(self, id):
-        cart_item = CartItem.query.filter(CartItem.id == id).first()
+    def patch(self, cart_id, cart_item_id):
+        cart = Cart.query.filter(Cart.id == cart_id).first()
+        cart_item = CartItem.query.filter(CartItem.id == cart_item_id).first()
 
         if cart_item.agreements[0].agreement_status == 'both-accepted':
             response = make_response({
@@ -1704,8 +1705,8 @@ class CartItemByID(Resource):
             }, 404)
             return response
     
-    def delete(self, id):
-        cart_item = CartItem.query.filter(CartItem.id == id).first()
+    def delete(self, cart_item_id):
+        cart_item = CartItem.query.filter(CartItem.id == cart_item_id).first()
 
         if cart_item:
             db.session.delete(cart_item)
@@ -1718,7 +1719,7 @@ class CartItemByID(Resource):
             }, 404)
             return response
         
-api.add_resource(CartItemByID, "/cart/item/<int:id>")
+api.add_resource(CartItemByID, "/cart/<int:cart_id>/item/<int:cart_item_id>")
 
 #----------------------------------------------- Messaging Routes -----------------------------------------------------------------------------
 
