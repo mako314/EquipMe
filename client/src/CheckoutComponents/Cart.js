@@ -18,8 +18,11 @@ function Cart(){
   const [currentCartTotal, setCurrentCartTotal] = useState(0)
   const [availableToCheckOutTotal, setAvailableToCheckOutTotal] = useState(0)
 
+  const [cartItemFiltering, setCartItemFiltering] = useState('newest')
+  const [filteredCartItems, setFilteredCartItems] = useState([])
 
   console.log("THE CART TOTAL:", individualTotal)
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some
 
   // console.log(Array.isArray(individualTotal))
   useEffect(() => {
@@ -52,6 +55,22 @@ setAvailableToCheckOutTotal(allTotalCarts)
 // console.log("THE CURRENT TOTAL FOR CART", cartData[currentCart]?.cart_name, ":", currentTotal)
 
 }, [cartData, individualTotal])
+
+  
+useEffect(() => {
+  if (cartItemFiltering === 'none') {
+    // Include all cart items
+    setFilteredCartItems(cartData[currentCart]?.cart_item)
+  } else {
+    // Apply the filter based on the selected agreement status
+    const filteredItems = cartData[currentCart]?.cart_item.filter(item =>
+      item.agreements.some(agreement => agreement.agreement_status === cartItemFiltering)
+    )
+    console.log(filteredItems)
+    setFilteredCartItems(filteredItems)
+  }
+}, [cartItemFiltering, cartData, currentCart])
+
 
 
   useEffect(() => {
@@ -127,9 +146,99 @@ setAvailableToCheckOutTotal(allTotalCarts)
   // console.log("JUST CART:", cartData)
   // console.log("CART DATA:", cartData)
 
+  const handleCartItemFiltering = (event) => {
+    console.log('Selected value:', event.target.value)
+    setCartItemFiltering(event.target.value)
+  }
+
+
+  // if (cartItemFiltering === 'none') {
+  //     // If 'none' is selected, include all cart items
+  //     setFilteredCartItems(cartData[currentCart]?.cart_item)
+  // } else {
+  //     // Otherwise, apply the filter based on the selected agreement status
+  //     setFilteredCartItems(cartData[currentCart]?.cart_item.flatMap(item => 
+  //         item.agreements.filter(agreement => agreement.agreement_status === cartItemFiltering)
+  //     ))
+  // }
+
+  console.log("FILTERED CART ITEMS:", filteredCartItems)
+
     return(
         <div className="h-screen bg-gray-100 pt-20 overflow-y-auto">
-    <h1 className="mb-10 text-center text-2xl font-bold">Cart Items</h1>
+        <div> 
+        <h1 className="mb-10 text-center text-2xl font-bold">Cart Items</h1>
+
+        <form className="flex flex-row items-center mb-4">
+        <div className="flex items-center mr-2">
+            <input 
+              type="radio" 
+              className="form-radio h-5 w-5 text-gray-600" 
+              name="fav_option" 
+              value='none' 
+              id="none" 
+              onChange={handleCartItemFiltering} 
+              checked={cartItemFiltering === 'none'}
+            />
+            <label htmlFor="none" className="ml-2 text-gray-700">None</label>
+          </div>
+
+          <div className="flex items-center mr-2">
+            <input 
+              type="radio" 
+              className="form-radio h-5 w-5 text-gray-600" 
+              name="fav_option" 
+              value='owner-accepted' 
+              id="owner-accepted" 
+              onChange={handleCartItemFiltering} 
+              checked={cartItemFiltering === 'owner-accepted'}
+            />
+            <label htmlFor="owner-accepted" className="ml-2 text-gray-700">Owner Accepted</label>
+          </div>
+
+          <div className="flex items-center mr-2">
+            <input 
+              type="radio" 
+              className="form-radio h-5 w-5 text-gray-600" 
+              name="fav_option" 
+              value="user-accepted" 
+              id="user-accepted" 
+              onChange={handleCartItemFiltering} 
+              checked={cartItemFiltering === 'user-accepted'}
+            />
+            <label htmlFor="user-accepted" className="ml-2 text-gray-700">User Accepted</label>
+          </div>
+
+          <div className="flex items-center mr-2">
+            <input 
+              type="radio" 
+              className="form-radio h-5 w-5 text-gray-600" 
+              name="fav_option" 
+              value="in-progress" 
+              id="in-progress" 
+              onChange={handleCartItemFiltering} 
+              checked={cartItemFiltering === 'in-progress'}
+            />
+            <label htmlFor="completed" className="ml-2 text-gray-700">In-Progress</label>
+          </div>
+
+          <div className="flex items-center mr-2">
+            <input 
+              type="radio" 
+              className="form-radio h-5 w-5 text-gray-600" 
+              name="fav_option" 
+              value="both-accepted" 
+              id="both-accepted" 
+              onChange={handleCartItemFiltering} 
+              checked={cartItemFiltering === 'both-accepted'}
+            />
+            <label htmlFor="completed" className="ml-2 text-gray-700">Ready for Checkout</label>
+          </div>
+
+        </form>
+        
+        </div>
+    
     <div className="mx-auto max-w-5xl justify-center px-6 md:flex md:space-x-6 xl:px-0">
       <div className="rounded-lg md:w-2/3">
       <select
@@ -165,12 +274,9 @@ setAvailableToCheckOutTotal(allTotalCarts)
         )}
 
       {/* <CreateNewCart addCart={addCart}/> */}
-        
-      {cartData[currentCart].cart_item?.length === 0 ?
-      <p>Cart is empty or loading...</p> 
-      : 
-      cartData[currentCart]?.cart_item.map((item) => {
-          // Extract rates
+    {filteredCartItems && filteredCartItems.length > 0 ? (
+        filteredCartItems.map((item) => {
+          console.log(item)
           const { hourly_rate, daily_rate, weekly_rate, promo_rate } = item.equipment.equipment_price[0]
 
           // Calculate rate values
@@ -202,8 +308,45 @@ setAvailableToCheckOutTotal(allTotalCarts)
               promoRate={promoRateValue}
             />
           )
-      })
-  }
+        })
+      ) : cartData[currentCart]?.cart_item && cartData[currentCart].cart_item.length > 0 ? (
+        cartData[currentCart].cart_item.map((item) => {
+          const { hourly_rate, daily_rate, weekly_rate, promo_rate } = item.equipment.equipment_price[0]
+
+            // Calculate rate values
+            const hourlyRateValue = hourly_rate / 100
+            const dailyRateValue = daily_rate / 100
+            const weeklyRateValue = weekly_rate / 100
+            const promoRateValue = promo_rate / 100
+            
+            // console.log("HOURLY RATE VALUE COMING IN TO CART ITEM:", hourlyRateValue)
+
+            return (
+              <CartItem 
+                key={ `${item.equipment_id}_${item.created_at}_${item.equipment.make}_${item.equipment.model}`}
+                equipment_image={item.equipment.equipment_image}
+                make={item.equipment.make}
+                model={item.equipment.model}
+                rateOptions={rateOptions}
+                cartItemRate={item.rental_rate}
+                cartItemRentalLength={item.rental_length}
+                cartItemQuantity={item.quantity}
+                setIndividualTotal={setIndividualTotal}
+                cartItemId={item.id}
+                cartId={item.cart_id}
+                costChange={item.price_cents_if_changed}
+                agreementStatus={item.agreements[0].agreement_status}
+                hourlyRate={hourlyRateValue}
+                dailyRate={dailyRateValue}
+                weeklyRate={weeklyRateValue}
+                promoRate={promoRateValue}
+              />
+            )
+        })
+      ) : (
+        <p>Cart is empty or loading...</p>
+      )
+    }
 
       </div>
       <div className="mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-0 md:w-1/3">

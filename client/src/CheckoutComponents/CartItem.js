@@ -4,7 +4,7 @@ import {toast} from 'react-toastify'
 
 function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate, cartItemRentalLength, cartItemQuantity, setIndividualTotal, hourlyRate, dailyRate, weeklyRate, promoRate, cartItemId, cartId, agreementStatus, costChange}){
 
-  // console.log("LOOKING FOR THE AGREEMENT STATUS:", agreementStatus)
+  console.log("LOOKING FOR THE AGREEMENT STATUS:", agreementStatus)
   const apiUrl = useContext(ApiUrlContext)
   // console.log("whole Item:", wholeItem)
   // console.log("Rental cartItemRate:", cartItemRate)
