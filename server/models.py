@@ -438,7 +438,7 @@ class RentalAgreement(db.Model, SerializerMixin):
         "EquipmentOwner", back_populates="agreements"
     )
     cart_item = db.relationship(
-        'CartItem', back_populates='agreements', cascade="all, delete", lazy='joined')
+        'CartItem', back_populates='agreements', cascade="all, delete")
     
     comment = db.relationship('AgreementComment', back_populates='agreements')
 
@@ -492,7 +492,7 @@ class Cart(db.Model, SerializerMixin):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     
     #We'll try this cascade delete first : https://docs.sqlalchemy.org/en/20/orm/cascades.html#cascade-delete-orphan
-    cart_item = db.relationship('CartItem', back_populates='cart', cascade="all, delete", lazy='joined')
+    cart_item = db.relationship('CartItem', back_populates='cart', cascade="all, delete")
     user = db.relationship ('User', back_populates='cart')
 
     serialize_rules = ('-cart_item.cart','-cart_item.equipment.agreements','-cart_item.equipment.owner','-user.cart','-user.user_inboxes','-user.agreements', '-user.review','-cart_item.review')
@@ -536,7 +536,7 @@ class CartItem(db.Model, SerializerMixin):
     cart_id = db.Column(db.Integer, db.ForeignKey('carts.id'))
     equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
 
-    cart = db.relationship('Cart', back_populates='cart_item', lazy='joined')
+    cart = db.relationship('Cart', back_populates='cart_item')
     equipment = db.relationship('Equipment', back_populates='cart_item')
     agreements = db.relationship('RentalAgreement',back_populates="cart_item")
 

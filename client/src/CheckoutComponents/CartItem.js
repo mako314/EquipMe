@@ -173,7 +173,11 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
 
     // console.log( "THE NEW COST:", (currentRate * cartItemQuantity * cartItemRentalLength))
     const newCost = currentRate * cartItemQuantity * cartItemRentalLength
-
+    console.log("THE CURRENT RATE:", currentRate)
+    console.log("THE CURRENT QUANTITY:",cartItemQuantity )
+    console.log("THE CURRENT CART ITEM RENTAL LENGTH:", cartItemRentalLength)
+    // console.log("THE currentRate * cartItemQuantity:", currentRate * cartItemQuantity)
+    console.log("THE NEW COST:", newCost)
     // handleTotalChange(currentRate, equipmentQuantity, rentalLength)
     setIndividualTotal(prevTotals => {
       // Find the index of the item with the same id
