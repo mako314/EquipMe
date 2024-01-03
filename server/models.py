@@ -438,7 +438,7 @@ class RentalAgreement(db.Model, SerializerMixin):
         "EquipmentOwner", back_populates="agreements"
     )
     cart_item = db.relationship(
-        'CartItem', back_populates='agreements', cascade="all, delete")
+        'CartItem', back_populates='agreements', cascade="all, delete", lazy='joined')
     
     comment = db.relationship('AgreementComment', back_populates='agreements')
 
@@ -492,7 +492,7 @@ class Cart(db.Model, SerializerMixin):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     
     #We'll try this cascade delete first : https://docs.sqlalchemy.org/en/20/orm/cascades.html#cascade-delete-orphan
-    cart_item = db.relationship('CartItem', back_populates='cart', cascade="all, delete")
+    cart_item = db.relationship('CartItem', back_populates='cart', cascade="all, delete", lazy='joined')
     user = db.relationship ('User', back_populates='cart')
 
     serialize_rules = ('-cart_item.cart','-cart_item.equipment.agreements','-cart_item.equipment.owner','-user.cart','-user.user_inboxes','-user.agreements', '-user.review','-cart_item.review')
@@ -504,7 +504,8 @@ class Cart(db.Model, SerializerMixin):
 
     def calculate_total(self):
         #Calculate the total price of all items in the cart
-        self.total = sum(cart_item.total_cost for cart_item in self.cart_item)
+        # self.total = sum(cart_item.total_cost for cart_item in self.cart_item)
+        self.total = sum(cart_item.total_cost for cart_item in self.cart_item if cart_item.agreements and cart_item.agreements[0].agreement_status == 'both-accepted')
         db.session.add(self)  # Assuming you want to make the changes in the current session
         db.session.commit()   # Save the changes to the database
         return self.total
@@ -535,7 +536,7 @@ class CartItem(db.Model, SerializerMixin):
     cart_id = db.Column(db.Integer, db.ForeignKey('carts.id'))
     equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
 
-    cart = db.relationship('Cart', back_populates='cart_item')
+    cart = db.relationship('Cart', back_populates='cart_item', lazy='joined')
     equipment = db.relationship('Equipment', back_populates='cart_item')
     agreements = db.relationship('RentalAgreement',back_populates="cart_item")
 

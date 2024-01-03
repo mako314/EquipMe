@@ -801,7 +801,7 @@ if __name__ == '__main__':
         
         db.session.add_all([cart1, cart2,cart3])
         
-
+#---------------------CART ITEMS------------------------------
         print("Generating example cart items...")   
         cart_items = [
             CartItem(
@@ -865,7 +865,7 @@ if __name__ == '__main__':
                 created_at = datetime(2023, 11, 11),
             ),
         ]
-
+#---------------------CART ITEM HISTORY CHANGES---------------
         cart_item_equipment_state_histories = [
             EquipmentStateHistory(
             equipment_id = cart_items[0].equipment_id,  # Excavator
@@ -958,6 +958,7 @@ if __name__ == '__main__':
         # print(equipment_state_history_7.available_quantity)
         db.session.commit()
 
+#--------------------CHANGE STATUSES TO REFLECT NEW TOTALS, EQUIPMENT_STATUS HOLDS THE ACTUAL QUANTITIES-------------------
         # Changing quantity through equipment statuses, 
         print('THE MATH:', equipment_statuses[0].available_quantity - cart_item_equipment_state_histories[0].reserved_quantity)
         print(equipment_statuses[0].available_quantity)
@@ -993,8 +994,6 @@ if __name__ == '__main__':
         # print(equipment_list[0].quantity)
 
         # Now that all items are added, calculate the total
-        cart1.total = cart1.calculate_total()
-        cart3.total = cart3.calculate_total()
         db.session.commit()
 
 #Seed rental agreements
@@ -1121,6 +1120,13 @@ if __name__ == '__main__':
 
         db.session.add_all(rental_agreements)
         db.session.commit()
+
+        for cart_item in cart1.cart_item:
+            print(cart_item.agreements)
+
+        cart1.total = cart1.calculate_total()
+        cart3.total = cart3.calculate_total()
+
 #------------------------------------------ NEW STATE HISTORY FOR A RENTAL AGREEMENT---------------
         print('Adding Equipment State History for Completed Rentals...')
         #(available → reserved → rented)
@@ -1194,6 +1200,8 @@ if __name__ == '__main__':
         )
         ]
 
+#-------------------- NEW STATE HISTORY TESTING AFTER RENTED TO SEE HOW ADDING MORE WOULD---------------
+        
         one_rented_8_added = EquipmentStateHistory(
             equipment_id = cart_items[2].equipment_id,  # Lawnmower
             total_quantity = cart_item_equipment_state_histories[2].total_quantity + 8,
