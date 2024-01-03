@@ -24,9 +24,9 @@ function Cart(){
   // console.log("THE CART TOTAL:", individualTotal)
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some
 
-  console.log("THE CURRENT CART TOTAL:", currentCartTotal)
-  console.log("AVAILABLE TO CHECK OUT TOTAL:", availableToCheckOutTotal)
-  console.log("THE CURRENT CART TOTAL BACKEND:", cartData[currentCart]?.total)
+  // console.log("THE CURRENT CART TOTAL:", currentCartTotal)
+  // console.log("AVAILABLE TO CHECK OUT TOTAL:", availableToCheckOutTotal)
+  // console.log("THE CURRENT CART TOTAL BACKEND:", cartData[currentCart]?.total)
 
   // console.log(Array.isArray(individualTotal))
   useEffect(() => {
@@ -60,9 +60,12 @@ function Cart(){
 setCurrentCartTotal(allTotalCarts)
 setAvailableToCheckOutTotal(itemsBothPartiesAgreedOn)
 // console.log("THE CURRENT TOTAL FOR CART", cartData[currentCart]?.cart_name, ":", currentTotal)
-
 }, [cartData, individualTotal])
 
+console.log("CHECKING FRONT END TO SEE IF BACKEND VALUE IS EQUAL TO", availableToCheckOutTotal * 100 === cartData[currentCart]?.total )
+
+console.log(availableToCheckOutTotal * 100)
+console.log(cartData[currentCart]?.total)
   
 useEffect(() => {
   if (cartItemFiltering === 'none') {
@@ -156,7 +159,7 @@ useEffect(() => {
   }
 
 
-  console.log("FILTERED CART ITEMS:", filteredCartItems)
+  // console.log("FILTERED CART ITEMS:", filteredCartItems)
 
     return(
       <div class="bg-gray-100 pt-10 pb-5">
