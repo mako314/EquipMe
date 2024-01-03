@@ -14,6 +14,7 @@ import pandas as pd
 import xml.etree.ElementTree as ET
 
 from flask_jwt_extended import create_access_token, set_access_cookies, jwt_required, get_jwt_identity, unset_jwt_cookies, create_refresh_token, get_jwt
+import stripe
 #------------------------------------HELPERS----------------------------------
 from datetime import datetime
 from helpers import is_available_for_date_range
@@ -1894,6 +1895,38 @@ class MessageByID(Resource):
             return response
         
 api.add_resource(MessageByID, '/message/<int:id>')
+
+class StripeCreateConnectAccount(Resource):
+    def post(self):
+        stripe.Account.create(
+            type="custom",
+            country="US",
+            email="jenny.rosen@example.com",
+            capabilities={
+                "card_payments": {"requested": True},
+                "transfers": {"requested": True},
+        },
+        )
+
+api.add_resource(StripeCreateConnectAccount, '/v1/accounts')
+
+class StripeEditConnectAccount(Resource):
+    def post(self):
+        stripe.Account.modify(
+        "acct_1Nv0FGQ9RKHgCVdK",
+        metadata={"order_id": "6735"},
+        )
+
+api.add_resource(StripeEditConnectAccount, '/v1/accounts/<int:id>')
+
+class StripeDeleteConnectAccount(Resource):
+    def delete(self, id):
+        stripe.Account.modify(
+        "acct_1Nv0FGQ9RKHgCVdK",
+        metadata={"order_id": "6735"},
+        )
+
+api.add_resource(StripeDeleteConnectAccount, '/v1/accounts/<int:id>')
 
 class CheckingOut(Resource):
     def checkout_equipment(equipment_id, quantity):
