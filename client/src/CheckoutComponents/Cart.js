@@ -71,6 +71,7 @@ useEffect(() => {
   }
 }, [cartItemFiltering, cartData, currentCart, currentUser])
 
+// UseEffect for initial cart load,
   useEffect(() => {
     if (role === 'user') {
       setCartData(currentUser.cart)
@@ -81,6 +82,7 @@ useEffect(() => {
     }
   }, [currentUser])
 
+  //If a user has no items in cart or no cart created display this instead
   if (!cartData || cartData?.length === 0) {
     return <div>Cart is empty or loading...</div>
   }
@@ -150,9 +152,14 @@ useEffect(() => {
   console.log("FILTERED CART ITEMS:", filteredCartItems)
 
     return(
-        <div className="h-screen bg-gray-100 pt-20 overflow-y-auto">
-        <div> 
-        <h1 className="mb-10 text-center text-2xl font-bold">Cart Items</h1>
+      <div class="bg-gray-100 pt-10 pb-5">
+        <div class="container mx-auto">
+        <div className="container mx-auto px-6">
+        <h1 className="mb-6 text-center text-2xl font-bold text-gray-900">Cart Items</h1>
+        <div class="flex flex-col items-center">
+        <div class="mb-4 w-full max-w-4xl px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-center space-x-4 bg-white py-3 px-5 rounded-lg shadow-md">
+        
 
         <form className="flex flex-row items-center mb-4">
         <div className="flex items-center mr-2">
@@ -234,7 +241,9 @@ useEffect(() => {
           </div>
 
         </form>
-        
+        </div>
+        </div>
+        </div>
         </div>
     
     <div className="mx-auto max-w-5xl justify-center px-6 md:flex md:space-x-6 xl:px-0">
@@ -313,7 +322,7 @@ useEffect(() => {
     }
 
       </div>
-      <div className="mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-0 md:w-1/3">
+      <div className="mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-12 md:w-1/3">
         <div className="mb-2 flex justify-between">
           <p className="text-gray-700">Total in Cart</p>
           <p className="text-gray-700">${(availableToCheckOutTotal).toFixed(2)}</p>
@@ -333,6 +342,8 @@ useEffect(() => {
         <button className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">Check out</button>
       </div>
 
+      
+      </div>
     </div>
   </div>
     )
