@@ -18,10 +18,10 @@ function Cart(){
   const [currentCartTotal, setCurrentCartTotal] = useState(0)
   const [availableToCheckOutTotal, setAvailableToCheckOutTotal] = useState(0)
 
-  const [cartItemFiltering, setCartItemFiltering] = useState('newest')
+  const [cartItemFiltering, setCartItemFiltering] = useState('none')
   const [filteredCartItems, setFilteredCartItems] = useState([])
 
-  console.log("THE CART TOTAL:", individualTotal)
+  // console.log("THE CART TOTAL:", individualTotal)
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some
 
   // console.log(Array.isArray(individualTotal))
@@ -69,9 +69,7 @@ useEffect(() => {
     console.log(filteredItems)
     setFilteredCartItems(filteredItems)
   }
-}, [cartItemFiltering, cartData, currentCart])
-
-
+}, [cartItemFiltering, cartData, currentCart, currentUser])
 
   useEffect(() => {
     if (role === 'user') {
@@ -141,26 +139,13 @@ useEffect(() => {
     })
   }
 
-  // console.log(cartData)
 
-  // console.log("JUST CART:", cartData)
-  // console.log("CART DATA:", cartData)
-
+  // Handle item filtering radio button function
   const handleCartItemFiltering = (event) => {
     console.log('Selected value:', event.target.value)
     setCartItemFiltering(event.target.value)
   }
 
-
-  // if (cartItemFiltering === 'none') {
-  //     // If 'none' is selected, include all cart items
-  //     setFilteredCartItems(cartData[currentCart]?.cart_item)
-  // } else {
-  //     // Otherwise, apply the filter based on the selected agreement status
-  //     setFilteredCartItems(cartData[currentCart]?.cart_item.flatMap(item => 
-  //         item.agreements.filter(agreement => agreement.agreement_status === cartItemFiltering)
-  //     ))
-  // }
 
   console.log("FILTERED CART ITEMS:", filteredCartItems)
 
@@ -181,6 +166,19 @@ useEffect(() => {
               checked={cartItemFiltering === 'none'}
             />
             <label htmlFor="none" className="ml-2 text-gray-700">None</label>
+          </div>
+
+          <div className="flex items-center mr-2">
+            <input 
+              type="radio" 
+              className="form-radio h-5 w-5 text-gray-600" 
+              name="fav_option" 
+              value="completed" 
+              id="completed" 
+              onChange={handleCartItemFiltering} 
+              checked={cartItemFiltering === 'completed'}
+            />
+            <label htmlFor="completed" className="ml-2 text-gray-700">Completed</label>
           </div>
 
           <div className="flex items-center mr-2">
@@ -219,7 +217,7 @@ useEffect(() => {
               onChange={handleCartItemFiltering} 
               checked={cartItemFiltering === 'in-progress'}
             />
-            <label htmlFor="completed" className="ml-2 text-gray-700">In-Progress</label>
+            <label htmlFor="in-progress" className="ml-2 text-gray-700">In-Progress</label>
           </div>
 
           <div className="flex items-center mr-2">
@@ -232,7 +230,7 @@ useEffect(() => {
               onChange={handleCartItemFiltering} 
               checked={cartItemFiltering === 'both-accepted'}
             />
-            <label htmlFor="completed" className="ml-2 text-gray-700">Ready for Checkout</label>
+            <label htmlFor="ready-for-checkout" className="ml-2 text-gray-700">Ready for Checkout</label>
           </div>
 
         </form>
@@ -274,9 +272,9 @@ useEffect(() => {
         )}
 
       {/* <CreateNewCart addCart={addCart}/> */}
-    {filteredCartItems && filteredCartItems.length > 0 ? (
+    {filteredCartItems && filteredCartItems.length > 0? (
         filteredCartItems.map((item) => {
-          console.log(item)
+          // console.log(item)
           const { hourly_rate, daily_rate, weekly_rate, promo_rate } = item.equipment.equipment_price[0]
 
           // Calculate rate values
@@ -309,42 +307,8 @@ useEffect(() => {
             />
           )
         })
-      ) : cartData[currentCart]?.cart_item && cartData[currentCart].cart_item.length > 0 ? (
-        cartData[currentCart].cart_item.map((item) => {
-          const { hourly_rate, daily_rate, weekly_rate, promo_rate } = item.equipment.equipment_price[0]
-
-            // Calculate rate values
-            const hourlyRateValue = hourly_rate / 100
-            const dailyRateValue = daily_rate / 100
-            const weeklyRateValue = weekly_rate / 100
-            const promoRateValue = promo_rate / 100
-            
-            // console.log("HOURLY RATE VALUE COMING IN TO CART ITEM:", hourlyRateValue)
-
-            return (
-              <CartItem 
-                key={ `${item.equipment_id}_${item.created_at}_${item.equipment.make}_${item.equipment.model}`}
-                equipment_image={item.equipment.equipment_image}
-                make={item.equipment.make}
-                model={item.equipment.model}
-                rateOptions={rateOptions}
-                cartItemRate={item.rental_rate}
-                cartItemRentalLength={item.rental_length}
-                cartItemQuantity={item.quantity}
-                setIndividualTotal={setIndividualTotal}
-                cartItemId={item.id}
-                cartId={item.cart_id}
-                costChange={item.price_cents_if_changed}
-                agreementStatus={item.agreements[0].agreement_status}
-                hourlyRate={hourlyRateValue}
-                dailyRate={dailyRateValue}
-                weeklyRate={weeklyRateValue}
-                promoRate={promoRateValue}
-              />
-            )
-        })
-      ) : (
-        <p>Cart is empty or loading...</p>
+      )  : (
+        <p>No items match your filter criteria.</p>
       )
     }
 
