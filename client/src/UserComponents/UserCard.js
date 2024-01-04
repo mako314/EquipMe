@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 import ContactModal from '../MessagingComponents/ContactModal'
 import { UserSessionContext } from './SessionContext'
 
-function UserCard({ id, email, firstName, lastName, location, phone, profileImage, item, profession, fromOwnerDash, address, address_line_2, city, state, postal_code }) {
+function UserCard({ id, email, firstName, lastName, phone, profileImage, item, profession, fromOwnerDash, address, address_line_2, city, state, postal_code }) {
     const { currentUser, role, setCurrentUser, setRole } = UserSessionContext()
 
     // console.log("WHAT ARE YOU",fromOwnerDash)
