@@ -2,7 +2,9 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 // import EquipmentMap from "../MapComponents/EquipmentMap";
 
-function ProductCard({ id, name, model, make, location, equipment_image }) {
+function ProductCard({ id, name, model, make, equipment_image, address, address_line_2, city, state, postal_code }) {
+
+    const equipmentLocation = `${address_line_2 === '' ?  address : address + ',' + address_line_2}, ${city}, ${state} ${postal_code} `
 
     const navigate = useNavigate();
 
@@ -20,7 +22,7 @@ function ProductCard({ id, name, model, make, location, equipment_image }) {
                 <div className="flex justify-between items-center p-4">
                     <div>
                         <h1 className="mt-5 text-2xl font-semibold">{model}</h1>
-                        <p className="mt-2">{name} <br /> {make} <br /> {location} </p>
+                        <p className="mt-2">{name} <br /> {make} <br /> {equipmentLocation} </p>
                     </div>
                     <div>
                         <button className="text-white bg-gray-800 hover:bg-amber-500 focus:outline-none focus:ring-4 focus:ring-amber-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-amber-500 dark:hover:bg-amber-500 dark:focus:ring-amber-500 dark:border-amber-500" onClick={handleClick}>More Info</button>
