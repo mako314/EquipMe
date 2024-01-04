@@ -62,7 +62,12 @@ if __name__ == '__main__':
         email="benjamin.davis23@gmail.com",
         _password_hash="",
         phone="312-555-1122",
-        location="Chicago, Illinois",
+        country = "USA",
+        state = "FL",
+        city = "Miami",
+        address = "450 Brickell Ave",
+        address_line_2 = "",
+        postal_code = "33131",
         profession="Construction Equipment Operator",
         bio="I have over 20 years of experience in construction equipment operation. Based in Chicago, I am committed to precision and expertise in handling complex machinery.",
         profileImage="https://avatarfiles.alphacoders.com/224/224246.png",
@@ -76,7 +81,12 @@ if __name__ == '__main__':
         email="ethan.martinez77@yahoo.com",
         _password_hash="",
         phone="305-555-2233",
-        location="Miami, Florida",
+        country = "USA",
+        state = "IL",
+        city = "Chicago",
+        address = "123 Wacker Dr",
+        address_line_2 = "",
+        postal_code = "60606",
         profession="Heavy Machine Operator",
         bio="As a heavy machine operator based in Miami, I specialize in managing and operating large-scale industrial equipment. My nearly two decades in the field have honed my skills and knowledge.",
         profileImage="https://avatarfiles.alphacoders.com/366/366869.png",
@@ -90,7 +100,12 @@ if __name__ == '__main__':
         email="william.anderson89@gmail.com",
         _password_hash="",
         phone="713-555-3344",
-        location="Houston, Texas",
+        country = "USA",
+        state = "TX",
+        city = "Houston",
+        address = "100 Main St",
+        address_line_2 = "",
+        postal_code = "77002",
         profession="Industrial Cleaning Specialist",
         bio="An industrial cleaning specialist from Houston, I am dedicated to maintaining high standards of cleanliness and safety. My attention to detail is what sets me apart in this industry.",
         profileImage="https://avatarfiles.alphacoders.com/325/325695.png",
@@ -104,61 +119,83 @@ if __name__ == '__main__':
         email="sofia.rodriguez12@hotmail.com",
         _password_hash="",
         phone="602-555-4455",
-        location="Phoenix, Arizona",
+        country = "USA",
+        state = "AZ",
+        city = "Phoenix",
+        address = "2550 Grand Ave",
+        address_line_2 = "",
+        postal_code = "85017",
         profession="Party and Event Equipment Organizer",
         bio="Organizing large-scale events and parties in Phoenix, I excel in coordinating and arranging event equipment. My creativity and organizational skills ensure every event is a success and memorable.",
         profileImage="https://avatarfiles.alphacoders.com/368/368085.png",
         # bannerImg="banner_sofia.png"
     )
         
-        user_4 = User(
+        user_5 = User(
         firstName="Christian",
         lastName="Domingues",
         age=42,
         email="christian.domingues55@yahoo.com",
         _password_hash="",
         phone="312-555-5566",
-        location="Chicago, Illinois",
+        country = "USA",
+        state = "IL",
+        city = "Chicago",
+        address = "875 N Michigan Ave",
+        address_line_2 = "",
+        postal_code = "60611",
         profession="Painting Contractor",
         bio="As a seasoned painting contractor from Chicago, I combine artistic flair with technical expertise. I specialize in various painting techniques, ensuring quality and reliability in every project.",
         profileImage="https://avatarfiles.alphacoders.com/368/368118.png",
         # bannerImg="banner_christian.png"
     )
 
-        user_5 = User(
+        user_6 = User(
         firstName="Sarah",
         lastName="Thompson",
         age=30,
         email="sarah.thompson99@gmail.com",
         _password_hash="",
         phone="206-555-6677",
-        location="Seattle, Washington",
+        country = "USA",
+        state = "WA",
+        city = "Seattle",
+        address = "600 Pine St",
+        address_line_2 = "",
+        postal_code = "98101",
         profession="Landscape Designer",
         bio="As a landscape designer in Seattle, my passion lies in transforming outdoor spaces. My designs focus on sustainability and creating visually stunning landscapes that stand the test of time.",
         profileImage="https://avatarfiles.alphacoders.com/327/327294.png",
         # bannerImg="banner_sarah.png"
     )
-        user_6 = User(
+        user_7 = User(
         firstName="Thomas",
         lastName="Brady",
         age=25,
         email="thomas.brady21@yahoo.com",
         _password_hash="",
         phone="713-555-7788",
-        location="Houston, Texas",
+        country = "USA",
+        state = "TX",
+        city = "Houston",
+        address = "2925 Richmond Ave",
+        address_line_2 = "",
+        postal_code = "77098",
         profession="Automotive Mechanic",
         bio="I am a skilled automotive mechanic from Houston with a passion for cars. My expertise lies in diagnostics and providing top-notch maintenance and repair services.",
         profileImage="https://avatarfiles.alphacoders.com/359/359621.png",
         # bannerImg="banner_thomas.png"
     )
         #Add all users
-        db.session.add(user_1)
-        db.session.add(user_2)
-        db.session.add(user_3)
-        db.session.add(user_4)
-        db.session.add(user_5)
-        db.session.add(user_6)
-        
+        # db.session.add(user_1)
+        # db.session.add(user_2)
+        # db.session.add(user_3)
+        # db.session.add(user_4)
+        # db.session.add(user_5)
+        # db.session.add(user_6)
+        # db.session.add(user_7)
+
+        db.session.add_all([user_1,user_2,user_3,user_4,user_5,user_6,user_7])
         db.session.commit()
         #This commit handles adding the users without their passwords for the time being.
 
@@ -168,7 +205,7 @@ if __name__ == '__main__':
         user_4_password = '123'
         user_5_password = '123'
         user_6_password = '123'
-
+        user_7_password = '123'
 
         #hash users passwords
         user_1.password_hash = user_1_password
@@ -177,16 +214,18 @@ if __name__ == '__main__':
         user_4.password_hash = user_4_password
         user_5.password_hash = user_5_password
         user_6.password_hash = user_6_password
-
+        user_7.password_hash = user_7_password
 
         #Re-add all users to include passwords
-        db.session.add(user_1)
-        db.session.add(user_2)
-        db.session.add(user_3)
-        db.session.add(user_4)
-        db.session.add(user_5)
-        db.session.add(user_6)
-        db.session.add_all([user_1,user_2,user_3,user_4,user_5,user_6])
+        # db.session.add(user_1)
+        # db.session.add(user_2)
+        # db.session.add(user_3)
+        # db.session.add(user_4)
+        # db.session.add(user_5)
+        # db.session.add(user_6)
+        # db.session.add(user_7)
+
+        db.session.add_all([user_1,user_2,user_3,user_4,user_5,user_6,user_7])
 
 
         db.session.commit()
@@ -202,7 +241,12 @@ if __name__ == '__main__':
             firstName="Mark", # Painting Equipment
             lastName = "Davis",
             age=42,
-            location="Chicago, Illinois",
+            country = "USA",
+            state = "IL",
+            city = "Chicago",
+            address = "472 W Lake St",
+            address_line_2 = "",
+            postal_code = "60661",
             profession="Plumbing",
             bio= "I specialize in plumbing and bring years of experience in handling and supplying top-notch painting equipment in Chicago. My focus is on providing reliable and efficient tools for any job.",
             phone="312-555-6789",
@@ -215,7 +259,12 @@ if __name__ == '__main__':
             firstName="Emily", # Party Equipment
             lastName = "Johnson",
             age=22,
-            location="Port St. Lucie, FL",
+            country = "USA",
+            state = "FL",
+            city = "Port St. Lucie",
+            address = "330 SW California Blvd",
+            address_line_2 = "",
+            postal_code = "34953",
             profession="Construction Equipment Operator",
             bio= "At 22, I'm deeply involved in the world of construction equipment operation in Port St. Lucie, FL. My goal is to ensure that every project has the right equipment for success.",
             phone="602-555-7891",
@@ -228,7 +277,12 @@ if __name__ == '__main__':
             firstName="Andrew", #Automotive Equipment
             lastName = "Jacobs",
             age=32,
-            location="Houston, Texas",
+            country = "USA",
+            state = "TX",
+            city = "Houston",
+            address = "150 Sabine St",
+            address_line_2 = "",
+            postal_code = "77007",
             profession="Automotive",
             bio= "Based in Houston, Texas, I provide automotive equipment for a variety of needs. With my extensive knowledge, I help clients choose the best tools for their automotive projects.",
             phone="713-555-0123",
@@ -241,7 +295,12 @@ if __name__ == '__main__':
             firstName="Henry", #Garden Equipment
             lastName = "Cavill",
             age=54,
-            location="Seattle, Washington",
+            country = "USA",
+            state = "WA",
+            city = "Seattle",
+            address = "410 Broad St",
+            address_line_2 = "",
+            postal_code = "98109",
             profession="Garden",
             bio= "As a garden equipment provider in Seattle, I take pride in offering high-quality tools. My experience in gardening aids clients in selecting the perfect equipment for their outdoor spaces.",
             phone="206-555-3456",
@@ -254,7 +313,12 @@ if __name__ == '__main__':
             firstName="David", #Heavy Machinery
             lastName = "Rodriguez",
             age=65,
-            location="Miami, Florida",
+            country = "USA",
+            state = "FL",
+            city = "Miami",
+            address = "900 S Miami Ave",
+            address_line_2 = "",
+            postal_code = "33130",
             profession="Heavy Machinery",
             bio= "From Miami, I specialize in heavy machinery. With my expertise, I ensure that each client gets the most suitable machinery for their industrial needs.",
             phone="305-555-1234",
@@ -267,7 +331,12 @@ if __name__ == '__main__':
             firstName="Amy", #Construction Equipment
             lastName = "Wilson",
             age=29,
-            location="Chicago, Illinois",
+            country = "USA",
+            state = "IL",
+            city = "Chicago",
+            address = "600 N Kingsbury St",
+            address_line_2 = "",
+            postal_code = "60654",
             profession="Construction",
             bio= "In Chicago, I focus on supplying construction equipment. My aim is to help projects run smoothly by providing reliable and effective tools.",
             phone="312-555-5678",
@@ -280,7 +349,12 @@ if __name__ == '__main__':
             firstName="Daniel", # Cleaning Equipment
             lastName = "Lee",
             age=35,
-            location="Houston, Texas",
+            country = "USA",
+            state = "TX",
+            city = "Houston",
+            address = "2205 McKinney St",
+            address_line_2 = "",
+            postal_code = "77003",
             profession="Cleaning",
             bio= "I provide top-grade cleaning equipment in Houston. My mission is to ensure cleanliness and efficiency in various environments through state-of-the-art equipment.",
             phone="713-555-4567",
@@ -293,7 +367,12 @@ if __name__ == '__main__':
             firstName="Jessica", # Plumbing Equipment
             lastName = "Sanchez",
             age=38,
-            location="New York City, New York",
+            country = "USA",
+            state = "NY",
+            city = "New York",
+            address = "200 Broadway",
+            address_line_2 = "",
+            postal_code = "10007",
             profession="Plumbing",
             bio= "From New York City, I specialize in plumbing equipment. I'm committed to offering the best tools and resources to meet diverse plumbing needs.",
             phone ="212-555-2345",
@@ -306,7 +385,12 @@ if __name__ == '__main__':
             firstName="Ryan", #Power-tool and hand-tool Equipment
             lastName = "Phillips",
             age=39,
-            location="Orlando, Florida",
+            country = "USA",
+            state = "FL",
+            city = "Orlando",
+            address = "400 S Orange Ave",
+            address_line_2 = "",
+            postal_code = "32801",
             profession="Power tools and Hand tools",
             bio= "In Orlando, Florida, I offer a range of power tools and hand tools. My expertise helps clients find the perfect tools for their projects, ensuring quality and durability.",
             phone="407-555-9012",
@@ -319,7 +403,12 @@ if __name__ == '__main__':
             firstName="Michelle", #Woodwork
             lastName = "Adams",
             age=40,
-            location="New Orleans, Louisiana",
+            country = "USA",
+            state = "LA",
+            city = "New Orleans",
+            address = "500 Chartres St",
+            address_line_2 = "",
+            postal_code = "70130",
             profession="Woodworking",
             bio= "I am dedicated to woodworking in New Orleans, Louisiana. My passion is to provide high-quality woodworking tools that cater to the intricate needs of this craft.",
             phone="504-555-7890",
@@ -330,16 +419,17 @@ if __name__ == '__main__':
         )
         
         #Add all owners
-        db.session.add(owner_1)
-        db.session.add(owner_2)
-        db.session.add(owner_3)
-        db.session.add(owner_4)
-        db.session.add(owner_5)
-        db.session.add(owner_6)
-        db.session.add(owner_7)
-        db.session.add(owner_8)
-        db.session.add(owner_9)
-        db.session.add(owner_10)
+        # db.session.add(owner_1)
+        # db.session.add(owner_2)
+        # db.session.add(owner_3)
+        # db.session.add(owner_4)
+        # db.session.add(owner_5)
+        # db.session.add(owner_6)
+        # db.session.add(owner_7)
+        # db.session.add(owner_8)
+        # db.session.add(owner_9)
+        # db.session.add(owner_10)
+        db.session.add_all([owner_1,owner_2,owner_3,owner_4,owner_5,owner_6,owner_7,owner_8,owner_9,owner_10,])
 
         db.session.commit()
         #This commit handles adding the owners without their passwords for the time being.
@@ -369,7 +459,9 @@ if __name__ == '__main__':
         owner_10.password_hash = owner_10_password
 
         #Re-add all owners
+
         db.session.add_all([owner_1,owner_2,owner_3,owner_4,owner_5,owner_6,owner_7,owner_8,owner_9,owner_10,])
+
         # db.session.add(owner_1)
         # db.session.add(owner_2)
         # db.session.add(owner_3)
@@ -425,9 +517,9 @@ if __name__ == '__main__':
         #     )
 
         
-        test_account = create_test_stripe_express_account(owner_1.email)
-        # test_link = create_test_stripe_account_link()
-        print("Test Express Account ID:", test_account.id)
+        # test_account = create_test_stripe_express_account(owner_1.email)
+        # # test_link = create_test_stripe_account_link()
+        # print("Test Express Account ID:", test_account.id)
 
 #---------------------------------------------------------
 
@@ -442,7 +534,12 @@ if __name__ == '__main__':
                 model = '336E L',
                 description = "Experience the power and precision of our top-of-the-line Caterpillar 336E L excavator. With its exceptional durability and advanced technology, this excavator is a game-changer for any construction or excavation project. It's well-maintained, ensuring reliable performance and efficiency. Rent it out to tackle your most demanding earthmoving tasks with confidence.",
                 equipment_image='https://s7d2.scene7.com/is/image/Caterpillar/C10123400',
-                location = '701 NW Street, St Lucie W Blvd, Port St. Lucie, FL 34986',
+                country = "US",
+                state = "FL",
+                city = "Port St. Lucie",
+                address = "701 NW Street, St Lucie W Blvd",
+                address_line_2 = "",
+                postal_code = "34986",    
                 availability = 'True',
                 delivery = 'False',
                 # quantity = 3,
@@ -455,7 +552,12 @@ if __name__ == '__main__':
                 model = '8FGCU25',
                 description = "Get your hands on our Toyota 8FGCU25 forklift, the ultimate solution for your lifting needs. Renowned for its stability and robustness, this forklift is a staple in our rental fleet. It's been meticulously serviced to guarantee your safety and enhance productivity. Whether it's for a warehouse or a construction site, this forklift won't let you down.",
                 equipment_image='https://sielift.com/wp-content/uploads/2018/02/IMG_0837.jpg',
-                location = '701 NW Street, St Lucie W Blvd, Port St. Lucie, FL 34986',
+                country = "US",
+                state = "FL",
+                city = "Port St. Lucie",
+                address = "701 NW Street, St Lucie W Blvd",
+                address_line_2 = "",
+                postal_code = "34986",    
                 availability = 'True',
                 delivery = 'False',
                 # quantity = 2,
@@ -468,7 +570,12 @@ if __name__ == '__main__':
                 model = 'HRX217VKA',
                 description = "Our Honda HRX217VKA lawnmower makes lawn care effortless and enjoyable. With its precise cutting and user-friendly features, it delivers a perfect trim every time. It's lightweight, easy to maneuver, and has been kept in pristine condition for your landscaping needs. Rent this and give your lawn the care it deserves.",
                 equipment_image='https://www.usatoday.com/gcdn/presto/2023/05/23/USAT/58538094-5018-47d0-8333-33d6835b9dbc-hondalawnmowerhero.png?crop=1436,1077,x349,y0',
-                location = '701 NW Street, St Lucie W Blvd, Port St. Lucie, FL 34986',
+                country = "US",
+                state = "FL",
+                city = "Port St. Lucie",
+                address = "701 NW Street, St Lucie W Blvd",
+                address_line_2 = "",
+                postal_code = "34986",    
                 availability = 'True',
                 delivery = 'False',
                 # quantity = 5,
@@ -481,7 +588,12 @@ if __name__ == '__main__':
                 model = '8R 410',
                 description = "Ready for the toughest farming tasks, our John Deere 8R 410 tractor combines strength with sophistication. It's been the backbone of our rental service due to its unmatched power and advanced features. We've taken great care to maintain it to the highest standards, ensuring it's ready to perform whenever you need it.",
                 equipment_image='https://www.deere.com/assets/images/region-4/products/tractors/row-crop-tractors/8r-8rt-row-crop-tractors/8r-410/8r_410_r4f063847_medium_b87e9556a84a3c95374c774923365e9425dd7f67.jpg',
-                location = '701 NW Street, St Lucie W Blvd, Port St. Lucie, FL 34986',
+                country = "US",
+                state = "FL",
+                city = "Port St. Lucie",
+                address = "701 NW Street, St Lucie W Blvd",
+                address_line_2 = "",
+                postal_code = "34986",    
                 availability = 'True',
                 delivery = 'True',
                 # quantity = 4,
@@ -494,7 +606,12 @@ if __name__ == '__main__':
                 model = 'Granite',
                 description = "Tackle the toughest jobs with ease using our Mack Granite dump truck. Known for its robust build and reliability, this dump truck is a key asset in any construction project. Regularly serviced and well-maintained, it offers superior performance and durability. Ideal for transporting heavy materials, it's ready to boost your productivity.",
                 equipment_image='https://img.forconstructionpros.com/files/base/acbm/fcp/image/2023/01/Mack_Granite_web.63c6e947975ae.png?auto=format%2Ccompress&q=70',
-                location = '701 NW Street, St Lucie W Blvd, Port St. Lucie, FL 34986',
+                country = "US",
+                state = "FL",
+                city = "Port St. Lucie",
+                address = "701 NW Street, St Lucie W Blvd",
+                address_line_2 = "",
+                postal_code = "34986",     
                 availability = 'True',
                 delivery = 'True',
                 owner_id = owner_2.id
@@ -506,7 +623,12 @@ if __name__ == '__main__':
                 model = 'GS-1930',
                 description = "Elevate your efficiency with our Genie GS-1930 scissor lift. Ideal for indoor and outdoor construction, maintenance, and installation applications with firm, level surfaces. Characterized by its robustness and ease of use, it provides a stable platform for elevated work. Meticulously maintained for safe and reliable operation.",
                 equipment_image='https://www.bcrentals.com/equipment/wp-content/uploads/2020/03/1930PIC1.jpg',
-                location = '701 NW Street, St Lucie W Blvd, Port St. Lucie, FL 34986',
+                country = "US",
+                state = "FL",
+                city = "Port St. Lucie",
+                address = "701 NW Street, St Lucie W Blvd",
+                address_line_2 = "",
+                postal_code = "34986",     
                 availability = 'True',
                 delivery = 'False',
                 owner_id = owner_2.id
@@ -518,7 +640,12 @@ if __name__ == '__main__':
                 model = 'HD 3.5/30-4S EA',
                 description = "Get spotless results with our Kärcher HD 3.5/30-4S pressure washer. Perfect for cleaning buildings, vehicles, and concrete surfaces. It combines efficiency with user-friendliness and offers high cleaning performance and reliability. This pressure washer has been kept in excellent condition for your cleaning needs.",
                 equipment_image='https://sceclean.com/wp-content/uploads/2016/11/karcher_hd_superclass-506x506.jpg',
-                location = '701 NW Street, St Lucie W Blvd, Port St. Lucie, FL 34986',
+                country = "US",
+                state = "FL",
+                city = "Port St. Lucie",
+                address = "701 NW Street, St Lucie W Blvd",
+                address_line_2 = "",
+                postal_code = "34986",
                 availability = 'True',
                 delivery = 'True',
                 owner_id = owner_2.id
@@ -530,7 +657,12 @@ if __name__ == '__main__':
                 model = 'EU2200i',
                 description = "Ensure uninterrupted power with our Honda EU2200i generator. Renowned for its quiet operation and portability, this generator is a reliable source of power for outdoor events, construction sites, or emergency backup. Regularly serviced for peak performance, it's ready to supply your power needs whenever and wherever.",
                 equipment_image='https://i.ytimg.com/vi/vRLvH5M24ww/maxresdefault.jpg',
-                location = '701 NW Street, St Lucie W Blvd, Port St. Lucie, FL 34986',
+                country = "US",
+                state = "FL",
+                city = "Port St. Lucie",
+                address = "701 NW Street, St Lucie W Blvd",
+                address_line_2 = "",
+                postal_code = "34986",     
                 availability = 'True',
                 delivery = 'False',
                 owner_id = owner_2.id

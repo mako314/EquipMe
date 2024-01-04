@@ -18,12 +18,14 @@ class User(db.Model, SerializerMixin):
     lastName = db.Column(db.String)
     age = db.Column(db.Integer)
 
-    location = db.Column(db.String)
+    # location = db.Column(db.String)
 
     country = db.Column(db.String)
     state = db.Column(db.String)
     city = db.Column(db.String)
     address = db.Column(db.String)
+    address_line_2 = db.Column(db.String)
+
     postal_code = db.Column(db.String)
 
     profession = db.Column(db.String)
@@ -122,12 +124,14 @@ class EquipmentOwner(db.Model, SerializerMixin):
     lastName = db.Column(db.String)
     age = db.Column(db.Integer)
 
-    location = db.Column(db.String)
+    # location = db.Column(db.String)
 
     country = db.Column(db.String)
     state = db.Column(db.String)
     city = db.Column(db.String)
     address = db.Column(db.String)
+    address_line_2 = db.Column(db.String)
+
     postal_code = db.Column(db.String)
 
     profession = db.Column(db.String)
@@ -207,12 +211,14 @@ class Equipment(db.Model, SerializerMixin):
     #THIS WILL BE TEMPORARY UNTIL I HAVE CLOUD HOSTING SET UP
     description = db.Column(db.String)
     equipment_image = db.Column(db.String)
-    location = db.Column(db.String)
+    # location = db.Column(db.String)
 
     country = db.Column(db.String)
     state = db.Column(db.String)
     city = db.Column(db.String)
     address = db.Column(db.String)
+    address_line_2 = db.Column(db.String)
+
     postal_code = db.Column(db.String)
 
     #base_of_operations = db.Column(db.String)
