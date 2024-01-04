@@ -24,25 +24,32 @@ function Cart(){
   // console.log("THE CART TOTAL:", individualTotal)
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some
 
+  // console.log("THE CURRENT CART TOTAL:", currentCartTotal)
+  // console.log("AVAILABLE TO CHECK OUT TOTAL:", availableToCheckOutTotal)
+  // console.log("THE CURRENT CART TOTAL BACKEND:", cartData[currentCart]?.total)
+
   // console.log(Array.isArray(individualTotal))
   useEffect(() => {
     let itemsBothPartiesAgreedOn = 0
     let allTotalCarts = 0 
 
     if(Array.isArray(individualTotal)){
-      // Filter items belonging to the current cart, filter any time need something for x, so I'm trying to only track totals for this specific cart, filter by cart ID.
+  // Individual total is calculated inside of CartItem.js, values passed in via props below in the return.
+  // Filter items belonging to the current cart, filter any time need something for x, so I'm trying to only track totals for this specific cart, filter by cart ID.
   const itemsInCurrentCartBothAgreed = individualTotal.filter(item => item.cart_id === cartData[currentCart].id && item.agreement_status === 'both-accepted')
 
-    // console.log("ITEMS IN CURRENT CART:", itemsInCurrentCart)
+  // console.log("ITEMS IN CURRENT CART:", itemsInCurrentCart)
 
+  //This just takes into account ALL the items in a users cart, where the items cart ID matches the current carts ID.
   const itemsInCurrentCartAll = individualTotal.filter(item => item.cart_id === cartData[currentCart].id)
 
   // Sum up the costs of these items
   itemsInCurrentCartBothAgreed.forEach((item) => {
-      // console.log(item)
+      console.log("TOTAL COST OF ITEMS THAT BOTH USERS AGREED UPON:", item.cost)
       itemsBothPartiesAgreedOn += item.cost
   })
 
+  // A for each that summarizes ALL items in the cart, 
   itemsInCurrentCartAll.forEach((item) => {
     // console.log(item)
     allTotalCarts += item.cost
@@ -50,12 +57,15 @@ function Cart(){
 
  }
 
-setCurrentCartTotal(itemsBothPartiesAgreedOn)
-setAvailableToCheckOutTotal(allTotalCarts)
+setCurrentCartTotal(allTotalCarts)
+setAvailableToCheckOutTotal(itemsBothPartiesAgreedOn)
 // console.log("THE CURRENT TOTAL FOR CART", cartData[currentCart]?.cart_name, ":", currentTotal)
-
 }, [cartData, individualTotal])
 
+console.log("CHECKING FRONT END TO SEE IF BACKEND VALUE IS EQUAL TO", availableToCheckOutTotal * 100 === cartData[currentCart]?.total )
+
+console.log(availableToCheckOutTotal * 100)
+console.log(cartData[currentCart]?.total)
   
 useEffect(() => {
   if (cartItemFiltering === 'none') {
@@ -149,7 +159,7 @@ useEffect(() => {
   }
 
 
-  console.log("FILTERED CART ITEMS:", filteredCartItems)
+  // console.log("FILTERED CART ITEMS:", filteredCartItems)
 
     return(
       <div class="bg-gray-100 pt-10 pb-5">
@@ -325,17 +335,17 @@ useEffect(() => {
       <div className="mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-12 md:w-1/3">
         <div className="mb-2 flex justify-between">
           <p className="text-gray-700">Total in Cart</p>
-          <p className="text-gray-700">${(availableToCheckOutTotal).toFixed(2)}</p>
+          <p className="text-gray-700">${(currentCartTotal).toFixed(2)}</p>
         </div>
         <div className="flex justify-between">
           <p className="text-gray-700">Available to Checkout, both Parties Accepted</p>
-          <p className="text-gray-700">${(currentCartTotal).toFixed(2)}</p>
+          <p className="text-gray-700">${(availableToCheckOutTotal).toFixed(2)}</p>
         </div>
         <hr className="my-4" />
         <div className="flex justify-between">
           <p className="text-lg font-bold">Total</p>
           <div className="">
-            <p className="mb-1 text-lg font-bold">${(currentCartTotal).toFixed(2)}</p>
+            <p className="mb-1 text-lg font-bold">${(availableToCheckOutTotal).toFixed(2)}</p>
             <p className="text-sm text-gray-700">including VAT</p>
           </div>
         </div>

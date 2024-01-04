@@ -48,7 +48,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
   }
   }, [currentUser])
 
-
+  const currentUserAddress = `${currentUser?.address_line_2 === '' ?  currentUser?.address : currentUser?.address + ',' + currentUser?.address_line_2}, ${currentUser?.city}, ${currentUser?.state} ${currentUser?.postal_code} `
 
   // console.log("THE CURRENT CART DATA:", currentUser.cart)
 
@@ -311,7 +311,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
   const handleCheckboxChange = (e) => {
     if (e.target.checked) {
         // If the checkbox is checked, set the delivery address to the user's address
-        setDeliveryAddress(currentUser?.location)
+        setDeliveryAddress(currentUserAddress)
     } else {
         // If the checkbox is unchecked, clear the delivery address
         setDeliveryAddress('')
@@ -422,7 +422,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
                                               type="checkbox"
                                               className="form-checkbox"
                                               name="delivery_address"
-                                              checked={deliveryAddress === currentUser?.location}
+                                              checked={deliveryAddress === currentUserAddress}
                                               onChange={handleCheckboxChange}
                                           />
                                             <span className="ml-2 font-bold text-gray-900">Use my Address on File</span>

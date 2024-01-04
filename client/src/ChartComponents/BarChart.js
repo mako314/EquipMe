@@ -49,7 +49,7 @@ function BarChart({currentUser}){
     // https://codesandbox.io/p/devbox/reactchartjs-react-chartjs-2-vertical-jebqk?file=%2FApp. tsx%3A38%2C1-52%2C3
     // https://www.chartjs.org/docs/latest/axes/cartesian/linear.html
     // https://www.chartjs.org/docs/latest/charts/bar.html
-    //Options that are set to the Chart.js Bar, options prop, 
+    // Options that are set to the Chart.js Bar, options prop, 
     let barChartOptions = {
         responsive: true,
         plugins: {

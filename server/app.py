@@ -14,9 +14,16 @@ import pandas as pd
 import xml.etree.ElementTree as ET
 
 from flask_jwt_extended import create_access_token, set_access_cookies, jwt_required, get_jwt_identity, unset_jwt_cookies, create_refresh_token, get_jwt
+import stripe
+import os
 #------------------------------------HELPERS----------------------------------
 from datetime import datetime
 from helpers import is_available_for_date_range
+from dotenv import load_dotenv
+
+# Have to tell the dotenv what to load specifically
+load_dotenv('../.env.local')
+stripe.api_key=os.getenv('STRIPE_TEST_SECRET_KEY')
 #------------------------------------ BOTH USER LOGIN-----------------------------------------------------------------------------
 
 class Login(Resource):
@@ -145,7 +152,12 @@ class Users(Resource):
                 email = data['email'],
                 _password_hash = data['password'],
                 phone = data['phone'],
-                location = data['location'],
+                country = data['country'],
+                state = data['state'],
+                city = data['city'],
+                address = data['address'],
+                address_line_2 = data['address_line_2'],
+                postal_code = data['postal_code'],
                 profession = data['profession'],
                 profileImage = data['profileImg'],
                 # bannerImg = data['bannerImg'],    
@@ -222,7 +234,7 @@ api.add_resource(UserByID, '/user/<int:id>')
 # MAY WANT TO INCLUDE MORE, BUT GOING TO TRY AND SPEED UP NETWORK BY DOING AN ONLY instead of RUles
 class UserByProfession(Resource):
     def get(self, ownerProfession):
-        users = [user.to_dict(only =('id','email', 'firstName', 'lastName', 'location', 'phone', 'profileImage')) for user in User.query.filter(User.profession == ownerProfession).all()]
+        users = [user.to_dict(only =('id','email', 'firstName', 'lastName', 'address', 'country', 'postal_code', 'state', 'address_line_2', 'city', 'phone', 'profileImage')) for user in User.query.filter(User.profession == ownerProfession).all()]
         if users:
             response = make_response(users, 200)
         else:
@@ -239,7 +251,7 @@ class EquipmentOwners(Resource):
 
     #succesful get to display
     def get(self):
-        equip_owners = [owner.to_dict(only = ('id', 'profession', 'email', 'location', 'firstName', 'lastName', 'phone','equipment', 'profileImage')) for owner in EquipmentOwner.query.all()]
+        equip_owners = [owner.to_dict(only = ('id', 'profession', 'email', 'address', 'country', 'postal_code', 'state', 'address_line_2', 'city', 'firstName', 'lastName', 'phone','equipment', 'profileImage')) for owner in EquipmentOwner.query.all()]
         #had to allow ID also to grab it with link
         response = make_response(equip_owners, 200)
         #rules =('-agreements', 'equipment')
@@ -253,7 +265,12 @@ class EquipmentOwners(Resource):
             new_owner = EquipmentOwner(
                 firstName = data['firstName'],
                 lastName = data['lastName'],
-                location = data['location'],
+                country = data['country'],
+                state = data['state'],
+                city = data['city'],
+                address = data['address'],
+                address_line_2 = data['address_line_2'],
+                postal_code = data['postal_code'],
                 age = data['age'],
                 profession = data['profession'],
                 phone = data['phone'],
@@ -356,7 +373,7 @@ class Equipments(Resource):
     #get ALL equipment -- DONE
     def get(self):
         equipment = [equipment.to_dict(
-            only =('id','model','name','make','location', 'type','location','availability','delivery', 'owner', 'equipment_price', 'equipment_image', 'featured_equipment','cart_item' ) #needed to include all of this for when one patches
+            only =('id','model','name','make', 'type','address', 'country', 'postal_code', 'state', 'address_line_2', 'city', 'availability','delivery', 'owner', 'equipment_price', 'equipment_image', 'featured_equipment','cart_item' ) #needed to include all of this for when one patches
         ) for equipment in Equipment.query.all()]                                       # no longer need phone, email, and owner_name
 
         response = make_response(equipment, 200)
@@ -376,7 +393,12 @@ class Equipments(Resource):
                 model = data['model'],
                 equipment_image = data['equipment_image'],
                 description = data['description'],
-                location = data['location'],
+                country = data['country'],
+                state = data['state'],
+                city = data['city'],
+                address = data['address'],
+                address_line_2 = data['address_line_2'],
+                postal_code = data['postal_code'],
                 availability = data['availability'],
                 delivery = data['delivery'],
                 owner_id= data['owner_id']
@@ -446,11 +468,11 @@ api.add_resource(Equipments, '/equipment')
 #Search and or filter by Equipment type, i.e. Heavy Machinery or painting
 #I can't quite use this either atm, it'd need to be changed to handle cities maybe? so I may have to break up the data from location to actual address, city ,state
 class EquipmentByLocation(Resource):
-
-    def get(self,location):
-        location_test = Equipment.query.filter(Equipment.location == location).all()
+    # For now we will handle similar cities, if not postal codes?
+    def get(self,postal_code):
+        location_test = Equipment.query.filter(Equipment.postal_code == postal_code).all()
         if location_test:
-            equipment = [equipment.to_dict(rules =('-agreements', '-owner.agreements')) for equipment in Equipment.query.filter(Equipment.location == location).all()]
+            equipment = [equipment.to_dict(rules =('-agreements', '-owner.agreements')) for equipment in Equipment.query.filter(Equipment.postal_code == postal_code).all()]
             response = make_response(equipment, 200)
             return response
         else:
@@ -461,7 +483,7 @@ class EquipmentByLocation(Resource):
         
         #need to find a way to make all the locations easily inputtable, for example Heavy Machinery doesn't get picked up if you do /heavymachinery
 
-api.add_resource(EquipmentByLocation, '/equipment/location/<string:location>')
+api.add_resource(EquipmentByLocation, '/equipment/location/<string:postal_code>')
 
 #likely going to need to edit types, have like a generalized list of some sort. 
 # class EquipmentByProfession(Resource):
@@ -633,7 +655,7 @@ api.add_resource(EquipmentByID, '/equipment/<int:id>')
 class AllEquipmentByOwnerID(Resource):
     def get(self,id):
         equipment = [equipment.to_dict(
-            only =('id','model','name','make','location', 'type','phone','email','location','availability','delivery','quantity', 'owner_name') #needed to include all of this for when one patches
+            only =('id','model','name','make', 'type','phone','email','address', 'country', 'postal_code', 'state', 'address_line_2', 'city','availability','delivery','quantity', 'owner_name') #needed to include all of this for when one patches
         ) for equipment in Equipment.query.filter(Equipment.owner_id == id).all()]
 
         response = make_response(equipment, 200)
@@ -1260,7 +1282,12 @@ class BulkEquipmentUpload(Resource):
                     type = row['Equipment_type'],
                     make = row['Make'],
                     model = row['Model'],
-                    location = row['Location'],
+                    country = row['country'],
+                    state = row['state'],
+                    city = row['city'],
+                    address = row['address'],
+                    address_line_2 = row['address_line_2'],
+                    postal_code = row['postal_code'],
                     availability = row['Availability'],
                     delivery = row['Delivery'],
                     quantity = row['Quantity'],
@@ -1894,6 +1921,36 @@ class MessageByID(Resource):
             return response
         
 api.add_resource(MessageByID, '/message/<int:id>')
+
+class StripeCreateConnectAccount(Resource):
+    def post(self):
+        stripe.Account.create(
+            type="custom",
+            country="US",
+            email="jenny.rosen@example.com",
+            capabilities={
+                "card_payments": {"requested": True},
+                "transfers": {"requested": True},
+        },
+        )
+
+api.add_resource(StripeCreateConnectAccount, '/v1/accounts')
+
+class StripeHandleConnectAccount(Resource):
+    def post(self, id):
+        stripe.Account.modify(
+        "acct_1Nv0FGQ9RKHgCVdK",
+        metadata={"order_id": "6735"},
+        )
+    
+    def delete(self, id):
+        stripe.Account.modify(
+        "acct_1Nv0FGQ9RKHgCVdK",
+        metadata={"order_id": "6735"},
+    )
+
+
+api.add_resource(StripeHandleConnectAccount, '/v1/accounts/<int:id>')
 
 class CheckingOut(Resource):
     def checkout_equipment(equipment_id, quantity):

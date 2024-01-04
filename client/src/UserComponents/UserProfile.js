@@ -47,7 +47,11 @@ function UserProfile({fromOwnerDash, setFromOwnerDash}) {
     email = '',
     firstName = '',
     lastName = '',
-    location = '',
+    state = '',
+    city = '',
+    address = '',
+    address_line_2 = '',
+    postal_code = '',
     phone = '',
     profession = '',
     profileImage = ''
@@ -56,6 +60,9 @@ function UserProfile({fromOwnerDash, setFromOwnerDash}) {
   // console.log("The user Profile:", userProfile)
   let reviewCounter = 0
   let agreementCounter = 0
+
+  const userLocation = `${address_line_2 === '' ?  address : address + ',' + address_line_2}, ${city}, ${state} ${postal_code} `
+
 
   if (Array.isArray(source.review)) {
     source.review.forEach((element) => {
@@ -223,7 +230,7 @@ function UserProfile({fromOwnerDash, setFromOwnerDash}) {
                 </h3>
                 <div className="text-sm leading-normal mt-0 mb-2 text-gray-500 font-bold uppercase">
                   <i className="fas fa-map-marker-alt mr-2 text-lg text-gray-500"></i>{" "}
-                  {location}
+                  {userLocation}
                 </div>
                 <div className="mb-2 text-gray-700 mt-10">
                   <i className="fas fa-briefcase mr-2 text-lg text-gray-500"></i>
@@ -246,7 +253,7 @@ function UserProfile({fromOwnerDash, setFromOwnerDash}) {
                         </ul>
 
                         <div className="flex mb-8">
-                          <EquipmentMap location={source.location} userDisplayHeight={300} userDisplayWidth={1500} userDisplayZoom={8}/>
+                          <EquipmentMap location={userLocation} userDisplayHeight={300} userDisplayWidth={1500} userDisplayZoom={8}/>
                         </div>
                         {fromOwnerDash === true && 
                         <div className="ml-auto flex items-center px-6 lg:ml-0 lg:p-0">

@@ -17,7 +17,16 @@ class User(db.Model, SerializerMixin):
     firstName = db.Column(db.String)
     lastName = db.Column(db.String)
     age = db.Column(db.Integer)
-    location = db.Column(db.String)
+
+    # location = db.Column(db.String)
+
+    country = db.Column(db.String)
+    state = db.Column(db.String)
+    city = db.Column(db.String)
+    address = db.Column(db.String)
+    address_line_2 = db.Column(db.String)
+    postal_code = db.Column(db.String)
+
     profession = db.Column(db.String)
     bio = db.Column(db.String)
     phone = db.Column(db.String)
@@ -113,7 +122,16 @@ class EquipmentOwner(db.Model, SerializerMixin):
     firstName = db.Column(db.String)
     lastName = db.Column(db.String)
     age = db.Column(db.Integer)
-    location = db.Column(db.String)
+
+    # location = db.Column(db.String)
+
+    country = db.Column(db.String)
+    state = db.Column(db.String)
+    city = db.Column(db.String)
+    address = db.Column(db.String)
+    address_line_2 = db.Column(db.String)
+    postal_code = db.Column(db.String)
+
     profession = db.Column(db.String)
     bio = db.Column(db.String)
     phone = db.Column(db.String)
@@ -191,7 +209,15 @@ class Equipment(db.Model, SerializerMixin):
     #THIS WILL BE TEMPORARY UNTIL I HAVE CLOUD HOSTING SET UP
     description = db.Column(db.String)
     equipment_image = db.Column(db.String)
-    location = db.Column(db.String)
+    # location = db.Column(db.String)
+
+    country = db.Column(db.String)
+    state = db.Column(db.String)
+    city = db.Column(db.String)
+    address = db.Column(db.String)
+    address_line_2 = db.Column(db.String)
+    postal_code = db.Column(db.String)
+
     #base_of_operations = db.Column(db.String)
     availability = db.Column(db.String)
     delivery = db.Column(db.String)
@@ -504,7 +530,8 @@ class Cart(db.Model, SerializerMixin):
 
     def calculate_total(self):
         #Calculate the total price of all items in the cart
-        self.total = sum(cart_item.total_cost for cart_item in self.cart_item)
+        # self.total = sum(cart_item.total_cost for cart_item in self.cart_item)
+        self.total = sum(cart_item.total_cost for cart_item in self.cart_item if cart_item.agreements and cart_item.agreements[0].agreement_status == 'both-accepted')
         db.session.add(self)  # Assuming you want to make the changes in the current session
         db.session.commit()   # Save the changes to the database
         return self.total

@@ -7,7 +7,7 @@ import ApiUrlContext from "../Api";
 import { UserSessionContext } from "../UserComponents/SessionContext";
 
 function OwnerEditForm(){
-
+    // READ ME READ ME READ ME
     // THIS ALMOST CONFUSED ME, BUT THIS FORM  EDITS BOTH USERS AND OWNERS
 
     //Need a place in the ownerProfile / Display page to allocate for this, still need to build owner signup.

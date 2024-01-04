@@ -14,9 +14,11 @@ function OwnerDisplay({fromOwnerDash, setFromOwnerDash}) {
   const [owner, setOwner] = useState([])
   const { currentUser, role, checkSession } = UserSessionContext()
   const [currentIndex, setCurrentIndex] = useState(0) // Tempted to make a scroller
-  const { firstName, lastName, location, bio, email, phone, equipment, profession, profileImage, website } = owner
+  const { firstName, lastName, state, city, address, address_line_2, postal_code, bio, email, phone, equipment, profession, profileImage, website } = owner
   const [heartColor, setHeartColor] = useState('white')
   const [isFavorited, setIsFavorited] = useState(null)
+
+  const ownerLocation = `${address_line_2 === '' ?  address : address + ',' + address_line_2}, ${city}, ${state} ${postal_code} `
 
   console.log("THE OWNER:", owner)
   const { id } = useParams()
@@ -74,7 +76,7 @@ function OwnerDisplay({fromOwnerDash, setFromOwnerDash}) {
   // console.log(equipmentNames)
   const equipmentCards = owner.equipment?.map((item) => {
     return(  <div key={item.id} className="flex-none flex-grow flex-shrink-0 basis-1/3 space-x-4"> 
-    <ProductCard key={item.id} id={item.id} name={item.name} model={item.model} make={item.make} location={item.location} item={item}  equipment_image={item.equipment_image}/>
+    <ProductCard key={item.id} id={item.id} name={item.name} model={item.model} make={item.make} state ={item.state } city={item.city} address={item.address} address_line_2={item.address_line_2} postal_code={item.postal_code}  item={item} equipment_image={item.equipment_image}/>
     </div>)
   
     
@@ -91,7 +93,11 @@ const featuredEquipment = owner.equipment?.filter(item => item.featured_equipmen
             name={item.name}
             model={item.model}
             make={item.make}
-            location={item.location}
+            state ={item.state } 
+            city={item.city} 
+            address={item.address} 
+            address_line_2={item.address_line_2} 
+            postal_code={item.postal_code}
             item={item}
             equipment_image={item.equipment_image}
         />
@@ -150,7 +156,7 @@ const displayEquipment = featuredEquipment.length > 0 ? featuredEquipment : <div
                             </ul> */}
                             {/* although it says equipmentMap, this map is really universal, so name may be prone to CHANGE */}
                             <div className="flex">
-                            <EquipmentMap location={location} userDisplayHeight={200} userDisplayWidth={325} userDisplayZoom={8}/>
+                            <EquipmentMap location={ownerLocation} userDisplayHeight={200} userDisplayWidth={325} userDisplayZoom={8}/>
                             </div>
 
                         </div>

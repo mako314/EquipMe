@@ -4,7 +4,7 @@ import {toast} from 'react-toastify'
 
 function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate, cartItemRentalLength, cartItemQuantity, setIndividualTotal, hourlyRate, dailyRate, weeklyRate, promoRate, cartItemId, cartId, agreementStatus, costChange}){
 
-  console.log("LOOKING FOR THE AGREEMENT STATUS:", agreementStatus)
+  // console.log("LOOKING FOR THE AGREEMENT STATUS:", agreementStatus)
   const apiUrl = useContext(ApiUrlContext)
   // console.log("whole Item:", wholeItem)
   // console.log("Rental cartItemRate:", cartItemRate)
@@ -28,7 +28,7 @@ function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate
   <option className="text-black"value="promo">Promo</option>
   </>
 
-console.log("make:", make, "model:", model,"THE AGREEMENT STATUS:", agreementStatus)
+// console.log("make:", make, "model:", model,"THE AGREEMENT STATUS:", agreementStatus)
 
 // let testData
 // console.log("TESTING DATA:", testData)
@@ -75,19 +75,20 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
     }
   }
 
-  console.log("THE RATE VALUE:", rateValue)
-  console.log("THE CURRENT RATE VALUE:", currentRate)
-  
-  console.log("THE UPDATED RATE:", costChange)
+  // console.log("THE RATE VALUE:", rateValue)
+  // console.log("THE CURRENT RATE VALUE:", currentRate)
+  // console.log("THE UPDATED RATE:", costChange)
+  // console.log("PRICE CENTS IF CHANGED:", (currentRate || rateValue) * 100,)
 
-  console.log("PRICE CENTS IF CHANGED:", (currentRate || rateValue) * 100,)
   // console.log("THE TOTAL QUANTITY:", totalQuantity)
   // console.log("THE TOTAL LENGTH:", totalLength)
 
   //Calculate the total cost
-  const newCost = ((rateValue ? rateValue : currentRate) * totalQuantity) * totalLength
+  // const newCost = ((rateValue ? rateValue : currentRate) * totalQuantity) * totalLength
+  const newCostRounded = parseFloat((currentRate * cartItemQuantity * cartItemRentalLength).toFixed(2))
+  console.log("THE NEW COST ROUNDED:", newCostRounded)
   // (currentRate || rateValue) * 100
-  console.log("RATE:", newCost)
+  // console.log("RATE:", newCost)
   if(agreementStatus !== 'both-accepted'){
   const dataToSend = {
     price_cents_if_changed: (currentRate || rateValue) * 100,
@@ -130,11 +131,11 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
   if (index !== -1) {
     // If found, update the cost of the existing item
     return prevTotals.map((item, idx) => 
-      idx === index ? { ...item, cost: newCost } : item
+      idx === index ? { ...item, cost: newCostRounded } : item
     )
   } else {
     // If not found, add a new item
-    return [...prevTotals, { id: cartItemId, cart_id: cartId,cost: newCost, agreement_status: agreementStatus}]
+    return [...prevTotals, { id: cartItemId, cart_id: cartId,cost: newCostRounded, agreement_status: agreementStatus}]
     // 
   }
 })
@@ -172,7 +173,17 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
     }
 
     // console.log( "THE NEW COST:", (currentRate * cartItemQuantity * cartItemRentalLength))
-    const newCost = currentRate * cartItemQuantity * cartItemRentalLength
+    // const newCost = currentRate * cartItemQuantity * cartItemRentalLength
+    
+    const newCostRounded = parseFloat((currentRate * cartItemQuantity * cartItemRentalLength).toFixed(2))
+    // console.log("THE TYPE OF newCostRounded:", typeof(newCostRounded))
+
+    // console.log("THE NEW COST ROUNDED:", newCostRounded)
+    // console.log("THE CURRENT RATE:", currentRate)
+    // console.log("THE CURRENT QUANTITY:",cartItemQuantity )
+    // console.log("THE CURRENT CART ITEM RENTAL LENGTH:", cartItemRentalLength)
+    // console.log("THE currentRate * cartItemQuantity:", currentRate * cartItemQuantity)
+    // console.log("THE NEW COST:", newCost)
 
     // handleTotalChange(currentRate, equipmentQuantity, rentalLength)
     setIndividualTotal(prevTotals => {
@@ -183,11 +194,11 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
       if (index !== -1) {
         // If found, update the cost of the existing item
         return prevTotals.map((item, idx) => 
-          idx === index ? { ...item, cost: newCost } : item
+          idx === index ? { ...item, cost: newCostRounded } : item
         )
       } else {
         // If not found, add a new item
-        return [...prevTotals, { id: cartItemId, cart_id: cartId,cost: newCost, agreement_status: agreementStatus}]
+        return [...prevTotals, { id: cartItemId, cart_id: cartId,cost: newCostRounded, agreement_status: agreementStatus}]
       }
     })
 
