@@ -18,7 +18,7 @@ import stripe
 import os
 #------------------------------------HELPERS----------------------------------
 from datetime import datetime
-from helpers import is_available_for_date_range
+# from helpers import is_available_for_date_range
 from dotenv import load_dotenv
 
 # Have to tell the dotenv what to load specifically

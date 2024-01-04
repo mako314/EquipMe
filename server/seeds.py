@@ -58,7 +58,7 @@ if __name__ == '__main__':
         user_1 =  User(
         firstName="Benjamin",
         lastName="Davis",
-        age=42,
+        date_of_birth = datetime(2024 - 42, 1, 15),
         email="benjamin.davis23@gmail.com",
         _password_hash="",
         phone="312-555-1122",
@@ -77,7 +77,7 @@ if __name__ == '__main__':
         user_2 = User(
         firstName="Ethan",
         lastName="Martinez",
-        age=39,
+        date_of_birth = datetime(2024 - 39, 4, 5),
         email="ethan.martinez77@yahoo.com",
         _password_hash="",
         phone="305-555-2233",
@@ -96,7 +96,7 @@ if __name__ == '__main__':
         user_3 = User(
         firstName="William",
         lastName="Anderson",
-        age=32,
+        date_of_birth = datetime(2024 - 32, 6, 21),
         email="william.anderson89@gmail.com",
         _password_hash="",
         phone="713-555-3344",
@@ -115,7 +115,7 @@ if __name__ == '__main__':
         user_4 =User(
         firstName="Sofia",
         lastName="Rodriguez",
-        age=29,
+        date_of_birth = datetime(2024 - 29, 8, 25),
         email="sofia.rodriguez12@hotmail.com",
         _password_hash="",
         phone="602-555-4455",
@@ -134,7 +134,7 @@ if __name__ == '__main__':
         user_5 = User(
         firstName="Christian",
         lastName="Domingues",
-        age=42,
+        date_of_birth = datetime(2024 - 42, 9, 28),
         email="christian.domingues55@yahoo.com",
         _password_hash="",
         phone="312-555-5566",
@@ -153,7 +153,7 @@ if __name__ == '__main__':
         user_6 = User(
         firstName="Sarah",
         lastName="Thompson",
-        age=30,
+        date_of_birth = datetime(2024 - 30, 2, 11),
         email="sarah.thompson99@gmail.com",
         _password_hash="",
         phone="206-555-6677",
@@ -171,7 +171,7 @@ if __name__ == '__main__':
         user_7 = User(
         firstName="Thomas",
         lastName="Brady",
-        age=25,
+        date_of_birth = datetime(2024 - 25, 7, 8),
         email="thomas.brady21@yahoo.com",
         _password_hash="",
         phone="713-555-7788",
@@ -240,7 +240,8 @@ if __name__ == '__main__':
         owner_1 = EquipmentOwner(
             firstName="Mark", # Painting Equipment
             lastName = "Davis",
-            age=42,
+
+            date_of_birth = datetime(2024 - 42, 1, 15),
             country = "USA",
             state = "IL",
             city = "Chicago",
@@ -258,7 +259,8 @@ if __name__ == '__main__':
         owner_2 = EquipmentOwner(
             firstName="Emily", # Party Equipment
             lastName = "Johnson",
-            age=22,
+
+            date_of_birth = datetime(2024 - 22, 4, 17),
             country = "USA",
             state = "FL",
             city = "Port St. Lucie",
@@ -276,7 +278,8 @@ if __name__ == '__main__':
         owner_3 = EquipmentOwner(
             firstName="Andrew", #Automotive Equipment
             lastName = "Jacobs",
-            age=32,
+
+            date_of_birth = datetime(2024 - 32, 1, 26),
             country = "USA",
             state = "TX",
             city = "Houston",
@@ -294,7 +297,8 @@ if __name__ == '__main__':
         owner_4 = EquipmentOwner(
             firstName="Henry", #Garden Equipment
             lastName = "Cavill",
-            age=54,
+
+            date_of_birth = datetime(2024 - 54, 10, 13),
             country = "USA",
             state = "WA",
             city = "Seattle",
@@ -312,7 +316,8 @@ if __name__ == '__main__':
         owner_5 = EquipmentOwner(
             firstName="David", #Heavy Machinery
             lastName = "Rodriguez",
-            age=65,
+
+            date_of_birth = datetime(2024 - 65, 4, 30),
             country = "USA",
             state = "FL",
             city = "Miami",
@@ -330,7 +335,8 @@ if __name__ == '__main__':
         owner_6 = EquipmentOwner(
             firstName="Amy", #Construction Equipment
             lastName = "Wilson",
-            age=29,
+
+            date_of_birth = datetime(2024 - 29, 11, 9),
             country = "USA",
             state = "IL",
             city = "Chicago",
@@ -348,7 +354,8 @@ if __name__ == '__main__':
         owner_7 = EquipmentOwner(
             firstName="Daniel", # Cleaning Equipment
             lastName = "Lee",
-            age=35,
+
+            date_of_birth = datetime(2024 - 35, 11, 1),
             country = "USA",
             state = "TX",
             city = "Houston",
@@ -366,7 +373,8 @@ if __name__ == '__main__':
         owner_8 = EquipmentOwner(
             firstName="Jessica", # Plumbing Equipment
             lastName = "Sanchez",
-            age=38,
+
+            date_of_birth = datetime(2024 - 38, 5, 18),
             country = "USA",
             state = "NY",
             city = "New York",
@@ -384,7 +392,8 @@ if __name__ == '__main__':
         owner_9 = EquipmentOwner(
             firstName="Ryan", #Power-tool and hand-tool Equipment
             lastName = "Phillips",
-            age=39,
+
+            date_of_birth = datetime(2024 - 39, 5, 26),
             country = "USA",
             state = "FL",
             city = "Orlando",
@@ -402,7 +411,8 @@ if __name__ == '__main__':
         owner_10 = EquipmentOwner(
             firstName="Michelle", #Woodwork
             lastName = "Adams",
-            age=40,
+
+            date_of_birth = datetime(2024 - 40, 3, 9),
             country = "USA",
             state = "LA",
             city = "New Orleans",
@@ -475,23 +485,32 @@ if __name__ == '__main__':
 
         db.session.commit()
 
-        # print(owner_1.id)
-        # print(owner_2.id)
-        # print(owner_3.id)
-        # print(owner_4.id)
-        # print(owner_5.id)
-        # print(owner_6.id)
-        # print(owner_7.id)
-        # print(owner_8.id)
-        # print(owner_9.id)
-        # print(owner_10.id)
+        print(owner_1.age)
+        print(owner_2.age)
+        print(owner_3.age)
+        print(owner_4.age)
+        print(owner_5.age)
+        print(owner_6.age)
+        print(owner_7.age)
+        print(owner_8.age)
+        print(owner_9.age)
+        print(owner_10.age)
+
         #Adds owners with their passwords hashed. 
 
-        # def create_test_stripe_express_account(owner_email):
+        # def create_test_stripe_express_account(owner):
         #     account = stripe.Account.create(
         #         type='express',
         #         country='US',
-        #         email= owner_email,
+        #         email= owner.email,
+        #         business_type= 'individual',
+        #         individual.address.city : owner.city,
+        #         individual.address.country : owner.country,
+        #         individual.address.line1 : owner.address,
+        #         individual.address.line2 : owner.address_line_2,
+        #         individual.address.postal_code: owner.postal_code,
+        #         individual.address.state: owner.state,
+
         #         capabilities={
         #             'card_payments': {'requested': True},
         #             'transfers': {'requested': True},
@@ -517,7 +536,7 @@ if __name__ == '__main__':
         #     )
 
         
-        # test_account = create_test_stripe_express_account(owner_1.email)
+        # test_account = create_test_stripe_express_account(owner_1)
         # # test_link = create_test_stripe_account_link()
         # print("Test Express Account ID:", test_account.id)
 
