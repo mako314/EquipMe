@@ -161,7 +161,11 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
                                 name={favorite.equipment.name} 
                                 model={favorite.equipment.model}
                                 make={favorite.equipment.make}
-                                location={favorite.equipment.location}
+                                address_line_2={favorite.equipment.address_line_2} 
+                                address={favorite.equipment.address} 
+                                city={favorite.equipment.city} 
+                                state={favorite.equipment.state} 
+                                postal_code={favorite.equipment.postal_code}
                                 equipment_image={favorite.equipment.equipment_image}
                             />
                         )
@@ -172,7 +176,11 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
                             id={favorite.owner.id}
                             firstName={favorite.owner.firstName}
                             lastName={favorite.owner.lastName} 
-                            location={favorite.owner.location}
+                            address_line_2={favorite.owner.address_line_2} 
+                            address={favorite.owner.address} 
+                            city={favorite.owner.city} 
+                            state={favorite.owner.state} 
+                            postal_code={favorite.owner.postal_code}
                             phone={favorite.owner.phone}
                             profileImage={favorite.owner.profileImage} 
                             />
@@ -201,7 +209,11 @@ function OwnerFavorites() {
                     email={favorite.user.email}
                     phone={favorite.user.phone}
                     profileImage={favorite.user.profileImage}
-                    location={favorite.user.location}
+                    address_line_2={favorite.user.address_line_2} 
+                    address={favorite.user.address} 
+                    city={favorite.user.city} 
+                    state={favorite.user.state} 
+                    postal_code={favorite.user.postal_code}
                 />)
             })}
         </div>

@@ -27,8 +27,10 @@ function EquipmentDisplay({}) {
   const [isFavorited, setIsFavorited] = useState(null)
 
 
-  const { model, name, make, location, email, phone, equipment_image, equipment_price, owner } = oneEquipment
+  const { model, name, make, state, city, address, address_line_2, postal_code, email, phone, equipment_image, equipment_price, owner } = oneEquipment
   
+  const equipmentLocation = `${address_line_2 === '' ?  address : address + ',' + address_line_2}, ${city}, ${state} ${postal_code} `
+
   let firstName, lastName
   if (oneEquipment && oneEquipment.owner) {
     ({ firstName, lastName } = oneEquipment.owner)
@@ -154,7 +156,7 @@ function EquipmentDisplay({}) {
             <p className="leading-relaxed mb-4">{oneEquipment.description}</p>
             <div className="flex border-t border-gray-800 py-2">
               <span className="text-gray-500">Location</span>
-              <span className="ml-auto text-white">{location}</span>
+              <span className="ml-auto text-white">{equipmentLocation}</span>
             </div>
             <div className="flex border-t border-gray-800 py-2">
               <span className="text-gray-500">Owner</span>
@@ -192,7 +194,7 @@ function EquipmentDisplay({}) {
 
         {/* The Google Map for the equipment is included below the information and leaves room for 
         product images to be included to the right of the equipment information */}
-        <EquipmentMap location={location} />
+        <EquipmentMap location={equipmentLocation} />
       </div>
 
     </section>
