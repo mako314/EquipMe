@@ -58,11 +58,11 @@ if __name__ == '__main__':
         user_1 =  User(
         firstName="Benjamin",
         lastName="Davis",
-        age=42,
+        date_of_birth = datetime(2024 - 42, 1, 15),
         email="benjamin.davis23@gmail.com",
         _password_hash="",
         phone="312-555-1122",
-        country = "USA",
+        country = "US",
         state = "FL",
         city = "Miami",
         address = "450 Brickell Ave",
@@ -77,11 +77,11 @@ if __name__ == '__main__':
         user_2 = User(
         firstName="Ethan",
         lastName="Martinez",
-        age=39,
+        date_of_birth = datetime(2024 - 39, 4, 5),
         email="ethan.martinez77@yahoo.com",
         _password_hash="",
         phone="305-555-2233",
-        country = "USA",
+        country = "US",
         state = "IL",
         city = "Chicago",
         address = "123 Wacker Dr",
@@ -96,11 +96,11 @@ if __name__ == '__main__':
         user_3 = User(
         firstName="William",
         lastName="Anderson",
-        age=32,
+        date_of_birth = datetime(2024 - 32, 6, 21),
         email="william.anderson89@gmail.com",
         _password_hash="",
         phone="713-555-3344",
-        country = "USA",
+        country = "US",
         state = "TX",
         city = "Houston",
         address = "100 Main St",
@@ -115,11 +115,11 @@ if __name__ == '__main__':
         user_4 =User(
         firstName="Sofia",
         lastName="Rodriguez",
-        age=29,
+        date_of_birth = datetime(2024 - 29, 8, 25),
         email="sofia.rodriguez12@hotmail.com",
         _password_hash="",
         phone="602-555-4455",
-        country = "USA",
+        country = "US",
         state = "AZ",
         city = "Phoenix",
         address = "2550 Grand Ave",
@@ -134,11 +134,11 @@ if __name__ == '__main__':
         user_5 = User(
         firstName="Christian",
         lastName="Domingues",
-        age=42,
+        date_of_birth = datetime(2024 - 42, 9, 28),
         email="christian.domingues55@yahoo.com",
         _password_hash="",
         phone="312-555-5566",
-        country = "USA",
+        country = "US",
         state = "IL",
         city = "Chicago",
         address = "875 N Michigan Ave",
@@ -153,11 +153,11 @@ if __name__ == '__main__':
         user_6 = User(
         firstName="Sarah",
         lastName="Thompson",
-        age=30,
+        date_of_birth = datetime(2024 - 30, 2, 11),
         email="sarah.thompson99@gmail.com",
         _password_hash="",
         phone="206-555-6677",
-        country = "USA",
+        country = "US",
         state = "WA",
         city = "Seattle",
         address = "600 Pine St",
@@ -171,11 +171,11 @@ if __name__ == '__main__':
         user_7 = User(
         firstName="Thomas",
         lastName="Brady",
-        age=25,
+        date_of_birth = datetime(2024 - 25, 7, 8),
         email="thomas.brady21@yahoo.com",
         _password_hash="",
         phone="713-555-7788",
-        country = "USA",
+        country = "US",
         state = "TX",
         city = "Houston",
         address = "2925 Richmond Ave",
@@ -240,8 +240,8 @@ if __name__ == '__main__':
         owner_1 = EquipmentOwner(
             firstName="Mark", # Painting Equipment
             lastName = "Davis",
-            age=42,
-            country = "USA",
+            date_of_birth = datetime(2024 - 42, 1, 15),
+            country = "US",
             state = "IL",
             city = "Chicago",
             address = "472 W Lake St",
@@ -258,8 +258,8 @@ if __name__ == '__main__':
         owner_2 = EquipmentOwner(
             firstName="Emily", # Party Equipment
             lastName = "Johnson",
-            age=22,
-            country = "USA",
+            date_of_birth = datetime(2024 - 22, 4, 17),
+            country = "US",
             state = "FL",
             city = "Port St. Lucie",
             address = "330 SW California Blvd",
@@ -276,8 +276,8 @@ if __name__ == '__main__':
         owner_3 = EquipmentOwner(
             firstName="Andrew", #Automotive Equipment
             lastName = "Jacobs",
-            age=32,
-            country = "USA",
+            date_of_birth = datetime(2024 - 32, 1, 26),
+            country = "US",
             state = "TX",
             city = "Houston",
             address = "150 Sabine St",
@@ -294,8 +294,8 @@ if __name__ == '__main__':
         owner_4 = EquipmentOwner(
             firstName="Henry", #Garden Equipment
             lastName = "Cavill",
-            age=54,
-            country = "USA",
+            date_of_birth = datetime(2024 - 54, 10, 13),
+            country = "US",
             state = "WA",
             city = "Seattle",
             address = "410 Broad St",
@@ -312,8 +312,8 @@ if __name__ == '__main__':
         owner_5 = EquipmentOwner(
             firstName="David", #Heavy Machinery
             lastName = "Rodriguez",
-            age=65,
-            country = "USA",
+            date_of_birth = datetime(2024 - 65, 4, 30),
+            country = "US",
             state = "FL",
             city = "Miami",
             address = "900 S Miami Ave",
@@ -330,8 +330,8 @@ if __name__ == '__main__':
         owner_6 = EquipmentOwner(
             firstName="Amy", #Construction Equipment
             lastName = "Wilson",
-            age=29,
-            country = "USA",
+            date_of_birth = datetime(2024 - 29, 11, 9),
+            country = "US",
             state = "IL",
             city = "Chicago",
             address = "600 N Kingsbury St",
@@ -348,8 +348,8 @@ if __name__ == '__main__':
         owner_7 = EquipmentOwner(
             firstName="Daniel", # Cleaning Equipment
             lastName = "Lee",
-            age=35,
-            country = "USA",
+            date_of_birth = datetime(2024 - 35, 11, 1),
+            country = "US",
             state = "TX",
             city = "Houston",
             address = "2205 McKinney St",
@@ -366,8 +366,8 @@ if __name__ == '__main__':
         owner_8 = EquipmentOwner(
             firstName="Jessica", # Plumbing Equipment
             lastName = "Sanchez",
-            age=38,
-            country = "USA",
+            date_of_birth = datetime(2024 - 38, 5, 18),
+            country = "US",
             state = "NY",
             city = "New York",
             address = "200 Broadway",
@@ -384,8 +384,8 @@ if __name__ == '__main__':
         owner_9 = EquipmentOwner(
             firstName="Ryan", #Power-tool and hand-tool Equipment
             lastName = "Phillips",
-            age=39,
-            country = "USA",
+            date_of_birth = datetime(2024 - 39, 5, 26),
+            country = "US",
             state = "FL",
             city = "Orlando",
             address = "400 S Orange Ave",
@@ -402,8 +402,8 @@ if __name__ == '__main__':
         owner_10 = EquipmentOwner(
             firstName="Michelle", #Woodwork
             lastName = "Adams",
-            age=40,
-            country = "USA",
+            date_of_birth = datetime(2024 - 40, 3, 9),
+            country = "US",
             state = "LA",
             city = "New Orleans",
             address = "500 Chartres St",
@@ -475,38 +475,105 @@ if __name__ == '__main__':
 
         db.session.commit()
 
-        # print(owner_1.id)
-        # print(owner_2.id)
-        # print(owner_3.id)
-        # print(owner_4.id)
-        # print(owner_5.id)
-        # print(owner_6.id)
-        # print(owner_7.id)
-        # print(owner_8.id)
-        # print(owner_9.id)
-        # print(owner_10.id)
+        # print(owner_1.age)
+        # print(owner_2.age)
+        # print(owner_3.age)
+        # print(owner_4.age)
+        # print(owner_5.age)
+        # print(owner_6.age)
+        # print(owner_7.age)
+        # print(owner_8.age)
+        # print(owner_9.age)
+        # print(owner_10.age)
+
         #Adds owners with their passwords hashed. 
 
-        # def create_test_stripe_express_account(owner_email):
-        #     account = stripe.Account.create(
-        #         type='express',
-        #         country='US',
-        #         email= owner_email,
-        #         capabilities={
-        #             'card_payments': {'requested': True},
-        #             'transfers': {'requested': True},
-        #         },
-        #     )
+        def create_test_stripe_express_account(owner):
+            account = stripe.Account.create(
+            type='express',
+            country=owner.country,
+            email=owner.email,
+            business_type='individual',
+            company = {
+                'address' : {
+                    'city': owner.city,
+                    'country': owner.country,
+                    'line1': 'address_full_match',
+                    'line2': owner.address_line_2,
+                    'postal_code': owner.postal_code,
+                    'state': owner.state,
+                },
+                'name' : 'Marks Rentals',
+                'phone' : owner.phone,
+                'tax_id' : '000000000',
+            },
+            individual={
+                'address': {
+                    'city': owner.city,
+                    'country': owner.country,
+                    'line1': 'address_full_match',
+                    'line2': owner.address_line_2,
+                    'postal_code': owner.postal_code,
+                    'state': owner.state,
+                },
+                'dob' : {
+                    'day': '01',
+                    'month': '01',
+                    'year': '1901',
+                },
+                'email' : owner.email,
+                'first_name' : owner.firstName,
+                'last_name' : owner.lastName,
+                'id_number': '000000000',
+                # 'id_number_provided' : True,
+            },
+            business_profile = {
+                'url' : 'https://accessible.stripe.com',
+                'support_phone' : owner.phone,
+                'support_email' : owner.email,
+                'name' : f"{owner.firstName} {owner.lastName}",
+                'support_address' : {
+                    'city': owner.city,
+                    'country': owner.country,
+                    'line1': 'address_full_match',
+                    'line2': owner.address_line_2,
+                    'postal_code': owner.postal_code,
+                    'state': owner.state,
+                },
+            },
+            capabilities={
+                'card_payments': {'requested': True},
+                'transfers': {'requested': True},
+            },
+        )
+            
+            # stripe.Account.create_external_account(
+            #     account.id,
+            #     external_account={
+            #     'object' : 'card',
+            #     'exp_month' : 8,
+            #     'exp_year' : 2028,
+            #     'number' : '6011981111111113',
+            #     'address_city' : owner.city,
+            #     'address_country' : owner.country,
+            #     'address_line1' : 'address_full_match',
+            #     'address_line2' : owner.address_line_2,
+            #     'address_state' : owner.state,
+            #     'address_zip' : owner.postal_code,
+            #     'cvc' : '372',
+            #     'name' : f"{owner.firstName} {owner.lastName}",
+            #     } 
+            # )
 
-        #     account_link = stripe.AccountLink.create(
-        #         account=account.id,
-        #         refresh_url='https://example.com/reauth',
-        #         return_url='https://example.com/return',
-        #         type='account_onboarding',
-        #     )
+            account_link = stripe.AccountLink.create(
+                account=account.id,
+                refresh_url='https://example.com/reauth',
+                return_url='https://example.com/return',
+                type='account_onboarding',
+            )
 
-        #     print(account_link.url)
-        #     return account
+            # print(account_link.url)
+            return account, account_link.url
         
         # def create_test_stripe_account_link(account):
         #     account_link = stripe.AccountLink.create(
@@ -514,12 +581,15 @@ if __name__ == '__main__':
         #         refresh_url='https://example.com/reauth',
         #         return_url='https://example.com/return',
         #         type='account_onboarding',
-        #     )
+        # )
 
         
-        # test_account = create_test_stripe_express_account(owner_1.email)
-        # # test_link = create_test_stripe_account_link()
-        # print("Test Express Account ID:", test_account.id)
+        # test_account = create_test_stripe_express_account(owner_1)
+        # test_link = create_test_stripe_account_link()
+        print("Test Express Account ID:", test_account.id)
+        test_account, account_link_url = create_test_stripe_express_account(owner_1)
+        print("Test Express Account ID:", test_account.id)
+        print("Account Link URL:", account_link_url)
 
 #---------------------------------------------------------
 

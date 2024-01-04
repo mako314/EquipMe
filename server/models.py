@@ -5,10 +5,14 @@ from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.hybrid import hybrid_property
 from config import db, bcrypt
 
-from datetime import datetime
+#---------------HELPER IMPORTS----------
+from datetime import datetime, date
+from helpers import calculate_age
+#---------------------------------------
 
-
-#---------------HELPER IMPORTS----------------
+#---------------Thoughts----------------
+# Could include a gender field for international regulations
+#---------------------------------------
 class User(db.Model, SerializerMixin):
     __tablename__ = "users"
 
@@ -16,7 +20,9 @@ class User(db.Model, SerializerMixin):
 
     firstName = db.Column(db.String)
     lastName = db.Column(db.String)
-    age = db.Column(db.Integer)
+
+    # age = db.Column(db.Integer)
+    date_of_birth = db.Column(db.Date)
 
     # location = db.Column(db.String)
 
@@ -76,6 +82,11 @@ class User(db.Model, SerializerMixin):
     # 12/9 allow review to be inside of agreements so I can check the length and allow for editing reviews
 
     #PROPERTIES
+
+    @property
+    def age(self):
+        return calculate_age(self.date_of_birth)
+    
     @hybrid_property
     def password_hash(self):
         return self._password_hash
@@ -92,6 +103,7 @@ class User(db.Model, SerializerMixin):
             self._password_hash, password.encode('utf-8'))
 
     #VALIDATES HERE
+    
     @validates("email")
     def validates_email(self, key, email):
         if len(email) > 0 and "@"  in email:
@@ -106,14 +118,14 @@ class User(db.Model, SerializerMixin):
         else:
             raise ValueError("Please input a name")
 
-    @validates("age")
-    def validates_age(self, key, age):
-        age = int(age)
-        if age >= 18:
-            return age
-        else:
-            raise ValueError("Sorry, but you must be 18 years or older to sign up.")
-    
+    # @validates("age")
+    # def validates_age(self, key, age):
+    #     age = int(age)
+    #     if age >= 18:
+    #         return age
+    #     else:
+    #         raise ValueError("Sorry, but you must be 18 years or older to sign up.")
+
 
 class EquipmentOwner(db.Model, SerializerMixin):
     __tablename__ = "owners"
@@ -121,6 +133,8 @@ class EquipmentOwner(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     firstName = db.Column(db.String)
     lastName = db.Column(db.String)
+
+    date_of_birth = db.Column(db.Date)
     age = db.Column(db.Integer)
 
     # location = db.Column(db.String)
@@ -165,6 +179,10 @@ class EquipmentOwner(db.Model, SerializerMixin):
     #12/9 allow review to be inside of agreements so I can check the length and allow for editing reviews
 
     #PROPERTIES
+    @property
+    def age(self):
+        return calculate_age(self.date_of_birth)
+    
     @hybrid_property
     def password_hash(self):
         return self._password_hash
