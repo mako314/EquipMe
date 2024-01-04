@@ -468,11 +468,11 @@ api.add_resource(Equipments, '/equipment')
 #Search and or filter by Equipment type, i.e. Heavy Machinery or painting
 #I can't quite use this either atm, it'd need to be changed to handle cities maybe? so I may have to break up the data from location to actual address, city ,state
 class EquipmentByLocation(Resource):
-
-    def get(self,location):
-        location_test = Equipment.query.filter(Equipment.location == location).all()
+    # For now we will handle similar cities, if not postal codes?
+    def get(self,postal_code):
+        location_test = Equipment.query.filter(Equipment.postal_code == postal_code).all()
         if location_test:
-            equipment = [equipment.to_dict(rules =('-agreements', '-owner.agreements')) for equipment in Equipment.query.filter(Equipment.location == location).all()]
+            equipment = [equipment.to_dict(rules =('-agreements', '-owner.agreements')) for equipment in Equipment.query.filter(Equipment.postal_code == postal_code).all()]
             response = make_response(equipment, 200)
             return response
         else:
@@ -483,7 +483,7 @@ class EquipmentByLocation(Resource):
         
         #need to find a way to make all the locations easily inputtable, for example Heavy Machinery doesn't get picked up if you do /heavymachinery
 
-api.add_resource(EquipmentByLocation, '/equipment/location/<string:location>')
+api.add_resource(EquipmentByLocation, '/equipment/location/<string:postal_code>')
 
 #likely going to need to edit types, have like a generalized list of some sort. 
 # class EquipmentByProfession(Resource):
