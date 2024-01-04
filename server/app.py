@@ -655,7 +655,7 @@ api.add_resource(EquipmentByID, '/equipment/<int:id>')
 class AllEquipmentByOwnerID(Resource):
     def get(self,id):
         equipment = [equipment.to_dict(
-            only =('id','model','name','make','location', 'type','phone','email','location','availability','delivery','quantity', 'owner_name') #needed to include all of this for when one patches
+            only =('id','model','name','make', 'type','phone','email','address', 'country', 'postal_code', 'state', 'address_2', 'city','availability','delivery','quantity', 'owner_name') #needed to include all of this for when one patches
         ) for equipment in Equipment.query.filter(Equipment.owner_id == id).all()]
 
         response = make_response(equipment, 200)
