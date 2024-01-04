@@ -25,7 +25,6 @@ class User(db.Model, SerializerMixin):
     city = db.Column(db.String)
     address = db.Column(db.String)
     address_line_2 = db.Column(db.String)
-
     postal_code = db.Column(db.String)
 
     profession = db.Column(db.String)
@@ -131,7 +130,6 @@ class EquipmentOwner(db.Model, SerializerMixin):
     city = db.Column(db.String)
     address = db.Column(db.String)
     address_line_2 = db.Column(db.String)
-
     postal_code = db.Column(db.String)
 
     profession = db.Column(db.String)
@@ -218,7 +216,6 @@ class Equipment(db.Model, SerializerMixin):
     city = db.Column(db.String)
     address = db.Column(db.String)
     address_line_2 = db.Column(db.String)
-
     postal_code = db.Column(db.String)
 
     #base_of_operations = db.Column(db.String)

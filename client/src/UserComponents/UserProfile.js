@@ -50,7 +50,7 @@ function UserProfile({fromOwnerDash, setFromOwnerDash}) {
     state = '',
     city = '',
     address = '',
-    address_2 = '',
+    address_line_2 = '',
     postal_code = '',
     phone = '',
     profession = '',
@@ -61,7 +61,7 @@ function UserProfile({fromOwnerDash, setFromOwnerDash}) {
   let reviewCounter = 0
   let agreementCounter = 0
 
-  const userLocation = `${address_2 === '' ?  address : address + ',' + address_2}, ${city}, ${state} ${postal_code} `
+  const userLocation = `${address_line_2 === '' ?  address : address + ',' + address_line_2}, ${city}, ${state} ${postal_code} `
 
 
   if (Array.isArray(source.review)) {

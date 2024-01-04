@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 import ContactModal from '../MessagingComponents/ContactModal'
 import { UserSessionContext } from './SessionContext'
 
-function UserCard({ id, email, firstName, lastName, location, phone, profileImage, item, profession, fromOwnerDash }) {
+function UserCard({ id, email, firstName, lastName, location, phone, profileImage, item, profession, fromOwnerDash, address, address_line_2, city, state, postal_code }) {
     const { currentUser, role, setCurrentUser, setRole } = UserSessionContext()
 
     // console.log("WHAT ARE YOU",fromOwnerDash)
@@ -15,7 +15,7 @@ function UserCard({ id, email, firstName, lastName, location, phone, profileImag
     function handleClick(e) {
         navigate(`/user/profile/${id}`)
     }
-
+    const userLocation = `${address_line_2 === '' ?  address : address + ',' + address_line_2}, ${city}, ${state} ${postal_code} `
 //--------------------------------------------------------------------------- This handles opening the modal to contact the individual (user)---------------------------------
     
 
@@ -29,7 +29,7 @@ function UserCard({ id, email, firstName, lastName, location, phone, profileImag
                         <h1 className="text-2xl font-semibold">{firstName} {lastName}</h1>
                         <p className="mt-2">{email}</p>
                         <p>{phone}</p>
-                        <p>{location}</p>
+                        <p>{userLocation}</p>
                     </div>
                         <div className="flex flex-row w-full mt-4 justify-end"> 
                         <button className= " ml-auto text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700" onClick={handleClick}>More Info</button>

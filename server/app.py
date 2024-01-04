@@ -234,7 +234,7 @@ api.add_resource(UserByID, '/user/<int:id>')
 # MAY WANT TO INCLUDE MORE, BUT GOING TO TRY AND SPEED UP NETWORK BY DOING AN ONLY instead of RUles
 class UserByProfession(Resource):
     def get(self, ownerProfession):
-        users = [user.to_dict(only =('id','email', 'firstName', 'lastName', 'address', 'country', 'postal_code', 'state', 'address_2', 'city', 'phone', 'profileImage')) for user in User.query.filter(User.profession == ownerProfession).all()]
+        users = [user.to_dict(only =('id','email', 'firstName', 'lastName', 'address', 'country', 'postal_code', 'state', 'address_line_2', 'city', 'phone', 'profileImage')) for user in User.query.filter(User.profession == ownerProfession).all()]
         if users:
             response = make_response(users, 200)
         else:
@@ -251,7 +251,7 @@ class EquipmentOwners(Resource):
 
     #succesful get to display
     def get(self):
-        equip_owners = [owner.to_dict(only = ('id', 'profession', 'email', 'address', 'country', 'postal_code', 'state', 'address_2', 'city', 'firstName', 'lastName', 'phone','equipment', 'profileImage')) for owner in EquipmentOwner.query.all()]
+        equip_owners = [owner.to_dict(only = ('id', 'profession', 'email', 'address', 'country', 'postal_code', 'state', 'address_line_2', 'city', 'firstName', 'lastName', 'phone','equipment', 'profileImage')) for owner in EquipmentOwner.query.all()]
         #had to allow ID also to grab it with link
         response = make_response(equip_owners, 200)
         #rules =('-agreements', 'equipment')
@@ -373,7 +373,7 @@ class Equipments(Resource):
     #get ALL equipment -- DONE
     def get(self):
         equipment = [equipment.to_dict(
-            only =('id','model','name','make', 'type','address', 'country', 'postal_code', 'state', 'address_2', 'city', 'availability','delivery', 'owner', 'equipment_price', 'equipment_image', 'featured_equipment','cart_item' ) #needed to include all of this for when one patches
+            only =('id','model','name','make', 'type','address', 'country', 'postal_code', 'state', 'address_line_2', 'city', 'availability','delivery', 'owner', 'equipment_price', 'equipment_image', 'featured_equipment','cart_item' ) #needed to include all of this for when one patches
         ) for equipment in Equipment.query.all()]                                       # no longer need phone, email, and owner_name
 
         response = make_response(equipment, 200)
@@ -655,7 +655,7 @@ api.add_resource(EquipmentByID, '/equipment/<int:id>')
 class AllEquipmentByOwnerID(Resource):
     def get(self,id):
         equipment = [equipment.to_dict(
-            only =('id','model','name','make', 'type','phone','email','address', 'country', 'postal_code', 'state', 'address_2', 'city','availability','delivery','quantity', 'owner_name') #needed to include all of this for when one patches
+            only =('id','model','name','make', 'type','phone','email','address', 'country', 'postal_code', 'state', 'address_line_2', 'city','availability','delivery','quantity', 'owner_name') #needed to include all of this for when one patches
         ) for equipment in Equipment.query.filter(Equipment.owner_id == id).all()]
 
         response = make_response(equipment, 200)
