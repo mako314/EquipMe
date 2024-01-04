@@ -108,7 +108,11 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
           renterFirstName={currentUser.firstName}
           renterLastName={currentUser.lastName}
           renterId={currentUser.id}
-          location={agreement.item.equipment.location}
+          state={agreement.item.equipment.state }
+          city={agreement.item.equipment.city }
+          address={agreement.item.equipment.address }
+          address_line_2={agreement.item.equipment.address_line_2 }
+          postal_code={agreement.item.equipment.postal_code}
           ownerEmail={agreement.item.equipment.owner.email}
           ownerFirstName={agreement.item.equipment.owner.firstName}
           ownerLastName={agreement.item.equipment.owner.lastName}
@@ -135,7 +139,11 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
         renterFirstName={agreement.cart_item.cart.user.firstName}
         renterLastName={agreement.cart_item.cart.user.lastName}
         renterId = {agreement.cart_item.cart.user.id}
-        location={currentUser.location}
+        state={currentUser.state}
+        city={currentUser.city}
+        address={currentUser.address}
+        address_line_2={currentUser.address_line_2}
+        postal_code={currentUser.postal_code}
         ownerEmail ={currentUser.email}
         ownerFirstName = {currentUser.firstName}
         ownerLastName ={currentUser.lastName}
