@@ -395,6 +395,40 @@ if __name__ == '__main__':
         # print(owner_10.id)
         #Adds owners with their passwords hashed. 
 
+        # def create_test_stripe_express_account(owner_email):
+        #     account = stripe.Account.create(
+        #         type='express',
+        #         country='US',
+        #         email= owner_email,
+        #         capabilities={
+        #             'card_payments': {'requested': True},
+        #             'transfers': {'requested': True},
+        #         },
+        #     )
+
+        #     account_link = stripe.AccountLink.create(
+        #         account=account.id,
+        #         refresh_url='https://example.com/reauth',
+        #         return_url='https://example.com/return',
+        #         type='account_onboarding',
+        #     )
+
+        #     print(account_link.url)
+        #     return account
+        
+        # def create_test_stripe_account_link(account):
+        #     account_link = stripe.AccountLink.create(
+        #         account=account.id,
+        #         refresh_url='https://example.com/reauth',
+        #         return_url='https://example.com/return',
+        #         type='account_onboarding',
+        #     )
+
+        
+        test_account = create_test_stripe_express_account(owner_1.email)
+        # test_link = create_test_stripe_account_link()
+        print("Test Express Account ID:", test_account.id)
+
 #---------------------------------------------------------
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1589,26 +1623,28 @@ if __name__ == '__main__':
         db.session.commit()
 
 #----------------Testing Stripe--------------
-        stripe.api_key = os.getenv('STRIPE_TEST_SECRET_KEY')
+        # stripe.api_key = os.getenv('STRIPE_TEST_SECRET_KEY')
 
-        starter_subscription = stripe.Product.create(
-        name="Starter Subscription",
-        description="$12/Month subscription",
-        )
+        # starter_subscription = stripe.Product.create(
+        # name="Starter Subscription",
+        # description="$12/Month subscription",
+        # )
 
-        starter_subscription_price = stripe.Price.create(
-        unit_amount=1200,
-        currency="usd",
-        recurring={"interval": "month"},
-        product=starter_subscription['id'],
-        )
+        # starter_subscription_price = stripe.Price.create(
+        # unit_amount=1200,
+        # currency="usd",
+        # recurring={"interval": "month"},
+        # product=starter_subscription['id'],
+        # )
 
-        # Save these identifiers
-        print(f"Success! Here is your starter subscription product id: {starter_subscription.id}")
-        print(f"Success! Here is your starter subscription price id: {starter_subscription_price.id}")
+        # # Save these identifiers
+        # print(f"Success! Here is your starter subscription product id: {starter_subscription.id}")
+        # print(f"Success! Here is your starter subscription price id: {starter_subscription_price.id}")
         
 
+
         print("FINISHED SEEDING")
+
         # owner2 = EquipmentOwner.query.filter_by(id = owner_2.id).first()
         # if owner2:
         #     print("Owner 2's Inboxes:")

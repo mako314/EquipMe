@@ -17,7 +17,15 @@ class User(db.Model, SerializerMixin):
     firstName = db.Column(db.String)
     lastName = db.Column(db.String)
     age = db.Column(db.Integer)
+
     location = db.Column(db.String)
+
+    country = db.Column(db.String)
+    state = db.Column(db.String)
+    city = db.Column(db.String)
+    address = db.Column(db.String)
+    postal_code = db.Column(db.String)
+
     profession = db.Column(db.String)
     bio = db.Column(db.String)
     phone = db.Column(db.String)
@@ -113,7 +121,15 @@ class EquipmentOwner(db.Model, SerializerMixin):
     firstName = db.Column(db.String)
     lastName = db.Column(db.String)
     age = db.Column(db.Integer)
+
     location = db.Column(db.String)
+
+    country = db.Column(db.String)
+    state = db.Column(db.String)
+    city = db.Column(db.String)
+    address = db.Column(db.String)
+    postal_code = db.Column(db.String)
+
     profession = db.Column(db.String)
     bio = db.Column(db.String)
     phone = db.Column(db.String)
