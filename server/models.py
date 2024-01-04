@@ -208,6 +208,13 @@ class Equipment(db.Model, SerializerMixin):
     description = db.Column(db.String)
     equipment_image = db.Column(db.String)
     location = db.Column(db.String)
+
+    country = db.Column(db.String)
+    state = db.Column(db.String)
+    city = db.Column(db.String)
+    address = db.Column(db.String)
+    postal_code = db.Column(db.String)
+
     #base_of_operations = db.Column(db.String)
     availability = db.Column(db.String)
     delivery = db.Column(db.String)
