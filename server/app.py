@@ -250,7 +250,7 @@ class EquipmentOwners(Resource):
 
     #succesful get to display
     def get(self):
-        equip_owners = [owner.to_dict(only = ('id', 'profession', 'email', 'location', 'firstName', 'lastName', 'phone','equipment', 'profileImage')) for owner in EquipmentOwner.query.all()]
+        equip_owners = [owner.to_dict(only = ('id', 'profession', 'email', 'address', 'country', 'postal_code', 'state', 'address_2', 'city', 'firstName', 'lastName', 'phone','equipment', 'profileImage')) for owner in EquipmentOwner.query.all()]
         #had to allow ID also to grab it with link
         response = make_response(equip_owners, 200)
         #rules =('-agreements', 'equipment')
