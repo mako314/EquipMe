@@ -565,10 +565,12 @@ if __name__ == '__main__':
             #     } 
             # )
 
+            # https://stripe.com/docs/api/account_links/create#create_account_link-refresh_url
+            # https://stackoverflow.com/questions/66899846/stripe-connect-express-account-refreshurl-and-returnurl-are-undefined
             account_link = stripe.AccountLink.create(
                 account=account.id,
-                refresh_url='https://example.com/reauth',
-                return_url='https://example.com/return',
+                refresh_url='http://localhost:3000/dashboard',
+                return_url='http://localhost:3000/cart',
                 type='account_onboarding',
             )
 
@@ -585,8 +587,11 @@ if __name__ == '__main__':
 
         
         # test_account = create_test_stripe_express_account(owner_1)
+        
         # test_link = create_test_stripe_account_link()
-        print("Test Express Account ID:", test_account.id)
+
+        # print("Test Express Account ID:", test_account.id)
+
         test_account, account_link_url = create_test_stripe_express_account(owner_1)
         print("Test Express Account ID:", test_account.id)
         print("Account Link URL:", account_link_url)
