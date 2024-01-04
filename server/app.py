@@ -393,7 +393,12 @@ class Equipments(Resource):
                 model = data['model'],
                 equipment_image = data['equipment_image'],
                 description = data['description'],
-                location = data['location'],
+                country = data['country'],
+                state = data['state'],
+                city = data['city'],
+                address = data['address'],
+                address_line_2 = data['address_line_2'],
+                postal_code = data['postal_code'],
                 availability = data['availability'],
                 delivery = data['delivery'],
                 owner_id= data['owner_id']
