@@ -15,9 +15,15 @@ import xml.etree.ElementTree as ET
 
 from flask_jwt_extended import create_access_token, set_access_cookies, jwt_required, get_jwt_identity, unset_jwt_cookies, create_refresh_token, get_jwt
 import stripe
+import os
 #------------------------------------HELPERS----------------------------------
 from datetime import datetime
 from helpers import is_available_for_date_range
+from dotenv import load_dotenv
+
+# Have to tell the dotenv what to load specifically
+load_dotenv('../.env.local')
+stripe.api_key=os.getenv('STRIPE_TEST_SECRET_KEY')
 #------------------------------------ BOTH USER LOGIN-----------------------------------------------------------------------------
 
 class Login(Resource):
@@ -1911,7 +1917,7 @@ class StripeCreateConnectAccount(Resource):
 api.add_resource(StripeCreateConnectAccount, '/v1/accounts')
 
 class StripeEditConnectAccount(Resource):
-    def post(self):
+    def post(self, id):
         stripe.Account.modify(
         "acct_1Nv0FGQ9RKHgCVdK",
         metadata={"order_id": "6735"},

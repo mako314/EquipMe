@@ -7,6 +7,12 @@ from sqlalchemy.exc import IntegrityError
 from datetime import datetime, timedelta
 from collections import defaultdict
 import random
+import stripe
+import os
+from dotenv import load_dotenv
+
+# Have to tell the dotenv what to load specifically
+load_dotenv('../.env.local')
 
 # IF you want to re-seed when you start development, just add everything in here (tab for indentation)
 def seed_database():
@@ -1581,6 +1587,25 @@ if __name__ == '__main__':
 
         db.session.add_all(owner_inbox)
         db.session.commit()
+
+#----------------Testing Stripe--------------
+        stripe.api_key = os.getenv('STRIPE_TEST_SECRET_KEY')
+
+        starter_subscription = stripe.Product.create(
+        name="Starter Subscription",
+        description="$12/Month subscription",
+        )
+
+        starter_subscription_price = stripe.Price.create(
+        unit_amount=1200,
+        currency="usd",
+        recurring={"interval": "month"},
+        product=starter_subscription['id'],
+        )
+
+        # Save these identifiers
+        print(f"Success! Here is your starter subscription product id: {starter_subscription.id}")
+        print(f"Success! Here is your starter subscription price id: {starter_subscription_price.id}")
         
 
         print("FINISHED SEEDING")
