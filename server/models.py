@@ -5,11 +5,14 @@ from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.hybrid import hybrid_property
 from config import db, bcrypt
 
+#---------------HELPER IMPORTS----------
 from datetime import datetime, date
 from helpers import calculate_age
+#---------------------------------------
 
-#---------------HELPER IMPORTS----------------
-#---------------------------------------------
+#---------------Thoughts----------------
+# Could include a gender field for international regulations
+#---------------------------------------
 class User(db.Model, SerializerMixin):
     __tablename__ = "users"
 
@@ -115,13 +118,13 @@ class User(db.Model, SerializerMixin):
         else:
             raise ValueError("Please input a name")
 
-    @validates("age")
-    def validates_age(self, key, age):
-        age = int(age)
-        if age >= 18:
-            return age
-        else:
-            raise ValueError("Sorry, but you must be 18 years or older to sign up.")
+    # @validates("age")
+    # def validates_age(self, key, age):
+    #     age = int(age)
+    #     if age >= 18:
+    #         return age
+    #     else:
+    #         raise ValueError("Sorry, but you must be 18 years or older to sign up.")
 
 
 class EquipmentOwner(db.Model, SerializerMixin):
