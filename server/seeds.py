@@ -1176,7 +1176,7 @@ if __name__ == '__main__':
             rental_start_date="2023-07-17",
             rental_end_date="2023-07-20",
             delivery = True,
-            delivery_address = user_1.location,
+            delivery_address = f"{user_1.address}, {user_1.city}, {user_1.state} {user_1.postal_code}",
             user_decision = "accept",
             owner_decision = "accept",
             agreement_status = "both-accepted",

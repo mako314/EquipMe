@@ -1916,23 +1916,21 @@ class StripeCreateConnectAccount(Resource):
 
 api.add_resource(StripeCreateConnectAccount, '/v1/accounts')
 
-class StripeEditConnectAccount(Resource):
+class StripeHandleConnectAccount(Resource):
     def post(self, id):
         stripe.Account.modify(
         "acct_1Nv0FGQ9RKHgCVdK",
         metadata={"order_id": "6735"},
         )
-
-api.add_resource(StripeEditConnectAccount, '/v1/accounts/<int:id>')
-
-class StripeDeleteConnectAccount(Resource):
+    
     def delete(self, id):
         stripe.Account.modify(
         "acct_1Nv0FGQ9RKHgCVdK",
         metadata={"order_id": "6735"},
-        )
+    )
 
-api.add_resource(StripeDeleteConnectAccount, '/v1/accounts/<int:id>')
+
+api.add_resource(StripeHandleConnectAccount, '/v1/accounts/<int:id>')
 
 class CheckingOut(Resource):
     def checkout_equipment(equipment_id, quantity):
