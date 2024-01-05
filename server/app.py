@@ -2080,7 +2080,7 @@ api.add_resource(StripeHandleConnectAccount, '/v1/accounts/<int:id>')
 
 class StripeCreateAccountLink(Resource):
     @jwt_required()
-    def post(self, account_id):
+    def post(self):
         current_user = get_jwt_identity()
         owner_id = current_user.get('id')
         owner_role = current_user.get('role')
@@ -2097,7 +2097,7 @@ class StripeCreateAccountLink(Resource):
                 return_url='http://localhost:3000/dashboard',
                 type='account_onboarding',
         )
-        
+
         if account_link:
             response = make_response(account_link, 201)
         else:
