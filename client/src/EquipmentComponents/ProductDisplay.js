@@ -157,39 +157,39 @@ function EquipmentDisplay({}) {
             <p className="leading-relaxed mb-4">{oneEquipment.description}</p>
 
             <div className="flex border-t border-gray-800 py-2">
-  <span className="text-gray-500">Location</span>
-  <span className="ml-auto text-white">{equipmentLocation}</span>
-</div>
-<div className="flex border-t border-gray-800 py-2">
-  <span className="text-gray-500">Owner</span>
-  <span className="ml-auto text-white">{firstName} {lastName}</span>
-</div>
-<div className="flex border-t border-b mb-6 border-gray-800 py-2">
-  <span className="text-gray-500">Quantity</span>
-  <span className="ml-auto text-white">{quantity}</span>
-</div>
-<div className="flex flex-col md:flex-row md:items-center md:space-x-4">
-  <div className="flex justify-start space-x-2 md:space-x-4 mb-4">
-    {equip_prices}
-  </div>
-  <div className="flex flex-row justify-start space-x-4">
-    {role === 'user' && 
-      <AddToCartModal equip_id={id} oneEquipment={oneEquipment} toggleModal={toggleModal} isModalOpen={isModalOpen}/>
-    }
-    {role === 'owner' && currentUser.id === oneEquipment.owner_id && 
-      <button className="inline-block rounded-lg bg-orange-500 px-8 py-2 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 md:text-base" onClick={handleEditNavigation}>Edit Equipment</button>
-    }
-  </div>
-  {role === 'user' && 
-    <div className="flex flex-row justify-start mt-4 md:mt-0">
-      <button className="rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center text-gray-500" onClick={handleFavoriteSelection}>
-        <svg fill={heartColor} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-5 h-5" viewBox="0 0 24 24">
-          <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
-        </svg>
-      </button>
-    </div>
-  }
-</div>
+            <span className="text-gray-500">Location</span>
+            <span className="ml-auto text-white">{equipmentLocation}</span>
+          </div>
+          <div className="flex border-t border-gray-800 py-2">
+            <span className="text-gray-500">Owner</span>
+            <span className="ml-auto text-white">{firstName} {lastName}</span>
+          </div>
+          <div className="flex border-t border-b mb-6 border-gray-800 py-2">
+            <span className="text-gray-500">Quantity</span>
+            <span className="ml-auto text-white">{quantity}</span>
+          </div>
+          <div className="flex flex-col md:flex-row md:items-center md:space-x-4">
+            <div className="flex justify-start space-x-2 md:space-x-4 mb-4">
+              {equip_prices}
+            </div>
+            <div className="flex flex-row justify-start space-x-4">
+              {role === 'user' && 
+                <AddToCartModal equip_id={id} oneEquipment={oneEquipment} toggleModal={toggleModal} isModalOpen={isModalOpen}/>
+              }
+              {role === 'owner' && currentUser.id === oneEquipment.owner_id && 
+                <button className="inline-block rounded-lg bg-orange-500 px-8 py-2 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 md:text-base" onClick={handleEditNavigation}>Edit Equipment</button>
+              }
+            </div>
+            {role === 'user' && 
+              <div className="flex flex-row justify-start mt-4 md:mt-0">
+                <button className="rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center text-gray-500" onClick={handleFavoriteSelection}>
+                  <svg fill={heartColor} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-5 h-5" viewBox="0 0 24 24">
+                    <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
+                  </svg>
+                </button>
+              </div>
+            }
+          </div>
 
           </div>
           <div className="lg:w-1/2 w-full lg:h-auto h-64 lg:py-6 mb-6 lg:mb-0">

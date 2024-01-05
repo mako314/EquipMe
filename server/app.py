@@ -340,9 +340,11 @@ class EquipmentOwners(Resource):
             new_owner.password_hash = new_owner._password_hash
 
             db.session.commit()
+            
+            account_link = None  # Initialize account_link to None
 
             if data['owner_consent'] == 'yes':
-                 account = stripe.Account.create(
+                account = stripe.Account.create(
                     type='express',
                     country=new_owner.country,
                     email=new_owner.email,
@@ -400,6 +402,9 @@ class EquipmentOwners(Resource):
                         'transfers': {'requested': True},
                     },
                 )
+                 
+                new_owner.stripe_id = account.id
+                db.session.commit()
             
             if data['owner_consent'] == 'yes' and data['create_link']:
                 account_link = stripe.AccountLink.create(
@@ -413,8 +418,16 @@ class EquipmentOwners(Resource):
                     print(account_link.url)
                 
 
-            response = make_response(new_owner.to_dict(), 201)
-            return response
+            # response = make_response(new_owner.to_dict(), 201)
+            if account_link:
+                return jsonify({
+                    'owner': new_owner,
+                    'stripe_onboard_link': account_link.url
+                }), 200
+            else:
+                return make_response(new_owner.to_dict(), 201)
+
+            # return response
 
         except ValueError:
             return make_response({"error": ["validations errors, check your input and try again"]} , 400)
@@ -2134,8 +2147,19 @@ class StripeCreateConnectAccount(Resource):
             },
         )
 
+        # account_link = stripe.AccountLink.create(
+        #         account=account.id,
+        #         refresh_url='http://localhost:3000/dashboard',
+        #         return_url='http://localhost:3000/dashboard',
+        #         type='account_onboarding',
+        # )
+
         equip_owner.stripe_id = account.id
+        # print(account_link.url)
+        
+        # equip_owner.stripe_onboard_link = account_link.url
         db.session.commit()
+        # print(equip_owner.stripe_onboard_link)
         # db.session.refresh(equip_owner)
 
         response = make_response(account, 200)

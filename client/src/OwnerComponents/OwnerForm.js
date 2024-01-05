@@ -16,14 +16,14 @@ function OwnerForm({addOwner}){
     const { currentUser, role, setCurrentUser, setRole } = UserSessionContext()
     // https://formik.org/docs/api/formik#setfieldvalue-field-string-value-any-shouldvalidate-boolean--promisevoid--formikerrors
     const handleOwnerConsentChange = (e) => {
-      formik.handleChange(e); // update formik state
-      setShowLinkCheckbox(e.target.value === 'yes'); // show or hide the checkbox
+      formik.handleChange(e) // update formik state
+      setShowLinkCheckbox(e.target.value === 'yes') // show or hide the checkbox
     }
 
     function handleLogin() {
         
-      let email = formik.values.email;
-      let password = formik.values.password;
+      let email = formik.values.email
+      let password = formik.values.password
 
       fetch(`${apiUrl}login`, {
           method: "POST",
@@ -37,7 +37,7 @@ function OwnerForm({addOwner}){
             resp.json().then((data) => {
               setCurrentUser(data.owner)
               setRole('owner')
-              navigate(`/dashboard`); // <-------- navigates to the dashboard
+              navigate(`/dashboard`) // <-------- navigates to the dashboard
             })
           }
         })
