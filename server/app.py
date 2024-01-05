@@ -2079,17 +2079,66 @@ class StripeCreateConnectAccount(Resource):
 api.add_resource(StripeCreateConnectAccount, '/v1/accounts')
 
 class StripeHandleConnectAccount(Resource):
+    @jwt_required()
+    def get(self, id):
+        current_user = get_jwt_identity()
+        owner_id = current_user.get('id')
+        owner_role = current_user.get('role')
+        equip_owner = EquipmentOwner.query.filter(EquipmentOwner.id == owner_id).first()
+        # check for charges_enabled
+        # check the state of the details_submitted
+        # https://stripe.com/docs/connect/express-accounts#:~:text=You%20can%20check%20the%20state,ve%20completed%20the%20onboarding%20process.
+        # A user that’s redirected to your return_url might not have completed the onboarding process. Retrieve the user’s account and check for charges_enabled. If the account isn’t fully onboarded, provide UI prompts to allow the user to continue onboarding later.
+        stripe_account = stripe.Account.retrieve(equip_owner.stripe_id)
+
+        if stripe_account:
+            response = make_response(stripe_account, 200)
+        else:
+            response = make_response({
+            "error": "Stripe Account not found"
+            }, 404)
+        return response
+
+    @jwt_required()
     def post(self, id):
-        stripe.Account.modify(
-        "acct_1Nv0FGQ9RKHgCVdK",
+        current_user = get_jwt_identity()
+        owner_id = current_user.get('id')
+        owner_role = current_user.get('role')
+        equip_owner = EquipmentOwner.query.filter(EquipmentOwner.id == owner_id).first()
+
+        stripe_account = stripe.Account.modify(
+        equip_owner.stripe_id,
         metadata={"order_id": "6735"},
         )
-    
+
+        if stripe_account:
+            response = make_response(stripe_account, 200)
+        else:
+            response = make_response({
+            "error": "Stripe Account not found"
+            }, 404)
+        return response
+
+    @jwt_required()
     def delete(self, id):
-        stripe.Account.modify(
-        "acct_1Nv0FGQ9RKHgCVdK",
+        current_user = get_jwt_identity()
+        owner_id = current_user.get('id')
+        owner_role = current_user.get('role')
+        equip_owner = EquipmentOwner.query.filter(EquipmentOwner.id == owner_id).first()
+
+        stripe_account = stripe.Account.modify(
+        equip_owner.stripe_id,
         metadata={"order_id": "6735"},
-    )
+        )
+
+        if stripe_account:
+            response = make_response(stripe_account, 204)
+        else:
+            response = make_response({
+            "error": "Stripe Account not found"
+            }, 404)
+        return response
+    
 api.add_resource(StripeHandleConnectAccount, '/v1/accounts/<int:id>')
 
 class StripeCreateAccountLink(Resource):
