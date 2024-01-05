@@ -248,6 +248,7 @@ if __name__ == '__main__':
             address_line_2 = "",
             postal_code = "60661",
             profession="Plumbing",
+            stripe_id = None,
             bio= "I specialize in plumbing and bring years of experience in handling and supplying top-notch painting equipment in Chicago. My focus is on providing reliable and efficient tools for any job.",
             phone="312-555-6789",
             email="markdavis82@yahoo.com",
@@ -266,6 +267,7 @@ if __name__ == '__main__':
             address_line_2 = "",
             postal_code = "34953",
             profession="Construction Equipment Operator",
+            stripe_id = None,
             bio= "At 22, I'm deeply involved in the world of construction equipment operation in Port St. Lucie, FL. My goal is to ensure that every project has the right equipment for success.",
             phone="602-555-7891",
             email="ejohnson@live.com",
@@ -284,6 +286,7 @@ if __name__ == '__main__':
             address_line_2 = "",
             postal_code = "77007",
             profession="Automotive",
+            stripe_id = None,
             bio= "Based in Houston, Texas, I provide automotive equipment for a variety of needs. With my extensive knowledge, I help clients choose the best tools for their automotive projects.",
             phone="713-555-0123",
             email="andrewjacobs93@gmail.com",
@@ -302,6 +305,7 @@ if __name__ == '__main__':
             address_line_2 = "",
             postal_code = "98109",
             profession="Garden",
+            stripe_id = None,
             bio= "As a garden equipment provider in Seattle, I take pride in offering high-quality tools. My experience in gardening aids clients in selecting the perfect equipment for their outdoor spaces.",
             phone="206-555-3456",
             email="hcavill34@hotmail.com",
@@ -320,6 +324,7 @@ if __name__ == '__main__':
             address_line_2 = "",
             postal_code = "33130",
             profession="Heavy Machinery",
+            stripe_id = None,
             bio= "From Miami, I specialize in heavy machinery. With my expertise, I ensure that each client gets the most suitable machinery for their industrial needs.",
             phone="305-555-1234",
             email="davidr83@gmail.com",
@@ -338,6 +343,7 @@ if __name__ == '__main__':
             address_line_2 = "",
             postal_code = "60654",
             profession="Construction",
+            stripe_id = None,
             bio= "In Chicago, I focus on supplying construction equipment. My aim is to help projects run smoothly by providing reliable and effective tools.",
             phone="312-555-5678",
             email="amywilson22@yahoo.com",
@@ -356,6 +362,7 @@ if __name__ == '__main__':
             address_line_2 = "",
             postal_code = "77003",
             profession="Cleaning",
+            stripe_id = None,
             bio= "I provide top-grade cleaning equipment in Houston. My mission is to ensure cleanliness and efficiency in various environments through state-of-the-art equipment.",
             phone="713-555-4567",
             email="daniel.lee78@yahoo.com",
@@ -374,6 +381,7 @@ if __name__ == '__main__':
             address_line_2 = "",
             postal_code = "10007",
             profession="Plumbing",
+            stripe_id = None,
             bio= "From New York City, I specialize in plumbing equipment. I'm committed to offering the best tools and resources to meet diverse plumbing needs.",
             phone ="212-555-2345",
             email="jess.sanchez22@gmail.com",
@@ -392,6 +400,7 @@ if __name__ == '__main__':
             address_line_2 = "",
             postal_code = "32801",
             profession="Power tools and Hand tools",
+            stripe_id = None,
             bio= "In Orlando, Florida, I offer a range of power tools and hand tools. My expertise helps clients find the perfect tools for their projects, ensuring quality and durability.",
             phone="407-555-9012",
             email="ryan.phillips87@gmail.com",
@@ -410,6 +419,7 @@ if __name__ == '__main__':
             address_line_2 = "",
             postal_code = "70130",
             profession="Woodworking",
+            stripe_id = None,
             bio= "I am dedicated to woodworking in New Orleans, Louisiana. My passion is to provide high-quality woodworking tools that cater to the intricate needs of this craft.",
             phone="504-555-7890",
             email="madams90@gmail.com",
@@ -429,7 +439,11 @@ if __name__ == '__main__':
         # db.session.add(owner_8)
         # db.session.add(owner_9)
         # db.session.add(owner_10)
-        db.session.add_all([owner_1,owner_2,owner_3,owner_4,owner_5,owner_6,owner_7,owner_8,owner_9,owner_10,])
+        all_owners = [owner_1,owner_2,owner_3,owner_4,owner_5,owner_6,owner_7,owner_8,owner_9,owner_10]
+
+        # db.session.add_all([owner_1,owner_2,owner_3,owner_4,owner_5,owner_6,owner_7,owner_8,owner_9,owner_10])
+
+        db.session.add_all(all_owners)
 
         db.session.commit()
         #This commit handles adding the owners without their passwords for the time being.
@@ -460,7 +474,8 @@ if __name__ == '__main__':
 
         #Re-add all owners
 
-        db.session.add_all([owner_1,owner_2,owner_3,owner_4,owner_5,owner_6,owner_7,owner_8,owner_9,owner_10,])
+        # db.session.add_all([owner_1,owner_2,owner_3,owner_4,owner_5,owner_6,owner_7,owner_8,owner_9,owner_10])
+        db.session.add_all(all_owners)
 
         # db.session.add(owner_1)
         # db.session.add(owner_2)
@@ -486,9 +501,25 @@ if __name__ == '__main__':
         # print(owner_9.age)
         # print(owner_10.age)
 
-        #Adds owners with their passwords hashed. 
+        for owner in all_owners:
+            print(owner.firstName)
 
+        # Adds owners with their passwords hashed. 
+        # date.year
+        # Between MINYEAR and MAXYEAR inclusive.
+
+        # date.month
+        # Between 1 and 12 inclusive.
+
+        # date.day
+        # Between 1 and the number of days in the given month of the given year.
+        # https://docs.python.org/3/library/datetime.html
+            
         def create_test_stripe_express_account(owner):
+            # Extract the day, month, and year from the owner's date_of_birth
+            birth_day = owner.date_of_birth.day
+            birth_month = owner.date_of_birth.month
+            birth_year = owner.date_of_birth.year
             account = stripe.Account.create(
             type='express',
             country=owner.country,
@@ -498,7 +529,7 @@ if __name__ == '__main__':
                 'address' : {
                     'city': owner.city,
                     'country': owner.country,
-                    'line1': 'address_full_match',
+                    'line1': owner.address,
                     'line2': owner.address_line_2,
                     'postal_code': owner.postal_code,
                     'state': owner.state,
@@ -511,19 +542,20 @@ if __name__ == '__main__':
                 'address': {
                     'city': owner.city,
                     'country': owner.country,
-                    'line1': 'address_full_match',
+                    'line1': owner.address,
                     'line2': owner.address_line_2,
                     'postal_code': owner.postal_code,
                     'state': owner.state,
                 },
                 'dob' : {
-                    'day': '01',
-                    'month': '01',
-                    'year': '1901',
+                    'day': birth_day,
+                    'month': birth_month,
+                    'year': birth_year,
                 },
                 'email' : owner.email,
                 'first_name' : owner.firstName,
                 'last_name' : owner.lastName,
+                'phone' : owner.phone,
                 'id_number': '000000000',
                 # 'id_number_provided' : True,
             },
@@ -535,7 +567,7 @@ if __name__ == '__main__':
                 'support_address' : {
                     'city': owner.city,
                     'country': owner.country,
-                    'line1': 'address_full_match',
+                    'line1': owner.address,
                     'line2': owner.address_line_2,
                     'postal_code': owner.postal_code,
                     'state': owner.state,
@@ -556,7 +588,7 @@ if __name__ == '__main__':
             #     'number' : '6011981111111113',
             #     'address_city' : owner.city,
             #     'address_country' : owner.country,
-            #     'address_line1' : 'address_full_match',
+            #     'address_line1' : owner.address,
             #     'address_line2' : owner.address_line_2,
             #     'address_state' : owner.state,
             #     'address_zip' : owner.postal_code,
@@ -565,30 +597,37 @@ if __name__ == '__main__':
             #     } 
             # )
 
+            # https://stripe.com/docs/api/account_links/create#create_account_link-refresh_url
+            # https://stackoverflow.com/questions/66899846/stripe-connect-express-account-refreshurl-and-returnurl-are-undefined
+            # Auto-fill 000-000-0000 as the test phone number and 000-000 as the SMS code when prompted (Express)
+            # https://stripe.com/docs/api/account_links/create
+
             account_link = stripe.AccountLink.create(
                 account=account.id,
-                refresh_url='https://example.com/reauth',
-                return_url='https://example.com/return',
+                refresh_url='http://localhost:3000/dashboard',
+                return_url='http://localhost:3000/dashboard',
                 type='account_onboarding',
             )
 
             # print(account_link.url)
             return account, account_link.url
-        
-        # def create_test_stripe_account_link(account):
-        #     account_link = stripe.AccountLink.create(
-        #         account=account.id,
-        #         refresh_url='https://example.com/reauth',
-        #         return_url='https://example.com/return',
-        #         type='account_onboarding',
-        # )
 
         
         # test_account = create_test_stripe_express_account(owner_1)
         # test_link = create_test_stripe_account_link()
-        print("Test Express Account ID:", test_account.id)
-        test_account, account_link_url = create_test_stripe_express_account(owner_1)
-        print("Test Express Account ID:", test_account.id)
+        # print("Test Express Account ID:", test_account.id)
+
+        for owner in all_owners:  # Assuming you have a list of all owners
+            stripe_account, onboarding_link = create_test_stripe_express_account(owner)
+            owner.stripe_id = stripe_account.id
+            # owner.stripe_onboarding_link = onboarding_link
+            # db.session.add(owner)
+
+        db.session.commit()
+
+        stripe_account, account_link_url = create_test_stripe_express_account(owner_1)
+        print("Test Express Account ID:", stripe_account.id)
+        print("TEST ACCOUNT ID TYPE", type(stripe_account.id))
         print("Account Link URL:", account_link_url)
 
 #---------------------------------------------------------

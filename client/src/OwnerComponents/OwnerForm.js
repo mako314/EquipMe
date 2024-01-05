@@ -8,12 +8,17 @@ import ApiUrlContext from "../Api"
 import { UserSessionContext } from "../UserComponents/SessionContext";
 
 function OwnerForm({addOwner}){
-
+    const [showLinkCheckbox, setShowLinkCheckbox] = useState(false)
     const [error, setError] = useState()
     const navigate = useNavigate()
     const apiUrl = useContext(ApiUrlContext)
     // const [owner, setOwner] = useContext(OwnerContext)
     const { currentUser, role, setCurrentUser, setRole } = UserSessionContext()
+    // https://formik.org/docs/api/formik#setfieldvalue-field-string-value-any-shouldvalidate-boolean--promisevoid--formikerrors
+    const handleOwnerConsentChange = (e) => {
+      formik.handleChange(e); // update formik state
+      setShowLinkCheckbox(e.target.value === 'yes'); // show or hide the checkbox
+    }
 
     function handleLogin() {
         
@@ -32,9 +37,9 @@ function OwnerForm({addOwner}){
               setCurrentUser(data.owner)
               setRole('owner')
               navigate(`/dashboard`); // <-------- navigates to the dashboard
-            });
+            })
           }
-        });
+        })
   }
 
     const formSchema = object({
@@ -46,13 +51,21 @@ function OwnerForm({addOwner}){
         initialValues: {
             firstName: '',
             lastName: '',
-            location: '',
+            country:'',
+            state:'',
+            city:'',
+            postal_code: '',
+            address:'',
+            address_line_2:'',
+            date_of_birth:'',
             profession: '',
             phone: '',
             email: '',
             password: '',
             profileImage: '',
             website: '',
+            owner_consent: '',
+            create_link: '',
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
@@ -110,11 +123,6 @@ function OwnerForm({addOwner}){
       </div>
 
       <div className="sm:col-span-2">
-        <label htmlFor="location" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">Location</label>
-        <input type="text" name="location" value={formik.values.location} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
-      </div>
-
-      <div className="sm:col-span-2">
         <label htmlFor="email" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">Email</label>
         <input type="text" name="email" value={formik.values.email} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
       </div>
@@ -125,8 +133,44 @@ function OwnerForm({addOwner}){
       </div>
 
       <div className="sm:col-span-2">
-        <label htmlFor="age" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Age </label>
-        <input type="text" name="age" value={formik.values.age} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+        <label htmlFor="date_of_birth" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">Date of Birth</label>
+        <input 
+            type="date" 
+            name="date_of_birth" 
+            value={formik.values.date_of_birth} 
+            onChange={formik.handleChange} 
+            className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" 
+        />
+      </div>
+
+      <div className="sm:col-span-2">
+        <label htmlFor="country" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Country </label>
+        <input type="text" name="country" value={formik.values.country} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+      </div>
+
+      <div className="sm:col-span-2">
+        <label htmlFor="state" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> State </label>
+        <input type="text" name="state" value={formik.values.state} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+      </div>
+
+      <div className="sm:col-span-2">
+        <label htmlFor="city" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> City </label>
+        <input type="text" name="city" value={formik.values.city} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+      </div>
+
+      <div className="sm:col-span-2">
+        <label htmlFor="address" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Address Line 1 </label>
+        <input type="text" name="address" value={formik.values.address} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+      </div>
+
+      <div className="sm:col-span-2">
+        <label htmlFor="address_line_2" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Address Line 2 </label>
+        <input type="text" name="address_line_2" value={formik.values.address_line_2} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+      </div>
+
+      <div className="sm:col-span-2">
+        <label htmlFor="postal_code" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Postal / Zip Code </label>
+        <input type="text" name="postal_code" value={formik.values.postal_code} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
       </div>
 
       <div className="sm:col-span-2">
@@ -150,9 +194,29 @@ function OwnerForm({addOwner}){
       </div>
 
 
+      <div className="sm:col-span-2">
+        <label className="text-gray-800 sm:text-base">Would you like to create a Stripe Connect upon Signing up?</label>
+        <div className="flex items-center">
+          <input type="radio" name="owner_consent" value="yes" checked={formik.values.owner_consent === 'yes'} onChange={handleOwnerConsentChange} />
+          <label htmlFor="owner_consent_yes" className="ml-2 text-sm text-gray-800 sm:text-base">Yes</label>
+        </div>
+        <div className="flex items-center">
+          <input type="radio" name="owner_consent" value="no" checked={formik.values.owner_consent === 'no'} onChange={handleOwnerConsentChange} />
+          <label htmlFor="owner_consent_no" className="ml-2 text-sm text-gray-800 sm:text-base">No</label>
+        </div>
+    
+        {showLinkCheckbox && (
+        <>
+          <br/>
+          <input type="checkbox" name="create_link" checked={formik.values.create_link === 'yes'} onChange={(e) => formik.setFieldValue('create_link', e.target.checked ? 'yes' : 'no')} />
+          <label htmlFor="create_link" className="ml-2 text-sm text-gray-800 sm:text-base">Yes, and Create my Stripe Dashboard Link Now</label>
+        </>
+      )}
+
+      </div> 
+
 
       <div className="flex items-center justify-between sm:col-span-2">
-
         {/* NEED TO CHANGE COLOR */}
         <button type="submit" className="inline-block rounded-lg bg-orange-500 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 md:text-base"> Sign Up!</button>
 

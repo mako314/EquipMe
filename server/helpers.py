@@ -1,7 +1,7 @@
-# from models import db, User, EquipmentOwner, Equipment, RentalAgreement
 from datetime import date
 
 # def is_available_for_date_range(equipment, start_date, end_date):
+      #from models import db, User, EquipmentOwner, Equipment, RentalAgreement
 #     existing_agreements = db.session.query(RentalAgreement).filter(
 #         RentalAgreement.equipment == equipment,
 #         # Check for overlapping date ranges

@@ -52,6 +52,7 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
     const [potentialRentalUsers, setPotentialRentalUsers] = useState([])
     const [potentialRentalOwners, setPotentialRentalOwners] = useState([])
     const [pageTitle, setPageTitle] = useState('Home')
+    const [stripeAccount, setStripeAccount] = useState('')
 
     // const [chartData, setChartData] = useState({
     //     labels: [],
@@ -59,7 +60,38 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
     //   })
     
     const navigate = useNavigate()
+
+    useEffect(() => {
+        const fetchStripeAccount = async () => {
+          try {
+            const response = await fetch(`${apiUrl}v1/accounts/${currentUser.stripe_id}`, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            })
+
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`)
+            }
+
+            const data = await response.json()
+            console.log("THE DATA:", data)
+            setStripeAccount(data)
+          } catch (error) {
+            console.error('Error fetching Stripe account:', error)
+            // Not sure if I'd like to have an error state
+            // setError('Failed to fetch Stripe account details.')
+          }
+        }
     
+        if (role === 'owner') {
+            fetchStripeAccount()
+            console.log("FUNCTION RAN")
+            console.log("THE CURRENT DATA IN STRIPE ACCOUNT:", stripeAccount)
+          }
+
+      }, [role])
 
     // console.log("USER INFO",currentUser)
     // console.log("USER FAVORITE",currentUser?.user_favorite)

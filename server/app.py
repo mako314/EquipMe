@@ -144,11 +144,14 @@ class Users(Resource):
     def post(self):
         data = request.get_json()
         try:
+            birth_date_str = data['date_of_birth']
+            birth_date = datetime.strptime(birth_date_str, '%Y-%m-%d').date()
             #need a way to attach to rental agreement
             new_user = User(
                 firstName = data['firstName'],
                 lastName = data['lastName'],
-                age = data['age'],
+                # age = data['age'],
+                date_of_birth = birth_date,
                 email = data['email'],
                 _password_hash = data['password'],
                 phone = data['phone'],
@@ -262,6 +265,12 @@ class EquipmentOwners(Resource):
     def post(self):
         data = request.get_json()
         try:
+            birth_date_str = data['date_of_birth']
+            birth_date = datetime.strptime(birth_date_str, '%Y-%m-%d').date()
+            birth_day = birth_date.day
+            birth_month = birth_date.month
+            birth_year = birth_date.year
+
             new_owner = EquipmentOwner(
                 firstName = data['firstName'],
                 lastName = data['lastName'],
@@ -271,7 +280,8 @@ class EquipmentOwners(Resource):
                 address = data['address'],
                 address_line_2 = data['address_line_2'],
                 postal_code = data['postal_code'],
-                age = data['age'],
+                # age = data['age'],
+                date_of_birth = birth_date,
                 profession = data['profession'],
                 phone = data['phone'],
                 email = data['email'],
@@ -284,6 +294,78 @@ class EquipmentOwners(Resource):
             new_owner.password_hash = new_owner._password_hash
 
             db.session.commit()
+
+            if data['owner_consent'] == 'yes':
+                 account = stripe.Account.create(
+                    type='express',
+                    country=new_owner.country,
+                    email=new_owner.email,
+                    business_type='individual',
+                    company = {
+                        'address' : {
+                            'city': new_owner.city,
+                            'country': new_owner.country,
+                            'line1': new_owner.address,
+                            'line2': new_owner.address_line_2,
+                            'postal_code': new_owner.postal_code,
+                            'state': new_owner.state,
+                        },
+                        'name' : 'Marks Rentals',
+                        'phone' : new_owner.phone,
+                        'tax_id' : '000000000',
+                    },
+                    individual={
+                        'address': {
+                            'city': new_owner.city,
+                            'country': new_owner.country,
+                            'line1': new_owner.address,
+                            'line2': new_owner.address_line_2,
+                            'postal_code': new_owner.postal_code,
+                            'state': new_owner.state,
+                        },
+                        'dob' : {
+                            'day': birth_day,
+                            'month': birth_month,
+                            'year': birth_year,
+                        },
+                        'email' : new_owner.email,
+                        'first_name' : new_owner.firstName,
+                        'last_name' : new_owner.lastName,
+                        'phone' : new_owner.phone,
+                        'id_number': '000000000',
+                        # 'id_number_provided' : True,
+                    },
+                    business_profile = {
+                        'url' : 'https://accessible.stripe.com',
+                        'support_phone' : new_owner.phone,
+                        'support_email' : new_owner.email,
+                        'name' : f"{new_owner.firstName} {new_owner.lastName}",
+                        'support_address' : {
+                            'city': new_owner.city,
+                            'country': new_owner.country,
+                            'line1': new_owner.address,
+                            'line2': new_owner.address_line_2,
+                            'postal_code': new_owner.postal_code,
+                            'state': new_owner.state,
+                        },
+                    },
+                    capabilities={
+                        'card_payments': {'requested': True},
+                        'transfers': {'requested': True},
+                    },
+                )
+            
+            if data['owner_consent'] == 'yes' and data['create_link']:
+                account_link = stripe.AccountLink.create(
+                account=account.id,
+                refresh_url='http://localhost:3000/dashboard',
+                return_url='http://localhost:3000/dashboard',
+                type='account_onboarding',
+            )
+            # https://stripe.com/docs/api/account_links/create
+                if account_link:
+                    print(account_link.url)
+                
 
             response = make_response(new_owner.to_dict(), 201)
             return response
@@ -1923,34 +2005,181 @@ class MessageByID(Resource):
 api.add_resource(MessageByID, '/message/<int:id>')
 
 class StripeCreateConnectAccount(Resource):
+    @jwt_required()
     def post(self):
-        stripe.Account.create(
-            type="custom",
-            country="US",
-            email="jenny.rosen@example.com",
+        current_user = get_jwt_identity()
+        owner_id = current_user.get('id')
+        owner_role = current_user.get('role')
+        equip_owner = EquipmentOwner.query.filter(EquipmentOwner.id == owner_id).first()
+
+        if owner_role != 'owner':
+            return {'error': 'Unauthorized'}, 403
+        if not equip_owner:
+            return {'error': 'Owner not found'}, 404
+        
+        account = stripe.Account.create(
+            type='express',
+            country=equip_owner.country,
+            email=equip_owner.email,
+            business_type='individual',
+            company = {
+                'address' : {
+                    'city': equip_owner.city,
+                    'country': equip_owner.country,
+                    'line1': equip_owner.address,
+                    'line2': equip_owner.address_line_2,
+                    'postal_code': equip_owner.postal_code,
+                    'state': equip_owner.state,
+                },
+                'name' : 'Marks Rentals',
+                'phone' : equip_owner.phone,
+                'tax_id' : '000000000',
+            },
+            individual={
+                'address': {
+                    'city': equip_owner.city,
+                    'country': equip_owner.country,
+                    'line1': equip_owner.address,
+                    'line2': equip_owner.address_line_2,
+                    'postal_code': equip_owner.postal_code,
+                    'state': equip_owner.state,
+                },
+                'dob' : {
+                    'day': '01',
+                    'month': '01',
+                    'year': '1901',
+                },
+                'email' : equip_owner.email,
+                'first_name' : equip_owner.firstName,
+                'last_name' : equip_owner.lastName,
+                'phone' : equip_owner.phone,
+                'id_number': '000000000',
+                # 'id_number_provided' : True,
+            },
+            business_profile = {
+                'url' : 'https://accessible.stripe.com',
+                'support_phone' : equip_owner.phone,
+                'support_email' : equip_owner.email,
+                'name' : f"{equip_owner.firstName} {equip_owner.lastName}",
+                'support_address' : {
+                    'city': equip_owner.city,
+                    'country': equip_owner.country,
+                    'line1': equip_owner.address,
+                    'line2': equip_owner.address_line_2,
+                    'postal_code': equip_owner.postal_code,
+                    'state': equip_owner.state,
+                },
+            },
             capabilities={
-                "card_payments": {"requested": True},
-                "transfers": {"requested": True},
-        },
+                'card_payments': {'requested': True},
+                'transfers': {'requested': True},
+            },
         )
 
 api.add_resource(StripeCreateConnectAccount, '/v1/accounts')
 
 class StripeHandleConnectAccount(Resource):
+    # @jwt_required()
+    def get(self, id):
+        # current_user = get_jwt_identity()
+        # owner_id = current_user.get('id')
+        # owner_role = current_user.get('role')
+        # equip_owner = EquipmentOwner.query.filter(EquipmentOwner.id == owner_id).first()
+        # equip_owner = EquipmentOwner.query.filter(EquipmentOwner.stripe_id == id).first()
+        
+        print("THE OWNER STRIPE ID:", id)
+
+        # check for charges_enabled
+        # check the state of the details_submitted
+        # https://stripe.com/docs/connect/express-accounts#:~:text=You%20can%20check%20the%20state,ve%20completed%20the%20onboarding%20process.
+        # A user that’s redirected to your return_url might not have completed the onboarding process. Retrieve the user’s account and check for charges_enabled. If the account isn’t fully onboarded, provide UI prompts to allow the user to continue onboarding later. The user can complete their account activation through a new account link (generated by your integration). You can check the state of the details_submitted parameter on their account to see if they’ve completed the onboarding process.
+        stripe_account = stripe.Account.retrieve(id)
+
+        if stripe_account:
+            response = make_response(stripe_account, 200)
+        else:
+            response = make_response({
+            "error": "Stripe Account not found"
+            }, 404)
+        return response
+
+    @jwt_required()
     def post(self, id):
-        stripe.Account.modify(
-        "acct_1Nv0FGQ9RKHgCVdK",
+        current_user = get_jwt_identity()
+        owner_id = current_user.get('id')
+        owner_role = current_user.get('role')
+
+        # equip_owner = EquipmentOwner.query.filter(EquipmentOwner.id == owner_id).first()
+
+        equip_owner = EquipmentOwner.query.filter(EquipmentOwner.stripe_id == id).first()
+
+        stripe_account = stripe.Account.modify(
+        id,
         metadata={"order_id": "6735"},
         )
-    
+
+        if stripe_account:
+            response = make_response(stripe_account, 200)
+        else:
+            response = make_response({
+            "error": "Stripe Account not found"
+            }, 404)
+        return response
+
+    @jwt_required()
     def delete(self, id):
-        stripe.Account.modify(
-        "acct_1Nv0FGQ9RKHgCVdK",
+        current_user = get_jwt_identity()
+        owner_id = current_user.get('id')
+        owner_role = current_user.get('role')
+
+        # equip_owner = EquipmentOwner.query.filter(EquipmentOwner.id == owner_id).first()
+
+        equip_owner = EquipmentOwner.query.filter(EquipmentOwner.stripe_id == id).first()
+
+        stripe_account = stripe.Account.modify(
+        id,
         metadata={"order_id": "6735"},
-    )
+        )
 
+        if stripe_account:
+            response = make_response(stripe_account, 204)
+        else:
+            response = make_response({
+            "error": "Stripe Account not found"
+            }, 404)
+        return response
+    
+api.add_resource(StripeHandleConnectAccount, '/v1/accounts/<string:id>')
 
-api.add_resource(StripeHandleConnectAccount, '/v1/accounts/<int:id>')
+class StripeCreateAccountLink(Resource):
+    @jwt_required()
+    def post(self):
+        current_user = get_jwt_identity()
+        owner_id = current_user.get('id')
+        owner_role = current_user.get('role')
+        equip_owner = EquipmentOwner.query.filter(EquipmentOwner.id == owner_id).first()
+
+        if owner_role != 'owner':
+            return {'error': 'Unauthorized'}, 403
+        if not equip_owner:
+            return {'error': 'Owner not found'}, 404
+        
+        account_link = stripe.AccountLink.create(
+                account=equip_owner.stripe_id,
+                refresh_url='http://localhost:3000/dashboard',
+                return_url='http://localhost:3000/dashboard',
+                type='account_onboarding',
+        )
+
+        if account_link:
+            response = make_response(account_link, 201)
+        else:
+            response = make_response({
+            "error": "Account link not found"
+            }, 404)
+        return response
+        
+api.add_resource(StripeCreateAccountLink, '/v1/account_links')
 
 class CheckingOut(Resource):
     def checkout_equipment(equipment_id, quantity):

@@ -13,7 +13,7 @@ function BarChart({currentUser}){
     const [showAll, setShowAll] = useState(false)
     const apiUrl = useContext(ApiUrlContext)
 
-    console.log("THE API URL:", apiUrl)
+    // console.log("THE API URL:", apiUrl)
 
     const { barChartEquipmentData, setBarChartEquipmentData } = useEquipmentData()
 
