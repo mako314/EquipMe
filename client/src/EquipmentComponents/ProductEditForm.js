@@ -47,7 +47,13 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
             type: oneEquipment.type,
             make: oneEquipment.make,
             model: oneEquipment.model,
-            location: oneEquipment.location,
+            // location: oneEquipment.location,
+            country:oneEquipment.country,
+            state:oneEquipment.state,
+            city:oneEquipment.city,
+            postal_code: oneEquipment.postal_code,
+            address:oneEquipment.address,
+            address_line_2:oneEquipment.address_line_2,
             availability: oneEquipment.availability,
             delivery: oneEquipment.delivery,
             totalQuantity: oneEquipment.status[0].total_quantity,
@@ -55,7 +61,7 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
             owner_id: currentUser?.id,
             equipment_image: oneEquipment.equipment_image,
             description: oneEquipment.description,
-            imageURL: '',
+            imageURL: oneEquipment.imageURL,
             hourly_rate : (oneEquipment.equipment_price[0].hourly_rate) / 100  ,
             daily_rate : (oneEquipment.equipment_price[0].daily_rate ) / 100 ,
             weekly_rate : (oneEquipment.equipment_price[0].weekly_rate) / 100  ,
@@ -222,9 +228,33 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
         </div>
  
         <div className="sm:col-span-2">
-          <label htmlFor="location" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">location, I should give them option to select other locations
-           (placeholder) </label>
-          <input type="text" name="location" value={formik.values.location} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+        <label htmlFor="country" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Country </label>
+        <input type="text" name="country" value={formik.values.country} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+        </div>
+
+        <div className="sm:col-span-2">
+          <label htmlFor="state" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> State </label>
+          <input type="text" name="state" value={formik.values.state} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+        </div>
+
+        <div className="sm:col-span-2">
+          <label htmlFor="city" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> City </label>
+          <input type="text" name="city" value={formik.values.city} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+        </div>
+
+        <div className="sm:col-span-2">
+          <label htmlFor="address" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Address Line 1 </label>
+          <input type="text" name="address" value={formik.values.address} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+        </div>
+
+        <div className="sm:col-span-2">
+          <label htmlFor="address_line_2" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Address Line 2 </label>
+          <input type="text" name="address_line_2" value={formik.values.address_line_2} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+        </div>
+
+        <div className="sm:col-span-2">
+          <label htmlFor="postal_code" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Postal / Zip Code </label>
+          <input type="text" name="postal_code" value={formik.values.postal_code} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
         </div>
  
         <div className="sm:col-span-2">

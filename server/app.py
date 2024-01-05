@@ -242,8 +242,15 @@ class UserByID(Resource):
             try:
                 data = request.get_json()
                 for key in data:
-                    setattr(user, key, data[key])
-                # db.session.add(user)
+                    if key == 'password':
+                        user.password_hash = data['password']
+                    if key == 'date_of_birth':
+                        birth_date_str = data['date_of_birth']
+                        birth_date = datetime.strptime(birth_date_str, '%Y-%m-%d').date()
+                        user.date_of_birth = birth_date
+                    else:
+                        setattr(user, key, data[key])
+                        # user.password_hash = user._password_hash
                 db.session.commit()
 
                 response = make_response(user.to_dict(), 202)
@@ -439,7 +446,15 @@ class EquipmentOwnerById(Resource):
             try:
                 data = request.get_json()
                 for key in data:
-                    setattr(equip_owner, key, data[key])
+                    if key == 'password':
+                        equip_owner.password_hash = data['password']
+                    if key == 'date_of_birth':
+                        birth_date_str = data['date_of_birth']
+                        birth_date = datetime.strptime(birth_date_str, '%Y-%m-%d').date()
+                        equip_owner.date_of_birth = birth_date
+                    else:
+                        setattr(equip_owner, key, data[key])
+                # user.password_hash = user._password_hash
                 # db.session.add(equip_owner)
                 db.session.commit()
 

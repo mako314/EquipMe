@@ -135,8 +135,7 @@ class EquipmentOwner(db.Model, SerializerMixin):
     lastName = db.Column(db.String)
 
     date_of_birth = db.Column(db.Date)
-    age = db.Column(db.Integer)
-
+    # age = db.Column(db.Integer)
     # location = db.Column(db.String)
 
     country = db.Column(db.String)
