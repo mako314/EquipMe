@@ -2119,6 +2119,10 @@ class StripeCreateConnectAccount(Resource):
             },
         )
 
+        equip_owner.stripe_id = account.id
+        db.session.commit()
+        # db.session.refresh(equip_owner)
+
         response = make_response(account, 200)
         return response
 

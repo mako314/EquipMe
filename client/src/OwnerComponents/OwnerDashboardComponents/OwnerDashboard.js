@@ -96,7 +96,9 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
 
       }, [role])
 
-    // console.log("USER INFO",currentUser)
+    console.log("USER INFO",currentUser)
+
+    console.log("THE CURRENT USERS STRIPE ID:", currentUser?.stripe_id)
     // console.log("USER FAVORITE",currentUser?.user_favorite)
     // console.log("With a role of:", role)
 
@@ -172,6 +174,7 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
                 resp.json().then((data) => {
                     setStripeAccount(data)
                     console.log(data)
+                    checkSession()
                 })
             } else {
                 // If the response is not OK, handle errors
@@ -596,6 +599,13 @@ function AccountSettings() {
                                  className="flex items-center justify-center h-10 px-4 ml-auto mr-2 rounded-lg bg-orange-500 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700" 
                                  onClick={handleStripeAccountCreation}> Create my Stripe Account
                                  </button>
+                            )}
+
+                            {currentUser.stripe_id && stripeAccount && !currentUser.stripe_onboard_link &&(
+                            <button 
+                            className="flex items-center justify-center h-10 px-4 ml-auto mr-2 rounded-lg bg-orange-500 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700" 
+                            onClick={handleStripeAccountCreation}> Complete Stripe Onboarding
+                            </button>
                             )}
                             
                             {currentUser.stripe_onboard_link && ( 
