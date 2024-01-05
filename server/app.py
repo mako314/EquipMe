@@ -17,7 +17,7 @@ from flask_jwt_extended import create_access_token, set_access_cookies, jwt_requ
 import stripe
 import os
 #------------------------------------HELPERS----------------------------------
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 # from helpers import is_available_for_date_range
 from dotenv import load_dotenv
 
@@ -95,6 +95,36 @@ class Logout(Resource):
 
 api.add_resource(Logout, '/logout')
 #------------------------------------------------------------------------------------------------------------------------------
+# https://flask-jwt-extended.readthedocs.io/en/stable/refreshing_tokens.html
+
+# def refresh_jwt_if_needed(response):
+#     try:
+#         exp_timestamp = get_jwt()["exp"]
+#         now = datetime.now(timezone.utc)
+#         target_timestamp = datetime.timestamp(now + timedelta(minutes=30))
+#         if target_timestamp > exp_timestamp:
+#             access_token = create_access_token(identity=get_jwt_identity())
+#             set_access_cookies(response, access_token)
+#     except (RuntimeError, KeyError):
+#         # Case where there is not a valid JWT. Just return the original response
+#         pass
+#     return response
+
+@app.after_request
+def refresh_expiring_jwts(response):
+    try:
+        exp_timestamp = get_jwt()["exp"]
+        now = datetime.now(timezone.utc)
+        target_timestamp = datetime.timestamp(now + timedelta(minutes=30))
+        if target_timestamp > exp_timestamp:
+            access_token = create_access_token(identity=get_jwt_identity())
+            set_access_cookies(response, access_token)
+        return response
+    except (RuntimeError, KeyError):
+        # Case where there is not a valid JWT. Just return the original response
+        return response
+
+#------------------------------------------------------------------------------------------------------------------------------
 class CheckSession(Resource):
     @jwt_required()
     def get(self):
@@ -108,6 +138,9 @@ class CheckSession(Resource):
             user = User.query.get(identity_id)
             # print(user)
             if user:
+                # session_response = {'role': identity_role, 'details': user.to_dict(rules=('-password_hash',))}, 200
+                # response = refresh_jwt_if_needed(session_response)
+                # return response
                 return {'role': identity_role, 'details': user.to_dict(rules=('-password_hash',))}, 200
             else:
                 return {'message': 'User not found'}, 404
@@ -115,6 +148,9 @@ class CheckSession(Resource):
             owner = EquipmentOwner.query.get(identity_id)
             # print(owner)
             if owner:
+                # session_response = {'role': identity_role, 'details': owner.to_dict(rules=('-password_hash',))}, 200
+                # response = refresh_jwt_if_needed(session_response)
+                # return response
                 return {'role': identity_role, 'details': owner.to_dict(rules=('-password_hash',))}, 200
             else:
                 return {'message': 'Owner not found'}, 404
@@ -122,6 +158,9 @@ class CheckSession(Resource):
         return {'message': 'Invalid session or role'}, 401
 
 api.add_resource(CheckSession, '/check_session')
+
+
+
 #------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -203,8 +242,15 @@ class UserByID(Resource):
             try:
                 data = request.get_json()
                 for key in data:
-                    setattr(user, key, data[key])
-                # db.session.add(user)
+                    if key == 'password':
+                        user.password_hash = data['password']
+                    if key == 'date_of_birth':
+                        birth_date_str = data['date_of_birth']
+                        birth_date = datetime.strptime(birth_date_str, '%Y-%m-%d').date()
+                        user.date_of_birth = birth_date
+                    else:
+                        setattr(user, key, data[key])
+                        # user.password_hash = user._password_hash
                 db.session.commit()
 
                 response = make_response(user.to_dict(), 202)
@@ -294,9 +340,11 @@ class EquipmentOwners(Resource):
             new_owner.password_hash = new_owner._password_hash
 
             db.session.commit()
+            
+            account_link = None  # Initialize account_link to None
 
             if data['owner_consent'] == 'yes':
-                 account = stripe.Account.create(
+                account = stripe.Account.create(
                     type='express',
                     country=new_owner.country,
                     email=new_owner.email,
@@ -354,6 +402,9 @@ class EquipmentOwners(Resource):
                         'transfers': {'requested': True},
                     },
                 )
+                 
+                new_owner.stripe_id = account.id
+                db.session.commit()
             
             if data['owner_consent'] == 'yes' and data['create_link']:
                 account_link = stripe.AccountLink.create(
@@ -367,8 +418,16 @@ class EquipmentOwners(Resource):
                     print(account_link.url)
                 
 
-            response = make_response(new_owner.to_dict(), 201)
-            return response
+            # response = make_response(new_owner.to_dict(), 201)
+            if account_link:
+                return jsonify({
+                    'owner': new_owner,
+                    'stripe_onboard_link': account_link.url
+                }), 200
+            else:
+                return make_response(new_owner.to_dict(), 201)
+
+            # return response
 
         except ValueError:
             return make_response({"error": ["validations errors, check your input and try again"]} , 400)
@@ -400,7 +459,15 @@ class EquipmentOwnerById(Resource):
             try:
                 data = request.get_json()
                 for key in data:
-                    setattr(equip_owner, key, data[key])
+                    if key == 'password':
+                        equip_owner.password_hash = data['password']
+                    if key == 'date_of_birth':
+                        birth_date_str = data['date_of_birth']
+                        birth_date = datetime.strptime(birth_date_str, '%Y-%m-%d').date()
+                        equip_owner.date_of_birth = birth_date
+                    else:
+                        setattr(equip_owner, key, data[key])
+                # user.password_hash = user._password_hash
                 # db.session.add(equip_owner)
                 db.session.commit()
 
@@ -2008,9 +2075,13 @@ class StripeCreateConnectAccount(Resource):
     @jwt_required()
     def post(self):
         current_user = get_jwt_identity()
+        print(current_user)
         owner_id = current_user.get('id')
+        print(owner_id)
         owner_role = current_user.get('role')
+        print(owner_role)
         equip_owner = EquipmentOwner.query.filter(EquipmentOwner.id == owner_id).first()
+        print(equip_owner)
 
         if owner_role != 'owner':
             return {'error': 'Unauthorized'}, 403
@@ -2076,15 +2147,33 @@ class StripeCreateConnectAccount(Resource):
             },
         )
 
+        # account_link = stripe.AccountLink.create(
+        #         account=account.id,
+        #         refresh_url='http://localhost:3000/dashboard',
+        #         return_url='http://localhost:3000/dashboard',
+        #         type='account_onboarding',
+        # )
+
+        equip_owner.stripe_id = account.id
+        # print(account_link.url)
+        
+        # equip_owner.stripe_onboard_link = account_link.url
+        db.session.commit()
+        # print(equip_owner.stripe_onboard_link)
+        # db.session.refresh(equip_owner)
+
+        response = make_response(account, 200)
+        return response
+
 api.add_resource(StripeCreateConnectAccount, '/v1/accounts')
 
 class StripeHandleConnectAccount(Resource):
-    # @jwt_required()
+    @jwt_required()
     def get(self, id):
-        # current_user = get_jwt_identity()
-        # owner_id = current_user.get('id')
+        current_user = get_jwt_identity()
+        owner_id = current_user.get('id')
         # owner_role = current_user.get('role')
-        # equip_owner = EquipmentOwner.query.filter(EquipmentOwner.id == owner_id).first()
+        equip_owner = EquipmentOwner.query.filter(EquipmentOwner.id == owner_id).first()
         # equip_owner = EquipmentOwner.query.filter(EquipmentOwner.stripe_id == id).first()
         
         print("THE OWNER STRIPE ID:", id)
@@ -2093,10 +2182,12 @@ class StripeHandleConnectAccount(Resource):
         # check the state of the details_submitted
         # https://stripe.com/docs/connect/express-accounts#:~:text=You%20can%20check%20the%20state,ve%20completed%20the%20onboarding%20process.
         # A user that’s redirected to your return_url might not have completed the onboarding process. Retrieve the user’s account and check for charges_enabled. If the account isn’t fully onboarded, provide UI prompts to allow the user to continue onboarding later. The user can complete their account activation through a new account link (generated by your integration). You can check the state of the details_submitted parameter on their account to see if they’ve completed the onboarding process.
-        stripe_account = stripe.Account.retrieve(id)
-
-        if stripe_account:
-            response = make_response(stripe_account, 200)
+        
+        if equip_owner:
+            # stripe_account = stripe.Account.retrieve(id)
+            stripe_account = stripe.Account.retrieve(equip_owner.stripe_id)
+            if stripe_account:
+                response = make_response(stripe_account, 200)
         else:
             response = make_response({
             "error": "Stripe Account not found"
@@ -2109,17 +2200,22 @@ class StripeHandleConnectAccount(Resource):
         owner_id = current_user.get('id')
         owner_role = current_user.get('role')
 
-        # equip_owner = EquipmentOwner.query.filter(EquipmentOwner.id == owner_id).first()
+        equip_owner = EquipmentOwner.query.filter(EquipmentOwner.id == owner_id).first()
 
-        equip_owner = EquipmentOwner.query.filter(EquipmentOwner.stripe_id == id).first()
+        # equip_owner = EquipmentOwner.query.filter(EquipmentOwner.stripe_id == id).first()
+        if equip_owner:
+            # stripe_account = stripe.Account.modify(
+            # id,
+            # metadata={"order_id": "6735"},
+            # )
 
-        stripe_account = stripe.Account.modify(
-        id,
-        metadata={"order_id": "6735"},
-        )
+            stripe_account = stripe.Account.modify(
+            equip_owner.stripe_id,
+            metadata={"order_id": "6735"},
+            )
 
-        if stripe_account:
-            response = make_response(stripe_account, 200)
+            if stripe_account:
+                response = make_response(stripe_account, 200)
         else:
             response = make_response({
             "error": "Stripe Account not found"
@@ -2132,17 +2228,22 @@ class StripeHandleConnectAccount(Resource):
         owner_id = current_user.get('id')
         owner_role = current_user.get('role')
 
-        # equip_owner = EquipmentOwner.query.filter(EquipmentOwner.id == owner_id).first()
+        equip_owner = EquipmentOwner.query.filter(EquipmentOwner.id == owner_id).first()
 
-        equip_owner = EquipmentOwner.query.filter(EquipmentOwner.stripe_id == id).first()
+        # equip_owner = EquipmentOwner.query.filter(EquipmentOwner.stripe_id == id).first()
+        if equip_owner:
+            # stripe_account = stripe.Account.modify(
+            # id,
+            # metadata={"order_id": "6735"},
+            # )
 
-        stripe_account = stripe.Account.modify(
-        id,
-        metadata={"order_id": "6735"},
-        )
+            stripe_account = stripe.Account.modify(
+            equip_owner.stripe_id,
+            metadata={"order_id": "6735"},
+            )
 
-        if stripe_account:
-            response = make_response(stripe_account, 204)
+            if stripe_account:
+                response = make_response(stripe_account, 204)
         else:
             response = make_response({
             "error": "Stripe Account not found"

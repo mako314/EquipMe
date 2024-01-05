@@ -289,6 +289,8 @@ function App() {
   })
   //-----------------------------------------------------
 
+  // https://stackoverflow.com/questions/42914666/react-router-external-link
+
   return (
     // UseContext gets called here, allowing the entirety of my app access to the USER and OWNER information!
     <SessionProvider>

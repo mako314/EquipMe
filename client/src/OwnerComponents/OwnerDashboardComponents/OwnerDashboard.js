@@ -44,7 +44,7 @@ import Page404 from '../../ErrorPageComponents/Page404';
 function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
     // Honestly with currentUser, we can just make this for both users and owners
 
-    const { currentUser, role} = UserSessionContext()
+    const { currentUser, role, checkSession} = UserSessionContext()
     const apiUrl = useContext(ApiUrlContext)
 
     const [isLoading, setIsLoading] = useState(false)
@@ -60,7 +60,8 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
     //   })
     
     const navigate = useNavigate()
-
+    // https://flask-jwt-extended.readthedocs.io/en/stable/token_locations.html#cookies
+    // Can use include like in the session context or same-origin I believe
     useEffect(() => {
         const fetchStripeAccount = async () => {
           try {
@@ -69,6 +70,7 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
               headers: {
                 'Content-Type': 'application/json',
               },
+              credentials: 'include'
             })
 
             if (!response.ok) {
@@ -85,15 +87,18 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
           }
         }
     
-        if (role === 'owner') {
+        if (role === 'owner' && currentUser.stripe_id) {
             fetchStripeAccount()
+            // checkSession()
             console.log("FUNCTION RAN")
             console.log("THE CURRENT DATA IN STRIPE ACCOUNT:", stripeAccount)
           }
 
       }, [role])
 
-    // console.log("USER INFO",currentUser)
+    console.log("USER INFO",currentUser)
+
+    // console.log("THE CURRENT USERS STRIPE ID:", currentUser?.stripe_id)
     // console.log("USER FAVORITE",currentUser?.user_favorite)
     // console.log("With a role of:", role)
 
@@ -114,6 +119,103 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
     //Owner csv uploading
     const handleCsvClick = (e) => {
         navigate('/temp/bulk_equipment_upload')
+    }
+
+    // https://www.w3schools.com/js/js_cookies.asp
+    // https://flask-jwt-extended.readthedocs.io/en/stable/api.html#flask_jwt_extended.get_csrf_token
+    // https://flask-jwt-extended.readthedocs.io/en/stable/options.html#cross-site-request-forgery-options
+    // SOLUTION? https://stackoverflow.com/questions/70071418/flask-jwt-extended-missing-csrf-access-token
+
+    const getCookie = (name) => {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';')
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim()
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1))
+                    break
+                }
+            }
+        }
+        return cookieValue
+    }
+
+    // console.log("COOKIE NAME:", getCookie("csrf_access_token"))
+
+    const handleStripeAccountCreation = () => {
+        fetch(`${apiUrl}v1/accounts`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRF-TOKEN": getCookie("csrf_access_token"),
+            },
+            credentials: 'include'
+        }).then((resp) => {
+            if (resp.ok) {
+                // If the response is OK
+                resp.json().then((data) => {
+                    setStripeAccount(data)
+                    console.log(data)
+                    checkSession()
+                })
+            } else {
+                // If the response is not OK, handle errors
+                resp.json().then((errorData) => {
+                    console.error('Error Response:', errorData)
+                })
+            }
+        }).catch((error) => {
+            //  catch network errors and other issues with the fetch request
+            console.error('Fetch Error:', error)
+        })
+    }
+
+    console.log(stripeAccount)
+    console.log("THE DETAILS SUBMITTED VALUE:", stripeAccount?.details_submitted)
+    console.log("THE CHARGES ENABLED VALUE:", stripeAccount?.charges_enabled)
+    // console.log(typeof(stripeAccount.details_submitted))
+    
+    
+
+    // https://stackoverflow.com/questions/71606230/usenavigate-navigate-to-external-link
+    // https://stackoverflow.com/questions/42914666/react-router-external-link
+    // https://www.w3schools.com/js/js_window_location.asp
+
+    const handleStripeOnboarding = () => {
+        // Needed to set onboard link to a variable to get this to work
+        if (stripeAccount?.charges_enabled === false || stripeAccount?.details_submitted === false) {
+            // Make a request to the backend to generate a new onboarding link
+            fetch(`${apiUrl}v1/account_links`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  "X-CSRF-TOKEN": getCookie("csrf_access_token"),
+                },
+                credentials: 'include'
+            }).then((resp) => {
+            if (resp.ok) {
+                // If the response is OK
+                resp.json().then((data) => {
+                    if (data) {
+                    console.log(data)
+                    console.log("THE URL:", data.url)
+                        // Redirect the user to the new onboarding link
+                    //   const onboardLink = data.stripe_onboard_link
+                    //   window.open(onboardLink, '_blank')
+                    }
+                })
+            } else {
+                // If the response is not OK, handle errors
+                resp.json().then((errorData) => {
+                    console.error('Error Response:', errorData)
+                })
+            }
+              }).catch(error => {
+                console.error('Error generating Stripe onboarding link:', error)
+              })
+        }
     }
 
     function RentalAgreements() {
@@ -488,22 +590,45 @@ function AccountSettings() {
 
                     </div>
                     <div className="flex flex-col overflow-auto flex-grow">
-                        <div className="flex items-center flex-shrink-0 h-16 px-8 border-b border-gray-300">
+                    <div className="flex items-center justify-between flex-shrink-0 h-16 px-8 border-b border-gray-300">
 
                             <h1 className="text-lg font-medium">{pageTitle}</h1>
-                            {role === 'owner' && <>
+                            {role === 'owner' && 
+                            <div className="flex justify-end items-center space-x-2">
                             <button className="flex items-center justify-center h-10 px-4 ml-auto text-sm font-medium rounded hover:bg-gray-300" onClick={handleCsvClick}>
                                 Upload Equipment File
 
                             </button>
-                            {/* <button className="flex items-center justify-center h-10 px-4 ml-auto text-sm font-medium bg-gray-200 rounded hover:bg-gray-300">
-                                Action 2
-                            </button> */}
                             
                             <Link to='/list_equipment'>
-                                <button className="flex items-center justify-center h-10 px-4 ml-auto mr-2 rounded-lg bg-orange-500 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700" onClick={() => setFromOwnerDash(true)}> List an Item</button>
+                                <button 
+                                className="flex items-center justify-center h-10 px-4 ml-auto mr-2 rounded-lg bg-orange-500 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700" 
+                                onClick={() => setFromOwnerDash(true)}> List an Item</button>
                             </Link>
-                            </>
+
+                            {!currentUser.stripe_id && !stripeAccount && ( 
+                                 <button 
+                                 className="flex items-center justify-center h-10 px-4 ml-auto mr-2 rounded-lg bg-orange-500 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700" 
+                                 onClick={handleStripeAccountCreation}> Create my Stripe Account
+                                 </button>
+                            )}
+
+                            {/* {currentUser.stripe_id && stripeAccount && !currentUser.stripe_onboard_link &&(
+                            <button 
+                            className="flex items-center justify-center h-10 px-4 ml-auto mr-2 rounded-lg bg-orange-500 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700" 
+                            onClick={handleStripeAccountCreation}> Complete Stripe Onboarding
+                            </button>
+                            )} */}
+
+                           {/* currentUser.stripe_id && stripeAccount &&  */}
+  
+                            {(stripeAccount && stripeAccount?.details_submitted === false || stripeAccount?.charges_enabled === false) && ( 
+                                 <button 
+                                 className="flex items-center justify-center h-10 px-4 ml-auto mr-2 rounded-lg bg-orange-500 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700" 
+                                 onClick={handleStripeOnboarding}> Complete Stripe Onboarding
+                                 </button>
+                            )}
+                            </div>
                             }
 
 

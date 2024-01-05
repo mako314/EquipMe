@@ -29,6 +29,7 @@ function UserForm({ addUser }){
 
         fetch(`${apiUrl}login`, {
             method: "POST",
+            credentials: 'include',
             headers: {
               "Content-Type": "application/json",
             },
@@ -38,10 +39,10 @@ function UserForm({ addUser }){
               resp.json().then((data) => {
                 setCurrentUser(data.user)
                 setRole(data.role)
-                navigate(`/dashboard`); // <-------- navigates to the profile
-              });
+                navigate(`/dashboard`) // <-------- navigates to the profile
+              })
             }
-          });
+          })
     }
 
     const formSchema = object({
@@ -69,6 +70,7 @@ function UserForm({ addUser }){
             date_of_birth:'',
             postal_code:'',
             profession: '',
+            bio: '',
             profileImage: '',
         },
         validationSchema: formSchema,
@@ -152,6 +154,12 @@ function UserForm({ addUser }){
             onChange={formik.handleChange} 
             className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" 
         />
+      </div>
+
+      <div className="sm:col-span-2">
+          <label htmlFor="bio" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Tell us about yourself! </label>
+          <textarea type="text" name="bio" value={formik.values.bio} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" 
+          > </textarea>
       </div>
 
       <div className="sm:col-span-2">

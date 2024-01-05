@@ -66,9 +66,9 @@ function EquipmentDisplay({}) {
 
   const equip_prices = equipment_price?.map((price) => {
     return <Fragment key={oneEquipment.id}>
-    <span className="title-font font-medium text-2xl text-white">Hourly Rate: <br></br>${(price.hourly_rate/100).toFixed(2)}</span>
-    <span className="title-font font-medium text-2xl text-white">Daily Rate: <br></br>${(price.daily_rate/100).toFixed(2)}</span>
-    <span className="title-font font-medium text-2xl text-white">Weekly Rate: <br></br>${(price.weekly_rate/100).toFixed(2)}</span>
+    <span className="title-font font-medium text-2xl text-white">Hourly Rate: <br/>${(price.hourly_rate/100).toFixed(2)}</span>
+    <span className="title-font font-medium text-2xl text-white">Daily Rate: <br/>${(price.daily_rate/100).toFixed(2)}</span>
+    <span className="title-font font-medium text-2xl text-white">Weekly Rate: <br/>${(price.weekly_rate/100).toFixed(2)}</span>
     </Fragment>
   })
 
@@ -139,71 +139,68 @@ function EquipmentDisplay({}) {
 
   //What can I include in details? Possibly whether or not the vehicle is available for delivery? Deposit ? ETC?
 
-  let loggedOutDisplay
-  loggedOutDisplay = (
-    <section className="text-gray-400 bg-gray-900 body-font overflow-hidden" >
+
+
+  return (
+    <>
+    <section className="text-gray-400 bg-gray-900 body-font overflow-hidden">
       <div className="container px-5 py-24 mx-auto">
-      {/* Could afford some padding here below */}
-        <div className="lg:w-4/5 flex flex-wrap mb-5 "> 
+        <div className="flex flex-wrap mb-5">
           <div className="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">
             <h2 className="text-sm title-font text-gray-500 tracking-widest">{name}</h2>
             <h1 className="text-white text-3xl title-font font-medium mb-4">{make} {model}</h1>
             <div className="flex mb-4">
-              <a className="flex-grow text-indigo-400 border-b-2 border-indigo-500 py-1 text-lg px-1 mr-2">Description</a>
-              <a className="flex-grow border-b-2 border-gray-800 py-1 text-lg px-1 mr-2">Reviews</a>
-              <a className="flex-grow border-b-2 border-gray-800 py-1 text-lg px-1">Details</a>
+              <span className="flex-grow text-indigo-400 border-b-2 border-indigo-500 py-1 text-lg px-1 mr-2">Description</span>
+              <span className="flex-grow border-b-2 border-gray-800 py-1 text-lg px-1 mr-2">Reviews</span>
+              <span className="flex-grow border-b-2 border-gray-800 py-1 text-lg px-1">Details</span>
             </div>
             <p className="leading-relaxed mb-4">{oneEquipment.description}</p>
+
             <div className="flex border-t border-gray-800 py-2">
-              <span className="text-gray-500">Location</span>
-              <span className="ml-auto text-white">{equipmentLocation}</span>
-            </div>
-            <div className="flex border-t border-gray-800 py-2">
-              <span className="text-gray-500">Owner</span>
-              <span className="ml-auto text-white">{firstName} {lastName}</span>
-            </div>
-            <div className="flex border-t border-b mb-6 border-gray-800 py-2">
-              <span className="text-gray-500">Quantity</span>
-              <span className="ml-auto text-white">{quantity}</span>
-            </div>
-            <div className="flex">
-              {/* <span className="title-font font-medium text-2xl text-white">$58.00</span> */}
+            <span className="text-gray-500">Location</span>
+            <span className="ml-auto text-white">{equipmentLocation}</span>
+          </div>
+          <div className="flex border-t border-gray-800 py-2">
+            <span className="text-gray-500">Owner</span>
+            <span className="ml-auto text-white">{firstName} {lastName}</span>
+          </div>
+          <div className="flex border-t border-b mb-6 border-gray-800 py-2">
+            <span className="text-gray-500">Quantity</span>
+            <span className="ml-auto text-white">{quantity}</span>
+          </div>
+          <div className="flex flex-col md:flex-row md:items-center md:space-x-4">
+            <div className="flex justify-start space-x-2 md:space-x-4 mb-4">
               {equip_prices}
-              {/* <button className="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded" >Rent Now</button> */}
-              
-              {role === 'user' && 
-              <AddToCartModal equip_id={id} oneEquipment={oneEquipment} toggleModal={toggleModal} isModalOpen={isModalOpen}/>}
-              
-              {role === 'owner' && currentUser.id === oneEquipment.owner_id && 
-              <button className="inline-block rounded-lg bg-orange-500 px-8 ml-2 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 md:text-base" onClick={handleEditNavigation}>Edit Equipment</button>}
-              
-              {role === 'user' && 
-              <button className="rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4" onClick={handleFavoriteSelection}>
-                <svg fill={heartColor} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-5 h-5" viewBox="0 0 24 24">
-                  <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
-                </svg>
-              </button>}
-
-
             </div>
-
+            <div className="flex flex-row justify-start space-x-4">
+              {role === 'user' && 
+                <AddToCartModal equip_id={id} oneEquipment={oneEquipment} toggleModal={toggleModal} isModalOpen={isModalOpen}/>
+              }
+              {role === 'owner' && currentUser.id === oneEquipment.owner_id && 
+                <button className="inline-block rounded-lg bg-orange-500 px-8 py-2 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 md:text-base" onClick={handleEditNavigation}>Edit Equipment</button>
+              }
+            </div>
+            {role === 'user' && 
+              <div className="flex flex-row justify-start mt-4 md:mt-0">
+                <button className="rounded-full w-10 h-10 bg-gray-800 p-0 border-0 inline-flex items-center justify-center text-gray-500" onClick={handleFavoriteSelection}>
+                  <svg fill={heartColor} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-5 h-5" viewBox="0 0 24 24">
+                    <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
+                  </svg>
+                </button>
+              </div>
+            }
           </div>
 
-          <img alt={`${make + model}`} className="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0 ml-auto object-cover object-center rounded" src={equipment_image} />
+          </div>
+          <div className="lg:w-1/2 w-full lg:h-auto h-64 lg:py-6 mb-6 lg:mb-0">
+            <img alt={`${make + model}`} className="w-full h-full object-cover object-center rounded" src={equipment_image} />
+          </div>
         </div>
 
-        {/* The Google Map for the equipment is included below the information and leaves room for 
-        product images to be included to the right of the equipment information */}
         <EquipmentMap location={equipmentLocation} />
       </div>
-
     </section>
-  )
-
-  return (
-    <>
-      {loggedOutDisplay}
-    </>
+  </>
   )
 }
 

@@ -16,17 +16,18 @@ function OwnerForm({addOwner}){
     const { currentUser, role, setCurrentUser, setRole } = UserSessionContext()
     // https://formik.org/docs/api/formik#setfieldvalue-field-string-value-any-shouldvalidate-boolean--promisevoid--formikerrors
     const handleOwnerConsentChange = (e) => {
-      formik.handleChange(e); // update formik state
-      setShowLinkCheckbox(e.target.value === 'yes'); // show or hide the checkbox
+      formik.handleChange(e) // update formik state
+      setShowLinkCheckbox(e.target.value === 'yes') // show or hide the checkbox
     }
 
     function handleLogin() {
         
-      let email = formik.values.email;
-      let password = formik.values.password;
+      let email = formik.values.email
+      let password = formik.values.password
 
       fetch(`${apiUrl}login`, {
           method: "POST",
+          credentials: 'include',
           headers: {
             "Content-Type": "application/json",
           },
@@ -36,7 +37,7 @@ function OwnerForm({addOwner}){
             resp.json().then((data) => {
               setCurrentUser(data.owner)
               setRole('owner')
-              navigate(`/dashboard`); // <-------- navigates to the dashboard
+              navigate(`/dashboard`) // <-------- navigates to the dashboard
             })
           }
         })
@@ -59,6 +60,7 @@ function OwnerForm({addOwner}){
             address_line_2:'',
             date_of_birth:'',
             profession: '',
+            bio: '',
             phone: '',
             email: '',
             password: '',
@@ -141,6 +143,12 @@ function OwnerForm({addOwner}){
             onChange={formik.handleChange} 
             className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" 
         />
+      </div>
+
+      <div className="sm:col-span-2">
+          <label htmlFor="bio" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Tell us about yourself! </label>
+          <textarea type="text" name="bio" value={formik.values.bio} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" 
+          > </textarea>
       </div>
 
       <div className="sm:col-span-2">

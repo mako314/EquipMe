@@ -30,8 +30,17 @@ function OwnerEditForm(){
         initialValues: {
             firstName: currentUser.firstName,
             lastName: currentUser.lastName,
-            location: currentUser.location,
+            // location: currentUser.location,
+            password: '',
+            country: currentUser.country,
+            state: currentUser.state,
+            city: currentUser.city,
+            postal_code: currentUser.postal_code,
+            address: currentUser.address,
+            address_line_2: currentUser.address_line_2,
+            date_of_birth: currentUser.date_of_birth,
             profession: currentUser.profession,
+            bio: currentUser.bio,
             phone: currentUser.phone,
             email: currentUser.email,
             profileImage: currentUser.profileImage,
@@ -105,14 +114,27 @@ function OwnerEditForm(){
                     <label htmlFor="lastName" className="mt-4 mb-2 inline-block text-sm text-gray-800 sm:text-base"> Last Name </label>
                     <input type="text" name="lastName" value={formik.values.lastName} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
 
-                
                     <label htmlFor="phone" className="mt-4 mb-2 inline-block text-sm text-gray-800 sm:text-base">Phone</label>
                     <input type="text" name="phone" value={formik.values.phone} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
                 
-
-                
                     <label htmlFor="email" className="mt-4 mb-2 inline-block text-sm text-gray-800 sm:text-base">Email</label>
                     <input type="text" name="email" value={formik.values.email} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+                </div>
+
+                <div className="sm:col-span-2">
+                    <label htmlFor="password" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">Password</label>
+                    <input type="text" name="password" value={formik.values.password} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+                </div>
+
+                <div className="sm:col-span-2">
+                    <label htmlFor="date_of_birth" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">Date of Birth</label>
+                    <input 
+                        type="date" 
+                        name="date_of_birth" 
+                        value={formik.values.date_of_birth} 
+                        onChange={formik.handleChange} 
+                        className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" 
+                    />
                 </div>
 
                 <div className="sm:col-span-2">
@@ -121,8 +143,39 @@ function OwnerEditForm(){
                 </div>
 
                 <div className="sm:col-span-2">
-                    <label htmlFor="location" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">Location</label>
-                    <input type="text" name="location" value={formik.values.location} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+                    <label htmlFor="bio" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Bio </label>
+                    <textarea type="text" name="bio" value={formik.values.bio} onChange={formik.handleChange} className="w-full h-48  rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" 
+                    > </textarea>
+                </div>
+
+                <div className="sm:col-span-2">
+                    <label htmlFor="country" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Country </label>
+                    <input type="text" name="country" value={formik.values.country} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+                </div>
+
+                <div className="sm:col-span-2">
+                    <label htmlFor="state" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> State </label>
+                    <input type="text" name="state" value={formik.values.state} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+                </div>
+
+                <div className="sm:col-span-2">
+                    <label htmlFor="city" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> City </label>
+                    <input type="text" name="city" value={formik.values.city} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+                </div>
+
+                <div className="sm:col-span-2">
+                    <label htmlFor="address" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Address Line 1 </label>
+                    <input type="text" name="address" value={formik.values.address} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+                </div>
+
+                <div className="sm:col-span-2">
+                    <label htmlFor="address_line_2" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Address Line 2 </label>
+                    <input type="text" name="address_line_2" value={formik.values.address_line_2} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+                </div>
+
+                <div className="sm:col-span-2">
+                    <label htmlFor="postal_code" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Postal / Zip Code </label>
+                    <input type="text" name="postal_code" value={formik.values.postal_code} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
                 </div>
 
                 {/* <div className="sm:col-span-2">

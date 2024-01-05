@@ -620,7 +620,7 @@ if __name__ == '__main__':
         for owner in all_owners:  # Assuming you have a list of all owners
             stripe_account, onboarding_link = create_test_stripe_express_account(owner)
             owner.stripe_id = stripe_account.id
-            # owner.stripe_onboarding_link = onboarding_link
+            # owner.stripe_onboard_link = onboarding_link
             # db.session.add(owner)
 
         db.session.commit()
