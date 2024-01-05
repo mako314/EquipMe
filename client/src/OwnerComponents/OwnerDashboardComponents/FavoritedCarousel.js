@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 function FavoriteCarousel({currentUser, setFromOwnerDash, role}) {
 
 const [currentIndex, setCurrentIndex] = useState(0)
-console.log("CAROUSEL:",currentUser)
+// console.log("CAROUSEL:",currentUser)
 const navigate = useNavigate()
 
 const handleEquipmentNavigation = (equipmentId) => {
