@@ -146,6 +146,7 @@ class EquipmentOwner(db.Model, SerializerMixin):
     address_line_2 = db.Column(db.String)
     postal_code = db.Column(db.String)
 
+    stripe_id = db.Column(db.String, unique=True, nullable=True)
     profession = db.Column(db.String)
     bio = db.Column(db.String)
     phone = db.Column(db.String)
