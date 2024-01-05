@@ -11,6 +11,10 @@ function UserForm({ addUser }){
     const [error, setError] = useState()
     const navigate = useNavigate()
 
+    // https://github.com/ErrorPro/react-google-autocomplete/issues/227
+    // https://github.com/ErrorPro/react-google-autocomplete/blob/HEAD/docs/formik.js
+    // https://www.npmjs.com/package/react-google-autocomplete
+    // Was going to use the above, but honestly, I'd rather keep the packages / libraries small for this project, close it up and start on a new one. 
 
     // const [user, setUser] = useContext(UserContext)
     const { currentUser, role, setCurrentUser, setRole } = UserSessionContext()
@@ -51,7 +55,7 @@ function UserForm({ addUser }){
         initialValues: {
             firstName: '',
             lastName: '',
-            age: '',
+            // age: '',
             email: '',
             password: '',
             phone: '',
@@ -59,12 +63,13 @@ function UserForm({ addUser }){
             country:'',
             state:'',
             city:'',
+            postal_code: '',
             address:'',
             address_line_2:'',
             date_of_birth:'',
             postal_code:'',
             profession: '',
-            profileImage: ' ',
+            profileImage: '',
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
@@ -124,6 +129,32 @@ function UserForm({ addUser }){
       </div>
 
       <div className="sm:col-span-2">
+        <label htmlFor="email" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">Email</label>
+        <input type="text" name="email" value={formik.values.email} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+      </div>
+
+      <div className="sm:col-span-2">
+        <label htmlFor="phone" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Phone </label>
+        <input type="text" name="phone" value={formik.values.phone} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+      </div>
+
+      <div className="sm:col-span-2">
+        <label htmlFor="password" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Password </label>
+        <input type="text" name="password" value={formik.values.password} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+      </div>
+
+      <div className="sm:col-span-2">
+        <label htmlFor="date_of_birth" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">Date of Birth</label>
+        <input 
+            type="date" 
+            name="date_of_birth" 
+            value={formik.values.date_of_birth} 
+            onChange={formik.handleChange} 
+            className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" 
+        />
+      </div>
+
+      <div className="sm:col-span-2">
         <label htmlFor="country" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Country </label>
         <input type="text" name="country" value={formik.values.country} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
       </div>
@@ -149,29 +180,8 @@ function UserForm({ addUser }){
       </div>
 
       <div className="sm:col-span-2">
-        <label htmlFor="email" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">Email</label>
-        <input type="text" name="email" value={formik.values.email} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
-      </div>
-
-      <div className="sm:col-span-2">
-        <label htmlFor="password" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Password </label>
-        <input type="text" name="password" value={formik.values.password} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
-      </div>
-
-      <div className="sm:col-span-2">
-        <label htmlFor="date_of_birth" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">Date of Birth</label>
-        <input 
-            type="date" 
-            name="date_of_birth" 
-            value={formik.values.date_of_birth} 
-            onChange={formik.handleChange} 
-            className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" 
-        />
-      </div>
-
-      <div className="sm:col-span-2">
-        <label htmlFor="phone" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Phone </label>
-        <input type="text" name="phone" value={formik.values.phone} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+        <label htmlFor="postal_code" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Postal / Zip Code </label>
+        <input type="text" name="postal_code" value={formik.values.postal_code} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
       </div>
 
       <div className="sm:col-span-2">

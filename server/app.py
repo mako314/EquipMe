@@ -144,11 +144,14 @@ class Users(Resource):
     def post(self):
         data = request.get_json()
         try:
+            birth_date_str = data['date_of_birth']
+            birth_date = datetime.strptime(birth_date_str, '%Y-%m-%d').date()
             #need a way to attach to rental agreement
             new_user = User(
                 firstName = data['firstName'],
                 lastName = data['lastName'],
-                age = data['age'],
+                # age = data['age'],
+                date_of_birth = birth_date,
                 email = data['email'],
                 _password_hash = data['password'],
                 phone = data['phone'],
@@ -262,6 +265,8 @@ class EquipmentOwners(Resource):
     def post(self):
         data = request.get_json()
         try:
+            birth_date_str = data['date_of_birth']
+            birth_date = datetime.strptime(birth_date_str, '%Y-%m-%d').date()
             new_owner = EquipmentOwner(
                 firstName = data['firstName'],
                 lastName = data['lastName'],
@@ -271,7 +276,8 @@ class EquipmentOwners(Resource):
                 address = data['address'],
                 address_line_2 = data['address_line_2'],
                 postal_code = data['postal_code'],
-                age = data['age'],
+                # age = data['age'],
+                date_of_birth = birth_date,
                 profession = data['profession'],
                 phone = data['phone'],
                 email = data['email'],
@@ -352,6 +358,10 @@ class EquipmentOwners(Resource):
                 return_url='http://localhost:3000/dashboard',
                 type='account_onboarding',
             )
+            # https://stripe.com/docs/api/account_links/create
+                if account_link:
+                    print(account_link.url)
+                
 
             response = make_response(new_owner.to_dict(), 201)
             return response

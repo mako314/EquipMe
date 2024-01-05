@@ -587,7 +587,8 @@ if __name__ == '__main__':
             # https://stripe.com/docs/api/account_links/create#create_account_link-refresh_url
             # https://stackoverflow.com/questions/66899846/stripe-connect-express-account-refreshurl-and-returnurl-are-undefined
             # Auto-fill 000-000-0000 as the test phone number and 000-000 as the SMS code when prompted (Express)
-
+            # https://stripe.com/docs/api/account_links/create
+            
             account_link = stripe.AccountLink.create(
                 account=account.id,
                 refresh_url='http://localhost:3000/dashboard',
