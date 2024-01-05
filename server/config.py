@@ -37,6 +37,9 @@ api = Api(app)
 bcrypt = Bcrypt(app) # allows for encryption/hashing
 
 #Time to manage cookies, yum.
+# locations – A location or list of locations to look for the JWT in this request, for example 'headers' or ['headers', 'cookies']. Defaults to None which indicates that JWTs will be looked for in the locations defined by the JWT_TOKEN_LOCATION configuration option.
+# https://flask-jwt-extended.readthedocs.io/en/stable/api.html#flask_jwt_extended.jwt_required
+# https://flask-jwt-extended.readthedocs.io/en/stable/token_locations.html#cookies
 app.config["JWT_COOKIE_SECURE"] = True
 app.config['JWT_SECRET_KEY'] = os.environ['JWT_SECRET_KEY']
 app.config['JWT_TOKEN_LOCATION'] = ['cookies']

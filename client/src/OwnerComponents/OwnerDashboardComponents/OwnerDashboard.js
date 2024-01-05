@@ -60,7 +60,8 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
     //   })
     
     const navigate = useNavigate()
-
+    // https://flask-jwt-extended.readthedocs.io/en/stable/token_locations.html#cookies
+    // Can use include like in the session context or same-origin I believe
     useEffect(() => {
         const fetchStripeAccount = async () => {
           try {
@@ -69,6 +70,7 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
               headers: {
                 'Content-Type': 'application/json',
               },
+              credentials: 'include'
             })
 
             if (!response.ok) {
@@ -87,7 +89,7 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
     
         if (role === 'owner') {
             fetchStripeAccount()
-            checkSession()
+            // checkSession()
             console.log("FUNCTION RAN")
             console.log("THE CURRENT DATA IN STRIPE ACCOUNT:", stripeAccount)
           }
