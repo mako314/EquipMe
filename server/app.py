@@ -17,7 +17,7 @@ from flask_jwt_extended import create_access_token, set_access_cookies, jwt_requ
 import stripe
 import os
 #------------------------------------HELPERS----------------------------------
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 # from helpers import is_available_for_date_range
 from dotenv import load_dotenv
 
@@ -95,6 +95,19 @@ class Logout(Resource):
 
 api.add_resource(Logout, '/logout')
 #------------------------------------------------------------------------------------------------------------------------------
+def refresh_jwt_if_needed(response):
+    try:
+        exp_timestamp = get_jwt()["exp"]
+        now = datetime.now(timezone.utc)
+        target_timestamp = datetime.timestamp(now + timedelta(minutes=30))
+        if target_timestamp > exp_timestamp:
+            access_token = create_access_token(identity=get_jwt_identity())
+            set_access_cookies(response, access_token)
+    except (RuntimeError, KeyError):
+        # Case where there is not a valid JWT. Just return the original response
+        pass
+    return response
+#------------------------------------------------------------------------------------------------------------------------------
 class CheckSession(Resource):
     @jwt_required()
     def get(self):
@@ -108,20 +121,27 @@ class CheckSession(Resource):
             user = User.query.get(identity_id)
             # print(user)
             if user:
-                return {'role': identity_role, 'details': user.to_dict(rules=('-password_hash',))}, 200
+                session_response = {'role': identity_role, 'details': user.to_dict(rules=('-password_hash',))}, 200
+                response = refresh_jwt_if_needed(session_response)
+                return response
             else:
                 return {'message': 'User not found'}, 404
         elif identity_role == 'owner':
             owner = EquipmentOwner.query.get(identity_id)
             # print(owner)
             if owner:
-                return {'role': identity_role, 'details': owner.to_dict(rules=('-password_hash',))}, 200
+                session_response = {'role': identity_role, 'details': owner.to_dict(rules=('-password_hash',))}, 200
+                response = refresh_jwt_if_needed(session_response)
+                return response
             else:
                 return {'message': 'Owner not found'}, 404
 
         return {'message': 'Invalid session or role'}, 401
 
 api.add_resource(CheckSession, '/check_session')
+
+
+
 #------------------------------------------------------------------------------------------------------------------------------
 
 

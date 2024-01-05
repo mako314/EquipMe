@@ -28,6 +28,7 @@ export const SessionProvider = ({ children }) => {
           setCurrentUser(data.details)
           setRole('owner')
           console.log("You are currently signed in as an owner")
+          // console.log(data.details)
         }
       })
       .catch(error => console.error('Error during session check:', error))

@@ -44,7 +44,7 @@ import Page404 from '../../ErrorPageComponents/Page404';
 function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
     // Honestly with currentUser, we can just make this for both users and owners
 
-    const { currentUser, role} = UserSessionContext()
+    const { currentUser, role, checkSession} = UserSessionContext()
     const apiUrl = useContext(ApiUrlContext)
 
     const [isLoading, setIsLoading] = useState(false)
@@ -87,6 +87,7 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
     
         if (role === 'owner') {
             fetchStripeAccount()
+            checkSession()
             console.log("FUNCTION RAN")
             console.log("THE CURRENT DATA IN STRIPE ACCOUNT:", stripeAccount)
           }
