@@ -2047,9 +2047,13 @@ class StripeCreateConnectAccount(Resource):
     @jwt_required()
     def post(self):
         current_user = get_jwt_identity()
+        print(current_user)
         owner_id = current_user.get('id')
+        print(owner_id)
         owner_role = current_user.get('role')
+        print(owner_role)
         equip_owner = EquipmentOwner.query.filter(EquipmentOwner.id == owner_id).first()
+        print(equip_owner)
 
         if owner_role != 'owner':
             return {'error': 'Unauthorized'}, 403
@@ -2114,6 +2118,9 @@ class StripeCreateConnectAccount(Resource):
                 'transfers': {'requested': True},
             },
         )
+
+        response = make_response(account, 200)
+        return response
 
 api.add_resource(StripeCreateConnectAccount, '/v1/accounts')
 

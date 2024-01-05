@@ -87,7 +87,7 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
           }
         }
     
-        if (role === 'owner') {
+        if (role === 'owner' && currentUser.stripe_id) {
             fetchStripeAccount()
             // checkSession()
             console.log("FUNCTION RAN")
@@ -118,6 +118,74 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
     const handleCsvClick = (e) => {
         navigate('/temp/bulk_equipment_upload')
     }
+
+    // const handleStripeAccountCreation = () => {
+    //     fetch(`${apiUrl}v1/accounts`, {
+    //         method: "POST",
+    //         headers: {
+    //           "Content-Type": "application/json",
+    //         },
+    //         credentials: 'include'
+    //       }).then((resp) => {
+    //         if (resp.ok) {
+    //           resp.json().then((data) => {
+    //             setStripeAccount(data)
+    //           })
+    //         }
+    //       })
+    // }
+
+    // https://www.w3schools.com/js/js_cookies.asp
+    // https://flask-jwt-extended.readthedocs.io/en/stable/api.html#flask_jwt_extended.get_csrf_token
+    // https://flask-jwt-extended.readthedocs.io/en/stable/options.html#cross-site-request-forgery-options
+    // SOLUTION? https://stackoverflow.com/questions/70071418/flask-jwt-extended-missing-csrf-access-token
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';')
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim()
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1))
+                    break
+                }
+            }
+        }
+        return cookieValue
+    }
+
+    console.log("COOKIE NAME:", getCookie("csrf_access_token"))
+
+    const handleStripeAccountCreation = () => {
+        fetch(`${apiUrl}v1/accounts`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRF-TOKEN": getCookie("csrf_access_token"),
+            },
+            credentials: 'include'
+        }).then((resp) => {
+            if (resp.ok) {
+                // If the response is OK
+                resp.json().then((data) => {
+                    setStripeAccount(data)
+                    console.log(data)
+                })
+            } else {
+                // If the response is not OK, handle errors
+                resp.json().then((errorData) => {
+                    console.error('Error Response:', errorData)
+                })
+            }
+        }).catch((error) => {
+            //  catch network errors and other issues with the fetch request
+            console.error('Fetch Error:', error)
+        })
+    }
+
+    console.log(stripeAccount)
 
     // https://stackoverflow.com/questions/71606230/usenavigate-navigate-to-external-link
     // https://stackoverflow.com/questions/42914666/react-router-external-link
@@ -522,6 +590,13 @@ function AccountSettings() {
                                 className="flex items-center justify-center h-10 px-4 ml-auto mr-2 rounded-lg bg-orange-500 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700" 
                                 onClick={() => setFromOwnerDash(true)}> List an Item</button>
                             </Link>
+
+                            {!currentUser.stripe_id && ( 
+                                 <button 
+                                 className="flex items-center justify-center h-10 px-4 ml-auto mr-2 rounded-lg bg-orange-500 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700" 
+                                 onClick={handleStripeAccountCreation}> Create my Stripe Account
+                                 </button>
+                            )}
                             
                             {currentUser.stripe_onboard_link && ( 
                                  <button 

@@ -38,10 +38,10 @@ function UserForm({ addUser }){
               resp.json().then((data) => {
                 setCurrentUser(data.user)
                 setRole(data.role)
-                navigate(`/dashboard`); // <-------- navigates to the profile
-              });
+                navigate(`/dashboard`) // <-------- navigates to the profile
+              })
             }
-          });
+          })
     }
 
     const formSchema = object({
