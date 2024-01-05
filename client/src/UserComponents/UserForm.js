@@ -42,7 +42,7 @@ function UserForm({ addUser }){
 
     const formSchema = object({
         firstName: string().required('Please enter a name'),
-        age: number().positive().required('You must be 18 years or older to sign up'),
+        // age: number().positive().required('You must be 18 years or older to sign up'),
         email: string().required('Please enter an email address')
     })
 
@@ -55,7 +55,14 @@ function UserForm({ addUser }){
             email: '',
             password: '',
             phone: '',
-            location: '',
+            // location: '',
+            country:'',
+            state:'',
+            city:'',
+            address:'',
+            address_line_2:'',
+            date_of_birth:'',
+            postal_code:'',
             profession: '',
             profileImage: ' ',
         },
@@ -117,8 +124,28 @@ function UserForm({ addUser }){
       </div>
 
       <div className="sm:col-span-2">
-        <label htmlFor="location" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Location </label>
-        <input type="text" name="location" value={formik.values.location} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+        <label htmlFor="country" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Country </label>
+        <input type="text" name="country" value={formik.values.country} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+      </div>
+
+      <div className="sm:col-span-2">
+        <label htmlFor="state" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> State </label>
+        <input type="text" name="state" value={formik.values.state} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+      </div>
+
+      <div className="sm:col-span-2">
+        <label htmlFor="city" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> City </label>
+        <input type="text" name="city" value={formik.values.city} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+      </div>
+
+      <div className="sm:col-span-2">
+        <label htmlFor="address" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Address Line 1 </label>
+        <input type="text" name="address" value={formik.values.address} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+      </div>
+
+      <div className="sm:col-span-2">
+        <label htmlFor="address_line_2" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Address Line 2 </label>
+        <input type="text" name="address_line_2" value={formik.values.address_line_2} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
       </div>
 
       <div className="sm:col-span-2">
@@ -132,8 +159,14 @@ function UserForm({ addUser }){
       </div>
 
       <div className="sm:col-span-2">
-        <label htmlFor="age" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Age </label>
-        <input type="text" name="age" value={formik.values.age} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+        <label htmlFor="date_of_birth" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">Date of Birth</label>
+        <input 
+            type="date" 
+            name="date_of_birth" 
+            value={formik.values.date_of_birth} 
+            onChange={formik.handleChange} 
+            className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" 
+        />
       </div>
 
       <div className="sm:col-span-2">
