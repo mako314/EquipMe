@@ -504,9 +504,22 @@ if __name__ == '__main__':
         for owner in all_owners:
             print(owner.firstName)
 
-        #Adds owners with their passwords hashed. 
+        # Adds owners with their passwords hashed. 
+        # date.year
+        # Between MINYEAR and MAXYEAR inclusive.
 
+        # date.month
+        # Between 1 and 12 inclusive.
+
+        # date.day
+        # Between 1 and the number of days in the given month of the given year.
+        # https://docs.python.org/3/library/datetime.html
+            
         def create_test_stripe_express_account(owner):
+            # Extract the day, month, and year from the owner's date_of_birth
+            birth_day = owner.date_of_birth.day
+            birth_month = owner.date_of_birth.month
+            birth_year = owner.date_of_birth.year
             account = stripe.Account.create(
             type='express',
             country=owner.country,
@@ -535,9 +548,9 @@ if __name__ == '__main__':
                     'state': owner.state,
                 },
                 'dob' : {
-                    'day': '01',
-                    'month': '01',
-                    'year': '1901',
+                    'day': birth_day,
+                    'month': birth_month,
+                    'year': birth_year,
                 },
                 'email' : owner.email,
                 'first_name' : owner.firstName,
@@ -588,7 +601,7 @@ if __name__ == '__main__':
             # https://stackoverflow.com/questions/66899846/stripe-connect-express-account-refreshurl-and-returnurl-are-undefined
             # Auto-fill 000-000-0000 as the test phone number and 000-000 as the SMS code when prompted (Express)
             # https://stripe.com/docs/api/account_links/create
-            
+
             account_link = stripe.AccountLink.create(
                 account=account.id,
                 refresh_url='http://localhost:3000/dashboard',

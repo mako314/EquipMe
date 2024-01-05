@@ -267,6 +267,10 @@ class EquipmentOwners(Resource):
         try:
             birth_date_str = data['date_of_birth']
             birth_date = datetime.strptime(birth_date_str, '%Y-%m-%d').date()
+            birth_day = birth_date.day
+            birth_month = birth_date.month
+            birth_year = birth_date.year
+
             new_owner = EquipmentOwner(
                 firstName = data['firstName'],
                 lastName = data['lastName'],
@@ -320,9 +324,9 @@ class EquipmentOwners(Resource):
                             'state': new_owner.state,
                         },
                         'dob' : {
-                            'day': '01',
-                            'month': '01',
-                            'year': '1901',
+                            'day': birth_day,
+                            'month': birth_month,
+                            'year': birth_year,
                         },
                         'email' : new_owner.email,
                         'first_name' : new_owner.firstName,

@@ -14,7 +14,7 @@ function OwnerForm({addOwner}){
     const apiUrl = useContext(ApiUrlContext)
     // const [owner, setOwner] = useContext(OwnerContext)
     const { currentUser, role, setCurrentUser, setRole } = UserSessionContext()
-
+    // https://formik.org/docs/api/formik#setfieldvalue-field-string-value-any-shouldvalidate-boolean--promisevoid--formikerrors
     const handleOwnerConsentChange = (e) => {
       formik.handleChange(e); // update formik state
       setShowLinkCheckbox(e.target.value === 'yes'); // show or hide the checkbox
