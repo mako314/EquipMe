@@ -249,6 +249,7 @@ if __name__ == '__main__':
             postal_code = "60661",
             profession="Plumbing",
             stripe_id = None,
+            stripe_onboard_link = None,
             bio= "I specialize in plumbing and bring years of experience in handling and supplying top-notch painting equipment in Chicago. My focus is on providing reliable and efficient tools for any job.",
             phone="312-555-6789",
             email="markdavis82@yahoo.com",
@@ -268,6 +269,7 @@ if __name__ == '__main__':
             postal_code = "34953",
             profession="Construction Equipment Operator",
             stripe_id = None,
+            stripe_onboard_link = None,
             bio= "At 22, I'm deeply involved in the world of construction equipment operation in Port St. Lucie, FL. My goal is to ensure that every project has the right equipment for success.",
             phone="602-555-7891",
             email="ejohnson@live.com",
@@ -287,6 +289,7 @@ if __name__ == '__main__':
             postal_code = "77007",
             profession="Automotive",
             stripe_id = None,
+            stripe_onboard_link = None,
             bio= "Based in Houston, Texas, I provide automotive equipment for a variety of needs. With my extensive knowledge, I help clients choose the best tools for their automotive projects.",
             phone="713-555-0123",
             email="andrewjacobs93@gmail.com",
@@ -306,6 +309,7 @@ if __name__ == '__main__':
             postal_code = "98109",
             profession="Garden",
             stripe_id = None,
+            stripe_onboard_link = None,
             bio= "As a garden equipment provider in Seattle, I take pride in offering high-quality tools. My experience in gardening aids clients in selecting the perfect equipment for their outdoor spaces.",
             phone="206-555-3456",
             email="hcavill34@hotmail.com",
@@ -325,6 +329,7 @@ if __name__ == '__main__':
             postal_code = "33130",
             profession="Heavy Machinery",
             stripe_id = None,
+            stripe_onboard_link = None,
             bio= "From Miami, I specialize in heavy machinery. With my expertise, I ensure that each client gets the most suitable machinery for their industrial needs.",
             phone="305-555-1234",
             email="davidr83@gmail.com",
@@ -344,6 +349,7 @@ if __name__ == '__main__':
             postal_code = "60654",
             profession="Construction",
             stripe_id = None,
+            stripe_onboard_link = None,
             bio= "In Chicago, I focus on supplying construction equipment. My aim is to help projects run smoothly by providing reliable and effective tools.",
             phone="312-555-5678",
             email="amywilson22@yahoo.com",
@@ -363,6 +369,7 @@ if __name__ == '__main__':
             postal_code = "77003",
             profession="Cleaning",
             stripe_id = None,
+            stripe_onboard_link = None,
             bio= "I provide top-grade cleaning equipment in Houston. My mission is to ensure cleanliness and efficiency in various environments through state-of-the-art equipment.",
             phone="713-555-4567",
             email="daniel.lee78@yahoo.com",
@@ -382,6 +389,7 @@ if __name__ == '__main__':
             postal_code = "10007",
             profession="Plumbing",
             stripe_id = None,
+            stripe_onboard_link = None,
             bio= "From New York City, I specialize in plumbing equipment. I'm committed to offering the best tools and resources to meet diverse plumbing needs.",
             phone ="212-555-2345",
             email="jess.sanchez22@gmail.com",
@@ -401,6 +409,7 @@ if __name__ == '__main__':
             postal_code = "32801",
             profession="Power tools and Hand tools",
             stripe_id = None,
+            stripe_onboard_link = None,
             bio= "In Orlando, Florida, I offer a range of power tools and hand tools. My expertise helps clients find the perfect tools for their projects, ensuring quality and durability.",
             phone="407-555-9012",
             email="ryan.phillips87@gmail.com",
@@ -420,6 +429,7 @@ if __name__ == '__main__':
             postal_code = "70130",
             profession="Woodworking",
             stripe_id = None,
+            stripe_onboard_link = None,
             bio= "I am dedicated to woodworking in New Orleans, Louisiana. My passion is to provide high-quality woodworking tools that cater to the intricate needs of this craft.",
             phone="504-555-7890",
             email="madams90@gmail.com",
@@ -620,7 +630,7 @@ if __name__ == '__main__':
         for owner in all_owners:  # Assuming you have a list of all owners
             stripe_account, onboarding_link = create_test_stripe_express_account(owner)
             owner.stripe_id = stripe_account.id
-            # owner.stripe_onboarding_link = onboarding_link
+            owner.stripe_onboard_link = onboarding_link
             # db.session.add(owner)
 
         db.session.commit()

@@ -119,6 +119,22 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
         navigate('/temp/bulk_equipment_upload')
     }
 
+    // https://stackoverflow.com/questions/71606230/usenavigate-navigate-to-external-link
+    // https://stackoverflow.com/questions/42914666/react-router-external-link
+    // https://www.w3schools.com/js/js_window_location.asp
+
+    const handleStripeOnboarding = () => {
+        // Needed to set onboard link to a variable to get this to work
+        const onboardLink = currentUser?.stripe_onboard_link
+        if (onboardLink) {
+            window.open(onboardLink, '_blank')
+        } else {
+            console.error("Stripe onboard link not found")
+        }
+    }
+
+    
+
     function RentalAgreements() {
         // setPageTitle('Rental Agreements')
         fromOwnerDash = true
@@ -491,22 +507,31 @@ function AccountSettings() {
 
                     </div>
                     <div className="flex flex-col overflow-auto flex-grow">
-                        <div className="flex items-center flex-shrink-0 h-16 px-8 border-b border-gray-300">
+                    <div className="flex items-center justify-between flex-shrink-0 h-16 px-8 border-b border-gray-300">
 
                             <h1 className="text-lg font-medium">{pageTitle}</h1>
-                            {role === 'owner' && <>
+                            {role === 'owner' && 
+                            <div className="flex justify-end items-center space-x-2">
                             <button className="flex items-center justify-center h-10 px-4 ml-auto text-sm font-medium rounded hover:bg-gray-300" onClick={handleCsvClick}>
                                 Upload Equipment File
 
                             </button>
-                            {/* <button className="flex items-center justify-center h-10 px-4 ml-auto text-sm font-medium bg-gray-200 rounded hover:bg-gray-300">
-                                Action 2
-                            </button> */}
                             
                             <Link to='/list_equipment'>
-                                <button className="flex items-center justify-center h-10 px-4 ml-auto mr-2 rounded-lg bg-orange-500 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700" onClick={() => setFromOwnerDash(true)}> List an Item</button>
+                                <button 
+                                className="flex items-center justify-center h-10 px-4 ml-auto mr-2 rounded-lg bg-orange-500 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700" 
+                                onClick={() => setFromOwnerDash(true)}> List an Item</button>
                             </Link>
-                            </>
+                            
+                            {currentUser.stripe_onboard_link && ( 
+                                 <button 
+                                 className="flex items-center justify-center h-10 px-4 ml-auto mr-2 rounded-lg bg-orange-500 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700" 
+                                 onClick={handleStripeOnboarding}> Complete Stripe Onboarding
+                                 </button>
+                            )}
+                           
+                            
+                            </div>
                             }
 
 
