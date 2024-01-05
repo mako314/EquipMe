@@ -498,7 +498,7 @@ if __name__ == '__main__':
                 'address' : {
                     'city': owner.city,
                     'country': owner.country,
-                    'line1': 'address_full_match',
+                    'line1': owner.address,
                     'line2': owner.address_line_2,
                     'postal_code': owner.postal_code,
                     'state': owner.state,
@@ -511,7 +511,7 @@ if __name__ == '__main__':
                 'address': {
                     'city': owner.city,
                     'country': owner.country,
-                    'line1': 'address_full_match',
+                    'line1': owner.address,
                     'line2': owner.address_line_2,
                     'postal_code': owner.postal_code,
                     'state': owner.state,
@@ -524,6 +524,7 @@ if __name__ == '__main__':
                 'email' : owner.email,
                 'first_name' : owner.firstName,
                 'last_name' : owner.lastName,
+                'phone' : owner.phone,
                 'id_number': '000000000',
                 # 'id_number_provided' : True,
             },
@@ -535,7 +536,7 @@ if __name__ == '__main__':
                 'support_address' : {
                     'city': owner.city,
                     'country': owner.country,
-                    'line1': 'address_full_match',
+                    'line1': owner.address,
                     'line2': owner.address_line_2,
                     'postal_code': owner.postal_code,
                     'state': owner.state,
@@ -556,7 +557,7 @@ if __name__ == '__main__':
             #     'number' : '6011981111111113',
             #     'address_city' : owner.city,
             #     'address_country' : owner.country,
-            #     'address_line1' : 'address_full_match',
+            #     'address_line1' : owner.address,
             #     'address_line2' : owner.address_line_2,
             #     'address_state' : owner.state,
             #     'address_zip' : owner.postal_code,
@@ -567,10 +568,11 @@ if __name__ == '__main__':
 
             # https://stripe.com/docs/api/account_links/create#create_account_link-refresh_url
             # https://stackoverflow.com/questions/66899846/stripe-connect-express-account-refreshurl-and-returnurl-are-undefined
+            # Auto-fill 000-000-0000 as the test phone number and 000-000 as the SMS code when prompted (Express)
             account_link = stripe.AccountLink.create(
                 account=account.id,
                 refresh_url='http://localhost:3000/dashboard',
-                return_url='http://localhost:3000/cart',
+                return_url='http://localhost:3000/dashboard',
                 type='account_onboarding',
             )
 
