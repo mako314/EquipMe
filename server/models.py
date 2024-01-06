@@ -629,6 +629,29 @@ class CartItem(db.Model, SerializerMixin):
         
 
     # Need to consider taxes, negative values, need validations here ASAP
+        
+class OrderHistory(db.Model, SerializerMixin):
+    __tablename__="order_history"
+    id = db.Column(db.Integer, primary_key=True)
+    order_datetime = db.Column(db.DateTime, default=datetime.utcnow)
+    total_amount = db.Column(db.Integer)  # For monetary values
+    payment_status = db.Column(db.String(50))
+    payment_method = db.Column(db.String(50))
+    order_status = db.Column(db.String(50))
+    delivery_address = db.Column(db.Text)
+    order_details = db.Column(db.Text)  # Can be a JSON string or a relationship to an OrderDetails table
+    estimated_delivery_date = db.Column(db.DateTime)
+    actual_delivery_date = db.Column(db.DateTime)
+    cancellation_date = db.Column(db.DateTime)
+    return_date = db.Column(db.DateTime)
+    actual_return_date = db.Column(db.DateTime)
+    notes = db.Column(db.Text)
+
+    # Foreign Keys
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))  
+
+    # Relationships
+    user = db.relationship('User', back_populates='orders')
 
 class Review(db.Model, SerializerMixin):
     __tablename__ = "reviews"
