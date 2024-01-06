@@ -1,4 +1,4 @@
-from models import db, User, EquipmentOwner, Equipment, RentalAgreement, EquipmentImage, Thread, UserInbox, OwnerInbox, Message, Cart, CartItem, EquipmentPrice, FeaturedEquipment, Review, UserFavorite, OwnerFavorite, AgreementComment, EquipmentStateHistory, EquipmentStateSummary, EquipmentStatus
+from models import db, User, EquipmentOwner, Equipment, RentalAgreement, EquipmentImage, Thread, UserInbox, OwnerInbox, Message, Cart, CartItem, EquipmentPrice, FeaturedEquipment, Review, UserFavorite, OwnerFavorite, AgreementComment, EquipmentStateHistory, EquipmentStateSummary, EquipmentStatus, OrderHistory
 import pandas as pd
 from app import app
 from random import randint, choice as rc
@@ -45,6 +45,7 @@ if __name__ == '__main__':
         OwnerInbox.query.delete()
         EquipmentOwner.query.delete()
         User.query.delete()
+        OrderHistory.query.delete()
         EquipmentImage.query.delete()
         Message.query.delete()
         Thread.query.delete()
@@ -1308,8 +1309,7 @@ if __name__ == '__main__':
             cart_item_id=cart_items[1].id,  # Forklift
             created_at = datetime(2023, 11, 30),  # Year, Month, Day
             updated_at = datetime(2023, 11, 30)
-            # created_at = datetime.utcnow(),
-            # updated_at = datetime.utcnow()
+
         ),
         RentalAgreement(
             rental_start_date="2023-07-17",
@@ -1324,8 +1324,6 @@ if __name__ == '__main__':
             cart_item_id=cart_items[2].id,  # Lawnmower
             created_at = datetime(2023, 11, 24),  # Year, Month, Day
             updated_at = datetime(2023, 11, 24)
-            # created_at = datetime.utcnow(),
-            # updated_at = datetime.utcnow()
         ),
         # RentalAgreement(
         #     rental_start_date="2023-07-17",
@@ -1425,21 +1423,22 @@ if __name__ == '__main__':
         #     new_state = f'User rented {cart_items[2].quantity} item or items',
         #     changed_at = datetime(2023, 12, 13),
         # )
+
         print('READ THIS PRINT:', cart_item_equipment_state_histories[3].available_quantity - cart_items[3].quantity)
         rental_agreements_state_history = [
-            EquipmentStateHistory(
-            equipment_id = cart_items[2].equipment_id,  # Lawnmower
-            total_quantity = cart_item_equipment_state_histories[2].total_quantity,
-            available_quantity = cart_item_equipment_state_histories[2].available_quantity,
-            reserved_quantity = cart_item_equipment_state_histories[2].reserved_quantity - cart_items[2].quantity,
-            rented_quantity = cart_items[2].quantity,
-            maintenance_quantity = 0,
-            transit_quantity = 0,
-            damaged_quantity = 0,
-            previous_state = cart_item_equipment_state_histories[2].new_state,
-            new_state = f'User rented {cart_items[2].quantity} item or items',
-            changed_at = datetime(2023, 12, 13),
-        ),
+        #     EquipmentStateHistory(
+        #     equipment_id = cart_items[2].equipment_id,  # Lawnmower
+        #     total_quantity = cart_item_equipment_state_histories[2].total_quantity,
+        #     available_quantity = cart_item_equipment_state_histories[2].available_quantity,
+        #     reserved_quantity = cart_item_equipment_state_histories[2].reserved_quantity - cart_items[2].quantity,
+        #     rented_quantity = cart_items[2].quantity,
+        #     maintenance_quantity = 0,
+        #     transit_quantity = 0,
+        #     damaged_quantity = 0,
+        #     previous_state = cart_item_equipment_state_histories[2].new_state,
+        #     new_state = f'User rented {cart_items[2].quantity} item or items',
+        #     changed_at = datetime(2023, 12, 13),
+        # ),
         EquipmentStateHistory(
             equipment_id = cart_items[3].equipment_id,  # John Deere
             total_quantity = cart_item_equipment_state_histories[3].total_quantity,
@@ -1481,18 +1480,91 @@ if __name__ == '__main__':
         )
         ]
 
+        db.session.add_all(rental_agreements_state_history,)
+        db.session.commit()
+
+#-------------------- ORDER HISTORIES------------------------------------------
+        weekly_rate = equipment_prices[2].weekly_rate
+        quantity = cart_items[3].quantity
+        rental_length_weeks = cart_items[3].rental_length  # assuming this is in weeks
+
+        total_cost = weekly_rate * quantity * rental_length_weeks
+        print(f"Weekly rate: {weekly_rate}, Quantity: {quantity}, Rental length (weeks): {rental_length_weeks}, Total cost: {total_cost}")
+
+        order_histories = [
+            OrderHistory(
+                order_datetime = datetime(2023, 11, 11),
+                total_amount = equipment_prices[2].weekly_rate * cart_items[3].quantity * cart_items[3].rental_length,
+                payment_status = 'completed',
+                payment_method = 'card',
+                order_status = "shipped/delivered",
+                delivery_address = None,
+                order_details =  f"{user_1.firstName} has rented {cart_items[3].quantity}, {equipment_list[3].name} {equipment_list[3].make} {equipment_list[3].model} from {rental_agreements[3].rental_start_date} to {rental_agreements[3].rental_end_date}. The owner is: {owner_2.firstName} {owner_2.lastName}",
+                estimated_delivery_date = datetime(2023, 11, 12),
+                actual_delivery_date = datetime(2023, 11, 12),
+                cancellation_date = None,
+                return_date = datetime(2023, 11, 20),
+                actual_return_date = datetime(2023, 11, 20),
+                notes = "Agreement Accepted, order in progress",
+                user_id = user_1.id,
+                owner_id = owner_2.id,
+                equipment_id = cart_items[3].equipment_id, # Tractor
+            ),
+            OrderHistory(
+                order_datetime = datetime(2023, 11, 11),
+                total_amount = (equipment_prices[6].weekly_rate * cart_items[4].quantity) * cart_items[4].rental_length,
+                payment_status = 'completed',
+                payment_method = 'card',
+                order_status = "completed",
+                delivery_address = None,
+                order_details =  f"{user_1.firstName} has rented {cart_items[4].quantity}, {equipment_list[6].name} {equipment_list[6].make} {equipment_list[6].model} from {rental_agreements[4].rental_start_date} to {rental_agreements[4].rental_end_date}. The owner is: {owner_2.firstName} {owner_2.lastName}",
+                estimated_delivery_date = datetime(2023, 11, 12),
+                actual_delivery_date = datetime(2023, 11, 12),
+                cancellation_date = None,
+                return_date = datetime(2023, 11, 20),
+                actual_return_date = datetime(2023, 11, 20),
+                notes = "Agreement Accepted, order in progress",
+                user_id = user_1.id,
+                owner_id = owner_2.id,
+                equipment_id = cart_items[4].equipment_id, # Pressure Washer
+            ),
+            OrderHistory(
+                order_datetime = datetime(2023, 11, 11),
+                total_amount = (equipment_prices[7].weekly_rate * cart_items[5].quantity) * cart_items[5].rental_length,
+                payment_status = 'completed',
+                payment_method = 'card',
+                order_status = "completed",
+                delivery_address = None,
+                order_details =  f"{user_1.firstName} has rented {cart_items[3].quantity}, {equipment_list[7].name} {equipment_list[7].make} {equipment_list[7].model} from {rental_agreements[5].rental_start_date} to {rental_agreements[5].rental_end_date}. The owner is: {owner_2.firstName} {owner_2.lastName}",
+                estimated_delivery_date = datetime(2023, 11, 12),
+                actual_delivery_date = datetime(2023, 11, 12),
+                cancellation_date = None,
+                return_date = datetime(2023, 11, 20),
+                actual_return_date = datetime(2023, 11, 20),
+                notes = "Agreement Accepted, order in progress",
+                user_id = user_1.id,
+                owner_id = owner_2.id,
+                equipment_id = cart_items[5].equipment_id, # Generator
+            ),
+        ]
+
+        db.session.add_all(order_histories,)
+        db.session.commit()
+
+
+
 #-------------------- NEW STATE HISTORY TESTING AFTER RENTED TO SEE HOW ADDING MORE WOULD---------------
-        
+        # Changed lawnmowers to never rented hence rented quantity going from cart_items[2].quantity to 0
         one_rented_8_added = EquipmentStateHistory(
             equipment_id = cart_items[2].equipment_id,  # Lawnmower
             total_quantity = cart_item_equipment_state_histories[2].total_quantity + 8,
             available_quantity = cart_item_equipment_state_histories[2].available_quantity + 8,
-            reserved_quantity = rental_agreements_state_history[0].reserved_quantity,
-            rented_quantity = cart_items[2].quantity,
+            reserved_quantity = cart_item_equipment_state_histories[2].reserved_quantity,
+            rented_quantity = 0,
             maintenance_quantity = 0,
             transit_quantity = 0,
             damaged_quantity = 0,
-            previous_state = rental_agreements_state_history[0].new_state,
+            previous_state = cart_item_equipment_state_histories[2].new_state,
             new_state = f'Owner added {8} items or item',
             changed_at = datetime(2023, 12, 13),
         )
@@ -1502,7 +1574,7 @@ if __name__ == '__main__':
             total_quantity = one_rented_8_added.total_quantity,
             available_quantity = one_rented_8_added.available_quantity - 1,
             reserved_quantity = one_rented_8_added.reserved_quantity,
-            rented_quantity = cart_items[2].quantity,
+            rented_quantity = 0,
             maintenance_quantity = 1,
             transit_quantity = 0,
             damaged_quantity = 0,
@@ -1511,26 +1583,26 @@ if __name__ == '__main__':
             changed_at = datetime(2023, 12, 15),
         )
 
+#--------------------------- EQUIPMENT STATUS ADJUSTMENTS -----------------------
         print('READ THIS PRINT:', cart_item_equipment_state_histories[4].total_quantity - cart_items[4].quantity)
 
         # db.session.add_all([equipment_state_history_8,])
-        
-        db.session.add_all(rental_agreements_state_history,)
-        db.session.commit()
 
         print("PLEASE BE 0:", cart_item_equipment_state_histories[3].reserved_quantity - cart_items[3].quantity,)
 
-        equipment_statuses[2].rented_quantity += rental_agreements_state_history[0].rented_quantity
-        equipment_statuses[2].reserved_quantity -= rental_agreements_state_history[0].rented_quantity
+        # equipment_statuses[2].rented_quantity += rental_agreements_state_history[0].rented_quantity
+        # equipment_statuses[2].reserved_quantity -= rental_agreements_state_history[0].rented_quantity
 
-        equipment_statuses[3].rented_quantity += rental_agreements_state_history[1].rented_quantity
-        equipment_statuses[3].reserved_quantity -= rental_agreements_state_history[1].rented_quantity
+        # Since I removed the lawnmower from the rental_agreements_state_history (as I decided it was never rented / no completed status), I ended up having to move all these array indexes -1
 
-        equipment_statuses[6].rented_quantity += rental_agreements_state_history[2].rented_quantity
-        equipment_statuses[6].reserved_quantity -= rental_agreements_state_history[2].rented_quantity
+        equipment_statuses[3].rented_quantity += rental_agreements_state_history[0].rented_quantity
+        equipment_statuses[3].reserved_quantity -= rental_agreements_state_history[0].rented_quantity
+
+        equipment_statuses[6].rented_quantity += rental_agreements_state_history[1].rented_quantity
+        equipment_statuses[6].reserved_quantity -= rental_agreements_state_history[1].rented_quantity
         
-        equipment_statuses[7].rented_quantity += rental_agreements_state_history[3].rented_quantity
-        equipment_statuses[7].reserved_quantity -= rental_agreements_state_history[3].rented_quantity
+        equipment_statuses[7].rented_quantity += rental_agreements_state_history[2].rented_quantity
+        equipment_statuses[7].reserved_quantity -= rental_agreements_state_history[2].rented_quantity
 
         db.session.add_all([one_rented_8_added, one_maintained_9])
         db.session.commit()

@@ -56,6 +56,8 @@ class User(db.Model, SerializerMixin):
 
     review = db.relationship ('Review', back_populates='user')
 
+    orders = db.relationship('OrderHistory', back_populates='user')
+
     user_favorite = db.relationship('UserFavorite', back_populates='user')
     owner_favorite = db.relationship('OwnerFavorite', back_populates='user')
 
@@ -67,7 +69,7 @@ class User(db.Model, SerializerMixin):
     # I may not need the relationship agreements to user directly, if it can be accessed inside of the cart_items, etc.
     # I'll probably clean these up as the time comes near for me to announce the site. But my lord, a lot of rules.
 
-    serialize_rules = ('-review.user.cart','-review.user.user_inboxes', '-review.user.user_favorite','-review.user.owner_favorite','-review.owner.owner_favorite','-review.owner.owner_inboxes','-review.owner.equipment','-review.owner.agreements','-review.cart_item','-cart.cart_item.agreements.cart_item','-cart.cart_item.agreements.review.user', '-cart.cart_item.agreements.review.owner','-cart.cart_item.equipment.featured_equipment','-cart.cart_item.equipment', '-cart.cart_item.equipment.owner.owner_inboxes','-cart.cart_item.equipment.owner.review','-cart.user.user_inboxes', '-cart.user.user_favorite', '-agreements', '-user_inboxes.user', '-user_favorite.owner_favorite', '-cart.cart_item.equipment.user_favorite', '-owner_favorite', '-cart.cart_item.equipment.owner.owner_favorite','-cart.cart_item.equipment.owner.user_favorite', '-review.owner.user_favorite', '-user_favorite.owner.equipment', '-user_favorite.owner.agreements', '-user_favorite.owner.review', '-user_favorite.owner.owner_favorite','-user_favorite.owner.user_favorite', '-user_favorite.owner.owner_favorite', '-user_favorite.owner.owner_inboxes','-user_favorite.equipment.cart_item', '-user_favorite.equipment.equipment_price', '-user_favorite.equipment.featured_equipment', '-user_favorite.equipment.owner', '-user_favorite.user')
+    serialize_rules = ('-review.user.cart','-review.user.user_inboxes', '-review.user.user_favorite','-review.user.owner_favorite','-review.owner.owner_favorite','-review.owner.owner_inboxes','-review.owner.equipment','-review.owner.agreements','-review.cart_item','-cart.cart_item.agreements.cart_item','-cart.cart_item.agreements.review.user', '-cart.cart_item.agreements.review.owner','-cart.cart_item.equipment.featured_equipment','-cart.cart_item.equipment', '-cart.cart_item.equipment.owner.owner_inboxes','-cart.cart_item.equipment.owner.review','-cart.user.user_inboxes', '-cart.user.user_favorite', '-agreements', '-user_inboxes.user', '-user_favorite.owner_favorite', '-cart.cart_item.equipment.user_favorite', '-owner_favorite', '-cart.cart_item.equipment.owner.owner_favorite','-cart.cart_item.equipment.owner.user_favorite', '-review.owner.user_favorite', '-user_favorite.owner.equipment', '-user_favorite.owner.agreements', '-user_favorite.owner.review', '-user_favorite.owner.owner_favorite','-user_favorite.owner.user_favorite', '-user_favorite.owner.owner_favorite', '-user_favorite.owner.owner_inboxes','-user_favorite.equipment.cart_item', '-user_favorite.equipment.equipment_price', '-user_favorite.equipment.featured_equipment', '-user_favorite.equipment.owner', '-user_favorite.user','-orders.user')
 
     #'-cart.cart_item.equipment.equipment_price' needed for price
 
@@ -171,9 +173,23 @@ class EquipmentOwner(db.Model, SerializerMixin):
     owner_favorite = db.relationship('OwnerFavorite', back_populates='owner')
     user_favorite = db.relationship('UserFavorite', back_populates='owner')
 
+    orders = db.relationship('OrderHistory', back_populates='owner')
+
     # I could include owner here, howeevr I'm not sure it's necessarily required.
     #Serialization rules
-    serialize_rules = ('-equipment.owner', '-agreements.owner', '-owner_inboxes.owner','-owner_inboxes.user','-review.owner', '-review.user.user_favorite','-review.user.cart', '-review.user.user_inboxes','-review.cart_item', '-equipment.cart_item.cart.cart_item', '-owner_favorite.owner', '-owner_favorite.equipment', '-owner_favorite.user.user_inboxes','-owner_favorite.user.cart','-owner_favorite.user.review','-owner_favorite.user.user_favorite','-user_favorite.owner', '-user_favorite.user','-agreements.cart_item.equipment.user_favorite', '-agreements.cart_item.review', '-equipment.cart_item.cart.user','-equipment.user_favorite.user', '-agreements.cart_item.equipment.featured_equipment', '-agreements.review.owner', '-agreements.review.user', '-review.agreements')
+    serialize_rules = ('-equipment.owner', '-agreements.owner', '-owner_inboxes.owner','-owner_inboxes.user','-review.owner', '-review.user.user_favorite','-review.user.cart', '-review.user.user_inboxes','-review.cart_item', '-equipment.cart_item.cart.cart_item', '-owner_favorite.owner', '-owner_favorite.equipment', '-owner_favorite.user.user_inboxes','-owner_favorite.user.cart','-owner_favorite.user.review','-owner_favorite.user.user_favorite','-user_favorite.owner', '-user_favorite.user','-agreements.cart_item.equipment.user_favorite', '-agreements.cart_item.review', '-equipment.cart_item.cart.user','-equipment.user_favorite.user', '-agreements.cart_item.equipment.featured_equipment', '-agreements.review.owner', '-agreements.review.user', '-review.agreements','-orders.owner', )
+
+    #Things that I believe can hold orders:
+    # Equipment
+    # Agreements, with user and equipment -agreements.cart_item.equipment.orders? 
+    # Reviews with orders
+    # Equipment.cart_item.cart ? Possibly holders orders in cart_item
+    # Owner Favorite.users likely has orders
+    # -equipment.cart_item. cart item may have equipment which has orders, 
+    # Anything with cart items seems to have equipment agreements.cart_item.equipment.
+    # review also has user, and owner, but both are removed
+    
+    #'-equipment.orders', '-review.user.orders', '-owner_favorite.user.orders', '-equipment.orders', '-agreements.cart_item.equipment.orders','-agreements.cart_item.equipment.user.orders',
 
     # '-owner_favorite.equipment.owner','-owner_favorite.equipment.cart_item', '-owner_favorite.equipment.owner_inboxes','-owner_favorite.featured_equipment', '-owner_favorite.equipment.equipment_price','-agreements.cart_item.equipment.user_favorite'
 
@@ -268,8 +284,10 @@ class Equipment(db.Model, SerializerMixin):
 
     equipment_state_summary = db.relationship('EquipmentStateSummary', back_populates='equipment')
 
+    orders = db.relationship('OrderHistory', back_populates='equipment')
+
     #Serialization rules
-    serialize_rules = ('-owner.equipment','-owner.owner_inboxes','-owner.agreements', '-owner.owner_favorite','-owner.review','-owner.user_favorite','-images.equipment', '-cart_item.equipment','-equipment_price.equipment', '-featured_equipment.equipment','-cart_item.review','-cart_item.agreements', '-cart_item.cart', '-user_favorite.equipment', '-user_favorite.owner', '-user_favorite.user.user_inboxes', '-user_favorite.user.agreement','-user_favorite.user.cart','-user_favorite.user.review', '-state_history.equipment', '-status.equipment', '-equipment_state_summary.equipment', '-state_history.equipment_state_summary', '-equipment_state_summary.state_history')
+    serialize_rules = ('-owner.equipment','-owner.owner_inboxes','-owner.agreements', '-owner.owner_favorite','-owner.review','-owner.user_favorite','-images.equipment', '-cart_item.equipment','-equipment_price.equipment', '-featured_equipment.equipment','-cart_item.review','-cart_item.agreements', '-cart_item.cart', '-user_favorite.equipment', '-user_favorite.owner', '-user_favorite.user.user_inboxes', '-user_favorite.user.agreement','-user_favorite.user.cart','-user_favorite.user.review', '-state_history.equipment', '-status.equipment', '-equipment_state_summary.equipment', '-state_history.equipment_state_summary', '-equipment_state_summary.state_history', '-orders.equipment', '-orders.user', '-orders.owner')
     
     # '-agreements.equipment', # REMOVED DUE TO AGREEMENTS BEING TO CART ITEMS
     
@@ -638,20 +656,28 @@ class OrderHistory(db.Model, SerializerMixin):
     payment_status = db.Column(db.String(50))
     payment_method = db.Column(db.String(50))
     order_status = db.Column(db.String(50))
-    delivery_address = db.Column(db.Text)
-    order_details = db.Column(db.Text)  # Can be a JSON string or a relationship to an OrderDetails table
+    delivery_address = db.Column(db.String)
+    order_details = db.Column(db.String) 
     estimated_delivery_date = db.Column(db.DateTime)
     actual_delivery_date = db.Column(db.DateTime)
     cancellation_date = db.Column(db.DateTime)
     return_date = db.Column(db.DateTime)
     actual_return_date = db.Column(db.DateTime)
-    notes = db.Column(db.Text)
+    notes = db.Column(db.String)
 
     # Foreign Keys
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))  
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'))
+    equipment_id = db.Column(db.Integer, db.ForeignKey('equipments.id'))
 
     # Relationships
     user = db.relationship('User', back_populates='orders')
+    owner = db.relationship("EquipmentOwner", back_populates="orders")
+    equipment = db.relationship('Equipment', back_populates='orders')
+
+    #Serialize Rules
+    serialize_rules = ('-user.orders','-owner.orders', '-equipment.orders')
+
 
 class Review(db.Model, SerializerMixin):
     __tablename__ = "reviews"
