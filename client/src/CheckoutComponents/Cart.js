@@ -2,6 +2,7 @@ import React,{useContext, useEffect, useState, Fragment} from "react";
 import CartItem from "./CartItem";
 import CreateNewCart from "./CreateNewCart";
 import ApiUrlContext from '../Api'
+import { useNavigate } from "react-router-dom";
 import {toast} from 'react-toastify'
 import { UserSessionContext } from "../UserComponents/SessionContext";
 
@@ -20,6 +21,12 @@ function Cart(){
 
   const [cartItemFiltering, setCartItemFiltering] = useState('none')
   const [filteredCartItems, setFilteredCartItems] = useState([])
+
+  const navigate = useNavigate()
+
+  const handleCheckoutNavigation = () => {
+    navigate(`/checkout`)
+  }
 
   // console.log("THE CART TOTAL:", individualTotal)
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some
@@ -162,13 +169,13 @@ useEffect(() => {
   // console.log("FILTERED CART ITEMS:", filteredCartItems)
 
     return(
-      <div class="bg-gray-100 pt-10 pb-5">
-        <div class="container mx-auto">
+      <div className="bg-gray-100 pt-10 pb-5">
+        <div className="container mx-auto">
         <div className="container mx-auto px-6">
         <h1 className="mb-6 text-center text-2xl font-bold text-gray-900">Cart Items</h1>
-        <div class="flex flex-col items-center">
-        <div class="mb-4 w-full max-w-4xl px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-center space-x-4 bg-white py-3 px-5 rounded-lg shadow-md">
+        <div className="flex flex-col items-center">
+        <div className="mb-4 w-full max-w-4xl px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-center space-x-4 bg-white py-3 px-5 rounded-lg shadow-md">
         
 
         <form className="flex flex-row items-center mb-4">
@@ -349,7 +356,12 @@ useEffect(() => {
             <p className="text-sm text-gray-700">including VAT</p>
           </div>
         </div>
-        <button className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">Check out</button>
+        <button 
+        className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600"
+        onClick={handleCheckoutNavigation}
+        >
+        Check out
+        </button>
       </div>
 
       

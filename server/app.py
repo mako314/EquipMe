@@ -2324,6 +2324,17 @@ api.add_resource(StripeCreateAccountLink, '/v1/account_links')
 
 class CheckingOut(Resource):
     def post(equipment_id, quantity):
+
+        # https://stripe.com/docs/connect/destination-charges
+        # To create a destination charge, specify the ID of the connected account that should receive the funds as the value of the transfer_data[destination] parameter
+
+        # stripe.PaymentIntent.create(
+        # amount=1000,
+        # currency="usd",
+        # automatic_payment_methods={"enabled": True},
+        # transfer_data={"destination": '{{CONNECTED_ACCOUNT_ID}}'},
+        # )
+
         stripe.checkout.Session.create(
         line_items=[
             {
@@ -2349,6 +2360,7 @@ class CheckingOut(Resource):
         ui_mode="embedded",
         return_url="https://example.com/checkout/return?session_id={CHECKOUT_SESSION_ID}",
         )
+
         # Fetch the most recent state history
         last_state = EquipmentStateHistory.query.filter_by(
             equipment_id=equipment_id

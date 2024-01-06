@@ -8,10 +8,11 @@ import {
 
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
-const stripe_key=process.env.STRIPE_TEST_SECRET_KEY
+const stripe_key=process.env.REACT_APP_STRIPE_TEST_PUBLISHABLE_KEY
+console.log("THE STRIPE KEY:",stripe_key)
 const stripePromise = loadStripe(stripe_key)
 
-const App = ({clientSecret}) => {
+const StripeCheckout = ({clientSecret}) => {
   const options = {clientSecret}
 
   return (
@@ -23,3 +24,5 @@ const App = ({clientSecret}) => {
     </EmbeddedCheckoutProvider>
   )
 }
+
+export default StripeCheckout
