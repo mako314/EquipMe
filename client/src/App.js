@@ -70,6 +70,7 @@ import NewMessageThreads from './MessagingComponents/NewMessageThreads';
 
 //---------------------- Checkout -----------------------------
 import Checkout from './CheckoutComponents/Checkout';
+import SuccesfulCheckout from './CheckoutComponents/SuccesfulCheckout';
 import Cart from './CheckoutComponents/Cart';
 
 //---------------------- Rental Agreement Display -----------------------------
@@ -357,6 +358,7 @@ function App() {
 
             {/* Temporary Checkout Routing */}
             <Route path='/checkout' element={<Checkout/>} />
+            <Route path='/checkout/successful' element={<SuccesfulCheckout/>} />
             <Route path='/cart' element={<Cart/>} />
 
             {/* Rental Display */}
