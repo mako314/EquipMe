@@ -9,7 +9,7 @@ import { UserSessionContext } from "../UserComponents/SessionContext";
 
 function Cart(){
 
-  const { currentUser, role } = UserSessionContext() 
+  const { currentUser, role} = UserSessionContext() 
   const apiUrl = useContext(ApiUrlContext)
   const [currentCart, setCurrentCart] = useState(0)
   const [cartData, setCartData] = useState([])
@@ -22,8 +22,10 @@ function Cart(){
   const [cartItemFiltering, setCartItemFiltering] = useState('none')
   const [filteredCartItems, setFilteredCartItems] = useState([])
   const [cartItemsChecked, setCartItemsChecked] = useState({})
+  
 
   const navigate = useNavigate()
+
 
   // const handleCheckoutNavigation = () => {
   //   navigate(`/checkout`)
@@ -38,6 +40,7 @@ function Cart(){
 
   // console.log(Array.isArray(individualTotal))
   useEffect(() => {
+
     let itemsBothPartiesAgreedOn = 0
     let allTotalCarts = 0 
 
@@ -50,7 +53,7 @@ function Cart(){
 
   //This just takes into account ALL the items in a users cart, where the items cart ID matches the current carts ID.
   const itemsInCurrentCartAll = individualTotal.filter(item => item.cart_id === cartData[currentCart].id)
-
+  console.log("CURRENT ITEMS IN CART:", itemsInCurrentCartAll)
   // Sum up the costs of these items
   itemsInCurrentCartBothAgreed.forEach((item) => {
       console.log("TOTAL COST OF ITEMS THAT BOTH USERS AGREED UPON:", item.cost)
@@ -92,6 +95,7 @@ useEffect(() => {
 
 // UseEffect for initial cart load,
   useEffect(() => {
+    console.log("Fetching cart data...")
     if (role === 'user') {
       setCartData(currentUser.cart)
     } else if (role === 'owner') {

@@ -1,5 +1,6 @@
 import React,{useContext, useEffect, useState} from "react";
 import ApiUrlContext from '../Api'
+import { UserSessionContext } from "../UserComponents/SessionContext";
 import {toast} from 'react-toastify'
 
 function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate, cartItemRentalLength, cartItemQuantity, setIndividualTotal, hourlyRate, dailyRate, weeklyRate, promoRate, cartItemId, cartId, agreementStatus, costChange, handleItemCheck, proceedToCheckout}){
@@ -67,7 +68,7 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
   // console.log('THE RENTAL LENGTH:', rentalLength)
   // console.log('THE RATE VALUE:', rateValue)
   // const rateValue = rateArray[e.target.options.selectedIndex]
-  let currentRate = ''
+  let currentRate = 0
   if (rateValue === 0){
     switch (newRateLength) {
         case "hourly":
@@ -87,31 +88,35 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
     }
   }
 
+  const rateForCalculation = currentRate > 0 ? currentRate : rateValue
+
   // console.log("THE RATE VALUE:", rateValue)
-  console.log("THE CURRENT RATE VALUE:", currentRate)
+  // console.log("THE CURRENT RATE VALUE:", currentRate)
   // console.log("THE UPDATED RATE:", costChange)
   // console.log("PRICE CENTS IF CHANGED:", (currentRate || rateValue) * 100,)
 
-  console.log("THE PRE-EXISTING QUANTITY:", equipmentQuantity)
-  console.log("THE PRE-EXISTING LENGTH:", rentalLength)
-  console.log("THE TOTAL QUANTITY:", totalQuantity)
-  console.log("THE TOTAL LENGTH:", totalLength)
+  // console.log("THE PRE-EXISTING QUANTITY:", equipmentQuantity)
+  // console.log("THE PRE-EXISTING LENGTH:", rentalLength)
+  // console.log("THE TOTAL QUANTITY:", totalQuantity)
+  // console.log("THE TOTAL LENGTH:", totalLength)
   // console.log("WHAT THE NEW RATE SHOULD BE: INSIDE THE SEND", newRateLength)
 
 
   //Calculate the total cost
   // const newCost = ((rateValue ? rateValue : currentRate) * totalQuantity) * totalLength
-  const newCostRounded = parseFloat((currentRate * totalQuantity * totalLength).toFixed(2))
-  console.log("THE NEW COST ROUNDED:", newCostRounded)
+  const newCostRounded = parseFloat((rateForCalculation * totalQuantity * totalLength).toFixed(2))
+
+  console.log("THE CURRENT RATE VALUE:", currentRate, "THE TOTAL QUANTITY:", totalQuantity, "THE TOTAL LENGTH:", totalLength, "THE NEW COST ROUNDED:", newCostRounded)
+
   // (currentRate || rateValue) * 100
   // console.log("RATE:", newCost)
   if(agreementStatus !== 'both-accepted'){
   const dataToSend = {
-    price_cents_if_changed: (currentRate || rateValue) * 100,
+    price_cents_if_changed: rateForCalculation * 100,
     rental_rate : newRateLength,
-    rental_length: rentalLength,
+    rental_length: totalLength,
     // cart_item_id: cartItemId,
-    quantity: equipmentQuantity,
+    quantity: totalQuantity,
     // agreement_status: agreementStatus,
   }
 
@@ -192,7 +197,7 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
     // const newCost = currentRate * cartItemQuantity * cartItemRentalLength
     
     const newCostRounded = parseFloat((currentRate * cartItemQuantity * cartItemRentalLength).toFixed(2))
-    console.log("THE TYPE OF newCostRounded:", typeof(newCostRounded))
+    // console.log("THE TYPE OF newCostRounded:", typeof(newCostRounded))
 
     // console.log("THE NEW COST ROUNDED:", newCostRounded)
     // console.log("THE CURRENT RATE:", currentRate)
@@ -253,13 +258,15 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
 
     //E.target.options.selected index finds the index of the selected option. I made an array with the values of the equipment cost
     const rateValue = rateArray[e.target.options.selectedIndex]
+    console.log("THE NEW RATE SELECTED INDEX IN HANDLE RATE CHANGE:", rateValue)
+
     // Ideally I'm only sending in rateValue, because i'm just calculating the new cost, if there's been a change in the rate, I made a rateArray that holds the same amount of indexes as the rates.
 
     // so if rateArray holds [$1, $2, $3, $4]
     // The e.target.options.selctedIndex has 4 options to choose from here: 
     // Hourly, daily, weekly, promo
     // Where they all coincide with the rateArray
-    console.log("THE NEW RATE BEING SENT IN:", newRate)
+    // console.log("THE NEW RATE BEING SENT IN:", newRate)
     // Due to the asynchrous nature of state, my fetch was sending off the older state, instead I had to implement another parameter, and send in the newRate to accurately capture the rental rate (daily, hourly, weekly, etc)
     handleTotalChange(rateValue, undefined, undefined, newRate)
 }
@@ -295,7 +302,7 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
     setSelectedRate(newSelectedRate)
 
     const rateValue = rateArray[e.target.options.selectedIndex]
-
+    console.log("THE NEW RATE SELECTED INDEX IN HANDLE DAY RANGE CHANGE:", rateValue)
     // Due to the asynchrous nature of state, my fetch was sending off the older state, instead I had to implement another parameter, and send in the newRate to accurately capture the rental rate (daily, hourly, weekly, etc)
 
     // Since I could've had better naming conventions likely, day range is capturing the "x hours, days, weeks, promo <- words here."
@@ -354,6 +361,7 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
         handleTotalChange(undefined, newQuantity, undefined, undefined)
         return newQuantity
       })
+
     }
 
     // A prop passed down from the Cart component that assigns a checked flag to the items after mapping over filtered items. 
