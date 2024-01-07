@@ -1159,7 +1159,7 @@ if __name__ == '__main__':
             transit_quantity = 0,
             damaged_quantity = 0,
             previous_state = initial_equipment_state_histories[0].new_state,
-            new_state = f'User reserved {cart_items[0].quantity} item or items to their cart',
+            new_state = f'User: {user_1.firstName} {user_1.lastName} reserved {cart_items[0].quantity} item or items to their cart',
             changed_at = datetime(2023, 12, 12),
         ),
         EquipmentStateHistory(
@@ -1172,7 +1172,7 @@ if __name__ == '__main__':
             transit_quantity = 0,
             damaged_quantity = 0,
             previous_state = initial_equipment_state_histories[1].new_state,
-            new_state = f'User reserved {cart_items[1].quantity} item or items to their cart',
+            new_state = f'User: {user_1.firstName} {user_1.lastName} reserved {cart_items[1].quantity} item or items to their cart',
             changed_at = datetime(2023, 12, 12),
         ),
         EquipmentStateHistory(
@@ -1185,7 +1185,7 @@ if __name__ == '__main__':
             transit_quantity = 0,
             damaged_quantity = 0,
             previous_state = initial_equipment_state_histories[2].new_state,
-            new_state = f'User reserved {cart_items[2].quantity} item or items to their cart',
+            new_state = f'User: {user_1.firstName} {user_1.lastName} reserved {cart_items[2].quantity} item or items to their cart',
             changed_at = datetime(2023, 12, 12),
         ),
         EquipmentStateHistory(
@@ -1198,7 +1198,7 @@ if __name__ == '__main__':
             transit_quantity = 0,
             damaged_quantity = 0,
             previous_state = initial_equipment_state_histories[7].new_state,
-            new_state = f'User reserved {cart_items[3].quantity} item or items to their cart',
+            new_state = f'User: {user_1.firstName} {user_1.lastName} reserved {cart_items[3].quantity} item or items to their cart',
             changed_at = datetime(2023, 11, 11),
         ),
         EquipmentStateHistory(
@@ -1211,7 +1211,7 @@ if __name__ == '__main__':
             transit_quantity = 0,
             damaged_quantity = 0,
             previous_state = initial_equipment_state_histories[6].new_state,
-            new_state = f'User reserved {cart_items[4].quantity} item or items to their cart',
+            new_state = f'User: {user_1.firstName} {user_1.lastName} reserved {cart_items[4].quantity} item or items to their cart',
             changed_at = datetime(2023, 11, 11),
         ),
         EquipmentStateHistory(
@@ -1224,7 +1224,7 @@ if __name__ == '__main__':
             transit_quantity = 0,
             damaged_quantity = 0,
             previous_state = initial_equipment_state_histories[7].new_state,
-            new_state = f'User reserved {cart_items[5].quantity} item or items to their cart',
+            new_state = f'User: {user_1.firstName} {user_1.lastName} reserved {cart_items[5].quantity} item or items to their cart',
             changed_at = datetime(2023, 11, 11),
         )
         
@@ -1449,7 +1449,7 @@ if __name__ == '__main__':
             transit_quantity = 0,
             damaged_quantity = 0,
             previous_state = cart_item_equipment_state_histories[3].new_state,
-            new_state = f'User rented {cart_items[3].quantity} item or items',
+            new_state = f'User: {user_1.firstName} {user_1.lastName} rented {cart_items[3].quantity} item or items',
             changed_at = datetime(2023, 11, 11),
         ),
         EquipmentStateHistory(
@@ -1462,7 +1462,7 @@ if __name__ == '__main__':
             transit_quantity = 0,
             damaged_quantity = 0,
             previous_state = cart_item_equipment_state_histories[3].new_state,
-            new_state = f'User rented {cart_items[4].quantity} item or items',
+            new_state = f'User: {user_1.firstName} {user_1.lastName} rented {cart_items[4].quantity} item or items',
             changed_at = datetime(2023, 11, 11),
         ),
         EquipmentStateHistory(
@@ -1475,7 +1475,7 @@ if __name__ == '__main__':
             transit_quantity = 0,
             damaged_quantity = 0,
             previous_state = cart_item_equipment_state_histories[4].new_state,
-            new_state = f'User rented {cart_items[5].quantity} item or items',
+            new_state = f'User: {user_1.firstName} {user_1.lastName} rented {cart_items[5].quantity} item or items',
             changed_at = datetime(2023, 11, 11),
         )
         ]

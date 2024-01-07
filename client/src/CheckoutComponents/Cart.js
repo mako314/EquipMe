@@ -21,12 +21,13 @@ function Cart(){
 
   const [cartItemFiltering, setCartItemFiltering] = useState('none')
   const [filteredCartItems, setFilteredCartItems] = useState([])
+  const [cartItemsChecked, setCartItemsChecked] = useState({})
 
   const navigate = useNavigate()
 
-  const handleCheckoutNavigation = () => {
-    navigate(`/checkout`)
-  }
+  // const handleCheckoutNavigation = () => {
+  //   navigate(`/checkout`)
+  // }
 
   // console.log("THE CART TOTAL:", individualTotal)
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some
@@ -63,16 +64,16 @@ function Cart(){
 })
 
  }
-
+// Calculates current carts total, and the available to check out total (meaning both parties accepted the rental agreement)
 setCurrentCartTotal(allTotalCarts)
 setAvailableToCheckOutTotal(itemsBothPartiesAgreedOn)
 // console.log("THE CURRENT TOTAL FOR CART", cartData[currentCart]?.cart_name, ":", currentTotal)
 }, [cartData, individualTotal])
 
-console.log("CHECKING FRONT END TO SEE IF BACKEND VALUE IS EQUAL TO", availableToCheckOutTotal * 100 === cartData[currentCart]?.total )
-
-console.log(availableToCheckOutTotal * 100)
-console.log(cartData[currentCart]?.total)
+// Math to check for the total amounts both backend and front end
+// console.log("CHECKING FRONT END TO SEE IF BACKEND VALUE IS EQUAL TO", availableToCheckOutTotal * 100 === cartData[currentCart]?.total )
+// console.log(availableToCheckOutTotal * 100)
+// console.log(cartData[currentCart]?.total)
   
 useEffect(() => {
   if (cartItemFiltering === 'none') {
@@ -164,6 +165,58 @@ useEffect(() => {
     console.log('Selected value:', event.target.value)
     setCartItemFiltering(event.target.value)
   }
+
+  // console.log("The filtered Cart Items:", filteredCartItems)
+
+  
+
+  const handleCheckoutStripe = () => {
+    const itemsReadyForCheckout = filteredCartItems.filter(item => item.isChecked)
+    console.log("ITEMS THAT HAVE BEEN CHECKBOXED:", itemsReadyForCheckout)
+    
+    itemsReadyForCheckout.forEach(cartItem => {
+      if (cartItem.agreements[0].agreement_status === 'both-accepted'){
+      console.log("individual cart item:", cartItem)
+      fetch(`${apiUrl}checkout/equipment/${cartItem.equipment_id}/cart/item/${cartItem.id}/${currentUser.id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // "X-CSRF-TOKEN": getCookie("csrf_access_token"),
+        },
+        credentials: 'include',
+        // body: JSON.stringify(),
+    }).then((resp) => {
+        if (resp.ok) {
+            // If the response is OK
+            resp.json().then((data) => {
+                // navigate(`/checkout`)
+            })
+        } else {
+            // If the response is not OK, handle errors
+            resp.json().then((errorData) => {
+                console.error('Error Response:', errorData)
+            })
+        }
+    }).catch((error) => {
+        //  catch network errors and other issues with the fetch request
+        console.error('Fetch Error:', error)})
+
+    } else {
+        return console.log("NOT BOTH ACCEPTED")
+      }
+    })
+
+}
+
+const handleItemCheck = (cartItemId, isChecked) => {
+  const updatedCartItems = filteredCartItems.map(item => 
+    item.id === cartItemId ? {...item, isChecked} : item
+  )
+  setFilteredCartItems(updatedCartItems)
+}
+
+
+console.log("THE ITEMS TO CHECK OUT:", filteredCartItems)
 
 
   // console.log("FILTERED CART ITEMS:", filteredCartItems)
@@ -330,6 +383,8 @@ useEffect(() => {
               dailyRate={dailyRateValue}
               weeklyRate={weeklyRateValue}
               promoRate={promoRateValue}
+              proceedToCheckout={cartItemsChecked[item.id]}
+              handleItemCheck={handleItemCheck}
             />
           )
         })
@@ -358,7 +413,7 @@ useEffect(() => {
         </div>
         <button 
         className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600"
-        onClick={handleCheckoutNavigation}
+        onClick={handleCheckoutStripe}
         >
         Check out
         </button>

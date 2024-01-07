@@ -2,17 +2,18 @@ import React,{useContext, useEffect, useState} from "react";
 import ApiUrlContext from '../Api'
 import {toast} from 'react-toastify'
 
-function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate, cartItemRentalLength, cartItemQuantity, setIndividualTotal, hourlyRate, dailyRate, weeklyRate, promoRate, cartItemId, cartId, agreementStatus, costChange}){
+function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate, cartItemRentalLength, cartItemQuantity, setIndividualTotal, hourlyRate, dailyRate, weeklyRate, promoRate, cartItemId, cartId, agreementStatus, costChange, handleItemCheck, proceedToCheckout}){
 
   // console.log("LOOKING FOR THE AGREEMENT STATUS:", agreementStatus)
   const apiUrl = useContext(ApiUrlContext)
   // console.log("whole Item:", wholeItem)
   // console.log("Rental cartItemRate:", cartItemRate)
   // A lot of props and state. Can  likely move in "day options"
+  // The below holds the actual time (daily, hourly, weekly, etc)
   const [selectedRate, setSelectedRate] = useState(cartItemRate)
 
   const rateArray = [hourlyRate, dailyRate, weeklyRate, promoRate]
-
+  // This holds the # of days, so not the actual rate of time as expected (meaning, daily, hourly, weekly , etc)
   const [dayRange, setDayRange] = useState('') //Can't set this to cartItemRate because this is hours, days, week. While cartItemRate is hourly, daily, weekly. 
   const [rentalLength, setRentalLength] = useState(cartItemRentalLength)
   const [equipmentQuantity, setEquipmentQuantity] = useState(cartItemQuantity)
@@ -33,6 +34,7 @@ function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate
 // let testData
 // console.log("TESTING DATA:", testData)
 
+// Checks the agreement status of the cart item before allowing any changes to be made. If something is in-progress, completed, or both parties have accepted, you cannot do anything to it. I.E adjust price, rental length, quantity.
 function checkAgreementStatus(agreementStatus) {
   if (agreementStatus === 'both-accepted' || agreementStatus === 'completed' || agreementStatus === 'in-progress') {
       const statusMessage = agreementStatus === 'both-accepted' ? 'Already Accepted' : 'Completed this Agreement'
@@ -44,8 +46,15 @@ function checkAgreementStatus(agreementStatus) {
   return false // Continue
 }
 
+function checkBothAgreedStatus(agreementStatus) {
+  return agreementStatus === 'both-accepted'
+}
 
-const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantity, totalLength = rentalLength) => {
+// Need to check this with regular variables and send a request off (regular meaning total, total length, etc)
+// This handles calculating the total cost (and sending it to the backend to update there)
+// It takes into account the rate value, total quantity, and totallength of a rental. There are some checks. For example it takes the selectedRate (THIS IS KIND OF THE COST BUT NOT REALLY, IT'S MORE LIKE WEEKLY/DAILY/HOURLY,) and uses the props (actual monetary values $) to give a value to the current rate. This also only happens if there is NO change to the rateValue and it comes in as the defaulted 0.
+// newRateLength is the length of the darn rental, daily, weekly, hourly, etc
+const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantity, totalLength = rentalLength, newRateLength = selectedRate) => {
   
   if (checkAgreementStatus(agreementStatus)) {
     return
@@ -57,7 +66,7 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
   // const rateValue = rateArray[e.target.options.selectedIndex]
   let currentRate = ''
   if (rateValue === 0){
-    switch (selectedRate) {
+    switch (newRateLength) {
         case "hourly":
             currentRate = hourlyRate
             break
@@ -76,12 +85,16 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
   }
 
   // console.log("THE RATE VALUE:", rateValue)
-  // console.log("THE CURRENT RATE VALUE:", currentRate)
+  console.log("THE CURRENT RATE VALUE:", currentRate)
   // console.log("THE UPDATED RATE:", costChange)
   // console.log("PRICE CENTS IF CHANGED:", (currentRate || rateValue) * 100,)
 
-  // console.log("THE TOTAL QUANTITY:", totalQuantity)
-  // console.log("THE TOTAL LENGTH:", totalLength)
+  console.log("THE PRE-EXISTING QUANTITY:", equipmentQuantity)
+  console.log("THE PRE-EXISTING LENGTH:", rentalLength)
+  console.log("THE TOTAL QUANTITY:", totalQuantity)
+  console.log("THE TOTAL LENGTH:", totalLength)
+  console.log("WHAT THE NEW RATE SHOULD BE: INSIDE THE SEND", newRateLength)
+
 
   //Calculate the total cost
   // const newCost = ((rateValue ? rateValue : currentRate) * totalQuantity) * totalLength
@@ -92,7 +105,7 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
   if(agreementStatus !== 'both-accepted'){
   const dataToSend = {
     price_cents_if_changed: (currentRate || rateValue) * 100,
-    rental_rate : selectedRate,
+    rental_rate : newRateLength,
     rental_length: rentalLength,
     // cart_item_id: cartItemId,
     quantity: equipmentQuantity,
@@ -144,7 +157,7 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
 
   // Set a day range if cartItemRate exists, it should exist. This component will likely only be used inside of Cart. We'll see!
   useEffect(() => {
-    // setSelectedRate(cartItemRate)
+    // setSelectedRate(currentRate)
     if (cartItemRate === "hourly"){
       setDayRange("hours")
     } else if (cartItemRate === "daily"){
@@ -205,12 +218,14 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
   }, [])
 
   // console.log('THE RATE:',selectedRate)
-
+  // Handles the rate change, The below holds the actual time (daily, hourly, weekly, etc)
+  // console.log("WHAT THE NEW RATE SHOULD BE: ABOVE HANDLE RATE CHANGE", selectedRate)
   const handleRateChange = (e) => {
     if (checkAgreementStatus(agreementStatus)) {
       return
     }
     const newRate = e.target.value
+    // console.log("WHAT THE NEW RATE SHOULD BE: E.TARGET.VALUE", e.target.value)
     setSelectedRate(newRate)
     let newDayRange = ''
     switch (newRate) {
@@ -234,15 +249,21 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
     // console.log("THE NEW RATE:", rateArray)
 
     //E.target.options.selected index finds the index of the selected option. I made an array with the values of the equipment cost
-
     const rateValue = rateArray[e.target.options.selectedIndex]
+    // Ideally I'm only sending in rateValue, because i'm just calculating the new cost, if there's been a change in the rate, I made a rateArray that holds the same amount of indexes as the rates.
 
-    handleTotalChange(rateValue)
+    // so if rateArray holds [$1, $2, $3, $4]
+    // The e.target.options.selctedIndex has 4 options to choose from here: 
+    // Hourly, daily, weekly, promo
+    // Where they all coincide with the rateArray
+    console.log("THE NEW RATE BEING SENT IN:", newRate)
+    handleTotalChange(rateValue, undefined, undefined, newRate)
 }
 
 
   // console.log('THE DAY RANGE:', dayRange)
-  //Concide rental length (dayRange) with rate
+  //Concide rental length (dayRange) with rate, this is just the hours days, weeks, etc.
+  console.log("THE DAY RANGE:", dayRange)
   const handleDayRangeChange = (e) => {
       if (checkAgreementStatus(agreementStatus)) {
     return
@@ -271,7 +292,7 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
 
     const rateValue = rateArray[e.target.options.selectedIndex]
 
-    handleTotalChange(rateValue)
+    handleTotalChange(rateValue, undefined, undefined, newSelectedRate)
 }
 
   const handleRentalLength = (e) =>{
@@ -326,13 +347,20 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
       })
     }
 
+    const handleConfirmCheckout = (e) => {
+      if (checkBothAgreedStatus(agreementStatus)) {
+        const isChecked = e.target.checked
+        handleItemCheck(cartItemId, isChecked)
+      }
+    }
+
     return(
       <div className="space-y-6 overflow-y-auto max-h-96">
 
           {/* Grab this for the map */}
           <div className="justify-between mb-6 rounded-lg bg-white p-6 shadow-md sm:flex sm:justify-start">
               {/* Image Preview */}
-              <img src={equipment_image} alt="product-image" className="w-full rounded-lg sm:w-40" />
+              <img src={equipment_image} alt="product-image" className="w-full rounded-lg sm:w-40 object-contain" />
 
               <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between">
                   {/* Product Details */}
@@ -392,8 +420,20 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
                           {rateOptions}
                           </select>
                       </div>
+                    {checkBothAgreedStatus(agreementStatus) && 
+                    <div className="mt-4 flex items-center sm:mt-0 sm:ml-4">
+                    <input
+                        type="checkbox"
+                        id={`confirmCheckout-${cartItemId}`}
+                        checked={proceedToCheckout}
+                        onChange={handleConfirmCheckout}
+                        className="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                    />
+                    <label htmlFor="confirmCheckout" className="ml-2 text-sm font-medium text-gray-700">
+                        Confirm Checkout
+                    </label>
+                    </div>}
 
-                      
                   </div>
               </div>
           </div>

@@ -2323,7 +2323,7 @@ api.add_resource(StripeCreateAccountLink, '/v1/account_links')
 # api.add_resource(CheckingOut, '/checkout/<int:equipment_id>/<int:quantity>')
 
 class CheckingOut(Resource):
-    def post(equipment_id, quantity):
+    def post(user_id, equipment_id, cart_item_id, cart_id):
 
         # https://stripe.com/docs/connect/destination-charges
         # To create a destination charge, specify the ID of the connected account that should receive the funds as the value of the transfer_data[destination] parameter
@@ -2335,15 +2335,31 @@ class CheckingOut(Resource):
         # transfer_data={"destination": '{{CONNECTED_ACCOUNT_ID}}'},
         # )
 
-        stripe.checkout.Session.create(
+        # Fetch the cart item, the equipment, and the user, and cart so I don't send in too many cart items and repeat the process. This way I can make a loop that checks if it's the item a user is wanting to check out now.
+        # Cart item for the quantity, delivery/ etc / rental agreement
+        # equipment for the status and to check the reserved amount 
+
+        cart = Cart.query.filter(Cart.id == cart_id).first()
+        # cart_item = CartItem.query.filter(CartItem.id == cart_item_id).first()
+        equipment = Equipment.query.filter(Equipment.id == equipment_id).first()
+        valid_items = []
+        for item in cart:
+            cart_item = CartItem.query.filter(CartItem.id == item['cart_item_id']).first()
+            if cart_item and cart_item.agreements[0].agreement_status == 'both-accepted':
+                valid_items.append(cart_item)
+        user = User.query.filter(User.id == user_id).first()
+
+
+        # Create the stripe checkout session
+        checkout = stripe.checkout.Session.create(
         line_items=[
             {
             "price_data": {
                 "currency": "usd",
                 "product_data": {
                     "name": "T-shirt",
-                    "description": "",
-                    "images": "",
+                    "description": "a basic t-shirt to test",
+                    "images": ["https://www.mrporter.com/variants/images/3633577411310824/in/w2000_q60.jpg"],
                     },
                 #Unit amount = how much to charge
                 "unit_amount": 2000,
@@ -2367,16 +2383,17 @@ class CheckingOut(Resource):
         ).order_by(EquipmentStateHistory.changed_at.desc()).first()
 
         # Ensure that the equipment is actually reserved before proceeding
-        if 'reserved' in last_state.new_state:
-            raise ValueError("Equipment must be in reserved state to check out.")
+
+        # if 'reserved' in last_state.new_state:
+        #     raise ValueError("Equipment must be in reserved state to check out.")
 
         # Deduct the quantity from the equipment's available stock
-        equipment = Equipment.query.get(equipment_id)
-        if equipment.status[0].current_quantity < quantity:
+        
+        if equipment.status[0].reserved_quantity < cart_item.quantity:
             raise ValueError("Not enough equipment available to fulfill this rental.")
 
-        equipment.status[0].current_quantity -= quantity
-        equipment.status[0].reserved_quantity += quantity
+        equipment.status[0].reserved_quantity -= cart_item.quantity
+
         db.session.add(equipment)
 
         # Record the state change
@@ -2385,19 +2402,28 @@ class CheckingOut(Resource):
             total_quantity = last_state.new_quantity,
             available_quantity = last_state.available_quantity,
             reserved_quantity = last_state.reserved_quantity,
-            rented_quantity = 0,
+            rented_quantity = cart_item.quantity,
             maintenance_quantity = 0,
             transit_quantity = 0,
             damaged_quantity = 0,
             previous_state = last_state.new_state,
-            new_state = 'available',
+            new_state = f'{user.firstName} {user.lastName} has rented {cart_item.quantity}',
             changed_at=datetime.utcnow(),
         )
         db.session.add(new_state_history)
 
         db.session.commit()
 
-api.add_resource(CheckingOut, '/checkout/<int:equipment_id>/<int:quantity>')
+        if checkout:
+            response = make_response(checkout, 201)
+        else:
+            response = make_response({
+            "error": "Checkout not Found"
+            }, 404)
+        return response
+
+
+api.add_resource(CheckingOut, '/checkout/equipment/<int:equipment_id>/cart/<int:cart_id>/item/<int:cart_item_id>/<int:user_id>')
 
 
 class CalculateMonthlyTotals(Resource):
