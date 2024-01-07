@@ -2323,10 +2323,50 @@ api.add_resource(StripeCreateAccountLink, '/v1/account_links')
 # api.add_resource(CheckingOut, '/checkout/<int:equipment_id>/<int:quantity>')
 
 class CheckingOut(Resource):
-    def post(cart_id, user_id):
+    def post(self):
         data = request.get_json()
         # equipment_id, cart_item_id,
         print(data)
+        # Check if data is a list and iterate over it
+        if isinstance(data, list):
+            for item in data:
+                user, equipment, cart = None, None, None  # Initialize to None to be accessed later
+                # Check each key independently
+                if 'user_id' in item:
+                    print("User ID:", item['user_id'])
+                    user = User.query.filter(User.id == item['user_id']).first()
+
+                if 'equipment_id' in item:
+                    print("Equipment ID:", item['equipment_id'])
+                    equipment = Equipment.query.filter(Equipment.id == item['equipment_id']).first()
+
+                if 'cart_id' in item:
+                    print("Cart ID:", item['cart_id'])
+                    cart = Cart.query.filter(Cart.id == item['cart_id']).first()
+
+                # Do something with user, equipment, cart...
+                if user:
+                    print(user.firstName, user.lastName)
+                if equipment:
+                    print(equipment.make, equipment.model)
+                    print("Equipment Owner ID:", equipment.owner_id)
+                if cart:
+                    print(cart.cart_name)
+                else:
+                    print("No cart found")
+        else:
+            print("Expected a list of items, but got:", type(data))
+
+        owner = EquipmentOwner.query.filter(EquipmentOwner.id == equipment.owner_id).first()
+
+        print(owner.firstName, owner.lastName)
+        # print(user.firstName, user.lastName)
+        # print(equipment.make, equipment.model)
+        # print(cart.cart_name)
+        # print("THE EQUIPMENT OWNER ID:", equipment.owner_id)
+
+        # print("THE USERS STRIPE ID:",user.stripe_id)
+
         # https://stripe.com/docs/connect/destination-charges
         # To create a destination charge, specify the ID of the connected account that should receive the funds as the value of the transfer_data[destination] parameter
 
@@ -2341,15 +2381,15 @@ class CheckingOut(Resource):
         # Cart item for the quantity, delivery/ etc / rental agreement
         # equipment for the status and to check the reserved amount 
 
-        cart = Cart.query.filter(Cart.id == cart_id).first()
+        # cart = Cart.query.filter(Cart.id == cart_id).first()
         # cart_item = CartItem.query.filter(CartItem.id == cart_item_id).first()
         # equipment = Equipment.query.filter(Equipment.id == equipment_id).first()
-        valid_items = []
-        for item in cart:
-            cart_item = CartItem.query.filter(CartItem.id == item['cart_item_id']).first()
-            if cart_item and cart_item.agreements[0].agreement_status == 'both-accepted':
-                valid_items.append(cart_item)
-        user = User.query.filter(User.id == user_id).first()
+        # valid_items = []
+        # for item in cart:
+        #     cart_item = CartItem.query.filter(CartItem.id == item['cart_item_id']).first()
+        #     if cart_item and cart_item.agreements[0].agreement_status == 'both-accepted':
+        #         valid_items.append(cart_item)
+        # user = User.query.filter(User.id == user_id).first()
 
 
         # Create the stripe checkout session
@@ -2361,7 +2401,7 @@ class CheckingOut(Resource):
                 "product_data": {
                     "name": "T-shirt",
                     "description": "a basic t-shirt to test",
-                    "images": ["https://www.mrporter.com/variants/images/3633577411310824/in/w2000_q60.jpg"],
+                    "images": ["https://assets.nintendo.com/image/upload/ar_16:9,c_lpad,w_1240/b_white/f_auto/q_auto/ncom/en_US/products/merchandise/collections/splatoon-3/splatoon-3-collection-backbone-athletic-fit-t-shirt-117981-1/117981-sportiqe-splatoon-3-mens-tshirt-front-back-1200x675"],
                     },
                 #Unit amount = how much to charge
                 "unit_amount": 2000,
@@ -2372,7 +2412,7 @@ class CheckingOut(Resource):
         ],
         payment_intent_data={
             "application_fee_amount": 123,
-            "transfer_data": {"destination": '{{CONNECTED_ACCOUNT_ID}}'},
+            "transfer_data": {"destination": f'{owner.stripe_id}'},
         },
         mode="payment",
         ui_mode="embedded",
@@ -2425,8 +2465,9 @@ class CheckingOut(Resource):
         return response
 
 
-api.add_resource(CheckingOut, '/checkout/equipment/cart/<int:cart_id>/user/<int:user_id>')
+api.add_resource(CheckingOut, '/v1/checkout/sessions')
 
+#/checkout/equipment/user/<int:user_id>
 
 class CalculateMonthlyTotals(Resource):
     def get(self, month, year):
