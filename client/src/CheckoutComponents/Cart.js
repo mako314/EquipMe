@@ -164,8 +164,9 @@ useEffect(() => {
     })
   }
 
-
-  // Handle item filtering radio button function
+  console.log("THE CURRENT CART ID:", currentCart)
+  // Handle item filtering radio button function:
+  // Takes into account the cart item rental agreement status and filters for only those, i.e. both-accepted, completed, user accepted, owner accepted.
   const handleCartItemFiltering = (event) => {
     console.log('Selected value:', event.target.value)
     setCartItemFiltering(event.target.value)
@@ -175,43 +176,45 @@ useEffect(() => {
 
   
 
-  const handleCheckoutStripe = () => {
+  const handleCheckoutStripe = async () => {
     const itemsReadyForCheckout = filteredCartItems.filter(item => item.isChecked)
     console.log("ITEMS THAT HAVE BEEN CHECKBOXED:", itemsReadyForCheckout)
 
-    itemsReadyForCheckout.forEach(cartItem => {
-      if (cartItem.agreements[0].agreement_status === 'both-accepted'){
-      console.log("individual cart item:", cartItem)
-      fetch(`${apiUrl}checkout/equipment/${cartItem.equipment_id}/cart/item/${cartItem.id}/${currentUser.id}`, {
+    console.log("THE USER ID:", currentUser.id)
+    console.log("THE CART ID", currentCart)
+
+    if (itemsReadyForCheckout.length === 0) {
+      console.log("No items are ready for checkout")
+      return
+    }
+
+    try {
+      const response = await fetch(`${apiUrl}checkout/equipment/user/${currentUser.id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          // "X-CSRF-TOKEN": getCookie("csrf_access_token"),
         },
         credentials: 'include',
-        // body: JSON.stringify(),
-    }).then((resp) => {
-        if (resp.ok) {
-            // If the response is OK
-            resp.json().then((data) => {
-                // navigate(`/checkout`)
-            })
-        } else {
-            // If the response is not OK, handle errors
-            resp.json().then((errorData) => {
-                console.error('Error Response:', errorData)
-            })
-        }
-    }).catch((error) => {
-        //  catch network errors and other issues with the fetch request
-        console.error('Fetch Error:', error)})
-
-    } else {
-        return console.log("NOT BOTH ACCEPTED")
+        body: JSON.stringify(itemsReadyForCheckout),
+      })
+  
+      if (response.ok) {
+        const data = await response.json()
+        console.log("Checkout Successful:", data)
+        // navigate(`/checkout`)
+      } else {
+        const errorData = await response.json()
+        console.error('Error Response:', errorData)
       }
-    })
+    } catch (error) {
+      console.error('Fetch Error:', error)
+    }
+  }
 
-}
+
+// This function maps over the filteredCartItems, and is passed to cart_item to be incorporated with the checkbox. When an item is checked it gives the isChecked a value of true, which then allows for that item to be checked out. 
+// This way if a user has say 5 items, and only wants to check out 2, they are able to select the 2 they'd like to checkout.
+//If it matches, a new object is created using the spread operator to copy all existing properties of the item. Then, the `isChecked` property is set to the new value provided by the `isChecked` parameter.
 
 const handleItemCheck = (cartItemId, isChecked) => {
   const updatedCartItems = filteredCartItems.map(item => 

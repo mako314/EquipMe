@@ -106,7 +106,7 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
   // const newCost = ((rateValue ? rateValue : currentRate) * totalQuantity) * totalLength
   const newCostRounded = parseFloat((rateForCalculation * totalQuantity * totalLength).toFixed(2))
 
-  console.log("THE CURRENT RATE VALUE:", currentRate, "THE TOTAL QUANTITY:", totalQuantity, "THE TOTAL LENGTH:", totalLength, "THE NEW COST ROUNDED:", newCostRounded)
+  // console.log("THE CURRENT RATE VALUE:", currentRate, "THE TOTAL QUANTITY:", totalQuantity, "THE TOTAL LENGTH:", totalLength, "THE NEW COST ROUNDED:", newCostRounded)
 
   // (currentRate || rateValue) * 100
   // console.log("RATE:", newCost)
@@ -258,7 +258,7 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
 
     //E.target.options.selected index finds the index of the selected option. I made an array with the values of the equipment cost
     const rateValue = rateArray[e.target.options.selectedIndex]
-    console.log("THE NEW RATE SELECTED INDEX IN HANDLE RATE CHANGE:", rateValue)
+    // console.log("THE NEW RATE SELECTED INDEX IN HANDLE RATE CHANGE:", rateValue)
 
     // Ideally I'm only sending in rateValue, because i'm just calculating the new cost, if there's been a change in the rate, I made a rateArray that holds the same amount of indexes as the rates.
 
@@ -274,7 +274,7 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
 
   // console.log('THE DAY RANGE:', dayRange)
   //Concide rental length (dayRange) with rate, this is just the hours days, weeks, etc.
-  console.log("THE DAY RANGE:", dayRange)
+  // console.log("THE DAY RANGE:", dayRange)
   const handleDayRangeChange = (e) => {
       if (checkAgreementStatus(agreementStatus)) {
     return
@@ -302,7 +302,7 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
     setSelectedRate(newSelectedRate)
 
     const rateValue = rateArray[e.target.options.selectedIndex]
-    console.log("THE NEW RATE SELECTED INDEX IN HANDLE DAY RANGE CHANGE:", rateValue)
+    // console.log("THE NEW RATE SELECTED INDEX IN HANDLE DAY RANGE CHANGE:", rateValue)
     // Due to the asynchrous nature of state, my fetch was sending off the older state, instead I had to implement another parameter, and send in the newRate to accurately capture the rental rate (daily, hourly, weekly, etc)
 
     // Since I could've had better naming conventions likely, day range is capturing the "x hours, days, weeks, promo <- words here."
