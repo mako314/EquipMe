@@ -54,6 +54,9 @@ function checkBothAgreedStatus(agreementStatus) {
 // This handles calculating the total cost (and sending it to the backend to update there)
 // It takes into account the rate value, total quantity, and totallength of a rental. There are some checks. For example it takes the selectedRate (THIS IS KIND OF THE COST BUT NOT REALLY, IT'S MORE LIKE WEEKLY/DAILY/HOURLY,) and uses the props (actual monetary values $) to give a value to the current rate. This also only happens if there is NO change to the rateValue and it comes in as the defaulted 0.
 // newRateLength is the length of the darn rental, daily, weekly, hourly, etc
+
+//Foolishly since I have longer coding sessions, I was trying to use existing values cartItemRentalLength, cartItemQuantity, which I initially set my state too in the math for the new cost. Instead of implementing the new parameters I passed totalQuantity and totalLength in, but never really accessed them. I've gone ahead and implemented them here for the fix.
+
 const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantity, totalLength = rentalLength, newRateLength = selectedRate) => {
   
   if (checkAgreementStatus(agreementStatus)) {
@@ -93,12 +96,12 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
   console.log("THE PRE-EXISTING LENGTH:", rentalLength)
   console.log("THE TOTAL QUANTITY:", totalQuantity)
   console.log("THE TOTAL LENGTH:", totalLength)
-  console.log("WHAT THE NEW RATE SHOULD BE: INSIDE THE SEND", newRateLength)
+  // console.log("WHAT THE NEW RATE SHOULD BE: INSIDE THE SEND", newRateLength)
 
 
   //Calculate the total cost
   // const newCost = ((rateValue ? rateValue : currentRate) * totalQuantity) * totalLength
-  const newCostRounded = parseFloat((currentRate * cartItemQuantity * cartItemRentalLength).toFixed(2))
+  const newCostRounded = parseFloat((currentRate * totalQuantity * totalLength).toFixed(2))
   console.log("THE NEW COST ROUNDED:", newCostRounded)
   // (currentRate || rateValue) * 100
   // console.log("RATE:", newCost)
@@ -189,7 +192,7 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
     // const newCost = currentRate * cartItemQuantity * cartItemRentalLength
     
     const newCostRounded = parseFloat((currentRate * cartItemQuantity * cartItemRentalLength).toFixed(2))
-    // console.log("THE TYPE OF newCostRounded:", typeof(newCostRounded))
+    console.log("THE TYPE OF newCostRounded:", typeof(newCostRounded))
 
     // console.log("THE NEW COST ROUNDED:", newCostRounded)
     // console.log("THE CURRENT RATE:", currentRate)
@@ -198,7 +201,7 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
     // console.log("THE currentRate * cartItemQuantity:", currentRate * cartItemQuantity)
     // console.log("THE NEW COST:", newCost)
 
-    // handleTotalChange(currentRate, equipmentQuantity, rentalLength)
+    // handleTotalChange(currentRate, equipmentQuantity, rentalLength) basically accounting for the total cost the individual cart item
     setIndividualTotal(prevTotals => {
       // Find the index of the item with the same id
       // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex
@@ -257,6 +260,7 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
     // Hourly, daily, weekly, promo
     // Where they all coincide with the rateArray
     console.log("THE NEW RATE BEING SENT IN:", newRate)
+    // Due to the asynchrous nature of state, my fetch was sending off the older state, instead I had to implement another parameter, and send in the newRate to accurately capture the rental rate (daily, hourly, weekly, etc)
     handleTotalChange(rateValue, undefined, undefined, newRate)
 }
 
@@ -292,6 +296,11 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
 
     const rateValue = rateArray[e.target.options.selectedIndex]
 
+    // Due to the asynchrous nature of state, my fetch was sending off the older state, instead I had to implement another parameter, and send in the newRate to accurately capture the rental rate (daily, hourly, weekly, etc)
+
+    // Since I could've had better naming conventions likely, day range is capturing the "x hours, days, weeks, promo <- words here."
+    // Not the actual quantity, but I match the words with a switch statement to know what the new selected rate should be and set it to that. I can also just pass that new variable of the selected rate as my 4th parameter!
+
     handleTotalChange(rateValue, undefined, undefined, newSelectedRate)
 }
 
@@ -304,7 +313,7 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
 
     setRentalLength(newLength)
 
-    handleTotalChange(undefined, undefined, newLength)
+    handleTotalChange(undefined, undefined, newLength, undefined)
   }
 
   
@@ -318,7 +327,7 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
 
     setEquipmentQuantity(newQuantity)
 
-    handleTotalChange(undefined, newQuantity, undefined)
+    handleTotalChange(undefined, newQuantity, undefined, undefined)
   }
 
     //----------------------
@@ -330,7 +339,7 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
       }
       setEquipmentQuantity(prevequipmentQuantity => { 
         const newQuantity = prevequipmentQuantity > 1 ? prevequipmentQuantity - 1 : 1
-        handleTotalChange(undefined, newQuantity, undefined)
+        handleTotalChange(undefined, newQuantity, undefined, undefined)
         return newQuantity
         })
     }
@@ -342,11 +351,13 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
       }
       setEquipmentQuantity(prevequipmentQuantity => {
         const newQuantity = prevequipmentQuantity + 1
-        handleTotalChange(undefined, newQuantity, undefined)
+        handleTotalChange(undefined, newQuantity, undefined, undefined)
         return newQuantity
       })
     }
 
+    // A prop passed down from the Cart component that assigns a checked flag to the items after mapping over filtered items. 
+    // From there a user can go and select certain items to checkout and leave the rest without checking out
     const handleConfirmCheckout = (e) => {
       if (checkBothAgreedStatus(agreementStatus)) {
         const isChecked = e.target.checked

@@ -59,6 +59,7 @@ function Cart(){
 
   // A for each that summarizes ALL items in the cart, 
   itemsInCurrentCartAll.forEach((item) => {
+    // console.log("INDIVIDUAL ITEM IN CART:", item)
     // console.log(item)
     allTotalCarts += item.cost
 })
@@ -173,7 +174,7 @@ useEffect(() => {
   const handleCheckoutStripe = () => {
     const itemsReadyForCheckout = filteredCartItems.filter(item => item.isChecked)
     console.log("ITEMS THAT HAVE BEEN CHECKBOXED:", itemsReadyForCheckout)
-    
+
     itemsReadyForCheckout.forEach(cartItem => {
       if (cartItem.agreements[0].agreement_status === 'both-accepted'){
       console.log("individual cart item:", cartItem)
