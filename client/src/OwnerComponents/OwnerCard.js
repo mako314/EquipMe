@@ -9,9 +9,9 @@ function OwnerCard({ id, email, firstName, lastName, address, address_line_2, ci
 
     const ownerLocation = `${address_line_2 === '' ?  address : address + ',' + address_line_2}, ${city}, ${state} ${postal_code} `
 
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
-    function handleClick(e) {
+    function handleClick() {
         navigate(`/equipment_owner/${id}`)
     }
 

@@ -69,7 +69,9 @@ import MessageThreads from './MessagingComponents/MessageThreads'
 import NewMessageThreads from './MessagingComponents/NewMessageThreads';
 
 //---------------------- Checkout -----------------------------
-import Checkout from './CheckoutComponents/Checkout';
+// import Checkout from './CheckoutComponents/Checkout';
+import StripeCheckout from './CheckoutComponents/StripeCheckout';
+import SuccesfulCheckout from './CheckoutComponents/SuccesfulCheckout';
 import Cart from './CheckoutComponents/Cart';
 
 //---------------------- Rental Agreement Display -----------------------------
@@ -356,7 +358,8 @@ function App() {
             <Route path='/user/card/:id' element={<UserCard/>} />
 
             {/* Temporary Checkout Routing */}
-            <Route path='/checkout' element={<Checkout/>} />
+            <Route path='/checkout' element={<StripeCheckout/>} />
+            <Route path='/checkout/successful' element={<SuccesfulCheckout/>} />
             <Route path='/cart' element={<Cart/>} />
 
             {/* Rental Display */}

@@ -2,6 +2,7 @@ import React,{useContext, useEffect, useState, Fragment} from "react";
 import CartItem from "./CartItem";
 import CreateNewCart from "./CreateNewCart";
 import ApiUrlContext from '../Api'
+import { useNavigate } from "react-router-dom";
 import {toast} from 'react-toastify'
 import { UserSessionContext } from "../UserComponents/SessionContext";
 
@@ -20,6 +21,13 @@ function Cart(){
 
   const [cartItemFiltering, setCartItemFiltering] = useState('none')
   const [filteredCartItems, setFilteredCartItems] = useState([])
+  const [cartItemsChecked, setCartItemsChecked] = useState({})
+
+  const navigate = useNavigate()
+
+  // const handleCheckoutNavigation = () => {
+  //   navigate(`/checkout`)
+  // }
 
   // console.log("THE CART TOTAL:", individualTotal)
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some
@@ -51,21 +59,22 @@ function Cart(){
 
   // A for each that summarizes ALL items in the cart, 
   itemsInCurrentCartAll.forEach((item) => {
+    // console.log("INDIVIDUAL ITEM IN CART:", item)
     // console.log(item)
     allTotalCarts += item.cost
 })
 
  }
-
+// Calculates current carts total, and the available to check out total (meaning both parties accepted the rental agreement)
 setCurrentCartTotal(allTotalCarts)
 setAvailableToCheckOutTotal(itemsBothPartiesAgreedOn)
 // console.log("THE CURRENT TOTAL FOR CART", cartData[currentCart]?.cart_name, ":", currentTotal)
 }, [cartData, individualTotal])
 
-console.log("CHECKING FRONT END TO SEE IF BACKEND VALUE IS EQUAL TO", availableToCheckOutTotal * 100 === cartData[currentCart]?.total )
-
-console.log(availableToCheckOutTotal * 100)
-console.log(cartData[currentCart]?.total)
+// Math to check for the total amounts both backend and front end
+// console.log("CHECKING FRONT END TO SEE IF BACKEND VALUE IS EQUAL TO", availableToCheckOutTotal * 100 === cartData[currentCart]?.total )
+// console.log(availableToCheckOutTotal * 100)
+// console.log(cartData[currentCart]?.total)
   
 useEffect(() => {
   if (cartItemFiltering === 'none') {
@@ -158,17 +167,69 @@ useEffect(() => {
     setCartItemFiltering(event.target.value)
   }
 
+  // console.log("The filtered Cart Items:", filteredCartItems)
+
+  
+
+  const handleCheckoutStripe = () => {
+    const itemsReadyForCheckout = filteredCartItems.filter(item => item.isChecked)
+    console.log("ITEMS THAT HAVE BEEN CHECKBOXED:", itemsReadyForCheckout)
+
+    itemsReadyForCheckout.forEach(cartItem => {
+      if (cartItem.agreements[0].agreement_status === 'both-accepted'){
+      console.log("individual cart item:", cartItem)
+      fetch(`${apiUrl}checkout/equipment/${cartItem.equipment_id}/cart/item/${cartItem.id}/${currentUser.id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // "X-CSRF-TOKEN": getCookie("csrf_access_token"),
+        },
+        credentials: 'include',
+        // body: JSON.stringify(),
+    }).then((resp) => {
+        if (resp.ok) {
+            // If the response is OK
+            resp.json().then((data) => {
+                // navigate(`/checkout`)
+            })
+        } else {
+            // If the response is not OK, handle errors
+            resp.json().then((errorData) => {
+                console.error('Error Response:', errorData)
+            })
+        }
+    }).catch((error) => {
+        //  catch network errors and other issues with the fetch request
+        console.error('Fetch Error:', error)})
+
+    } else {
+        return console.log("NOT BOTH ACCEPTED")
+      }
+    })
+
+}
+
+const handleItemCheck = (cartItemId, isChecked) => {
+  const updatedCartItems = filteredCartItems.map(item => 
+    item.id === cartItemId ? {...item, isChecked} : item
+  )
+  setFilteredCartItems(updatedCartItems)
+}
+
+
+console.log("THE ITEMS TO CHECK OUT:", filteredCartItems)
+
 
   // console.log("FILTERED CART ITEMS:", filteredCartItems)
 
     return(
-      <div class="bg-gray-100 pt-10 pb-5">
-        <div class="container mx-auto">
+      <div className="bg-gray-100 pt-10 pb-5">
+        <div className="container mx-auto">
         <div className="container mx-auto px-6">
         <h1 className="mb-6 text-center text-2xl font-bold text-gray-900">Cart Items</h1>
-        <div class="flex flex-col items-center">
-        <div class="mb-4 w-full max-w-4xl px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-center space-x-4 bg-white py-3 px-5 rounded-lg shadow-md">
+        <div className="flex flex-col items-center">
+        <div className="mb-4 w-full max-w-4xl px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-center space-x-4 bg-white py-3 px-5 rounded-lg shadow-md">
         
 
         <form className="flex flex-row items-center mb-4">
@@ -323,6 +384,8 @@ useEffect(() => {
               dailyRate={dailyRateValue}
               weeklyRate={weeklyRateValue}
               promoRate={promoRateValue}
+              proceedToCheckout={cartItemsChecked[item.id]}
+              handleItemCheck={handleItemCheck}
             />
           )
         })
@@ -349,7 +412,12 @@ useEffect(() => {
             <p className="text-sm text-gray-700">including VAT</p>
           </div>
         </div>
-        <button className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">Check out</button>
+        <button 
+        className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600"
+        onClick={handleCheckoutStripe}
+        >
+        Check out
+        </button>
       </div>
 
       
