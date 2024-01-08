@@ -26,10 +26,12 @@ function Cart(){
 
   const navigate = useNavigate()
 
+  // https://stackoverflow.com/questions/42173786/react-router-pass-data-when-navigating-programmatically
 
-  // const handleCheckoutNavigation = () => {
-  //   navigate(`/checkout`)
-  // }
+  // Handles navigating to the checkout with the clientSecret
+  const handleCheckoutNavigation = (client_secret) => {
+    navigate('/checkout', { state: { clientSecret: client_secret} });
+  }
 
   // console.log("THE CART TOTAL:", individualTotal)
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some
@@ -78,7 +80,8 @@ setAvailableToCheckOutTotal(itemsBothPartiesAgreedOn)
 // console.log("CHECKING FRONT END TO SEE IF BACKEND VALUE IS EQUAL TO", availableToCheckOutTotal * 100 === cartData[currentCart]?.total )
 // console.log(availableToCheckOutTotal * 100)
 // console.log(cartData[currentCart]?.total)
-  
+
+
 useEffect(() => {
   if (cartItemFiltering === 'none') {
     // Include all cart items
@@ -178,6 +181,24 @@ useEffect(() => {
 
   const handleCheckoutStripe = async () => {
     const itemsReadyForCheckout = filteredCartItems.filter(item => item.isChecked)
+    .map(item => {
+      console.log(item)
+      return {
+        agreement_status: item.agreements[0].agreement_status,
+        delivery: item.agreements[0].delivery,
+        delivery_address: item.agreements[0].delivery_address,
+        quantity: item.quantity,
+        price_cents_at_addition: item.price_cents_at_addition,
+        price_cents_if_changed : item.price_cents_if_changed,
+        rental_rate: item.rental_rate,
+        rental_length: item.rental_length,
+        equipment_id: item.equipment_id,
+        cart_id: item.cart_id,
+        cart_item_id: item.id,
+        user_id: currentUser.id
+      }
+    })
+
     console.log("ITEMS THAT HAVE BEEN CHECKBOXED:", itemsReadyForCheckout)
 
     console.log("THE USER ID:", currentUser.id)
@@ -189,7 +210,7 @@ useEffect(() => {
     }
 
     try {
-      const response = await fetch(`${apiUrl}checkout/equipment/user/${currentUser.id}`, {
+      const response = await fetch(`${apiUrl}v1/checkout/sessions`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -201,6 +222,7 @@ useEffect(() => {
       if (response.ok) {
         const data = await response.json()
         console.log("Checkout Successful:", data)
+        handleCheckoutNavigation(data.client_secret)
         // navigate(`/checkout`)
       } else {
         const errorData = await response.json()

@@ -6,7 +6,7 @@ function SuccesfulCheckout(){
     return(
         <div class="bg-white min-h-screen">
     <div class="mx-auto items-center container flex flex-col">
-        <img src="https://placehold.co/500" alt="Successful Checkout Image - Digital shopping cart with checkout items and a
+        <img src="https://i.imgur.com/9L7Tjf9.png" alt="Successful Checkout Image - Digital shopping cart with checkout items and a
             tick mark" class="w-80 mt-20"/>
         <p class="font-semibold text-2xl mt-10 text-gray-700">Thank you for your rental!</p>
         <p class="mt-10 text-gray-600 text-center max-w-lg">Your rental was successful and you will receive a confirmation

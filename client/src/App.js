@@ -359,7 +359,7 @@ function App() {
 
             {/* Temporary Checkout Routing */}
             <Route path='/checkout' element={<StripeCheckout/>} />
-            <Route path='/checkout/successful' element={<SuccesfulCheckout/>} />
+            <Route path='/checkout/successful/return' element={<SuccesfulCheckout/>} />
             <Route path='/cart' element={<Cart/>} />
 
             {/* Rental Display */}
