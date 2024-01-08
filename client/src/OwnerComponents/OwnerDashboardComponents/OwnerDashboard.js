@@ -218,6 +218,51 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
         }
     }
 
+
+
+
+    // Handles creating a stripe login link for a user to get into their dashboard, that way they have a stripe dashboard also
+
+    const handleStripeLoginLink = () => {
+        // Needed to set onboard link to a variable to get this to work
+            // Make a request to the backend to generate a new onboarding link
+            fetch(`${apiUrl}v1/accounts/${currentUser.stripe_id}/login_links`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  "X-CSRF-TOKEN": getCookie("csrf_access_token"),
+                },
+                credentials: 'include'
+            }).then((resp) => {
+            if (resp.ok) {
+                // If the response is OK
+                resp.json().then((data) => {
+                    if (data) {
+                    console.log(data)
+                    console.log("THE URL:", data.url)
+                        // Redirect the user to the new onboarding link
+                      const dashBoardLink = data.url
+                      window.open(dashBoardLink, '_blank')
+                    }
+                })
+            } else {
+                // If the response is not OK, handle errors
+                resp.json().then((errorData) => {
+                    console.error('Error Response:', errorData)
+                })
+            }
+              }).catch(error => {
+                console.error('Error generating Stripe onboarding link:', error)
+              })
+        
+    }
+
+
+
+
+
+
+
     function RentalAgreements() {
         // setPageTitle('Rental Agreements')
         fromOwnerDash = true
@@ -242,6 +287,7 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
         })
     }
 
+    // Handles finding a users favorites, along with it there are radio buttons to filter through whether they're looking for equipment or owners that they have favorited
     function UserFavorites() {
         const [selectedFavorite, setSelectedFavorite] = useState('equipment')
 
@@ -622,10 +668,17 @@ function AccountSettings() {
 
                            {/* currentUser.stripe_id && stripeAccount &&  */}
   
-                            {(stripeAccount && stripeAccount?.details_submitted === false || stripeAccount?.charges_enabled === false) && ( 
+                            {((stripeAccount && stripeAccount?.details_submitted === false) || stripeAccount?.charges_enabled === false) && ( 
                                  <button 
                                  className="flex items-center justify-center h-10 px-4 ml-auto mr-2 rounded-lg bg-orange-500 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700" 
                                  onClick={handleStripeOnboarding}> Complete Stripe Onboarding
+                                 </button>
+                            )}
+
+                                {((stripeAccount && stripeAccount?.details_submitted === true) || stripeAccount?.charges_enabled === true) && ( 
+                                 <button 
+                                 className="flex items-center justify-center h-10 px-4 ml-auto mr-2 rounded-lg bg-orange-500 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700" 
+                                 onClick={handleStripeLoginLink}> Stripe Dashboard
                                  </button>
                             )}
                             </div>
