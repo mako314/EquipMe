@@ -2327,10 +2327,11 @@ class CheckingOut(Resource):
         data = request.get_json()
         # equipment_id, cart_item_id,
         print(data)
+        line_items = []
         # Check if data is a list and iterate over it
         if isinstance(data, list):
             for item in data:
-                user, equipment, cart = None, None, None  # Initialize to None to be accessed later
+                user, equipment, cart, cart_item = None, None, None, None  # Initialize to None to be accessed later
                 # Check each key independently
                 if 'user_id' in item:
                     print("User ID:", item['user_id'])
@@ -2344,80 +2345,75 @@ class CheckingOut(Resource):
                     print("Cart ID:", item['cart_id'])
                     cart = Cart.query.filter(Cart.id == item['cart_id']).first()
 
-                # Do something with user, equipment, cart...
-                if user:
-                    print(user.firstName, user.lastName)
-                if equipment:
-                    print(equipment.make, equipment.model)
-                    print("Equipment Owner ID:", equipment.owner_id)
-                if cart:
-                    print(cart.cart_name)
-                else:
-                    print("No cart found")
+                if 'cart_item_id' in item:
+                    print("Cart Item ID:", item['cart_item_id'])
+                    cart_item = CartItem.query.filter_by(id=item.get('cart_item_id')).first()
+                    print(cart_item.agreements[0])
+                    print(cart_item.agreements[0].agreement_status)
+                    # belongs in the condition below
+                    # cart_item.agreement_status != 'both-accepted'
+
+                # Skip invalid or non-eligible items
+                if not cart_item or not cart or not equipment or cart_item.agreements[0].agreement_status != 'both-accepted':
+                    continue
+
+                # Validate incoming data against CartItem data
+                
+                if cart_item.quantity != int(item['quantity']) or cart_item.rental_length != int(item['rental_length']):
+                    continue  # Skip items with mismatched data
+
+                unit_price = cart_item.price_cents_if_changed or cart_item.price_cents_at_addition
+                total_price = unit_price * item['quantity'] * item['rental_length']
+
+                line_item = {
+                "price_data": {
+                    "currency": "usd",
+                    "product_data": {
+                        "name": f"{cart.cart_name} - {equipment.make} {equipment.model}",
+                        "description": f"{equipment.description}",
+                        "images": [equipment.equipment_image], 
+                    },
+                    "unit_amount": total_price,
+                    "tax_behavior": "exclusive",
+                },
+                "quantity": 1,  # Since total price accounts for quantity and rental length
+                }
+                
+                line_items.append(line_item)
+
+
         else:
             print("Expected a list of items, but got:", type(data))
 
         owner = EquipmentOwner.query.filter(EquipmentOwner.id == equipment.owner_id).first()
 
         print(owner.firstName, owner.lastName)
-        # print(user.firstName, user.lastName)
-        # print(equipment.make, equipment.model)
-        # print(cart.cart_name)
-        # print("THE EQUIPMENT OWNER ID:", equipment.owner_id)
-
-        # print("THE USERS STRIPE ID:",user.stripe_id)
 
         # https://stripe.com/docs/connect/destination-charges
         # To create a destination charge, specify the ID of the connected account that should receive the funds as the value of the transfer_data[destination] parameter
-
-        # stripe.PaymentIntent.create(
-        # amount=1000,
-        # currency="usd",
-        # automatic_payment_methods={"enabled": True},
-        # transfer_data={"destination": '{{CONNECTED_ACCOUNT_ID}}'},
-        # )
 
         # Fetch the cart item, the equipment, and the user, and cart so I don't send in too many cart items and repeat the process. This way I can make a loop that checks if it's the item a user is wanting to check out now.
         # Cart item for the quantity, delivery/ etc / rental agreement
         # equipment for the status and to check the reserved amount 
 
-        # cart = Cart.query.filter(Cart.id == cart_id).first()
-        # cart_item = CartItem.query.filter(CartItem.id == cart_item_id).first()
-        # equipment = Equipment.query.filter(Equipment.id == equipment_id).first()
-        # valid_items = []
-        # for item in cart:
-        #     cart_item = CartItem.query.filter(CartItem.id == item['cart_item_id']).first()
-        #     if cart_item and cart_item.agreements[0].agreement_status == 'both-accepted':
-        #         valid_items.append(cart_item)
-        # user = User.query.filter(User.id == user_id).first()
-
-
+        print( "LINE ITEMS:", line_items)
+        if not line_items:
+            return make_response({"error": "No valid items for checkout"}, 400)
+        
         # Create the stripe checkout session
-        checkout = stripe.checkout.Session.create(
-        line_items=[
-            {
-            "price_data": {
-                "currency": "usd",
-                "product_data": {
-                    "name": "T-shirt",
-                    "description": "a basic t-shirt to test",
-                    "images": ["https://assets.nintendo.com/image/upload/ar_16:9,c_lpad,w_1240/b_white/f_auto/q_auto/ncom/en_US/products/merchandise/collections/splatoon-3/splatoon-3-collection-backbone-athletic-fit-t-shirt-117981-1/117981-sportiqe-splatoon-3-mens-tshirt-front-back-1200x675"],
-                    },
-                #Unit amount = how much to charge
-                "unit_amount": 2000,
-                "tax_behavior": "exclusive",
+        try:
+            checkout = stripe.checkout.Session.create(
+            line_items=line_items,
+            payment_intent_data={
+                "application_fee_amount": 123,
+                "transfer_data": {"destination": f'{owner.stripe_id}'},
             },
-            "quantity": 1,
-            },
-        ],
-        payment_intent_data={
-            "application_fee_amount": 123,
-            "transfer_data": {"destination": f'{owner.stripe_id}'},
-        },
-        mode="payment",
-        ui_mode="embedded",
-        return_url="https://example.com/checkout/return?session_id={CHECKOUT_SESSION_ID}",
-        )
+            mode="payment",
+            ui_mode="embedded",
+            return_url="http://localhost:3000/checkout/successful/return?session_id={CHECKOUT_SESSION_ID}",
+            )
+        except Exception as e:
+            return make_response({"error": str(e)}, 500)
 
         # Fetch the most recent state history
         # last_state = EquipmentStateHistory.query.filter_by(
@@ -2454,7 +2450,7 @@ class CheckingOut(Resource):
         # )
         # db.session.add(new_state_history)
 
-        db.session.commit()
+        # db.session.commit()
 
         if checkout:
             response = make_response(checkout, 200)

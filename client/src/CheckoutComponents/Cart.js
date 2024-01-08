@@ -80,7 +80,8 @@ setAvailableToCheckOutTotal(itemsBothPartiesAgreedOn)
 // console.log("CHECKING FRONT END TO SEE IF BACKEND VALUE IS EQUAL TO", availableToCheckOutTotal * 100 === cartData[currentCart]?.total )
 // console.log(availableToCheckOutTotal * 100)
 // console.log(cartData[currentCart]?.total)
-  
+
+
 useEffect(() => {
   if (cartItemFiltering === 'none') {
     // Include all cart items
@@ -188,9 +189,10 @@ useEffect(() => {
         price_cents_at_addition: item.price_cents_at_addition,
         price_cents_if_changed : item.price_cents_if_changed,
         rental_rate: item.rental_rate,
-        rental_rate: item.rental_rate,
+        rental_length: item.rental_length,
         equipment_id: item.equipment_id,
         cart_id: item.cart_id,
+        cart_item_id: item.id,
         user_id: currentUser.id
       }
     })
