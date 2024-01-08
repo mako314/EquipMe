@@ -185,6 +185,8 @@ useEffect(() => {
       console.log(item)
       return {
         agreement_status: item.agreements[0].agreement_status,
+        delivery: item.agreements[0].delivery,
+        delivery_address: item.agreements[0].delivery_address,
         quantity: item.quantity,
         price_cents_at_addition: item.price_cents_at_addition,
         price_cents_if_changed : item.price_cents_if_changed,

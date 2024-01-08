@@ -2358,19 +2358,27 @@ class CheckingOut(Resource):
                     continue
 
                 # Validate incoming data against CartItem data
-                
-                if cart_item.quantity != int(item['quantity']) or cart_item.rental_length != int(item['rental_length']):
+                if cart_item.quantity != int(item['quantity']) or cart_item.rental_length != int(item['rental_length']) or cart_item.rental_rate != item['rental_rate']:
                     continue  # Skip items with mismatched data
 
+                if equipment.status[0].reserved_quantity < cart_item.quantity:
+                    raise ValueError("Not enough equipment available to fulfill this rental.")
+
+                # Grabs the owner from the database
+                owner = EquipmentOwner.query.filter(EquipmentOwner.id == equipment.owner_id).first()
+
+                # Calculates the unit price based on whether the price has ever changed. All cart_items have a price at addition, but if a change is made, i.e, from hourly to daily, it accounts for if changed
                 unit_price = cart_item.price_cents_if_changed or cart_item.price_cents_at_addition
-                total_price = unit_price * item['quantity'] * item['rental_length']
+
+                # Calculates the total price based off the unit price and with the pre-existing quantity / rental length of the cart item. There is a test above to see if the incoming values are != to the ones inside of the db currently.
+                total_price = unit_price * cart_item.quantity * cart_item.rental_length
 
                 line_item = {
                 "price_data": {
                     "currency": "usd",
                     "product_data": {
-                        "name": f"{cart.cart_name} - {equipment.make} {equipment.model}",
-                        "description": f"{equipment.description}",
+                        "name": f" Cart: {cart.cart_name.upper()} | Make: {equipment.make} Model: {equipment.model}",
+                        "description": f"{user.firstName} {user.lastName} is agreeing to rent ({cart_item.quantity}) {equipment.make} {equipment.model} at a {cart_item.rental_rate} rate of {unit_price / 100} from the Owner: {owner.firstName} {owner.lastName} ",
                         "images": [equipment.equipment_image], 
                     },
                     "unit_amount": total_price,
@@ -2385,9 +2393,9 @@ class CheckingOut(Resource):
         else:
             print("Expected a list of items, but got:", type(data))
 
-        owner = EquipmentOwner.query.filter(EquipmentOwner.id == equipment.owner_id).first()
 
-        print(owner.firstName, owner.lastName)
+
+        # print(owner.firstName, owner.lastName)
 
         # https://stripe.com/docs/connect/destination-charges
         # To create a destination charge, specify the ID of the connected account that should receive the funds as the value of the transfer_data[destination] parameter
@@ -2408,6 +2416,8 @@ class CheckingOut(Resource):
                 "application_fee_amount": 123,
                 "transfer_data": {"destination": f'{owner.stripe_id}'},
             },
+            #'paypal','us_bank_account'
+            payment_method_types=['card',],
             mode="payment",
             ui_mode="embedded",
             return_url="http://localhost:3000/checkout/successful/return?session_id={CHECKOUT_SESSION_ID}",
@@ -2417,7 +2427,7 @@ class CheckingOut(Resource):
 
         # Fetch the most recent state history
         # last_state = EquipmentStateHistory.query.filter_by(
-        #     equipment_id=equipment_id
+        #     equipment_id=equipment.id
         # ).order_by(EquipmentStateHistory.changed_at.desc()).first()
 
         # Ensure that the equipment is actually reserved before proceeding
@@ -2436,18 +2446,23 @@ class CheckingOut(Resource):
 
         # Record the state change
         # new_state_history = EquipmentStateHistory(
-        #     equipment_id = equipment_id,
+        #     equipment_id = equipment.id,
         #     total_quantity = last_state.new_quantity,
         #     available_quantity = last_state.available_quantity,
         #     reserved_quantity = last_state.reserved_quantity,
         #     rented_quantity = cart_item.quantity,
-        #     maintenance_quantity = 0,
-        #     transit_quantity = 0,
-        #     damaged_quantity = 0,
+        #     maintenance_quantity = last_state.maintenance_quantity,
+        #     transit_quantity = last_state.transit_quantity,
+        #     damaged_quantity = last_state.damaged_quantity,
         #     previous_state = last_state.new_state,
         #     new_state = f'{user.firstName} {user.lastName} has rented {cart_item.quantity}',
         #     changed_at=datetime.utcnow(),
         # )
+
+        # Need to create a stripe webhook for this:
+        # equipment.status[0].reserved_quantity -= cart_item.quantity
+        # equipment.status[0].rented_quantity += cart_item.quantity
+
         # db.session.add(new_state_history)
 
         # db.session.commit()
