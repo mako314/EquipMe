@@ -24,6 +24,7 @@ from dotenv import load_dotenv
 # Have to tell the dotenv what to load specifically
 load_dotenv('../.env.local')
 stripe.api_key=os.getenv('STRIPE_TEST_SECRET_KEY')
+endpoint_secret=os.getenv('WEBHOOK_SECRET')
 #------------------------------------ BOTH USER LOGIN-----------------------------------------------------------------------------
 
 class Login(Resource):
@@ -2496,55 +2497,172 @@ class CreateLoginLinkStripeDash(Resource):
 api.add_resource(CreateLoginLinkStripeDash, '/v1/accounts/<string:id>/login_links')
 
 
+# class WebHookForStripeSuccess(Resource):
+#     def post(self):
+#         endpoint_secret = os.getenv('WEBHOOK_SECRET')
+#         def webhook_received():
+#             request_data = json.loads(request.data)
+#             signature = request.headers.get("stripe-signature")
+
+#             # Verify webhook signature and extract the event.
+#             # See https://stripe.com/docs/webhooks#verify-events for more information.
+#             try:
+#                 event = stripe.Webhook.construct_event(
+#                     payload=request.data, sig_header=signature, secret=endpoint_secret
+#                 )
+#             except ValueError as e:
+#                 # Invalid payload.
+#                 return Response(status=400)
+#             except stripe.error.SignatureVerificationError as e:
+#                 # Invalid Signature.
+#                 return Response(status=400)
+
+#             if event['type'] == 'payment_intent.canceled':
+#                 payment_intent = event['data']['object']
+#             elif event['type'] == 'payment_intent.payment_failed':
+#                 payment_intent = event['data']['object']
+#             elif event['type'] == 'payment_intent.succeeded':
+#                 payment_intent = event['data']['object']
+#                 # ... handle other event types
+#             else:
+#                 print('Unhandled event type {}'.format(event['type']))
+
+#             return json.dumps({"success": True}), 200
+        
+#         def handle_successful_payment_intent(payment_intent):
+#             # Fulfill the purchase
+#             print(str(payment_intent))
+        
+# api.add_resource(WebHookForStripeSuccess, '/webhook')
+
 class WebHookForStripeSuccess(Resource):
     def post(self):
-        endpoint_secret = os.getenv('WEBHOOK_SECRET')
-        def webhook_received():
-            request_data = json.loads(request.data)
-            signature = request.headers.get("stripe-signature")
-
-            # Verify webhook signature and extract the event.
-            # See https://stripe.com/docs/webhooks#verify-events for more information.
-            try:
-                event = stripe.Webhook.construct_event(
-                    payload=request.data, sig_header=signature, secret=endpoint_secret
-                )
-            except ValueError as e:
-                # Invalid payload.
-                return Response(status=400)
-            except stripe.error.SignatureVerificationError as e:
-                # Invalid Signature.
-                return Response(status=400)
-            
-            # if event['type'] == 'payment_intent.canceled':
-            #     payment_intent = event['data']['object']
-            #     # ... handle other event types
-            # else:
-            #     print('Unhandled event type {}'.format(event['type']))
-
-            # if event["type"] == "payment_intent.succeeded":
-            #     payment_intent = event["data"]["object"]
-            #     handle_successful_payment_intent(payment_intent)
-
-            if event['type'] == 'payment_intent.canceled':
-                payment_intent = event['data']['object']
-            elif event['type'] == 'payment_intent.payment_failed':
-                payment_intent = event['data']['object']
-            elif event['type'] == 'payment_intent.succeeded':
-                payment_intent = event['data']['object']
-                # ... handle other event types
-            else:
-                print('Unhandled event type {}'.format(event['type']))
-
-            return json.dumps({"success": True}), 200
+        # endpoint_secret = os.getenv('WEBHOOK_SECRET')
+        endpoint_secret="whsec_46dcd2d963e5a06aaae0a7be860e031ff3a11fcb19d08abad6193dd960803c6e"
+        print(request.headers.get("stripe-signature"))
+        request.get_data(as_text=True)
+        print(request.get_data(as_text=True))
+        signature = request.headers.get("stripe-signature")
         
 
 
-        def handle_successful_payment_intent(payment_intent):
-            # Fulfill the purchase
-            print(str(payment_intent))
-        
+
+        # Directly process the webhook in the post method
+        try:
+            event = stripe.Webhook.construct_event(
+                payload=request.data, sig_header=signature, secret=endpoint_secret
+            )
+        except ValueError as e:
+            # Invalid payload
+            print(f"Invalid payload: {e}")
+            return Response(status=400)
+        except stripe.error.SignatureVerificationError as e:
+            # Invalid Signature
+            print(f"Invalid Signature: {e}")
+            return Response(status=400)
+
+        # Check the event type and handle accordingly
+        if event['type'] == 'payment_intent.canceled':
+            self.handle_payment_intent_canceled(event['data']['object'])
+        elif event['type'] == 'payment_intent.payment_failed':
+            self.handle_payment_intent_failed(event['data']['object'])
+        elif event['type'] == 'payment_intent.succeeded':
+            self.handle_successful_payment_intent(event['data']['object'])
+        else:
+            print(f'Unhandled event type: {event["type"]}')
+
+        return json.dumps({"success": True}), 200
+
+    def handle_successful_payment_intent(self, payment_intent):
+        # Logic to handle successful payment intent
+        print(f"Successful payment intent: {payment_intent}")
+
+    def handle_payment_intent_canceled(self, payment_intent):
+        # Logic to handle canceled payment intent
+        print(f"Canceled payment intent: {payment_intent}")
+
+    def handle_payment_intent_failed(self, payment_intent):
+        # Logic to handle failed payment intent
+        print(f"Failed payment intent: {payment_intent}")
+
 api.add_resource(WebHookForStripeSuccess, '/webhook')
+
+
+# class WebHookForStripeSuccess(Resource):
+#     def post(self):
+#         event = None
+#         payload = request.data  # Keep the payload in raw format
+
+#         print('THE END POINT SECRET:', endpoint_secret)
+
+#         if endpoint_secret:
+#             sig_header = request.headers.get('stripe-signature')
+#             try:
+#                 event = stripe.Webhook.construct_event(
+#                     payload, sig_header, endpoint_secret
+#                 )
+#             except stripe.error.SignatureVerificationError as e:
+#                 print('⚠️  Webhook signature verification failed.' + str(e))
+#                 return jsonify(success=False)
+
+#         try:
+#             event = json.loads(payload)  # Parse the event as JSON after verification
+#         except json.decoder.JSONDecodeError as e:
+#             print('⚠️  Webhook error while parsing basic request.' + str(e))
+#             return jsonify(success=False)
+
+#         # [Handle the event as before]
+
+#         return jsonify(success=True)
+
+# api.add_resource(WebHookForStripeSuccess, '/webhook')
+
+
+# class WebHookForStripeSuccess(Resource):
+#     def post(self):
+#         endpoint_secret='whsec_46dcd2d963e5a06aaae0a7be860e031ff3a11fcb19d08abad6193dd960803c6e'
+#         payload = request.data
+#         sig_header = request.headers.get('stripe-signature')
+
+#         try:
+#             event = stripe.Webhook.construct_event(
+#                 payload, sig_header, endpoint_secret
+#             )
+#         except stripe.error.SignatureVerificationError as e:
+#             print('⚠️  Webhook signature verification failed.', e)
+#             return jsonify(success=False)
+
+#         # Handle the event
+#         print("Webhook received:", event['type'])
+#         return jsonify(success=True)
+
+
+# api.add_resource(WebHookForStripeSuccess, '/webhook')
+
+# class WebHookForStripeSuccess(Resource):
+#     def post(self):
+#         endpoint_secret = os.getenv('WEBHOOK_SECRET')
+#         signature = request.headers.get("stripe-signature")
+
+#         # Debugging: Print raw payload and signature
+#         print("Raw payload:", request.data)
+#         print("Signature:", signature)
+
+#         try:
+#             event = stripe.Webhook.construct_event(
+#                 payload=request.data, sig_header=signature, secret=endpoint_secret
+#             )
+#         except ValueError as e:
+#             print(f"Invalid payload: {e}")
+#             return Response("Invalid payload", status=400)
+#         except stripe.error.SignatureVerificationError as e:
+#             print(f"Invalid Signature: {e}")
+#             return Response("Invalid Signature", status=400)
+
+#         print(f"Received Event: {event['type']}")
+#         return {"success": True}, 200
+
+# api.add_resource(WebHookForStripeSuccess, '/webhook')
 
 
 class CalculateMonthlyTotals(Resource):
