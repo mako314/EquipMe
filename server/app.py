@@ -4,8 +4,8 @@ from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAg
 # from flask import Flask, request, make_response, jsonify
 # from flask_restful import Api, Resource
 # import os
-
-from flask import Flask, request, make_response, jsonify, session
+import json
+from flask import Flask, request, make_response, jsonify, session, render_template, request, Response
 from flask_restful import Resource
 from config import db, app, api
 from sqlalchemy import asc, desc
@@ -2176,7 +2176,7 @@ class StripeHandleConnectAccount(Resource):
         equip_owner = EquipmentOwner.query.filter(EquipmentOwner.id == owner_id).first()
         # equip_owner = EquipmentOwner.query.filter(EquipmentOwner.stripe_id == id).first()
         
-        print("THE OWNER STRIPE ID:", id)
+        # print("THE OWNER STRIPE ID:", id)
 
         # check for charges_enabled
         # check the state of the details_submitted
@@ -2478,7 +2478,74 @@ class CheckingOut(Resource):
 
 api.add_resource(CheckingOut, '/v1/checkout/sessions')
 
-#/checkout/equipment/user/<int:user_id>
+# Route to create login link for stripe dashboard
+class CreateLoginLinkStripeDash(Resource):
+    def post(self,id):
+        print("THE OWNER STRIPE ID:", id)
+        #ID HERE IS STRIPE ID
+        login_link = stripe.Account.create_login_link(id)
+
+        if login_link:
+            response = make_response(login_link, 200)
+        else:
+            response = make_response({
+            "error": "Login Link not Found"
+            }, 404)
+        return response
+
+api.add_resource(CreateLoginLinkStripeDash, '/v1/accounts/<string:id>/login_links')
+
+
+class WebHookForStripeSuccess(Resource):
+    def post(self):
+        endpoint_secret = os.getenv('WEBHOOK_SECRET')
+        def webhook_received():
+            request_data = json.loads(request.data)
+            signature = request.headers.get("stripe-signature")
+
+            # Verify webhook signature and extract the event.
+            # See https://stripe.com/docs/webhooks#verify-events for more information.
+            try:
+                event = stripe.Webhook.construct_event(
+                    payload=request.data, sig_header=signature, secret=endpoint_secret
+                )
+            except ValueError as e:
+                # Invalid payload.
+                return Response(status=400)
+            except stripe.error.SignatureVerificationError as e:
+                # Invalid Signature.
+                return Response(status=400)
+            
+            # if event['type'] == 'payment_intent.canceled':
+            #     payment_intent = event['data']['object']
+            #     # ... handle other event types
+            # else:
+            #     print('Unhandled event type {}'.format(event['type']))
+
+            # if event["type"] == "payment_intent.succeeded":
+            #     payment_intent = event["data"]["object"]
+            #     handle_successful_payment_intent(payment_intent)
+
+            if event['type'] == 'payment_intent.canceled':
+                payment_intent = event['data']['object']
+            elif event['type'] == 'payment_intent.payment_failed':
+                payment_intent = event['data']['object']
+            elif event['type'] == 'payment_intent.succeeded':
+                payment_intent = event['data']['object']
+                # ... handle other event types
+            else:
+                print('Unhandled event type {}'.format(event['type']))
+
+            return json.dumps({"success": True}), 200
+        
+
+
+        def handle_successful_payment_intent(payment_intent):
+            # Fulfill the purchase
+            print(str(payment_intent))
+        
+api.add_resource(WebHookForStripeSuccess, '/webhook')
+
 
 class CalculateMonthlyTotals(Resource):
     def get(self, month, year):
