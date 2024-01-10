@@ -1,9 +1,24 @@
 import React, { useEffect, useState, useContext } from 'react';
 import ApiUrlContext from '../Api'
+import { useNavigate} from 'react-router-dom';
 
-function SuccesfulCheckout(){
+function AfterCheckout(){
     const apiUrl = useContext(ApiUrlContext)
     const [eventData, setEventData] = useState([])
+    const [isLoading, setIsLoading] = useState(true)
+    const navigate = useNavigate();
+
+    const handleDashNav = () => {
+        navigate(`/dashboard`)
+    }
+
+    const handleHomeNav = () => {
+        navigate(`/`)
+    }
+
+    const handleCartNav = () => {
+        navigate(`/cart`)
+    }
 
     // https://developer.mozilla.org/en-US/docs/Web/API/EventSource
     // https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events
@@ -20,13 +35,14 @@ function SuccesfulCheckout(){
             }
             console.log("Update from Server:", data)
             setEventData(prevEvents => [...prevEvents, data])
-
+            setIsLoading(false)
             // console.log("Update from Server:", data)
         }
 
         eventSource.onerror = function(err) {
             console.error("EventSource failed:", err)
             // Handle errors
+            setIsLoading(false)
         }
 
         return () => {
@@ -39,7 +55,15 @@ function SuccesfulCheckout(){
 
     return(
         <div className="bg-white min-h-screen flex flex-col items-center pt-5 pb-5">
-            {eventData.map((event, index) => (
+            {isLoading ? (
+                // Loader spinner
+                <div className="flex items-center justify-center space-x-2">
+                <div className="p-2 rounded-full bg-indigo-500 animate-pulse" />
+                <div className="p-2 rounded-full bg-indigo-500 animate-pulse" />
+                <div className="p-2 rounded-full bg-indigo-500 animate-pulse" />
+                </div>
+            ) : (
+            eventData.map((event, index) => (
                 <div key={index} className="text-center">
                     {event.type === 'payment_intent.succeeded' && (
                         <div className="flex flex-col items-center justify-center">
@@ -51,13 +75,35 @@ function SuccesfulCheckout(){
                     )}
                     {/* Render other event types if necessary */}
                 </div>
-            ))}
-            <button fontFamily="Arial" type="submit"
-                className="mt-20 inline-flex border border-indigo-500 focus:outline-none
-                focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 justify-center rounded-md py-2 px-4 bg-indigo-600
-                text-sm font-medium text-white shadow-sm hover:bg-indigo-700 transition-colors">Continue Shopping</button>
+                ))
+            )}
+            <div className='flex flex-row gap-4'> 
+            <button 
+                onClick={handleCartNav}
+                className="mt-20 inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors bg-amber-500 hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 border border-transparent"
+            >
+                Back to Cart
+            </button>
+
+            <button
+                onClick={handleHomeNav}
+                className="mt-20 inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors bg-amber-500 hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 border border-transparent"
+            >
+                Home
+            </button>
+
+            <button 
+                onClick={handleDashNav}
+                className="mt-20 inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors bg-amber-500 hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 border border-transparent"
+            >
+                My Dashboard
+            </button>
+
+            </div>
+
+
         </div>
     )
 }
 
-export default SuccesfulCheckout
+export default AfterCheckout

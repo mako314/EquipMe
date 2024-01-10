@@ -2633,6 +2633,7 @@ class WebHookForStripeSuccess(Resource):
         print(f"Failed payment intent: {payment_intent}")
 
     def format_payment_intent_data(self, payment_intent):
+        print("THE PAYMENT INTENT DATA:", payment_intent)
         # Format payment_intent data 
         return {
             "id": payment_intent.get("id"),
