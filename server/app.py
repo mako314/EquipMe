@@ -2543,45 +2543,6 @@ class SSEEndpoint(Resource):
 # Adding the SSE endpoint to the API
 api.add_resource(SSEEndpoint, '/sse/endpoint')
 
-
-# class WebHookForStripeSuccess(Resource):
-#     def post(self):
-#         endpoint_secret = os.getenv('WEBHOOK_SECRET')
-#         def webhook_received():
-#             request_data = json.loads(request.data)
-#             signature = request.headers.get("stripe-signature")
-
-#             # Verify webhook signature and extract the event.
-#             # See https://stripe.com/docs/webhooks#verify-events for more information.
-#             try:
-#                 event = stripe.Webhook.construct_event(
-#                     payload=request.data, sig_header=signature, secret=endpoint_secret
-#                 )
-#             except ValueError as e:
-#                 # Invalid payload.
-#                 return Response(status=400)
-#             except stripe.error.SignatureVerificationError as e:
-#                 # Invalid Signature.
-#                 return Response(status=400)
-
-#             if event['type'] == 'payment_intent.canceled':
-#                 payment_intent = event['data']['object']
-#             elif event['type'] == 'payment_intent.payment_failed':
-#                 payment_intent = event['data']['object']
-#             elif event['type'] == 'payment_intent.succeeded':
-#                 payment_intent = event['data']['object']
-#                 # ... handle other event types
-#             else:
-#                 print('Unhandled event type {}'.format(event['type']))
-
-#             return json.dumps({"success": True}), 200
-        
-#         def handle_successful_payment_intent(payment_intent):
-#             # Fulfill the purchase
-#             print(str(payment_intent))
-        
-# api.add_resource(WebHookForStripeSuccess, '/webhook')
-
 class WebHookForStripeSuccess(Resource):
     def post(self):
         # endpoint_secret = os.getenv('WEBHOOK_SECRET')
@@ -2680,84 +2641,6 @@ class WebHookForStripeSuccess(Resource):
         }
 
 api.add_resource(WebHookForStripeSuccess, '/webhook')
-
-
-# class WebHookForStripeSuccess(Resource):
-#     def post(self):
-#         event = None
-#         payload = request.data  # Keep the payload in raw format
-
-#         print('THE END POINT SECRET:', endpoint_secret)
-
-#         if endpoint_secret:
-#             sig_header = request.headers.get('stripe-signature')
-#             try:
-#                 event = stripe.Webhook.construct_event(
-#                     payload, sig_header, endpoint_secret
-#                 )
-#             except stripe.error.SignatureVerificationError as e:
-#                 print('⚠️  Webhook signature verification failed.' + str(e))
-#                 return jsonify(success=False)
-
-#         try:
-#             event = json.loads(payload)  # Parse the event as JSON after verification
-#         except json.decoder.JSONDecodeError as e:
-#             print('⚠️  Webhook error while parsing basic request.' + str(e))
-#             return jsonify(success=False)
-
-#         # [Handle the event as before]
-
-#         return jsonify(success=True)
-
-# api.add_resource(WebHookForStripeSuccess, '/webhook')
-
-
-# class WebHookForStripeSuccess(Resource):
-#     def post(self):
-#         endpoint_secret='whsec_46dcd2d963e5a06aaae0a7be860e031ff3a11fcb19d08abad6193dd960803c6e'
-#         payload = request.data
-#         sig_header = request.headers.get('stripe-signature')
-
-#         try:
-#             event = stripe.Webhook.construct_event(
-#                 payload, sig_header, endpoint_secret
-#             )
-#         except stripe.error.SignatureVerificationError as e:
-#             print('⚠️  Webhook signature verification failed.', e)
-#             return jsonify(success=False)
-
-#         # Handle the event
-#         print("Webhook received:", event['type'])
-#         return jsonify(success=True)
-
-
-# api.add_resource(WebHookForStripeSuccess, '/webhook')
-
-# class WebHookForStripeSuccess(Resource):
-#     def post(self):
-#         endpoint_secret = os.getenv('WEBHOOK_SECRET')
-#         signature = request.headers.get("stripe-signature")
-
-#         # Debugging: Print raw payload and signature
-#         print("Raw payload:", request.data)
-#         print("Signature:", signature)
-
-#         try:
-#             event = stripe.Webhook.construct_event(
-#                 payload=request.data, sig_header=signature, secret=endpoint_secret
-#             )
-#         except ValueError as e:
-#             print(f"Invalid payload: {e}")
-#             return Response("Invalid payload", status=400)
-#         except stripe.error.SignatureVerificationError as e:
-#             print(f"Invalid Signature: {e}")
-#             return Response("Invalid Signature", status=400)
-
-#         print(f"Received Event: {event['type']}")
-#         return {"success": True}, 200
-
-# api.add_resource(WebHookForStripeSuccess, '/webhook')
-
 
 class CalculateMonthlyTotals(Resource):
     def get(self, month, year):
