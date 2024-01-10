@@ -62,7 +62,11 @@ function RentalAgreementDisplay() {
         rentalUpdatedAt={agreement.updated_at}
         renterFirstName={currentUser.firstName}
         renterLastName={currentUser.lastName}
-        location={item.equipment.location}
+        state={item.equipment.state}
+        postal_code={item.equipment.postal_code}
+        city={item.equipment.city}
+        address={item.equipment.address}
+        addressLine2={item.equipment.address_line_2}
         ownerEmail ={item.equipment.owner.email}
         ownerFirstName = {item.equipment.owner.firstName}
         ownerLastName ={item.equipment.owner.lastName}
@@ -92,7 +96,11 @@ function RentalAgreementDisplay() {
         rentalUpdatedAt={agreement.updated_at}
         renterFirstName={agreement.cart_item.cart.user.firstName}
         renterLastName={agreement.cart_item.cart.user.lastName}
-        location={currentUser.location}
+        state={currentUser.state}
+        postal_code={currentUser.postal_code}
+        city={currentUser.city}
+        address={currentUser.address}
+        addressLine2={currentUser.address_line_2}
         ownerEmail ={currentUser.email}
         ownerFirstName = {currentUser.firstName}
         ownerLastName ={currentUser.lastName}

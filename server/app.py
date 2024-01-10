@@ -1200,8 +1200,8 @@ class RentalAgreementsByID(Resource):
             equipment_id = cart_item_received.equipment_id,
             total_quantity = equipment_status.total_quantity,
             available_quantity = equipment_status.available_quantity,
-            reserved_quantity = equipment_status.available_quantity - cart_item_received,
-            rented_quantity = cart_item_received,
+            reserved_quantity = equipment_status.available_quantity - cart_item_received.quantity,
+            rented_quantity = cart_item_received.quantity,
             maintenance_quantity = 0,
             transit_quantity = 0
             )
@@ -1210,8 +1210,8 @@ class RentalAgreementsByID(Resource):
             equipment_id = cart_item_received.equipment_id,  # Lawnmower
             total_quantity = equipment_status.total_quantity,
             available_quantity = equipment_status.available_quantity,
-            reserved_quantity = equipment_status.available_quantity - cart_item_received,
-            rented_quantity = cart_item_received,
+            reserved_quantity = equipment_status.available_quantity - cart_item_received.quantity,
+            rented_quantity = cart_item_received.quantity,
             maintenance_quantity = 0,
             transit_quantity = 0,
             damaged_quantity = 0,
@@ -2522,25 +2522,6 @@ class SSEEndpoint(Resource):
 
         return Response(stream_with_context(event_stream()), content_type='text/event-stream')
             
-        # def event_stream():
-        #     while True:
-        #         if not events_queue.empty():
-        #             data = events_queue.get()  # Get the event data from the queue
-        #             yield f"data: {json.dumps(data)}\n\n"
-        #         else:
-        #             yield "data: {}\n\n"  # Send a keep-alive packet
-        #         time.sleep(1)
-
-        # return Response(stream_with_context(event_stream()), content_type='text/event-stream')
-        # def event_stream():
-        #     while True:
-        #         data = {"message": "Hello from SSE!"}
-        #         yield f"data: {json.dumps(data)}\n\n"
-        #         time.sleep(5)  # Send an event every 5 seconds for demonstration
-
-        # return Response(stream_with_context(event_stream()), content_type='text/event-stream')
-
-# Adding the SSE endpoint to the API
 api.add_resource(SSEEndpoint, '/sse/endpoint')
 
 class WebHookForStripeSuccess(Resource):

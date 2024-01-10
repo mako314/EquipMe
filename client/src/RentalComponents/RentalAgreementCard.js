@@ -13,8 +13,8 @@ function RentalAgreementCard({ equipmentName, rentalId, rentalStart, rentalEnd, 
     console.log("THE REVIEWS:",existingReviews)
 
     const [isModalOpen, setIsModalOpen] = useState(false)
-
-    const rentalAgreementLocation = `${address_line_2 === '' ?  address : address + ',' + address_line_2}, ${city}, ${state} ${postal_code} `
+    
+    const rentalAgreementLocation = `${address_line_2 === '' ? address + ', ' + address_line_2 : address}, ${city}, ${state} ${postal_code} `
 
     // console.log('OWNER ID:', ownerId)
     const rentalAgreementStatuses = ['in-progress', 'user-accepted', 'owner-accepted', 'both-accepted']
