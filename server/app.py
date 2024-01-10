@@ -1221,7 +1221,7 @@ class RentalAgreementsByID(Resource):
             )
             db.session.commit()
             if agreement.user_decision == 'accept' and agreement.owner_decision == 'accept':
-                agreement.agreement_status = 'Completed'
+                agreement.agreement_status = 'in-progress'
                 db.session.add(new_equipment_status)
                 db.session.add(new_state_history)
                 db.session.commit()
