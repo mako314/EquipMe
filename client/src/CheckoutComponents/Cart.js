@@ -179,6 +179,8 @@ useEffect(() => {
 
   
 
+  // This function handles the actual checkout aspect, and grabbing the client_secret that is passed into the embedded from located in the StripeCheckout component. This is needed to create the options for the checkout provider.
+  // Essentially we map over the filtered cart items (and we check to see if that item has been checked for checkout with isChecked) we then map over and send that item as json to the backend so we can map over it and include it in the line items for the checkout. In the end it just navigates you to the page and stripe handles checkout
   const handleCheckoutStripe = async () => {
     const itemsReadyForCheckout = filteredCartItems.filter(item => item.isChecked)
     .map(item => {

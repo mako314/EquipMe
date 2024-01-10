@@ -5,13 +5,14 @@ from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAg
 # from flask_restful import Api, Resource
 # import os
 import json
-from flask import Flask, request, make_response, jsonify, session, render_template, request, Response
+from flask import Flask, request, make_response, jsonify, session, render_template, request, Response, stream_with_context
 from flask_restful import Resource
 from config import db, app, api
 from sqlalchemy import asc, desc
 from sqlalchemy.exc import IntegrityError
 import pandas as pd
 import xml.etree.ElementTree as ET
+import time
 
 from flask_jwt_extended import create_access_token, set_access_cookies, jwt_required, get_jwt_identity, unset_jwt_cookies, create_refresh_token, get_jwt
 import stripe
@@ -20,11 +21,21 @@ import os
 from datetime import datetime, timezone, timedelta
 # from helpers import is_available_for_date_range
 from dotenv import load_dotenv
+from queue import Queue
 
 # Have to tell the dotenv what to load specifically
 load_dotenv('../.env.local')
 stripe.api_key=os.getenv('STRIPE_TEST_SECRET_KEY')
-endpoint_secret=os.getenv('WEBHOOK_SECRET')
+# endpoint_secret=os.getenv('WEBHOOK_SECRET')
+
+from queue import Queue
+
+# Global queue for SSE events
+# https://docs.python.org/3/library/queue.html
+# https://stackoverflow.com/questions/63394902/how-to-install-queuefrom-queue-import-queue-library-in-python3-8
+events_queue = Queue()
+
+
 #------------------------------------ BOTH USER LOGIN-----------------------------------------------------------------------------
 
 class Login(Resource):
@@ -2497,6 +2508,42 @@ class CreateLoginLinkStripeDash(Resource):
 api.add_resource(CreateLoginLinkStripeDash, '/v1/accounts/<string:id>/login_links')
 
 
+# https://docs.python.org/3/library/json.html
+class SSEEndpoint(Resource):
+    def get(self):
+        def event_stream():
+            while True:
+                if not events_queue.empty():
+                    data = events_queue.get()  # Get the event data from the queue
+                    yield f"data: {json.dumps(data)}\n\n"
+                else:
+                    time.sleep(1)  # Adjust the sleep time as needed
+                    continue  # Skip sending a message if the queue is empty
+
+                return Response(stream_with_context(event_stream()), content_type='text/event-stream')
+            
+        # def event_stream():
+        #     while True:
+        #         if not events_queue.empty():
+        #             data = events_queue.get()  # Get the event data from the queue
+        #             yield f"data: {json.dumps(data)}\n\n"
+        #         else:
+        #             yield "data: {}\n\n"  # Send a keep-alive packet
+        #         time.sleep(1)
+
+        # return Response(stream_with_context(event_stream()), content_type='text/event-stream')
+        # def event_stream():
+        #     while True:
+        #         data = {"message": "Hello from SSE!"}
+        #         yield f"data: {json.dumps(data)}\n\n"
+        #         time.sleep(5)  # Send an event every 5 seconds for demonstration
+
+        # return Response(stream_with_context(event_stream()), content_type='text/event-stream')
+
+# Adding the SSE endpoint to the API
+api.add_resource(SSEEndpoint, '/sse/endpoint')
+
+
 # class WebHookForStripeSuccess(Resource):
 #     def post(self):
 #         endpoint_secret = os.getenv('WEBHOOK_SECRET')
@@ -2538,15 +2585,13 @@ api.add_resource(CreateLoginLinkStripeDash, '/v1/accounts/<string:id>/login_link
 class WebHookForStripeSuccess(Resource):
     def post(self):
         # endpoint_secret = os.getenv('WEBHOOK_SECRET')
-        endpoint_secret="whsec_46dcd2d963e5a06aaae0a7be860e031ff3a11fcb19d08abad6193dd960803c6e"
-        print(request.headers.get("stripe-signature"))
+        endpoint_secret=os.getenv('CLI_WEBHOOK_SECRET')
+        # endpoint_secret="whsec_46dcd2d963e5a06aaae0a7be860e031ff3a11fcb19d08abad6193dd960803c6e"
+        # print(request.headers.get("stripe-signature"))
         request.get_data(as_text=True)
-        print(request.get_data(as_text=True))
+        # print(request.get_data(as_text=True))
         signature = request.headers.get("stripe-signature")
         
-
-
-
         # Directly process the webhook in the post method
         try:
             event = stripe.Webhook.construct_event(
@@ -2560,18 +2605,59 @@ class WebHookForStripeSuccess(Resource):
             # Invalid Signature
             print(f"Invalid Signature: {e}")
             return Response(status=400)
+        
+        # This dictionary will hold the data you want to send to the SSE endpoint
+        processed_event_data = {"type": event["type"], "data": {}}
 
         # Check the event type and handle accordingly
         if event['type'] == 'payment_intent.canceled':
             self.handle_payment_intent_canceled(event['data']['object'])
+            processed_event_data["data"] = self.format_payment_intent_data(event['data']['object'])
         elif event['type'] == 'payment_intent.payment_failed':
             self.handle_payment_intent_failed(event['data']['object'])
+            processed_event_data["data"] = self.format_payment_intent_data(event['data']['object'])
         elif event['type'] == 'payment_intent.succeeded':
             self.handle_successful_payment_intent(event['data']['object'])
+            processed_event_data["data"] = self.format_payment_intent_data(event['data']['object'])
+        elif event['type'] == 'payment_intent.created':
+            self.handle_payment_intent_created(event['data']['object'])
+            processed_event_data["data"] = self.format_payment_intent_data(event['data']['object'])
+        elif event['type'] == 'application_fee.created':
+            self.handle_application_fee_created(event['data']['object'])
+            processed_event_data["data"] = self.format_payment_intent_data(event['data']['object'])
+        elif event['type'] == 'checkout.session.expired':
+            self.handle_checkout_session_expired(event['data']['object'])
+            processed_event_data["data"] = self.format_payment_intent_data(event['data']['object'])
         else:
             print(f'Unhandled event type: {event["type"]}')
 
+        events_queue.put(processed_event_data)
+
+        print("THE EVENTS QUE:", events_queue)
+        # processed_event_data = {"type": event["type"], "data": event["data"]["object"]}
+        # events_queue.put(processed_event_data)  # Add the event data to the queue
+            
+        #Unhandled event type: transfer.created
+        #127.0.0.1 - - [09/Jan/2024 15:08:53] "POST /webhook HTTP/1.1" 200 -
+        #Unhandled event type: charge.succeeded
+        #127.0.0.1 - - [09/Jan/2024 15:08:53] "POST /webhook HTTP/1.1" 200 -
+        #Unhandled event type: payment.created
+        #127.0.0.1 - - [09/Jan/2024 15:08:53] "POST /webhook HTTP/1.1" 200 -
+        #Unhandled event type: checkout.session.completed
+        #127.0.0.1 - - [09/Jan/2024 15:08:53] "POST /webhook HTTP/1.1" 200 -
+
         return json.dumps({"success": True}), 200
+    def handle_checkout_session_expired(self, payment_intent):
+        # Logic to Checkout session has expired
+        print(f"Checkout session has expired: {payment_intent}")
+
+    def handle_application_fee_created(self, payment_intent):
+        # Logic to Application fee created
+        print(f"Application fee created: {payment_intent}")
+    
+    def handle_payment_intent_created(self, payment_intent):
+        # Logic to handle created payment intent
+        print(f"Created payment intent: {payment_intent}")
 
     def handle_successful_payment_intent(self, payment_intent):
         # Logic to handle successful payment intent
@@ -2584,6 +2670,14 @@ class WebHookForStripeSuccess(Resource):
     def handle_payment_intent_failed(self, payment_intent):
         # Logic to handle failed payment intent
         print(f"Failed payment intent: {payment_intent}")
+
+    def format_payment_intent_data(self, payment_intent):
+        # Format payment_intent data 
+        return {
+            "id": payment_intent.get("id"),
+            "status": payment_intent.get("status"),
+            # other fields 
+        }
 
 api.add_resource(WebHookForStripeSuccess, '/webhook')
 
