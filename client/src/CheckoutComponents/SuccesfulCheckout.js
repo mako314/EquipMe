@@ -5,9 +5,9 @@ function SuccesfulCheckout(){
     const apiUrl = useContext(ApiUrlContext)
     // https://developer.mozilla.org/en-US/docs/Web/API/EventSource
     // https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events
-    
+
     useEffect(() => {
-        const eventSource = new EventSource(`${apiUrl}sse/endpoint`);
+        const eventSource = new EventSource(`${apiUrl}sse/endpoint`)
 
         eventSource.onmessage = function(event) {
             const data = JSON.parse(event.data)
@@ -42,7 +42,7 @@ function SuccesfulCheckout(){
         <p className="mt-10 text-gray-600 text-center max-w-lg">Your rental was successful and you will receive a confirmation
             email soon. If delivery was possible, we'll be in touch soon with the Owner to coordinate the delivery of your Equipment!</p>
         <div className="mt-20">
-        <button fontfamily="Arial" type="submit" className="inline-flex border border-indigo-500 focus:outline-none
+        <button fontFamily="Arial" type="submit" className="inline-flex border border-indigo-500 focus:outline-none
             focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 justify-center rounded-md py-2 px-4 bg-indigo-600
             text-sm font-medium text-white shadow-sm">Continue Shopping</button>
         </div>

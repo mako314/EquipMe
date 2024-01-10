@@ -2520,7 +2520,7 @@ class SSEEndpoint(Resource):
                     time.sleep(1)  # Adjust the sleep time as needed
                     continue  # Skip sending a message if the queue is empty
 
-                return Response(stream_with_context(event_stream()), content_type='text/event-stream')
+        return Response(stream_with_context(event_stream()), content_type='text/event-stream')
             
         # def event_stream():
         #     while True:
