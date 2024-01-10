@@ -2340,6 +2340,10 @@ class CheckingOut(Resource):
         # equipment_id, cart_item_id,
         print(data)
         line_items = []
+        equipment_ids = []
+        cart_item_ids = []
+        user_ids = []
+
         # Check if data is a list and iterate over it
         if isinstance(data, list):
             for item in data:
@@ -2375,6 +2379,11 @@ class CheckingOut(Resource):
 
                 if equipment.status[0].reserved_quantity < cart_item.quantity:
                     raise ValueError("Not enough equipment available to fulfill this rental.")
+                
+                if user and equipment and cart_item:
+                    user_ids.append(str(user.id))
+                    equipment_ids.append(str(equipment.id))
+                    cart_item_ids.append(str(cart_item.id))
 
                 # Grabs the owner from the database
                 owner = EquipmentOwner.query.filter(EquipmentOwner.id == equipment.owner_id).first()
@@ -2420,11 +2429,22 @@ class CheckingOut(Resource):
         if not line_items:
             return make_response({"error": "No valid items for checkout"}, 400)
         
+        equipment_ids_str = ','.join(equipment_ids)
+        cart_item_ids_str = ','.join(cart_item_ids)
+        user_ids_str = ','.join(user_ids)
+        
         # Create the stripe checkout session
+        # https://stripe.com/docs/api/metadata
+        # https://stripe.com/docs/api/checkout/sessions/object
         try:
             checkout = stripe.checkout.Session.create(
             line_items=line_items,
             payment_intent_data={
+                'metadata' : {
+                'user_ids': user_ids_str, 
+                'equipment_ids': equipment_ids_str,
+                'cart_item_ids': cart_item_ids_str,
+            },
                 "application_fee_amount": 123,
                 "transfer_data": {"destination": f'{owner.stripe_id}'},
             },
@@ -2436,49 +2456,7 @@ class CheckingOut(Resource):
             )
         except Exception as e:
             return make_response({"error": str(e)}, 500)
-
-        # Fetch the most recent state history
-        # last_state = EquipmentStateHistory.query.filter_by(
-        #     equipment_id=equipment.id
-        # ).order_by(EquipmentStateHistory.changed_at.desc()).first()
-
-        # Ensure that the equipment is actually reserved before proceeding
-
-        # if 'reserved' in last_state.new_state:
-        #     raise ValueError("Equipment must be in reserved state to check out.")
-
-        # Deduct the quantity from the equipment's available stock
         
-        # if equipment.status[0].reserved_quantity < cart_item.quantity:
-        #     raise ValueError("Not enough equipment available to fulfill this rental.")
-
-        # equipment.status[0].reserved_quantity -= cart_item.quantity
-
-        # db.session.add(equipment)
-
-        # Record the state change
-        # new_state_history = EquipmentStateHistory(
-        #     equipment_id = equipment.id,
-        #     total_quantity = last_state.new_quantity,
-        #     available_quantity = last_state.available_quantity,
-        #     reserved_quantity = last_state.reserved_quantity,
-        #     rented_quantity = cart_item.quantity,
-        #     maintenance_quantity = last_state.maintenance_quantity,
-        #     transit_quantity = last_state.transit_quantity,
-        #     damaged_quantity = last_state.damaged_quantity,
-        #     previous_state = last_state.new_state,
-        #     new_state = f'{user.firstName} {user.lastName} has rented {cart_item.quantity}',
-        #     changed_at=datetime.utcnow(),
-        # )
-
-        # Need to create a stripe webhook for this:
-        # equipment.status[0].reserved_quantity -= cart_item.quantity
-        # equipment.status[0].rented_quantity += cart_item.quantity
-
-        # db.session.add(new_state_history)
-
-        # db.session.commit()
-
         if checkout:
             response = make_response(checkout, 200)
         else:
@@ -2528,7 +2506,6 @@ class WebHookForStripeSuccess(Resource):
     def post(self):
         # endpoint_secret = os.getenv('WEBHOOK_SECRET')
         endpoint_secret=os.getenv('CLI_WEBHOOK_SECRET')
-        # endpoint_secret="whsec_46dcd2d963e5a06aaae0a7be860e031ff3a11fcb19d08abad6193dd960803c6e"
         # print(request.headers.get("stripe-signature"))
         request.get_data(as_text=True)
         # print(request.get_data(as_text=True))
@@ -2591,11 +2568,13 @@ class WebHookForStripeSuccess(Resource):
         return json.dumps({"success": True}), 200
     def handle_checkout_session_expired(self, payment_intent):
         # Logic to Checkout session has expired
-        print(f"Checkout session has expired: {payment_intent}")
+        pass
+        # print(f"Checkout session has expired: {payment_intent}")
 
     def handle_application_fee_created(self, payment_intent):
         # Logic to Application fee created
-        print(f"Application fee created: {payment_intent}")
+        pass
+        # print(f"Application fee created: {payment_intent}")
     
     def handle_payment_intent_created(self, payment_intent):
         # Logic to handle created payment intent
@@ -2603,7 +2582,79 @@ class WebHookForStripeSuccess(Resource):
 
     def handle_successful_payment_intent(self, payment_intent):
         # Logic to handle successful payment intent
-        print(f"Successful payment intent: {payment_intent}")
+        print(f"Payment intent SUCCEEDED: {payment_intent}")
+        # print(payment_intent)
+        # equipment_id = payment_intent.get("metadata", {}).get("equipment_id")
+        # cart_item_id = payment_intent.get("metadata", {}).get("cart_item_id")
+        # user_id = payment_intent.get("metadata", {}).get("user_id")
+
+        # print("THE EQUIPMENT ID:", equipment_id)
+        # print("THE CART ITEM ID:", cart_item_id)
+        # print("THE USER ID:", user_id)
+        # if equipment_id and cart_item_id and user_id:
+        #     equipment = Equipment.query.get(equipment_id)
+        #     cart_item = CartItem.query.get(cart_item_id)
+        #     user = User.query.get(user_id)
+
+        #     if not equipment or not cart_item:
+        #         print("Equipment or Cart Item not found.")
+        #         return
+        #     if not user:
+        #         print("User not found, currently we do not support guest checkout")
+        #         return
+        equipment_ids_str = payment_intent.get("metadata", {}).get("equipment_ids")
+        cart_item_ids_str = payment_intent.get("metadata", {}).get("cart_item_ids")
+        user_ids_str = payment_intent.get("metadata", {}).get("user_ids")
+
+        if equipment_ids_str and cart_item_ids_str and user_ids_str:
+                equipment_ids = equipment_ids_str.split(',')
+                cart_item_ids = cart_item_ids_str.split(',')
+                user_ids = user_ids_str.split(',')
+
+                for equipment_id, cart_item_id, user_id in zip(equipment_ids, cart_item_ids, user_ids):
+                    # Process each equipment, cart item, and user
+                    equipment = Equipment.query.get(equipment_id)
+                    cart_item = CartItem.query.get(cart_item_id)
+                    user = User.query.get(user_id)
+
+                    if not equipment or not cart_item or not user:
+                        print("Equipment, Cart Item, or User not found.")
+                        continue
+
+                last_state = EquipmentStateHistory.query.filter_by(
+                equipment_id=equipment.id
+                ).order_by(EquipmentStateHistory.changed_at.desc()).first()
+
+            # Update equipment status
+                if equipment.status[0].reserved_quantity < cart_item.quantity:
+                    raise ValueError("Not enough equipment available to fulfill this rental.")
+                
+                equipment.status[0].reserved_quantity -= cart_item.quantity
+                equipment.status[0].rented_quantity += cart_item.quantity
+                db.session.commit()
+
+                new_state_history = EquipmentStateHistory(
+                equipment_id = equipment.id,
+                total_quantity = last_state.total_quantity,
+                available_quantity = last_state.available_quantity,
+                reserved_quantity = last_state.reserved_quantity,
+                rented_quantity = cart_item.quantity,
+                maintenance_quantity = last_state.maintenance_quantity,
+                transit_quantity = last_state.transit_quantity,
+                damaged_quantity = last_state.damaged_quantity,
+                previous_state = last_state.new_state,
+                new_state = f'{user.firstName} {user.lastName} has rented {cart_item.quantity}',
+                changed_at=datetime.utcnow(),
+            )
+                print("THE NEW STATE HISTORY:",new_state_history)
+                
+                db.session.add(new_state_history)
+                db.session.commit()
+                
+        else:
+            print("Metadata does not contain required IDs.")   
+        
+
 
     def handle_payment_intent_canceled(self, payment_intent):
         # Logic to handle canceled payment intent
