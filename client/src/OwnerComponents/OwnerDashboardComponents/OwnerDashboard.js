@@ -372,6 +372,22 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
 function OwnerFavorites() {
     // setPageTitle('Your Favorites')
     currentUser?.owner_favorite?.map((favorite) =>console.log("THE USER IDS:",favorite?.user.user_id))
+
+    // Conditional to test if the owner_favorites array in the Owner data object.
+    if (currentUser?.owner_favorite.length === 0){
+        return(
+        <div className="flex flex-col items-center justify-center p-10 bg-white shadow-md rounded-lg">
+            <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPmr2qlzoYhc6OVoQZVRReION31sFib3oSBQ&usqp=CAU"
+                alt="More Heavy Equipment just Sitting Out"
+                className="max-w-xs md:max-w-sm lg:max-w-md mb-4 rounded-lg shadow-lg"
+            />
+            <p className="text-lg md:text-xl lg:text-2xl text-center text-gray-700 font-semibold">
+                You haven't favorited anyone yet, once you have you'll be able to see your favorites in this section!
+            </p>
+        </div>
+        )
+    }
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
             {currentUser?.owner_favorite?.map((favorite) => {
