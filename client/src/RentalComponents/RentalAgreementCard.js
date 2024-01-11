@@ -3,6 +3,7 @@ import {useNavigate} from 'react-router-dom';
 import SubmitReview from "../ReviewComponents/SubmitReview";
 
 function RentalAgreementCard({ equipmentName, rentalId, rentalStart, rentalEnd, renterFirstName, renterLastName, city, state ,address, address_line_2, postal_code, ownerEmail, ownerFirstName, ownerLastName, cartName, quantity, rentalDelivery, rentalDeliveryAddress, rentalRevisions, rentalStatus,rentalCreatedAt, rentalUpdatedAt, setFromOwnerDash, fromOwnerDash, renterId, ownerId, existingReviews}) {
+    
     const navigate = useNavigate()
     // May be a good idea to draw how exactly status should work, 
     // one side accepted, both, in progress, etc

@@ -58,10 +58,10 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
       return filterKeyWord ? agreement.agreement_status === filterKeyWord : true
     }
 
-    const filterAgreementsByName = (agreement) => {
-      console.log("Agreement status: ", agreement.agreement_status, "Filter keyword: ", filterKeyWord)
-      return filterKeyWord ? agreement.agreement_status === filterKeyWord : true
-    }
+    // const filterAgreementsByName = (agreement) => {
+    //   console.log("Agreement status: ", agreement.agreement_status, "Filter keyword: ", filterKeyWord)
+    //   return filterKeyWord ? agreement.agreement_status === filterKeyWord : true
+    // }
 
     // Flatten the agreements into a single array, I needed the cart, the cart_item for quantity etc, when everything is flattened, spread it into allAgreements
     let allAgreements = role === 'user' ? (currentUser?.cart ?? []).flatMap(cart => 
@@ -86,11 +86,11 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
       allAgreements = allAgreements.filter(filterAgreementsByStatus)
     }
 
-    if (filterKeyWord && filterKeyWord !== 'none') {
-      // Check agreements after filtering
-      console.log("Agreements after filtering:", allAgreements) 
-      allAgreements = allAgreements.filter(filterAgreements)
-    }
+    // if (filterKeyWord && filterKeyWord !== 'none') {
+    //   // Check agreements after filtering
+    //   console.log("Agreements after filtering:", allAgreements) 
+    //   allAgreements = allAgreements.filter(filterAgreements)
+    // }
 
     // Sort the ( possibly filtered) agreements. Agreements are always sorted regardless if filtering occurs or not.
     const sortedAgreements = allAgreements.sort(userSortOption)
@@ -237,6 +237,19 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
               type="radio" 
               className="form-radio h-5 w-5 text-gray-600" 
               name="fav_option" 
+              value="in-progress" 
+              id="in-progress" 
+              onChange={handleRadioChange} 
+              checked={filterKeyWord === 'in-progress'}
+            />
+            <label htmlFor="in-progress" className="ml-2 text-gray-700">In-Progress</label>
+          </div>
+
+          <div className="flex items-center mr-2">
+            <input 
+              type="radio" 
+              className="form-radio h-5 w-5 text-gray-600" 
+              name="fav_option" 
               value="completed" 
               id="completed" 
               onChange={handleRadioChange} 
@@ -244,7 +257,10 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
             />
             <label htmlFor="completed" className="ml-2 text-gray-700">Completed</label>
           </div>
+
         </form>
+
+        
   
   <div className="flex flex-row flex-wrap justify-start"> 
     {sortedCards}
