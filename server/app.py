@@ -349,6 +349,8 @@ class EquipmentOwners(Resource):
             )
             db.session.add(new_owner)
 
+            print('THE NEW OWNER:', new_owner)
+
             new_owner.password_hash = new_owner._password_hash
 
             db.session.commit()
@@ -432,10 +434,10 @@ class EquipmentOwners(Resource):
 
             # response = make_response(new_owner.to_dict(), 201)
             if account_link:
-                return jsonify({
-                    'owner': new_owner,
+                return make_response(jsonify({
+                    'owner': new_owner.to_dict(),
                     'stripe_onboard_link': account_link.url
-                }), 200
+                }), 201)
             else:
                 return make_response(new_owner.to_dict(), 201)
 
@@ -1199,8 +1201,8 @@ class RentalAgreementsByID(Resource):
             new_equipment_status = EquipmentStatus(
             equipment_id = cart_item_received.equipment_id,
             total_quantity = equipment_status.total_quantity,
-            available_quantity = equipment_status.available_quantity,
-            reserved_quantity = equipment_status.available_quantity - cart_item_received.quantity,
+            available_quantity = equipment_status.available_quantity - cart_item_received.quantity,
+            reserved_quantity = equipment_status.reserved_quantity + cart_item_received.quantity,
             rented_quantity = cart_item_received.quantity,
             maintenance_quantity = 0,
             transit_quantity = 0
@@ -1209,8 +1211,8 @@ class RentalAgreementsByID(Resource):
             new_state_history = EquipmentStateHistory(
             equipment_id = cart_item_received.equipment_id,  # Lawnmower
             total_quantity = equipment_status.total_quantity,
-            available_quantity = equipment_status.available_quantity,
-            reserved_quantity = equipment_status.available_quantity - cart_item_received.quantity,
+            available_quantity = equipment_status.available_quantity - cart_item_received.quantity,
+            reserved_quantity = equipment_status.reserved_quantity + cart_item_received.quantity,
             rented_quantity = cart_item_received.quantity,
             maintenance_quantity = 0,
             transit_quantity = 0,
@@ -1801,7 +1803,8 @@ class AddItemToCart(Resource):
             equipment_id = equipment.id,
             total_quantity = equipment_status.total_quantity,
             available_quantity = equipment_status.available_quantity,
-            reserved_quantity = amount_added_to_cart,
+            # amount_added_to_cart 
+            reserved_quantity = equipment_status.available_quantity,
             rented_quantity = previous_state_history.rented_quantity,
             maintenance_quantity = previous_state_history.maintenance_quantity,
             transit_quantity = previous_state_history.transit_quantity,
@@ -2643,8 +2646,8 @@ class WebHookForStripeSuccess(Resource):
                 equipment_id = equipment.id,
                 total_quantity = last_state.total_quantity,
                 available_quantity = last_state.available_quantity,
-                reserved_quantity = last_state.reserved_quantity,
-                rented_quantity = cart_item.quantity,
+                reserved_quantity = last_state.reserved_quantity - cart_item.quantity,
+                rented_quantity = last_state.rented_quantity + cart_item.quantity,
                 maintenance_quantity = last_state.maintenance_quantity,
                 transit_quantity = last_state.transit_quantity,
                 damaged_quantity = last_state.damaged_quantity,

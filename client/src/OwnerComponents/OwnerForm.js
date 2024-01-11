@@ -14,13 +14,14 @@ function OwnerForm({addOwner}){
     const apiUrl = useContext(ApiUrlContext)
     // const [owner, setOwner] = useContext(OwnerContext)
     const { currentUser, role, setCurrentUser, setRole } = UserSessionContext()
+
     // https://formik.org/docs/api/formik#setfieldvalue-field-string-value-any-shouldvalidate-boolean--promisevoid--formikerrors
     const handleOwnerConsentChange = (e) => {
       formik.handleChange(e) // update formik state
       setShowLinkCheckbox(e.target.value === 'yes') // show or hide the checkbox
     }
 
-    function handleLogin() {
+    function handleLogin(stripe_onboard_link = null) {
         
       let email = formik.values.email
       let password = formik.values.password
@@ -35,9 +36,17 @@ function OwnerForm({addOwner}){
         }).then((resp) => {
           if (resp.ok) {
             resp.json().then((data) => {
+              console.log("LOGIN DATA:", data)
               setCurrentUser(data.owner)
-              setRole('owner')
-              navigate(`/dashboard`) // <-------- navigates to the dashboard
+              setRole(data.role)
+              console.log("the type of data the role is:", typeof(data.role))
+              if (stripe_onboard_link) {
+                // Open the Stripe onboard link in a new tab
+                window.open(stripe_onboard_link, '_blank')
+              } else {
+                // If there's no Stripe onboard link, navigate to the dashboard
+                navigate(`/dashboard`)
+              }
             })
           }
         })
@@ -80,9 +89,10 @@ function OwnerForm({addOwner}){
             })
                 .then(res => {
                     if (res.ok){
-                        res.json().then(owner => {
-                            addOwner(owner)
-                            handleLogin()
+                        res.json().then(data => {
+                            addOwner(data.owner)
+                            console.log("THE OWNER DATA:", data.owner)
+                            handleLogin(data.stripe_onboard_link)
                         })
                     } else {
                         res.json().then(error => setError(error)) //for backend errors
@@ -217,7 +227,7 @@ function OwnerForm({addOwner}){
         <>
           <br/>
           <input type="checkbox" name="create_link" checked={formik.values.create_link === 'yes'} onChange={(e) => formik.setFieldValue('create_link', e.target.checked ? 'yes' : 'no')} />
-          <label htmlFor="create_link" className="ml-2 text-sm text-gray-800 sm:text-base">Yes, and Create my Stripe Dashboard Link Now</label>
+          <label htmlFor="create_link" className="ml-2 text-sm text-gray-800 sm:text-base">Yes, and take me to complete my stripe onboarding now</label>
         </>
       )}
 
