@@ -15,6 +15,7 @@ function BarChart({currentUser}){
 
     // console.log("THE API URL:", apiUrl)
 
+    // I needed to make a context to hold some data so it would persist
     const { barChartEquipmentData, setBarChartEquipmentData } = useEquipmentData()
 
     const [monthlyData, setMonthlyData] = useState({
@@ -452,38 +453,44 @@ function BarChart({currentUser}){
       
   }, [])
 
+
   // console.log("THE CHART DATA:", monthlyData)
   
-    return(
-        
-      <div className="h-full w-full flex flex-col items-center justify-center p-4">
+    return (
+      currentUser.equipment.length === 0 ? (
+        <div className="flex items-center justify-center h-full text-center text-gray-800">
+          <p className="text-lg font-medium">No rental agreements have been formed yet!</p>
+        </div>
+      ) : 
+      (
+        <div className="h-full w-full flex flex-col items-center justify-center p-4">
         <div className="flex justify-center space-x-4 mb-4">
-      <button 
-        className='mb-4 text-lg font-semibold bg-orange-500 text-white py-2 px-6 rounded hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:ring-opacity-50 shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1'
-        onClick={() => updateChartData(false)}
-      >
-        Refresh Data
-      </button>
+        <button 
+          className='mb-4 text-lg font-semibold bg-orange-500 text-white py-2 px-6 rounded hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:ring-opacity-50 shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1'
+          onClick={() => updateChartData(false)}
+        >
+          Refresh Data
+        </button>
 
-      <button 
-        className='mb-4 text-lg font-semibold bg-orange-500 text-white py-2 px-6 rounded hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:ring-opacity-50 shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1'
-        onClick={() => updateChartData(true)}
-      >
-        Show All Data
-      </button>
-      </div>
+        <button 
+          className='mb-4 text-lg font-semibold bg-orange-500 text-white py-2 px-6 rounded hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:ring-opacity-50 shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1'
+          onClick={() => updateChartData(true)}
+        >
+          Show All Data
+        </button>
+        </div>
 
-      <div className="w-full h-full">
-      {showAll ? (
-          <Bar data={barChartEquipmentData} options={barChartOptions} />
-        ) : (
-          <Bar data={monthlyData} options={barChartOptions} />
-        )}
-    </div>
+        <div className="w-full h-full">
+        {showAll ? (
+            <Bar data={barChartEquipmentData} options={barChartOptions} />
+          ) : (
+            <Bar data={monthlyData} options={barChartOptions} />
+          )}
+        </div>
 
-    </div>
-        
-    )
+        </div>
+  )
+  )
 }
 
 export default BarChart
