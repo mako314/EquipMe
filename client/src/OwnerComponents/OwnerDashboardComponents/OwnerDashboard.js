@@ -550,6 +550,21 @@ function AccountSettings() {
             case 'Potential Renters':
                 if (isLoading) {
                     return <div>Loading...</div> // Loading indicator
+                } 
+                console.log("THE POTENTIAL RENTAL USERS:", potentialRentalUsers)
+                if (potentialRentalUsers.error === 'Users not found'){
+                    return(
+                    <div className="flex flex-col items-center justify-center p-10 bg-white shadow-md rounded-lg">
+                        <img
+                            src="https://assets-global.website-files.com/5f98b7826beb070752d84b32/6077fad14e8d6b4623eb8d48_3%20Reasons%20Why%20Talking%20to%20Real%20Users%20is%20Important%20for%20UX%20Design%20-%20Egnyte%20Blog.png"
+                            alt="More Heavy Equipment just Sitting Out"
+                            className="max-w-xs md:max-w-sm lg:max-w-md mb-4 rounded-lg shadow-lg"
+                        />
+                        <p className="text-lg md:text-xl lg:text-2xl text-center text-gray-700 font-semibold">
+                            No users have signed up with your profession yet, try encouraging some friends to sign up!
+                        </p>
+                    </div>
+                    )
                 }
                 return (
                     <UserCollection
