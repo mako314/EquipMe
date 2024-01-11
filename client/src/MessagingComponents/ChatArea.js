@@ -22,7 +22,7 @@ function ChatArea({inboxes, SelectedThreadID, setNewMessage, newMessage, setInbo
 
 //   console.log(owner)
 
-  
+
 // ----------------------------------------------------------------------
 // ---------------Detect whether or not a USER is logged in-------------------
 
@@ -67,7 +67,7 @@ function ChatArea({inboxes, SelectedThreadID, setNewMessage, newMessage, setInbo
 
   // Selects the thread to display , I may incorporate a place holder in place of it being empty at the mounting of the application
   const selectedThread = inboxes?.find(inbox => inbox.id === SelectedThreadID);
-
+  selectedThread?.thread.messages.map((message) => (console.log("the message details:",message)))
     return (
         <div className="flex-grow p-4">
           <div className="bg-white rounded-lg shadow-md p-4 relative">

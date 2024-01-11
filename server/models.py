@@ -177,7 +177,7 @@ class EquipmentOwner(db.Model, SerializerMixin):
 
     # I could include owner here, howeevr I'm not sure it's necessarily required.
     #Serialization rules
-    serialize_rules = ('-orders.owner', '-orders.user','-equipment.owner', '-agreements.owner', '-owner_inboxes.owner','-owner_inboxes.user','-review.owner', '-review.user.user_favorite','-review.user.cart', '-review.user.user_inboxes','-review.cart_item', '-equipment.cart_item.cart.cart_item', '-owner_favorite.owner', '-owner_favorite.equipment', '-owner_favorite.user.user_inboxes','-owner_favorite.user.cart','-owner_favorite.user.review','-owner_favorite.user.user_favorite','-user_favorite.owner', '-user_favorite.user','-agreements.cart_item.equipment.user_favorite', '-agreements.cart_item.review', '-equipment.cart_item.cart.user','-equipment.user_favorite.user', '-agreements.cart_item.equipment.featured_equipment', '-agreements.review.owner', '-agreements.review.user', '-review.agreements', '-orders.equipment',)
+    serialize_rules = ('-orders.owner', '-orders.user','-equipment.owner', '-agreements.owner', '-owner_inboxes.owner','-owner_inboxes.user','-review.owner', '-review.user.user_favorite','-review.user.cart', '-review.user.user_inboxes','-review.cart_item', '-equipment.cart_item.cart.cart_item', '-owner_favorite.owner', '-owner_favorite.equipment', '-owner_favorite.user.user_inboxes','-owner_favorite.user.cart','-owner_favorite.user.review','-owner_favorite.user.user_favorite','-user_favorite.owner', '-user_favorite.user','-agreements.cart_item.equipment.user_favorite', '-agreements.cart_item.review', '-equipment.cart_item.cart.user','-equipment.user_favorite.user', '-agreements.cart_item.equipment.featured_equipment', '-agreements.review.owner', '-agreements.review.user', '-review.agreements', '-orders.equipment', '-agreements.cart_item.cart.user', '-agreements.cart_item.equipment.equipment_state_summary', '-agreements.cart_item.equipment.orders', '-agreements.cart_item.equipment.state_history', '-agreements.cart_item.equipment.status', '-user_favorite.equipment.equipment_state_summary', '-user_favorite.equipment.state_history')
 
     # '-agreements.review.user.orders'
     # '-review.user.orders', '-owner_favorite.user.orders', '-equipment.orders', '-agreements.cart_item.equipment.orders','-agreements.cart_item.equipment.user.orders','-orders.equipment', '-orders.user', '-equipment.orders.owner', '-equipment.orders.user',
@@ -742,7 +742,7 @@ class Message(db.Model, SerializerMixin):
     thread = db.relationship('Thread', back_populates='messages')
 
 
-    serialize_rules = ('-thread',)
+    serialize_rules = ('-thread.user_inboxes', '-thread.user_inboxes.thread', '-thread.owner_inboxes', '-thread.owner_inboxes.thread' )
 
     # I also have to consider attaching an equipment ID. Maybe equipment quotes can be a table also?
 
@@ -758,7 +758,7 @@ class Thread(db.Model, SerializerMixin):
     user_inboxes = db.relationship("UserInbox", back_populates="thread")
     owner_inboxes = db.relationship("OwnerInbox", back_populates="thread")
 
-    serialize_rules = ('-user_inboxes.thread', '-owner_inboxes.thread','-user_inboxes.user', '-owner_inboxes.owner','-messages.thread')
+    serialize_rules = ('-user_inboxes.thread', '-owner_inboxes.thread','-user_inboxes.user.agreements', '-user_inboxes.user.cart', '-user_inboxes.user.review', '-user_inboxes.user.orders', '-user_inboxes.user.user_favorite','-user_inboxes.user.owner_favorite', '-user_inboxes.user._password_hash','-owner_inboxes.owner._password_hash','-owner_inboxes.owner.equipment', '-owner_inboxes.owner.agreements', '-owner_inboxes.owner.owner_favorite', '-owner_inboxes.owner.orders', '-owner_inboxes.owner.user_favorite', '-owner_inboxes.owner.review','-messages.thread')
 
 class UserInbox(db.Model, SerializerMixin):
     __tablename__ = "user_inboxes"
