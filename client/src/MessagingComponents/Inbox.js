@@ -103,8 +103,8 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
                 handleThreadSelect(inbox.id);
                 const firstMessage = inbox.thread.messages[0];
                 
-                let recipientType;
-                let recipientID;
+                let recipientType
+                let recipientID
                 // if (user)
                 if (role === 'user') {
                     // If a user is logged in
