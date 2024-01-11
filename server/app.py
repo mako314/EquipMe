@@ -213,7 +213,7 @@ class Users(Resource):
                 address_line_2 = data['address_line_2'],
                 postal_code = data['postal_code'],
                 profession = data['profession'],
-                profileImage = data['profileImg'],
+                profileImage = data['profileImage'],
                 # bannerImg = data['bannerImg'],    
             )
 
