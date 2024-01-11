@@ -90,53 +90,61 @@ console.log(carouselItems)
     setCurrentIndex(newIndex)
   }
 
+  if (userAgreementsForDateSorting.length === 0){
+    return(
+      <div className="flex items-center justify-center h-full text-center text-gray-800">
+       <p className="text-lg font-medium">You haven't rented any Equipment yet, you can use this area later to track those! </p>
+      </div>
+    )
+  }
+
   return (
-<>
-  <h2 className="text-lg font-medium text-center mb-2 bg-gray-100 rounded-lg shadow-lg p-2">
-    Your Current Rentals
-  </h2>
-  <div className="flex w-full bg-gray-100 rounded-lg shadow-lg p-2 items-center"> {/* Container for the image and details */}
-    <div className="w-1/2 p-4"> {/* Container for the image */}
-      {carouselItems[currentIndex]?.image}
-    </div>
-    <div className="w-1/2 p-4 flex flex-col justify-between"> {/* Container for the details and buttons */}
-      <div>
-        <p className="text-lg font-semibold">
-          {carouselItems[currentIndex]?.name}
-        </p>
-        <p className="text-sm">
-          Quantity: {carouselItems[currentIndex]?.quantityRented}
-        </p>
-        <p className="text-sm">
-          Total Cost: {carouselItems[currentIndex]?.amountTotal}
-        </p>
-        <p className="text-sm">
-          {carouselItems[currentIndex]?.duration}
-        </p>
-        <p className="text-sm">
-          Owner Phone: {carouselItems[currentIndex]?.ownerPhone}
-        </p>
-        <p className="text-sm mb-4">
-          Owner Email: {carouselItems[currentIndex]?.ownerEmail}
-        </p>
-      </div>
-      <div className="flex justify-start space-x-4 mt-4"> {/* Adjusted Button container */}
-        <button
-          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow transition duration-300 ease-in-out"
-          onClick={goToPrevious}
-        >
-          Previous
-        </button>
-        <button
-          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow transition duration-300 ease-in-out"
-          onClick={goToNext}
-        >
-          Next
-        </button>
-      </div>
-    </div>
-  </div>
-</>
+      <>
+        <h2 className="text-lg font-medium text-center mb-2 bg-gray-100 rounded-lg shadow-lg p-2">
+          Your Current Rentals
+        </h2>
+        <div className="flex w-full bg-gray-100 rounded-lg shadow-lg p-2 items-center"> {/* Container for the image and details */}
+          <div className="w-1/2 p-4"> {/* Container for the image */}
+            {carouselItems[currentIndex]?.image}
+          </div>
+          <div className="w-1/2 p-4 flex flex-col justify-between"> {/* Container for the details and buttons */}
+            <div>
+              <p className="text-lg font-semibold">
+                {carouselItems[currentIndex]?.name}
+              </p>
+              <p className="text-sm">
+                Quantity: {carouselItems[currentIndex]?.quantityRented}
+              </p>
+              <p className="text-sm">
+                Total Cost: {carouselItems[currentIndex]?.amountTotal}
+              </p>
+              <p className="text-sm">
+                {carouselItems[currentIndex]?.duration}
+              </p>
+              <p className="text-sm">
+                Owner Phone: {carouselItems[currentIndex]?.ownerPhone}
+              </p>
+              <p className="text-sm mb-4">
+                Owner Email: {carouselItems[currentIndex]?.ownerEmail}
+              </p>
+            </div>
+            <div className="flex justify-start space-x-4 mt-4"> {/* Adjusted Button container */}
+              <button
+                className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow transition duration-300 ease-in-out"
+                onClick={goToPrevious}
+              >
+                Previous
+              </button>
+              <button
+                className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow transition duration-300 ease-in-out"
+                onClick={goToNext}
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        </div>
+      </>
   )
 }
 
