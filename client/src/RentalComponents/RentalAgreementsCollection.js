@@ -263,7 +263,18 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
         
   
   <div className="flex flex-row flex-wrap justify-start"> 
-    {sortedCards}
+    {sortedCards.length > 0 ? sortedCards : (
+                <div className="flex flex-col items-center justify-center p-10 bg-white shadow-md rounded-lg">
+                    <img
+                        src="https://www.kaser-albehar.com/wp-content/uploads/2018/10/110819093004-1.jpg"
+                        alt="More Heavy Equipment just Sitting Out"
+                        className="max-w-xs md:max-w-sm lg:max-w-md mb-4 rounded-lg shadow-lg"
+                    />
+                    <p className="text-lg md:text-xl lg:text-2xl text-center text-gray-700 font-semibold">
+                      Once you've uploaded Equipment that's available to be rented, You'll be able to view and handle your rental agreements here!
+                    </p>
+                </div>
+            )}
   </div>
   </div>
     )

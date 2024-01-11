@@ -41,7 +41,7 @@ function ProductCollection({ equipmentArray, handleEquipmentDelete, handleEditEq
                 <div className="flex flex-col items-center justify-center p-10 bg-white shadow-md rounded-lg">
                     <img
                         src="https://www.modernmachinery.com/wp-content/uploads/2022/04/2H1A9567-Edit-1.jpg"
-                        alt="Empty Shelf"
+                        alt="Heavy Duty Equipment"
                         className="max-w-xs md:max-w-sm lg:max-w-md mb-4 rounded-lg shadow-lg"
                     />
                     <p className="text-lg md:text-xl lg:text-2xl text-center text-gray-700 font-semibold">
