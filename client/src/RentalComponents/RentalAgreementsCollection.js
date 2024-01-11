@@ -53,7 +53,12 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
   useEffect(() => {
 
     // take an agreement and filter it, it's called on all agreements which is an array with the agreement data we need. It's been flatmapped twice if it's a user, and then mapped over for the data we need. We compare it with the selected filter key word, which is decided by the radio buttons and compared with agreement_status of the agreement.
-    const filterAgreements = (agreement) => {
+    const filterAgreementsByStatus = (agreement) => {
+      console.log("Agreement status: ", agreement.agreement_status, "Filter keyword: ", filterKeyWord)
+      return filterKeyWord ? agreement.agreement_status === filterKeyWord : true
+    }
+
+    const filterAgreementsByName = (agreement) => {
       console.log("Agreement status: ", agreement.agreement_status, "Filter keyword: ", filterKeyWord)
       return filterKeyWord ? agreement.agreement_status === filterKeyWord : true
     }
@@ -78,6 +83,12 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
     if (filterKeyWord && filterKeyWord !== 'none') {
       // Check agreements after filtering
       console.log("Agreements after filtering:", allAgreements) 
+      allAgreements = allAgreements.filter(filterAgreementsByStatus)
+    }
+
+    if (filterKeyWord && filterKeyWord !== 'none') {
+      // Check agreements after filtering
+      console.log("Agreements after filtering:", allAgreements) 
       allAgreements = allAgreements.filter(filterAgreements)
     }
 
@@ -97,6 +108,8 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
           cartName={agreement.cart_name}
           quantity={agreement.item.quantity}
           equipmentName={agreement.item.equipment.name}
+          equipmentModel={agreement.item.equipment.model}
+          equipmentMake={agreement.item.equipment.make}
           rentalStart={formatDate(agreement.rental_start_date)}
           rentalEnd={formatDate(agreement.rental_end_date)}
           rentalDelivery={agreement.delivery}
@@ -128,6 +141,8 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
         cartName={agreement.cart_item.cart.cart_name}
         quantity={agreement.cart_item.quantity}
         equipmentName={agreement.cart_item.equipment.name}
+        equipmentModel={agreement.cart_item.equipment.model}
+        equipmentMake={agreement.cart_item.equipment.make}
         rentalStart={formatDate(agreement.rental_start_date)}
         rentalEnd={formatDate(agreement.rental_end_date)}
         rentalDelivery={agreement.delivery}

@@ -42,7 +42,9 @@ function OwnerForm({addOwner}){
               console.log("the type of data the role is:", typeof(data.role))
               if (stripe_onboard_link) {
                 // Open the Stripe onboard link in a new tab
-                window.open(stripe_onboard_link, '_blank')
+                // window.open(stripe_onboard_link, '_blank')
+                // Open stripe in same tab, leads to dashboard after completion
+                window.location.href = data.stripe_onboard_link
               } else {
                 // If there's no Stripe onboard link, navigate to the dashboard
                 navigate(`/dashboard`)
@@ -228,6 +230,11 @@ function OwnerForm({addOwner}){
           <br/>
           <input type="checkbox" name="create_link" checked={formik.values.create_link === 'yes'} onChange={(e) => formik.setFieldValue('create_link', e.target.checked ? 'yes' : 'no')} />
           <label htmlFor="create_link" className="ml-2 text-sm text-gray-800 sm:text-base">Yes, and take me to complete my stripe onboarding now</label>
+          <p className=" text-xs text-gray-800 sm:text-base"> 
+          **
+          <br/>
+          Checking this box will open the stripe onboarding process in the same tab, after completion you'll be taken to your dashboard
+          </p>
         </>
       )}
 

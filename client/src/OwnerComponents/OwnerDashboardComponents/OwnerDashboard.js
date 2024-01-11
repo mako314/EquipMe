@@ -257,12 +257,7 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
         
     }
 
-
-
-
-
-
-
+    // The rental agreements portion, allow for filtering etc,
     function RentalAgreements() {
         // setPageTitle('Rental Agreements')
         fromOwnerDash = true
@@ -445,6 +440,7 @@ function AccountSettings() {
         })
     }
 
+    //Handles navigating one to their inbox
     const handleInboxNavigation = () => {
         setFromOwnerDash(true)
         // Use setTimeout to allow state update before navigation
@@ -453,6 +449,7 @@ function AccountSettings() {
         }, 0)
       }
 
+    // Takes a user to their public facing profile
     const handlePublicProfileNav = () => {
         setFromOwnerDash(true)
         // Use setTimeout to allow state update before navigation
