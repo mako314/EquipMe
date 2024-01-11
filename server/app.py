@@ -1,4 +1,4 @@
-from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement, Message, Thread,UserInbox, OwnerInbox, Cart, CartItem, EquipmentPrice, Review, UserFavorite, OwnerFavorite, AgreementComment, FeaturedEquipment, EquipmentStateHistory, EquipmentStatus, EquipmentStateSummary
+from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement, Message, Thread,UserInbox, OwnerInbox, Cart, CartItem, EquipmentPrice, Review, UserFavorite, OwnerFavorite, AgreementComment, FeaturedEquipment, EquipmentStateHistory, EquipmentStatus, EquipmentStateSummary, OrderHistory
 # from flask_cors import CORS
 # from flask_migrate import Migrate
 # from flask import Flask, request, make_response, jsonify
@@ -2343,11 +2343,12 @@ class CheckingOut(Resource):
         equipment_ids = []
         cart_item_ids = []
         user_ids = []
+        owner_ids = []
 
         # Check if data is a list and iterate over it
         if isinstance(data, list):
             for item in data:
-                user, equipment, cart, cart_item = None, None, None, None  # Initialize to None to be accessed later
+                user, equipment, cart, cart_item, owner = None, None, None, None, None  # Initialize to None to be accessed later
                 # Check each key independently
                 if 'user_id' in item:
                     print("User ID:", item['user_id'])
@@ -2380,13 +2381,16 @@ class CheckingOut(Resource):
                 if equipment.status[0].reserved_quantity < cart_item.quantity:
                     raise ValueError("Not enough equipment available to fulfill this rental.")
                 
-                if user and equipment and cart_item:
+                # Grabs the owner from the database
+                owner = EquipmentOwner.query.filter(EquipmentOwner.id == equipment.owner_id).first()
+                
+                if user and equipment and cart_item and owner:
                     user_ids.append(str(user.id))
                     equipment_ids.append(str(equipment.id))
                     cart_item_ids.append(str(cart_item.id))
+                    owner_ids.append(str(owner.id))
 
-                # Grabs the owner from the database
-                owner = EquipmentOwner.query.filter(EquipmentOwner.id == equipment.owner_id).first()
+
 
                 # Calculates the unit price based on whether the price has ever changed. All cart_items have a price at addition, but if a change is made, i.e, from hourly to daily, it accounts for if changed
                 unit_price = cart_item.price_cents_if_changed or cart_item.price_cents_at_addition
@@ -2432,6 +2436,7 @@ class CheckingOut(Resource):
         equipment_ids_str = ','.join(equipment_ids)
         cart_item_ids_str = ','.join(cart_item_ids)
         user_ids_str = ','.join(user_ids)
+        owner_ids_str = ','.join(owner_ids)
         
         # Create the stripe checkout session
         # https://stripe.com/docs/api/metadata
@@ -2442,6 +2447,7 @@ class CheckingOut(Resource):
             payment_intent_data={
                 'metadata' : {
                 'user_ids': user_ids_str, 
+                'owner_ids': owner_ids_str,
                 'equipment_ids': equipment_ids_str,
                 'cart_item_ids': cart_item_ids_str,
             },
@@ -2643,12 +2649,56 @@ class WebHookForStripeSuccess(Resource):
                 transit_quantity = last_state.transit_quantity,
                 damaged_quantity = last_state.damaged_quantity,
                 previous_state = last_state.new_state,
-                new_state = f'{user.firstName} {user.lastName} has rented {cart_item.quantity}',
+                new_state = f'{user.firstName} {user.lastName} has rented {cart_item.quantity} {equipment.make} {equipment.model}' ,
                 changed_at=datetime.utcnow(),
             )
                 print("THE NEW STATE HISTORY:",new_state_history)
                 
                 db.session.add(new_state_history)
+
+                payment_method_id = payment_intent.get('payment_method')
+                print('THE PAYMENT METHOD:',payment_intent.get('payment_method') )
+                card_details = None
+                if payment_method_id:
+                    try:
+                        incoming_payment_method = stripe.PaymentMethod.retrieve(payment_method_id)
+                        # Now you have the payment method details
+                        print('THE PAYMENT METHOD:', incoming_payment_method)
+
+                        payment_method_type = incoming_payment_method.type
+                        print("Payment Method Type:", payment_method_type)
+
+                        if payment_method_type == 'card':
+                            card_details = incoming_payment_method.card
+                            # Extract card details as needed
+                            print("Card Brand:", card_details.brand)
+                            print("Card Last 4 Digits: 111", card_details.last4)
+                            print(cart_item.agreements[0].delivery_address)
+
+                    except stripe.error.StripeError as e:
+                        # Handle error
+                        print("Error fetching payment method:", e)
+
+                new_order_history = OrderHistory(
+                order_datetime = datetime.utcnow(),
+                total_amount =  payment_intent.amount_received, # For monetary values
+                payment_status = payment_intent.status,
+                payment_method = f'{payment_method_type} - {card_details.brand}: {card_details.last4}',
+                order_status = 'In-Progress',
+                delivery_address = cart_item.agreements[0].delivery_address,
+                order_details = f'{user.firstName} {user.lastName} has rented {cart_item.quantity} {equipment.make} {equipment.model}' ,
+                estimated_delivery_date = None,
+                actual_delivery_date = None,
+                cancellation_date = None,
+                return_date = None,
+                actual_return_date = None,
+                notes = "",
+                user_id = user.id,
+                owner_id =equipment.owner.id,
+                equipment_id = equipment.id,
+                )
+
+                db.session.add(new_order_history)
                 db.session.commit()
                 
         else:

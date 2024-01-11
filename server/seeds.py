@@ -1933,6 +1933,8 @@ if __name__ == '__main__':
         ]
 
         db.session.add_all(owner_inbox)
+        print("ADD 12 RESERVED TO EXCAVATOR FOR STRIPE TESTING")
+        equipment_statuses[0].reserved_quantity = 12
         db.session.commit()
 
 #----------------Testing Stripe--------------
@@ -1955,6 +1957,7 @@ if __name__ == '__main__':
         # print(f"Success! Here is your starter subscription price id: {starter_subscription_price.id}")
         
 
+        
 
         print("FINISHED SEEDING")
 
