@@ -457,9 +457,10 @@ function BarChart({currentUser}){
   // console.log("THE CHART DATA:", monthlyData)
   
     return (
+      // conditional here is the first thing written, so instead of jsx we just use the variable and a ternary to determine if the equipment length is === 0 
       currentUser.equipment.length === 0 ? (
         <div className="flex items-center justify-center h-full text-center text-gray-800">
-          <p className="text-lg font-medium">No rental agreements have been formed yet!</p>
+          <p className="text-lg font-medium">No listed equipment quite yet, we'll populate this chart for you after you've listed one to track all the essentials!</p>
         </div>
       ) : 
       (
@@ -489,8 +490,7 @@ function BarChart({currentUser}){
         </div>
 
         </div>
-  )
-  )
+  ))
 }
 
 export default BarChart

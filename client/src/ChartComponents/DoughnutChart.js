@@ -127,13 +127,21 @@ function DoughnutChart({currentUser, role}) {
 
     return(
         <>
-        {role === 'owner' ? <Doughnut
+        {currentUser?.equipment.length === 0 ? (
+        <div className="flex items-center justify-center h-full text-center text-gray-800">
+            <p className="text-lg font-medium">No listed equipment quite yet, we'll populate this chart for you after you've listed one to track all the essentials!</p>
+        </div>
+        ) : (
+        role === 'owner' && 
+        <Doughnut
         options={{
         responsive: true,
         maintainAspectRatio: false,
         }}
         data={doughnutData}
-        /> : ""}
+        /> 
+        )}
+
         </>
     )
 }
