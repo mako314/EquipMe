@@ -10,8 +10,10 @@ function AgreementFiltering({currentUser, role}) {
 
     const [agreementFiltering, setAgreementFiltering] = useState('newest')
 
+    // Set variable for date sorting for the OWNER roles
     let agreementsForDateSorting = Array.isArray(currentUser?.agreements) ? [...currentUser.agreements] : []
 
+    // Same variable as above, but it's for date sorting for the USER roles
     let userAgreementsForDateSorting = []
     
     if (role === 'user'){
@@ -80,7 +82,7 @@ function AgreementFiltering({currentUser, role}) {
         setAgreementFiltering(event.target.value)
     }
 
-    let userSortOption = (a, b) => new Date(a.created_at) - new Date(b.created_at)
+    // let userSortOption = (a, b) => new Date(a.created_at) - new Date(b.created_at)
 
     let sortedAscendingAgreements = conditionalAgreementData
     .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
@@ -168,6 +170,14 @@ function AgreementFiltering({currentUser, role}) {
     
     // console.log("TESTING DESCENDING ORDER:", sortedTestingDescending)
     // console.log("TESTING ASCENDING ORDER:", sortedTestingAscending)
+
+    if (sortedDescendingAgreements.length === 0 || sortedAscendingAgreements.length === 0){
+        return (
+            <div className="flex items-center justify-center h-full text-center text-gray-800">
+                <p className="text-lg font-medium">No rental agreements have been formed yet!</p>
+            </div>
+        )
+    }
 
     return(
         <>
