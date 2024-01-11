@@ -257,12 +257,7 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
         
     }
 
-
-
-
-
-
-
+    // The rental agreements portion, allow for filtering etc,
     function RentalAgreements() {
         // setPageTitle('Rental Agreements')
         fromOwnerDash = true
@@ -290,6 +285,21 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
     // Handles finding a users favorites, along with it there are radio buttons to filter through whether they're looking for equipment or owners that they have favorited
     function UserFavorites() {
         const [selectedFavorite, setSelectedFavorite] = useState('equipment')
+
+        if(currentUser?.user_favorite.length === 0){
+            return(
+                <div className="flex flex-col items-center justify-center p-10 bg-white shadow-md rounded-lg">
+                <img
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPmr2qlzoYhc6OVoQZVRReION31sFib3oSBQ&usqp=CAU"
+                    alt="More Heavy Equipment just Sitting Out"
+                    className="max-w-xs md:max-w-sm lg:max-w-md mb-4 rounded-lg shadow-lg"
+                />
+                <p className="text-lg md:text-xl lg:text-2xl text-center text-gray-700 font-semibold">
+                    You haven't favorited anyone yet, once you have you'll be able to see your favorites in this section!
+                </p>
+            </div>
+            )
+        }
 
         // setPageTitle('Your Favorites')
         const handleRadioChange = (event) => {
@@ -377,6 +387,22 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
 function OwnerFavorites() {
     // setPageTitle('Your Favorites')
     currentUser?.owner_favorite?.map((favorite) =>console.log("THE USER IDS:",favorite?.user.user_id))
+
+    // Conditional to test if the owner_favorites array in the Owner data object.
+    if (currentUser?.owner_favorite.length === 0){
+        return(
+        <div className="flex flex-col items-center justify-center p-10 bg-white shadow-md rounded-lg">
+            <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPmr2qlzoYhc6OVoQZVRReION31sFib3oSBQ&usqp=CAU"
+                alt="More Heavy Equipment just Sitting Out"
+                className="max-w-xs md:max-w-sm lg:max-w-md mb-4 rounded-lg shadow-lg"
+            />
+            <p className="text-lg md:text-xl lg:text-2xl text-center text-gray-700 font-semibold">
+                You haven't favorited anyone yet, once you have you'll be able to see your favorites in this section!
+            </p>
+        </div>
+        )
+    }
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
             {currentUser?.owner_favorite?.map((favorite) => {
@@ -445,6 +471,7 @@ function AccountSettings() {
         })
     }
 
+    //Handles navigating one to their inbox
     const handleInboxNavigation = () => {
         setFromOwnerDash(true)
         // Use setTimeout to allow state update before navigation
@@ -453,6 +480,7 @@ function AccountSettings() {
         }, 0)
       }
 
+    // Takes a user to their public facing profile
     const handlePublicProfileNav = () => {
         setFromOwnerDash(true)
         // Use setTimeout to allow state update before navigation
@@ -537,6 +565,21 @@ function AccountSettings() {
             case 'Potential Renters':
                 if (isLoading) {
                     return <div>Loading...</div> // Loading indicator
+                } 
+                console.log("THE POTENTIAL RENTAL USERS:", potentialRentalUsers)
+                if (potentialRentalUsers.error === 'Users not found'){
+                    return(
+                    <div className="flex flex-col items-center justify-center p-10 bg-white shadow-md rounded-lg">
+                        <img
+                            src="https://assets-global.website-files.com/5f98b7826beb070752d84b32/6077fad14e8d6b4623eb8d48_3%20Reasons%20Why%20Talking%20to%20Real%20Users%20is%20Important%20for%20UX%20Design%20-%20Egnyte%20Blog.png"
+                            alt="More Heavy Equipment just Sitting Out"
+                            className="max-w-xs md:max-w-sm lg:max-w-md mb-4 rounded-lg shadow-lg"
+                        />
+                        <p className="text-lg md:text-xl lg:text-2xl text-center text-gray-700 font-semibold">
+                            No users have signed up with your profession yet, try encouraging some friends to sign up!
+                        </p>
+                    </div>
+                    )
                 }
                 return (
                     <UserCollection
@@ -554,7 +597,18 @@ function AccountSettings() {
                 equipmentOwnerArray={potentialRentalOwners} 
                 setFromOwnerDash={setFromOwnerDash} 
                 fromOwnerDash={fromOwnerDash}/>
-                ) : <div> currently no Owners signed up with the same profession</div>
+                ) : (
+                <div className="flex flex-col items-center justify-center p-10 bg-white shadow-md rounded-lg">
+                <img
+                    src="https://assets-global.website-files.com/5f98b7826beb070752d84b32/6077fad14e8d6b4623eb8d48_3%20Reasons%20Why%20Talking%20to%20Real%20Users%20is%20Important%20for%20UX%20Design%20-%20Egnyte%20Blog.png"
+                    alt="More Heavy Equipment just Sitting Out"
+                    className="max-w-xs md:max-w-sm lg:max-w-md mb-4 rounded-lg shadow-lg"
+                />
+                <p className="text-lg md:text-xl lg:text-2xl text-center text-gray-700 font-semibold">
+                    No owners have signed up with your profession yet, try encouraging some friends to sign up!
+                </p>
+                </div>
+                )
                 return ownerCollection
             case 'Owner Favorites':
                 return <OwnerFavorites/>

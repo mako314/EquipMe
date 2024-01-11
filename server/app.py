@@ -1,4 +1,4 @@
-from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement, Message, Thread,UserInbox, OwnerInbox, Cart, CartItem, EquipmentPrice, Review, UserFavorite, OwnerFavorite, AgreementComment, FeaturedEquipment, EquipmentStateHistory, EquipmentStatus, EquipmentStateSummary
+from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement, Message, Thread,UserInbox, OwnerInbox, Cart, CartItem, EquipmentPrice, Review, UserFavorite, OwnerFavorite, AgreementComment, FeaturedEquipment, EquipmentStateHistory, EquipmentStatus, EquipmentStateSummary, OrderHistory
 # from flask_cors import CORS
 # from flask_migrate import Migrate
 # from flask import Flask, request, make_response, jsonify
@@ -213,7 +213,7 @@ class Users(Resource):
                 address_line_2 = data['address_line_2'],
                 postal_code = data['postal_code'],
                 profession = data['profession'],
-                profileImage = data['profileImg'],
+                profileImage = data['profileImage'],
                 # bannerImg = data['bannerImg'],    
             )
 
@@ -349,6 +349,8 @@ class EquipmentOwners(Resource):
             )
             db.session.add(new_owner)
 
+            print('THE NEW OWNER:', new_owner)
+
             new_owner.password_hash = new_owner._password_hash
 
             db.session.commit()
@@ -432,10 +434,10 @@ class EquipmentOwners(Resource):
 
             # response = make_response(new_owner.to_dict(), 201)
             if account_link:
-                return jsonify({
-                    'owner': new_owner,
+                return make_response(jsonify({
+                    'owner': new_owner.to_dict(),
                     'stripe_onboard_link': account_link.url
-                }), 200
+                }), 201)
             else:
                 return make_response(new_owner.to_dict(), 201)
 
@@ -1199,8 +1201,8 @@ class RentalAgreementsByID(Resource):
             new_equipment_status = EquipmentStatus(
             equipment_id = cart_item_received.equipment_id,
             total_quantity = equipment_status.total_quantity,
-            available_quantity = equipment_status.available_quantity,
-            reserved_quantity = equipment_status.available_quantity - cart_item_received.quantity,
+            available_quantity = equipment_status.available_quantity - cart_item_received.quantity,
+            reserved_quantity = equipment_status.reserved_quantity + cart_item_received.quantity,
             rented_quantity = cart_item_received.quantity,
             maintenance_quantity = 0,
             transit_quantity = 0
@@ -1209,8 +1211,8 @@ class RentalAgreementsByID(Resource):
             new_state_history = EquipmentStateHistory(
             equipment_id = cart_item_received.equipment_id,  # Lawnmower
             total_quantity = equipment_status.total_quantity,
-            available_quantity = equipment_status.available_quantity,
-            reserved_quantity = equipment_status.available_quantity - cart_item_received.quantity,
+            available_quantity = equipment_status.available_quantity - cart_item_received.quantity,
+            reserved_quantity = equipment_status.reserved_quantity + cart_item_received.quantity,
             rented_quantity = cart_item_received.quantity,
             maintenance_quantity = 0,
             transit_quantity = 0,
@@ -1801,7 +1803,8 @@ class AddItemToCart(Resource):
             equipment_id = equipment.id,
             total_quantity = equipment_status.total_quantity,
             available_quantity = equipment_status.available_quantity,
-            reserved_quantity = amount_added_to_cart,
+            # amount_added_to_cart 
+            reserved_quantity = equipment_status.available_quantity,
             rented_quantity = previous_state_history.rented_quantity,
             maintenance_quantity = previous_state_history.maintenance_quantity,
             transit_quantity = previous_state_history.transit_quantity,
@@ -2340,10 +2343,15 @@ class CheckingOut(Resource):
         # equipment_id, cart_item_id,
         print(data)
         line_items = []
+        equipment_ids = []
+        cart_item_ids = []
+        user_ids = []
+        owner_ids = []
+
         # Check if data is a list and iterate over it
         if isinstance(data, list):
             for item in data:
-                user, equipment, cart, cart_item = None, None, None, None  # Initialize to None to be accessed later
+                user, equipment, cart, cart_item, owner = None, None, None, None, None  # Initialize to None to be accessed later
                 # Check each key independently
                 if 'user_id' in item:
                     print("User ID:", item['user_id'])
@@ -2375,9 +2383,17 @@ class CheckingOut(Resource):
 
                 if equipment.status[0].reserved_quantity < cart_item.quantity:
                     raise ValueError("Not enough equipment available to fulfill this rental.")
-
+                
                 # Grabs the owner from the database
                 owner = EquipmentOwner.query.filter(EquipmentOwner.id == equipment.owner_id).first()
+                
+                if user and equipment and cart_item and owner:
+                    user_ids.append(str(user.id))
+                    equipment_ids.append(str(equipment.id))
+                    cart_item_ids.append(str(cart_item.id))
+                    owner_ids.append(str(owner.id))
+
+
 
                 # Calculates the unit price based on whether the price has ever changed. All cart_items have a price at addition, but if a change is made, i.e, from hourly to daily, it accounts for if changed
                 unit_price = cart_item.price_cents_if_changed or cart_item.price_cents_at_addition
@@ -2420,11 +2436,24 @@ class CheckingOut(Resource):
         if not line_items:
             return make_response({"error": "No valid items for checkout"}, 400)
         
+        equipment_ids_str = ','.join(equipment_ids)
+        cart_item_ids_str = ','.join(cart_item_ids)
+        user_ids_str = ','.join(user_ids)
+        owner_ids_str = ','.join(owner_ids)
+        
         # Create the stripe checkout session
+        # https://stripe.com/docs/api/metadata
+        # https://stripe.com/docs/api/checkout/sessions/object
         try:
             checkout = stripe.checkout.Session.create(
             line_items=line_items,
             payment_intent_data={
+                'metadata' : {
+                'user_ids': user_ids_str, 
+                'owner_ids': owner_ids_str,
+                'equipment_ids': equipment_ids_str,
+                'cart_item_ids': cart_item_ids_str,
+            },
                 "application_fee_amount": 123,
                 "transfer_data": {"destination": f'{owner.stripe_id}'},
             },
@@ -2436,49 +2465,7 @@ class CheckingOut(Resource):
             )
         except Exception as e:
             return make_response({"error": str(e)}, 500)
-
-        # Fetch the most recent state history
-        # last_state = EquipmentStateHistory.query.filter_by(
-        #     equipment_id=equipment.id
-        # ).order_by(EquipmentStateHistory.changed_at.desc()).first()
-
-        # Ensure that the equipment is actually reserved before proceeding
-
-        # if 'reserved' in last_state.new_state:
-        #     raise ValueError("Equipment must be in reserved state to check out.")
-
-        # Deduct the quantity from the equipment's available stock
         
-        # if equipment.status[0].reserved_quantity < cart_item.quantity:
-        #     raise ValueError("Not enough equipment available to fulfill this rental.")
-
-        # equipment.status[0].reserved_quantity -= cart_item.quantity
-
-        # db.session.add(equipment)
-
-        # Record the state change
-        # new_state_history = EquipmentStateHistory(
-        #     equipment_id = equipment.id,
-        #     total_quantity = last_state.new_quantity,
-        #     available_quantity = last_state.available_quantity,
-        #     reserved_quantity = last_state.reserved_quantity,
-        #     rented_quantity = cart_item.quantity,
-        #     maintenance_quantity = last_state.maintenance_quantity,
-        #     transit_quantity = last_state.transit_quantity,
-        #     damaged_quantity = last_state.damaged_quantity,
-        #     previous_state = last_state.new_state,
-        #     new_state = f'{user.firstName} {user.lastName} has rented {cart_item.quantity}',
-        #     changed_at=datetime.utcnow(),
-        # )
-
-        # Need to create a stripe webhook for this:
-        # equipment.status[0].reserved_quantity -= cart_item.quantity
-        # equipment.status[0].rented_quantity += cart_item.quantity
-
-        # db.session.add(new_state_history)
-
-        # db.session.commit()
-
         if checkout:
             response = make_response(checkout, 200)
         else:
@@ -2528,7 +2515,6 @@ class WebHookForStripeSuccess(Resource):
     def post(self):
         # endpoint_secret = os.getenv('WEBHOOK_SECRET')
         endpoint_secret=os.getenv('CLI_WEBHOOK_SECRET')
-        # endpoint_secret="whsec_46dcd2d963e5a06aaae0a7be860e031ff3a11fcb19d08abad6193dd960803c6e"
         # print(request.headers.get("stripe-signature"))
         request.get_data(as_text=True)
         # print(request.get_data(as_text=True))
@@ -2591,11 +2577,13 @@ class WebHookForStripeSuccess(Resource):
         return json.dumps({"success": True}), 200
     def handle_checkout_session_expired(self, payment_intent):
         # Logic to Checkout session has expired
-        print(f"Checkout session has expired: {payment_intent}")
+        pass
+        # print(f"Checkout session has expired: {payment_intent}")
 
     def handle_application_fee_created(self, payment_intent):
         # Logic to Application fee created
-        print(f"Application fee created: {payment_intent}")
+        pass
+        # print(f"Application fee created: {payment_intent}")
     
     def handle_payment_intent_created(self, payment_intent):
         # Logic to handle created payment intent
@@ -2603,7 +2591,123 @@ class WebHookForStripeSuccess(Resource):
 
     def handle_successful_payment_intent(self, payment_intent):
         # Logic to handle successful payment intent
-        print(f"Successful payment intent: {payment_intent}")
+        print(f"Payment intent SUCCEEDED: {payment_intent}")
+        # print(payment_intent)
+        # equipment_id = payment_intent.get("metadata", {}).get("equipment_id")
+        # cart_item_id = payment_intent.get("metadata", {}).get("cart_item_id")
+        # user_id = payment_intent.get("metadata", {}).get("user_id")
+
+        # print("THE EQUIPMENT ID:", equipment_id)
+        # print("THE CART ITEM ID:", cart_item_id)
+        # print("THE USER ID:", user_id)
+        # if equipment_id and cart_item_id and user_id:
+        #     equipment = Equipment.query.get(equipment_id)
+        #     cart_item = CartItem.query.get(cart_item_id)
+        #     user = User.query.get(user_id)
+
+        #     if not equipment or not cart_item:
+        #         print("Equipment or Cart Item not found.")
+        #         return
+        #     if not user:
+        #         print("User not found, currently we do not support guest checkout")
+        #         return
+        equipment_ids_str = payment_intent.get("metadata", {}).get("equipment_ids")
+        cart_item_ids_str = payment_intent.get("metadata", {}).get("cart_item_ids")
+        user_ids_str = payment_intent.get("metadata", {}).get("user_ids")
+
+        if equipment_ids_str and cart_item_ids_str and user_ids_str:
+                equipment_ids = equipment_ids_str.split(',')
+                cart_item_ids = cart_item_ids_str.split(',')
+                user_ids = user_ids_str.split(',')
+
+                for equipment_id, cart_item_id, user_id in zip(equipment_ids, cart_item_ids, user_ids):
+                    # Process each equipment, cart item, and user
+                    equipment = Equipment.query.get(equipment_id)
+                    cart_item = CartItem.query.get(cart_item_id)
+                    user = User.query.get(user_id)
+
+                    if not equipment or not cart_item or not user:
+                        print("Equipment, Cart Item, or User not found.")
+                        continue
+
+                last_state = EquipmentStateHistory.query.filter_by(
+                equipment_id=equipment.id
+                ).order_by(EquipmentStateHistory.changed_at.desc()).first()
+
+            # Update equipment status
+                if equipment.status[0].reserved_quantity < cart_item.quantity:
+                    raise ValueError("Not enough equipment available to fulfill this rental.")
+                
+                equipment.status[0].reserved_quantity -= cart_item.quantity
+                equipment.status[0].rented_quantity += cart_item.quantity
+                db.session.commit()
+
+                new_state_history = EquipmentStateHistory(
+                equipment_id = equipment.id,
+                total_quantity = last_state.total_quantity,
+                available_quantity = last_state.available_quantity,
+                reserved_quantity = last_state.reserved_quantity - cart_item.quantity,
+                rented_quantity = last_state.rented_quantity + cart_item.quantity,
+                maintenance_quantity = last_state.maintenance_quantity,
+                transit_quantity = last_state.transit_quantity,
+                damaged_quantity = last_state.damaged_quantity,
+                previous_state = last_state.new_state,
+                new_state = f'{user.firstName} {user.lastName} has rented {cart_item.quantity} {equipment.make} {equipment.model}' ,
+                changed_at=datetime.utcnow(),
+            )
+                print("THE NEW STATE HISTORY:",new_state_history)
+                
+                db.session.add(new_state_history)
+
+                payment_method_id = payment_intent.get('payment_method')
+                print('THE PAYMENT METHOD:',payment_intent.get('payment_method') )
+                card_details = None
+                if payment_method_id:
+                    try:
+                        incoming_payment_method = stripe.PaymentMethod.retrieve(payment_method_id)
+                        # Now you have the payment method details
+                        print('THE PAYMENT METHOD:', incoming_payment_method)
+
+                        payment_method_type = incoming_payment_method.type
+                        print("Payment Method Type:", payment_method_type)
+
+                        if payment_method_type == 'card':
+                            card_details = incoming_payment_method.card
+                            # Extract card details as needed
+                            print("Card Brand:", card_details.brand)
+                            print("Card Last 4 Digits: 111", card_details.last4)
+                            print(cart_item.agreements[0].delivery_address)
+
+                    except stripe.error.StripeError as e:
+                        # Handle error
+                        print("Error fetching payment method:", e)
+
+                new_order_history = OrderHistory(
+                order_datetime = datetime.utcnow(),
+                total_amount =  payment_intent.amount_received, # For monetary values
+                payment_status = payment_intent.status,
+                payment_method = f'{payment_method_type} - {card_details.brand}: {card_details.last4}',
+                order_status = 'In-Progress',
+                delivery_address = cart_item.agreements[0].delivery_address,
+                order_details = f'{user.firstName} {user.lastName} has rented {cart_item.quantity} {equipment.make} {equipment.model}' ,
+                estimated_delivery_date = None,
+                actual_delivery_date = None,
+                cancellation_date = None,
+                return_date = None,
+                actual_return_date = None,
+                notes = "",
+                user_id = user.id,
+                owner_id =equipment.owner.id,
+                equipment_id = equipment.id,
+                )
+
+                db.session.add(new_order_history)
+                db.session.commit()
+                
+        else:
+            print("Metadata does not contain required IDs.")   
+        
+
 
     def handle_payment_intent_canceled(self, payment_intent):
         # Logic to handle canceled payment intent

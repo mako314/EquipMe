@@ -3,7 +3,7 @@ import ApiUrlContext from '../Api'
 import {toast} from 'react-toastify'
 import { UserSessionContext } from '../UserComponents/SessionContext'
 
-function ContactModal({recipientID}){
+function ContactModal({recipientID, firstName, lastName}){
     const { currentUser, role, checkSession } = UserSessionContext()
 
     const apiUrl = useContext(ApiUrlContext)
@@ -80,7 +80,7 @@ function ContactModal({recipientID}){
 
                 if (response.ok) {
                     await checkSession()
-                    toast.success("✉️ Message sent successfully!",{
+                    toast.success(`✉️ Message to: ${firstName}, ${lastName} sent successfully!`,{
                     "autoClose" : 2000
                     })
                     console.log("Message sent successfully")

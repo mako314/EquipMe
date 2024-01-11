@@ -18,6 +18,28 @@ const handleEquipmentNavigation = (equipmentId) => {
 //Just did something similar as to when I had the review submission stars, but instead I'm pushing an object into carouselItems, the image has an image element 
 let carouselItems = []
 
+// Test owner user.favorites ? To see if they have either not been favorited, or if they haven't uploaded equipment
+if (currentUser?.equipment?.user_favorite?.length === 0 && role === 'owner'){
+  if (currentUser?.equipment?.length === 0 && role === 'owner'){
+    return(
+      <div className="flex items-center justify-center h-full text-center text-gray-800">
+       <p className="text-lg font-medium">You haven't uploaded any equipment yet, until then a user can't favorite it, and the favorites won't be shown here!</p>
+      </div>)
+  } else {
+  return(
+    <div className="flex items-center justify-center h-full text-center text-gray-800">
+    <p className="text-lg font-medium">Users haven't favorited any Equipment quite yet!</p>
+   </div>
+   )}
+}
+
+if (currentUser?.user_favorite?.length === 0 && role === 'user'){
+  return(
+    <div className="flex items-center justify-center h-full text-center text-gray-800">
+     <p className="text-lg font-medium">You haven't favorited any Equipment yet, once you do you'll be able to see them here too! </p>
+    </div>)
+}
+
 //Also, I didn't need to map, as I don't have it set to a variable, I'm just pushing stuff inside of carouselItems instead of mapping and creating a new array. If I had done something like const thisData.map for example
 
 if(role ==='user'){

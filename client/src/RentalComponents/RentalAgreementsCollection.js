@@ -53,10 +53,15 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
   useEffect(() => {
 
     // take an agreement and filter it, it's called on all agreements which is an array with the agreement data we need. It's been flatmapped twice if it's a user, and then mapped over for the data we need. We compare it with the selected filter key word, which is decided by the radio buttons and compared with agreement_status of the agreement.
-    const filterAgreements = (agreement) => {
+    const filterAgreementsByStatus = (agreement) => {
       console.log("Agreement status: ", agreement.agreement_status, "Filter keyword: ", filterKeyWord)
       return filterKeyWord ? agreement.agreement_status === filterKeyWord : true
     }
+
+    // const filterAgreementsByName = (agreement) => {
+    //   console.log("Agreement status: ", agreement.agreement_status, "Filter keyword: ", filterKeyWord)
+    //   return filterKeyWord ? agreement.agreement_status === filterKeyWord : true
+    // }
 
     // Flatten the agreements into a single array, I needed the cart, the cart_item for quantity etc, when everything is flattened, spread it into allAgreements
     let allAgreements = role === 'user' ? (currentUser?.cart ?? []).flatMap(cart => 
@@ -78,8 +83,14 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
     if (filterKeyWord && filterKeyWord !== 'none') {
       // Check agreements after filtering
       console.log("Agreements after filtering:", allAgreements) 
-      allAgreements = allAgreements.filter(filterAgreements)
+      allAgreements = allAgreements.filter(filterAgreementsByStatus)
     }
+
+    // if (filterKeyWord && filterKeyWord !== 'none') {
+    //   // Check agreements after filtering
+    //   console.log("Agreements after filtering:", allAgreements) 
+    //   allAgreements = allAgreements.filter(filterAgreements)
+    // }
 
     // Sort the ( possibly filtered) agreements. Agreements are always sorted regardless if filtering occurs or not.
     const sortedAgreements = allAgreements.sort(userSortOption)
@@ -97,6 +108,8 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
           cartName={agreement.cart_name}
           quantity={agreement.item.quantity}
           equipmentName={agreement.item.equipment.name}
+          equipmentModel={agreement.item.equipment.model}
+          equipmentMake={agreement.item.equipment.make}
           rentalStart={formatDate(agreement.rental_start_date)}
           rentalEnd={formatDate(agreement.rental_end_date)}
           rentalDelivery={agreement.delivery}
@@ -128,6 +141,8 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
         cartName={agreement.cart_item.cart.cart_name}
         quantity={agreement.cart_item.quantity}
         equipmentName={agreement.cart_item.equipment.name}
+        equipmentModel={agreement.cart_item.equipment.model}
+        equipmentMake={agreement.cart_item.equipment.make}
         rentalStart={formatDate(agreement.rental_start_date)}
         rentalEnd={formatDate(agreement.rental_end_date)}
         rentalDelivery={agreement.delivery}
@@ -222,6 +237,19 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
               type="radio" 
               className="form-radio h-5 w-5 text-gray-600" 
               name="fav_option" 
+              value="in-progress" 
+              id="in-progress" 
+              onChange={handleRadioChange} 
+              checked={filterKeyWord === 'in-progress'}
+            />
+            <label htmlFor="in-progress" className="ml-2 text-gray-700">In-Progress</label>
+          </div>
+
+          <div className="flex items-center mr-2">
+            <input 
+              type="radio" 
+              className="form-radio h-5 w-5 text-gray-600" 
+              name="fav_option" 
               value="completed" 
               id="completed" 
               onChange={handleRadioChange} 
@@ -229,10 +257,24 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
             />
             <label htmlFor="completed" className="ml-2 text-gray-700">Completed</label>
           </div>
+
         </form>
+
+        
   
   <div className="flex flex-row flex-wrap justify-start"> 
-    {sortedCards}
+    {sortedCards.length > 0 ? sortedCards : (
+                <div className="flex flex-col items-center justify-center p-10 bg-white shadow-md rounded-lg">
+                    <img
+                        src="https://www.kaser-albehar.com/wp-content/uploads/2018/10/110819093004-1.jpg"
+                        alt="More Heavy Equipment just Sitting Out"
+                        className="max-w-xs md:max-w-sm lg:max-w-md mb-4 rounded-lg shadow-lg"
+                    />
+                    <p className="text-lg md:text-xl lg:text-2xl text-center text-gray-700 font-semibold">
+                      Once you've uploaded Equipment that's available to be rented, You'll be able to view and handle your rental agreements here!
+                    </p>
+                </div>
+            )}
   </div>
   </div>
     )
