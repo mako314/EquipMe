@@ -35,9 +35,9 @@ import InsuranceRecommendations from './InsuranceRecommendations';
 //Rental Monitor
 import RentalMonitor from './RentalMonitor';
 
-//404 Page Import
-import Page404 from '../../ErrorPageComponents/Page404';
-
+//404 / Extra Page Import
+import Page404 from '../../ExtraPageComponents/Page404';
+import LoadingPage from '../../ExtraPageComponents/LoadingPage';
 
 
 
@@ -53,6 +53,8 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
     const [potentialRentalOwners, setPotentialRentalOwners] = useState([])
     const [pageTitle, setPageTitle] = useState('Home')
     const [stripeAccount, setStripeAccount] = useState('')
+    const [dashLoad, setDashLoad] = useState(true)
+    
 
     // const [chartData, setChartData] = useState({
     //     labels: [],
@@ -80,6 +82,7 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
             const data = await response.json()
             console.log("THE DATA:", data)
             setStripeAccount(data)
+            setDashLoad(false)
           } catch (error) {
             console.error('Error fetching Stripe account:', error)
             // Not sure if I'd like to have an error state
@@ -94,9 +97,15 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
             console.log("THE CURRENT DATA IN STRIPE ACCOUNT:", stripeAccount)
           }
 
-      }, [role])
+      }, [])
 
     console.log("USER INFO",currentUser)
+    
+
+    // Wait for useEffect to load before displaying the page
+    if (dashLoad) {
+        return <><LoadingPage/></>
+    }
 
     // console.log("THE CURRENT USERS STRIPE ID:", currentUser?.stripe_id)
     // console.log("USER FAVORITE",currentUser?.user_favorite)
@@ -521,7 +530,7 @@ function AccountSettings() {
                         
                         <div className="h-96 w-full col-span-2 bg-white border border-gray-200 shadow-md rounded-lg p-4">
                         {role === 'owner' &&
-                        <BarChart currentUser={currentUser}/>}
+                        <BarChart currentUser={currentUser} setDashLoad={setDashLoad}/>}
                         
                         {role === 'user' && 
                         <RentedItemUserCarousel currentUser={currentUser} setFromOwnerDash={setFromOwnerDash} role={role}/>}

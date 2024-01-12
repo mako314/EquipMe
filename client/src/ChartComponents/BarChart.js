@@ -6,7 +6,7 @@ import { useEquipmentData } from "./BarChartDataContext";
 import ApiUrlContext from "../Api";
 
 // useRef
-function BarChart({currentUser}){
+function BarChart({currentUser, setDashLoad}){
 
     const [existingData, setExistingData] = useState(currentUser?.equipment); // initialData is existing data
     // const [updateCounter, setUpdateCounter] = useState(0)
@@ -450,6 +450,7 @@ function BarChart({currentUser}){
       // setInititalDataLoaded(true)
       
       setShowAll(true)
+      // setDashLoad(false)
       
   }, [])
 
