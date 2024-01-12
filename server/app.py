@@ -1094,6 +1094,7 @@ class RentalAgreements(Resource):
         #     return make_response({'error': 'Not enough equipment available'}, 400)
 
         #may need a way to write in validations
+        # I have to think about how this is going to work, an agreement-status is likely initiated by a user in my application, so it would be either in-progress or user-accepted.
         new_rental_agreement = RentalAgreement(
             rental_start_date = start_date,
             rental_end_date = end_date,
@@ -1223,7 +1224,7 @@ class RentalAgreementsByID(Resource):
             )
             db.session.commit()
             if agreement.user_decision == 'accept' and agreement.owner_decision == 'accept':
-                agreement.agreement_status = 'in-progress'
+                agreement.agreement_status = 'both-accepted'
                 db.session.add(new_equipment_status)
                 db.session.add(new_state_history)
                 db.session.commit()

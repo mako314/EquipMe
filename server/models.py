@@ -245,7 +245,7 @@ class Equipment(db.Model, SerializerMixin):
     make = db.Column(db.String)
     model = db.Column(db.String)
     #THIS WILL BE TEMPORARY UNTIL I HAVE CLOUD HOSTING SET UP
-    description = db.Column(db.String)
+    description = db.Column(db.String, nullable= True)
     equipment_image = db.Column(db.String)
     # location = db.Column(db.String)
 
@@ -253,7 +253,7 @@ class Equipment(db.Model, SerializerMixin):
     state = db.Column(db.String)
     city = db.Column(db.String)
     address = db.Column(db.String)
-    address_line_2 = db.Column(db.String)
+    address_line_2 = db.Column(db.String, nullable= True)
     postal_code = db.Column(db.String)
 
     #base_of_operations = db.Column(db.String)
