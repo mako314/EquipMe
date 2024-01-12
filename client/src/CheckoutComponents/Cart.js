@@ -118,7 +118,7 @@ useEffect(() => {
 
   //If a user has no items in cart or no cart created display this instead
   if (!cartData || cartData?.length === 0) {
-    return <LoadingPage/>
+    return <LoadingPage loadDetails={"Cart"}/>
   }
 
   //Changes cart based on cart ID
