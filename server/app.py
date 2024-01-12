@@ -2708,7 +2708,7 @@ class WebHookForStripeSuccess(Resource):
                 cancellation_date = None,
                 return_date = None,
                 actual_return_date = None,
-                notes = "",
+                notes = payment_intent.id,
                 user_id = user.id,
                 owner_id =equipment.owner.id,
                 equipment_id = equipment.id,
@@ -2848,6 +2848,23 @@ class CalculateMonthlyTotals(Resource):
 
     
 api.add_resource(CalculateMonthlyTotals, '/summarize/<string:month>/<string:year>')
+
+class OrderHistoryByUserId(Resource):
+    def patch(self, user_id):
+        # Filter orders by user_id
+        orders = OrderHistory.query.filter_by(user_id=user_id).all()
+        
+        orders = [order.to_dict() for order in OrderHistory.query.all()]
+        # Convert orders to dictionaries if not empty
+        if orders:
+            orders_dict = [order.to_dict() for order in orders]
+            response = make_response({"orders": orders_dict}, 200)
+        else:
+            response = make_response({"error": "No orders found for the specified user"}, 404)
+
+        return response
+
+api.add_resource(OrderHistoryByUserId, '/order/history/<int:user_id>')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

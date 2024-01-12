@@ -73,6 +73,7 @@ import NewMessageThreads from './MessagingComponents/NewMessageThreads';
 import StripeCheckout from './CheckoutComponents/StripeCheckout';
 import AfterCheckout from './CheckoutComponents/AfterCheckout';
 import Cart from './CheckoutComponents/Cart';
+import OrderHistory from './CheckoutComponents/OrderHistory';
 
 //---------------------- Rental Agreement Display -----------------------------
 import RentalAgreementDisplay from './RentalComponents/RentalAgreementDisplay'
@@ -361,6 +362,7 @@ function App() {
             <Route path='/checkout' element={<StripeCheckout/>} />
             <Route path='/checkout/successful/return' element={<AfterCheckout/>} />
             <Route path='/cart' element={<Cart/>} />
+            <Route path='/order/history' element={<OrderHistory/>}/>
 
             {/* Rental Display */}
             <Route path='/handle/agreements/:rental_agreement_id' element={<RentalAgreementDisplay/>} />
