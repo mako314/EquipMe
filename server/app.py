@@ -2402,12 +2402,24 @@ class CheckingOut(Resource):
                 # Calculates the total price based off the unit price and with the pre-existing quantity / rental length of the cart item. There is a test above to see if the incoming values are != to the ones inside of the db currently.
                 total_price = unit_price * cart_item.quantity * cart_item.rental_length
 
+                print("THE RENTAL RATE:", cart_item.rental_rate)
+
+                amount_of_time = None
+                if cart_item.rental_rate == 'daily':
+                    amount_of_time = 'days'
+                if cart_item.rental_rate == 'hourly':
+                    amount_of_time = 'hours'
+                if cart_item.rental_rate == 'weekly':
+                    amount_of_time = 'weeks'
+                if cart_item.rental_rate == 'promo':
+                    amount_of_time = 'promo agreed upon by both parties'
+
                 line_item = {
                 "price_data": {
                     "currency": "usd",
                     "product_data": {
                         "name": f" Cart: {cart.cart_name.upper()} | Make: {equipment.make} Model: {equipment.model}",
-                        "description": f"{user.firstName} {user.lastName} is agreeing to rent ({cart_item.quantity}) {equipment.make} {equipment.model} at a {cart_item.rental_rate} rate of {unit_price / 100} from the Owner: {owner.firstName} {owner.lastName} ",
+                        "description": f"{user.firstName} {user.lastName} is agreeing to rent ({cart_item.quantity}) {equipment.make} {equipment.model} at a {cart_item.rental_rate} rate of {unit_price / 100} for a total of {cart_item.rental_length} {amount_of_time} from the Owner: {owner.firstName} {owner.lastName} ",
                         "images": [equipment.equipment_image], 
                     },
                     "unit_amount": total_price,
