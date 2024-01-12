@@ -55,11 +55,17 @@ function Cart(){
 
   //This just takes into account ALL the items in a users cart, where the items cart ID matches the current carts ID.
   const itemsInCurrentCartAll = individualTotal.filter(item => item.cart_id === cartData[currentCart].id)
+  
   console.log("CURRENT ITEMS IN CART:", itemsInCurrentCartAll)
   // Sum up the costs of these items
   itemsInCurrentCartBothAgreed.forEach((item) => {
-      console.log("TOTAL COST OF ITEMS THAT BOTH USERS AGREED UPON:", item.cost)
+    console.log("LOOK HERE FOR THE ITEM:",item)
+
+    if(item.isChecked) {
+      console.log("TOTAL COST OF ITEMS THAT BOTH USERS AGREED UPON AND ARE CHECKED:", item.cost)
       itemsBothPartiesAgreedOn += item.cost
+    }
+
   })
 
   // A for each that summarizes ALL items in the cart, 

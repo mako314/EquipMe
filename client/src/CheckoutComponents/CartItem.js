@@ -369,6 +369,17 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
     const handleConfirmCheckout = (e) => {
       if (checkBothAgreedStatus(agreementStatus)) {
         const isChecked = e.target.checked
+
+        setIndividualTotal(prevTotals => {
+          // Find the index of the item with the same id
+          const index = prevTotals.findIndex(item => item.id === cartItemId)
+    
+          // Update the isChecked status of the existing item
+          return prevTotals.map((item, idx) => 
+            idx === index ? { ...item, isChecked: isChecked } : item
+          )
+        })
+
         handleItemCheck(cartItemId, isChecked)
       }
     }
