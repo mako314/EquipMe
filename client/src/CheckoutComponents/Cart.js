@@ -8,6 +8,8 @@ import { UserSessionContext } from "../UserComponents/SessionContext";
 
 import LoadingPage from "../ExtraPageComponents/LoadingPage";
 
+import Page404 from "../ExtraPageComponents/Page404";
+
 
 function Cart(){
 
@@ -113,13 +115,19 @@ useEffect(() => {
       toast.warn(`🛒 We don't currently support owner carts`,{
         "autoClose" : 2000
       })
+      
     }
   }, [currentUser])
 
   //If a user has no items in cart or no cart created display this instead
   if (!cartData || cartData?.length === 0) {
+    if (role === 'owner'){
+      return <div> Not available! </div>
+    }
     return <LoadingPage loadDetails={"Cart"}/>
   }
+
+
 
   //Changes cart based on cart ID
   const handleCartChange = (e) => {

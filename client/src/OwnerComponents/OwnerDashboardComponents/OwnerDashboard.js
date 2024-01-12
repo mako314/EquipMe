@@ -213,8 +213,8 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
                     console.log(data)
                     console.log("THE URL:", data.url)
                         // Redirect the user to the new onboarding link
-                    //   const onboardLink = data.stripe_onboard_link
-                    //   window.open(onboardLink, '_blank')
+                      const onboardLink = data.url
+                      window.open(onboardLink, '_blank')
                     }
                 })
             } else {
