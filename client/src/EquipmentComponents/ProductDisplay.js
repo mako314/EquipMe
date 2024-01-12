@@ -5,10 +5,12 @@ import EquipmentMap from '../MapComponents/EquipmentMap'
 import AddToCartModal from '../CheckoutComponents/AddToCartModal'
 // import UserContext from '../UserComponents/UserContext'
 // import OwnerContext from '../OwnerComponents/OwnerContext'
+
 import ApiUrlContext from '../Api'
 import { UserSessionContext } from '../UserComponents/SessionContext'
 import ProductEditForm from './ProductEditForm'
 
+import LoadingPage from '../ExtraPageComponents/LoadingPage'
 
 function EquipmentDisplay({}) {
   // THE ID HERE IS THE EQUIPMENT ID.
@@ -25,7 +27,7 @@ function EquipmentDisplay({}) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [heartColor, setHeartColor] = useState('white')
   const [isFavorited, setIsFavorited] = useState(null)
-
+  const [loading, setLoading] = useState(true)
 
   const { model, name, make, state, city, address, address_line_2, postal_code, email, phone, equipment_image, equipment_price, owner } = oneEquipment
   
@@ -52,6 +54,7 @@ function EquipmentDisplay({}) {
       .then((data) => {
         setOneEquipment(data)
         console.log(data)
+        setLoading(false)
       })
   }, [])
 
@@ -139,7 +142,10 @@ function EquipmentDisplay({}) {
 
   //What can I include in details? Possibly whether or not the vehicle is available for delivery? Deposit ? ETC?
 
-
+  // Render loading page if dash is still loading
+  if (loading) {
+    return <><LoadingPage/></>
+  }
 
   return (
     <>

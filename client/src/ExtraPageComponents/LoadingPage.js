@@ -11,4 +11,4 @@ const LoadingPage = () => {
     );
 };
 
-export default LoadingPage
+export default LoadingPage;

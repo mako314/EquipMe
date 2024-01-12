@@ -7,6 +7,7 @@ import ProductCard from '../EquipmentComponents/ProductCard'
 import Reviews from '../ReviewComponents/Reviews'
 import { UserSessionContext } from '../UserComponents/SessionContext'
 import ApiUrlContext from '../Api'
+import LoadingPage from '../ExtraPageComponents/LoadingPage'
 
 function OwnerDisplay({fromOwnerDash, setFromOwnerDash}) {
     
@@ -17,6 +18,7 @@ function OwnerDisplay({fromOwnerDash, setFromOwnerDash}) {
   const { firstName, lastName, state, city, address, address_line_2, postal_code, bio, email, phone, equipment, profession, profileImage, website } = owner
   const [heartColor, setHeartColor] = useState('white')
   const [isFavorited, setIsFavorited] = useState(null)
+  const [loading, setLoading] = useState(true)
 
   const ownerLocation = `${address_line_2 === '' ?  address : address + ',' + address_line_2}, ${city}, ${state} ${postal_code} `
 
@@ -35,6 +37,7 @@ function OwnerDisplay({fromOwnerDash, setFromOwnerDash}) {
         setHeartColor(favoriteStatus ? "red" : "white")
         // I can't just set is favorited and try it with heart color, it's just too quick and defaults, so I make a variable that contains data and set it to that.
         setIsFavorited(favoriteStatus)
+        setLoading(false)
       })
   }, [])
 
@@ -122,6 +125,13 @@ const displayEquipment = featuredEquipment.length > 0 ? featuredEquipment : <div
     const navigateToLogin = () => {
         navigate(`/login`)
     }
+
+    console.log("CURRENT USER TEST:", currentUser)
+
+// Render loading page if display is still loading
+  if (loading) {
+    return <><LoadingPage/></>
+  }
 
 
   return (

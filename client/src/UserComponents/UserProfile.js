@@ -5,6 +5,7 @@ import Reviews from '../ReviewComponents/Reviews';
 import EquipmentMap from '../MapComponents/EquipmentMap';
 import { UserSessionContext } from './SessionContext';
 import { useParams, useNavigate, useInRouterContext } from 'react-router-dom';
+import LoadingPage from '../ExtraPageComponents/LoadingPage';
 
 
 function UserProfile({fromOwnerDash, setFromOwnerDash}) {
@@ -16,6 +17,7 @@ function UserProfile({fromOwnerDash, setFromOwnerDash}) {
   const [userProfile, setUserProfile] = useState({})
   const [heartColor, setHeartColor] = useState('white')
   const [isFavorited, setIsFavorited] = useState(null)
+  const [loading, setLoading] = useState(true)
   const navigate = useNavigate();
   const { id } = useParams()
 
@@ -37,6 +39,7 @@ function UserProfile({fromOwnerDash, setFromOwnerDash}) {
         setHeartColor(favoriteStatus ? "red" : "white")
         // I can't just set is favorited and try it with heart color, it's just too quick and defaults, so I make a variable that contains data and set it to that.
         setIsFavorited(favoriteStatus)
+        setLoading(false)
       })
   }, [])
 
@@ -138,6 +141,11 @@ function UserProfile({fromOwnerDash, setFromOwnerDash}) {
   const navigateBackToDash = () => {
     setFromOwnerDash(!fromOwnerDash)
     navigate(`/dashboard`)
+  }
+
+  // Render loading page if display is still loading
+  if (loading) {
+    return <><LoadingPage/></>
   }
 
   return (

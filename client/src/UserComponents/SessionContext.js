@@ -5,7 +5,7 @@ const SessionContext = createContext();
 export const UserSessionContext = () => useContext(SessionContext)
 
 export const SessionProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState([])
+  const [currentUser, setCurrentUser] = useState()
   const [role, setRole] = useState('')
   const apiUrl=process.env.REACT_APP_API_URL
 //   console.log(process.env.REACT_APP_API_URL)
@@ -22,11 +22,11 @@ export const SessionProvider = ({ children }) => {
         // console.log("Check Session Data:", data)
         if (data.role === 'user') {
           setCurrentUser(data.details)
-          setRole('user')
+          setRole(data.role)
           console.log("You are currently signed in as an user")
         } else if (data.role === 'owner') {
           setCurrentUser(data.details)
-          setRole('owner')
+          setRole(data.role)
           console.log("You are currently signed in as an owner")
           // console.log(data.details)
         }
