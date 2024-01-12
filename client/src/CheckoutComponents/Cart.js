@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import {toast} from 'react-toastify'
 import { UserSessionContext } from "../UserComponents/SessionContext";
 
+import LoadingPage from "../ExtraPageComponents/LoadingPage";
+
 
 function Cart(){
 
@@ -116,7 +118,7 @@ useEffect(() => {
 
   //If a user has no items in cart or no cart created display this instead
   if (!cartData || cartData?.length === 0) {
-    return <div>Cart is empty or loading...</div>
+    return <LoadingPage/>
   }
 
   //Changes cart based on cart ID
