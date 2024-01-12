@@ -95,6 +95,8 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
             // checkSession()
             console.log("FUNCTION RAN")
             console.log("THE CURRENT DATA IN STRIPE ACCOUNT:", stripeAccount)
+          } else {
+            setDashLoad(false)
           }
 
       }, [])
