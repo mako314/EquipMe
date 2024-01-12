@@ -130,7 +130,7 @@ const displayEquipment = featuredEquipment.length > 0 ? featuredEquipment : <div
 
 // Render loading page if display is still loading
   if (loading) {
-    return <><LoadingPage/></>
+    return <LoadingPage loadDetails={"Owner Profile Page"}/>
   }
 
 

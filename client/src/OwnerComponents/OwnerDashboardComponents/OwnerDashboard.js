@@ -106,7 +106,7 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
 
     // Wait for useEffect to load before displaying the page
     if (dashLoad) {
-        return <><LoadingPage/></>
+        return <><LoadingPage loadDetails={" your Dashboard"}/></>
     }
 
     // console.log("THE CURRENT USERS STRIPE ID:", currentUser?.stripe_id)

@@ -145,7 +145,7 @@ function UserProfile({fromOwnerDash, setFromOwnerDash}) {
 
   // Render loading page if display is still loading
   if (loading) {
-    return <><LoadingPage/></>
+    return <><LoadingPage loadDetails={"User Profile Page"}/></>
   }
 
   return (
