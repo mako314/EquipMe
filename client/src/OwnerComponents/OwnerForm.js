@@ -221,14 +221,15 @@ function OwnerForm({addOwner}){
 
       <div className="sm:col-span-2">
         <label className="text-gray-800 sm:text-base">Would you like to create a Stripe Connect upon Signing up?</label>
-        <div className="flex items-center">
+      <div className="flex items-center">
           <input type="radio" name="owner_consent" value="yes" checked={formik.values.owner_consent === 'yes'} onChange={handleOwnerConsentChange} />
           <label htmlFor="owner_consent_yes" className="ml-2 text-sm text-gray-800 sm:text-base">Yes</label>
-        </div>
-        <div className="flex items-center">
+      </div>
+
+      <div className="flex items-center">
           <input type="radio" name="owner_consent" value="no" checked={formik.values.owner_consent === 'no'} onChange={handleOwnerConsentChange} />
           <label htmlFor="owner_consent_no" className="ml-2 text-sm text-gray-800 sm:text-base">No</label>
-        </div>
+      </div>
     
         {showLinkCheckbox && (
         <>
