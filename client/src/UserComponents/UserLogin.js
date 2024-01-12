@@ -7,6 +7,7 @@ function UserLogin(){
 
     //Take me to my page scotty,
     const navigate = useNavigate();
+    const [error, setError] = useState(null)
 
     // const [user, setUser] = useState(null); // stores user on client-side
     // const [user, setUser] = useContext(UserContext)
@@ -14,37 +15,80 @@ function UserLogin(){
     const { currentUser, role, setCurrentUser, setRole } = UserSessionContext()
 
     // sends information to server-side, sets session, and sets state
+    // function handleLogin(e) {
+    //     e.preventDefault();
+
+    //     let email = e.target.email.value;
+    //     let password = e.target.password.value;
+
+    //     fetch(`${apiUrl}login`, {
+    //         method: "POST",
+    //         credentials: 'include',
+    //         headers: {
+    //           "Content-Type": "application/json",
+    //         },
+    //         body: JSON.stringify( { email, password } ),
+    //       }).then((resp) => {
+    //         if (resp.ok) {
+    //           resp.json().then((data) => {
+    //             console.log(data.role)
+    //             if(data.role === 'user'){
+    //               setCurrentUser(data.user)
+    //               setRole(data.role)
+    //               navigate(`/dashboard`) 
+    //               // navigate(`/user/profile/${data.id}`); // <-------- navigates to the profile
+    //             } else if(data.role === 'owner'){
+    //               setCurrentUser(data.owner)
+    //               setRole(data.role)
+    //               navigate(`/dashboard`) 
+    //             }
+    //           })
+    //         }
+    //       })
+    // }
+
     function handleLogin(e) {
-        e.preventDefault();
-
-        let email = e.target.email.value;
-        let password = e.target.password.value;
-
-        fetch(`${apiUrl}login`, {
-            method: "POST",
-            credentials: 'include',
-            headers: {
+      e.preventDefault()
+  
+      let email = e.target.email.value
+      let password = e.target.password.value
+  
+      fetch(`${apiUrl}login`, {
+          method: "POST",
+          credentials: 'include',
+          headers: {
               "Content-Type": "application/json",
-            },
-            body: JSON.stringify( { email, password } ),
-          }).then((resp) => {
-            if (resp.ok) {
+          },
+          body: JSON.stringify({ email, password }),
+      }).then((resp) => {
+          if (resp.ok) {
               resp.json().then((data) => {
-                console.log(data.role)
-                if(data.role === 'user'){
-                  setCurrentUser(data.user)
-                  setRole(data.role)
-                  navigate(`/dashboard`) 
-                  // navigate(`/user/profile/${data.id}`); // <-------- navigates to the profile
-                } else if(data.role === 'owner'){
-                  setCurrentUser(data.owner)
-                  setRole(data.role)
-                  navigate(`/dashboard`) 
-                }
+                  console.log(data.role)
+                  if (data.role === 'user') {
+                      setCurrentUser(data.user)
+                      setRole(data.role)
+                      navigate(`/dashboard`)
+                  } else if (data.role === 'owner') {
+                      setCurrentUser(data.owner)
+                      setRole(data.role)
+                      navigate(`/dashboard`)
+                  }
               })
-            }
-          })
-    }
+          } else {
+              // Handle login failure here
+              console.log(resp)
+              console.error('Login failed. Incorrect email or password.')
+
+              // You can display an error message to the user, e.g., set an error state
+              setError('Login failed. Incorrect email or password.')
+          } 
+      })
+      .catch((error) => {
+        // Handle fetch error here
+        console.error('Fetch error:', error)
+        // You can set an error message state here if needed
+      })
+  }
 
     // console.log("the role sir:", role)
     // removes session, removes state
@@ -84,7 +128,9 @@ function UserLogin(){
               <input type="password" name="password" id="password" className="block w-full px-5 py-3 text-base text-neutral-600 placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg bg-gray-50 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300" placeholder="Enter your password"/>
             </div>
             <div className="flex flex-col mt-4 lg:space-y-2">
-
+              {error && (
+              <p className="text-red-500 text-sm">{error}</p>
+              )}
                {/* LOG IN BUTTON TO THIS */}
               <button type="submit" className="flex items-center justify-center w-full px-10 py-4 text-base font-medium text-center text-white transition duration-500 ease-in-out transform bg-amber-500 rounded-xl hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Sign in</button>
 

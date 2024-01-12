@@ -119,6 +119,10 @@ const displayEquipment = featuredEquipment.length > 0 ? featuredEquipment : <div
         navigate(`/dashboard`)
     }
 
+    const navigateToLogin = () => {
+        navigate(`/login`)
+    }
+
 
   return (
 
@@ -134,14 +138,24 @@ const displayEquipment = featuredEquipment.length > 0 ? featuredEquipment : <div
                             <h1 className="text-xl font-bold"> {firstName} {lastName}</h1>
                             <p className="text-gray-600">{profession}</p>
                             <div className="mt-6 flex flex-wrap gap-4 justify-center">
-                                {role === 'user' || role === 'owner' ? <ContactModal recipientID={id} firstName={firstName} lastName={lastName}/> : <span className="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded"> Sign in to contact</span>}
+                                {role === 'user' || role === 'owner' ? 
+                                <ContactModal recipientID={id} firstName={firstName} lastName={lastName}/> 
+                                :
+                                <span 
+                                className="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded cursor-pointer	"
+                                onClick={navigateToLogin}> 
+                                Sign in to contact
+                                </span>
+                                }
                                 {/* <ContactModal recipientID={id}/> */}
                                 {/* <span className="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded"> {website} </span> */}
+                                {currentUser && 
                                 <button className="rounded-full w-10 h-10 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4" onClick={handleFavoriteSelection}>
                                     <svg fill={heartColor} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-5 h-5" viewBox="0 0 24 24">
                                     <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
                                     </svg>
                                 </button>
+                                }
                             </div>
                         </div>
                         <hr className="my-6 border-t border-gray-300"/>

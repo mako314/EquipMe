@@ -65,33 +65,33 @@ class Login(Resource):
             return response
 
         # Neither
-        return jsonify(error='Invalid credentials'), 401
+        return make_response(jsonify(error='Invalid credentials'), 401)
 
 api.add_resource(Login, '/login')
 #------------------------------------------------------------------------------------------------------------------------------
 
 #------------------------------------OWNER LOGIN------------------------------------------------------------------------------
 
-class OwnerLogin(Resource):
+# class OwnerLogin(Resource):
 
-    def get(self):
-        pass
+#     def get(self):
+#         pass
 
-    def post(self):
-        data = request.get_json()
-        email = data['email']
-        print(email)
-        owner = EquipmentOwner.query.filter(EquipmentOwner.email == email).first()
-        password = data['password']
-        if owner and owner.authenticate(password):
-            access_token = create_access_token(identity=owner.id)
-            response = jsonify({"msg": "login successful"}, 200)
-            set_access_cookies(response, access_token)
-            return response
-        else:
-            return {'error': 'Invalid credentials'}, 401
+#     def post(self):
+#         data = request.get_json()
+#         email = data['email']
+#         print(email)
+#         owner = EquipmentOwner.query.filter(EquipmentOwner.email == email).first()
+#         password = data['password']
+#         if owner and owner.authenticate(password):
+#             access_token = create_access_token(identity=owner.id)
+#             response = jsonify({"msg": "login successful"}, 200)
+#             set_access_cookies(response, access_token)
+#             return response
+#         else:
+#             return {'error': 'Invalid credentials'}, 401
 
-api.add_resource(OwnerLogin, '/owner/login')
+# api.add_resource(OwnerLogin, '/owner/login')
 #------------------------------------------------------------------------------------------------------------------------------
 
 #------------------------------------USER LOGOUT------------------------------------------------------------------------------
