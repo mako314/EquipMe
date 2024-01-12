@@ -130,7 +130,7 @@ function RentalMonitor({currentUser, role}){
     //   return monthlyRevenueData.reduce((sum, { totalRevenuePerMonth }) => sum + totalRevenuePerMonth, 0)
     // }, [monthlyRevenueData])
       
-
+    // This accounts for one rental agreement formed too.
     if(agreementsData.length === 0 && role === 'owner'){
       return(
         <div className="flex items-center justify-center h-full text-center text-gray-800">

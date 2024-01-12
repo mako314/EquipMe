@@ -541,6 +541,8 @@ class AgreementComment(db.Model, SerializerMixin):
     owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'), nullable= True)
     agreement_id = db.Column(db.Integer, db.ForeignKey('agreements.id'))
 
+    # May need to include an origin column
+
     agreements = db.relationship('RentalAgreement', back_populates ='comment')
 
     serialize_rules = ('-agreements.comment', )

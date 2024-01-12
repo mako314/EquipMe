@@ -19,19 +19,22 @@ const handleEquipmentNavigation = (equipmentId) => {
 let carouselItems = []
 
 // Test owner user.favorites ? To see if they have either not been favorited, or if they haven't uploaded equipment
-if (currentUser?.equipment?.user_favorite?.length === 0 && role === 'owner'){
+console.log("FAVORITE CAROUSEL LENGTH:", currentUser?.equipment?.user_favorite?.length)
+
+console.log(" AND THE ROLE : ", role)
+if (currentUser?.equipment?.user_favorite?.length > 0 && role === 'owner'){
   if (currentUser?.equipment?.length === 0 && role === 'owner'){
     return(
       <div className="flex items-center justify-center h-full text-center text-gray-800">
        <p className="text-lg font-medium">You haven't uploaded any equipment yet, until then a user can't favorite it, and the favorites won't be shown here!</p>
       </div>)
-  } else {
+  } 
+} else {
   return(
     <div className="flex items-center justify-center h-full text-center text-gray-800">
     <p className="text-lg font-medium">Users haven't favorited any Equipment quite yet!</p>
    </div>
    )}
-}
 
 if (currentUser?.user_favorite?.length === 0 && role === 'user'){
   return(

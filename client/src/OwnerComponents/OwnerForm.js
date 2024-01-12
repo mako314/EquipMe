@@ -22,9 +22,12 @@ function OwnerForm({addOwner}){
     }
 
     function handleLogin(stripe_onboard_link = null) {
+      console.log("Stripe Onboard Link:", stripe_onboard_link)
         
       let email = formik.values.email
       let password = formik.values.password
+      let create_link = formik.values.create_link
+
 
       fetch(`${apiUrl}login`, {
           method: "POST",
@@ -40,11 +43,13 @@ function OwnerForm({addOwner}){
               setCurrentUser(data.owner)
               setRole(data.role)
               console.log("the type of data the role is:", typeof(data.role))
-              if (stripe_onboard_link) {
+              if (stripe_onboard_link && create_link === 'yes') {
                 // Open the Stripe onboard link in a new tab
+                console.log("Stripe Onboard Link:", stripe_onboard_link)
                 // window.open(stripe_onboard_link, '_blank')
                 // Open stripe in same tab, leads to dashboard after completion
-                window.location.href = data.stripe_onboard_link
+                window.location.href = stripe_onboard_link
+                // window.location.href = "https://google.com"
               } else {
                 // If there's no Stripe onboard link, navigate to the dashboard
                 navigate(`/dashboard`)
