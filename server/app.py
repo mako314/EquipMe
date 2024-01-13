@@ -2704,7 +2704,7 @@ class WebHookForStripeSuccess(Resource):
                 payment_method = f'{payment_method_type} - {card_details.brand}: {card_details.last4}',
                 order_status = 'In-Progress',
                 delivery_address = cart_item.agreements[0].delivery_address,
-                order_details = f'{user.firstName} {user.lastName} has rented {cart_item.quantity} {equipment.make} {equipment.model}' ,
+                order_details = f'{user.firstName} {user.lastName} has rented {cart_item.quantity}\n{equipment.make} {equipment.model}',
                 estimated_delivery_date = None,
                 actual_delivery_date = None,
                 cancellation_date = None,

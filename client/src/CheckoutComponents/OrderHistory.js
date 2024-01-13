@@ -12,13 +12,19 @@ function OrderHistory(){
     const [loading, setLoading] = useState(true)
     // view product should link to 
     const [orderHistory, setOrderHistory] = useState([])
-    
 
+    const navigate = useNavigate()
+    
+    function handleEquipmentNavigation(id) {
+        navigate(`/equipment/${id}`)
+        window.scrollTo(0, 0)
+    }
 
     useEffect(() => {
         const fetchOrderHistory = async () => {
             if (!currentUser || !currentUser.id) {
-                console.error("currentUser or currentUser.id is undefined.");
+                console.error("currentUser or currentUser.id is undefined.")
+                setLoading(false)
                 return
             }
     
@@ -40,6 +46,7 @@ function OrderHistory(){
                 setLoading(false)
             } catch (error) {
                 console.error('Fetch Error:', error.message)
+                
             }
         };
     
@@ -50,27 +57,69 @@ function OrderHistory(){
         return <LoadingPage loadDetails={"your Order History"}/>
     }
 
+    if(!currentUser){
+        return <div> Not available </div>
+    }
+
+    let OrderHistoryTotal = 0
+
+    orderHistory.orders.forEach((item) => {
+        console.log("FOR EACH ITEM CONSOLE LOG:", item)
+        OrderHistoryTotal =+ item.total_amount
+    })
+
+    console.log("ORDER HISTORY TOTAL:", OrderHistoryTotal)
+
     let mappedOrderHistory
     console.log("TYPE OF ORDER HISTORY:", typeof(orderHistory.orders))
     if (Array.isArray(orderHistory.orders)) {
-        mappedOrderHistory = orderHistory.orders.map((item, index) => {
-            console.log("THE ORDER HISTORY ITEM:", item)
-            return <div key={index}>Order Item: {item.order_number}</div>
+        mappedOrderHistory = orderHistory.orders.map((item) => {
+            return(<li className="p-4 sm:p-6">
+                <div className="flex items-center sm:items-start">
+                <div className="flex-shrink-0 w-20 h-20 bg-gray-200 rounded-lg overflow-hidden sm:w-40 sm:h-40">
+                    <img src={item.equipment.equipment_image} alt={item.equipment.make + ' ' + item.equipment.model} className="w-full h-full object-center object-cover"/>
+                </div>
+                <div className="flex-1 ml-6 text-sm">
+                    <div className="font-medium text-gray-900 sm:flex sm:justify-between">
+                    <h5>{item.order_details}</h5>
+                    <p className="mt-2 sm:mt-0">${(item.total_amount / 100).toFixed(2)}</p>
+                    </div>
+                    <p className="hidden text-gray-500 sm:block sm:mt-2"> {item.notes}</p>
+                </div>
+                </div>
+
+                <div className="mt-6 sm:flex sm:justify-between">
+                <div className="flex items-center">
+
+                    <svg className="w-5 h-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    <p className="ml-2 text-sm font-medium text-gray-500">Estimated Delivery on <time dateTime="2021-07-12">{item.estimated_delivery_date}</time></p>
+                </div>
+
+                <div className="mt-6 border-t border-gray-200 pt-4 flex items-center space-x-4 divide-x divide-gray-200 text-sm font-medium sm:mt-0 sm:ml-4 sm:border-none sm:pt-0">
+                    <div className="flex-1 flex justify-center">
+                    <span className="text-indigo-600 whitespace-nowrap hover:text-indigo-500 cursor-pointer" onClick={ () => handleEquipmentNavigation(item.equipment.id)}>View product</span>
+                    </div>
+                </div>
+                </div>
+            </li>)
         })
     } else {
         console.log("orderHistory is not an array");
-        mappedOrderHistory = <p>No order history available</p>
+        // mappedOrderHistory = <p>No order history available</p>
     }
 
     if (loading){
         return <LoadingPage loadDetails={"your Order History"}/>
     }
     console.log("THE STATE ORDER HISTORY:", orderHistory)
-
+    // console.log(mappedOrderHistory)
 
 
     return(
         <div className="bg-white">
+            
             <div className="py-16 sm:py-24">
                 <div className="max-w-7xl mx-auto sm:px-2 lg:px-8">
                 <div className="max-w-2xl mx-auto px-4 lg:max-w-4xl lg:px-0">
@@ -100,7 +149,7 @@ function OrderHistory(){
                             </div>
                             <div>
                             <dt className="font-medium text-gray-900">Total amount</dt>
-                            <dd className="mt-1 font-medium text-gray-900">$160.00</dd>
+                            <dd className="mt-1 font-medium text-gray-900">${OrderHistoryTotal.toFixed(2)}</dd>
                             </div>
                         </dl>
 
@@ -137,39 +186,7 @@ function OrderHistory(){
 
                         <h4 className="sr-only">Items</h4>
                         <ul role="list" className="divide-y divide-gray-200">
-                        <li className="p-4 sm:p-6">
-                            <div className="flex items-center sm:items-start">
-                            <div className="flex-shrink-0 w-20 h-20 bg-gray-200 rounded-lg overflow-hidden sm:w-40 sm:h-40">
-                                <img src="https://tailwindui.com/img/ecommerce-images/order-history-page-03-product-01.jpg" alt="Moss green canvas compact backpack with double top zipper, zipper front pouch, and matching carry handle and backpack straps." className="w-full h-full object-center object-cover"/>
-                            </div>
-                            <div className="flex-1 ml-6 text-sm">
-                                <div className="font-medium text-gray-900 sm:flex sm:justify-between">
-                                <h5>Micro Backpack</h5>
-                                <p className="mt-2 sm:mt-0">$70.00</p>
-                                </div>
-                                <p className="hidden text-gray-500 sm:block sm:mt-2">Are you a minimalist looking for a compact carry option? The Micro Backpack is the perfect size for your essential everyday carry items. Wear it like a backpack or carry it like a satchel for all-day use.</p>
-                            </div>
-                            </div>
-
-                            <div className="mt-6 sm:flex sm:justify-between">
-                            <div className="flex items-center">
-
-                                <svg className="w-5 h-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                                </svg>
-                                <p className="ml-2 text-sm font-medium text-gray-500">Delivered on <time dateTime="2021-07-12">July 12, 2021</time></p>
-                            </div>
-
-                            <div className="mt-6 border-t border-gray-200 pt-4 flex items-center space-x-4 divide-x divide-gray-200 text-sm font-medium sm:mt-0 sm:ml-4 sm:border-none sm:pt-0">
-                                <div className="flex-1 flex justify-center">
-                                <a href="#" className="text-indigo-600 whitespace-nowrap hover:text-indigo-500">View product</a>
-                                </div>
-                                <div className="flex-1 pl-4 flex justify-center">
-                                <a href="#" className="text-indigo-600 whitespace-nowrap hover:text-indigo-500">Buy again</a>
-                                </div>
-                            </div>
-                            </div>
-                        </li>
+                            {mappedOrderHistory}
 
 
                         </ul>
