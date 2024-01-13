@@ -39,8 +39,6 @@ import RentalMonitor from './RentalMonitor';
 import Page404 from '../../ExtraPageComponents/Page404';
 import LoadingPage from '../../ExtraPageComponents/LoadingPage';
 
-
-
 function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
     // Honestly with currentUser, we can just make this for both users and owners
 

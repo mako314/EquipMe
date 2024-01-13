@@ -2853,11 +2853,10 @@ class CalculateMonthlyTotals(Resource):
 api.add_resource(CalculateMonthlyTotals, '/summarize/<string:month>/<string:year>')
 
 class OrderHistoryByUserId(Resource):
-    def patch(self, user_id):
+    def get(self, user_id):
         # Filter orders by user_id
         orders = OrderHistory.query.filter_by(user_id=user_id).all()
         
-        orders = [order.to_dict() for order in OrderHistory.query.all()]
         # Convert orders to dictionaries if not empty
         if orders:
             orders_dict = [order.to_dict() for order in orders]

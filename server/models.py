@@ -683,7 +683,7 @@ class OrderHistory(db.Model, SerializerMixin):
 
     #Serialize Rules
     # I had to remove the move back to 'equipment.orders' here to remove the order data from my owners orders object
-    serialize_rules = ('-user.orders','-owner.orders', '-equipment',)
+    serialize_rules = ('-user.review','-user.agreements','-user.user_inboxes','-user.cart','-user.orders', '-user.user_favorite','-user.owner_favorite','-owner.agreements','-owner.owner_inboxes','-owner.review','-owner.owner_favorite','-owner.user_favorite','-owner.orders','-owner.equipment','-equipment',)
 
 
 class Review(db.Model, SerializerMixin):
