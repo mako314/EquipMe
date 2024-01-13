@@ -233,7 +233,6 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
 
 
     // Handles creating a stripe login link for a user to get into their dashboard, that way they have a stripe dashboard also
-
     const handleStripeLoginLink = () => {
         // Needed to set onboard link to a variable to get this to work
             // Make a request to the backend to generate a new onboarding link

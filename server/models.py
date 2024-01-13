@@ -669,6 +669,7 @@ class OrderHistory(db.Model, SerializerMixin):
     return_date = db.Column(db.DateTime)
     actual_return_date = db.Column(db.DateTime)
     notes = db.Column(db.String)
+    order_number = db.Column(db.String)
 
     # Foreign Keys
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))

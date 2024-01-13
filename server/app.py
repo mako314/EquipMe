@@ -2695,6 +2695,8 @@ class WebHookForStripeSuccess(Resource):
                         # Handle error
                         print("Error fetching payment method:", e)
 
+                print("WHAT I BELIEVE TO BE THE ID OF THE PAYMENT INTENT:", payment_intent.id)
+
                 new_order_history = OrderHistory(
                 order_datetime = datetime.utcnow(),
                 total_amount =  payment_intent.amount_received, # For monetary values
@@ -2708,10 +2710,11 @@ class WebHookForStripeSuccess(Resource):
                 cancellation_date = None,
                 return_date = None,
                 actual_return_date = None,
-                notes = payment_intent.id,
+                notes = '',
                 user_id = user.id,
                 owner_id =equipment.owner.id,
                 equipment_id = equipment.id,
+                order_number = payment_intent.id
                 )
 
                 db.session.add(new_order_history)

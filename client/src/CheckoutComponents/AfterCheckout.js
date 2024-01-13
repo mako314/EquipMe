@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import ApiUrlContext from '../Api'
 import { useNavigate} from 'react-router-dom';
+import LoadingPage from '../ExtraPageComponents/LoadingPage';
 
 function AfterCheckout(){
     const apiUrl = useContext(ApiUrlContext)
@@ -24,6 +25,7 @@ function AfterCheckout(){
     // https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events
 
     useEffect(() => {
+        
         const eventSource = new EventSource(`${apiUrl}sse/endpoint`)
 
         eventSource.onmessage = function(event) {
@@ -52,18 +54,15 @@ function AfterCheckout(){
 
     console.log("CHECKING STATE DATA:", eventData)
 
+    if (isLoading){
+        return <LoadingPage loadDetails={"your Order Confirmation"}/>
+    }
 
+    if (eventData){
     return(
         <div className="bg-white min-h-screen flex flex-col items-center pt-5 pb-5">
-            {isLoading ? (
-                // Loader spinner
-                <div className="flex items-center justify-center space-x-2">
-                <div className="p-2 rounded-full bg-indigo-500 animate-pulse" />
-                <div className="p-2 rounded-full bg-indigo-500 animate-pulse" />
-                <div className="p-2 rounded-full bg-indigo-500 animate-pulse" />
-                </div>
-            ) : (
-            eventData.map((event, index) => (
+
+            {eventData.map((event, index) => (
                 <div key={index} className="text-center">
                     {event.type === 'payment_intent.succeeded' && (
                         <div className="flex flex-col items-center justify-center">
@@ -75,8 +74,7 @@ function AfterCheckout(){
                     )}
                     {/* Render other event types if necessary */}
                 </div>
-                ))
-            )}
+                ))}
             <div className='flex flex-row gap-4'> 
             <button 
                 onClick={handleCartNav}
@@ -103,7 +101,7 @@ function AfterCheckout(){
 
 
         </div>
-    )
+    )}
 }
 
 export default AfterCheckout
