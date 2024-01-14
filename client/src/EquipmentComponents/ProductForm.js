@@ -152,6 +152,7 @@ function ProductForm({ addEquipment }){
                                         "autoClose" : 2000
                                       })
                                       checkSession()
+                                      navigate('/dashboard')
                                       console.log(res)
                                     }
                                     console.log(res)

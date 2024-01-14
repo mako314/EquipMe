@@ -63,7 +63,7 @@ function OrderHistory(){
 
     let OrderHistoryTotal = 0
 
-    orderHistory.orders.forEach((item) => {
+    orderHistory?.orders?.forEach((item) => {
         console.log("FOR EACH ITEM CONSOLE LOG:", item)
         OrderHistoryTotal =+ item.total_amount
     })
