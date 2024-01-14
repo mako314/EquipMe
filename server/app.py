@@ -65,33 +65,33 @@ class Login(Resource):
             return response
 
         # Neither
-        return jsonify(error='Invalid credentials'), 401
+        return make_response(jsonify(error='Invalid credentials'), 401)
 
 api.add_resource(Login, '/login')
 #------------------------------------------------------------------------------------------------------------------------------
 
 #------------------------------------OWNER LOGIN------------------------------------------------------------------------------
 
-class OwnerLogin(Resource):
+# class OwnerLogin(Resource):
 
-    def get(self):
-        pass
+#     def get(self):
+#         pass
 
-    def post(self):
-        data = request.get_json()
-        email = data['email']
-        print(email)
-        owner = EquipmentOwner.query.filter(EquipmentOwner.email == email).first()
-        password = data['password']
-        if owner and owner.authenticate(password):
-            access_token = create_access_token(identity=owner.id)
-            response = jsonify({"msg": "login successful"}, 200)
-            set_access_cookies(response, access_token)
-            return response
-        else:
-            return {'error': 'Invalid credentials'}, 401
+#     def post(self):
+#         data = request.get_json()
+#         email = data['email']
+#         print(email)
+#         owner = EquipmentOwner.query.filter(EquipmentOwner.email == email).first()
+#         password = data['password']
+#         if owner and owner.authenticate(password):
+#             access_token = create_access_token(identity=owner.id)
+#             response = jsonify({"msg": "login successful"}, 200)
+#             set_access_cookies(response, access_token)
+#             return response
+#         else:
+#             return {'error': 'Invalid credentials'}, 401
 
-api.add_resource(OwnerLogin, '/owner/login')
+# api.add_resource(OwnerLogin, '/owner/login')
 #------------------------------------------------------------------------------------------------------------------------------
 
 #------------------------------------USER LOGOUT------------------------------------------------------------------------------
@@ -1094,6 +1094,7 @@ class RentalAgreements(Resource):
         #     return make_response({'error': 'Not enough equipment available'}, 400)
 
         #may need a way to write in validations
+        # I have to think about how this is going to work, an agreement-status is likely initiated by a user in my application, so it would be either in-progress or user-accepted.
         new_rental_agreement = RentalAgreement(
             rental_start_date = start_date,
             rental_end_date = end_date,
@@ -1223,7 +1224,7 @@ class RentalAgreementsByID(Resource):
             )
             db.session.commit()
             if agreement.user_decision == 'accept' and agreement.owner_decision == 'accept':
-                agreement.agreement_status = 'in-progress'
+                agreement.agreement_status = 'both-accepted'
                 db.session.add(new_equipment_status)
                 db.session.add(new_state_history)
                 db.session.commit()
@@ -2401,12 +2402,24 @@ class CheckingOut(Resource):
                 # Calculates the total price based off the unit price and with the pre-existing quantity / rental length of the cart item. There is a test above to see if the incoming values are != to the ones inside of the db currently.
                 total_price = unit_price * cart_item.quantity * cart_item.rental_length
 
+                print("THE RENTAL RATE:", cart_item.rental_rate)
+
+                amount_of_time = None
+                if cart_item.rental_rate == 'daily':
+                    amount_of_time = 'days'
+                if cart_item.rental_rate == 'hourly':
+                    amount_of_time = 'hours'
+                if cart_item.rental_rate == 'weekly':
+                    amount_of_time = 'weeks'
+                if cart_item.rental_rate == 'promo':
+                    amount_of_time = 'promo agreed upon by both parties'
+
                 line_item = {
                 "price_data": {
                     "currency": "usd",
                     "product_data": {
                         "name": f" Cart: {cart.cart_name.upper()} | Make: {equipment.make} Model: {equipment.model}",
-                        "description": f"{user.firstName} {user.lastName} is agreeing to rent ({cart_item.quantity}) {equipment.make} {equipment.model} at a {cart_item.rental_rate} rate of {unit_price / 100} from the Owner: {owner.firstName} {owner.lastName} ",
+                        "description": f"{user.firstName} {user.lastName} is agreeing to rent ({cart_item.quantity}) {equipment.make} {equipment.model} at a {cart_item.rental_rate} rate of {unit_price / 100} for a total of {cart_item.rental_length} {amount_of_time} from the Owner: {owner.firstName} {owner.lastName} ",
                         "images": [equipment.equipment_image], 
                     },
                     "unit_amount": total_price,
@@ -2682,6 +2695,8 @@ class WebHookForStripeSuccess(Resource):
                         # Handle error
                         print("Error fetching payment method:", e)
 
+                print("WHAT I BELIEVE TO BE THE ID OF THE PAYMENT INTENT:", payment_intent.id)
+
                 new_order_history = OrderHistory(
                 order_datetime = datetime.utcnow(),
                 total_amount =  payment_intent.amount_received, # For monetary values
@@ -2689,16 +2704,17 @@ class WebHookForStripeSuccess(Resource):
                 payment_method = f'{payment_method_type} - {card_details.brand}: {card_details.last4}',
                 order_status = 'In-Progress',
                 delivery_address = cart_item.agreements[0].delivery_address,
-                order_details = f'{user.firstName} {user.lastName} has rented {cart_item.quantity} {equipment.make} {equipment.model}' ,
+                order_details = f'{user.firstName} {user.lastName} has rented {cart_item.quantity}\n{equipment.make} {equipment.model}',
                 estimated_delivery_date = None,
                 actual_delivery_date = None,
                 cancellation_date = None,
                 return_date = None,
                 actual_return_date = None,
-                notes = "",
+                notes = '',
                 user_id = user.id,
                 owner_id =equipment.owner.id,
                 equipment_id = equipment.id,
+                order_number = payment_intent.id
                 )
 
                 db.session.add(new_order_history)
@@ -2835,6 +2851,22 @@ class CalculateMonthlyTotals(Resource):
 
     
 api.add_resource(CalculateMonthlyTotals, '/summarize/<string:month>/<string:year>')
+
+class OrderHistoryByUserId(Resource):
+    def get(self, user_id):
+        # Filter orders by user_id
+        orders = OrderHistory.query.filter_by(user_id=user_id).all()
+        
+        # Convert orders to dictionaries if not empty
+        if orders:
+            orders_dict = [order.to_dict() for order in orders]
+            response = make_response({"orders": orders_dict}, 200)
+        else:
+            response = make_response({"error": "No orders found for the specified user"}, 404)
+
+        return response
+
+api.add_resource(OrderHistoryByUserId, '/order/history/<int:user_id>')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

@@ -7,6 +7,7 @@ import ProductCard from '../EquipmentComponents/ProductCard'
 import Reviews from '../ReviewComponents/Reviews'
 import { UserSessionContext } from '../UserComponents/SessionContext'
 import ApiUrlContext from '../Api'
+import LoadingPage from '../ExtraPageComponents/LoadingPage'
 
 function OwnerDisplay({fromOwnerDash, setFromOwnerDash}) {
     
@@ -17,6 +18,7 @@ function OwnerDisplay({fromOwnerDash, setFromOwnerDash}) {
   const { firstName, lastName, state, city, address, address_line_2, postal_code, bio, email, phone, equipment, profession, profileImage, website } = owner
   const [heartColor, setHeartColor] = useState('white')
   const [isFavorited, setIsFavorited] = useState(null)
+  const [loading, setLoading] = useState(true)
 
   const ownerLocation = `${address_line_2 === '' ?  address : address + ',' + address_line_2}, ${city}, ${state} ${postal_code} `
 
@@ -35,6 +37,7 @@ function OwnerDisplay({fromOwnerDash, setFromOwnerDash}) {
         setHeartColor(favoriteStatus ? "red" : "white")
         // I can't just set is favorited and try it with heart color, it's just too quick and defaults, so I make a variable that contains data and set it to that.
         setIsFavorited(favoriteStatus)
+        setLoading(false)
       })
   }, [])
 
@@ -119,6 +122,17 @@ const displayEquipment = featuredEquipment.length > 0 ? featuredEquipment : <div
         navigate(`/dashboard`)
     }
 
+    const navigateToLogin = () => {
+        navigate(`/login`)
+    }
+
+    console.log("CURRENT USER TEST:", currentUser)
+
+// Render loading page if display is still loading
+  if (loading) {
+    return <LoadingPage loadDetails={"Owner Profile Page"}/>
+  }
+
 
   return (
 
@@ -134,14 +148,24 @@ const displayEquipment = featuredEquipment.length > 0 ? featuredEquipment : <div
                             <h1 className="text-xl font-bold"> {firstName} {lastName}</h1>
                             <p className="text-gray-600">{profession}</p>
                             <div className="mt-6 flex flex-wrap gap-4 justify-center">
-                                {role === 'user' || role === 'owner' ? <ContactModal recipientID={id} firstName={firstName} lastName={lastName}/> : <span className="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded"> Sign in to contact</span>}
+                                {role === 'user' || role === 'owner' ? 
+                                <ContactModal recipientID={id} firstName={firstName} lastName={lastName}/> 
+                                :
+                                <span 
+                                className="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded cursor-pointer	"
+                                onClick={navigateToLogin}> 
+                                Sign in to contact
+                                </span>
+                                }
                                 {/* <ContactModal recipientID={id}/> */}
                                 {/* <span className="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded"> {website} </span> */}
+                                {currentUser && 
                                 <button className="rounded-full w-10 h-10 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4" onClick={handleFavoriteSelection}>
                                     <svg fill={heartColor} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-5 h-5" viewBox="0 0 24 24">
                                     <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
                                     </svg>
                                 </button>
+                                }
                             </div>
                         </div>
                         <hr className="my-6 border-t border-gray-300"/>

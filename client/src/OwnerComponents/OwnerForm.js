@@ -12,6 +12,7 @@ function OwnerForm({addOwner}){
     const [error, setError] = useState()
     const navigate = useNavigate()
     const apiUrl = useContext(ApiUrlContext)
+    const [loading, setLoading] = useState(false)
     // const [owner, setOwner] = useContext(OwnerContext)
     const { currentUser, role, setCurrentUser, setRole } = UserSessionContext()
 
@@ -22,9 +23,12 @@ function OwnerForm({addOwner}){
     }
 
     function handleLogin(stripe_onboard_link = null) {
-        
+      console.log("Stripe Onboard Link:", stripe_onboard_link)
+      // setLoading(true)
       let email = formik.values.email
       let password = formik.values.password
+      let create_link = formik.values.create_link
+
 
       fetch(`${apiUrl}login`, {
           method: "POST",
@@ -40,14 +44,18 @@ function OwnerForm({addOwner}){
               setCurrentUser(data.owner)
               setRole(data.role)
               console.log("the type of data the role is:", typeof(data.role))
-              if (stripe_onboard_link) {
+              if (stripe_onboard_link && create_link === 'yes') {
                 // Open the Stripe onboard link in a new tab
+                console.log("Stripe Onboard Link:", stripe_onboard_link)
                 // window.open(stripe_onboard_link, '_blank')
                 // Open stripe in same tab, leads to dashboard after completion
-                window.location.href = data.stripe_onboard_link
+                window.location.href = stripe_onboard_link
+                // window.location.href = "https://google.com"
+                setLoading(false)
               } else {
                 // If there's no Stripe onboard link, navigate to the dashboard
                 navigate(`/dashboard`)
+                setLoading(false)
               }
             })
           }
@@ -82,6 +90,7 @@ function OwnerForm({addOwner}){
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
+          setLoading(true)
             fetch(`${apiUrl}equipment_owners` , {
                 method: "POST",
                 headers: {
@@ -107,6 +116,14 @@ function OwnerForm({addOwner}){
 
     return(
         <div key='signupForm' className="bg-white py-6 sm:py-8 lg:py-12">
+        {loading && (
+          <div className="fixed inset-0 bg-gray-800 bg-opacity-50 z-50 flex justify-center items-center">
+            <div className="flex flex-col items-center justify-center">
+              <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+              <p className="mt-4 text-white text-lg">Creating your Account...</p>
+            </div>
+          </div>
+        )}
   <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
 
     <div className="mb-10 md:mb-16">
@@ -216,14 +233,15 @@ function OwnerForm({addOwner}){
 
       <div className="sm:col-span-2">
         <label className="text-gray-800 sm:text-base">Would you like to create a Stripe Connect upon Signing up?</label>
-        <div className="flex items-center">
+      <div className="flex items-center">
           <input type="radio" name="owner_consent" value="yes" checked={formik.values.owner_consent === 'yes'} onChange={handleOwnerConsentChange} />
           <label htmlFor="owner_consent_yes" className="ml-2 text-sm text-gray-800 sm:text-base">Yes</label>
-        </div>
-        <div className="flex items-center">
+      </div>
+
+      <div className="flex items-center">
           <input type="radio" name="owner_consent" value="no" checked={formik.values.owner_consent === 'no'} onChange={handleOwnerConsentChange} />
           <label htmlFor="owner_consent_no" className="ml-2 text-sm text-gray-800 sm:text-base">No</label>
-        </div>
+      </div>
     
         {showLinkCheckbox && (
         <>

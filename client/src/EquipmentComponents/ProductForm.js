@@ -270,17 +270,32 @@ function ProductForm({ addEquipment }){
           <label htmlFor="postal_code" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Postal / Zip Code </label>
           <input type="text" name="postal_code" value={formik.values.postal_code} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
         </div>
- 
+
         <div className="sm:col-span-2">
-          <label htmlFor="availability" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Is this Equipment available to rent now?
-           (placeholder) </label>
-          <input type="text" name="availability" value={formik.values.availability} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+        <label htmlFor="availability" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Is this Equipment available to rent now? </label>
+        <div className="flex items-center">
+          <input type="radio" name="availability" value="yes" checked={formik.values.availability === 'yes'} onChange={formik.handleChange}/>
+          <label htmlFor="availability_yes" className="ml-2 text-sm text-gray-800 sm:text-base">Yes</label>
+        </div>
+        <div className="flex items-center">
+          <input type="radio" name="availability" value="no" checked={formik.values.availability === 'no'} onChange={formik.handleChange}/>
+          <label htmlFor="availability_no" className="ml-2 text-sm text-gray-800 sm:text-base">No</label>
+        </div>
+
         </div>
  
+
         <div className="sm:col-span-2">
-          <label htmlFor="delivery" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Is this Equipment capable of being delivered?
-           (placeholder) </label>
-          <input type="text" name="delivery" value={formik.values.delivery} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+        <label htmlFor="delivery" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Is this Equipment currently Avaiable to be Delivered? </label>
+        <div className="flex items-center">
+          <input type="radio" name="delivery" value="yes" checked={formik.values.delivery === 'yes'} onChange={formik.handleChange}/>
+          <label htmlFor="delivery_yes" className="ml-2 text-sm text-gray-800 sm:text-base">Yes</label>
+        </div>
+        <div className="flex items-center">
+          <input type="radio" name="delivery" value="no" checked={formik.values.delivery === 'no'} onChange={formik.handleChange} />
+          <label htmlFor="delivery_no" className="ml-2 text-sm text-gray-800 sm:text-base">No</label>
+        </div>
+
         </div>
  
         <div className="sm:col-span-2">
@@ -294,26 +309,27 @@ function ProductForm({ addEquipment }){
         </div>
 
 
-        <label htmlFor="format" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Format: 0000.00</label>
-
+        <label htmlFor="format" className="mb-2 inline-block text-sm sm:text-base font-semibold text-red-600">
+          Format: 0000.00 *$ NOT REQUIRED
+        </label>
 
         <div className="sm:col-span-2">
-          <label htmlFor="hourly_rate" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Hourly Rate: *$ NOT REQUIRED</label>
+          <label htmlFor="hourly_rate" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Hourly Rate:</label>
           <input type="number" name="hourly_rate" value={formik.values.hourly_rate} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
         </div>
 
         <div className="sm:col-span-2">
-          <label htmlFor="daily_rate" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Daily Rate *$ NOT REQUIRED: </label>
+          <label htmlFor="daily_rate" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Daily Rate: </label>
           <input type="number" name="daily_rate" value={formik.values.daily_rate} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
         </div>
 
         <div className="sm:col-span-2">
-          <label htmlFor="weekly_rate" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Weekly Rate: *$ NOT REQUIRED</label>
+          <label htmlFor="weekly_rate" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Weekly Rate:</label>
           <input type="number" name="weekly_rate" value={formik.values.weekly_rate} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
         </div>
 
         <div className="sm:col-span-2">
-          <label htmlFor="promo_rate" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Promo Rate: *$ NOT REQUIRED</label>
+          <label htmlFor="promo_rate" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Promo Rate:</label>
           <input type="number" name="promo_rate" value={formik.values.promo_rate} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
         </div>
 

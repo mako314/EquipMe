@@ -6,6 +6,10 @@ import { useNavigate } from "react-router-dom";
 import {toast} from 'react-toastify'
 import { UserSessionContext } from "../UserComponents/SessionContext";
 
+import LoadingPage from "../ExtraPageComponents/LoadingPage";
+
+import Page404 from "../ExtraPageComponents/Page404";
+
 
 function Cart(){
 
@@ -55,11 +59,17 @@ function Cart(){
 
   //This just takes into account ALL the items in a users cart, where the items cart ID matches the current carts ID.
   const itemsInCurrentCartAll = individualTotal.filter(item => item.cart_id === cartData[currentCart].id)
+  
   console.log("CURRENT ITEMS IN CART:", itemsInCurrentCartAll)
   // Sum up the costs of these items
   itemsInCurrentCartBothAgreed.forEach((item) => {
-      console.log("TOTAL COST OF ITEMS THAT BOTH USERS AGREED UPON:", item.cost)
+    console.log("LOOK HERE FOR THE ITEM:",item)
+
+    if(item.isChecked) {
+      console.log("TOTAL COST OF ITEMS THAT BOTH USERS AGREED UPON AND ARE CHECKED:", item.cost)
       itemsBothPartiesAgreedOn += item.cost
+    }
+
   })
 
   // A for each that summarizes ALL items in the cart, 
@@ -105,13 +115,19 @@ useEffect(() => {
       toast.warn(`🛒 We don't currently support owner carts`,{
         "autoClose" : 2000
       })
+      
     }
   }, [currentUser])
 
   //If a user has no items in cart or no cart created display this instead
   if (!cartData || cartData?.length === 0) {
-    return <div>Cart is empty or loading...</div>
+    if (role === 'owner'){
+      return <div> Not available! </div>
+    }
+    return <LoadingPage loadDetails={"Cart"}/>
   }
+
+
 
   //Changes cart based on cart ID
   const handleCartChange = (e) => {

@@ -5,6 +5,7 @@ import Reviews from '../ReviewComponents/Reviews';
 import EquipmentMap from '../MapComponents/EquipmentMap';
 import { UserSessionContext } from './SessionContext';
 import { useParams, useNavigate, useInRouterContext } from 'react-router-dom';
+import LoadingPage from '../ExtraPageComponents/LoadingPage';
 
 
 function UserProfile({fromOwnerDash, setFromOwnerDash}) {
@@ -16,6 +17,7 @@ function UserProfile({fromOwnerDash, setFromOwnerDash}) {
   const [userProfile, setUserProfile] = useState({})
   const [heartColor, setHeartColor] = useState('white')
   const [isFavorited, setIsFavorited] = useState(null)
+  const [loading, setLoading] = useState(true)
   const navigate = useNavigate();
   const { id } = useParams()
 
@@ -37,6 +39,7 @@ function UserProfile({fromOwnerDash, setFromOwnerDash}) {
         setHeartColor(favoriteStatus ? "red" : "white")
         // I can't just set is favorited and try it with heart color, it's just too quick and defaults, so I make a variable that contains data and set it to that.
         setIsFavorited(favoriteStatus)
+        setLoading(false)
       })
   }, [])
 
@@ -140,6 +143,11 @@ function UserProfile({fromOwnerDash, setFromOwnerDash}) {
     navigate(`/dashboard`)
   }
 
+  // Render loading page if display is still loading
+  if (loading) {
+    return <><LoadingPage loadDetails={"User Profile Page"}/></>
+  }
+
   return (
     <>
       <div className="relative block" style={{ height: "500px" }}>
@@ -182,11 +190,13 @@ function UserProfile({fromOwnerDash, setFromOwnerDash}) {
                 
                 <div className="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center">
                   <div className="py-6 px-3 mt-32 sm:mt-0">
+                  {currentUser && 
                   <button className="rounded-full w-10 h-10 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4" onClick={handleFavoriteSelection}>
+                    
                     <svg fill={heartColor} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-5 h-5" viewBox="0 0 24 24" >
                         <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
                     </svg>
-                  </button>
+                  </button>}
 
                     {/* New Material that SK has added for sheet functionality */}
                     {/* <button

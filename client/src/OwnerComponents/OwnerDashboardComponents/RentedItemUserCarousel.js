@@ -10,6 +10,8 @@ const navigate = useNavigate()
 
 let userAgreementsForDateSorting = []
 
+// I need to adjust what the 'in-progress' agreement_status entails
+
 const flatMappedUserAgreement = currentUser?.cart?.flatMap(item => {
   return item.cart_item?.flatMap(cartItem => {
     return cartItem.agreements

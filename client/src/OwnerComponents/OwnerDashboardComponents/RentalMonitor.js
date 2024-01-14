@@ -130,14 +130,14 @@ function RentalMonitor({currentUser, role}){
     //   return monthlyRevenueData.reduce((sum, { totalRevenuePerMonth }) => sum + totalRevenuePerMonth, 0)
     // }, [monthlyRevenueData])
       
-
-    if(userAgreementData.length === 0 && role === 'owner'){
+    // This accounts for one rental agreement formed too.
+    if(agreementsData.length === 0 && role === 'owner'){
       return(
         <div className="flex items-center justify-center h-full text-center text-gray-800">
        <p className="text-lg font-medium">You haven't uploaded any equipment yet, which means no rental agreements have been formed!  Until then we can't monitor your rentals.</p>
       </div>
       )
-    } else if (userAgreementData.length === 0 && role === 'user'){
+    } else if (agreementsData.length === 0 && role === 'user'){
       return(
         <div className="flex items-center justify-center h-full text-center text-gray-800">
        <p className="text-lg font-medium">You haven't rented any Equipment yet, which means no rental agreements have been formed!  Until then we can't monitor your rentals.</p>

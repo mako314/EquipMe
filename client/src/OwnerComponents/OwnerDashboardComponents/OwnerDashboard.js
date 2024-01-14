@@ -35,11 +35,9 @@ import InsuranceRecommendations from './InsuranceRecommendations';
 //Rental Monitor
 import RentalMonitor from './RentalMonitor';
 
-//404 Page Import
-import Page404 from '../../ErrorPageComponents/Page404';
-
-
-
+//404 / Extra Page Import
+import Page404 from '../../ExtraPageComponents/Page404';
+import LoadingPage from '../../ExtraPageComponents/LoadingPage';
 
 function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
     // Honestly with currentUser, we can just make this for both users and owners
@@ -53,6 +51,8 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
     const [potentialRentalOwners, setPotentialRentalOwners] = useState([])
     const [pageTitle, setPageTitle] = useState('Home')
     const [stripeAccount, setStripeAccount] = useState('')
+    const [dashLoad, setDashLoad] = useState(true)
+    
 
     // const [chartData, setChartData] = useState({
     //     labels: [],
@@ -80,6 +80,7 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
             const data = await response.json()
             console.log("THE DATA:", data)
             setStripeAccount(data)
+            setDashLoad(false)
           } catch (error) {
             console.error('Error fetching Stripe account:', error)
             // Not sure if I'd like to have an error state
@@ -92,11 +93,19 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
             // checkSession()
             console.log("FUNCTION RAN")
             console.log("THE CURRENT DATA IN STRIPE ACCOUNT:", stripeAccount)
+          } else {
+            setDashLoad(false)
           }
 
-      }, [role])
+      }, [])
 
     console.log("USER INFO",currentUser)
+    
+
+    // Wait for useEffect to load before displaying the page
+    if (dashLoad) {
+        return <><LoadingPage loadDetails={" your Dashboard"}/></>
+    }
 
     // console.log("THE CURRENT USERS STRIPE ID:", currentUser?.stripe_id)
     // console.log("USER FAVORITE",currentUser?.user_favorite)
@@ -202,8 +211,8 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
                     console.log(data)
                     console.log("THE URL:", data.url)
                         // Redirect the user to the new onboarding link
-                    //   const onboardLink = data.stripe_onboard_link
-                    //   window.open(onboardLink, '_blank')
+                      const onboardLink = data.url
+                      window.open(onboardLink, '_blank')
                     }
                 })
             } else {
@@ -222,7 +231,6 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
 
 
     // Handles creating a stripe login link for a user to get into their dashboard, that way they have a stripe dashboard also
-
     const handleStripeLoginLink = () => {
         // Needed to set onboard link to a variable to get this to work
             // Make a request to the backend to generate a new onboarding link
@@ -521,7 +529,7 @@ function AccountSettings() {
                         
                         <div className="h-96 w-full col-span-2 bg-white border border-gray-200 shadow-md rounded-lg p-4">
                         {role === 'owner' &&
-                        <BarChart currentUser={currentUser}/>}
+                        <BarChart currentUser={currentUser} setDashLoad={setDashLoad}/>}
                         
                         {role === 'user' && 
                         <RentedItemUserCarousel currentUser={currentUser} setFromOwnerDash={setFromOwnerDash} role={role}/>}

@@ -30,11 +30,11 @@ class User(db.Model, SerializerMixin):
     state = db.Column(db.String)
     city = db.Column(db.String)
     address = db.Column(db.String)
-    address_line_2 = db.Column(db.String)
+    address_line_2 = db.Column(db.String, nullable=True)
     postal_code = db.Column(db.String)
 
     profession = db.Column(db.String)
-    bio = db.Column(db.String)
+    bio = db.Column(db.String, nullable=True)
     phone = db.Column(db.String)
     email = db.Column(db.String)
     profileImage = db.Column(db.String)
@@ -144,13 +144,13 @@ class EquipmentOwner(db.Model, SerializerMixin):
     state = db.Column(db.String)
     city = db.Column(db.String)
     address = db.Column(db.String)
-    address_line_2 = db.Column(db.String)
+    address_line_2 = db.Column(db.String, nullable=True)
     postal_code = db.Column(db.String)
 
     stripe_id = db.Column(db.String, unique=True, nullable=True)
     # stripe_onboard_link = db.Column(db.String, nullable=True)
     profession = db.Column(db.String)
-    bio = db.Column(db.String)
+    bio = db.Column(db.String, nullable=True)
     phone = db.Column(db.String)
     email = db.Column(db.String)
     _password_hash = db.Column(db.String, nullable=False)
@@ -245,7 +245,7 @@ class Equipment(db.Model, SerializerMixin):
     make = db.Column(db.String)
     model = db.Column(db.String)
     #THIS WILL BE TEMPORARY UNTIL I HAVE CLOUD HOSTING SET UP
-    description = db.Column(db.String)
+    description = db.Column(db.String, nullable= True)
     equipment_image = db.Column(db.String)
     # location = db.Column(db.String)
 
@@ -253,7 +253,7 @@ class Equipment(db.Model, SerializerMixin):
     state = db.Column(db.String)
     city = db.Column(db.String)
     address = db.Column(db.String)
-    address_line_2 = db.Column(db.String)
+    address_line_2 = db.Column(db.String, nullable= True)
     postal_code = db.Column(db.String)
 
     #base_of_operations = db.Column(db.String)
@@ -541,6 +541,8 @@ class AgreementComment(db.Model, SerializerMixin):
     owner_id = db.Column(db.Integer, db.ForeignKey('owners.id'), nullable= True)
     agreement_id = db.Column(db.Integer, db.ForeignKey('agreements.id'))
 
+    # May need to include an origin column
+
     agreements = db.relationship('RentalAgreement', back_populates ='comment')
 
     serialize_rules = ('-agreements.comment', )
@@ -667,6 +669,7 @@ class OrderHistory(db.Model, SerializerMixin):
     return_date = db.Column(db.DateTime)
     actual_return_date = db.Column(db.DateTime)
     notes = db.Column(db.String)
+    order_number = db.Column(db.String)
 
     # Foreign Keys
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
@@ -680,7 +683,7 @@ class OrderHistory(db.Model, SerializerMixin):
 
     #Serialize Rules
     # I had to remove the move back to 'equipment.orders' here to remove the order data from my owners orders object
-    serialize_rules = ('-user.orders','-owner.orders', '-equipment',)
+    serialize_rules = ('-user.review','-user.agreements','-user.user_inboxes','-user.cart','-user.orders', '-user.user_favorite','-user.owner_favorite','-owner.agreements','-owner.owner_inboxes','-owner.review','-owner.owner_favorite','-owner.user_favorite','-owner.orders','-owner.equipment','-equipment.cart_item', '-equipment.equipment_price', '-equipment.featured_equipment',  '-equipment.user_favorite', '-equipment.state_history', '-equipment.status', '-equipment.equipment_state_summary', '-equipment.orders',)
 
 
 class Review(db.Model, SerializerMixin):

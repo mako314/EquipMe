@@ -10,7 +10,7 @@ function ProductCard({ id, name, model, make, equipment_image, address, address_
 
     // placeholder image = https://t4.ftcdn.net/jpg/00/93/18/45/360_F_93184515_pMvi6Fz6o1Qu32kM6lXycawPq8igxjIc.jpg
 
-    function handleClick(e) {
+    function handleClick() {
         navigate(`/equipment/${id}`)
         window.scrollTo(0, 0)
     }
