@@ -1259,6 +1259,7 @@ class RentalAgreementComments(Resource):
 
         new_comment = AgreementComment(
             comment =  data.get('comment'),
+            origin = data.get('origin'),
             created_at = datetime.utcnow(),
             updated_at = datetime.utcnow(),
             user_id =  data.get('user_id'),

@@ -526,6 +526,8 @@ class AgreementComment(db.Model, SerializerMixin):
 
     comment = db.Column(db.String)
 
+    origin = db.Column(db.String)
+
     created_at = db.Column(
     db.DateTime, nullable=True,
     default=datetime.utcnow,
@@ -670,6 +672,10 @@ class OrderHistory(db.Model, SerializerMixin):
     actual_return_date = db.Column(db.DateTime)
     notes = db.Column(db.String)
     order_number = db.Column(db.String)
+    created_at = db.Column(
+    db.DateTime, nullable=True,
+    default=datetime.utcnow,
+    )
 
     # Foreign Keys
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))

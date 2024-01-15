@@ -241,6 +241,7 @@ function RentalAgreementDisplay() {
         comment : rentalComment,
         user_id: role === 'user' ? currentUser?.id : allAgreements[currentAgreementIndex]?.theAgreement.user_id,
         owner_id: role === 'owner' ? currentUser?.id : allAgreements[currentAgreementIndex]?.theAgreement.owner_id,
+        origin : role,
         agreement_id: allAgreements[currentAgreementIndex]?.theAgreement.id
     }
 
