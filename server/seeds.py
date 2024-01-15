@@ -1491,10 +1491,16 @@ if __name__ == '__main__':
         total_cost = weekly_rate * quantity * rental_length_weeks
         print(f"Weekly rate: {weekly_rate}, Quantity: {quantity}, Rental length (weeks): {rental_length_weeks}, Total cost: {total_cost}")
 
+        total_order_amount = sum([
+            equipment_prices[2].weekly_rate * cart_items[3].quantity * cart_items[3].rental_length,
+            (equipment_prices[6].weekly_rate * cart_items[4].quantity) * cart_items[4].rental_length,
+            (equipment_prices[7].weekly_rate * cart_items[5].quantity) * cart_items[5].rental_length
+        ])
+
         order_histories = [
             OrderHistory(
                 order_datetime = datetime(2023, 11, 11),
-                total_amount = equipment_prices[2].weekly_rate * cart_items[3].quantity * cart_items[3].rental_length,
+                total_amount = total_order_amount,
                 payment_status = 'completed',
                 payment_method = 'card',
                 order_status = "shipped/delivered",
@@ -1509,10 +1515,12 @@ if __name__ == '__main__':
                 user_id = user_1.id,
                 owner_id = owner_2.id,
                 equipment_id = cart_items[3].equipment_id, # Tractor
+                order_number = "TEST123",
+                individual_item_total = equipment_prices[2].weekly_rate * cart_items[3].quantity * cart_items[3].rental_length,
             ),
             OrderHistory(
                 order_datetime = datetime(2023, 11, 11),
-                total_amount = (equipment_prices[6].weekly_rate * cart_items[4].quantity) * cart_items[4].rental_length,
+                total_amount = total_order_amount,
                 payment_status = 'completed',
                 payment_method = 'card',
                 order_status = "completed",
@@ -1527,10 +1535,12 @@ if __name__ == '__main__':
                 user_id = user_1.id,
                 owner_id = owner_2.id,
                 equipment_id = cart_items[4].equipment_id, # Pressure Washer
+                order_number = "TEST123",
+                individual_item_total = (equipment_prices[6].weekly_rate * cart_items[4].quantity) * cart_items[4].rental_length,
             ),
             OrderHistory(
                 order_datetime = datetime(2023, 11, 11),
-                total_amount = (equipment_prices[7].weekly_rate * cart_items[5].quantity) * cart_items[5].rental_length,
+                total_amount = total_order_amount,
                 payment_status = 'completed',
                 payment_method = 'card',
                 order_status = "completed",
@@ -1545,6 +1555,8 @@ if __name__ == '__main__':
                 user_id = user_1.id,
                 owner_id = owner_2.id,
                 equipment_id = cart_items[5].equipment_id, # Generator
+                order_number = "TEST123",
+                individual_item_total = (equipment_prices[7].weekly_rate * cart_items[5].quantity) * cart_items[5].rental_length,
             ),
         ]
 

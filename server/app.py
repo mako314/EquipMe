@@ -2705,6 +2705,21 @@ class WebHookForStripeSuccess(Resource):
                     rental_delivery_date_dt = parse_iso_date(rental_delivery_date)
                     rental_return_date_dt = parse_iso_date(rental_return_date)
 
+                    def calculate_item_total(item):
+                        # Check if there's a changed price, otherwise use the price at addition
+                        price_per_unit = item.price_cents_if_changed if item.price_cents_if_changed is not None else item.price_cents_at_addition
+                        
+                        # Calculate total based on quantity and rental length
+                        total_price_cents = price_per_unit * item.quantity * item.rental_length
+
+                        # Optionally, convert total price to dollars if needed
+                        total_price_dollars = total_price_cents / 100
+
+                        return total_price_dollars
+                    
+                    total_item_indv_cost = calculate_item_total(cart_item)
+                    print(calculate_item_total(cart_item))
+
                     new_order_history = OrderHistory(
                     order_datetime = datetime.utcnow(),
                     total_amount =  payment_intent.amount_received, # For monetary values
@@ -2722,8 +2737,10 @@ class WebHookForStripeSuccess(Resource):
                     user_id = user.id,
                     owner_id =equipment.owner.id,
                     equipment_id = equipment.id,
-                    order_number = payment_intent.id
+                    order_number = payment_intent.id,
+                    individual_item_total = total_item_indv_cost
                     )
+                    
 
                     db.session.add(new_order_history)
                     db.session.commit()
