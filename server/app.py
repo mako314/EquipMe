@@ -548,6 +548,8 @@ class Equipments(Resource):
     def post(self):
         data = request.get_json()
         try:
+            description = data.get('description', None)
+            address_line_2 = data.get('address_line_2', None)
         #need a way to input, owner_id and owner maybe a 2 step process?
             new_equipment = Equipment(
                 name = data['name'],
@@ -555,12 +557,12 @@ class Equipments(Resource):
                 make = data['make'],
                 model = data['model'],
                 equipment_image = data['equipment_image'],
-                description = data['description'],
+                description = description,
                 country = data['country'],
                 state = data['state'],
                 city = data['city'],
                 address = data['address'],
-                address_line_2 = data['address_line_2'],
+                address_line_2 = address_line_2,
                 postal_code = data['postal_code'],
                 availability = data['availability'],
                 delivery = data['delivery'],

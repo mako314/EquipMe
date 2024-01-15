@@ -776,7 +776,12 @@ function AccountSettings() {
 
     return (
         <>
-            {currentUser ? <LoggedInDisplay/> : <Page404 errorString={userLoggedOut}/>}
+            {isLoading 
+            ? <LoadingPage />
+            : currentUser 
+                ? <LoggedInDisplay/>
+                : <Page404 errorString={userLoggedOut}/>
+        }
         </>
     )
 }
