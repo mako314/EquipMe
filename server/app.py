@@ -2670,6 +2670,7 @@ class WebHookForStripeSuccess(Resource):
                 new_state = f'{user.firstName} {user.lastName} has rented {cart_item.quantity} {equipment.make} {equipment.model}' ,
                 changed_at=datetime.utcnow(),
             )
+                
                 print("THE NEW STATE HISTORY:",new_state_history)
                 
                 db.session.add(new_state_history)
@@ -2699,6 +2700,27 @@ class WebHookForStripeSuccess(Resource):
 
                 print("WHAT I BELIEVE TO BE THE ID OF THE PAYMENT INTENT:", payment_intent.id)
 
+                def parse_iso_date(date_str):
+                    if date_str.endswith('Z'):
+                        # Replace 'Z' with '+00:00' for UTC offset
+                        date_str = date_str.replace('Z', '+00:00')
+                    try:
+                        return datetime.fromisoformat(date_str)
+                    except ValueError:
+                        print(f"Invalid date format: {date_str}")
+                        return None
+                
+                rental_delivery_date = cart_item.agreements[0].rental_start_date
+                rental_return_date = cart_item.agreements[0].rental_end_date
+
+                # Convert string to datetime
+                # rental_delivery_date_dt = datetime.strptime(rental_delivery_date, '%Y-%m-%d')
+                # rental_return_date_dt = datetime.strptime(rental_return_date, '%Y-%m-%d')
+
+                # Convert string to datetime using the parse_iso_date function
+                rental_delivery_date_dt = parse_iso_date(rental_delivery_date)
+                rental_return_date_dt = parse_iso_date(rental_return_date)
+
                 new_order_history = OrderHistory(
                 order_datetime = datetime.utcnow(),
                 total_amount =  payment_intent.amount_received, # For monetary values
@@ -2707,10 +2729,10 @@ class WebHookForStripeSuccess(Resource):
                 order_status = 'In-Progress',
                 delivery_address = cart_item.agreements[0].delivery_address,
                 order_details = f'{user.firstName} {user.lastName} has rented {cart_item.quantity}\n{equipment.make} {equipment.model}',
-                estimated_delivery_date = None,
+                estimated_delivery_date = rental_delivery_date_dt,
                 actual_delivery_date = None,
                 cancellation_date = None,
-                return_date = None,
+                return_date = rental_return_date_dt,
                 actual_return_date = None,
                 notes = '',
                 user_id = user.id,

@@ -289,11 +289,11 @@ function ProductForm({ addEquipment }){
         <div className="sm:col-span-2">
         <label htmlFor="delivery" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Is this Equipment currently Avaiable to be Delivered? </label>
         <div className="flex items-center">
-          <input type="radio" name="delivery" value="yes" checked={formik.values.delivery === 'yes'} onChange={formik.handleChange}/>
+          <input type="radio" name="delivery" value="True" checked={formik.values.delivery === 'True'} onChange={formik.handleChange}/>
           <label htmlFor="delivery_yes" className="ml-2 text-sm text-gray-800 sm:text-base">Yes</label>
         </div>
         <div className="flex items-center">
-          <input type="radio" name="delivery" value="no" checked={formik.values.delivery === 'no'} onChange={formik.handleChange} />
+          <input type="radio" name="delivery" value="False" checked={formik.values.delivery === 'False'} onChange={formik.handleChange} />
           <label htmlFor="delivery_no" className="ml-2 text-sm text-gray-800 sm:text-base">No</label>
         </div>
 

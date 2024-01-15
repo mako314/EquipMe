@@ -1283,8 +1283,8 @@ if __name__ == '__main__':
         print("Configuring our current rental agreements...")
         rental_agreements = [
         RentalAgreement(
-            rental_start_date="2023-07-17",
-            rental_end_date="2023-07-20",
+            rental_start_date=datetime(2023, 11, 30, 15, 30, 0),
+            rental_end_date=datetime(2023, 11, 30, 15, 30, 0),
             delivery = True,
             delivery_address = f"{user_1.address}, {user_1.city}, {user_1.state} {user_1.postal_code}",
             user_decision = "accept",
@@ -1293,12 +1293,12 @@ if __name__ == '__main__':
             owner_id = owner_2.id, # Emily Johnson
             user_id=user_1.id,  # Benjamin Davis
             cart_item_id=cart_items[0].id,  # Excavator caterpillar thing
-            created_at = datetime.utcnow(),
-            updated_at = datetime.utcnow()
+            created_at = datetime(2023, 11, 30),
+            updated_at = datetime(2023, 11, 30)
         ),
         RentalAgreement(
-            rental_start_date="2023-07-17",
-            rental_end_date="2023-07-20",
+            rental_start_date=datetime(2023, 11, 30, 15, 30, 0),
+            rental_end_date=datetime(2023, 11, 30, 17, 30, 0),
             delivery = False,
             delivery_address = "",
             user_decision = "accept",
@@ -1312,8 +1312,8 @@ if __name__ == '__main__':
 
         ),
         RentalAgreement(
-            rental_start_date="2023-07-17",
-            rental_end_date="2023-07-20",
+            rental_start_date=datetime(2023, 11, 24, 17, 30, 0),
+            rental_end_date=datetime(2023, 11, 27, 17, 30, 0),
             delivery = False,
             delivery_address = "",
             user_decision = "accept",
@@ -1340,8 +1340,8 @@ if __name__ == '__main__':
         #     updated_at = datetime(2023, 12, 9)
         # ),
         RentalAgreement(
-            rental_start_date="2023-07-17",
-            rental_end_date="2023-07-20",
+            rental_start_date=datetime(2023, 12, 9, 17, 30, 0),
+            rental_end_date=datetime(2023, 12, 9, 19, 30, 0),
             delivery = False,
             delivery_address = "",
             user_decision = "accept",
@@ -1368,8 +1368,8 @@ if __name__ == '__main__':
         #     updated_at = datetime(2023, 10, 15)
         # )
         RentalAgreement(
-            rental_start_date="2023-11-11",
-            rental_end_date="2023-11-20",
+            rental_start_date=datetime(2023, 11, 11, 17, 30, 0),
+            rental_end_date=datetime(2023, 11, 11, 19, 30, 0),
             delivery = False,
             delivery_address = "",
             user_decision = "accept",
@@ -1382,8 +1382,8 @@ if __name__ == '__main__':
             updated_at = datetime(2023, 11, 11)
         ),
         RentalAgreement(
-            rental_start_date="2023-11-11",
-            rental_end_date="2023-11-20",
+            rental_start_date=datetime(2023, 11, 11, 14, 30, 0),
+            rental_end_date=datetime(2023, 11, 11, 19, 30, 0),
             delivery = False,
             delivery_address = "",
             user_decision = "accept",
