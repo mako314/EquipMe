@@ -12,9 +12,12 @@ function OrderHistory(){
     const [loading, setLoading] = useState(true)
     // view product should link to 
     const [orderHistory, setOrderHistory] = useState([])
+    const [groupedOrders, setGroupedOrders] = useState({});
 
     const navigate = useNavigate()
-    
+
+
+    // Handles navigating to the equipments display
     function handleEquipmentNavigation(id) {
         navigate(`/equipment/${id}`)
         window.scrollTo(0, 0)
@@ -42,7 +45,8 @@ function OrderHistory(){
                 }
     
                 const data = await response.json()
-                setOrderHistory(data)
+                // setOrderHistory(data)
+                groupOrdersByNumber(data.orders)
                 setLoading(false)
             } catch (error) {
                 console.error('Fetch Error:', error.message)
@@ -53,7 +57,22 @@ function OrderHistory(){
         fetchOrderHistory()
     }, [apiUrl, currentUser])
 
-        if (loading){
+
+    // Group the orders by order numbers
+    const groupOrdersByNumber = (orders) => {
+        const grouped = {}
+        orders.forEach(order => {
+            const groupKey = order.order_number
+            if (!grouped[groupKey]) {
+                grouped[groupKey] = []
+            }
+            grouped[groupKey].push(order)
+        })
+        setGroupedOrders(grouped)
+    }
+
+
+    if (loading){
         return <LoadingPage loadDetails={"your Order History"}/>
     }
 
@@ -68,52 +87,86 @@ function OrderHistory(){
         OrderHistoryTotal =+ item.total_amount
     })
 
-    console.log("ORDER HISTORY TOTAL:", OrderHistoryTotal)
+    // console.log("ORDER HISTORY TOTAL:", OrderHistoryTotal)
 
-    let mappedOrderHistory
-    console.log("TYPE OF ORDER HISTORY:", typeof(orderHistory.orders))
-    if (Array.isArray(orderHistory.orders)) {
-        mappedOrderHistory = orderHistory.orders.map((item) => {
-            return(<li className="p-4 sm:p-6">
-                <div className="flex items-center sm:items-start">
-                <div className="flex-shrink-0 w-20 h-20 bg-gray-200 rounded-lg overflow-hidden sm:w-40 sm:h-40">
-                    <img src={item.equipment.equipment_image} alt={item.equipment.make + ' ' + item.equipment.model} className="w-full h-full object-center object-cover"/>
+    let mappedGroupedOrders
+    if (groupedOrders && typeof groupedOrders === 'object') {
+        mappedGroupedOrders = Object.entries(groupedOrders).map(([orderNumber, orders]) => {
+            return (
+                <div key={orderNumber}>
+                    <h3>Order Number: {orderNumber}</h3>
+                    <ul>
+                        {orders.map((order) => (
+                            <li className="p-4 sm:p-6" key={order.id}>
+                                <div className="flex items-center sm:items-start">
+                                    <div className="flex-shrink-0 w-20 h-20 bg-gray-200 rounded-lg overflow-hidden sm:w-40 sm:h-40">
+                                        <img src={order.equipment.equipment_image} alt={`${order.equipment.make} ${order.equipment.model}`} className="w-full h-full object-center object-cover"/>
+                                    </div>
+                                    <div className="flex-1 ml-6 text-sm">
+                                        <div className="font-medium text-gray-900 sm:flex sm:justify-between">
+                                            <h5>{order.order_details}</h5>
+                                            <p className="mt-2 sm:mt-0">${(order.total_amount / 100).toFixed(2)}</p>
+                                        </div>
+                                        <p className="hidden text-gray-500 sm:block sm:mt-2"> {order.notes}</p>
+                                    </div>
+                                </div>
+    
+                                <div className="mt-6 sm:flex sm:justify-between">
+                                    <div className="flex items-center">
+                                        <svg className="w-5 h-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                        </svg>
+                                        <p className="ml-2 text-sm font-medium text-gray-500">Estimated Delivery on <time dateTime={order.estimated_delivery_date}>{order.estimated_delivery_date}</time></p>
+                                    </div>
+    
+                                    <div className="mt-6 border-t border-gray-200 pt-4 flex items-center space-x-4 divide-x divide-gray-200 text-sm font-medium sm:mt-0 sm:ml-4 sm:border-none sm:pt-0">
+                                        <div className="flex-1 flex justify-center">
+                                            <span className="text-indigo-600 whitespace-nowrap hover:text-indigo-500 cursor-pointer" onClick={() => handleEquipmentNavigation(order.equipment.id)}>View product</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
-                <div className="flex-1 ml-6 text-sm">
-                    <div className="font-medium text-gray-900 sm:flex sm:justify-between">
-                    <h5>{item.order_details}</h5>
-                    <p className="mt-2 sm:mt-0">${(item.total_amount / 100).toFixed(2)}</p>
-                    </div>
-                    <p className="hidden text-gray-500 sm:block sm:mt-2"> {item.notes}</p>
-                </div>
-                </div>
-
-                <div className="mt-6 sm:flex sm:justify-between">
-                <div className="flex items-center">
-
-                    <svg className="w-5 h-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                    </svg>
-                    <p className="ml-2 text-sm font-medium text-gray-500">Estimated Delivery on <time dateTime="2021-07-12">{item.estimated_delivery_date}</time></p>
-                </div>
-
-                <div className="mt-6 border-t border-gray-200 pt-4 flex items-center space-x-4 divide-x divide-gray-200 text-sm font-medium sm:mt-0 sm:ml-4 sm:border-none sm:pt-0">
-                    <div className="flex-1 flex justify-center">
-                    <span className="text-indigo-600 whitespace-nowrap hover:text-indigo-500 cursor-pointer" onClick={ () => handleEquipmentNavigation(item.equipment.id)}>View product</span>
-                    </div>
-                </div>
-                </div>
-            </li>)
+            )
         })
     } else {
-        console.log("orderHistory is not an array");
-        // mappedOrderHistory = <p>No order history available</p>
+        console.log("groupedOrders is not an object or is empty")
+        mappedGroupedOrders = <p>No order history available</p>
     }
 
+
+
+    // console.log("TYPE OF ORDER HISTORY:", typeof(orderHistory))
+    // console.log("Order History:", orderHistory)
+    // console.log("Type of Order History:", typeof(orderHistory))
+    // console.log("Is Order History an Object:", typeof orderHistory === 'object')
+    // console.log("Is Order History Null:", orderHistory === null)
+    // console.log("Is Order History Undefined:", orderHistory === undefined)
+    if (groupedOrders && typeof groupedOrders === 'object') {
+        Object.entries(groupedOrders).forEach(([orderNumber, orders]) => {
+            console.log("Order Number:", orderNumber)
+            orders.forEach((order) => {
+                console.log("Order ID:", order.id)
+                console.log("Order Details:", order.order_details)
+                console.log("Total Amount:", order.total_amount)
+                console.log("Equipment Name:", order.equipment.name)
+                console.log("Equipment Image URL:", order.equipment.equipment_image)
+            })
+        })
+    } else {
+        console.log("groupedOrders is not an object or is empty")
+    }
+
+
+
+
+    // Test for loading page
     if (loading){
         return <LoadingPage loadDetails={"your Order History"}/>
     }
-    console.log("THE STATE ORDER HISTORY:", orderHistory)
+    console.log("THE STATE ORDER HISTORY:", groupedOrders)
     // console.log(mappedOrderHistory)
 
 
@@ -178,7 +231,7 @@ function OrderHistory(){
 
                         <h4 className="sr-only">Items</h4>
                         <ul role="list" className="divide-y divide-gray-200">
-                            {mappedOrderHistory}
+                            {mappedGroupedOrders}
 
 
                         </ul>
