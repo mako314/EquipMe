@@ -1369,7 +1369,7 @@ if __name__ == '__main__':
         # )
         RentalAgreement(
             rental_start_date=datetime(2023, 11, 11, 17, 30, 0),
-            rental_end_date=datetime(2023, 11, 11, 19, 30, 0),
+            rental_end_date=datetime(2023, 11, 25, 19, 30, 0),
             delivery = False,
             delivery_address = "",
             user_decision = "accept",
@@ -1516,7 +1516,7 @@ if __name__ == '__main__':
                 owner_id = owner_2.id,
                 equipment_id = cart_items[3].equipment_id, # Tractor
                 order_number = "TEST123",
-                individual_item_total = equipment_prices[2].weekly_rate * cart_items[3].quantity * cart_items[3].rental_length,
+                individual_item_total = (equipment_prices[2].weekly_rate * cart_items[3].quantity * cart_items[3].rental_length) / 100,
             ),
             OrderHistory(
                 order_datetime = datetime(2023, 11, 11),
@@ -1536,7 +1536,7 @@ if __name__ == '__main__':
                 owner_id = owner_2.id,
                 equipment_id = cart_items[4].equipment_id, # Pressure Washer
                 order_number = "TEST123",
-                individual_item_total = (equipment_prices[6].weekly_rate * cart_items[4].quantity) * cart_items[4].rental_length,
+                individual_item_total = ((equipment_prices[6].weekly_rate * cart_items[4].quantity) * cart_items[4].rental_length) / 100, 
             ),
             OrderHistory(
                 order_datetime = datetime(2023, 11, 11),
@@ -1556,7 +1556,7 @@ if __name__ == '__main__':
                 owner_id = owner_2.id,
                 equipment_id = cart_items[5].equipment_id, # Generator
                 order_number = "TEST123",
-                individual_item_total = (equipment_prices[7].weekly_rate * cart_items[5].quantity) * cart_items[5].rental_length,
+                individual_item_total = ((equipment_prices[7].weekly_rate * cart_items[5].quantity) * cart_items[5].rental_length) / 100,
             ),
         ]
 

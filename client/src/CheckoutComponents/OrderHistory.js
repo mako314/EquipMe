@@ -193,7 +193,7 @@ function OrderHistory(){
                                                       <div className="flex-1 ml-6 text-sm">
                                                           <div className="font-medium text-gray-900 sm:flex sm:justify-between">
                                                               <h5>{order.equipment.name}</h5>
-                                                              <p className="mt-2 sm:mt-0">${order.individual_item_total}</p>
+                                                              <p className="mt-2 sm:mt-0">${order.individual_item_total.toFixed(2)}</p>
                                                           </div>
                                                           <p className="hidden text-gray-500 sm:block sm:mt-2">{order.order_details}</p>
                                                       </div>

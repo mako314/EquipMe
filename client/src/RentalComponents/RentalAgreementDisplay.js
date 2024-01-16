@@ -178,7 +178,9 @@ function RentalAgreementDisplay() {
     ))
 
     console.log("All Agreements:", allAgreements[currentAgreementIndex])
+    console.log("THE SPECIFIC AGREEMENT:", allAgreements[currentAgreementIndex].theAgreement)
     
+    // Handles the editing of the agreement, be it delivery address change, or changing the decision
     const handleAgreementEdit = () => {
         let decision = role === 'owner' ? 'owner_decision' : 'user_decision'
         let updatedAgreement
@@ -218,6 +220,8 @@ function RentalAgreementDisplay() {
 
         console.log("THE AGREEMENT:",updatedAgreement)
 
+        
+
         fetch(`${apiUrl}rental/agreements/${allAgreements[currentAgreementIndex]?.theAgreement.id}`, {
             method: "PATCH",
             headers: {
@@ -227,6 +231,11 @@ function RentalAgreementDisplay() {
         }).then((resp) => {
             if (resp.ok) {
                 console.log(resp)
+                if ((updatedAgreement.user_decision || updatedAgreement.owner_decision ) === 'accept'){
+                toast.success(`📝 You've succesfully accepted this agreement! Once both parties have accepted you can proceed to checkout. `,
+                {
+                  "autoClose" : 6000
+                })}
                 checkSession()
                 // Going to do a spread operator thing 
             }
