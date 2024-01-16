@@ -344,12 +344,13 @@ function RentalAgreementDisplay() {
         <section>
         <div key={currentAgreementIndex} className="py-16 md:py-24 lg:py-32 mx-auto w-full max-w-7xl px-5 md:px-10">
             <div className="flex flex-col items-start lg:flex-row lg:space-x-20">
+           
             <div className="flex-[1_1_500px] max-[991px]:w-full max-[991px]:flex-none">
                 <div className="max-w-3xl mb-8 md:mb-12 lg:mb-16">
                 {rentalCardDisplay[currentAgreementIndex]}
                 </div>
 
-                {role === 'owner' &&(
+                { allAgreements[currentAgreementIndex].theAgreement.agreement_status !== 'both-accepted' && role === 'owner' && (
                 <div> 
 
                 <input
@@ -426,6 +427,8 @@ function RentalAgreementDisplay() {
                     <br></br>
                 </div>
             )}
+            { allAgreements[currentAgreementIndex].theAgreement.agreement_status !== 'both-accepted' &&
+            <>
             <div className="mt-6 flex justify-between"> 
 
                 <label className="inline-flex items-center font-bold text-gray-900">
@@ -453,15 +456,16 @@ function RentalAgreementDisplay() {
                     <span className="ml-2"> Accept Agreement </span>
                 </label>
 
-                </div>
+            </div>
 
-                <div className="flex justify-end"> 
+            <div className="flex justify-end"> 
                     <button 
                     onClick={handleAgreementEdit}
                     className="bg-black text-white text-sm px-6 py-3 mt-8 rounded-lg shadow transition duration-150 ease-in-out hover:bg-gray-700 focus:outline-none">
                     Submit Changes
                     </button>
             </div>
+            </>}
 
             </div>
 
