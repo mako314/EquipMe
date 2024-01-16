@@ -41,6 +41,7 @@ function RentalAgreementDisplay() {
     let rentalCard
     // Need to find a way to map over an array that's nested inside of an array.
     //Went with flat map, but since there's another nested array inside of cart.cart_item, I needed to flatten that also, and finally, I map over item.agreements to get the agreement dates.
+    // Had to change USER to contain OWNER information for comments, changed USER to owner in this IF with user. The one under it was already properly done!
     //Luckily with flatmap, everything was available!
     if (role === 'user'){
         (rentalCard = currentUser?.cart?.flatMap(cart => 
@@ -73,8 +74,9 @@ function RentalAgreementDisplay() {
         />)
         rentalCardDisplay.push(rentalCard)
         // console.log("LOOKING FOR OWNER",item.equipment.owner)
+        // I CAN'T BELIEVE THIS TOOK ME SO FREAKING LONG TO NOTICE!!! SINCE IT WAS THE USER I WAS RETURNING THE SAME DARN USER WHEN IT'S THE CURRENT USER AT THE TIME! BUT INSTEAD I NEEDED TO RETURN OWNER HERE TO GET THE PROPER THING!
         const singleAgreement = agreement
-        allAgreements.push({theAgreement : singleAgreement, user: cart.user})
+        allAgreements.push({theAgreement : singleAgreement, owner: item.equipment.owner})
 
         }) || []
         ) || []
@@ -109,7 +111,7 @@ function RentalAgreementDisplay() {
         rentalCardDisplay.push(rentalCard)
         const singleAgreement = agreement
         // console.log("LOOKING FOR USER", agreement.cart_item.cart.user)
-        allAgreements.push({theAgreement : singleAgreement, owner: agreement.cart_item.cart.user})
+        allAgreements.push({theAgreement : singleAgreement, user: agreement.cart_item.cart.user})
     })
     }
 
@@ -152,33 +154,74 @@ function RentalAgreementDisplay() {
     // console.log("The current rental card:", rentalCardDisplay[0])
     // console.log("currentUser agreements OWNER:", currentUser?.agreements[0])
 
+    console.log("TESTING ALLAGREEMENTS CURRENTAGREEMENT INDEX USER AND OWNER:", allAgreements[currentAgreementIndex])
+    console.log("TESTING ALLAGREEMENTS CURRENTAGREEMENT INDEX USER AND OWNER:", allAgreements[currentAgreementIndex])
+
+    // if (role === 'owner'){
+    //     otherUser = allAgreements[currentAgreementIndex]?.user
+    // } else if (role === 'user'){
+    //     otherUser = allAgreements[currentAgreementIndex]?.owner
+    // }
+
     let otherUser = allAgreements[currentAgreementIndex]?.user || allAgreements[currentAgreementIndex]?.owner
 
-    // console.log("Other USER:", otherUser)
+    console.log("Other USER:", otherUser)
 
     //So I decided to make an object be pushed into AllAgreements, that way I'll have access to user information too, and it'll be much cleaner. It's one rental agreement per, so I didn't need to grab the currentAgreementIndex for it. This puts out all the comments
-    const test = allAgreements[currentAgreementIndex]?.theAgreement.comment?.map((item) => console.log("THE ITEMS INSIDE OF THIS", item))
+    // const test = allAgreements[currentAgreementIndex]?.theAgreement.comment?.map((item) => console.log("THE ITEMS INSIDE OF THIS", item))
 
-    const comments = allAgreements[currentAgreementIndex]?.theAgreement.comment?.map((item) => ( 
-        <div key={item.id} className="mb-6 w-full overflow-hidden bg-[#f2f2f7] p-8 rounded-sm border-b border-black">
-        <div className="flex items-start mb-2">
-        <img src={item.owner_id === currentUser.id ? otherUser.profileImage : currentUser?.profileImage} alt="" className="inline-block h-12 w-12 object-cover rounded-full mr-4"/>
-        <h5 className="text-xl font-bold mt-2">{item.owner_id === currentUser.id ? otherUser.firstName : currentUser.firstName } {item.owner_id === currentUser.id ? otherUser.lastName : currentUser.lastName }</h5>
-        </div>
-        <div className="flex items-start justify-between">
-            <p className="text-xl font-bold">Comment Created At: <br></br> {item.created_at}</p>
-            <span> 👈👉 </span>
-            <p className="text-xl font-bold">Comment Updated At: <br></br> {item.updated_at}</p>
-        </div>
-        <div className="w-full overflow-hidden mb-4 max-w-[640px] lg:max-w-[960px] mt-4">
-            <p className="max-[479px]:text-sm">{item.comment}</p>
-        </div>
-        </div>
-        
-    ))
+    // I'm pretty sure what I had before would've worked, but I eventually needed to include origin. Initially I had a ternary that would test the user_id being present or owner_id being present, and in my seed file I was only sending one in. However since I have two types of users, both an owner and a regular user, I can have two IDS of 1. So the user_id can match the currentUser.id of 1, and it could be two different people. This is the reason I decided to include an origin. 
 
-    console.log("All Agreements:", allAgreements[currentAgreementIndex])
+    // Also, when I was mapping:         allAgreements.push({theAgreement : singleAgreement, owner: item.equipment.owner})
+    // I had this as user: cart.user, this being the mapped rental agreements for user, meant I was just filling the array with more user information that was already available since they're the currently signed in user. However, I spotted it in time for my sanity, and realized that it was just the same user as the currently signed in user. It would be different for owner, because there I remembered to properly set it to grab the users information that is acquiring the rental agreement. 
+
+    // Such a foolish mistake that took so long, but we learn and move on!
+
+    const comments = allAgreements[currentAgreementIndex]?.theAgreement.comment?.map((item) => {
+        let profileImage, firstName, lastName
     
+        if (item.user_id === currentUser.id && item.origin === role) {
+            // Current user made the comment and has a role of USER
+            profileImage = currentUser.profileImage
+            firstName = currentUser.firstName
+            lastName = currentUser.lastName
+        } else if (item.owner_id === currentUser.id && item.origin === role) {
+            // Current user made the comment and has a role of OWNER
+            profileImage = currentUser.profileImage
+            firstName = currentUser.firstName
+            lastName = currentUser.lastName
+        } else {
+            // Comment made by someone else
+            profileImage = otherUser?.profileImage
+            firstName = otherUser?.firstName
+            lastName = otherUser?.lastName
+        }
+
+        console.log(profileImage)
+    
+        return (
+            <div key={item.id} className="mb-6 w-full overflow-hidden bg-[#f2f2f7] p-8 rounded-sm border-b border-black">
+                <div className="flex items-start mb-2">
+                    <img src={profileImage} alt="" className="inline-block h-12 w-12 object-cover rounded-full mr-4"/>
+                    <h5 className="text-xl font-bold mt-2">{firstName} {lastName}</h5>
+                </div>
+                <div className="flex items-start justify-between">
+                    <p className="text-xl font-bold">Comment Created At: <br /> {item.created_at}</p>
+                    <span> 👈👉 </span>
+                    <p className="text-xl font-bold">Comment Updated At: <br /> {item.updated_at}</p>
+                </div>
+                <div className="w-full overflow-hidden mb-4 max-w-[640px] lg:max-w-[960px] mt-4">
+                    <p className="max-[479px]:text-sm">{item.comment}</p>
+                </div>
+            </div>
+        )
+    })
+
+    
+    console.log("All Agreements:", allAgreements[currentAgreementIndex])
+    console.log("THE SPECIFIC AGREEMENT:", allAgreements[currentAgreementIndex]?.theAgreement)
+    
+    // Handles the editing of the agreement, be it delivery address change, or changing the decision
     const handleAgreementEdit = () => {
         let decision = role === 'owner' ? 'owner_decision' : 'user_decision'
         let updatedAgreement
@@ -218,6 +261,8 @@ function RentalAgreementDisplay() {
 
         console.log("THE AGREEMENT:",updatedAgreement)
 
+        
+
         fetch(`${apiUrl}rental/agreements/${allAgreements[currentAgreementIndex]?.theAgreement.id}`, {
             method: "PATCH",
             headers: {
@@ -227,6 +272,16 @@ function RentalAgreementDisplay() {
         }).then((resp) => {
             if (resp.ok) {
                 console.log(resp)
+                if ((updatedAgreement.user_decision || updatedAgreement.owner_decision ) === 'accept'){
+                toast.success(`📝 You've succesfully ACCEPTED ✅ this agreement! Once both parties have accepted you can proceed to checkout. `,
+                {
+                  "autoClose" : 6000
+                })}
+                if ((updatedAgreement.user_decision || updatedAgreement.owner_decision ) === 'decline'){
+                toast.warn(`📝 You've DECLINED ❌ this agreement! Once both parties have accepted you can proceed to checkout. `,
+                {
+                    "autoClose" : 6000
+                })}
                 checkSession()
                 // Going to do a spread operator thing 
             }
@@ -241,6 +296,7 @@ function RentalAgreementDisplay() {
         comment : rentalComment,
         user_id: role === 'user' ? currentUser?.id : allAgreements[currentAgreementIndex]?.theAgreement.user_id,
         owner_id: role === 'owner' ? currentUser?.id : allAgreements[currentAgreementIndex]?.theAgreement.owner_id,
+        origin : role,
         agreement_id: allAgreements[currentAgreementIndex]?.theAgreement.id
     }
 
@@ -256,6 +312,10 @@ function RentalAgreementDisplay() {
             console.log(resp)
             setRentalComment('')
             checkSession()
+            toast.success(`✍ Successfully left a comment! `,
+            {
+              "autoClose" : 2000
+            })
             // Going to do a spread operator thing 
         }
     })}
@@ -334,12 +394,13 @@ function RentalAgreementDisplay() {
         <section>
         <div key={currentAgreementIndex} className="py-16 md:py-24 lg:py-32 mx-auto w-full max-w-7xl px-5 md:px-10">
             <div className="flex flex-col items-start lg:flex-row lg:space-x-20">
+           
             <div className="flex-[1_1_500px] max-[991px]:w-full max-[991px]:flex-none">
                 <div className="max-w-3xl mb-8 md:mb-12 lg:mb-16">
                 {rentalCardDisplay[currentAgreementIndex]}
                 </div>
 
-                {role === 'owner' &&(
+                { allAgreements[currentAgreementIndex]?.theAgreement.agreement_status !== 'both-accepted' && role === 'owner' && (
                 <div> 
 
                 <input
@@ -416,6 +477,8 @@ function RentalAgreementDisplay() {
                     <br></br>
                 </div>
             )}
+            { allAgreements[currentAgreementIndex]?.theAgreement.agreement_status !== 'both-accepted' &&
+            <>
             <div className="mt-6 flex justify-between"> 
 
                 <label className="inline-flex items-center font-bold text-gray-900">
@@ -443,15 +506,16 @@ function RentalAgreementDisplay() {
                     <span className="ml-2"> Accept Agreement </span>
                 </label>
 
-                </div>
+            </div>
 
-                <div className="flex justify-end"> 
+            <div className="flex justify-end"> 
                     <button 
                     onClick={handleAgreementEdit}
                     className="bg-black text-white text-sm px-6 py-3 mt-8 rounded-lg shadow transition duration-150 ease-in-out hover:bg-gray-700 focus:outline-none">
                     Submit Changes
                     </button>
             </div>
+            </>}
 
             </div>
 

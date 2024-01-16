@@ -12,6 +12,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
   const apiUrl = useContext(ApiUrlContext)
   const { currentUser, role, checkSession } = UserSessionContext()
 
+  console.log("THE delivery state:", oneEquipment.delivery)
   //States to capture info, day ranges, costs, length of rental, quantity, and track modal, cart
   //This might be multiple states for now, but the plan is to convert it to one big state object.
   const [selectedRate, setSelectedRate] = useState("hourly")

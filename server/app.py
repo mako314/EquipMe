@@ -1259,6 +1259,7 @@ class RentalAgreementComments(Resource):
 
         new_comment = AgreementComment(
             comment =  data.get('comment'),
+            origin = data.get('origin'),
             created_at = datetime.utcnow(),
             updated_at = datetime.utcnow(),
             user_id =  data.get('user_id'),
@@ -2607,25 +2608,6 @@ class WebHookForStripeSuccess(Resource):
     def handle_successful_payment_intent(self, payment_intent):
         # Logic to handle successful payment intent
         print(f"Payment intent SUCCEEDED: {payment_intent}")
-        # print(payment_intent)
-        # equipment_id = payment_intent.get("metadata", {}).get("equipment_id")
-        # cart_item_id = payment_intent.get("metadata", {}).get("cart_item_id")
-        # user_id = payment_intent.get("metadata", {}).get("user_id")
-
-        # print("THE EQUIPMENT ID:", equipment_id)
-        # print("THE CART ITEM ID:", cart_item_id)
-        # print("THE USER ID:", user_id)
-        # if equipment_id and cart_item_id and user_id:
-        #     equipment = Equipment.query.get(equipment_id)
-        #     cart_item = CartItem.query.get(cart_item_id)
-        #     user = User.query.get(user_id)
-
-        #     if not equipment or not cart_item:
-        #         print("Equipment or Cart Item not found.")
-        #         return
-        #     if not user:
-        #         print("User not found, currently we do not support guest checkout")
-        #         return
         equipment_ids_str = payment_intent.get("metadata", {}).get("equipment_ids")
         cart_item_ids_str = payment_intent.get("metadata", {}).get("cart_item_ids")
         user_ids_str = payment_intent.get("metadata", {}).get("user_ids")
@@ -2637,6 +2619,7 @@ class WebHookForStripeSuccess(Resource):
 
                 for equipment_id, cart_item_id, user_id in zip(equipment_ids, cart_item_ids, user_ids):
                     # Process each equipment, cart item, and user
+                    print(f"Processing: Equipment ID {equipment_id}, Cart Item ID {cart_item_id}, User ID {user_id}")
                     equipment = Equipment.query.get(equipment_id)
                     cart_item = CartItem.query.get(cart_item_id)
                     user = User.query.get(user_id)
@@ -2645,82 +2628,122 @@ class WebHookForStripeSuccess(Resource):
                         print("Equipment, Cart Item, or User not found.")
                         continue
 
-                last_state = EquipmentStateHistory.query.filter_by(
-                equipment_id=equipment.id
-                ).order_by(EquipmentStateHistory.changed_at.desc()).first()
+                    last_state = EquipmentStateHistory.query.filter_by(
+                    equipment_id=equipment.id
+                    ).order_by(EquipmentStateHistory.changed_at.desc()).first()
 
-            # Update equipment status
-                if equipment.status[0].reserved_quantity < cart_item.quantity:
-                    raise ValueError("Not enough equipment available to fulfill this rental.")
-                
-                equipment.status[0].reserved_quantity -= cart_item.quantity
-                equipment.status[0].rented_quantity += cart_item.quantity
-                db.session.commit()
+                # Update equipment status
+                    if equipment.status[0].reserved_quantity < cart_item.quantity:
+                        raise ValueError("Not enough equipment available to fulfill this rental.")
+                    
+                    equipment.status[0].reserved_quantity -= cart_item.quantity
+                    equipment.status[0].rented_quantity += cart_item.quantity
+                    db.session.commit()
 
-                new_state_history = EquipmentStateHistory(
-                equipment_id = equipment.id,
-                total_quantity = last_state.total_quantity,
-                available_quantity = last_state.available_quantity,
-                reserved_quantity = last_state.reserved_quantity - cart_item.quantity,
-                rented_quantity = last_state.rented_quantity + cart_item.quantity,
-                maintenance_quantity = last_state.maintenance_quantity,
-                transit_quantity = last_state.transit_quantity,
-                damaged_quantity = last_state.damaged_quantity,
-                previous_state = last_state.new_state,
-                new_state = f'{user.firstName} {user.lastName} has rented {cart_item.quantity} {equipment.make} {equipment.model}' ,
-                changed_at=datetime.utcnow(),
-            )
-                print("THE NEW STATE HISTORY:",new_state_history)
-                
-                db.session.add(new_state_history)
-
-                payment_method_id = payment_intent.get('payment_method')
-                print('THE PAYMENT METHOD:',payment_intent.get('payment_method') )
-                card_details = None
-                if payment_method_id:
-                    try:
-                        incoming_payment_method = stripe.PaymentMethod.retrieve(payment_method_id)
-                        # Now you have the payment method details
-                        print('THE PAYMENT METHOD:', incoming_payment_method)
-
-                        payment_method_type = incoming_payment_method.type
-                        print("Payment Method Type:", payment_method_type)
-
-                        if payment_method_type == 'card':
-                            card_details = incoming_payment_method.card
-                            # Extract card details as needed
-                            print("Card Brand:", card_details.brand)
-                            print("Card Last 4 Digits: 111", card_details.last4)
-                            print(cart_item.agreements[0].delivery_address)
-
-                    except stripe.error.StripeError as e:
-                        # Handle error
-                        print("Error fetching payment method:", e)
-
-                print("WHAT I BELIEVE TO BE THE ID OF THE PAYMENT INTENT:", payment_intent.id)
-
-                new_order_history = OrderHistory(
-                order_datetime = datetime.utcnow(),
-                total_amount =  payment_intent.amount_received, # For monetary values
-                payment_status = payment_intent.status,
-                payment_method = f'{payment_method_type} - {card_details.brand}: {card_details.last4}',
-                order_status = 'In-Progress',
-                delivery_address = cart_item.agreements[0].delivery_address,
-                order_details = f'{user.firstName} {user.lastName} has rented {cart_item.quantity}\n{equipment.make} {equipment.model}',
-                estimated_delivery_date = None,
-                actual_delivery_date = None,
-                cancellation_date = None,
-                return_date = None,
-                actual_return_date = None,
-                notes = '',
-                user_id = user.id,
-                owner_id =equipment.owner.id,
-                equipment_id = equipment.id,
-                order_number = payment_intent.id
+                    new_state_history = EquipmentStateHistory(
+                    equipment_id = equipment.id,
+                    total_quantity = last_state.total_quantity,
+                    available_quantity = last_state.available_quantity,
+                    reserved_quantity = last_state.reserved_quantity - cart_item.quantity,
+                    rented_quantity = last_state.rented_quantity + cart_item.quantity,
+                    maintenance_quantity = last_state.maintenance_quantity,
+                    transit_quantity = last_state.transit_quantity,
+                    damaged_quantity = last_state.damaged_quantity,
+                    previous_state = last_state.new_state,
+                    new_state = f'{user.firstName} {user.lastName} has rented {cart_item.quantity} {equipment.make} {equipment.model}' ,
+                    changed_at=datetime.utcnow(),
                 )
+                    
+                    print("THE NEW STATE HISTORY:",new_state_history)
+                    
+                    db.session.add(new_state_history)
 
-                db.session.add(new_order_history)
-                db.session.commit()
+                    payment_method_id = payment_intent.get('payment_method')
+                    print('THE PAYMENT METHOD:',payment_intent.get('payment_method') )
+                    card_details = None
+                    if payment_method_id:
+                        try:
+                            incoming_payment_method = stripe.PaymentMethod.retrieve(payment_method_id)
+                            # Now you have the payment method details
+                            print('THE PAYMENT METHOD:', incoming_payment_method)
+
+                            payment_method_type = incoming_payment_method.type
+                            print("Payment Method Type:", payment_method_type)
+
+                            if payment_method_type == 'card':
+                                card_details = incoming_payment_method.card
+                                # Extract card details as needed
+                                print("Card Brand:", card_details.brand)
+                                print("Card Last 4 Digits: 111", card_details.last4)
+                                print(cart_item.agreements[0].delivery_address)
+
+                        except stripe.error.StripeError as e:
+                            # Handle error
+                            print("Error fetching payment method:", e)
+
+                    print("WHAT I BELIEVE TO BE THE ID OF THE PAYMENT INTENT:", payment_intent.id)
+
+                    # Convert data to python date time object
+                    def parse_iso_date(date_str):
+                        if date_str.endswith('Z'):
+                            # Replace 'Z' with '+00:00' for UTC offset
+                            date_str = date_str.replace('Z', '+00:00')
+                        try:
+                            return datetime.fromisoformat(date_str)
+                        except ValueError:
+                            print(f"Invalid date format: {date_str}")
+                            return None
+                    
+                    rental_delivery_date = cart_item.agreements[0].rental_start_date
+                    rental_return_date = cart_item.agreements[0].rental_end_date
+
+                    # Convert string to datetime
+                    # rental_delivery_date_dt = datetime.strptime(rental_delivery_date, '%Y-%m-%d')
+                    # rental_return_date_dt = datetime.strptime(rental_return_date, '%Y-%m-%d')
+
+                    # Convert string to datetime using the parse_iso_date function
+                    rental_delivery_date_dt = parse_iso_date(rental_delivery_date)
+                    rental_return_date_dt = parse_iso_date(rental_return_date)
+
+                    def calculate_item_total(item):
+                        # Check if there's a changed price, otherwise use the price at addition
+                        price_per_unit = item.price_cents_if_changed if item.price_cents_if_changed is not None else item.price_cents_at_addition
+                        
+                        # Calculate total based on quantity and rental length
+                        total_price_cents = price_per_unit * item.quantity * item.rental_length
+
+                        # Optionally, convert total price to dollars if needed
+                        total_price_dollars = total_price_cents / 100
+
+                        return total_price_dollars
+                    
+                    total_item_indv_cost = calculate_item_total(cart_item)
+                    print(calculate_item_total(cart_item))
+
+                    new_order_history = OrderHistory(
+                    order_datetime = datetime.utcnow(),
+                    total_amount =  payment_intent.amount_received, # For monetary values
+                    payment_status = payment_intent.status,
+                    payment_method = f'{payment_method_type} - {card_details.brand}: {card_details.last4}',
+                    order_status = 'In-Progress',
+                    delivery_address = cart_item.agreements[0].delivery_address,
+                    order_details = f'{user.firstName} {user.lastName} has rented {cart_item.quantity}\n{equipment.make} {equipment.model}',
+                    estimated_delivery_date = rental_delivery_date_dt,
+                    actual_delivery_date = None,
+                    cancellation_date = None,
+                    return_date = rental_return_date_dt,
+                    actual_return_date = None,
+                    notes = '',
+                    user_id = user.id,
+                    owner_id =equipment.owner.id,
+                    equipment_id = equipment.id,
+                    order_number = payment_intent.id,
+                    individual_item_total = total_item_indv_cost
+                    )
+                    
+
+                    db.session.add(new_order_history)
+                    db.session.commit()
                 
         else:
             print("Metadata does not contain required IDs.")   
