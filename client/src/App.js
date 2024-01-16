@@ -109,6 +109,9 @@ function App() {
   // State to determine if you came from ownerDash, below will be more state to control owner actions
   const [fromOwnerDash, setFromOwnerDash] = useState(false)
 
+  // State to simply hold the amount of items ready to be checked out in a cart
+  const [availableToCheckoutNumb, setAvailableToCheckoutNumb] = useState(0)
+
   // context for APIUrl
   const apiUrl = process.env.REACT_APP_API_URL
   // console.log("this is the api url:", apiUrl)
@@ -300,7 +303,7 @@ function App() {
       <EquipmentDataProvider>
         <ApiProvider>
         <>
-          <NavBar setSearchTerm={setSearchTerm} />
+          <NavBar setSearchTerm={setSearchTerm} availableToCheckoutNumb={availableToCheckoutNumb} />
 
           <Routes>
             {/* Home Page */}
@@ -361,7 +364,7 @@ function App() {
             {/* Temporary Checkout Routing */}
             <Route path='/checkout' element={<StripeCheckout/>} />
             <Route path='/checkout/successful/return' element={<AfterCheckout/>} />
-            <Route path='/cart' element={<Cart/>} />
+            <Route path='/cart' element={<Cart setAvailableToCheckoutNumb={setAvailableToCheckoutNumb}/>} />
             <Route path='/order/history' element={<OrderHistory/>}/>
 
             {/* Rental Display */}

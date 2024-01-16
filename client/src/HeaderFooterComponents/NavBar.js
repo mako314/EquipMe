@@ -8,7 +8,7 @@ import SearchBar from "./SearchBar";
 import { UserSessionContext } from "../UserComponents/SessionContext";
 import ApiUrlContext from "../Api";
 
-function NavBar({ setSearchTerm }) {
+function NavBar({ setSearchTerm, availableToCheckoutNumb }) {
   const apiUrl = useContext(ApiUrlContext)
   const [isToggleOpen, setIsToggleOpen] = useState(false)
   const { currentUser, role, setCurrentUser, setRole } = UserSessionContext()
@@ -155,14 +155,18 @@ function NavBar({ setSearchTerm }) {
             </div>
 
             {role === 'user' && (
-                <div className="flex items-center px-6 lg:ml-0 lg:pl-3">
-                    <Link to="/cart" onClick={closeMobileView} className="text-white hover:text-amber-500">
-                        {/* SVG Cart Icon */}
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-cart4" viewBox="0 0 16 16">
-                            <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5M3.14 5l.5 2H5V5zM6 5v2h2V5zm3 0v2h2V5zm3 0v2h1.36l.5-2zm1.11 3H12v2h.61zM11 8H9v2h2zM8 8H6v2h2zM5 8H3.89l.5 2H5zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0m9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0"/>
-                        </svg>
-                    </Link>
-                </div>
+              <div className="flex items-center px-6 lg:ml-0 lg:pl-3">
+                <Link to="/cart" onClick={closeMobileView} className="text-white hover:text-amber-500 relative">
+                  {/* SVG Cart Icon */}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-cart4" viewBox="0 0 16 16">
+                      <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5M3.14 5l.5 2H5V5zM6 5v2h2V5zm3 0v2h2V5zm3 0v2h1.36l.5-2zm1.11 3H12v2h.61zM11 8H9v2h2zM8 8H6v2h2zM5 8H3.89l.5 2H5zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0m9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0"/>
+                  </svg>
+                  {/* Item count */}
+                  <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-500 w-5 h-5 text-white text-xs flex items-center justify-center">
+                    {availableToCheckoutNumb}
+                  </span>
+                </Link>
+              </div>
             )}
 
           </nav>
