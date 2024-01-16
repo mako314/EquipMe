@@ -158,6 +158,7 @@ const displayEquipment = featuredEquipment.length > 0 ? featuredEquipment : <div
                                 Sign in to Contact
                                 </span>
                                 }
+                                
                                 {/* <ContactModal recipientID={id}/> */}
                                 {/* <span className="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded"> {website} </span> */}
                                 {currentUser && owner.id !== currentUser.id && 
