@@ -175,8 +175,8 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
   }, [currentUser, agreementFiltering, filterKeyWord])
 
   const handleAgreementSelection = (event) => {
-    console.log('Selected value:', event.target.value);
-    setAgreementFiltering(event.target.value);
+    console.log('Selected value:', event.target.value)
+    setAgreementFiltering(event.target.value)
   }
 
     return (
