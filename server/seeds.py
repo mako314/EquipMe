@@ -1729,6 +1729,7 @@ if __name__ == '__main__':
         AgreementComment(
             comment = " This looks good to me, I'll go ahead and accept it!",
             owner_id = owner_2.id, # Emily Johnson
+            origin = 'owner',
             agreement_id = rental_agreements[0].id,
             created_at = datetime.utcnow(),
             updated_at = datetime.utcnow()
@@ -1736,6 +1737,7 @@ if __name__ == '__main__':
         AgreementComment(
             comment = " I'm so sorry, but I actually don't need this for delivery!",
             user_id=user_1.id,  # Benjamin Davis
+            origin = 'user',
             agreement_id = rental_agreements[0].id,
             created_at = datetime.utcnow(),
             updated_at = datetime.utcnow()
@@ -1743,6 +1745,7 @@ if __name__ == '__main__':
         AgreementComment(
             comment = "Sounds good, thanks for renting it!",
             owner_id = owner_2.id, # Emily Johnson
+            origin = 'owner',
             agreement_id = rental_agreements[0].id,
             created_at = datetime.utcnow(),
             updated_at = datetime.utcnow()
