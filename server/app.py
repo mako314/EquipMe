@@ -2634,6 +2634,8 @@ class WebHookForStripeSuccess(Resource):
                     cart_item = CartItem.query.get(cart_item_id)
                     user = User.query.get(user_id)
 
+                    # May also need to grab the rental agreement and set it to completed here once it's done 
+
                     if not equipment or not cart_item or not user:
                         print("Equipment, Cart Item, or User not found.")
                         continue
@@ -2901,7 +2903,23 @@ class OrderHistoryByUserId(Resource):
 
         return response
 
-api.add_resource(OrderHistoryByUserId, '/order/history/<int:user_id>')
+api.add_resource(OrderHistoryByUserId, '/user/order/history/<int:user_id>')
+
+class OrderHistoryByOwnerId(Resource):
+    def get(self, owner_id):
+        # Filter orders by owner_id
+        orders = OrderHistory.query.filter_by(owner_id=owner_id).all()
+        
+        # Convert orders to dictionaries if not empty
+        if orders:
+            orders_dict = [order.to_dict() for order in orders]
+            response = make_response({"orders": orders_dict}, 200)
+        else:
+            response = make_response({"error": "No orders found for the specified user"}, 404)
+
+        return response
+
+api.add_resource(OrderHistoryByOwnerId, '/owner/order/history/<int:owner_id>')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
