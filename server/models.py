@@ -48,18 +48,18 @@ class User(db.Model, SerializerMixin):
     #relationships 
     #do a cascade to make life easier
     #may not even need agreements
-    agreements = db.relationship('RentalAgreement', back_populates="user")
+    agreements = db.relationship('RentalAgreement', back_populates="user", cascade="all, delete")
 
-    user_inboxes = db.relationship("UserInbox", back_populates="user")
+    user_inboxes = db.relationship("UserInbox", back_populates="user", cascade="all, delete")
 
-    cart = db.relationship('Cart', back_populates='user')
+    cart = db.relationship('Cart', back_populates='user', cascade="all, delete")
 
-    review = db.relationship ('Review', back_populates='user')
+    review = db.relationship ('Review', back_populates='user', cascade="all, delete")
 
-    orders = db.relationship('OrderHistory', back_populates='user')
+    orders = db.relationship('OrderHistory', back_populates='user', cascade="all, delete")
 
-    user_favorite = db.relationship('UserFavorite', back_populates='user')
-    owner_favorite = db.relationship('OwnerFavorite', back_populates='user')
+    user_favorite = db.relationship('UserFavorite', back_populates='user', cascade="all, delete")
+    owner_favorite = db.relationship('OwnerFavorite', back_populates='user', cascade="all, delete")
 
     #Serialization rules
     # serialize_rules = ('-agreements.user', '-user_inboxes.user', '-cart.user', '-review.user', '-review.cart_item','-review_owner', )
@@ -161,19 +161,19 @@ class EquipmentOwner(db.Model, SerializerMixin):
     # agreements = db.relationship('RentalAgreement', back_populates="owner", overlaps="users,owners")
 
     #do a cascade to make life easier
-    equipment = db.relationship('Equipment', back_populates='owner')
+    equipment = db.relationship('Equipment', back_populates='owner', cascade="all, delete")
 
-    agreements = db.relationship('RentalAgreement', back_populates ='owner')
+    agreements = db.relationship('RentalAgreement', back_populates ='owner', cascade="all, delete")
 
-    owner_inboxes = db.relationship('OwnerInbox', back_populates='owner')
+    owner_inboxes = db.relationship('OwnerInbox', back_populates='owner', cascade="all, delete")
     #you can just do a query EquipmentOwner.query.get(1), or equipment = owner.equipment. Then you can do for equipment in owner.equipment print(equipment) for example
 
-    review = db.relationship ('Review', back_populates='owner')
+    review = db.relationship ('Review', back_populates='owner', cascade="all, delete")
 
-    owner_favorite = db.relationship('OwnerFavorite', back_populates='owner')
-    user_favorite = db.relationship('UserFavorite', back_populates='owner')
+    owner_favorite = db.relationship('OwnerFavorite', back_populates='owner', cascade="all, delete")
+    user_favorite = db.relationship('UserFavorite', back_populates='owner', cascade="all, delete")
 
-    orders = db.relationship('OrderHistory', back_populates='owner')
+    orders = db.relationship('OrderHistory', back_populates='owner', cascade="all, delete")
 
     # I could include owner here, howeevr I'm not sure it's necessarily required.
     #Serialization rules
@@ -275,17 +275,17 @@ class Equipment(db.Model, SerializerMixin):
 
     equipment_price = db.relationship('EquipmentPrice', back_populates='equipment', cascade="all, delete")
 
-    images = db.relationship('EquipmentImage', back_populates='equipment')
+    images = db.relationship('EquipmentImage', back_populates='equipment', cascade="all, delete")
 
-    featured_equipment = db.relationship('FeaturedEquipment', back_populates='equipment')
+    featured_equipment = db.relationship('FeaturedEquipment', back_populates='equipment', cascade="all, delete")
 
-    user_favorite = db.relationship('UserFavorite', back_populates='equipment')
+    user_favorite = db.relationship('UserFavorite', back_populates='equipment', cascade="all, delete")
     
-    state_history = db.relationship('EquipmentStateHistory', back_populates='equipment')
+    state_history = db.relationship('EquipmentStateHistory', back_populates='equipment', cascade="all, delete")
 
-    status = db.relationship('EquipmentStatus', back_populates='equipment')
+    status = db.relationship('EquipmentStatus', back_populates='equipment', cascade="all, delete")
 
-    equipment_state_summary = db.relationship('EquipmentStateSummary', back_populates='equipment')
+    equipment_state_summary = db.relationship('EquipmentStateSummary', back_populates='equipment', cascade="all, delete")
 
     orders = db.relationship('OrderHistory', back_populates='equipment')
 
@@ -376,7 +376,7 @@ class EquipmentStateSummary(db.Model, SerializerMixin):
     # I think adding total available would be redundant, I can just take quantity - reserved / rented out / maintenance
     equipment = db.relationship('Equipment', back_populates='equipment_state_summary')
 
-    state_history = db.relationship('EquipmentStateHistory', back_populates='equipment_state_summary')
+    state_history = db.relationship('EquipmentStateHistory', back_populates='equipment_state_summary', cascade="all, delete")
 
     serialize_rules = ('-state_history.equipment_state_summary','-equipment.equipment_state_summary', '-equipment.state_history')
 
@@ -506,7 +506,7 @@ class RentalAgreement(db.Model, SerializerMixin):
     cart_item = db.relationship(
         'CartItem', back_populates='agreements', cascade="all, delete")
     
-    comment = db.relationship('AgreementComment', back_populates='agreements')
+    comment = db.relationship('AgreementComment', back_populates='agreements', cascade="all, delete")
 
     review = db.relationship('Review', back_populates="agreements")
     
@@ -608,7 +608,7 @@ class CartItem(db.Model, SerializerMixin):
 
     cart = db.relationship('Cart', back_populates='cart_item')
     equipment = db.relationship('Equipment', back_populates='cart_item')
-    agreements = db.relationship('RentalAgreement',back_populates="cart_item")
+    agreements = db.relationship('RentalAgreement',back_populates="cart_item", cascade="all, delete")
 
     # review = db.relationship('Review', back_populates="cart_item")
 
@@ -761,7 +761,7 @@ class Thread(db.Model, SerializerMixin):
     subject = db.Column(db.String, nullable=True)
     #Need to incorporate something like user_delete & owner_delete
 
-    messages = db.relationship('Message', back_populates='thread')
+    messages = db.relationship('Message', back_populates='thread', cascade="all, delete")
     user_inboxes = db.relationship("UserInbox", back_populates="thread")
     owner_inboxes = db.relationship("OwnerInbox", back_populates="thread")
 
@@ -775,7 +775,7 @@ class UserInbox(db.Model, SerializerMixin):
     thread_id = db.Column(db.Integer, db.ForeignKey('threads.id'))
 
     user = db.relationship("User", back_populates="user_inboxes")
-    thread = db.relationship("Thread", back_populates="user_inboxes")
+    thread = db.relationship("Thread", back_populates="user_inboxes", cascade="all, delete")
 
     serialize_rules = ('-user.user_inboxes', '-thread.user_inboxes', '-thread.owner_inboxes')
 
@@ -787,7 +787,7 @@ class OwnerInbox(db.Model, SerializerMixin):
     thread_id = db.Column(db.Integer, db.ForeignKey('threads.id'))
 
     owner = db.relationship("EquipmentOwner", back_populates="owner_inboxes")
-    thread = db.relationship("Thread", back_populates="owner_inboxes")
+    thread = db.relationship("Thread", back_populates="owner_inboxes", cascade="all, delete")
 
     serialize_rules = ('-owner.owner_inboxes', '-thread.owner_inboxes', '-thread.user_inboxes')
 

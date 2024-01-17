@@ -6,17 +6,21 @@ import SearchBar from "./SearchBar";
 
 //Context imports
 import { UserSessionContext } from "../UserComponents/SessionContext";
+import { CartAvailProviderContext } from "../CheckoutComponents/AvailToCheckoutContext";
 import ApiUrlContext from "../Api";
 
-function NavBar({ setSearchTerm, availableToCheckoutNumb }) {
+function NavBar({ setSearchTerm}) {
   const apiUrl = useContext(ApiUrlContext)
   const [isToggleOpen, setIsToggleOpen] = useState(false)
   const { currentUser, role, setCurrentUser, setRole } = UserSessionContext()
+  const { availableToCheckoutNumb } = CartAvailProviderContext()
 
-  const navigate = useNavigate();
+  console.log("CHECKING THIS NUMBER:", availableToCheckoutNumb)
+
+  const navigate = useNavigate()
 
   const closeMobileView = () => {
-    setIsToggleOpen(false);
+    setIsToggleOpen(false)
   }
 
   function userHandleLogout() {

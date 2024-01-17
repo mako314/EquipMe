@@ -1,11 +1,12 @@
 import React, {useState, useContext, useEffect} from "react"
 import RentalAgreementCard from "./RentalAgreementCard";
 import { UserSessionContext } from "../UserComponents/SessionContext";
+import { CartAvailProviderContext } from "../CheckoutComponents/AvailToCheckoutContext";
 import { useParams, useNavigate } from 'react-router-dom'
 import ApiUrlContext from "../Api";
 import {toast} from 'react-toastify'
 
-function RentalAgreementDisplay() {
+function RentalAgreementDisplay({setAvailableToCheckoutNumb}) {
     const apiUrl = useContext(ApiUrlContext)
     const { currentUser, role, checkSession} = UserSessionContext()
     
@@ -18,6 +19,7 @@ function RentalAgreementDisplay() {
     const [deliveryAddress, setDeliveryAddress] = useState(false)
 
     const { rental_agreement_id } = useParams()
+    const { calculateReadyToCheckout } = CartAvailProviderContext()
 
     const formatDate = (date) => {
         // Was having a lot of issues and couldn't tell where from, so I wrote some validations to test what could be going wrong
@@ -282,10 +284,26 @@ function RentalAgreementDisplay() {
                 {
                     "autoClose" : 6000
                 })}
-                checkSession()
-                // Going to do a spread operator thing 
-            }
-        })}
+                
+
+                // Test if role is user, take the returned promise, and pass it to calculateReadyCartTotal for real time update on how many cart items available for checkout.
+                if (role === 'user'){
+                checkSession().then(updatedUserData => {
+                    if (role === 'user') {
+                      console.log("THE CONDITIONAL RAN CART SHOULD UPDATE")
+                      calculateReadyToCheckout(updatedUserData.cart)
+                    }
+                  }).catch(error => {
+                    console.error("Error in checkSession:", error)
+                  })
+                } else {
+                    // or else just send a regular check session!
+                    checkSession()
+                }
+                
+                }
+        })
+    }
 
     
     //HANDLES POSTING A COMMENT, 

@@ -1,9 +1,10 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom"
 import { UserSessionContext } from './SessionContext';
+import { CartAvailProviderContext } from '../CheckoutComponents/AvailToCheckoutContext';
 import ApiUrlContext from '../Api';
 
-function UserLogin({setAvailableToCheckoutNumb}){
+function UserLogin(){
 
     //Take me to my page scotty,
     const navigate = useNavigate();
@@ -13,6 +14,9 @@ function UserLogin({setAvailableToCheckoutNumb}){
     // const [user, setUser] = useContext(UserContext)
     const apiUrl = useContext(ApiUrlContext)
     const { currentUser, role, setCurrentUser, setRole } = UserSessionContext()
+
+    const { calculateReadyToCheckout } = CartAvailProviderContext()
+
 
     // sends information to server-side, sets session, and sets state
     // function handleLogin(e) {
@@ -67,24 +71,8 @@ function UserLogin({setAvailableToCheckoutNumb}){
                   if (data.role === 'user') {
                       setCurrentUser(data.user)
                       setRole(data.role)
-                       // Calculates the total items ready for checkout and displays the number in the cart svg in the navbar for users
-                      // Assuming `cartData` is an array of cart objects and each cart has a `cart_item` array
-                      const totalAvailableToCheckout = data.user.cart.reduce((total, cart) => {
-                        // Filter the cart items based on your criteria (both parties accepted)
-                        console.log("THE CART REDUCER INSIDE APP.JS:", cart)
-                        const availableItems = cart.cart_item?.filter(item => 
-                          item.agreements.some(agreement => agreement.agreement_status === 'both-accepted')
-                        )
-                        
-                        // Add the count of available items in this cart to the running total
-                        return total + (availableItems?.length || 0)
-                      }, 0) // Start the running total at 0
-                    
-                      // Now you have the total count of items available to checkout across all carts
-                      console.log("Total items available to checkout across all carts:", totalAvailableToCheckout)
-                    
-                      // If you have a state to keep track of this total, you can set it here
-                      setAvailableToCheckoutNumb(totalAvailableToCheckout)
+                      // Grab this for the context: data.user.cart.
+                      calculateReadyToCheckout(data.user.cart)
                       navigate(`/dashboard`)
                   } else if (data.role === 'owner') {
                       setCurrentUser(data.owner)

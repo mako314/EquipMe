@@ -1875,18 +1875,7 @@ class AddItemToCart(Resource):
 
 api.add_resource(AddItemToCart, '/cart/<int:cart_id>')
 
-class CartItemByID(Resource):
-    def get(self,cart_item_id):
-        cart_item = CartItem.query.filter(CartItem.id == cart_item_id).first()
-
-        if cart_item:
-            return make_response(cart_item.to_dict(),200)
-        else:
-            response = make_response({
-            "error": "Item not found"
-            }, 404)
-            return response
-        
+class CartItemByIdWithCart(Resource):
     def patch(self, cart_id, cart_item_id):
         cart = Cart.query.filter(Cart.id == cart_id).first()
         cart_item = CartItem.query.filter(CartItem.id == cart_item_id).first()
@@ -1939,6 +1928,21 @@ class CartItemByID(Resource):
             }, 404)
             return response
     
+api.add_resource(CartItemByIdWithCart, "/cart/<int:cart_id>/item/<int:cart_item_id>")
+
+
+class CartItemById(Resource):
+    def get(self,cart_item_id):
+        cart_item = CartItem.query.filter(CartItem.id == cart_item_id).first()
+
+        if cart_item:
+            return make_response(cart_item.to_dict(),200)
+        else:
+            response = make_response({
+            "error": "Item not found"
+            }, 404)
+            return response
+        
     def delete(self, cart_item_id):
         cart_item = CartItem.query.filter(CartItem.id == cart_item_id).first()
 
@@ -1953,7 +1957,7 @@ class CartItemByID(Resource):
             }, 404)
             return response
         
-api.add_resource(CartItemByID, "/cart/<int:cart_id>/item/<int:cart_item_id>")
+api.add_resource(CartItemById, "/cart/item/<int:cart_item_id>")
 
 #----------------------------------------------- Messaging Routes -----------------------------------------------------------------------------
 

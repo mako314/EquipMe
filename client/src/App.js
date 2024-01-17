@@ -44,6 +44,9 @@ import { ApiProvider } from './Api';
 //----------------------Check Session Context -----------------------------
 import { SessionProvider } from './UserComponents/SessionContext';
 
+//---------------------- Calculate # of items ready for checkout Context -----------------------------
+import { CartTotalNumbProvider } from './CheckoutComponents/AvailToCheckoutContext';
+
 //----------------------Bar Chart Data Session Context -----------------------------
 import {EquipmentDataProvider} from './ChartComponents/BarChartDataContext';
 
@@ -110,7 +113,6 @@ function App() {
   const [fromOwnerDash, setFromOwnerDash] = useState(false)
 
   // State to simply hold the amount of items ready to be checked out in a cart
-  const [availableToCheckoutNumb, setAvailableToCheckoutNumb] = useState(0)
 
   // context for APIUrl
   const apiUrl = process.env.REACT_APP_API_URL
@@ -294,37 +296,15 @@ function App() {
     return item.model?.toLowerCase().includes(searchTerm?.toLowerCase()) || item.location?.toLowerCase().includes(searchTerm?.toLowerCase()) || item.make?.toLowerCase().includes(searchTerm?.toLowerCase()) || item.name?.toLowerCase().includes(searchTerm?.toLowerCase())
   })
   //-----------------------------------------------------
-  // https://stackoverflow.com/questions/42914666/react-router-external-link
-
-  const caclulcateReadyToCheckout = () => {
-    // Calculates the total items ready for checkout and displays the number in the cart svg in the navbar for users
-    // Assuming `cartData` is an array of cart objects and each cart has a `cart_item` array
-    const totalAvailableToCheckout = currentUser.cart.reduce((total, cart) => {
-      // Filter the cart items based on your criteria (both parties accepted)
-      console.log("THE CART REDUCER INSIDE APP.JS:", cart)
-      const availableItems = cart.cart_item?.filter(item => 
-        item.agreements.some(agreement => agreement.agreement_status === 'both-accepted')
-      )
-      
-      // Add the count of available items in this cart to the running total
-      return total + (availableItems?.length || 0)
-    }, 0) // Start the running total at 0
-  
-    // Now you have the total count of items available to checkout across all carts
-    console.log("Total items available to checkout across all carts:", totalAvailableToCheckout)
-  
-    // If you have a state to keep track of this total, you can set it here
-    setAvailableToCheckoutNumb(totalAvailableToCheckout)
-
-  }
 
   return (
     // UseContext gets called here, allowing the entirety of my app access to the USER and OWNER information!
     <SessionProvider>
+      <CartTotalNumbProvider>
       <EquipmentDataProvider>
         <ApiProvider>
         <>
-          <NavBar setSearchTerm={setSearchTerm} availableToCheckoutNumb={availableToCheckoutNumb} />
+          <NavBar setSearchTerm={setSearchTerm} />
 
           <Routes>
             {/* Home Page */}
@@ -357,7 +337,7 @@ function App() {
             <Route path='/equipment/:id/edit' element={<ProductEditForm equipmentToEdit={equipmentToEdit} updateEquipment={updateEquipment} />} />
 
             {/* Login Page Route */}
-            <Route path='/login' element={<UserLogin setAvailableToCheckoutNumb={setAvailableToCheckoutNumb}/>} />
+            <Route path='/login' element={<UserLogin/>} />
             {/* <Route path='/owner/login' element={<OwnerLogin />} /> */}
 
             {/* User Profile Page*/}
@@ -410,6 +390,7 @@ function App() {
         </>
         </ApiProvider>
       </EquipmentDataProvider>
+      </CartTotalNumbProvider>
     </SessionProvider>
   );
 }
