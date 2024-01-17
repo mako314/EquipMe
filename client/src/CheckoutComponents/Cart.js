@@ -11,7 +11,7 @@ import LoadingPage from "../ExtraPageComponents/LoadingPage";
 import Page404 from "../ExtraPageComponents/Page404";
 
 
-function Cart({setAvailableToCheckoutNumb}){
+function Cart(){
 
   const { currentUser, role} = UserSessionContext() 
   const apiUrl = useContext(ApiUrlContext)
@@ -45,8 +45,12 @@ function Cart({setAvailableToCheckoutNumb}){
   // console.log("THE CURRENT CART TOTAL:", currentCartTotal)
   // console.log("AVAILABLE TO CHECK OUT TOTAL:", availableToCheckOutTotal)
   // console.log("THE CURRENT CART TOTAL BACKEND:", cartData[currentCart]?.total)
-
   // console.log(Array.isArray(individualTotal))
+
+  console.log("THE CART TESTING:", cartData[currentCart])
+  console.log("THE CART DATA:", cartData)
+  console.log("THE CURRENT CART VALUE:", currentCart)
+
   useEffect(() => {
 
     let itemsBothPartiesAgreedOn = 0
@@ -147,7 +151,11 @@ useEffect(() => {
 
   //Changes cart based on cart ID
   const handleCartChange = (e) => {
-    setCurrentCart(e.target.value)
+    // setCurrentCart(e.target.value)
+    // Find index found it's way back in, what an amazing function
+    const cartId = parseInt(e.target.value, 10) // assuming your IDs are integers
+    const cartIndex = cartData.findIndex(cart => cart.id === cartId)
+    setCurrentCart(cartIndex)
   }
 
   //Simple open modal for cart creation
@@ -175,15 +183,17 @@ useEffect(() => {
   const cartOptions = cartData?.map((item) => {
     return (
     <Fragment key={`${item.id} ${item.cart_name}`}>
-    {/* so the value starts at 0, but the item.id (cart id) starts at 1. So I -1 here to get the right cart index */}
-    <option className="text-black" value={item.id - 1}>{item.cart_name}</option> 
+    {/* so the value starts at 0, but the item.id (cart id) starts at 1. So I -1 here to get the right cart index 
+    I was able to find a solution to this, god is good
+    */}
+    <option className="text-black" value={item.id}>{item.cart_name}</option> 
     </Fragment>)
   })
 
 
   //Map over equipment price, and take the rates as options
   let rateOptions
-  if(Array.isArray(cartData[currentCart].cart_item)){
+  if(Array.isArray(cartData[currentCart]?.cart_item)){
     cartData[currentCart].cart_item?.flatMap(item => {
       if (Array.isArray(item.equipment.equipment_price)) {
         item.equipment.equipment_price?.map((price) => {
@@ -274,7 +284,6 @@ useEffect(() => {
 // This function maps over the filteredCartItems, and is passed to cart_item to be incorporated with the checkbox. When an item is checked it gives the isChecked a value of true, which then allows for that item to be checked out. 
 // This way if a user has say 5 items, and only wants to check out 2, they are able to select the 2 they'd like to checkout.
 //If it matches, a new object is created using the spread operator to copy all existing properties of the item. Then, the `isChecked` property is set to the new value provided by the `isChecked` parameter.
-
 const handleItemCheck = (cartItemId, isChecked) => {
   const updatedCartItems = filteredCartItems.map(item => 
     item.id === cartItemId ? {...item, isChecked} : item
@@ -282,11 +291,30 @@ const handleItemCheck = (cartItemId, isChecked) => {
   setFilteredCartItems(updatedCartItems)
 }
 
+//Handles deleting the cart item!
+const handleDeleteCart = async (cartId) => {
+  try {
+    const response = await fetch(`${apiUrl}user/${currentUser.id}/cart/${cartData[currentCart].id}`, {
+      method: 'DELETE',
+      // ... other settings like headers
+    })
+
+    if (response.ok) {
+      // Filter out the deleted cart
+      const updatedCarts = cartData.filter(cart => cart.id !== cartId)
+      // Update the state
+      setCartData(updatedCarts)
+    } else {
+      // Handle errors, for example, show a message to the user
+    }
+  } catch (error) {
+    // Handle fetch errors
+  }
+}
+
 
 // console.log("THE ITEMS TO CHECK OUT:", filteredCartItems)
-
-
-  // console.log("FILTERED CART ITEMS:", filteredCartItems)
+// console.log("FILTERED CART ITEMS:", filteredCartItems)
 
     return(
       <div className="bg-gray-100 pt-10 pb-5">
@@ -387,7 +415,7 @@ const handleItemCheck = (cartItemId, isChecked) => {
       <div className="rounded-lg md:w-2/3">
       <select
             className="text-sm mb-2 font-medium text-gray-900 dark:text-gray-300 border-2 border-black"
-            value={currentCart} 
+            value={currentCart >= 0 && currentCart < cartData.length ? cartData[currentCart].id : ''} 
             onChange={handleCartChange}>
             {cartOptions}
       </select>
@@ -397,6 +425,13 @@ const handleItemCheck = (cartItemId, isChecked) => {
           className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300 ml-4 mb-2"
         >
           Create New Cart
+        </button>
+
+        <button
+          onClick={handleDeleteCart}
+          className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-blue-300 ml-4 mb-2"
+        >
+          Delete Cart
         </button>
 
         {/* Modal */}
