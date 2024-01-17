@@ -511,6 +511,7 @@ class EquipmentOwnerById(Resource):
         print(equip_owner.id)
         if equip_owner:
             # owner.agreements and owner.equipment do I need to cycle through and delete the agreement relationship also?
+            stripe.Account.delete(equip_owner.stripe_id)
             db.session.delete(equip_owner)
             db.session.commit()
             response = make_response({"message":"Succesfully deleted!"}, 204)
@@ -1991,23 +1992,6 @@ class SendMessage(Resource):
 
 api.add_resource(SendMessage, "/messages")
 
-class DeleteMessage(Resource):
-    def delete(self, message_id):
-        message = Message.query.filter(Message.id == message_id).first()
-
-        if message:
-            db.session.delete(message)
-            db.session.commit()
-            response = make_response({"message":"Succesfully deleted!"}, 204)
-            return response
-        else:
-            response = make_response({
-            "error": "Item not found"
-            }, 404)
-            return response
-
-api.add_resource(DeleteMessage, "/message/<int:message_id>")
-
 class StartNewThread(Resource):
     def post(self):
         data = request.get_json()
@@ -2124,7 +2108,6 @@ class MessageByID(Resource):
         message = Message.query.filter(Message.id == id).first()
 
         if message:
-            #may need to delete the renter id and equipment id
             db.session.delete(message)
             db.session.commit()
             response = make_response({"message":"Succesfully deleted!"}, 204)
@@ -2347,46 +2330,6 @@ class StripeCreateAccountLink(Resource):
         return response
         
 api.add_resource(StripeCreateAccountLink, '/v1/account_links')
-
-# class CheckingOut(Resource):
-#     def checkout_equipment(equipment_id, quantity):
-#         # Fetch the most recent state history
-#         last_state = EquipmentStateHistory.query.filter_by(
-#             equipment_id=equipment_id
-#         ).order_by(EquipmentStateHistory.changed_at.desc()).first()
-
-#         # Ensure that the equipment is actually reserved before proceeding
-#         if 'reserved' in last_state.new_state:
-#             raise ValueError("Equipment must be in reserved state to check out.")
-
-#         # Deduct the quantity from the equipment's available stock
-#         equipment = Equipment.query.get(equipment_id)
-#         if equipment.status[0].current_quantity < quantity:
-#             raise ValueError("Not enough equipment available to fulfill this rental.")
-
-#         equipment.status[0].current_quantity -= quantity
-#         equipment.status[0].reserved_quantity += quantity
-#         db.session.add(equipment)
-
-#         # Record the state change
-#         new_state_history = EquipmentStateHistory(
-#             equipment_id = equipment_id,
-#             total_quantity = last_state.new_quantity,
-#             available_quantity = last_state.available_quantity,
-#             reserved_quantity = last_state.reserved_quantity,
-#             rented_quantity = 0,
-#             maintenance_quantity = 0,
-#             transit_quantity = 0,
-#             damaged_quantity = 0,
-#             previous_state = last_state.new_state,
-#             new_state = 'available',
-#             changed_at=datetime.utcnow(),
-#         )
-#         db.session.add(new_state_history)
-
-#         db.session.commit()
-
-# api.add_resource(CheckingOut, '/checkout/<int:equipment_id>/<int:quantity>')
 
 class CheckingOut(Resource):
     def post(self):
