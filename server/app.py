@@ -1991,6 +1991,24 @@ class SendMessage(Resource):
 
 api.add_resource(SendMessage, "/messages")
 
+class DeleteMessage(Resource):
+    def delete(self, message_id):
+        message = Message.query.filter(Message.id == message_id).first()
+
+        if message:
+            # print(message.agreements[0].agreement_status)
+            db.session.delete(message)
+            db.session.commit()
+            response = make_response({"message":"Succesfully deleted!"}, 204)
+            return response
+        else:
+            response = make_response({
+            "error": "Item not found"
+            }, 404)
+            return response
+
+api.add_resource(DeleteMessage, "/message/<int:message_id>")
+
 class StartNewThread(Resource):
     def post(self):
         data = request.get_json()
