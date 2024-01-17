@@ -357,6 +357,16 @@ class EquipmentOwners(Resource):
             
             account_link = None  # Initialize account_link to None
 
+            def format_website_url(website):
+                if not website:  # Checks if the website is None or an empty string
+                    return 'https://accessible.stripe.com'  # Returns the default URL
+                if not website.startswith(('http://', 'https://')):
+                    return f'https://{website}'  # Prepends 'http://' if necessary
+                return website  # Returns the website as is if it's already valid
+
+            website_url = format_website_url(new_owner.website)
+            print("Formatted Website URL:", website_url)
+
             if data['owner_consent'] == 'yes':
                 account = stripe.Account.create(
                     type='express',
@@ -372,7 +382,7 @@ class EquipmentOwners(Resource):
                             'postal_code': new_owner.postal_code,
                             'state': new_owner.state,
                         },
-                        'name' : 'Marks Rentals',
+                        'name' : f'{new_owner.firstName} {new_owner.lastName} EquipMe Rentals',
                         'phone' : new_owner.phone,
                         'tax_id' : '000000000',
                     },
@@ -398,7 +408,7 @@ class EquipmentOwners(Resource):
                         # 'id_number_provided' : True,
                     },
                     business_profile = {
-                        'url' : 'https://accessible.stripe.com',
+                        'url' : website_url,
                         'support_phone' : new_owner.phone,
                         'support_email' : new_owner.email,
                         'name' : f"{new_owner.firstName} {new_owner.lastName}",
@@ -2121,7 +2131,7 @@ class StripeCreateConnectAccount(Resource):
                     'postal_code': equip_owner.postal_code,
                     'state': equip_owner.state,
                 },
-                'name' : 'Marks Rentals',
+                'name' : f'{equip_owner.firstName} {equip_owner.lastName} EquipMe Rentals',
                 'phone' : equip_owner.phone,
                 'tax_id' : '000000000',
             },
@@ -2624,6 +2634,8 @@ class WebHookForStripeSuccess(Resource):
                     cart_item = CartItem.query.get(cart_item_id)
                     user = User.query.get(user_id)
 
+                    # May also need to grab the rental agreement and set it to completed here once it's done 
+
                     if not equipment or not cart_item or not user:
                         print("Equipment, Cart Item, or User not found.")
                         continue
@@ -2891,7 +2903,23 @@ class OrderHistoryByUserId(Resource):
 
         return response
 
-api.add_resource(OrderHistoryByUserId, '/order/history/<int:user_id>')
+api.add_resource(OrderHistoryByUserId, '/user/order/history/<int:user_id>')
+
+class OrderHistoryByOwnerId(Resource):
+    def get(self, owner_id):
+        # Filter orders by owner_id
+        orders = OrderHistory.query.filter_by(owner_id=owner_id).all()
+        
+        # Convert orders to dictionaries if not empty
+        if orders:
+            orders_dict = [order.to_dict() for order in orders]
+            response = make_response({"orders": orders_dict}, 200)
+        else:
+            response = make_response({"error": "No orders found for the specified user"}, 404)
+
+        return response
+
+api.add_resource(OrderHistoryByOwnerId, '/owner/order/history/<int:owner_id>')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

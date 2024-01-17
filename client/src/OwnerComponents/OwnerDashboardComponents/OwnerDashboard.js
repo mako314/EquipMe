@@ -15,6 +15,10 @@ import ProductCard from '../../EquipmentComponents/ProductCard'
 import OwnerCard from '../OwnerCard';
 
 
+// Order History Attempt//
+import OrderHistory from '../../CheckoutComponents/OrderHistory';
+
+
 import { UserSessionContext } from '../../UserComponents/SessionContext';
 import { ReactComponent as EquipMeLogo } from '../../Content/EquipMeLogo.svg'
 
@@ -624,6 +628,9 @@ function AccountSettings() {
                 return <UserFavorites/>
             case 'Account Settings':
                 return <AccountSettings/>
+            case 'Order History':
+                setFromOwnerDash(true)
+                return <OrderHistory fromOwnerDash={fromOwnerDash}/>
             default:
                 return <DashHome />
         }
@@ -686,6 +693,10 @@ function AccountSettings() {
                             </span>
 
                             <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" onClick={handlePublicProfileNav}> Your Public Profile</span>
+
+                            <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" 
+                             onClick={() => handleViewClick('Order History')}
+                            > Order History </span>
 
                             <span className="flex items-center flex-shrink-0 cursor-pointer h-10 px-2 text-sm font-medium rounded hover:bg-gray-300 leading-none" 
                              onClick={() => handleViewClick('Account Settings')}

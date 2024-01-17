@@ -148,18 +148,20 @@ const displayEquipment = featuredEquipment.length > 0 ? featuredEquipment : <div
                             <h1 className="text-xl font-bold"> {firstName} {lastName}</h1>
                             <p className="text-gray-600">{profession}</p>
                             <div className="mt-6 flex flex-wrap gap-4 justify-center">
-                                {role === 'user' || role === 'owner' ? 
+                                {(role === 'user' || (role === 'owner' && owner.id !== currentUser.id)) ? 
                                 <ContactModal recipientID={id} firstName={firstName} lastName={lastName}/> 
                                 :
+                                (role === 'owner' && owner.id === currentUser.id) ? null : 
                                 <span 
                                 className="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded cursor-pointer	"
                                 onClick={navigateToLogin}> 
-                                Sign in to contact
+                                Sign in to Contact
                                 </span>
                                 }
+                                
                                 {/* <ContactModal recipientID={id}/> */}
                                 {/* <span className="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded"> {website} </span> */}
-                                {currentUser && 
+                                {currentUser && owner.id !== currentUser.id && 
                                 <button className="rounded-full w-10 h-10 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4" onClick={handleFavoriteSelection}>
                                     <svg fill={heartColor} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-5 h-5" viewBox="0 0 24 24">
                                     <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
@@ -264,11 +266,11 @@ const displayEquipment = featuredEquipment.length > 0 ? featuredEquipment : <div
                             
                         </div>
                         {/* px-5 md:px-10  */}
-                        <div class="mx-auto w-full max-w-7xl py-16 md:py-24 lg:py-32">
+                        <div className="mx-auto w-full max-w-7xl py-16 md:py-24 lg:py-32">
                         <div className="flex justify-between">
                                 <span className="text-gray-600 font-bold mb-4">Reviews</span>
                         </div>
-                            <ul class="mb-6 grid gap-5 sm:grid-cols-2 md:grid-cols-2 md:mb-16"> 
+                            <ul className="mb-6 grid gap-5 sm:grid-cols-2 md:grid-cols-2 md:mb-16"> 
                         {userReviews?.map((item) => (
                             <Reviews stars={item.review_stars} comment={item.review_comment} image={item.user.profileImage} firstName={item.user.firstName} lastName={item.user.lastName} profession={item.user.profession}/>
                         ))}

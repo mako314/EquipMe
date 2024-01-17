@@ -6,7 +6,7 @@ import LoadingPage from '../ExtraPageComponents/LoadingPage';
 
 import ApiUrlContext from '../Api';
 
-function OrderHistory(){
+function OrderHistory({fromOwnerDash}){
     const { currentUser, role} = UserSessionContext()
     const apiUrl = useContext(ApiUrlContext)
     const [loading, setLoading] = useState(true)
@@ -31,7 +31,9 @@ function OrderHistory(){
             }
     
             try {
-                const response = await fetch(`${apiUrl}order/history/${currentUser.id}`, {
+                let fetchUrl
+                role === 'owner' ?  fetchUrl = `${apiUrl}owner/order/history/${currentUser.id}` : fetchUrl = `${apiUrl}user/order/history/${currentUser.id}`
+                const response = await fetch(`${fetchUrl}`, {
                     method: "GET", 
                     headers: {
                         "Content-Type": "application/json",
@@ -134,6 +136,10 @@ function OrderHistory(){
 
     console.log("FUNCTION OF GET SORTED ORDER ARRAY:", getSortedOrderArray())
 
+    const navigateToOrderHistory = () => {
+        navigate(`/order/history`)
+    }
+
 
     return (
       <div className="bg-white">
@@ -142,8 +148,10 @@ function OrderHistory(){
                   <div className="max-w-2xl mx-auto px-4 lg:max-w-4xl lg:px-0">
                       <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">Order history</h1>
                       <p className="mt-2 text-sm text-gray-500">Check the status of recent orders, manage returns, and discover similar products.</p>
+                      
+                      <div className='flex flex-row'> 
                       <select 
-                      className="block appearance-none w-auto bg-white border border-gray-300 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 my-2"
+                      className="block appearance-none w-auto bg-white border border-gray-300 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 my-2 mr-4"
                       value={orderFiltering}
                       onChange={handleOrderHistoryFiltering}
                   >
@@ -151,6 +159,14 @@ function OrderHistory(){
                       <option name="newest_option" value="newest" id="newest">Newest First</option>
                       <option name="oldest_option" value="oldest" id="oldest">Oldest First</option>
                   </select>
+
+                  {fromOwnerDash === true && 
+                        <div className="ml-auto flex items-center px-6 lg:ml-0 lg:p-0">
+                            <button className="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded bg-amber-500 px-5 text-sm font-medium tracking-wide text-white shadow-md shadow-amber-200 transition duration-300 hover:bg-emerald-600 hover:shadow-sm hover:shadow-emerald-200 focus:bg-emerald-700 focus:shadow-sm focus:shadow-emerald-200 focus-visible:outline-none disabled:cursor-not-allowed disabled:border-emerald-300 disabled:bg-emerald-300 disabled:shadow-none"  onClick={navigateToOrderHistory}>
+                            Order History Page
+                            </button>
+                    </div>}
+                    </div>
                   </div>
 
               </div>

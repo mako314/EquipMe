@@ -387,7 +387,7 @@ if __name__ == '__main__':
             phone ="212-555-2345",
             email="jess.sanchez22@EquipMe.com",
             _password_hash="",
-            profileImage = "https://avatarfiles.alphacoders.com/352/352560.png",
+            profileImage = "https://avatarfiles.alphacoders.com/339/339110.jpg",
             website = " "
         )
         owner_9 = EquipmentOwner(

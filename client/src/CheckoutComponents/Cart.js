@@ -11,7 +11,7 @@ import LoadingPage from "../ExtraPageComponents/LoadingPage";
 import Page404 from "../ExtraPageComponents/Page404";
 
 
-function Cart(){
+function Cart({setAvailableToCheckoutNumb}){
 
   const { currentUser, role} = UserSessionContext() 
   const apiUrl = useContext(ApiUrlContext)
@@ -26,6 +26,8 @@ function Cart(){
   const [cartItemFiltering, setCartItemFiltering] = useState('none')
   const [filteredCartItems, setFilteredCartItems] = useState([])
   const [cartItemsChecked, setCartItemsChecked] = useState({})
+
+  const [isLoading, setIsLoading] = useState(true)
   
 
   const navigate = useNavigate()
@@ -55,18 +57,27 @@ function Cart(){
   // Filter items belonging to the current cart, filter any time need something for x, so I'm trying to only track totals for this specific cart, filter by cart ID.
   const itemsInCurrentCartBothAgreed = individualTotal.filter(item => item.cart_id === cartData[currentCart].id && item.agreement_status === 'both-accepted')
 
+  console.log("NUMBER I'D TRY TO USE FOR CART STANDING TOTAL AVAILABLE TO CHECKOUT?", itemsInCurrentCartBothAgreed.length)
+
+  // if(itemsInCurrentCartBothAgreed.length > 0){
+  //   setAvailableToCheckoutNumb(itemsInCurrentCartBothAgreed.length)
+  // } else{
+  //   setAvailableToCheckOutTotal(0)
+  // }
+
   // console.log("ITEMS IN CURRENT CART:", itemsInCurrentCart)
 
   //This just takes into account ALL the items in a users cart, where the items cart ID matches the current carts ID.
   const itemsInCurrentCartAll = individualTotal.filter(item => item.cart_id === cartData[currentCart].id)
   
-  console.log("CURRENT ITEMS IN CART:", itemsInCurrentCartAll)
+  // console.log("CURRENT ITEMS IN CART:", itemsInCurrentCartAll)
   // Sum up the costs of these items
   itemsInCurrentCartBothAgreed.forEach((item) => {
-    console.log("LOOK HERE FOR THE ITEM:",item)
+    // console.log("LOOK HERE FOR THE ITEM:",item)
+    // Can likely just do a +1 here or prevCount => prevCount +1 state for the cart number
 
     if(item.isChecked) {
-      console.log("TOTAL COST OF ITEMS THAT BOTH USERS AGREED UPON AND ARE CHECKED:", item.cost)
+      // console.log("TOTAL COST OF ITEMS THAT BOTH USERS AGREED UPON AND ARE CHECKED:", item.cost)
       itemsBothPartiesAgreedOn += item.cost
     }
 
@@ -101,7 +112,7 @@ useEffect(() => {
     const filteredItems = cartData[currentCart]?.cart_item.filter(item =>
       item.agreements.some(agreement => agreement.agreement_status === cartItemFiltering)
     )
-    console.log(filteredItems)
+    // console.log(filteredItems)
     setFilteredCartItems(filteredItems)
   }
 }, [cartItemFiltering, cartData, currentCart, currentUser])
@@ -111,6 +122,7 @@ useEffect(() => {
     console.log("Fetching cart data...")
     if (role === 'user') {
       setCartData(currentUser.cart)
+      setIsLoading(false)
     } else if (role === 'owner') {
       toast.warn(`🛒 We don't currently support owner carts`,{
         "autoClose" : 2000
@@ -124,6 +136,10 @@ useEffect(() => {
     if (role === 'owner'){
       return <div> Not available! </div>
     }
+    return <div> Nothing has been added to your cart yet! </div>
+  }
+
+  if (isLoading){
     return <LoadingPage loadDetails={"Cart"}/>
   }
 
@@ -183,11 +199,11 @@ useEffect(() => {
     })
   }
 
-  console.log("THE CURRENT CART ID:", currentCart)
+  // console.log("THE CURRENT CART ID:", currentCart)
   // Handle item filtering radio button function:
   // Takes into account the cart item rental agreement status and filters for only those, i.e. both-accepted, completed, user accepted, owner accepted.
   const handleCartItemFiltering = (event) => {
-    console.log('Selected value:', event.target.value)
+    // console.log('Selected value:', event.target.value)
     setCartItemFiltering(event.target.value)
   }
 
@@ -218,12 +234,15 @@ useEffect(() => {
     })
 
     console.log("ITEMS THAT HAVE BEEN CHECKBOXED:", itemsReadyForCheckout)
-
-    console.log("THE USER ID:", currentUser.id)
-    console.log("THE CART ID", currentCart)
+    // Or I can likely use this : o, but this is just checkboxed, so I'd need something to determine it previously (cart amount ready to checkout )
+    // console.log("THE USER ID:", currentUser.id)
+    // console.log("THE CART ID", currentCart)
 
     if (itemsReadyForCheckout.length === 0) {
       console.log("No items are ready for checkout")
+      toast.warn(`🛒 You haven't selected anything to checkout yet!`,{
+        "autoClose" : 2000
+      })
       return
     }
 
@@ -239,7 +258,7 @@ useEffect(() => {
   
       if (response.ok) {
         const data = await response.json()
-        console.log("Checkout Successful:", data)
+        // console.log("Checkout Successful:", data)
         handleCheckoutNavigation(data.client_secret)
         // navigate(`/checkout`)
       } else {
@@ -264,7 +283,7 @@ const handleItemCheck = (cartItemId, isChecked) => {
 }
 
 
-console.log("THE ITEMS TO CHECK OUT:", filteredCartItems)
+// console.log("THE ITEMS TO CHECK OUT:", filteredCartItems)
 
 
   // console.log("FILTERED CART ITEMS:", filteredCartItems)
