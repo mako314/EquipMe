@@ -284,7 +284,10 @@ function RentalAgreementDisplay({setAvailableToCheckoutNumb}) {
                 {
                     "autoClose" : 6000
                 })}
+                
 
+                // Test if role is user, take the returned promise, and pass it to calculateReadyCartTotal for real time update on how many cart items available for checkout.
+                if (role === 'user'){
                 checkSession().then(updatedUserData => {
                     if (role === 'user') {
                       console.log("THE CONDITIONAL RAN CART SHOULD UPDATE")
@@ -293,6 +296,10 @@ function RentalAgreementDisplay({setAvailableToCheckoutNumb}) {
                   }).catch(error => {
                     console.error("Error in checkSession:", error)
                   })
+                } else {
+                    // or else just send a regular check session!
+                    checkSession()
+                }
                 
                 }
         })
