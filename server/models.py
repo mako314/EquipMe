@@ -506,7 +506,7 @@ class RentalAgreement(db.Model, SerializerMixin):
     cart_item = db.relationship(
         'CartItem', back_populates='agreements', cascade="all, delete")
     
-    comment = db.relationship('AgreementComment', back_populates='agreements')
+    comment = db.relationship('AgreementComment', back_populates='agreements', cascade="all, delete")
 
     review = db.relationship('Review', back_populates="agreements")
     

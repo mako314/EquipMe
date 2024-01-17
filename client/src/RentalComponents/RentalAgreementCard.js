@@ -18,7 +18,7 @@ function RentalAgreementCard({ equipmentName, rentalId, rentalStart, rentalEnd, 
     const rentalAgreementLocation = `${address_line_2 === '' ? address + ', ' + address_line_2 : address}, ${city}, ${state} ${postal_code} `
 
     // console.log('OWNER ID:', ownerId)
-    const rentalAgreementStatuses = ['in-progress', 'user-accepted', 'owner-accepted', 'both-accepted']
+    const rentalAgreementStatuses = ['in-progress', 'user-accepted', 'owner-accepted', 'Owner has DECLINED this agreement', 'User has DECLINED this agreement','both-accepted']
 
     // 'in-progress',
     const showHandleButton = rentalAgreementStatuses.includes(rentalStatus)
