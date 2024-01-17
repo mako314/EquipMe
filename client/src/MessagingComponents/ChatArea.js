@@ -67,13 +67,13 @@ function ChatArea({inboxes, SelectedThreadID, setNewMessage, newMessage, setInbo
 
   // Selects the thread to display , I may incorporate a place holder in place of it being empty at the mounting of the application
   const selectedThread = inboxes?.find(inbox => inbox.id === SelectedThreadID);
-  selectedThread?.thread.messages.map((message) => (console.log("the message details:",message)))
+  selectedThread?.thread?.messages?.map((message) => (console.log("the message details:",message)))
     return (
         <div className="flex-grow p-4">
           <div className="bg-white rounded-lg shadow-md p-4 relative">
             <ul>
               {/* If selectedThread is available, map over its messages */}
-              {selectedThread?.thread.messages.map((message) => (      
+              {selectedThread?.thread?.messages?.map((message) => (      
               <div key={message.id} className="bg-white rounded-lg shadow-md p-4 mb-4">
               <div className="flex items-start justify-between">
                 <div className="flex flex-col items-center mr-4">

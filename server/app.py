@@ -1996,7 +1996,6 @@ class DeleteMessage(Resource):
         message = Message.query.filter(Message.id == message_id).first()
 
         if message:
-            # print(message.agreements[0].agreement_status)
             db.session.delete(message)
             db.session.commit()
             response = make_response({"message":"Succesfully deleted!"}, 204)
@@ -2029,6 +2028,23 @@ class StartNewThread(Resource):
         #except ValueError
 
 api.add_resource(StartNewThread, "/new/thread")
+
+class DeleteThread(Resource):
+    def delete(self, thread_id):
+        thread = Thread.query.filter(Thread.id == thread_id).first()
+
+        if thread:
+            db.session.delete(thread)
+            db.session.commit()
+            response = make_response({"message":"Succesfully deleted!"}, 204)
+            return response
+        else:
+            response = make_response({
+            "error": "Item not found"
+            }, 404)
+            return response
+
+api.add_resource(DeleteThread, "/thread/<int:thread_id>")
 
 class AddToInboxes(Resource):
     def post(self):

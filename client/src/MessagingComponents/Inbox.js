@@ -27,12 +27,14 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
     useEffect(() => {
       if (role === 'user' && currentUser?.user_inboxes) {
         setInboxes(currentUser?.user_inboxes)
+        console.log("CHECKING THREAD IDS:", currentUser?.user_inboxes)
         setSelectedThreadID(1)
         // console.log("User Inboxes:", user_inboxes)
     }
 
       if (role === 'owner' && currentUser?.owner_inboxes) {
        setInboxes(currentUser?.owner_inboxes)
+       console.log("CHECKING THREAD IDS:", currentUser?.owner_inboxes)
        setSelectedThreadID(1)
         // console.log("Owner Inboxes:", owner_inboxes)
     }
@@ -136,7 +138,7 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
                 fetchRecipientData(recipientID, recipientType);
             }}
             >
-                {inbox.thread.subject}
+                {inbox?.thread?.subject}
             </li>
           ))}
         </ul>
