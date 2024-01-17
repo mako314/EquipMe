@@ -1947,6 +1947,7 @@ class CartItemById(Resource):
         cart_item = CartItem.query.filter(CartItem.id == cart_item_id).first()
 
         if cart_item:
+            print(cart_item.agreements[0].agreement_status)
             db.session.delete(cart_item)
             db.session.commit()
             response = make_response({"message":"Succesfully deleted!"}, 204)
