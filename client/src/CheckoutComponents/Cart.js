@@ -26,6 +26,8 @@ function Cart({setAvailableToCheckoutNumb}){
   const [cartItemFiltering, setCartItemFiltering] = useState('none')
   const [filteredCartItems, setFilteredCartItems] = useState([])
   const [cartItemsChecked, setCartItemsChecked] = useState({})
+
+  const [isLoading, setIsLoading] = useState(true)
   
 
   const navigate = useNavigate()
@@ -57,11 +59,11 @@ function Cart({setAvailableToCheckoutNumb}){
 
   console.log("NUMBER I'D TRY TO USE FOR CART STANDING TOTAL AVAILABLE TO CHECKOUT?", itemsInCurrentCartBothAgreed.length)
 
-  if(itemsInCurrentCartBothAgreed.length > 0){
-    setAvailableToCheckoutNumb(itemsInCurrentCartBothAgreed.length)
-  } else{
-    setAvailableToCheckOutTotal(0)
-  }
+  // if(itemsInCurrentCartBothAgreed.length > 0){
+  //   setAvailableToCheckoutNumb(itemsInCurrentCartBothAgreed.length)
+  // } else{
+  //   setAvailableToCheckOutTotal(0)
+  // }
 
   // console.log("ITEMS IN CURRENT CART:", itemsInCurrentCart)
 
@@ -120,6 +122,7 @@ useEffect(() => {
     console.log("Fetching cart data...")
     if (role === 'user') {
       setCartData(currentUser.cart)
+      setIsLoading(false)
     } else if (role === 'owner') {
       toast.warn(`🛒 We don't currently support owner carts`,{
         "autoClose" : 2000
@@ -133,6 +136,10 @@ useEffect(() => {
     if (role === 'owner'){
       return <div> Not available! </div>
     }
+    return <div> Nothing has been added to your cart yet! </div>
+  }
+
+  if (isLoading){
     return <LoadingPage loadDetails={"Cart"}/>
   }
 

@@ -133,11 +133,11 @@ function App() {
       }
     })
     .then(data => {
-      // console.log("The Data",data)
+      console.log("The Data",data)
       if (data.role === 'user') {
-        setCurrentUser(data)
+        setCurrentUser(data.details)
       } else if (data.role === 'owner') {
-        setCurrentUser(data)
+        setCurrentUser(data.details)
       }
     })
     .catch(error => {
@@ -294,8 +294,29 @@ function App() {
     return item.model?.toLowerCase().includes(searchTerm?.toLowerCase()) || item.location?.toLowerCase().includes(searchTerm?.toLowerCase()) || item.make?.toLowerCase().includes(searchTerm?.toLowerCase()) || item.name?.toLowerCase().includes(searchTerm?.toLowerCase())
   })
   //-----------------------------------------------------
-
   // https://stackoverflow.com/questions/42914666/react-router-external-link
+
+  const caclulcateReadyToCheckout = () => {
+    // Calculates the total items ready for checkout and displays the number in the cart svg in the navbar for users
+    // Assuming `cartData` is an array of cart objects and each cart has a `cart_item` array
+    const totalAvailableToCheckout = currentUser.cart.reduce((total, cart) => {
+      // Filter the cart items based on your criteria (both parties accepted)
+      console.log("THE CART REDUCER INSIDE APP.JS:", cart)
+      const availableItems = cart.cart_item?.filter(item => 
+        item.agreements.some(agreement => agreement.agreement_status === 'both-accepted')
+      )
+      
+      // Add the count of available items in this cart to the running total
+      return total + (availableItems?.length || 0)
+    }, 0) // Start the running total at 0
+  
+    // Now you have the total count of items available to checkout across all carts
+    console.log("Total items available to checkout across all carts:", totalAvailableToCheckout)
+  
+    // If you have a state to keep track of this total, you can set it here
+    setAvailableToCheckoutNumb(totalAvailableToCheckout)
+
+  }
 
   return (
     // UseContext gets called here, allowing the entirety of my app access to the USER and OWNER information!
@@ -336,7 +357,7 @@ function App() {
             <Route path='/equipment/:id/edit' element={<ProductEditForm equipmentToEdit={equipmentToEdit} updateEquipment={updateEquipment} />} />
 
             {/* Login Page Route */}
-            <Route path='/login' element={<UserLogin />} />
+            <Route path='/login' element={<UserLogin setAvailableToCheckoutNumb={setAvailableToCheckoutNumb}/>} />
             {/* <Route path='/owner/login' element={<OwnerLogin />} /> */}
 
             {/* User Profile Page*/}
@@ -364,7 +385,7 @@ function App() {
             {/* Temporary Checkout Routing */}
             <Route path='/checkout' element={<StripeCheckout/>} />
             <Route path='/checkout/successful/return' element={<AfterCheckout/>} />
-            <Route path='/cart' element={<Cart setAvailableToCheckoutNumb={setAvailableToCheckoutNumb}/>} />
+            <Route path='/cart' element={<Cart/>} />
             <Route path='/order/history' element={<OrderHistory/>}/>
 
             {/* Rental Display */}
