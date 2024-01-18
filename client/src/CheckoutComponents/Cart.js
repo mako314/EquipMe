@@ -28,6 +28,8 @@ function Cart(){
   const [cartItemsChecked, setCartItemsChecked] = useState({})
 
   const [isLoading, setIsLoading] = useState(true)
+
+  const [toggleDelete, setToggleDelete] = useState(false)
   
 
   const navigate = useNavigate()
@@ -165,7 +167,13 @@ useEffect(() => {
 
   //Needed to move this here to have the state update for a re-render, allows for creating a new cart.
   const addCart = (newCart) => {
-    setCartData((cartData) => [...cartData, newCart])
+    const updatedCartData = [...cartData, newCart]
+    setCartData(updatedCartData)
+    const newCartIndex = updatedCartData.length - 1 // Index of the last element
+    console.log("THE NEW CART INDEX:", newCartIndex)
+    setCurrentCart(newCartIndex)
+    return updatedCartData
+    // setCartData((cartData) => [...cartData, newCart])
   }
 
   //-------------------------------------
@@ -291,6 +299,12 @@ const handleItemCheck = (cartItemId, isChecked) => {
   setFilteredCartItems(updatedCartItems)
 }
 
+
+// Toggle for delete button
+const handleToggleDelete = () => {
+  setToggleDelete(!toggleDelete)
+}
+
 //Handles deleting the cart item!
 const handleDeleteCart = async (cartId) => {
   try {
@@ -304,6 +318,7 @@ const handleDeleteCart = async (cartId) => {
       const updatedCarts = cartData.filter(cart => cart.id !== cartId)
       // Update the state
       setCartData(updatedCarts)
+      setToggleDelete(!toggleDelete)
     } else {
       // Handle errors, for example, show a message to the user
     }
@@ -427,12 +442,31 @@ const handleDeleteCart = async (cartId) => {
           Create New Cart
         </button>
 
-        <button
-          onClick={handleDeleteCart}
-          className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-blue-300 ml-4 mb-2"
-        >
-          Delete Cart
-        </button>
+
+        {!toggleDelete ? (
+                <button
+                    onClick={handleToggleDelete}
+                    className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-blue-300 ml-4 mb-2"
+                >
+                    Delete my cart
+                </button>
+            ) : (
+                <>
+                    <button
+                        onClick={() => handleDeleteCart(cartData[currentCart].id)}
+                        className="bg-green-500 text-white p-2 rounded-md hover:bg-green-600 focus:outline-none focus:ring-4 focus:ring-blue-300 ml-4 mb-2"
+                    >
+                        Yes, I'm sure
+                    </button>
+                    <button
+                        onClick={handleToggleDelete}
+                        className="bg-gray-500 text-white p-2 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-4 focus:ring-blue-300 ml-4 mb-2"
+                    >
+                        No, I changed my mind
+                    </button>
+                </>
+          )}
+
 
         {/* Modal */}
         {isModalOpen && (
@@ -446,7 +480,7 @@ const handleDeleteCart = async (cartId) => {
                 </svg>
                 </div>
                 <h3 className="text-lg leading-6 font-medium text-gray-900">Create New Cart</h3>
-                <CreateNewCart addCart={addCart} toggleModal={toggleModal} />
+                <CreateNewCart addCart={addCart} toggleModal={toggleModal} setCurrentCart={setCurrentCart}/>
               </div>
             </div>
           </div>
