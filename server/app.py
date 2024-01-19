@@ -1956,26 +1956,38 @@ class CartItemById(Resource):
             print(cart_item.equipment.model)
             print(cart_item.equipment.id)
 
+            user = User.query.filter(User.id == cart_item.agreements[0].user_id).first()
 
-            # last_state = EquipmentStateHistory.query.filter_by(
-            # equipment_id=equipment.id
-            # ).order_by(EquipmentStateHistory.changed_at.desc()).first()
+            equipment_status = EquipmentStatus.query.filter(EquipmentStatus.equipment_id == cart_item.equipment.id).first()
+
+            print("Reserved Quantity:", equipment_status.reserved_quantity)
+
+            equipment_status.reserved_quantity -= cart_item.quantity
+            equipment_status.available_quantity += cart_item.quantity
+
+            last_state = EquipmentStateHistory.query.filter_by(
+            equipment_id=cart_item.equipment.id
+            ).order_by(EquipmentStateHistory.changed_at.desc()).first()
+
+            # new_state = f'{user.firstName} {user.lastName} has removed {cart_item.quantity} {cart_item.equipment.make} {cart_item.equipment.model} from their cart'
             
-            # new_state_history = EquipmentStateHistory(
-            #         equipment_id = equipment.id,
-            #         total_quantity = last_state.total_quantity,
-            #         available_quantity = last_state.available_quantity,
-            #         reserved_quantity = last_state.reserved_quantity - cart_item.quantity,
-            #         rented_quantity = last_state.rented_quantity + cart_item.quantity,
-            #         maintenance_quantity = last_state.maintenance_quantity,
-            #         transit_quantity = last_state.transit_quantity,
-            #         damaged_quantity = last_state.damaged_quantity,
-            #         previous_state = last_state.new_state,
-            #         new_state = f'{user.firstName} {user.lastName} has rented {cart_item.quantity} {equipment.make} {equipment.model}' ,
-            #         changed_at=datetime.utcnow(),
-            #     )
-            
+            new_state_history = EquipmentStateHistory(
+                equipment_id = cart_item.equipment.id,
+                total_quantity = last_state.total_quantity,
+                available_quantity = last_state.available_quantity + cart_item.quantity,
+                reserved_quantity = last_state.reserved_quantity - cart_item.quantity,
+                rented_quantity = last_state.rented_quantity,
+                maintenance_quantity = last_state.maintenance_quantity,
+                transit_quantity = last_state.transit_quantity,
+                damaged_quantity = last_state.damaged_quantity,
+                previous_state = last_state.new_state,
+                new_state = f'{user.firstName} {user.lastName} has removed {cart_item.quantity} {cart_item.equipment.make} {cart_item.equipment.model} from their cart' ,
+                changed_at=datetime.utcnow(),
+            )
+
             db.session.delete(cart_item)
+            db.session.add(new_state_history)
+            db.session.add(equipment_status)
             db.session.commit()
             response = make_response({"message":"Succesfully deleted!"}, 204)
             return response
