@@ -31,6 +31,7 @@ function Cart(){
 
   const [toggleDelete, setToggleDelete] = useState(false)
   
+  // const [itemsDeleted, setItemsDeleted] = useState(0)
 
   const navigate = useNavigate()
 
@@ -101,6 +102,9 @@ function Cart(){
 setCurrentCartTotal(allTotalCarts)
 setAvailableToCheckOutTotal(itemsBothPartiesAgreedOn)
 // console.log("THE CURRENT TOTAL FOR CART", cartData[currentCart]?.cart_name, ":", currentTotal)
+
+// Items deleted is counted (incremented) in cartItem and will hopefully re-calculate the total
+// itemsDeleted
 }, [cartData, individualTotal])
 
 // Math to check for the total amounts both backend and front end
@@ -522,6 +526,7 @@ const handleDeleteCart = async (cartId) => {
               handleItemCheck={handleItemCheck}
               setFilteredCartItems={setFilteredCartItems}
               filteredCartItems={filteredCartItems}
+              // setItemsDeleted={setItemsDeleted}
             />
           )
         })

@@ -263,7 +263,7 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
         
   
   <div className="flex flex-row flex-wrap justify-start"> 
-    {sortedCards.length > 0 ? sortedCards : currentUser?.equipment.length > 0 ? (
+    {sortedCards?.length > 0 ? sortedCards : currentUser?.equipment?.length > 0 ? (
                 <div className="flex flex-col items-center justify-center p-10 bg-white shadow-md rounded-lg">
                     <img
                         src="https://www.kaser-albehar.com/wp-content/uploads/2018/10/110819093004-1.jpg"
