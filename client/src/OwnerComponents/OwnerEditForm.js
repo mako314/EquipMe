@@ -30,7 +30,6 @@ function OwnerEditForm(){
         initialValues: {
             firstName: currentUser.firstName,
             lastName: currentUser.lastName,
-            // location: currentUser.location,
             password: '',
             country: currentUser.country,
             state: currentUser.state,
@@ -88,7 +87,8 @@ function OwnerEditForm(){
                     {/* display errors from formik/yup */}
                     {formik.errors && Object.entries(formik.errors).map(([field, error]) => <p key={field + error}>{error}</p>)}
                     {/* display errors from backend */}
-                    {error && <p>{error}</p>}
+                    {error && <p>{error.message ? error.message : 'An error occurred'}</p>}
+
                     </div>
 
                 {/* Avatar Section */}

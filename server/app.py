@@ -254,8 +254,8 @@ class UserByID(Resource):
             try:
                 data = request.get_json()
                 for key in data:
-                    if key == 'password':
-                        user.password_hash = data['password']
+                    if key == 'password' and data['password']:
+                            user.password_hash = data['password']
                     if key == 'date_of_birth':
                         birth_date_str = data['date_of_birth']
                         birth_date = datetime.strptime(birth_date_str, '%Y-%m-%d').date()
@@ -267,8 +267,11 @@ class UserByID(Resource):
 
                 response = make_response(user.to_dict(), 202)
                 return response
-            except ValueError:
-                return make_response({"error": ["validations errors, check your input and try again"]} , 400)
+            except ValueError as ve:
+                # Log the error message and the data causing the error
+                print(f"ValueError occurred: {ve}")
+                print(f"Data received: {data}")
+                return make_response({"error": ["Validation errors, check your input and try again", str(ve)]}, 400)
 
         else:
             response = make_response({
@@ -483,7 +486,7 @@ class EquipmentOwnerById(Resource):
             try:
                 data = request.get_json()
                 for key in data:
-                    if key == 'password':
+                    if key == 'password' and data['password']:
                         equip_owner.password_hash = data['password']
                     if key == 'date_of_birth':
                         birth_date_str = data['date_of_birth']
