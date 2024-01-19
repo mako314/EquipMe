@@ -2084,6 +2084,34 @@ class AddToInboxes(Resource):
 
 api.add_resource(AddToInboxes, "/new/inboxes")
 
+class UserInboxByUserId(Resource):
+    def get(self, user_id):
+        user_inboxes = UserInbox.query.filter(UserInbox.user_id == user_id).all()
+        if user_inboxes:
+            user_inboxes_dict = [user_inbox.to_dict() for user_inbox in user_inboxes]
+            return make_response(user_inboxes_dict,200)
+        else:
+            response = make_response({
+            "error": "Item not found"
+            }, 404)
+            return response
+
+api.add_resource(UserInboxByUserId, "/thread/user/<int:user_id>")
+
+class OwnerInboxByUserId(Resource):
+    def get(self, owner_id):
+        owner_inboxes = OwnerInbox.query.filter(OwnerInbox.owner_id == owner_id).all()
+        if owner_inboxes:
+            owner_inboxes_dict = [owner_inbox.to_dict() for owner_inbox in owner_inboxes]
+            return make_response(owner_inboxes_dict,200)
+        else:
+            response = make_response({
+            "error": "Item not found"
+            }, 404)
+            return response
+
+api.add_resource(OwnerInboxByUserId, "/thread/owner/<int:owner_id>")
+
 
 class ThreadById(Resource):
     def get(self, thread_id):

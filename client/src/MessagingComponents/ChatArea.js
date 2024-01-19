@@ -3,17 +3,24 @@ import MessageInput from './MessageInput'
 import { UserSessionContext } from '../UserComponents/SessionContext'
 import LoadingPage from '../ExtraPageComponents/LoadingPage'
 
-function ChatArea({inboxes, SelectedThreadID, setNewMessage, newMessage, setInboxes, recipientInfo, isLoading }){
+function ChatArea({inboxes, selectedThreadID, setNewMessage, newMessage, setInboxes, recipientInfo, isLoading }){
 
 // ---------------Detect whether or not an OWNER is logged in-------------------
   const { currentUser, role } = UserSessionContext()
 
   // Selects the thread to display , I may incorporate a place holder in place of it being empty at the mounting of the application
-  const selectedThread = inboxes?.find(inbox => inbox.id === SelectedThreadID);
+  const selectedThread = inboxes?.find(inbox => inbox.id === selectedThreadID);
   // selectedThread?.thread?.messages?.map((message) => (console.log("the message details:",message)))
     return (
         <div className="flex-grow p-4">
           {isLoading && <LoadingPage loadDetails={"Your Chat"}/>}
+          {inboxes.length === 0 && (
+            <div className="text-center p-10 mt-5 bg-white rounded-lg shadow-md">
+              <h2 className="text-2xl font-semibold text-gray-800">Your Inbox is Empty</h2>
+              <p className="text-gray-600 mt-2">Looks like you don't have any messages yet.</p>
+              <p className="text-gray-600">Feel free to explore and connect with others!</p>
+            </div>
+          )}
           <div className="bg-white rounded-lg shadow-md p-4 relative">
             <ul>
               {/* If selectedThread is available, map over its messages */}
@@ -49,7 +56,7 @@ function ChatArea({inboxes, SelectedThreadID, setNewMessage, newMessage, setInbo
           </div>
           <MessageInput
           inboxes={inboxes} 
-          SelectedThreadID={SelectedThreadID}
+          selectedThreadID={selectedThreadID}
           setNewMessage={setNewMessage}
           newMessage={newMessage}
           setInboxes={setInboxes}

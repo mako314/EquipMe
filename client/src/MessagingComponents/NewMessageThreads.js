@@ -9,7 +9,7 @@ function NewMessageThreads({fromOwnerDash, setFromOwnerDash}) {
 // ---------------Detect whether or not an OWNER is logged in-------------------
   // Take state from inbox and declare here so it is usable in whole messaging app
   const [inboxes, setInboxes] = useState([])
-  const [SelectedThreadID, setSelectedThreadID] = useState(null)
+  const [selectedThreadID, setSelectedThreadID] = useState(null)
   const [newMessage, setNewMessage] = useState('') // State for the new message input
   const [recipientInfo, setRecipientInfo] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -27,7 +27,7 @@ function NewMessageThreads({fromOwnerDash, setFromOwnerDash}) {
       <Inbox 
       setInboxes={setInboxes} 
       inboxes={inboxes} 
-      SelectedThreadID={SelectedThreadID}
+      selectedThreadID={selectedThreadID}
       setSelectedThreadID={setSelectedThreadID}
       newMessage={newMessage}
       setRecipientInfo={setRecipientInfo}
@@ -35,12 +35,13 @@ function NewMessageThreads({fromOwnerDash, setFromOwnerDash}) {
       fromOwnerDash={fromOwnerDash}
       setFromOwnerDash={setFromOwnerDash}
       setIsLoading={setIsLoading}
+      isLoading={isLoading}
       />
 
       {/* Message Area */}
       <ChatArea
       inboxes={inboxes} 
-      SelectedThreadID={SelectedThreadID}
+      selectedThreadID={selectedThreadID}
       setNewMessage={setNewMessage}
       newMessage={newMessage}
       setInboxes={setInboxes}
