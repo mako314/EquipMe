@@ -154,6 +154,8 @@ function Inbox({inboxes, setInboxes, selectedThreadID, setSelectedThreadID, setR
           const updatedInboxes = inboxes.filter(item => item.id !== deletingThreadId)
           setInboxes(updatedInboxes)
           fetchAndUpdateInboxes()
+          const firstInbox = updatedInboxes[0]
+          setSelectedThreadID(firstInbox.id)
           // setInboxes
 
         } else {
@@ -180,14 +182,14 @@ function Inbox({inboxes, setInboxes, selectedThreadID, setSelectedThreadID, setR
       setDeletingThreadId(threadId)
     }
 
-    // Update the inboxes with a server call
+    // Update the inboxes with a server call, simiar to what I did with the cart items, I just update the inboxes to be the updated ones.
     const fetchAndUpdateInboxes = async () => {
       let fetchUrl = role === 'owner' ? `/thread/owner/` : `/thread/user/`
       const url = `${apiUrl}/${fetchUrl}${currentUser.id}`
       console.log("Constructed URL for fetch:", url)
       // console.log("I RAN")
       try {
-        const response = await fetch(url);
+        const response = await fetch(url)
         if (response.ok) {
           const updatedInboxes = await response.json()
           console.log("THE UPDATED INBOXES:", updatedInboxes)
