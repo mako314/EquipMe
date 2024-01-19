@@ -2666,6 +2666,7 @@ class WebHookForStripeSuccess(Resource):
                     if equipment.status[0].reserved_quantity < cart_item.quantity:
                         raise ValueError("Not enough equipment available to fulfill this rental.")
                     
+                    # check this again make sure it's working
                     equipment.status[0].reserved_quantity -= cart_item.quantity
                     equipment.status[0].rented_quantity += cart_item.quantity
                     db.session.commit()

@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState} from 'react'
 import { UserSessionContext } from '../UserComponents/SessionContext'
 import Inbox from './Inbox'
 import ChatArea from './ChatArea'
+import LoadingPage from '../ExtraPageComponents/LoadingPage';
 
 function NewMessageThreads({fromOwnerDash, setFromOwnerDash}) {
 
@@ -11,7 +12,14 @@ function NewMessageThreads({fromOwnerDash, setFromOwnerDash}) {
   const [SelectedThreadID, setSelectedThreadID] = useState(null)
   const [newMessage, setNewMessage] = useState('') // State for the new message input
   const [recipientInfo, setRecipientInfo] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
   const { currentUser, role } = UserSessionContext()
+
+  console.log("LOADING:", isLoading)
+
+  // if(isLoading){
+  //   return <LoadingPage/>
+  // }
 
   return (
     <div className="flex bg-gray-100 min-h-screen">
@@ -26,6 +34,7 @@ function NewMessageThreads({fromOwnerDash, setFromOwnerDash}) {
       recipientInfo={recipientInfo}
       fromOwnerDash={fromOwnerDash}
       setFromOwnerDash={setFromOwnerDash}
+      setIsLoading={setIsLoading}
       />
 
       {/* Message Area */}
@@ -36,6 +45,7 @@ function NewMessageThreads({fromOwnerDash, setFromOwnerDash}) {
       newMessage={newMessage}
       setInboxes={setInboxes}
       recipientInfo={recipientInfo}
+      isLoading={isLoading}
       />
 
     </div>

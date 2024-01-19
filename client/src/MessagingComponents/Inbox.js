@@ -4,10 +4,13 @@ import {useNavigate} from 'react-router-dom';
 import { UserSessionContext } from '../UserComponents/SessionContext';
 
 
-function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRecipientInfo, fromOwnerDash, setFromOwnerDash }){
+function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRecipientInfo, fromOwnerDash, setFromOwnerDash, setIsLoading}){
 
 // ---------------Detect whether or not an OWNER is logged in-------------------
-  const { currentUser, role } = UserSessionContext() 
+  const { currentUser, role } = UserSessionContext()
+
+  console.log(setIsLoading)
+
   const apiUrl = useContext(ApiUrlContext)
 
   // const [ownerInboxes, setOwnerInboxes] = useState([])
@@ -17,9 +20,10 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
   // console.log("You an owner?",owner)
   // console.log(user)
 
-  console.log(currentUser?.user_inboxes)
-  console.log(currentUser?.owner_inboxes)
-  console.log(fromOwnerDash)
+  // console.log(currentUser?.user_inboxes)
+  // console.log(currentUser?.owner_inboxes)
+  // console.log(fromOwnerDash)
+
 
 
 // --------------------------------------------------------------------
@@ -27,15 +31,15 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
     useEffect(() => {
       if (role === 'user' && currentUser?.user_inboxes) {
         setInboxes(currentUser?.user_inboxes)
-        console.log("CHECKING THREAD IDS:", currentUser?.user_inboxes)
-        setSelectedThreadID(1)
+        // console.log("CHECKING THREAD IDS:", currentUser?.user_inboxes)
+        // setSelectedThreadID(1)
         // console.log("User Inboxes:", user_inboxes)
     }
 
       if (role === 'owner' && currentUser?.owner_inboxes) {
        setInboxes(currentUser?.owner_inboxes)
-       console.log("CHECKING THREAD IDS:", currentUser?.owner_inboxes)
-       setSelectedThreadID(1)
+      //  console.log("CHECKING THREAD IDS:", currentUser?.owner_inboxes)
+      //  setSelectedThreadID(1)
         // console.log("Owner Inboxes:", owner_inboxes)
     }
   }, [currentUser, fromOwnerDash])
@@ -53,7 +57,7 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
 // }, [owner, user])
 
 
-    console.log("Inboxes in State:", inboxes)
+    // console.log("Inboxes in State:", inboxes)
 
     //This handles simple thread selection, basically taking the threads we have mapped out on the left sidebar and taking the ID to select the thread.
     const handleThreadSelect = (threadID) => {
@@ -71,9 +75,11 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
         if (response.ok) {
           const data = await response.json()
           setRecipientInfo(data)
+          setIsLoading(false)
         }
       } catch (error) {
         console.error('Error fetching recipient data:', error)
+        setIsLoading(false)
       }
     }
 
@@ -84,6 +90,50 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
   }
 
   // const inboxSource = user || owner
+
+  // Go through inboxes, set selected thread ID to the first one. Afterwards, find the first message in that thread. Compare the message.user_type to user and owner depending on the role that is currently signed in.
+  // If it's a role of user signed in, test and see if it's a user. if It's a user_type of user, that means the first message
+  useEffect(() => {
+    if (inboxes && inboxes.length > 0) {
+        const firstInbox = inboxes[0]
+        setSelectedThreadID(firstInbox.id)
+
+        const firstMessage = firstInbox.thread.messages[0]
+        let recipientType
+        let recipientID
+
+        if (role === 'user') {
+          // If a user is logged in
+          if (firstMessage.user_type === "user") {
+              // If the first message was sent by a user
+              recipientType = "owner"
+              recipientID = firstMessage.recipient_id
+          } else {
+              // If the first message was sent by an owner
+              recipientType = "owner"
+              recipientID = firstMessage.sender_id
+          }
+          // else if (owner)
+      } else if (role === 'owner') {
+          // If an owner is logged in
+          if (firstMessage.user_type === "owner") {
+              // If the first message was sent by an owner
+              recipientType = "user"
+              recipientID = firstMessage.recipient_id
+          } else {
+              // If the first message was sent by a user
+              recipientType = "user"
+              recipientID = firstMessage.sender_id
+          }
+      }
+
+        fetchRecipientData(recipientID, recipientType)
+    }
+    // setIsLoading(false)
+}, [inboxes, role])
+
+
+
     
 
     return(
@@ -133,9 +183,9 @@ function Inbox({inboxes, setInboxes,SelectedThreadID, setSelectedThreadID, setRe
                     }
                 }
                 
-                console.log("Recipient Type:", recipientType);
-                console.log("Recipient ID:", recipientID);
-                fetchRecipientData(recipientID, recipientType);
+                console.log("Recipient Type:", recipientType)
+                console.log("Recipient ID:", recipientID)
+                fetchRecipientData(recipientID, recipientType)
             }}
             >
                 {inbox?.thread?.subject}
