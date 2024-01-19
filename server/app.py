@@ -2125,11 +2125,19 @@ class ThreadById(Resource):
             }, 404)
             return response
         
-    def delete(self, thread_id):
+    def delete(self, thread_id, role):
         thread = Thread.query.filter(Thread.id == thread_id).first()
+        owner_inbox = OwnerInbox.query.filter(OwnerInbox.thread_id == thread_id).first()
+        user_inbox = UserInbox.query.filter(UserInbox.thread_id == thread_id).first()
+        print("THE ROLE:", role)
 
-        if thread:
-            db.session.delete(thread)
+        if role:
+            if role == 'user':
+                # db.session.delete(thread)
+                db.session.delete(user_inbox)
+            if role == 'owner':
+                # db.session.delete(thread)
+                db.session.delete(owner_inbox)
             db.session.commit()
             response = make_response({"message":"Succesfully deleted!"}, 204)
             return response
@@ -2139,7 +2147,7 @@ class ThreadById(Resource):
             }, 404)
             return response
 
-api.add_resource(ThreadById, "/thread/<int:thread_id>")
+api.add_resource(ThreadById, "/thread/<int:thread_id>/<string:role>")
 
 class MessageByID(Resource):
     def get(self, id):

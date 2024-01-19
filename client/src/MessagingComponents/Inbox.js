@@ -14,6 +14,7 @@ function Inbox({inboxes, setInboxes, selectedThreadID, setSelectedThreadID, setR
 
   const apiUrl = useContext(ApiUrlContext)
   const [toggleDelete, setToggleDelete] = useState(false)
+  const [deletingThreadId, setDeletingThreadId] = useState(null)
 
   console.log("THE INBOXES:", inboxes)
   // const [ownerInboxes, setOwnerInboxes] = useState([])
@@ -135,21 +136,22 @@ function Inbox({inboxes, setInboxes, selectedThreadID, setSelectedThreadID, setR
 
         fetchRecipientData(recipientID, recipientType)
     }
+    setIsLoading(false)
 
 }, [inboxes, role])
 
 
     // Delete a thread 
-    const handleThreadDelete = async (threadID) => {
-      console.log("INCOMING THREAD ID:", threadID)
+    const handleThreadDelete = async () => {
+      console.log("INCOMING THREAD ID:", deletingThreadId)
       try {
-        const response = await fetch(`${apiUrl}thread/${threadID}`, {
+        const response = await fetch(`${apiUrl}thread/${deletingThreadId}/${role}`, {
           method: 'DELETE',
         })
         
         if (response.ok) {
           // Filter out the deleted item
-          const updatedInboxes = inboxes.filter(item => item.id !== threadID)
+          const updatedInboxes = inboxes.filter(item => item.id !== deletingThreadId)
           setInboxes(updatedInboxes)
           fetchAndUpdateInboxes()
           // setInboxes
@@ -173,18 +175,22 @@ function Inbox({inboxes, setInboxes, selectedThreadID, setSelectedThreadID, setR
 
 
     // Just a toggle for the delete
-    const handleToggleDelete = () => {
+    const handleToggleDelete = (threadId) => {
       setToggleDelete(!toggleDelete)
+      setDeletingThreadId(threadId)
     }
 
-
+    // Update the inboxes with a server call
     const fetchAndUpdateInboxes = async () => {
       let fetchUrl = role === 'owner' ? `/thread/owner/` : `/thread/user/`
-      console.log("I RAN")
+      const url = `${apiUrl}/${fetchUrl}${currentUser.id}`
+      console.log("Constructed URL for fetch:", url)
+      // console.log("I RAN")
       try {
-        const response = await fetch(`${apiUrl}/${fetchUrl}${currentUser.id}`);
+        const response = await fetch(url);
         if (response.ok) {
           const updatedInboxes = await response.json()
+          console.log("THE UPDATED INBOXES:", updatedInboxes)
           if (role === 'owner'){
           setCurrentUser(prevUser => ({
             ...prevUser,
@@ -217,7 +223,17 @@ function Inbox({inboxes, setInboxes, selectedThreadID, setSelectedThreadID, setR
       }
     }
 
-    console.log("THE SELECTED THREAD ID:", selectedThreadID)
+    // console.log("THE THREAD ID TO DELETE:", deletingThreadId)
+
+
+  // const handleThreadDeleteId = (threadId) => {
+  //     setDeletingThreadId(threadId)
+  // }
+
+  const handleCancelDelete = () => {
+    setDeletingThreadId(null)
+    setToggleDelete(!toggleDelete)
+  }
 
     
 
@@ -246,7 +262,7 @@ function Inbox({inboxes, setInboxes, selectedThreadID, setSelectedThreadID, setR
               }`}
               onClick={() => {
                 // If anything breaks, I used to have this as just inbox.id, but the threads are separate from inboxes.
-                handleThreadSelect(inbox.thread.id)
+                handleThreadSelect(inbox.thread_id)
                 const firstMessage = inbox.thread.messages[0]
                 
                 let recipientType
@@ -277,9 +293,10 @@ function Inbox({inboxes, setInboxes, selectedThreadID, setSelectedThreadID, setR
                     }
                 }
                 
-                console.log("Recipient Type:", recipientType)
-                console.log("Recipient ID:", recipientID)
+                // console.log("Recipient Type:", recipientType)
+                // console.log("Recipient ID:", recipientID)
                 fetchRecipientData(recipientID, recipientType)
+                console.log("THE DARN INBOX THREAD ID:", inbox.thread_id)
                 
             }}
             >
@@ -287,29 +304,33 @@ function Inbox({inboxes, setInboxes, selectedThreadID, setSelectedThreadID, setR
             </li>
             <button
                     onClick={() => {
-                      console.log("THE THREAD ID:", inbox.thread.id)
-                      handleToggleDelete()}}
+                      // console.log("THE THREAD ID:", inbox.thread_id)
+                      handleToggleDelete(inbox.thread_id)}}
                     className="ml-4" // Add your styling here
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
                     </svg>
 
-                  </button>
+            </button>
 
-                {toggleDelete && (
-                <div className="fixed inset-0 bg-gray-600 bg-opacity-50 z-40 overflow-y-auto h-full w-full" onClick={() => setToggleDelete(false)}>
+                {toggleDelete && inbox.thread_id && (
+                <div className="fixed inset-0 bg-gray-600 bg-opacity-25 z-40 overflow-y-auto h-full w-full" onClick={() => setToggleDelete(false)}>
                   <div className="relative top-20 mx-auto p-5 border w-1/3 shadow-lg rounded-md bg-white text-center">
                     <h3 className="text-lg font-medium leading-6 text-gray-900">Are you sure you want to delete this item?</h3>
                     <div className="mt-2 flex justify-center">
                       <button
-                        onClick={() => handleThreadDelete(inbox?.thread?.id)}
+                        onClick={() => {
+                          // console.log("WHAT IS THIS THREAD ID:", inbox?.thread_id)
+                          handleThreadDelete(inbox?.thread_id)}}
                         className="mr-2 rounded bg-red-500 py-2 px-4 text-white hover:bg-red-600"
                       >
                         Yes, Delete This Thread.
                       </button>
                       <button
-                        onClick={handleToggleDelete}
+                        onClick={() => {
+                          // console.log("WHAT IS THIS THREAD ID WHEN CANCELLING:", inbox?.thread_id)
+                          handleCancelDelete()}}
                         className="rounded bg-gray-500 py-2 px-4 text-white hover:bg-gray-600"
                       >
                         Cancel
