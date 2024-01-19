@@ -1952,6 +1952,29 @@ class CartItemById(Resource):
 
         if cart_item:
             print(cart_item.agreements[0].agreement_status)
+            print(cart_item.equipment.make)
+            print(cart_item.equipment.model)
+            print(cart_item.equipment.id)
+
+
+            # last_state = EquipmentStateHistory.query.filter_by(
+            # equipment_id=equipment.id
+            # ).order_by(EquipmentStateHistory.changed_at.desc()).first()
+            
+            # new_state_history = EquipmentStateHistory(
+            #         equipment_id = equipment.id,
+            #         total_quantity = last_state.total_quantity,
+            #         available_quantity = last_state.available_quantity,
+            #         reserved_quantity = last_state.reserved_quantity - cart_item.quantity,
+            #         rented_quantity = last_state.rented_quantity + cart_item.quantity,
+            #         maintenance_quantity = last_state.maintenance_quantity,
+            #         transit_quantity = last_state.transit_quantity,
+            #         damaged_quantity = last_state.damaged_quantity,
+            #         previous_state = last_state.new_state,
+            #         new_state = f'{user.firstName} {user.lastName} has rented {cart_item.quantity} {equipment.make} {equipment.model}' ,
+            #         changed_at=datetime.utcnow(),
+            #     )
+            
             db.session.delete(cart_item)
             db.session.commit()
             response = make_response({"message":"Succesfully deleted!"}, 204)

@@ -13,7 +13,7 @@ import Page404 from "../ExtraPageComponents/Page404";
 
 function Cart(){
 
-  const { currentUser, role} = UserSessionContext() 
+  const { currentUser, role, setCurrentUser} = UserSessionContext() 
   const apiUrl = useContext(ApiUrlContext)
   const [currentCart, setCurrentCart] = useState(0)
   const [cartData, setCartData] = useState([])
@@ -30,8 +30,6 @@ function Cart(){
   const [isLoading, setIsLoading] = useState(true)
 
   const [toggleDelete, setToggleDelete] = useState(false)
-  
-  // const [itemsDeleted, setItemsDeleted] = useState(0)
 
   const navigate = useNavigate()
 
@@ -50,9 +48,9 @@ function Cart(){
   // console.log("THE CURRENT CART TOTAL BACKEND:", cartData[currentCart]?.total)
   // console.log(Array.isArray(individualTotal))
 
-  console.log("THE CART TESTING:", cartData[currentCart])
-  console.log("THE CART DATA:", cartData)
-  console.log("THE CURRENT CART VALUE:", currentCart)
+  // console.log("THE CART TESTING:", cartData[currentCart])
+  // console.log("THE CART DATA:", cartData)
+  // console.log("THE CURRENT CART VALUE:", currentCart)
 
   useEffect(() => {
 
@@ -64,7 +62,7 @@ function Cart(){
   // Filter items belonging to the current cart, filter any time need something for x, so I'm trying to only track totals for this specific cart, filter by cart ID.
   const itemsInCurrentCartBothAgreed = individualTotal.filter(item => item.cart_id === cartData[currentCart].id && item.agreement_status === 'both-accepted')
 
-  console.log("NUMBER I'D TRY TO USE FOR CART STANDING TOTAL AVAILABLE TO CHECKOUT?", itemsInCurrentCartBothAgreed.length)
+  // console.log("NUMBER I'D TRY TO USE FOR CART STANDING TOTAL AVAILABLE TO CHECKOUT?", itemsInCurrentCartBothAgreed.length)
 
   // if(itemsInCurrentCartBothAgreed.length > 0){
   //   setAvailableToCheckoutNumb(itemsInCurrentCartBothAgreed.length)
@@ -103,8 +101,6 @@ setCurrentCartTotal(allTotalCarts)
 setAvailableToCheckOutTotal(itemsBothPartiesAgreedOn)
 // console.log("THE CURRENT TOTAL FOR CART", cartData[currentCart]?.cart_name, ":", currentTotal)
 
-// Items deleted is counted (incremented) in cartItem and will hopefully re-calculate the total
-// itemsDeleted
 }, [cartData, individualTotal])
 
 // Math to check for the total amounts both backend and front end
@@ -139,7 +135,7 @@ useEffect(() => {
       })
       
     }
-  }, [currentUser])
+  }, [currentUser, currentCart])
 
   //If a user has no items in cart or no cart created display this instead
   if (!cartData || cartData?.length === 0) {
@@ -255,7 +251,7 @@ useEffect(() => {
       }
     })
 
-    console.log("ITEMS THAT HAVE BEEN CHECKBOXED:", itemsReadyForCheckout)
+    // console.log("ITEMS THAT HAVE BEEN CHECKBOXED:", itemsReadyForCheckout)
     // Or I can likely use this : o, but this is just checkboxed, so I'd need something to determine it previously (cart amount ready to checkout )
     // console.log("THE USER ID:", currentUser.id)
     // console.log("THE CART ID", currentCart)
@@ -327,6 +323,63 @@ const handleDeleteCart = async (cartId) => {
     }
   } catch (error) {
     // Handle fetch errors
+  }
+}
+
+const onItemDeleted = (deletedItemId) => {
+  const updatedCartItems = filteredCartItems.filter(item => item.id !== deletedItemId)
+  setFilteredCartItems(updatedCartItems)
+
+  // Recalculate total and console log each item
+  const newTotal = updatedCartItems.reduce((total, item) => {
+    console.log(item) // Log each item
+
+    // Determine the price to use (if changed or at addition)
+    const itemPrice = (item.price_cents_if_changed != null) ? item.price_cents_if_changed : item.price_cents_at_addition
+
+    // Calculate item total considering quantity and rental length
+    const itemTotal = itemPrice * item.quantity * item.rental_length
+
+    return total + itemTotal 
+  }, 0)
+
+  console.log(newTotal)
+
+  // Convert total to a more readable format
+  const newTotalInDollars = newTotal / 100
+  console.log("New Total:", newTotalInDollars)
+
+  setCurrentCartTotal(newTotalInDollars)
+  fetchAndUpdateCartData()
+  
+}
+
+
+const fetchAndUpdateCartData = async () => {
+  try {
+    const response = await fetch(`${apiUrl}/user/${currentUser.id}/cart/`);
+    if (response.ok) {
+      const updatedCartData = await response.json()
+      setCurrentUser(prevUser => ({
+        ...prevUser,
+        cart: updatedCartData
+      }))
+    } else {
+      const errorData = await response.json();
+      console.error("An error occurred:", errorData.message)
+      toast.error(`Error: ${errorData.message}`,
+      {
+        "autoClose" : 2000
+      })
+    }
+  } catch (error) {
+    // Handle network/JS errors
+    console.error("A network or JavaScript error occurred:", error.message);
+    // Optionally, display a notification to the user
+    toast.error(`Network/JavaScript Error: ${error.message}`,
+    {
+      "autoClose" : 2000
+    })
   }
 }
 
@@ -526,7 +579,7 @@ const handleDeleteCart = async (cartId) => {
               handleItemCheck={handleItemCheck}
               setFilteredCartItems={setFilteredCartItems}
               filteredCartItems={filteredCartItems}
-              // setItemsDeleted={setItemsDeleted}
+              onItemDeleted={onItemDeleted}
             />
           )
         })

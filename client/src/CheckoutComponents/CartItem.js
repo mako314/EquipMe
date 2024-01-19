@@ -3,7 +3,7 @@ import ApiUrlContext from '../Api'
 import { UserSessionContext } from "../UserComponents/SessionContext";
 import {toast} from 'react-toastify'
 
-function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate, cartItemRentalLength, cartItemQuantity, setIndividualTotal, hourlyRate, dailyRate, weeklyRate, promoRate, cartItemId, cartId, agreementStatus, costChange, handleItemCheck, proceedToCheckout, setFilteredCartItems, filteredCartItems, wholeItem}){
+function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate, cartItemRentalLength, cartItemQuantity, setIndividualTotal, hourlyRate, dailyRate, weeklyRate, promoRate, cartItemId, cartId, agreementStatus, costChange, handleItemCheck, proceedToCheckout, setFilteredCartItems, filteredCartItems, onItemDeleted}){
 
   // console.log("LOOKING FOR THE AGREEMENT STATUS:", agreementStatus)
   const apiUrl = useContext(ApiUrlContext)
@@ -19,9 +19,8 @@ function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate
   const [equipmentQuantity, setEquipmentQuantity] = useState(cartItemQuantity)
 
   const [toggleDelete, setToggleDelete] = useState(false)
-  const [itemsDeleted, setItemsDeleted] = useState(0)
 
-  console.log("The whole item:", wholeItem)
+  // console.log("The whole item:", wholeItem)
   
   
   // console.log("THE WHOLE ITEM ",cartId)
@@ -124,7 +123,7 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
     // agreement_status: agreementStatus,
   }
 
-  console.log("THE DATA TO SEND:", dataToSend)
+  // console.log("THE DATA TO SEND:", dataToSend)
 
   try {
     const response = await fetch(`${apiUrl}cart/${cartId}/item/${cartItemId}`, {
@@ -229,7 +228,7 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
 
     console.log("I'VE RAN INSIDE THE USE EFFECT")
 
-  }, [itemsDeleted])
+  }, [])
 
   // console.log('THE RATE:',selectedRate)
   // Handles the rate change, The below holds the actual time (daily, hourly, weekly, etc)
@@ -397,20 +396,26 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
         const response = await fetch(`${apiUrl}cart/item/${cartItemId}`, {
           method: 'DELETE',
         })
-    
+        
         if (response.ok) {
           // Filter out the deleted item
           const updatedCartItems = filteredCartItems.filter(item => item.id !== cartItemId)
           setFilteredCartItems(updatedCartItems)
-          console.log("USE EFFECT -- ITEMS DELETED INSIDE THE DELETE", itemsDeleted)
-          // Reflect that an item was deleted, increment a counter that gets activated with a useEffect in cart to reflect new totals:
-          setItemsDeleted(prevCount => prevCount + 1)
+          onItemDeleted(cartItemId)
+
         } else {
           console.log("Error in deleting the cart item")
-          // Handle any errors
+          toast.error(`Error in deleting the cart item`,
+          {
+            "autoClose" : 2000
+          })
         }
       } catch (error) {
         console.error('Fetch Error:', error)
+        toast.error(`Error in deleting the cart item: ${error}`,
+          {
+            "autoClose" : 2000
+          })
         // Handle fetch errors
       }
     }
@@ -419,8 +424,6 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
     const handleToggleDelete = () => {
       setToggleDelete(!toggleDelete)
     }
-
-    console.log("USE EFFECT -- ITEMS DELETED OUTSIDE THE DELETE", itemsDeleted)
 
 
     return(
