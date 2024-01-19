@@ -310,7 +310,6 @@ const handleDeleteCart = async (cartId) => {
   try {
     const response = await fetch(`${apiUrl}user/${currentUser.id}/cart/${cartData[currentCart].id}`, {
       method: 'DELETE',
-      // ... other settings like headers
     })
 
     if (response.ok) {
@@ -320,7 +319,7 @@ const handleDeleteCart = async (cartId) => {
       setCartData(updatedCarts)
       setToggleDelete(!toggleDelete)
     } else {
-      // Handle errors, for example, show a message to the user
+      console.log("Error in the fetch!")
     }
   } catch (error) {
     // Handle fetch errors
@@ -521,6 +520,8 @@ const handleDeleteCart = async (cartId) => {
               promoRate={promoRateValue}
               proceedToCheckout={cartItemsChecked[item.id]}
               handleItemCheck={handleItemCheck}
+              setFilteredCartItems={setFilteredCartItems}
+              filteredCartItems={filteredCartItems}
             />
           )
         })

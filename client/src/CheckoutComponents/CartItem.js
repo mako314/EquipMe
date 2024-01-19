@@ -3,7 +3,7 @@ import ApiUrlContext from '../Api'
 import { UserSessionContext } from "../UserComponents/SessionContext";
 import {toast} from 'react-toastify'
 
-function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate, cartItemRentalLength, cartItemQuantity, setIndividualTotal, hourlyRate, dailyRate, weeklyRate, promoRate, cartItemId, cartId, agreementStatus, costChange, handleItemCheck, proceedToCheckout}){
+function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate, cartItemRentalLength, cartItemQuantity, setIndividualTotal, hourlyRate, dailyRate, weeklyRate, promoRate, cartItemId, cartId, agreementStatus, costChange, handleItemCheck, proceedToCheckout, setFilteredCartItems, filteredCartItems}){
 
   // console.log("LOOKING FOR THE AGREEMENT STATUS:", agreementStatus)
   const apiUrl = useContext(ApiUrlContext)
@@ -383,6 +383,30 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
         handleItemCheck(cartItemId, isChecked)
       }
     }
+
+
+    // Delete a cart item
+    const handleDeleteCartItem = async (cartItemId) => {
+      try {
+        const response = await fetch(`${apiUrl}cart_item/${cartItemId}`, {
+          method: 'DELETE',
+        })
+    
+        if (response.ok) {
+          // Filter out the deleted item
+          const updatedCartItems = filteredCartItems.filter(item => item.id !== cartItemId);
+          setFilteredCartItems(updatedCartItems)
+        } else {
+          console.log("Error in deleting the cart item")
+          // Handle any errors
+        }
+      } catch (error) {
+        console.error('Fetch Error:', error)
+        // Handle fetch errors
+      }
+    }
+
+
 
     return(
       <div className="space-y-6 overflow-y-auto max-h-96">
