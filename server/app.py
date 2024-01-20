@@ -1181,23 +1181,7 @@ class RentalAgreementsByID(Resource):
             "error": "Rental Agreement not found"
             }, 404)
             return response
-        
-    #delete a single rental agreement
-    def delete(self, id):
-        agreement = RentalAgreement.query.filter(RentalAgreement.id == id).first()
-        print("THE CART ID OF THE AGREEMENT:", agreement.cart_id)
-        if agreement:
-            #may need to delete the renter id and equipment id
-            db.session.delete(agreement)
-            db.session.commit()
-            response = make_response({"message":"Succesfully deleted!"}, 204)
-            return response
-        else:
-            response = make_response({
-            "error": "Rental Agreement not found"
-            }, 404)
-            return response
-        
+         
     #patch a rental agreement
     def patch(self, id):
         agreement = RentalAgreement.query.filter(RentalAgreement.id == id).first()
@@ -1265,6 +1249,74 @@ class RentalAgreementsByID(Resource):
             }, 404)
             return response
 api.add_resource(RentalAgreementsByID, '/rental/agreements/<int:id>')
+
+class RentalAgreementDeleteByID(Resource):
+    #delete a single rental agreement
+    def delete(self, id, role):
+        agreement = RentalAgreement.query.filter(RentalAgreement.id == id).first()
+        cart_item = CartItem.query.filter(CartItem.id == agreement.cart_item_id).first()
+
+        
+        equipment_status = EquipmentStatus.query.filter(EquipmentStatus.equipment_id == cart_item.equipment.id).first()
+
+        print("Reserved Quantity:", equipment_status.reserved_quantity)
+
+        equipment_status.reserved_quantity -= cart_item.quantity
+        equipment_status.available_quantity += cart_item.quantity
+
+        last_state = EquipmentStateHistory.query.filter_by(
+        equipment_id=cart_item.equipment.id
+        ).order_by(EquipmentStateHistory.changed_at.desc()).first()
+
+        # new_state = f'{user.firstName} {user.lastName} has removed {cart_item.quantity} {cart_item.equipment.make} {cart_item.equipment.model} from their cart'
+        
+        if role == 'user':
+            user = User.query.filter(User.id == agreement.user_id).first()
+            new_state_history = EquipmentStateHistory(
+                equipment_id = cart_item.equipment.id,
+                total_quantity = last_state.total_quantity,
+                available_quantity = last_state.available_quantity + cart_item.quantity,
+                reserved_quantity = last_state.reserved_quantity - cart_item.quantity,
+                rented_quantity = last_state.rented_quantity,
+                maintenance_quantity = last_state.maintenance_quantity,
+                transit_quantity = last_state.transit_quantity,
+                damaged_quantity = last_state.damaged_quantity,
+                previous_state = last_state.new_state,
+                new_state = f'{user.firstName} {user.lastName} has removed {cart_item.quantity} {cart_item.equipment.make} {cart_item.equipment.model} from their cart. Since they have deleted the rental agreement' ,
+                changed_at=datetime.utcnow(),
+            )
+        elif role == 'owner':
+            owner = EquipmentOwner.query.filter(EquipmentOwner.id == agreement.owner_id).first()
+            new_state_history = EquipmentStateHistory(
+                equipment_id = cart_item.equipment.id,
+                total_quantity = last_state.total_quantity,
+                available_quantity = last_state.available_quantity + cart_item.quantity,
+                reserved_quantity = last_state.reserved_quantity - cart_item.quantity,
+                rented_quantity = last_state.rented_quantity,
+                maintenance_quantity = last_state.maintenance_quantity,
+                transit_quantity = last_state.transit_quantity,
+                damaged_quantity = last_state.damaged_quantity,
+                previous_state = last_state.new_state,
+                new_state = f' ${role}: {owner.firstName} {owner.lastName} has removed {cart_item.quantity} {cart_item.equipment.make} {cart_item.equipment.model} from their cart. Since they have deleted the rental agreement' ,
+                changed_at=datetime.utcnow(),
+            )
+        
+        print("THE CART ID OF THE AGREEMENT:", agreement.cart_item_id)
+        if agreement:
+            #may need to delete the renter id and equipment id
+            db.session.delete(agreement)
+            db.session.add(new_state_history)
+            db.session.add(equipment_status)
+            db.session.commit()
+            response = make_response({"message":"Succesfully deleted!"}, 204)
+            return response
+        else:
+            response = make_response({
+            "error": "Rental Agreement not found"
+            }, 404)
+            return response
+        
+api.add_resource(RentalAgreementDeleteByID, '/rental/agreements/<int:id>/<string:role>')
 
 #-----------------------------------------------Agreement Comment Routes-----------------------------------------------------------------------------#
 class RentalAgreementComments(Resource):

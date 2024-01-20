@@ -430,7 +430,7 @@ function RentalAgreementDisplay() {
     // Delete a cart item
     const handleDeleteRentalAgreement = async (rentalAgreementId) => {
         try {
-            const response = await fetch(`${apiUrl}rental/agreements/${rentalAgreementId}`, {
+            const response = await fetch(`${apiUrl}rental/agreements/${rentalAgreementId}/${role}`, {
             method: 'DELETE',
             })
             
@@ -438,6 +438,10 @@ function RentalAgreementDisplay() {
             // Filter out the deleted item
             const updatedAgreements = allRentalAgreementsState.filter(agreement => agreement.theAgreement.id !== rentalAgreementId)
             setAllRentalAgreementsState(updatedAgreements)
+            toast.success(`💥 You've succesfully deleted this agreement `,
+            {
+              "autoClose" : 3000
+            })
             } else {
             console.log("Error in deleting the rental agreement")
             toast.error(`Error in deleting the rental agreement`,
