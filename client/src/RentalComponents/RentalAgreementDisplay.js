@@ -6,7 +6,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import ApiUrlContext from "../Api";
 import {toast} from 'react-toastify'
 
-function RentalAgreementDisplay() {
+function RentalAgreementDisplay({fromOwnerDash}) {
     const apiUrl = useContext(ApiUrlContext)
     const { currentUser, role, checkSession} = UserSessionContext()
     
@@ -145,8 +145,8 @@ function RentalAgreementDisplay() {
     // }
 
     // Looping because issue where it causes an infinite loop
+
     useEffect(() => {
-        if (Array.isArray(allRentalAgreementsState)) {
             const selectedAgreementIndex = allRentalAgreementsState.findIndex(agreementObj => 
                 agreementObj.theAgreement.id.toString() === rental_agreement_id
             );
@@ -156,8 +156,7 @@ function RentalAgreementDisplay() {
             if (selectedAgreementIndex !== -1) {
                 setCurrentAgreementIndex(selectedAgreementIndex);
             }
-        }
-    }, [rental_agreement_id])
+    }, [rental_agreement_id, allRentalAgreementsState])
 
     
 
@@ -442,6 +441,8 @@ function RentalAgreementDisplay() {
             {
               "autoClose" : 3000
             })
+            goToNextAgreement()
+            checkSession()
             } else {
             console.log("Error in deleting the rental agreement")
             toast.error(`Error in deleting the rental agreement`,
@@ -584,7 +585,7 @@ function RentalAgreementDisplay() {
 
             </div>
 
-            <div className="flex justify-between"> 
+            <div className="flex justify-end"> 
 
                     <button
                         onClick={handleToggleDelete}
@@ -592,6 +593,7 @@ function RentalAgreementDisplay() {
                     >
                         Delete this Rental Agreement
                     </button>
+
 
                     <button 
                     onClick={handleAgreementEdit}

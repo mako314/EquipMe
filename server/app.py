@@ -596,6 +596,8 @@ class Equipments(Resource):
             else:
                 state_total = total_quantity
 
+            print("Is this bugging:", state_total)
+
             new_equipment_status = EquipmentStatus(
                 equipment_id = new_equipment.id,
                 total_quantity = state_total,
@@ -1865,6 +1867,8 @@ class AddItemToCart(Resource):
             cart.cart_item.append(new_item)
             db.session.add(new_item)
             db.session.commit()
+            new_available_quantity = equipment_status.available_quantity - amount_added_to_cart
+            new_reserved_quantity = equipment_status.reserved_quantity + amount_added_to_cart
             equipment_status.available_quantity -= amount_added_to_cart
             equipment_status.reserved_quantity += amount_added_to_cart
 
@@ -1873,9 +1877,9 @@ class AddItemToCart(Resource):
         new_state_history = EquipmentStateHistory(
             equipment_id = equipment.id,
             total_quantity = equipment_status.total_quantity,
-            available_quantity = equipment_status.available_quantity,
+            available_quantity = new_available_quantity,
             # amount_added_to_cart 
-            reserved_quantity = equipment_status.available_quantity,
+            reserved_quantity = new_reserved_quantity,
             rented_quantity = previous_state_history.rented_quantity,
             maintenance_quantity = previous_state_history.maintenance_quantity,
             transit_quantity = previous_state_history.transit_quantity,
