@@ -106,19 +106,19 @@ class User(db.Model, SerializerMixin):
 
     #VALIDATES HERE
     
-    @validates("email")
-    def validates_email(self, key, email):
-        if len(email) > 0 and "@"  in email:
-            return email
-        else:
-            raise ValueError("Please check that you entered your email correctly")
+    # @validates("email")
+    # def validates_email(self, key, email):
+    #     if len(email) > 0 and "@"  in email:
+    #         return email
+    #     else:
+    #         raise ValueError("Please check that you entered your email correctly")
     
-    @validates("name")
-    def validates_name(self, key, name):
-        if len(name) > 0:
-            return name
-        else:
-            raise ValueError("Please input a name")
+    # @validates("name")
+    # def validates_name(self, key, name):
+    #     if len(name) > 0:
+    #         return name
+    #     else:
+    #         raise ValueError("Please input a name")
 
     # @validates("age")
     # def validates_age(self, key, age):

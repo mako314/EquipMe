@@ -3,7 +3,7 @@ import ApiUrlContext from '../Api'
 import { UserSessionContext } from "../UserComponents/SessionContext";
 import {toast} from 'react-toastify'
 
-function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate, cartItemRentalLength, cartItemQuantity, setIndividualTotal, hourlyRate, dailyRate, weeklyRate, promoRate, cartItemId, cartId, agreementStatus, costChange, handleItemCheck, proceedToCheckout}){
+function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate, cartItemRentalLength, cartItemQuantity, setIndividualTotal, hourlyRate, dailyRate, weeklyRate, promoRate, cartItemId, cartId, agreementStatus, costChange, handleItemCheck, proceedToCheckout, setFilteredCartItems, filteredCartItems, onItemDeleted}){
 
   // console.log("LOOKING FOR THE AGREEMENT STATUS:", agreementStatus)
   const apiUrl = useContext(ApiUrlContext)
@@ -12,12 +12,15 @@ function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate
   // A lot of props and state. Can  likely move in "day options"
   // The below holds the actual time (daily, hourly, weekly, etc)
   const [selectedRate, setSelectedRate] = useState(cartItemRate)
-
   const rateArray = [hourlyRate, dailyRate, weeklyRate, promoRate]
   // This holds the # of days, so not the actual rate of time as expected (meaning, daily, hourly, weekly , etc)
   const [dayRange, setDayRange] = useState('') //Can't set this to cartItemRate because this is hours, days, week. While cartItemRate is hourly, daily, weekly. 
   const [rentalLength, setRentalLength] = useState(cartItemRentalLength)
   const [equipmentQuantity, setEquipmentQuantity] = useState(cartItemQuantity)
+
+  const [toggleDelete, setToggleDelete] = useState(false)
+
+  // console.log("The whole item:", wholeItem)
   
   
   // console.log("THE WHOLE ITEM ",cartId)
@@ -120,7 +123,7 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
     // agreement_status: agreementStatus,
   }
 
-  console.log("THE DATA TO SEND:", dataToSend)
+  // console.log("THE DATA TO SEND:", dataToSend)
 
   try {
     const response = await fetch(`${apiUrl}cart/${cartId}/item/${cartItemId}`, {
@@ -222,6 +225,8 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
         return [...prevTotals, { id: cartItemId, cart_id: cartId,cost: newCostRounded, agreement_status: agreementStatus}]
       }
     })
+
+    console.log("I'VE RAN INSIDE THE USE EFFECT")
 
   }, [])
 
@@ -384,6 +389,43 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
       }
     }
 
+
+    // Delete a cart item
+    const handleDeleteCartItem = async (cartItemId) => {
+      try {
+        const response = await fetch(`${apiUrl}cart/item/${cartItemId}`, {
+          method: 'DELETE',
+        })
+        
+        if (response.ok) {
+          // Filter out the deleted item
+          const updatedCartItems = filteredCartItems.filter(item => item.id !== cartItemId)
+          setFilteredCartItems(updatedCartItems)
+          onItemDeleted(cartItemId)
+
+        } else {
+          console.log("Error in deleting the cart item")
+          toast.error(`Error in deleting the cart item`,
+          {
+            "autoClose" : 2000
+          })
+        }
+      } catch (error) {
+        console.error('Fetch Error:', error)
+        toast.error(`Error in deleting the cart item: ${error}`,
+          {
+            "autoClose" : 2000
+          })
+        // Handle fetch errors
+      }
+    }
+
+    // Toggle for delete button
+    const handleToggleDelete = () => {
+      setToggleDelete(!toggleDelete)
+    }
+
+
     return(
       <div className="space-y-6 overflow-y-auto max-h-96">
 
@@ -402,6 +444,46 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
 
                   {/* Quantity and Price */}
                   <div className="mt-4 flex justify-between sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
+
+                  <div className="flex justify-end">
+                  <button
+                    onClick={handleToggleDelete}
+                    className="ml-4" 
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+
+                  </button>
+
+                  {toggleDelete && (
+                  <div className="fixed inset-0 bg-gray-600 bg-opacity-50 z-40 overflow-y-auto h-full w-full" onClick={() => setToggleDelete(false)}>
+                    <div className="relative top-20 mx-auto p-5 border w-1/3 shadow-lg rounded-md bg-white">
+                      <h3 className="text-lg font-medium leading-6 text-gray-900">Are you sure you want to delete this item?</h3>
+                      <div className="mt-2">
+                        <button
+                          onClick={() => handleDeleteCartItem(cartItemId)}
+                          className="mr-2 rounded bg-red-500 py-2 px-4 text-white hover:bg-red-600"
+                        >
+                          Yes, Remove This Item from My Cart.
+                        </button>
+                        <button
+                          onClick={handleToggleDelete}
+                          className="rounded bg-gray-500 py-2 px-4 text-white hover:bg-gray-600"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                  </div>
+
+
+
+
+
                       <div className="flex items-center justify-end space-x-2">
                           {/* Quantity Adjustment */}
                           <span className='text-black'> Quantity </span>
@@ -475,19 +557,3 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
 }
 
 export default CartItem
-
-
-  // //Concide rate with rental length (dayRange)
-  // const handleRateChange = (e) => {
-  //   const newRate = e.target.value
-  //   setSelectedRate(newRate)
-  //   if (newRate === "hourly"){
-  //     setDayRange("hours")
-  //   } else if (newRate === "daily"){
-  //     setDayRange("days")
-  //   } else if (newRate === "weekly"){
-  //     setDayRange("week")
-  //   } else if (newRate === "promo"){
-  //     setDayRange("promo")
-  //   }
-  // }

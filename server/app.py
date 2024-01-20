@@ -254,8 +254,8 @@ class UserByID(Resource):
             try:
                 data = request.get_json()
                 for key in data:
-                    if key == 'password':
-                        user.password_hash = data['password']
+                    if key == 'password' and data['password']:
+                            user.password_hash = data['password']
                     if key == 'date_of_birth':
                         birth_date_str = data['date_of_birth']
                         birth_date = datetime.strptime(birth_date_str, '%Y-%m-%d').date()
@@ -267,8 +267,11 @@ class UserByID(Resource):
 
                 response = make_response(user.to_dict(), 202)
                 return response
-            except ValueError:
-                return make_response({"error": ["validations errors, check your input and try again"]} , 400)
+            except ValueError as ve:
+                # Log the error message and the data causing the error
+                print(f"ValueError occurred: {ve}")
+                print(f"Data received: {data}")
+                return make_response({"error": ["Validation errors, check your input and try again", str(ve)]}, 400)
 
         else:
             response = make_response({
@@ -483,7 +486,7 @@ class EquipmentOwnerById(Resource):
             try:
                 data = request.get_json()
                 for key in data:
-                    if key == 'password':
+                    if key == 'password' and data['password']:
                         equip_owner.password_hash = data['password']
                     if key == 'date_of_birth':
                         birth_date_str = data['date_of_birth']
@@ -511,6 +514,7 @@ class EquipmentOwnerById(Resource):
         print(equip_owner.id)
         if equip_owner:
             # owner.agreements and owner.equipment do I need to cycle through and delete the agreement relationship also?
+            stripe.Account.delete(equip_owner.stripe_id)
             db.session.delete(equip_owner)
             db.session.commit()
             response = make_response({"message":"Succesfully deleted!"}, 204)
@@ -1947,7 +1951,43 @@ class CartItemById(Resource):
         cart_item = CartItem.query.filter(CartItem.id == cart_item_id).first()
 
         if cart_item:
+            print(cart_item.agreements[0].agreement_status)
+            print(cart_item.equipment.make)
+            print(cart_item.equipment.model)
+            print(cart_item.equipment.id)
+
+            user = User.query.filter(User.id == cart_item.agreements[0].user_id).first()
+
+            equipment_status = EquipmentStatus.query.filter(EquipmentStatus.equipment_id == cart_item.equipment.id).first()
+
+            print("Reserved Quantity:", equipment_status.reserved_quantity)
+
+            equipment_status.reserved_quantity -= cart_item.quantity
+            equipment_status.available_quantity += cart_item.quantity
+
+            last_state = EquipmentStateHistory.query.filter_by(
+            equipment_id=cart_item.equipment.id
+            ).order_by(EquipmentStateHistory.changed_at.desc()).first()
+
+            # new_state = f'{user.firstName} {user.lastName} has removed {cart_item.quantity} {cart_item.equipment.make} {cart_item.equipment.model} from their cart'
+            
+            new_state_history = EquipmentStateHistory(
+                equipment_id = cart_item.equipment.id,
+                total_quantity = last_state.total_quantity,
+                available_quantity = last_state.available_quantity + cart_item.quantity,
+                reserved_quantity = last_state.reserved_quantity - cart_item.quantity,
+                rented_quantity = last_state.rented_quantity,
+                maintenance_quantity = last_state.maintenance_quantity,
+                transit_quantity = last_state.transit_quantity,
+                damaged_quantity = last_state.damaged_quantity,
+                previous_state = last_state.new_state,
+                new_state = f'{user.firstName} {user.lastName} has removed {cart_item.quantity} {cart_item.equipment.make} {cart_item.equipment.model} from their cart' ,
+                changed_at=datetime.utcnow(),
+            )
+
             db.session.delete(cart_item)
+            db.session.add(new_state_history)
+            db.session.add(equipment_status)
             db.session.commit()
             response = make_response({"message":"Succesfully deleted!"}, 204)
             return response
@@ -2011,6 +2051,7 @@ class StartNewThread(Resource):
 
 api.add_resource(StartNewThread, "/new/thread")
 
+
 class AddToInboxes(Resource):
     def post(self):
         data = request.get_json()
@@ -2043,6 +2084,34 @@ class AddToInboxes(Resource):
 
 api.add_resource(AddToInboxes, "/new/inboxes")
 
+class UserInboxByUserId(Resource):
+    def get(self, user_id):
+        user_inboxes = UserInbox.query.filter(UserInbox.user_id == user_id).all()
+        if user_inboxes:
+            user_inboxes_dict = [user_inbox.to_dict() for user_inbox in user_inboxes]
+            return make_response(user_inboxes_dict,200)
+        else:
+            response = make_response({
+            "error": "Item not found"
+            }, 404)
+            return response
+
+api.add_resource(UserInboxByUserId, "/thread/user/<int:user_id>")
+
+class OwnerInboxByUserId(Resource):
+    def get(self, owner_id):
+        owner_inboxes = OwnerInbox.query.filter(OwnerInbox.owner_id == owner_id).all()
+        if owner_inboxes:
+            owner_inboxes_dict = [owner_inbox.to_dict() for owner_inbox in owner_inboxes]
+            return make_response(owner_inboxes_dict,200)
+        else:
+            response = make_response({
+            "error": "Item not found"
+            }, 404)
+            return response
+
+api.add_resource(OwnerInboxByUserId, "/thread/owner/<int:owner_id>")
+
 
 class ThreadById(Resource):
     def get(self, thread_id):
@@ -2055,8 +2124,32 @@ class ThreadById(Resource):
             "error": "Thread not found"
             }, 404)
             return response
+        
+    def delete(self, thread_id, role):
+        thread = Thread.query.filter(Thread.id == thread_id).first()
+        owner_inbox = OwnerInbox.query.filter(OwnerInbox.thread_id == thread_id).first()
+        user_inbox = UserInbox.query.filter(UserInbox.thread_id == thread_id).first()
+        print("THE ROLE:", role)
 
-api.add_resource(ThreadById, "/thread/<int:thread_id>")
+        # I don't even think I need to access the thread since there's a cascade deletes.
+
+        if role:
+            if role == 'user':
+                # db.session.delete(thread)
+                db.session.delete(user_inbox)
+            if role == 'owner':
+                # db.session.delete(thread)
+                db.session.delete(owner_inbox)
+            db.session.commit()
+            response = make_response({"message":"Succesfully deleted!"}, 204)
+            return response
+        else:
+            response = make_response({
+            "error": "Item not found"
+            }, 404)
+            return response
+
+api.add_resource(ThreadById, "/thread/<int:thread_id>/<string:role>")
 
 class MessageByID(Resource):
     def get(self, id):
@@ -2091,7 +2184,6 @@ class MessageByID(Resource):
         message = Message.query.filter(Message.id == id).first()
 
         if message:
-            #may need to delete the renter id and equipment id
             db.session.delete(message)
             db.session.commit()
             response = make_response({"message":"Succesfully deleted!"}, 204)
@@ -2314,46 +2406,6 @@ class StripeCreateAccountLink(Resource):
         return response
         
 api.add_resource(StripeCreateAccountLink, '/v1/account_links')
-
-# class CheckingOut(Resource):
-#     def checkout_equipment(equipment_id, quantity):
-#         # Fetch the most recent state history
-#         last_state = EquipmentStateHistory.query.filter_by(
-#             equipment_id=equipment_id
-#         ).order_by(EquipmentStateHistory.changed_at.desc()).first()
-
-#         # Ensure that the equipment is actually reserved before proceeding
-#         if 'reserved' in last_state.new_state:
-#             raise ValueError("Equipment must be in reserved state to check out.")
-
-#         # Deduct the quantity from the equipment's available stock
-#         equipment = Equipment.query.get(equipment_id)
-#         if equipment.status[0].current_quantity < quantity:
-#             raise ValueError("Not enough equipment available to fulfill this rental.")
-
-#         equipment.status[0].current_quantity -= quantity
-#         equipment.status[0].reserved_quantity += quantity
-#         db.session.add(equipment)
-
-#         # Record the state change
-#         new_state_history = EquipmentStateHistory(
-#             equipment_id = equipment_id,
-#             total_quantity = last_state.new_quantity,
-#             available_quantity = last_state.available_quantity,
-#             reserved_quantity = last_state.reserved_quantity,
-#             rented_quantity = 0,
-#             maintenance_quantity = 0,
-#             transit_quantity = 0,
-#             damaged_quantity = 0,
-#             previous_state = last_state.new_state,
-#             new_state = 'available',
-#             changed_at=datetime.utcnow(),
-#         )
-#         db.session.add(new_state_history)
-
-#         db.session.commit()
-
-# api.add_resource(CheckingOut, '/checkout/<int:equipment_id>/<int:quantity>')
 
 class CheckingOut(Resource):
     def post(self):
@@ -2652,6 +2704,7 @@ class WebHookForStripeSuccess(Resource):
                     if equipment.status[0].reserved_quantity < cart_item.quantity:
                         raise ValueError("Not enough equipment available to fulfill this rental.")
                     
+                    # check this again make sure it's working
                     equipment.status[0].reserved_quantity -= cart_item.quantity
                     equipment.status[0].rented_quantity += cart_item.quantity
                     db.session.commit()

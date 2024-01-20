@@ -11,8 +11,8 @@ function MessageInput({SelectedThreadID, setNewMessage, newMessage, setInboxes, 
   
 // They should have context ids already so input them here
 
-console.log("This is the inbox ALL", inboxes)
-console.log("These are the threads with the thread ID", inboxes[SelectedThreadID])
+// console.log("This is the inbox ALL", inboxes)
+// console.log("These are the threads with the thread ID", inboxes[SelectedThreadID])
 // I need to move context ID to threads, should be simple enough
 // --------------------------------------------------------------------
 
