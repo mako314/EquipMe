@@ -6,7 +6,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import ApiUrlContext from "../Api";
 import {toast} from 'react-toastify'
 
-function RentalAgreementDisplay({setAvailableToCheckoutNumb}) {
+function RentalAgreementDisplay() {
     const apiUrl = useContext(ApiUrlContext)
     const { currentUser, role, checkSession} = UserSessionContext()
     
@@ -17,6 +17,7 @@ function RentalAgreementDisplay({setAvailableToCheckoutNumb}) {
     const [deliveryChoice, setDeliveryChoice] = useState(null)
     const [isDeliveryAddress, setIsDeliveryAddress] = useState(false)
     const [deliveryAddress, setDeliveryAddress] = useState(false)
+    const [toggleDelete, setToggleDelete] = useState(false)
 
     const { rental_agreement_id } = useParams()
     const { calculateReadyToCheckout } = CartAvailProviderContext()
@@ -157,7 +158,7 @@ function RentalAgreementDisplay({setAvailableToCheckoutNumb}) {
     // console.log("currentUser agreements OWNER:", currentUser?.agreements[0])
 
     console.log("TESTING ALLAGREEMENTS CURRENTAGREEMENT INDEX USER AND OWNER:", allAgreements[currentAgreementIndex])
-    console.log("TESTING ALLAGREEMENTS CURRENTAGREEMENT INDEX USER AND OWNER:", allAgreements[currentAgreementIndex])
+    // console.log("TESTING ALLAGREEMENTS CURRENTAGREEMENT INDEX USER AND OWNER:", allAgreements[currentAgreementIndex])
 
     // if (role === 'owner'){
     //     otherUser = allAgreements[currentAgreementIndex]?.user
@@ -167,7 +168,7 @@ function RentalAgreementDisplay({setAvailableToCheckoutNumb}) {
 
     let otherUser = allAgreements[currentAgreementIndex]?.user || allAgreements[currentAgreementIndex]?.owner
 
-    console.log("Other USER:", otherUser)
+    // console.log("Other USER:", otherUser)
 
     //So I decided to make an object be pushed into AllAgreements, that way I'll have access to user information too, and it'll be much cleaner. It's one rental agreement per, so I didn't need to grab the currentAgreementIndex for it. This puts out all the comments
     // const test = allAgreements[currentAgreementIndex]?.theAgreement.comment?.map((item) => console.log("THE ITEMS INSIDE OF THIS", item))
@@ -199,7 +200,7 @@ function RentalAgreementDisplay({setAvailableToCheckoutNumb}) {
             lastName = otherUser?.lastName
         }
 
-        console.log(profileImage)
+        // console.log(profileImage)
     
         return (
             <div key={item.id} className="mb-6 w-full overflow-hidden bg-[#f2f2f7] p-8 rounded-sm border-b border-black">
@@ -221,7 +222,7 @@ function RentalAgreementDisplay({setAvailableToCheckoutNumb}) {
 
     
     console.log("All Agreements:", allAgreements[currentAgreementIndex])
-    console.log("THE SPECIFIC AGREEMENT:", allAgreements[currentAgreementIndex]?.theAgreement)
+    // console.log("THE SPECIFIC AGREEMENT:", allAgreements[currentAgreementIndex]?.theAgreement)
     
     // Handles the editing of the agreement, be it delivery address change, or changing the decision
     const handleAgreementEdit = () => {
@@ -356,6 +357,7 @@ function RentalAgreementDisplay({setAvailableToCheckoutNumb}) {
       }, [allAgreements.length])
 
 
+    // Go to next agreement,
     const goToNextAgreement = () => {
         //go to next agreement
         setCurrentAgreementIndex((prevIndex) =>
@@ -363,36 +365,43 @@ function RentalAgreementDisplay({setAvailableToCheckoutNumb}) {
         )
         resetAgreementForm()
       }
-
+    
+    // Go to previous agreement,
     const goToPreviousAgreement = () => {
         //go to previous agreement
         setCurrentAgreementIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : allAgreements.length - 1))
         resetAgreementForm()
     }
 
+    // Handle a decision change, i.e accept / decline an agreement
     const handleDecisionChange = (e) => {
         // If pickup selected setDelivery to false
         setSelectedDecision(e.target.value)
         // If the checkbox is unchecked, clear the delivery address
     }
     
+    // Handle a change in the delivery
     const handleDeliveryChange = (e) => {
         // IF IsDelivery set to false ( meaning it the checkbox was clicked again you set choice to false)
         setDeliveryChoice(e.target.value === 'true')
     }
 
+    // Handles the actual toggle of the delivery /address
     const handleDeliveryToggle = () => {
         //Toggle delivery field, then set delivery to false if you click it again
         setIsDelivery(!isDelivery)
         // setDeliveryChoice(false)
     }
 
+
+    // Handles toggling the delivery address
     const handleDeliveryAddressToggle = ()  => {
         //Toggle delivery address field, then set delivery address to be blank if you unclick it
         setIsDeliveryAddress(!isDeliveryAddress)
         setDeliveryAddress('')
     }
 
+    // Resets the agreement form
     const resetAgreementForm = () => {
         setIsDelivery(false);
         setIsDeliveryAddress(false);
@@ -407,6 +416,40 @@ function RentalAgreementDisplay({setAvailableToCheckoutNumb}) {
     // console.log(typeof(deliveryChoice))
     // console.log("DELIVERY ADDRESS:",deliveryAddress)
     // console.log("DELIVERY ADDRESS:", typeof(deliveryAddress))
+
+    // Delete a cart item
+    const handleDeleteRentalAgreement = async (rentalAgreementId) => {
+        try {
+            const response = await fetch(`${apiUrl}rental/agreements/${rentalAgreementId}`, {
+            method: 'DELETE',
+            })
+            
+            if (response.ok) {
+            // Filter out the deleted item
+
+            } else {
+            console.log("Error in deleting the rental agreement")
+            toast.error(`Error in deleting the rental agreement`,
+            {
+                "autoClose" : 2000
+            })
+            }
+        } catch (error) {
+            console.error('Fetch Error:', error)
+            toast.error(`Error in deleting the rental agreement: ${error}`,
+            {
+                "autoClose" : 2000
+            })
+            // Handle fetch errors
+        }
+        }
+    
+        // Toggle for delete button
+        const handleToggleDelete = () => {
+        setToggleDelete(!toggleDelete)
+        }
+
+        // console.log("RENTAL AGREEMENT ID:", allAgreements[currentAgreementIndex]?.theAgreement?.id)
     
     return(
         <section>
@@ -526,14 +569,52 @@ function RentalAgreementDisplay({setAvailableToCheckoutNumb}) {
 
             </div>
 
-            <div className="flex justify-end"> 
+            <div className="flex justify-between"> 
+
+                    <button
+                        onClick={handleToggleDelete}
+                        className="bg-red-500 text-white text-sm px-6 py-3 mt-8 rounded-lg shadow transition duration-150 ease-in-out hover:bg-gray-700 focus:outline-none"
+                    >
+                        Delete this Rental Agreement
+                    </button>
+
                     <button 
                     onClick={handleAgreementEdit}
                     className="bg-black text-white text-sm px-6 py-3 mt-8 rounded-lg shadow transition duration-150 ease-in-out hover:bg-gray-700 focus:outline-none">
                     Submit Changes
                     </button>
+
+                    
+
+                  {toggleDelete && (
+                  <div className="fixed inset-0 bg-gray-600 bg-opacity-50 z-40 overflow-y-auto h-full w-full" onClick={() => setToggleDelete(false)}>
+                    <div className="relative top-20 mx-auto p-5 border w-1/3 shadow-lg rounded-md bg-white">
+                      <h3 className="text-lg font-medium leading-6 text-gray-900">Are you sure you want to delete this item?</h3>
+                      <div className="mt-2">
+                        <button
+                          onClick={() => handleDeleteRentalAgreement(allAgreements[currentAgreementIndex]?.theAgreement?.id)}
+                          className="mr-2 rounded bg-red-500 py-2 px-4 text-white hover:bg-red-600"
+                        >
+                          Yes, Remove This Rental Agreement.
+                        </button>
+                        <button
+                          onClick={handleToggleDelete}
+                          className="rounded bg-gray-500 py-2 px-4 text-white hover:bg-gray-600"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+
             </div>
-            </>}
+            
+            </>
+
+            
+            }
 
             </div>
 

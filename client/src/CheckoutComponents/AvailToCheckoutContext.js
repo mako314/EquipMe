@@ -26,7 +26,7 @@ export const CartTotalNumbProvider = ({ children, cartData }) => {
       
         // Sum the quantities of the available items
         const availableQuantities = availableItems.reduce((sum, item) => {
-          console.log("THE ITEM IN THE SECOND REDUCER:", item)
+          // console.log("THE ITEM IN THE SECOND REDUCER:", item)
           return sum + item.quantity;
         }, 0)
       
@@ -34,7 +34,7 @@ export const CartTotalNumbProvider = ({ children, cartData }) => {
         return total + availableQuantities;
       }, 0) // Start the running total at 0
       
-      console.log("Total quantity of items available to checkout across all carts:", totalAvailableToCheckout)
+      // console.log("Total quantity of items available to checkout across all carts:", totalAvailableToCheckout)
       
       // Update the state with the new total
       setAvailableToCheckoutNumb(totalAvailableToCheckout)
