@@ -255,13 +255,13 @@ function UserProfile({fromOwnerDash, setFromOwnerDash}) {
                 </div>
               </div>
 
-              <div class="mx-auto w-full max-w-7xl py-16">
+              <div className="mx-auto w-full max-w-7xl py-16">
                         <div className="flex justify-between">
                                 <span className="text-gray-600 font-bold mb-4">Reviews</span>
                         </div>
-                        <ul class="mb-6 grid gap-5 sm:grid-cols-2 md:grid-cols-2 md:mb-16"> 
+                        <ul className="mb-6 grid gap-5 sm:grid-cols-2 md:grid-cols-2 md:mb-16"> 
                         {ownerReviews?.map((item) => (
-                            <Reviews stars={item.review_stars} comment={item.review_comment} image={item.owner.profileImage} firstName={item.owner.firstName} lastName={item.owner.lastName} profession={item.owner.profession}/>
+                            <Reviews key={item.id} stars={item.review_stars} comment={item.review_comment} image={item.owner.profileImage} firstName={item.owner.firstName} lastName={item.owner.lastName} profession={item.owner.profession} wholeItem={item} reviewId={item.id}/>
                         ))}
                         </ul>
 

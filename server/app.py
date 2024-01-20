@@ -1635,6 +1635,22 @@ class OwnerReviewEditing(Resource):
 api.add_resource(OwnerReviewEditing, '/owner/<int:owner_id>/review/<int:review_id>/')
 
 
+class ReviewDeleting(Resource):
+    def delete(self, review_id, role):
+        selected_review = Review.query.filter_by(reviewer_type = role, id = review_id).first()
+        if selected_review:
+            db.session.delete(selected_review)
+            db.session.commit()
+            response = make_response({"message":"Succesfully deleted!"}, 204)
+            return response
+        else:
+            response = make_response({
+            "error": "Review not found"
+            }, 404)
+            return response
+
+api.add_resource(ReviewDeleting, '/review/<int:review_id>/<string:role>')
+
 #-----------------------------------------------Rental Agreement Classes - CHECKING FOR AVAILABILITY AND SUCH -----------------------------------------------------------------------------
 
 # Will need to make a call to this route I believe, to check whether or not the date and end date will be available for using the equipment. Need to find a way to also match the time. If someone's only renting a piece out for two hours, they have another 10 hours ahead in which the equipment can be rented.

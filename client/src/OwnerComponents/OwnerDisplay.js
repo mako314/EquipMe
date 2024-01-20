@@ -272,7 +272,7 @@ const displayEquipment = featuredEquipment.length > 0 ? featuredEquipment : <div
                         </div>
                             <ul className="mb-6 grid gap-5 sm:grid-cols-2 md:grid-cols-2 md:mb-16"> 
                         {userReviews?.map((item) => (
-                            <Reviews stars={item.review_stars} comment={item.review_comment} image={item.user.profileImage} firstName={item.user.firstName} lastName={item.user.lastName} profession={item.user.profession}/>
+                            <Reviews key={item.id} stars={item.review_stars} comment={item.review_comment} image={item.user.profileImage} firstName={item.user.firstName} lastName={item.user.lastName} profession={item.user.profession} wholeItem={item} reviewId={item.id}/>
                         ))}
                             </ul>
                         </div>

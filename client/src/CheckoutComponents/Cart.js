@@ -60,7 +60,7 @@ function Cart(){
     if(Array.isArray(individualTotal)){
   // Individual total is calculated inside of CartItem.js, values passed in via props below in the return.
   // Filter items belonging to the current cart, filter any time need something for x, so I'm trying to only track totals for this specific cart, filter by cart ID.
-  const itemsInCurrentCartBothAgreed = individualTotal.filter(item => item.cart_id === cartData[currentCart].id && item.agreement_status === 'both-accepted')
+  const itemsInCurrentCartBothAgreed = individualTotal?.filter(item => item?.cart_id === cartData[currentCart]?.id && item?.agreement_status === 'both-accepted')
 
   // console.log("NUMBER I'D TRY TO USE FOR CART STANDING TOTAL AVAILABLE TO CHECKOUT?", itemsInCurrentCartBothAgreed.length)
 
@@ -73,7 +73,7 @@ function Cart(){
   // console.log("ITEMS IN CURRENT CART:", itemsInCurrentCart)
 
   //This just takes into account ALL the items in a users cart, where the items cart ID matches the current carts ID.
-  const itemsInCurrentCartAll = individualTotal.filter(item => item.cart_id === cartData[currentCart].id)
+  const itemsInCurrentCartAll = individualTotal?.filter(item => item?.cart_id === cartData[currentCart]?.id)
   
   // console.log("CURRENT ITEMS IN CART:", itemsInCurrentCartAll)
   // Sum up the costs of these items
@@ -160,21 +160,33 @@ useEffect(() => {
     setCurrentCart(cartIndex)
   }
 
+  // //Needed to move this here to have the state update for a re-render, allows for creating a new cart.
+  // const addCart = (newCart) => {
+  //   const updatedCartData = [...cartData, newCart]
+  //   setCartData(updatedCartData)
+  //   const newCartIndex = updatedCartData.length - 1 // Index of the last element
+  //   console.log("THE NEW CART INDEX:", newCartIndex)
+  //   setCurrentCart(newCartIndex)
+  //   return updatedCartData
+  //   // setCartData((cartData) => [...cartData, newCart])
+  // }
+
+  const addCart = (newCart) => {
+    setCartData(prevCartData => {
+      const updatedCartData = [...prevCartData, newCart]
+      setCurrentCart(updatedCartData.length - 1) // Set currentCart to the index of the new cart
+      return updatedCartData
+    })
+  }
+
+  console.log("THE CURRENT CART INDEX:", currentCart)
+
   //Simple open modal for cart creation
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen)
   }
 
-  //Needed to move this here to have the state update for a re-render, allows for creating a new cart.
-  const addCart = (newCart) => {
-    const updatedCartData = [...cartData, newCart]
-    setCartData(updatedCartData)
-    const newCartIndex = updatedCartData.length - 1 // Index of the last element
-    console.log("THE NEW CART INDEX:", newCartIndex)
-    setCurrentCart(newCartIndex)
-    return updatedCartData
-    // setCartData((cartData) => [...cartData, newCart])
-  }
+
 
   //-------------------------------------
 
@@ -314,10 +326,14 @@ const handleDeleteCart = async (cartId) => {
 
     if (response.ok) {
       // Filter out the deleted cart
-      const updatedCarts = cartData.filter(cart => cart.id !== cartId)
+      // const updatedCarts = cartData.filter(cart => cart.id !== cartId)
       // Update the state
-      setCartData(updatedCarts)
+      // setCartData(updatedCarts)
+      fetchAndUpdateCartData()
       setToggleDelete(!toggleDelete)
+      toast.success(`💥 Cart successfully deleted!`, {
+        "autoClose": 2000
+    })
     } else {
       console.log("Error in the fetch!")
     }
@@ -357,15 +373,16 @@ const onItemDeleted = (deletedItemId) => {
 
 const fetchAndUpdateCartData = async () => {
   try {
-    const response = await fetch(`${apiUrl}/user/${currentUser.id}/cart/`);
+    const response = await fetch(`${apiUrl}/user/${currentUser.id}/cart/`)
     if (response.ok) {
       const updatedCartData = await response.json()
       setCurrentUser(prevUser => ({
         ...prevUser,
         cart: updatedCartData
       }))
+      console.log("THE RESPONSE:", response)
     } else {
-      const errorData = await response.json();
+      const errorData = await response.json()
       console.error("An error occurred:", errorData.message)
       toast.error(`Error: ${errorData.message}`,
       {
@@ -374,7 +391,7 @@ const fetchAndUpdateCartData = async () => {
     }
   } catch (error) {
     // Handle network/JS errors
-    console.error("A network or JavaScript error occurred:", error.message);
+    console.error("A network or JavaScript error occurred:", error.message)
     // Optionally, display a notification to the user
     toast.error(`Network/JavaScript Error: ${error.message}`,
     {

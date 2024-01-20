@@ -445,6 +445,8 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
                   {/* Quantity and Price */}
                   <div className="mt-4 flex justify-between sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
 
+
+                  {/* DELETE BUTTON IT'S AN SVG X */}
                   <div className="flex justify-end">
                   <button
                     onClick={handleToggleDelete}
@@ -477,8 +479,8 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
                     </div>
                   </div>
                 )}
-
                   </div>
+                  {/* DELETE BUTTON IT'S AN SVG X */}
 
 
 
