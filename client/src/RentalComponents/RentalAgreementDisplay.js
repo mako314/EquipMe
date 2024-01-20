@@ -426,7 +426,8 @@ function RentalAgreementDisplay() {
             
             if (response.ok) {
             // Filter out the deleted item
-
+            const updatedAgreements = allAgreements.filter(agreement => agreement.theAgreement.id !== rentalAgreementId)
+            allAgreements = updatedAgreements
             } else {
             console.log("Error in deleting the rental agreement")
             toast.error(`Error in deleting the rental agreement`,
@@ -449,7 +450,7 @@ function RentalAgreementDisplay() {
         setToggleDelete(!toggleDelete)
         }
 
-        // console.log("RENTAL AGREEMENT ID:", allAgreements[currentAgreementIndex]?.theAgreement?.id)
+        console.log("All Agreements?:", allAgreements)
     
     return(
         <section>
