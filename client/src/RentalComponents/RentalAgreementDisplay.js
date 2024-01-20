@@ -147,15 +147,17 @@ function RentalAgreementDisplay({fromOwnerDash}) {
     // Looping because issue where it causes an infinite loop
 
     useEffect(() => {
+        if (Array.isArray(allRentalAgreementsState)) {
             const selectedAgreementIndex = allRentalAgreementsState.findIndex(agreementObj => 
                 agreementObj.theAgreement.id.toString() === rental_agreement_id
             );
-    
+
             console.log("THE SELECTED AGREEMENT INDEX:", selectedAgreementIndex);
-        
+
             if (selectedAgreementIndex !== -1) {
                 setCurrentAgreementIndex(selectedAgreementIndex);
             }
+        }
     }, [rental_agreement_id, allRentalAgreementsState])
 
     

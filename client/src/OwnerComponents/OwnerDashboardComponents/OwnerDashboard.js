@@ -573,7 +573,7 @@ function AccountSettings() {
             case 'Active Listings':
                 return <ActiveListings />
             case 'Rental Agreements':
-                setFromOwnerDash(prevState => !prevState)
+                // setFromOwnerDash(prevState => !prevState)
                 return <RentalAgreements fromOwnerDash={fromOwnerDash}/>
             case 'Potential Renters':
                 if (isLoading) {
