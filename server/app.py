@@ -1185,6 +1185,7 @@ class RentalAgreementsByID(Resource):
     #delete a single rental agreement
     def delete(self, id):
         agreement = RentalAgreement.query.filter(RentalAgreement.id == id).first()
+        print("THE CART ID OF THE AGREEMENT:", agreement.cart_id)
         if agreement:
             #may need to delete the renter id and equipment id
             db.session.delete(agreement)
