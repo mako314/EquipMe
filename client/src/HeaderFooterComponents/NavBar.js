@@ -15,7 +15,7 @@ function NavBar({ setSearchTerm}) {
   const { currentUser, role, setCurrentUser, setRole } = UserSessionContext()
   const { availableToCheckoutNumb } = CartAvailProviderContext()
 
-  console.log("CHECKING THIS NUMBER:", availableToCheckoutNumb)
+  // console.log("CHECKING THIS NUMBER:", availableToCheckoutNumb)
 
   const navigate = useNavigate()
 
