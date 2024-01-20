@@ -154,8 +154,10 @@ function Inbox({inboxes, setInboxes, selectedThreadID, setSelectedThreadID, setR
           const updatedInboxes = inboxes.filter(item => item.id !== deletingThreadId)
           setInboxes(updatedInboxes)
           fetchAndUpdateInboxes()
+          if(updatedInboxes.length > 0){
           const firstInbox = updatedInboxes[0]
           setSelectedThreadID(firstInbox.id)
+          }
           // setInboxes
 
         } else {
@@ -209,10 +211,6 @@ function Inbox({inboxes, setInboxes, selectedThreadID, setSelectedThreadID, setR
         } else {
           const errorData = await response.json();
           console.error("An error occurred:", errorData.message)
-          toast.error(`Error: ${errorData.message}`,
-          {
-            "autoClose" : 2000
-          })
         }
       } catch (error) {
         // Handle network/JS errors

@@ -2131,6 +2131,8 @@ class ThreadById(Resource):
         user_inbox = UserInbox.query.filter(UserInbox.thread_id == thread_id).first()
         print("THE ROLE:", role)
 
+        # I don't even think I need to access the thread since there's a cascade deletes.
+
         if role:
             if role == 'user':
                 # db.session.delete(thread)
