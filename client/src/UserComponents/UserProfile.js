@@ -104,6 +104,7 @@ function UserProfile({fromOwnerDash, setFromOwnerDash}) {
   console.log("THE REVIEWS:",source.review)
   // Owner is the one leaving reviews
   // let ownerReviews = source.review?.filter(reviewSubmission => reviewSubmission.reviewer_type === 'owner')
+
 //-----------------------------------------------------------------
     // The portion below handled setting the owners reviews, did this because it makes the delete easier.
     useEffect(() => {
@@ -117,6 +118,7 @@ function UserProfile({fromOwnerDash, setFromOwnerDash}) {
       setOwnerReviews(currentReviews => currentReviews.filter(review => review.id !== deletedReviewId));
       }
 //-----------------------------------------------------------------
+
 
   console.log("Owner Reviews:", ownerReviews)
   

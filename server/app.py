@@ -1487,57 +1487,136 @@ class BulkEquipmentUpload(Resource):
         
         # Read CSV, XML, and XLSX documents to rapidly add equipment row by row, appending to the owner's equipment list, and commit
         try:
-            file_extension_type = equipmentFile.filename.split('.')[-1].lower()
+            # file_extension_type = equipmentFile.filename.split('.')[-1].lower()
 
-            if file_extension_type == '.csv':
-                allEquipment = pd.read_csv(equipmentFile)
+            # if file_extension_type == '.csv':
+            #     all_equipment = pd.read_csv(equipmentFile)
+
+            # # Conditional for XML file types
+            # elif file_extension_type == 'xml':
+            #     root = ET.fromstring(equipmentFile.read())
+            #     all_equipment = []
+
+            #     for equipment_element in root:
+            #         equipment_data = {}
+            #         for element_data in equipment_element:
+            #             equipment_data[element_data.tag] = element_data.text
+            #         all_equipment.append(equipment_data)
+
+            # # Conditional for Microsoft Excel files
+            # elif file_extension_type == 'xlsx':
+            #     all_equipment = pd.read_excel(equipmentFile)
+            
+            file_extension_type = equipmentFile.filename.rsplit('.', 1)[1].lower()
+            print(file_extension_type)
+
+            if file_extension_type == 'csv':
+                all_equipment = pd.read_csv(equipmentFile)
 
             # Conditional for XML file types
             elif file_extension_type == 'xml':
                 root = ET.fromstring(equipmentFile.read())
-                allEquipment = []
+                all_equipment = []
 
                 for equipment_element in root:
                     equipment_data = {}
                     for element_data in equipment_element:
                         equipment_data[element_data.tag] = element_data.text
-                    allEquipment.append(equipment_data)
+                    all_equipment.append(equipment_data)
 
             # Conditional for Microsoft Excel files
             elif file_extension_type == 'xlsx':
-                allEquipment = pd.read_excel(equipmentFile)
+                all_equipment = pd.read_excel(equipmentFile)
 
-            allEquipment.columns = ['Equipment_name', 'Equipment_type', 'Make', 'Model', 'Owner', 'Phone', 'Email', 'Location', 'Availability', 'Delivery', 'Quantity']
+            # Handling other file types
+            else:
+                return make_response(jsonify({'error': f'Unsupported file type: {file_extension_type}'}), 400)
+            
+            print("ALL THE EQUIPMENT",all_equipment)
+            
+            # Ensure all_equipment is not None before proceeding
+            if all_equipment is None:
+                return make_response(jsonify({'error': 'File processing error'}), 500)
+            
+
+            all_equipment.columns = ['Equipment_name', 'Equipment_type', 'Equipment Image', 'Make', 'Model', 'Owner First Name', 'Owner Last Name', 'Phone', 'Email', 'State', 'City', 'Address', 'Address_line_2', 'Postal_Code', 'Availability', 'Delivery', 'Total Quantity', 'Available Quantity']
             equipment_list = []
 
-            for index, row in allEquipment.iterrows():
-                owner_name = row['Owner']
-                equipment_owner = EquipmentOwner.query.filter(EquipmentOwner.name == owner_name).first()
+            for index, row in all_equipment.iterrows():
+                owner_first_name = row['Owner First Name']
+                owner_last_name = row['Owner Last Name']
+                owner_phone = row['Phone']
+                owner_email = row['Email']
+                
+                equipment_owner = EquipmentOwner.query.filter_by(firstName=owner_first_name, lastName=owner_last_name, email = owner_email, phone = owner_phone).first()
+
                 equipment = Equipment(
                     name = row['Equipment_name'],
                     type = row['Equipment_type'],
                     make = row['Make'],
                     model = row['Model'],
-                    country = row['country'],
-                    state = row['state'],
-                    city = row['city'],
-                    address = row['address'],
-                    address_line_2 = row['address_line_2'],
-                    postal_code = row['postal_code'],
+                    description = row['Description'],
+                    equipment_image = row['Equipment Image'],
+                    country = "US",
+                    state = row['State'],
+                    city = row['City'],
+                    address = row['Address'],
+                    address_line_2 = row['Address_line_2'],
+                    postal_code = row['Postal_Code'],
                     availability = row['Availability'],
                     delivery = row['Delivery'],
                     quantity = row['Quantity'],
                     owner_id = equipment_owner.id
                 )
 
+                total_quantity = int(row['Total Quantity'])
+                available_quantity = int(row['Available Quantity'])
+
+                if available_quantity > total_quantity:
+                    state_total = available_quantity
+                else:
+                    state_total = total_quantity
+
+                new_equipment_status = EquipmentStatus(
+                equipment_id = equipment.id,
+                total_quantity = state_total,
+                available_quantity = state_total,
+                reserved_quantity = 0,
+                rented_quantity = 0,
+                maintenance_quantity = 0,
+                transit_quantity = 0
+                )
+
+                new_state_history = EquipmentStateHistory(
+                equipment_id = equipment.id,
+                total_quantity = state_total,
+                available_quantity = state_total,
+                reserved_quantity = 0,
+                rented_quantity = 0,
+                maintenance_quantity = 0,
+                transit_quantity = 0,
+                damaged_quantity = 0,
+                previous_state = 'non-existing',
+                new_state = 'available',
+                changed_at = datetime.utcnow(),
+                )
+
+                db.session.add(new_equipment_status)
+                db.session.add(new_state_history)
+
+
                 equipment_list.append(equipment)
                 equipment_owner.equipment.append(equipment)
+
+           
 
             db.session.add_all(equipment_list)
             db.session.commit()
 
-        except ValueError:
-            return jsonify({'error': 'Value Error when reading file'}), 500
+            return make_response(jsonify({'message': 'Successfully uploaded!'}), 200)
+
+        except Exception as e:
+            return make_response(jsonify({'error': f'Error processing file: {str(e)}'}), 500)
 
 api.add_resource(BulkEquipmentUpload, '/bulk_file_upload')
 
