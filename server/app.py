@@ -1709,16 +1709,20 @@ class Carts(Resource):
 api.add_resource(Carts, "/carts")
 
 class CartByUserID(Resource):
-    def get(self,user_id):
+    # def get(self,user_id):
+    #     carts = Cart.query.filter(Cart.user_id == user_id).all()
+    #     if carts:
+    #         carts_dict = [cart.to_dict() for cart in carts]
+    #         return make_response(carts_dict,200)
+    #     else:
+    #         response = make_response({
+    #         "error": "Item not found"
+    #         }, 404)
+    #         return response
+    def get(self, user_id):
         carts = Cart.query.filter(Cart.user_id == user_id).all()
-        if carts:
-            carts_dict = [cart.to_dict() for cart in carts]
-            return make_response(carts_dict,200)
-        else:
-            response = make_response({
-            "error": "Item not found"
-            }, 404)
-            return response
+        carts_dict = [cart.to_dict() for cart in carts]
+        return make_response(carts_dict, 200)
         
     def patch(self, user_id):
         cart = Cart.query.filter(Cart.user_id == user_id).first()
@@ -1750,7 +1754,7 @@ class CartByUserID(Resource):
             }, 404)
             return response
         
-api.add_resource(CartByUserID, "/user/<int:user_id>/cart/")
+api.add_resource(CartByUserID, "/user/<int:user_id>/cart")
 
 class UserCartByCartID(Resource):
     def get(self,cart_id, user_id):

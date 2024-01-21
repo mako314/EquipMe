@@ -13,7 +13,7 @@ import Page404 from "../ExtraPageComponents/Page404";
 
 function Cart(){
 
-  const { currentUser, role, setCurrentUser} = UserSessionContext() 
+  const { currentUser, role, setCurrentUser, checkSession} = UserSessionContext() 
   const apiUrl = useContext(ApiUrlContext)
   const [currentCart, setCurrentCart] = useState(0)
   const [cartData, setCartData] = useState([])
@@ -31,6 +31,7 @@ function Cart(){
 
   const [toggleDelete, setToggleDelete] = useState(false)
 
+  const [noCarts, setNoCarts] = useState(false)
   const navigate = useNavigate()
 
   // https://stackoverflow.com/questions/42173786/react-router-pass-data-when-navigating-programmatically
@@ -110,6 +111,12 @@ setAvailableToCheckOutTotal(itemsBothPartiesAgreedOn)
 
 
 useEffect(() => {
+  console.log("cartData updated:", cartData);
+  console.log("currentCart updated:", currentCart);
+}, [cartData, currentCart])
+
+
+useEffect(() => {
   if (cartItemFiltering === 'none') {
     // Include all cart items
     setFilteredCartItems(cartData[currentCart]?.cart_item)
@@ -138,12 +145,10 @@ useEffect(() => {
   }, [currentUser, currentCart])
 
   //If a user has no items in cart or no cart created display this instead
-  if (!cartData || cartData?.length === 0) {
-    if (role === 'owner'){
+  if (role === 'owner'){
       return <div> Not available! </div>
-    }
-    return <div> Nothing has been added to your cart yet! </div>
   }
+
 
   if (isLoading){
     return <LoadingPage loadDetails={"Cart"}/>
@@ -153,6 +158,9 @@ useEffect(() => {
 
   //Changes cart based on cart ID
   const handleCartChange = (e) => {
+    if(currentUser.cart.length === 0){
+
+    }
     // setCurrentCart(e.target.value)
     // Find index found it's way back in, what an amazing function
     const cartId = parseInt(e.target.value, 10) // assuming your IDs are integers
@@ -161,15 +169,6 @@ useEffect(() => {
   }
 
   // //Needed to move this here to have the state update for a re-render, allows for creating a new cart.
-  // const addCart = (newCart) => {
-  //   const updatedCartData = [...cartData, newCart]
-  //   setCartData(updatedCartData)
-  //   const newCartIndex = updatedCartData.length - 1 // Index of the last element
-  //   console.log("THE NEW CART INDEX:", newCartIndex)
-  //   setCurrentCart(newCartIndex)
-  //   return updatedCartData
-  //   // setCartData((cartData) => [...cartData, newCart])
-  // }
 
   const addCart = (newCart) => {
     setCartData(prevCartData => {
@@ -186,29 +185,13 @@ useEffect(() => {
     setIsModalOpen(!isModalOpen)
   }
 
-
-
-  //-------------------------------------
-
-  //  cartData[currentCart].cart_item?.length === 0 ?
-  //   <p> Cart is empty or loading...</p> 
-  //   : 
-  //   cartData[currentCart]?.cart_item.forEach((item) => (
-  //     // console.log("THE ITEM:", item)
-  //   ))  
-    
-
-
-  // Map over carts, present options
-  const cartOptions = cartData?.map((item) => {
-    return (
-    <Fragment key={`${item.id} ${item.cart_name}`}>
-    {/* so the value starts at 0, but the item.id (cart id) starts at 1. So I -1 here to get the right cart index 
-    I was able to find a solution to this, god is good
-    */}
-    <option className="text-black" value={item.id}>{item.cart_name}</option> 
-    </Fragment>)
-  })
+  const cartOptions = currentUser.cart.length > 0 ? (
+    cartData?.map((item) => (
+      <option key={item.id} value={item.id}>{item.cart_name}</option>
+    ))
+  ) : (
+    <option key="no-cart" value="" disabled>No carts available</option>
+  )
 
 
   //Map over equipment price, and take the rates as options
@@ -320,7 +303,7 @@ const handleToggleDelete = () => {
 //Handles deleting the cart item!
 const handleDeleteCart = async (cartId) => {
   try {
-    const response = await fetch(`${apiUrl}user/${currentUser.id}/cart/${cartData[currentCart].id}`, {
+    const response = await fetch(`${apiUrl}user/${currentUser.id}/cart/${cartId}`, {
       method: 'DELETE',
     })
 
@@ -329,16 +312,24 @@ const handleDeleteCart = async (cartId) => {
       // const updatedCarts = cartData.filter(cart => cart.id !== cartId)
       // Update the state
       // setCartData(updatedCarts)
-      fetchAndUpdateCartData()
+      await fetchAndUpdateCartData()
       setToggleDelete(!toggleDelete)
       toast.success(`💥 Cart successfully deleted!`, {
         "autoClose": 2000
     })
     } else {
       console.log("Error in the fetch!")
+      toast.error(`Error: Failed to delete, check your input and try again!`,
+      {
+        "autoClose" : 2000
+      })
     }
   } catch (error) {
     // Handle fetch errors
+    toast.error(`Error: Failed to delete, check your input and try again!`,
+    {
+      "autoClose" : 2000
+    })
   }
 }
 
@@ -373,17 +364,34 @@ const onItemDeleted = (deletedItemId) => {
 
 const fetchAndUpdateCartData = async () => {
   try {
-    const response = await fetch(`${apiUrl}/user/${currentUser.id}/cart/`)
+    const response = await fetch(`${apiUrl}user/${currentUser.id}/cart`)
     if (response.ok) {
       const updatedCartData = await response.json()
-      setCurrentUser(prevUser => ({
-        ...prevUser,
-        cart: updatedCartData
-      }))
-      console.log("THE RESPONSE:", response)
+      if (updatedCartData.length === 0) {
+        // No carts are available
+        setCartData([])
+        setNoCarts(true)
+        setCurrentCart(-1) // Resetting currentCart
+        checkSession()
+        console.log('Updated cartData: updatedCartData.length === 0', updatedCartData)
+      } else {
+        // Carts are available
+        setCartData(updatedCartData)
+        console.log('Updated cartData: else', updatedCartData)
+        setCurrentUser(prevUser => ({
+          ...prevUser,
+          cart: updatedCartData
+        }))
+        checkSession()
+        setNoCarts(false)
+      }
     } else {
       const errorData = await response.json()
       console.error("An error occurred:", errorData.message)
+      setNoCarts(true)
+      setCartData([])
+      setCurrentCart(-1)
+      checkSession()
       toast.error(`Error: ${errorData.message}`,
       {
         "autoClose" : 2000
@@ -412,7 +420,6 @@ const fetchAndUpdateCartData = async () => {
         <div className="flex flex-col items-center">
         <div className="mb-4 w-full max-w-4xl px-4 sm:px-6 lg:px-8">
         <div className="flex justify-center space-x-4 bg-white py-3 px-5 rounded-lg shadow-md">
-        
 
         <form className="flex flex-row items-center mb-4">
         <div className="flex items-center mr-2">
@@ -502,10 +509,14 @@ const fetchAndUpdateCartData = async () => {
     <div className="mx-auto max-w-5xl justify-center px-6 md:flex md:space-x-6 xl:px-0">
       <div className="rounded-lg md:w-2/3">
       <select
+            key={`cart-select-${cartData.length}`}
             className="text-sm mb-2 font-medium text-gray-900 dark:text-gray-300 border-2 border-black"
             value={currentCart >= 0 && currentCart < cartData.length ? cartData[currentCart].id : ''} 
             onChange={handleCartChange}>
+            <option value="" disabled>--Please Select a Cart--</option>
             {cartOptions}
+
+
       </select>
        {/* Button to open the modal */}
        <button
@@ -526,7 +537,7 @@ const fetchAndUpdateCartData = async () => {
             ) : (
                 <>
                     <button
-                        onClick={() => handleDeleteCart(cartData[currentCart].id)}
+                        onClick={() => handleDeleteCart(cartData[currentCart]?.id)}
                         className="bg-green-500 text-white p-2 rounded-md hover:bg-green-600 focus:outline-none focus:ring-4 focus:ring-blue-300 ml-4 mb-2"
                     >
                         Yes, I'm sure
@@ -560,6 +571,7 @@ const fetchAndUpdateCartData = async () => {
         )}
 
       {/* <CreateNewCart addCart={addCart}/> */}
+
     {filteredCartItems && filteredCartItems.length > 0? (
         filteredCartItems.map((item) => {
           // console.log(item)
@@ -604,6 +616,14 @@ const fetchAndUpdateCartData = async () => {
         <p>No items match your filter criteria.</p>
       )
     }
+
+{cartData.length === 0 && (
+          <div className="text-center p-10">
+            <h2 className="text-2xl font-bold mb-4">No Carts Available</h2>
+            <p>Create a new cart to get started.</p>
+            {/* You can add a button or link to create a new cart here */}
+          </div>
+        )}
 
       </div>
       <div className="mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-12 md:w-1/3">

@@ -52,7 +52,6 @@ function CreateNewCart({addCart, toggleModal, setCurrentCart}){
         }
         const createdCart = await resp.json()
         console.log("THE NEW CART:", createdCart)
-        
         addCart(createdCart)
         toggleModal()
         checkSession()
