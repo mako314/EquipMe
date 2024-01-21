@@ -18,6 +18,7 @@ function UserProfile({fromOwnerDash, setFromOwnerDash}) {
   const [heartColor, setHeartColor] = useState('white')
   const [isFavorited, setIsFavorited] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [ownerReviews, setOwnerReviews] = useState([])
   const navigate = useNavigate();
   const { id } = useParams()
 
@@ -102,7 +103,20 @@ function UserProfile({fromOwnerDash, setFromOwnerDash}) {
   
   console.log("THE REVIEWS:",source.review)
   // Owner is the one leaving reviews
-  let ownerReviews = source.review?.filter(reviewSubmission => reviewSubmission.reviewer_type === 'owner')
+  // let ownerReviews = source.review?.filter(reviewSubmission => reviewSubmission.reviewer_type === 'owner')
+//-----------------------------------------------------------------
+    // The portion below handled setting the owners reviews, did this because it makes the delete easier.
+    useEffect(() => {
+      // When component mounts, initialize userReviews
+      setOwnerReviews(source.review?.filter(reviewSubmission => reviewSubmission.reviewer_type === 'owner'))
+      }, [source.review]) // Depend on owner.review
+  
+      // Handles immediately removing the the review a user removes.
+      const handleReviewDelete = (deletedReviewId) => {
+      // Update userReviews state
+      setOwnerReviews(currentReviews => currentReviews.filter(review => review.id !== deletedReviewId));
+      }
+//-----------------------------------------------------------------
 
   console.log("Owner Reviews:", ownerReviews)
   
@@ -138,10 +152,14 @@ function UserProfile({fromOwnerDash, setFromOwnerDash}) {
     })
   }
 
+  // Navigate back to dashboard
   const navigateBackToDash = () => {
     setFromOwnerDash(!fromOwnerDash)
     navigate(`/dashboard`)
   }
+
+
+
 
   // Render loading page if display is still loading
   if (loading) {
@@ -261,7 +279,7 @@ function UserProfile({fromOwnerDash, setFromOwnerDash}) {
                         </div>
                         <ul className="mb-6 grid gap-5 sm:grid-cols-2 md:grid-cols-2 md:mb-16"> 
                         {ownerReviews?.map((item) => (
-                            <Reviews key={item.id} stars={item.review_stars} comment={item.review_comment} image={item.owner.profileImage} firstName={item.owner.firstName} lastName={item.owner.lastName} profession={item.owner.profession} wholeItem={item} reviewId={item.id}/>
+                            <Reviews key={item.id} stars={item.review_stars} comment={item.review_comment} image={item.owner.profileImage} firstName={item.owner.firstName} lastName={item.owner.lastName} profession={item.owner.profession} onDelete={handleReviewDelete} reviewId={item.id}/>
                         ))}
                         </ul>
 

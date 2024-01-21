@@ -19,6 +19,7 @@ function OwnerDisplay({fromOwnerDash, setFromOwnerDash}) {
   const [heartColor, setHeartColor] = useState('white')
   const [isFavorited, setIsFavorited] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [userReviews, setUserReviews] = useState([])
 
   const ownerLocation = `${address_line_2 === '' ?  address : address + ',' + address_line_2}, ${city}, ${state} ${postal_code} `
 
@@ -70,8 +71,6 @@ function OwnerDisplay({fromOwnerDash, setFromOwnerDash}) {
     })
   }
 
- 
-
   const equipmentNames = equipment?.map((equipment) => {
     return equipment.name + " " + equipment.make + " " + equipment.model
   })
@@ -111,9 +110,7 @@ const featuredEquipment = owner.equipment?.filter(item => item.featured_equipmen
 const displayEquipment = featuredEquipment.length > 0 ? featuredEquipment : <div>No items currently featured</div>
 // handleEquipmentDelete={handleEquipmentDelete} handleEditEquipment={handleEditEquipment}
 
-//   console.log(owner)
-
-    let userReviews = owner.review?.filter(reviewSubmission =>  reviewSubmission.reviewer_type === 'user')
+    // let userReviews = owner.review?.filter(reviewSubmission =>  reviewSubmission.reviewer_type === 'user')
     console.log("userReviews:", userReviews )
     console.log("reviews:", owner.review)
 
@@ -127,6 +124,20 @@ const displayEquipment = featuredEquipment.length > 0 ? featuredEquipment : <div
     }
 
     console.log("CURRENT USER TEST:", currentUser)
+
+    //-----------------------------------------------------------------
+    // The portion below handled setting the owners reviews, did this because it makes the delete easier.
+    useEffect(() => {
+    // When component mounts, initialize userReviews
+    setUserReviews(owner.review?.filter(review => review.reviewer_type === 'user'))
+    }, [owner.review]) // Depend on owner.review
+
+    // Handles immediately removing the the review a user removes.
+    const handleReviewDelete = (deletedReviewId) => {
+    // Update userReviews state
+    setUserReviews(currentReviews => currentReviews.filter(review => review.id !== deletedReviewId));
+    }
+    //-----------------------------------------------------------------
 
 // Render loading page if display is still loading
   if (loading) {
@@ -272,7 +283,7 @@ const displayEquipment = featuredEquipment.length > 0 ? featuredEquipment : <div
                         </div>
                             <ul className="mb-6 grid gap-5 sm:grid-cols-2 md:grid-cols-2 md:mb-16"> 
                         {userReviews?.map((item) => (
-                            <Reviews key={item.id} stars={item.review_stars} comment={item.review_comment} image={item.user.profileImage} firstName={item.user.firstName} lastName={item.user.lastName} profession={item.user.profession} wholeItem={item} reviewId={item.id}/>
+                            <Reviews key={item.id} stars={item.review_stars} comment={item.review_comment} image={item.user.profileImage} firstName={item.user.firstName} lastName={item.user.lastName} profession={item.user.profession} onDelete={handleReviewDelete} reviewId={item.id}/>
                         ))}
                             </ul>
                         </div>

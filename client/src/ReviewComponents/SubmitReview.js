@@ -36,7 +36,7 @@ function SubmitReview({toggleReviewModal, isModalOpen, renterId, ownerId, rental
         }
 
         if(starAmount === 0){
-            return toast.warn(`⭐ Star amount must be at least`,
+            return toast.warn(`⭐ Star amount must be at least 1.`,
             {
             "autoClose" : 2000
             })

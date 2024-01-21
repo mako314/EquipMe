@@ -3,9 +3,9 @@ import ApiUrlContext from '../Api';
 import {toast} from 'react-toastify'
 import { UserSessionContext } from '../UserComponents/SessionContext';
 
-function Reviews({stars, comment, image, firstName, lastName, profession, wholeItem, reviewId}){
+function Reviews({stars, comment, image, firstName, lastName, profession, reviewId, onDelete}){
 
-  const { currentUser, role, setCurrentUser} = UserSessionContext() 
+  const { currentUser, role, setCurrentUser, checkSession} = UserSessionContext() 
   const apiUrl = useContext(ApiUrlContext)
   const [toggleDelete, setToggleDelete] = useState(false)
 
@@ -20,7 +20,6 @@ function Reviews({stars, comment, image, firstName, lastName, profession, wholeI
     />)
   }
 
-  console.log("THE WHOLE ITEM:", wholeItem)
 
   const handleDeleteReview = async (inReviewId) => {
     try {
@@ -29,6 +28,7 @@ function Reviews({stars, comment, image, firstName, lastName, profession, wholeI
       })
   
       if (response.ok) {
+        onDelete(inReviewId)
         // Filter out the deleted review
         const updatedReivews = currentUser.review.filter(item => item.id !== inReviewId)
         setCurrentUser(prevUser => ({
@@ -36,6 +36,7 @@ function Reviews({stars, comment, image, firstName, lastName, profession, wholeI
           review: updatedReivews
         }))
         setToggleDelete(!toggleDelete)
+        checkSession()
         toast.success(`💥 Review successfully deleted!`, {
           "autoClose": 2000
       })
