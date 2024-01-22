@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 function FavoriteCarousel({currentUser, setFromOwnerDash, role}) {
 
 const [currentIndex, setCurrentIndex] = useState(0)
-console.log("CAROUSEL:",currentUser)
+console.log("CURRENT USER:",currentUser)
 const navigate = useNavigate()
 
 const handleEquipmentNavigation = (equipmentId) => {
@@ -22,13 +22,16 @@ let carouselItems = []
 // console.log("FAVORITE CAROUSEL LENGTH:", currentUser?.equipment?.user_favorite?.length)
 
 // console.log(" AND THE ROLE : ", role)
-if (currentUser?.equipment?.user_favorite?.length === undefined && role === 'owner'){
-  return(
-    <div className="flex items-center justify-center h-full text-center text-gray-800">
-    <p className="text-lg font-medium">Users haven't favorited any Equipment quite yet!</p>
-   </div>
-   )
+if (currentUser && role === 'owner') {
+  const hasFavorites = currentUser.equipment.some(item => item.user_favorite && item.user_favorite.length > 0);
 
+  if (!hasFavorites) {
+    return(
+      <div className="flex items-center justify-center h-full text-center text-gray-800">
+        <p className="text-lg font-medium">Users haven't favorited any Equipment quite yet!</p>
+      </div>
+    );
+  }
 } else if (currentUser?.equipment?.length === 0 && role === 'owner') {
   return(
     <div className="flex items-center justify-center h-full text-center text-gray-800">

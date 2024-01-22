@@ -535,7 +535,7 @@ if __name__ == '__main__':
                     'postal_code': owner.postal_code,
                     'state': owner.state,
                 },
-                'name' : f'{owner.firstName} Rentals',
+                'name' : f"{owner.firstName}'s Rentals",
                 'phone' : owner.phone,
                 'tax_id' : '000000000',
             },
