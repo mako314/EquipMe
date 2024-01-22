@@ -84,6 +84,7 @@ import RentalAgreementDisplay from './RentalComponents/RentalAgreementDisplay'
 //---------------------- Extra Pages -----------------------------
 import AboutUsPage from './ExtraPageComponents/AboutUs';
 import CookiesPolicy from './ExtraPageComponents/Cookies';
+import TermsAndConditionsPage from './ExtraPageComponents/TermsAndConditions';
 
 //---------------------- Toastify -----------------------------
 import { ToastContainer, toast } from 'react-toastify'
@@ -379,6 +380,7 @@ function App() {
             {/* Extra pages like contact us, cookies, about us, etc */}
             <Route path='/about/us' element={<AboutUsPage/>} />
             <Route path='/cookies' element={<CookiesPolicy/>} />
+            <Route path='/terms/and/conditions' element={<TermsAndConditionsPage/>} />
 
 
           </Routes>
