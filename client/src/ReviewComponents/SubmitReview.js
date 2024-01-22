@@ -71,8 +71,9 @@ function SubmitReview({toggleReviewModal, isModalOpen, renterId, ownerId, rental
           }).then((resp) => {
             if (resp.ok) {
               resp.json().then((newReviewData) => {
-                console.log(newReviewData)
-                postedReview ?                 toast.success(`✅ Succesfully edited the review you left ${role === 'owner' ? `${renterFirstName} ${renterLastName}` : `${ownerFirstName} ${ownerLastName}` } `,
+                // console.log(newReviewData)
+                postedReview ?
+                toast.success(`✅ Succesfully edited the review you left ${role === 'owner' ? `${renterFirstName} ${renterLastName}` : `${ownerFirstName} ${ownerLastName}` } `,
                 {
                   "autoClose" : 2000
                 })
@@ -117,7 +118,7 @@ function SubmitReview({toggleReviewModal, isModalOpen, renterId, ownerId, rental
         alt="" 
         className="mr-1.5 w-4 cursor-pointer"
         onClick={ () => {
-        console.log(`Setting star amount to ${i}`) // Star count
+        // console.log(`Setting star amount to ${i}`) // Star count
         setStarAmount(i)}}
         key={`star-${i}`} 
         />)

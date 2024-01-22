@@ -22,7 +22,7 @@ function UserProfile({fromOwnerDash, setFromOwnerDash}) {
   const navigate = useNavigate();
   const { id } = useParams()
 
-  console.log("THE CURRENT USER:",currentUser)
+  // console.log("THE CURRENT USER:",currentUser)
 
   // function handleCsvClick(e) {
   //   console.log("Button working")
@@ -36,7 +36,7 @@ function UserProfile({fromOwnerDash, setFromOwnerDash}) {
       .then((data) => {
         setUserProfile(data)
         const favoriteStatus = currentUser?.owner_favorite?.some(favorite => favorite.user_id === parseInt(id, 10))
-        console.log("Favorite Status:", favoriteStatus)
+        // console.log("Favorite Status:", favoriteStatus)
         setHeartColor(favoriteStatus ? "red" : "white")
         // I can't just set is favorited and try it with heart color, it's just too quick and defaults, so I make a variable that contains data and set it to that.
         setIsFavorited(favoriteStatus)
@@ -101,7 +101,7 @@ function UserProfile({fromOwnerDash, setFromOwnerDash}) {
 
   // console.log(source?.user_inboxes?.length)
   
-  console.log("THE REVIEWS:",source.review)
+  // console.log("THE REVIEWS:",source.review)
   // Owner is the one leaving reviews
   // let ownerReviews = source.review?.filter(reviewSubmission => reviewSubmission.reviewer_type === 'owner')
 
@@ -120,13 +120,13 @@ function UserProfile({fromOwnerDash, setFromOwnerDash}) {
 //-----------------------------------------------------------------
 
 
-  console.log("Owner Reviews:", ownerReviews)
+  // console.log("Owner Reviews:", ownerReviews)
   
   //May actually want to include a banner image so it looks nicer
 
 
   const handleFavoriteSelection = () => {
-    console.log(isFavorited)
+    // console.log(isFavorited)
     // Conditional method and URL based on whether is favorited doesn't exist off the useEffect
     const method = !isFavorited ? "POST" : "DELETE"
     const url = !isFavorited ? `${apiUrl}owner/${currentUser.id}/favorite/user/${id}` : `${apiUrl}remove/owner/${currentUser.id}/favorite/user/${id}`

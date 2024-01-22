@@ -38,7 +38,7 @@ const checkSession = () => {
       if (data.role === 'user' || data.role === 'owner') {
         setCurrentUser(data.details)
         setRole(data.role)
-        console.log("You are signed in as a ", data.role)
+        // console.log("You are signed in as a ", data.role)
         resolve(data.details) // Resolve with the updated user details
       } else if (!data){
         // Handle when data is null due to an unsuccessful response
