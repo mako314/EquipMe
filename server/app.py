@@ -1539,10 +1539,11 @@ class BulkEquipmentUpload(Resource):
                 return make_response(jsonify({'error': 'File processing error'}), 500)
             
 
-            all_equipment.columns = ['Equipment_name', 'Equipment_type', 'Equipment Image', 'Make', 'Model', 'Owner First Name', 'Owner Last Name', 'Phone', 'Email', 'State', 'City', 'Address', 'Address_line_2', 'Postal_Code', 'Availability', 'Delivery', 'Total Quantity', 'Available Quantity']
+            all_equipment.columns = ['Equipment_name', 'Equipment_type', 'Make', 'Model', 'Equipment Image', 'State', 'City', 'Address Line 1', 'Address_line_2', 'Postal_Code', 'Availability', 'Delivery', 'Total Quantity', 'Available Quantity', 'Owner First Name', 'Owner Last Name', 'Phone', 'Email',]
             equipment_list = []
 
             for index, row in all_equipment.iterrows():
+                print(f"Processing row {index}: {row}")
                 owner_first_name = row['Owner First Name']
                 owner_last_name = row['Owner Last Name']
                 owner_phone = row['Phone']
@@ -1555,19 +1556,21 @@ class BulkEquipmentUpload(Resource):
                     type = row['Equipment_type'],
                     make = row['Make'],
                     model = row['Model'],
-                    description = row['Description'],
                     equipment_image = row['Equipment Image'],
                     country = "US",
                     state = row['State'],
                     city = row['City'],
-                    address = row['Address'],
+                    address = row['Address Line 1'],
                     address_line_2 = row['Address_line_2'],
                     postal_code = row['Postal_Code'],
                     availability = row['Availability'],
                     delivery = row['Delivery'],
-                    quantity = row['Quantity'],
                     owner_id = equipment_owner.id
                 )
+
+                db.session.add(equipment)
+                db.session.commit()
+                db.session.flush()
 
                 total_quantity = int(row['Total Quantity'])
                 available_quantity = int(row['Available Quantity'])
@@ -1603,17 +1606,22 @@ class BulkEquipmentUpload(Resource):
 
                 db.session.add(new_equipment_status)
                 db.session.add(new_state_history)
+                db.session.commit()
+            
+        except Exception as e:
+            print(f"Error processing row {index}: {e}")
+            db.session.rollback()
 
+            # db.session.commit()
 
-                equipment_list.append(equipment)
-                equipment_owner.equipment.append(equipment)
-
-           
-
-            db.session.add_all(equipment_list)
-            db.session.commit()
-
+            
             return make_response(jsonify({'message': 'Successfully uploaded!'}), 200)
+
+            # equipment_list.append(equipment)
+            # equipment_owner.equipment.append(equipment)
+
+            # db.session.add_all(equipment_list)
+            # db.session.commit()
 
         except Exception as e:
             return make_response(jsonify({'error': f'Error processing file: {str(e)}'}), 500)
