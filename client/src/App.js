@@ -350,7 +350,7 @@ function App() {
             <Route path='/user/profile/:id' element={<UserProfile setFromOwnerDash={setFromOwnerDash} fromOwnerDash={fromOwnerDash}/>} />
 
             {/* Temp Route for CSV File Upload*/}
-            <Route path='/temp/bulk_equipment_upload' element={<BulkEquipmentUpload />} />
+            <Route path='/temp/bulk_equipment_upload' element={<BulkEquipmentUpload setEquipmentArray={setEquipmentArray}/>} />
 
             {/* Owner Dashboard Page
             Likely converting this to just a general dashboard. Dashboards for everyone!
