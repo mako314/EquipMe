@@ -440,8 +440,8 @@ class EquipmentOwners(Resource):
             if data['owner_consent'] == 'yes' and data['create_link']:
                 account_link = stripe.AccountLink.create(
                 account=account.id,
-                refresh_url='http://localhost:3000/dashboard',
-                return_url='http://localhost:3000/dashboard',
+                refresh_url='https://www.equipme.live/dashboard',
+                return_url='https://www.equipme.live/dashboard',
                 type='account_onboarding',
             )
             # https://stripe.com/docs/api/account_links/create
@@ -2561,8 +2561,8 @@ class StripeCreateAccountLink(Resource):
         
         account_link = stripe.AccountLink.create(
                 account=equip_owner.stripe_id,
-                refresh_url='http://localhost:3000/dashboard',
-                return_url='http://localhost:3000/dashboard',
+                refresh_url='https://www.equipme.live/dashboard',
+                return_url='https://www.equipme.live/dashboard',
                 type='account_onboarding',
         )
 
