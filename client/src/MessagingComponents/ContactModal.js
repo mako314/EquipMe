@@ -21,7 +21,7 @@ function ContactModal({recipientID, firstName, lastName}){
     // }
 
     // console.log("Hi, I'm you're sender:", sender?.firstName)
-    console.log("Hi, I'm you're sender:", currentUser?.firstName)
+    // console.log("Hi, I'm you're sender:", currentUser?.firstName)
 
     function toggleModal() {
         setIsModalOpen(!isModalOpen)
@@ -39,7 +39,7 @@ function ContactModal({recipientID, firstName, lastName}){
                 "Content-Type": "application/json"
             }
         })
-        console.log("THE RECIPIENT ID:", recipientID)
+        // console.log("THE RECIPIENT ID:", recipientID)
         let threadData = await response.json()
         if (response.ok && threadData) {
             // 2. Create two inboxes once the thread is successfully created.
@@ -83,7 +83,7 @@ function ContactModal({recipientID, firstName, lastName}){
                     toast.success(`✉️ Message to: ${firstName}, ${lastName} sent successfully!`,{
                     "autoClose" : 2000
                     })
-                    console.log("Message sent successfully")
+                    // console.log("Message sent successfully")
                     
                     // window.alert("Message sent successfully!")
                 } else {

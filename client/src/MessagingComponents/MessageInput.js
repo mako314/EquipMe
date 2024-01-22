@@ -56,7 +56,7 @@ const handleSendMessage = () => {
       }
   }
 
-    console.log('Sending message:', message)
+    // console.log('Sending message:', message)
     fetch(`${apiUrl}messages`, {
       method: "POST",
       body: JSON.stringify(message),
@@ -66,12 +66,12 @@ const handleSendMessage = () => {
     })
     .then((response) => response.json())
     .then((message) => { if (message && message.id){
-        console.log("Adding message:", message.content, "To a thread with an ID of:", message.thread_id)
+        // console.log("Adding message:", message.content, "To a thread with an ID of:", message.thread_id)
         //This monster down here is what does all the magic. Cannot believe I hadn't considered just using the spread operator for real time updates... ah!!
         const updatedInboxes = inboxes?.map(inbox => {
             if (inbox.id === SelectedThreadID) {
-                console.log("Inbox ID:",inbox.id)
-                console.log("Thread ID:",SelectedThreadID)
+                // console.log("Inbox ID:",inbox.id)
+                // console.log("Thread ID:",SelectedThreadID)
                 return {
                     ...inbox,
                     thread: {

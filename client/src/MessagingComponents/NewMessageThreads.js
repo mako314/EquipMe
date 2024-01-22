@@ -15,7 +15,7 @@ function NewMessageThreads({fromOwnerDash, setFromOwnerDash}) {
   const [isLoading, setIsLoading] = useState(true)
   const { currentUser, role } = UserSessionContext()
 
-  console.log("LOADING:", isLoading)
+  // console.log("LOADING:", isLoading)
 
   // if(isLoading){
   //   return <LoadingPage/>
