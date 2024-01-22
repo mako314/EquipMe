@@ -23,14 +23,14 @@ let carouselItems = []
 
 // console.log(" AND THE ROLE : ", role)
 if (currentUser && role === 'owner') {
-  const hasFavorites = currentUser.equipment.some(item => item.user_favorite && item.user_favorite.length > 0);
+  const hasFavorites = currentUser.equipment.some(item => item.user_favorite && item.user_favorite.length > 0)
 
   if (!hasFavorites) {
     return(
       <div className="flex items-center justify-center h-full text-center text-gray-800">
         <p className="text-lg font-medium">Users haven't favorited any Equipment quite yet!</p>
       </div>
-    );
+    )
   }
 } else if (currentUser?.equipment?.length === 0 && role === 'owner') {
   return(

@@ -186,8 +186,8 @@ function Inbox({inboxes, setInboxes, selectedThreadID, setSelectedThreadID, setR
 
     // Update the inboxes with a server call, simiar to what I did with the cart items, I just update the inboxes to be the updated ones.
     const fetchAndUpdateInboxes = async () => {
-      let fetchUrl = role === 'owner' ? `/thread/owner/` : `/thread/user/`
-      const url = `${apiUrl}/${fetchUrl}${currentUser.id}`
+      let fetchUrl = role === 'owner' ? `thread/owner/` : `thread/user/`
+      const url = `${apiUrl}${fetchUrl}${currentUser.id}`
       // console.log("Constructed URL for fetch:", url)
       // console.log("I RAN")
       try {
