@@ -29,8 +29,8 @@ if __name__ == '__main__':
         #Clear dbs
         print("Clearing db...")
         AgreementComment.query.delete()
-        RentalAgreement.query.delete()
         Review.query.delete()
+        RentalAgreement.query.delete()
         CartItem.query.delete()
         Cart.query.delete()
         EquipmentStatus.query.delete()
