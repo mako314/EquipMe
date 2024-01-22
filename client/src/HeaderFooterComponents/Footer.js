@@ -43,9 +43,15 @@ function Footer() {
             </li>
             </Link>
 
+            <Link
+            to="/contact/us">
             <li>
                 <span className="text-white hover:text-amber-500">Contact Us</span>
             </li>
+            </Link>
+
+
+
             </nav>
         </div>
         <div className="lg:w-1/4 md:w-1/2 w-full px-4">

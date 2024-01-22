@@ -85,6 +85,7 @@ import RentalAgreementDisplay from './RentalComponents/RentalAgreementDisplay'
 import AboutUsPage from './ExtraPageComponents/AboutUs';
 import CookiesPolicy from './ExtraPageComponents/Cookies';
 import TermsAndConditionsPage from './ExtraPageComponents/TermsAndConditions';
+import ContactUsPage from './ExtraPageComponents/ContactPage';
 
 //---------------------- Toastify -----------------------------
 import { ToastContainer, toast } from 'react-toastify'
@@ -381,7 +382,8 @@ function App() {
             <Route path='/about/us' element={<AboutUsPage/>} />
             <Route path='/cookies' element={<CookiesPolicy/>} />
             <Route path='/terms/and/conditions' element={<TermsAndConditionsPage/>} />
-
+            <Route path='/contact/us' element={<ContactUsPage/>} />
+            
 
           </Routes>
           <ToastContainer
