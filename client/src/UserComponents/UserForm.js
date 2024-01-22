@@ -10,6 +10,7 @@ import ApiUrlContext from "../Api";
 function UserForm({ addUser }){
     const [error, setError] = useState()
     const navigate = useNavigate()
+    const [loading, setLoading] = useState(false)
 
     // https://github.com/ErrorPro/react-google-autocomplete/issues/227
     // https://github.com/ErrorPro/react-google-autocomplete/blob/HEAD/docs/formik.js
@@ -38,6 +39,7 @@ function UserForm({ addUser }){
             if (resp.ok) {
               resp.json().then((data) => {
                 setCurrentUser(data.user)
+                setLoading(false)
                 setRole(data.role)
                 navigate(`/dashboard`) // <-------- navigates to the profile
               })
@@ -75,6 +77,7 @@ function UserForm({ addUser }){
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
+          setLoading(true)
             fetch(`${apiUrl}users` , {
                 method: "POST",
                 headers: {
@@ -104,6 +107,14 @@ function UserForm({ addUser }){
 
     return (
     <div className="bg-white py-6 sm:py-8 lg:py-12">
+              {loading && (
+          <div className="fixed inset-0 bg-gray-800 bg-opacity-50 z-50 flex justify-center items-center">
+            <div className="flex flex-col items-center justify-center">
+              <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+              <p className="mt-4 text-white text-lg">Creating your Account...</p>
+            </div>
+          </div>
+        )}
   <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
 
     <div className="mb-10 md:mb-16">
@@ -132,7 +143,7 @@ function UserForm({ addUser }){
 
       <div className="sm:col-span-2">
         <label htmlFor="email" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">Email</label>
-        <input type="text" name="email" value={formik.values.email} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+        <input type="email" name="email" value={formik.values.email} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
       </div>
 
       <div className="sm:col-span-2">

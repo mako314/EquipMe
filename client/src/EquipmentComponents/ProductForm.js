@@ -47,7 +47,7 @@ function ProductForm({ addEquipment }){
     //   }, []);
     
     //   console.log(owner)
-    console.log(featureEquipment)
+    // console.log(featureEquipment)
     
 
 
@@ -108,7 +108,7 @@ function ProductForm({ addEquipment }){
                 .then(res => {
                     if (res.ok){
                         res.json().then(data => {
-                            console.log(data)
+                            // console.log(data)
                             const equipment = data.equipment
                             const updatedValues = {
                               ...values,
@@ -120,7 +120,7 @@ function ProductForm({ addEquipment }){
                           //     equipment_id: equipment.id,
                           //     imageURL: values.imageURL,
                           // }
-                          console.log('THE EQUIPMENT:', equipment)
+                          // console.log('THE EQUIPMENT:', equipment)
                             fetch (`${apiUrl}equipment/price` , {
                               method: "POST",
                               headers: {
@@ -137,7 +137,7 @@ function ProductForm({ addEquipment }){
                                 })}
                                 checkSession()
                                 res.json().then(updatedValues =>{
-                                  console.log(featureEquipment)
+                                  // console.log(featureEquipment)
                                   if(featureEquipment === true){
                                   fetch (`${apiUrl}feature/equipment/${equipment.id}` , {
                                     method: "POST",
@@ -153,9 +153,9 @@ function ProductForm({ addEquipment }){
                                       })
                                       checkSession()
                                       navigate('/dashboard')
-                                      console.log(res)
+                                      // console.log(res)
                                     }
-                                    console.log(res)
+                                    // console.log(res)
                                   })}
                                 })
                               }

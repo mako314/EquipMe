@@ -53,7 +53,7 @@ function EquipmentDisplay({}) {
       .then((resp) => resp.json())
       .then((data) => {
         setOneEquipment(data)
-        console.log(data)
+        // console.log(data)
         setLoading(false)
       })
   }, [])
@@ -65,7 +65,7 @@ function EquipmentDisplay({}) {
   // const quantity = oneEquipment ? oneEquipment?.status[0]?.current_quantity : 0
   // console.log("Display Page one equipment:", oneEquipment)
 
-  console.log("EQUIPMENT STATUS:", quantity)
+  // console.log("EQUIPMENT STATUS:", quantity)
 
   const equip_prices = equipment_price?.map((price) => {
     return <Fragment key={oneEquipment.id}>

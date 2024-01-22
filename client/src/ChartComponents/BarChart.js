@@ -380,7 +380,7 @@ function BarChart({currentUser, setDashLoad}){
             setMonthlyData(currentMonthMappedData)
             
             }
-            console.log(monthlyData)
+            // console.log(monthlyData)
 
             
       
@@ -495,58 +495,3 @@ function BarChart({currentUser, setDashLoad}){
 }
 
 export default BarChart
-
-
-
-
-
-      // console.log("UNIQUE ID:", summary.equipment_id, "THE RESERVED QUANTITY:", summary.total_reserved
-      // )
-    
-      // if (processedEquipmentIds?.has(uniqueId)) {
-        // console.log(`Skipping duplicate entry for equipment ID: ${uniqueId}`)
-      //    // Update existing data rather than skipping
-      //   acc[month].totalInCart += summary.total_reserved
-      //   return acc
-      // }
-    
-      // processedEquipmentIds?.add(uniqueId);
-      // console.log(`Processed entry for equipment ID: ${uniqueId}`);
-
-      // console.log(processedEquipmentIds)
-    
-      // // Ensure month data structure exists
-      // if (!acc[month]) {
-      //   acc[month] = {
-      //     totalQuantity: 0,
-      //     totalIdle: 0,
-      //     totalReserved: 0,
-      //     totalCancelled: 0,
-      //     totalMaintenanceQuantity: 0,
-      //     totalRentedOut: 0,
-      //     totalInCart: 0,
-      //   };
-      // }
-    
-      // // Accumulate data
-      // acc[month].totalQuantity = (acc[month].totalQuantity || 0) + summary.total_quantity
-
-      // console.log("THE MONTH:", acc[month])
-      // console.log("THE TOTAL QUANTITY COUNT:", acc[month])
-
-      // acc[month].totalIdle = (acc[month].totalIdle || 0) +  summary.total_available
-
-      // // acc[month].totalReserved = (acc[month].totalReserved || 0) + summary.total_reserved
-
-      // acc[month].totalCancelled = (acc[month].totalCancelled || 0) + summary.total_cancelled
-
-      // acc[month].totalMaintenanceQuantity = (acc[month].totalMaintenanceQuantity || 0) + summary.total_maintenance_quantity
-
-      // acc[month].totalRentedOut = (acc[month].totalRentedOut || 0) + summary.total_rented_out
-
-      // acc[month].totalInCart = (acc[month].totalInCart || 0) + summary.total_reserved
-
-      // console.log(`Month: ${month}, Equipment ID: ${summary.equipment_id}, Equipment History ID: ${summary.equipment_history_id},Total In MAINTENANCE: ${acc[month].totalMaintenanceQuantity}, Idle Equipment: ${acc[month].totalIdle}, Total Equipment: ${acc[month].totalQuantity}, Total In Cart: ${acc[month].totalInCart}`)
-    
-      // return acc // Return the updated accumulator
-    // }

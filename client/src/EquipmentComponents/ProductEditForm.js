@@ -28,7 +28,7 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
     // console.log("EQUIPMENT TO EDIT",oneEquipment)
     // console.log("ONE EQUIPMENT ID:", oneEquipment.id)
 
-    console.log(error)
+    // console.log(error)
     
     const formSchema = object({
         name: string().required('Please enter a name'),
@@ -78,8 +78,8 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
                 },
                 body: JSON.stringify(values)
             })
-            console.log("I'VE FIRED")
-            console.log("THE VALUES", values)
+            // console.log("I'VE FIRED")
+            // console.log("THE VALUES", values)
 
             if (!patchResponse.ok){
               const patchError = await patchResponse.json()
@@ -98,7 +98,7 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
               promo_rate: values.promo_rate,
             }
 
-            console.log('PRICING DATA:',pricingData)
+            // console.log('PRICING DATA:',pricingData)
 
             const priceResponse = await fetch(`${apiUrl}equipment/${oneEquipment.id}/price`, {
               method: "PATCH",
@@ -108,7 +108,7 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
               body: JSON.stringify(pricingData)
             })
 
-            console.log('I FIRED OFF')
+            // console.log('I FIRED OFF')
       
             if (!priceResponse.ok) {
               const priceError = await priceResponse.json()
@@ -121,7 +121,7 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
               "autoClose" : 2000
             })}
 
-            console.log("FEATURED RESPONSE : ", featureEquipment)
+            // console.log("FEATURED RESPONSE : ", featureEquipment)
             if (featureEquipment !== null){
               const featureURL = featureEquipment === true 
               ? `/feature/equipment/${oneEquipment.id}` 

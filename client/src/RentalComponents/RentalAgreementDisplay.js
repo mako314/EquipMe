@@ -2,11 +2,11 @@ import React, {useState, useContext, useEffect} from "react"
 import RentalAgreementCard from "./RentalAgreementCard";
 import { UserSessionContext } from "../UserComponents/SessionContext";
 import { CartAvailProviderContext } from "../CheckoutComponents/AvailToCheckoutContext";
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import ApiUrlContext from "../Api";
 import {toast} from 'react-toastify'
 
-function RentalAgreementDisplay({fromOwnerDash}) {
+function RentalAgreementDisplay() {
     const apiUrl = useContext(ApiUrlContext)
     const { currentUser, role, checkSession} = UserSessionContext()
     
@@ -21,6 +21,12 @@ function RentalAgreementDisplay({fromOwnerDash}) {
     const [allRentalAgreementsState, setAllRentalAgreementsState] = useState(false)
     const { rental_agreement_id } = useParams()
     const { calculateReadyToCheckout } = CartAvailProviderContext()
+
+    const navigate = useNavigate()
+    const location = useLocation()
+    const { fromOwnerDash } = location.state || {}
+
+    // console.log("FROM OWNER DASH:?", fromOwnerDash)
 
     const formatDate = (date) => {
         // Was having a lot of issues and couldn't tell where from, so I wrote some validations to test what could be going wrong
@@ -150,12 +156,12 @@ function RentalAgreementDisplay({fromOwnerDash}) {
         if (Array.isArray(allRentalAgreementsState)) {
             const selectedAgreementIndex = allRentalAgreementsState.findIndex(agreementObj => 
                 agreementObj.theAgreement.id.toString() === rental_agreement_id
-            );
+            )
 
-            console.log("THE SELECTED AGREEMENT INDEX:", selectedAgreementIndex);
+            // console.log("THE SELECTED AGREEMENT INDEX:", selectedAgreementIndex)
 
             if (selectedAgreementIndex !== -1) {
-                setCurrentAgreementIndex(selectedAgreementIndex);
+                setCurrentAgreementIndex(selectedAgreementIndex)
             }
         }
     }, [rental_agreement_id, allRentalAgreementsState])
@@ -168,7 +174,7 @@ function RentalAgreementDisplay({fromOwnerDash}) {
     // console.log("The current rental card:", rentalCardDisplay[0])
     // console.log("currentUser agreements OWNER:", currentUser?.agreements[0])
 
-    console.log("TESTING allRentalAgreementsState CURRENTAGREEMENT INDEX USER AND OWNER:", allRentalAgreementsState[currentAgreementIndex])
+    // console.log("TESTING allRentalAgreementsState CURRENTAGREEMENT INDEX USER AND OWNER:", allRentalAgreementsState[currentAgreementIndex])
     // console.log("TESTING allRentalAgreementsState CURRENTAGREEMENT INDEX USER AND OWNER:", allRentalAgreementsState[currentAgreementIndex])
 
     // if (role === 'owner'){
@@ -232,7 +238,7 @@ function RentalAgreementDisplay({fromOwnerDash}) {
     })
 
     
-    console.log("All Agreements:", allRentalAgreementsState[currentAgreementIndex])
+    // console.log("All Agreements:", allRentalAgreementsState[currentAgreementIndex])
     // console.log("THE SPECIFIC AGREEMENT:", allRentalAgreementsState[currentAgreementIndex]?.theAgreement)
     
     // Handles the editing of the agreement, be it delivery address change, or changing the decision
@@ -240,8 +246,8 @@ function RentalAgreementDisplay({fromOwnerDash}) {
         let decision = role === 'owner' ? 'owner_decision' : 'user_decision'
         let updatedAgreement
 
-        console.log("DELIVERY CHOICE:", deliveryChoice)
-        console.log("DELIVERY ADDRESS:", deliveryAddress)
+        // console.log("DELIVERY CHOICE:", deliveryChoice)
+        // console.log("DELIVERY ADDRESS:", deliveryAddress)
         //Handle agreement submission
         if((deliveryChoice || deliveryChoice === true) && deliveryAddress){
         updatedAgreement = {
@@ -273,7 +279,7 @@ function RentalAgreementDisplay({fromOwnerDash}) {
             })
         }
 
-        console.log("THE AGREEMENT:",updatedAgreement)
+        // console.log("THE AGREEMENT:",updatedAgreement)
 
         
 
@@ -285,7 +291,7 @@ function RentalAgreementDisplay({fromOwnerDash}) {
             body: JSON.stringify(updatedAgreement),
         }).then((resp) => {
             if (resp.ok) {
-                console.log(resp)
+                // console.log(resp)
                 if ((updatedAgreement.user_decision || updatedAgreement.owner_decision ) === 'accept'){
                 toast.success(`📝 You've succesfully ACCEPTED ✅ this agreement! Once both parties have accepted you can proceed to checkout. `,
                 {
@@ -302,7 +308,7 @@ function RentalAgreementDisplay({fromOwnerDash}) {
                 if (role === 'user'){
                 checkSession().then(updatedUserData => {
                     if (role === 'user') {
-                      console.log("THE CONDITIONAL RAN CART SHOULD UPDATE")
+                    //   console.log("THE CONDITIONAL RAN CART SHOULD UPDATE")
                       calculateReadyToCheckout(updatedUserData.cart)
                     }
                   }).catch(error => {
@@ -339,7 +345,7 @@ function RentalAgreementDisplay({fromOwnerDash}) {
         body: JSON.stringify(newComment),
     }).then((resp) => {
         if (resp.ok) {
-            console.log(resp)
+            // console.log(resp)
             setRentalComment('')
             checkSession()
             toast.success(`✍ Successfully left a comment! `,
@@ -446,7 +452,7 @@ function RentalAgreementDisplay({fromOwnerDash}) {
             goToNextAgreement()
             checkSession()
             } else {
-            console.log("Error in deleting the rental agreement")
+            // console.log("Error in deleting the rental agreement")
             toast.error(`Error in deleting the rental agreement`,
             {
                 "autoClose" : 2000
@@ -467,7 +473,11 @@ function RentalAgreementDisplay({fromOwnerDash}) {
         setToggleDelete(!toggleDelete)
         }
 
-        console.log("All Agreements?:", allRentalAgreementsState)
+        // console.log("All Agreements?:", allRentalAgreementsState)
+
+        const navigateBackToOwnerDash = () => {
+            navigate(`/dashboard`)
+        }
     
     return(
         <section>
@@ -587,7 +597,7 @@ function RentalAgreementDisplay({fromOwnerDash}) {
 
             </div>
 
-            <div className="flex justify-end"> 
+            <div className="flex justify-between"> 
 
                     <button
                         onClick={handleToggleDelete}
@@ -690,6 +700,11 @@ function RentalAgreementDisplay({fromOwnerDash}) {
                         </svg>
                     </button>
                 </div>
+
+                {fromOwnerDash && 
+              <button className="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded bg-amber-500 px-5 text-sm font-medium tracking-wide text-white shadow-md shadow-amber-200 transition duration-300 hover:bg-emerald-600 hover:shadow-sm hover:shadow-emerald-200 focus:bg-emerald-700 focus:shadow-sm focus:shadow-emerald-200 focus-visible:outline-none disabled:cursor-not-allowed disabled:border-emerald-300 disabled:bg-emerald-300 disabled:shadow-none"  onClick={navigateBackToOwnerDash}>
+               Return to Dashboard
+              </button>}
             </div>
             </div>
 

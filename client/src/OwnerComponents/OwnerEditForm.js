@@ -59,8 +59,12 @@ function OwnerEditForm(){
               .then(res =>{
                 if (res.ok) {
                     res.json().then(owner => {
-                        console.log("The UPDATED Owner:", owner)
+                        // console.log("The UPDATED Owner:", owner)
                         // updateOwner(owner)
+                        toast.success(`Succesfully updated your account `,
+                        {
+                        "autoClose" : 2000
+                        })
                         checkSession()
                         // navigate('/equipment_owners')
                     })
@@ -87,7 +91,7 @@ function OwnerEditForm(){
       
           if (response.ok) {
             // Should I just send them to the home screen?
-            toast.success(`🛒 Succesfully Deleted your account `,
+            toast.success(`Succesfully Deleted your account `,
             {
               "autoClose" : 2000
             })
@@ -95,7 +99,7 @@ function OwnerEditForm(){
             window.scrollTo(0, 0)
 
           } else {
-            console.log("Error in the fetch!")
+            // console.log("Error in the fetch!")
           }
         } catch (error) {
           // Handle fetch errors
@@ -151,12 +155,12 @@ function OwnerEditForm(){
                     <input type="text" name="phone" value={formik.values.phone} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
                 
                     <label htmlFor="email" className="mt-4 mb-2 inline-block text-sm text-gray-800 sm:text-base">Email</label>
-                    <input type="text" name="email" value={formik.values.email} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+                    <input type="email" name="email" value={formik.values.email} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
                 </div>
 
                 <div className="sm:col-span-2">
                     <label htmlFor="password" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">Password</label>
-                    <input type="text" name="password" value={formik.values.password} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+                    <input type="password" name="password" value={formik.values.password} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
                 </div>
 
                 <div className="sm:col-span-2">
@@ -177,8 +181,8 @@ function OwnerEditForm(){
 
                 <div className="sm:col-span-2">
                     <label htmlFor="bio" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Bio </label>
-                    <textarea type="text" name="bio" value={formik.values.bio} onChange={formik.handleChange} className="w-full h-48  rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" 
-                    > </textarea>
+                    <textarea type="text" name="bio" value={formik.values.bio || ''} onChange={formik.handleChange} className="w-full h-48  rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" 
+                    /> 
                 </div>
 
                 <div className="sm:col-span-2">

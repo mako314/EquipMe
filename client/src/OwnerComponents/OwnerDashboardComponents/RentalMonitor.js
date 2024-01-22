@@ -8,8 +8,8 @@ function RentalMonitor({currentUser, role}){
      const flatMappedUserAgreement = currentUser?.cart?.flatMap(item => {
         return item.cart_item?.map(cartItem  => {
             return cartItem.agreements.map(agreement => { 
-                console.log('CART ITEM PRICE:', cartItem?.price_cents_at_addition) 
-                console.log('AGREEMENT STATUSES:', agreement.agreement_status)
+                // console.log('CART ITEM PRICE:', cartItem?.price_cents_at_addition) 
+                // console.log('AGREEMENT STATUSES:', agreement.agreement_status)
             return {
                     id : agreement.id,
                     agreement_status: agreement.agreement_status,

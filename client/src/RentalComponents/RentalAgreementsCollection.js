@@ -11,7 +11,7 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
     const [agreementFiltering, setAgreementFiltering] = useState('newest')
     const [filterKeyWord, setFilterKeyWord] = useState('none')
 
-  console.log(filterKeyWord)
+  // console.log(filterKeyWord)
   //This formatdate function takes the created_at and updated_at dates and changes them into a much simpler format. This reads like the following:
   // Created At: Dec 8, 2023, 07:00:00 PM
   // Updated At: Dec 8, 2023, 07:00:00 PM
@@ -54,7 +54,7 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
 
     // take an agreement and filter it, it's called on all agreements which is an array with the agreement data we need. It's been flatmapped twice if it's a user, and then mapped over for the data we need. We compare it with the selected filter key word, which is decided by the radio buttons and compared with agreement_status of the agreement.
     const filterAgreementsByStatus = (agreement) => {
-      console.log("Agreement status: ", agreement.agreement_status, "Filter keyword: ", filterKeyWord)
+      // console.log("Agreement status: ", agreement.agreement_status, "Filter keyword: ", filterKeyWord)
       return filterKeyWord ? agreement.agreement_status === filterKeyWord : true
     }
 
@@ -77,12 +77,12 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
     }))
 
     // Check agreements before filtering
-    console.log("Agreements before filtering:", allAgreements) 
+    // console.log("Agreements before filtering:", allAgreements) 
 
     //If filterKeyWord exists and is not equal to none, go ahead and filter with the function 
     if (filterKeyWord && filterKeyWord !== 'none') {
       // Check agreements after filtering
-      console.log("Agreements after filtering:", allAgreements) 
+      // console.log("Agreements after filtering:", allAgreements) 
       allAgreements = allAgreements.filter(filterAgreementsByStatus)
     }
 
@@ -175,7 +175,7 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
   }, [currentUser, agreementFiltering, filterKeyWord])
 
   const handleAgreementSelection = (event) => {
-    console.log('Selected value:', event.target.value)
+    // console.log('Selected value:', event.target.value)
     setAgreementFiltering(event.target.value)
   }
 

@@ -12,7 +12,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
   const apiUrl = useContext(ApiUrlContext)
   const { currentUser, role, checkSession } = UserSessionContext()
 
-  console.log("THE delivery state:", oneEquipment.delivery)
+  // console.log("THE delivery state:", oneEquipment.delivery)
   //States to capture info, day ranges, costs, length of rental, quantity, and track modal, cart
   //This might be multiple states for now, but the plan is to convert it to one big state object.
   const [selectedRate, setSelectedRate] = useState("hourly")
@@ -41,11 +41,11 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
   useEffect(() => {
     if (role === 'user' && currentCart != null) {
     setCartData(currentUser.cart)
-    console.log(' first if ')
+    // console.log(' first if ')
     } else if (role === 'user' && currentUser?.cart?.length > 0){
     setCartData(currentUser.cart)
     setCurrentCart(currentUser.cart[0]) // Set the first cart as the current cart
-    console.log(' second if ')
+    // console.log(' second if ')
   }
   }, [currentUser])
 
@@ -108,10 +108,10 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
     // this has been grabbing the ID. But I made currentCart an object, wonder if it is the best practice? I think so.
     // Ended up using a variable to grab the target . value, state would set it in one go, and then you'd need to click again to get that state value.
     const selectedCartId = e.target.value
-    console.log("THE CART ID",selectedCartId)
+    // console.log("THE CART ID",selectedCartId)
 
     const selectedCart = cartData.find(item => item.id.toString() === selectedCartId)
-    console.log("THE CART CHANGE:",selectedCart)
+    // console.log("THE CART CHANGE:",selectedCart)
     if (selectedCart) {
         setCurrentCart(selectedCart)
     }
@@ -206,7 +206,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
       }).then((resp) => {
         if (resp.ok) {
           resp.json().then((newCartData) => {
-            console.log(newCartData.id)
+            // console.log(newCartData.id)
             if(startRental && endRental){
             let cartAndEquipment = {
               'cart_id': currentCart.id,
@@ -238,7 +238,7 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
             }).then((resp) => {
               if (resp.ok) {
                 resp.json().then((rentalAgreementData) => {
-                  console.log("The new rental agreement", rentalAgreementData)
+                  // console.log("The new rental agreement", rentalAgreementData)
                   toast.success(`🛒 Succesfully added ${newCartItem.quantity} ${oneEquipment.make} ${oneEquipment.name} ${oneEquipment.model}, to ${currentCart.cart_name} `,
                   {
                     "autoClose" : 2000
@@ -247,8 +247,8 @@ function AddToCartModal({equip_id, oneEquipment, toggleModal, isModalOpen }){
                 })
               }
             })} else {
-              console.log(resp.error)
-              console.log("Start or End Rental Date is missing or invalid")
+              // console.log(resp.error)
+              // console.log("Start or End Rental Date is missing or invalid")
             }
           })
         } else{
