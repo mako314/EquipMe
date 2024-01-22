@@ -23,7 +23,7 @@ function OwnerDisplay({fromOwnerDash, setFromOwnerDash}) {
 
   const ownerLocation = `${address_line_2 === '' ?  address : address + ',' + address_line_2}, ${city}, ${state} ${postal_code} `
 
-  console.log("THE OWNER:", owner)
+//   console.log("THE OWNER:", owner)
   const { id } = useParams()
   // const navigate = useNavigate()
   const apiUrl = useContext(ApiUrlContext)
@@ -43,7 +43,7 @@ function OwnerDisplay({fromOwnerDash, setFromOwnerDash}) {
   }, [])
 
   const handleFavoriteSelection = () => {
-    console.log(isFavorited)
+    // console.log(isFavorited)
     // Conditional method and URL based on whether is favorited doesn't exist off the useEffect
     const method = !isFavorited ? "POST" : "DELETE"
     const url = !isFavorited ? `${apiUrl}user/${currentUser.id}/favorite/owner/${id}` : `${apiUrl}remove/user/${currentUser.id}/favorite/owner/${id}`
@@ -111,8 +111,8 @@ const displayEquipment = featuredEquipment.length > 0 ? featuredEquipment : <div
 // handleEquipmentDelete={handleEquipmentDelete} handleEditEquipment={handleEditEquipment}
 
     // let userReviews = owner.review?.filter(reviewSubmission =>  reviewSubmission.reviewer_type === 'user')
-    console.log("userReviews:", userReviews )
-    console.log("reviews:", owner.review)
+    // console.log("userReviews:", userReviews )
+    // console.log("reviews:", owner.review)
 
     const navigateBackToDash = () => {
         setFromOwnerDash(!fromOwnerDash)
@@ -123,7 +123,7 @@ const displayEquipment = featuredEquipment.length > 0 ? featuredEquipment : <div
         navigate(`/login`)
     }
 
-    console.log("CURRENT USER TEST:", currentUser)
+    // console.log("CURRENT USER TEST:", currentUser)
 
     //-----------------------------------------------------------------
     // The portion below handled setting the owners reviews, did this because it makes the delete easier.

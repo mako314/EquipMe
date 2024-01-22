@@ -23,7 +23,7 @@ function OwnerForm({addOwner}){
     }
 
     function handleLogin(stripe_onboard_link = null) {
-      console.log("Stripe Onboard Link:", stripe_onboard_link)
+      // console.log("Stripe Onboard Link:", stripe_onboard_link)
       // setLoading(true)
       let email = formik.values.email
       let password = formik.values.password
@@ -40,13 +40,13 @@ function OwnerForm({addOwner}){
         }).then((resp) => {
           if (resp.ok) {
             resp.json().then((data) => {
-              console.log("LOGIN DATA:", data)
+              // console.log("LOGIN DATA:", data)
               setCurrentUser(data.owner)
               setRole(data.role)
-              console.log("the type of data the role is:", typeof(data.role))
+              // console.log("the type of data the role is:", typeof(data.role))
               if (stripe_onboard_link && create_link === 'yes') {
                 // Open the Stripe onboard link in a new tab
-                console.log("Stripe Onboard Link:", stripe_onboard_link)
+                // console.log("Stripe Onboard Link:", stripe_onboard_link)
                 // window.open(stripe_onboard_link, '_blank')
                 // Open stripe in same tab, leads to dashboard after completion
                 window.location.href = stripe_onboard_link
@@ -102,7 +102,7 @@ function OwnerForm({addOwner}){
                     if (res.ok){
                         res.json().then(data => {
                             addOwner(data.owner)
-                            console.log("THE OWNER DATA:", data.owner)
+                            // console.log("THE OWNER DATA:", data.owner)
                             handleLogin(data.stripe_onboard_link)
                         })
                     } else {

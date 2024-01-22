@@ -59,7 +59,7 @@ function OwnerEditForm(){
               .then(res =>{
                 if (res.ok) {
                     res.json().then(owner => {
-                        console.log("The UPDATED Owner:", owner)
+                        // console.log("The UPDATED Owner:", owner)
                         // updateOwner(owner)
                         toast.success(`Succesfully updated your account `,
                         {
@@ -99,7 +99,7 @@ function OwnerEditForm(){
             window.scrollTo(0, 0)
 
           } else {
-            console.log("Error in the fetch!")
+            // console.log("Error in the fetch!")
           }
         } catch (error) {
           // Handle fetch errors
