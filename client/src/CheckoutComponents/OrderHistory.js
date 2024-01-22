@@ -87,14 +87,14 @@ function OrderHistory({fromOwnerDash}){
         // This tested whether or not I could do an object.entries map, (would return an array), which i would then map over the orders, and display the data I'm trying to display. 
         // I implement this more functionally in the return
         Object.entries(groupedOrders).forEach(([orderNumber, orders]) => {
-            console.log("Order Number:", orderNumber)
+            // console.log("Order Number:", orderNumber)
             orders.forEach((order) => {
-                console.log("Order ID:", order.id)
-                console.log("ORDER ORDER ORDER:", order)
-                console.log("Order Details:", order.order_details)
-                console.log("Total Amount:", order.total_amount)
-                console.log("Equipment Name:", order.equipment.name)
-                console.log("Equipment Image URL:", order.equipment.equipment_image)
+                // console.log("Order ID:", order.id)
+                // console.log("ORDER ORDER ORDER:", order)
+                // console.log("Order Details:", order.order_details)
+                // console.log("Total Amount:", order.total_amount)
+                // console.log("Equipment Name:", order.equipment.name)
+                // console.log("Equipment Image URL:", order.equipment.equipment_image)
             })
         })
     } else {
@@ -107,7 +107,7 @@ function OrderHistory({fromOwnerDash}){
         return <LoadingPage loadDetails={"your Order History"}/>
     }
 
-    console.log("THE STATE ORDER HISTORY:", groupedOrders)
+    // console.log("THE STATE ORDER HISTORY:", groupedOrders)
     // console.log(mappedOrderHistory)
 
 
@@ -130,11 +130,11 @@ function OrderHistory({fromOwnerDash}){
 
   // Handles the order history filtering
     const handleOrderHistoryFiltering = (event) => {
-      console.log('Selected value:', event.target.value)
+    //   console.log('Selected value:', event.target.value)
       setOrderFiltering(event.target.value)
     }
 
-    console.log("FUNCTION OF GET SORTED ORDER ARRAY:", getSortedOrderArray())
+    // console.log("FUNCTION OF GET SORTED ORDER ARRAY:", getSortedOrderArray())
 
     const navigateToOrderHistory = () => {
         navigate(`/order/history`)

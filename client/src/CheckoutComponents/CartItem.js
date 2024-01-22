@@ -136,7 +136,7 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
 
     if (response.ok) {
       const updatedItem = await response.json()
-      console.log("THE UPDATED CART ITEM:",updatedItem)
+      // console.log("THE UPDATED CART ITEM:",updatedItem)
       
     } else {
       console.error('Failed to update cart item:', await response.text())
@@ -226,7 +226,7 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
       }
     })
 
-    console.log("I'VE RAN INSIDE THE USE EFFECT")
+    // console.log("I'VE RAN INSIDE THE USE EFFECT")
 
   }, [])
 
@@ -404,7 +404,7 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
           onItemDeleted(cartItemId)
 
         } else {
-          console.log("Error in deleting the cart item")
+          // console.log("Error in deleting the cart item")
           toast.error(`Error in deleting the cart item`,
           {
             "autoClose" : 2000

@@ -110,10 +110,10 @@ setAvailableToCheckOutTotal(itemsBothPartiesAgreedOn)
 // console.log(cartData[currentCart]?.total)
 
 
-useEffect(() => {
-  console.log("cartData updated:", cartData);
-  console.log("currentCart updated:", currentCart);
-}, [cartData, currentCart])
+// useEffect(() => {
+//   console.log("cartData updated:", cartData);
+//   console.log("currentCart updated:", currentCart);
+// }, [cartData, currentCart])
 
 
 useEffect(() => {
@@ -132,7 +132,7 @@ useEffect(() => {
 
 // UseEffect for initial cart load,
   useEffect(() => {
-    console.log("Fetching cart data...")
+    // console.log("Fetching cart data...")
     if (role === 'user') {
       setCartData(currentUser.cart)
       setIsLoading(false)
@@ -178,7 +178,7 @@ useEffect(() => {
     })
   }
 
-  console.log("THE CURRENT CART INDEX:", currentCart)
+  // console.log("THE CURRENT CART INDEX:", currentCart)
 
   //Simple open modal for cart creation
   const toggleModal = () => {
@@ -229,7 +229,7 @@ useEffect(() => {
   const handleCheckoutStripe = async () => {
     const itemsReadyForCheckout = filteredCartItems.filter(item => item.isChecked)
     .map(item => {
-      console.log(item)
+      // console.log(item)
       return {
         agreement_status: item.agreements[0].agreement_status,
         delivery: item.agreements[0].delivery,
@@ -318,7 +318,7 @@ const handleDeleteCart = async (cartId) => {
         "autoClose": 2000
     })
     } else {
-      console.log("Error in the fetch!")
+      // console.log("Error in the fetch!")
       toast.error(`Error: Failed to delete, check your input and try again!`,
       {
         "autoClose" : 2000
@@ -339,7 +339,7 @@ const onItemDeleted = (deletedItemId) => {
 
   // Recalculate total and console log each item
   const newTotal = updatedCartItems.reduce((total, item) => {
-    console.log(item) // Log each item
+    // console.log(item) // Log each item
 
     // Determine the price to use (if changed or at addition)
     const itemPrice = (item.price_cents_if_changed != null) ? item.price_cents_if_changed : item.price_cents_at_addition
@@ -350,11 +350,11 @@ const onItemDeleted = (deletedItemId) => {
     return total + itemTotal 
   }, 0)
 
-  console.log(newTotal)
+  // console.log(newTotal)
 
   // Convert total to a more readable format
   const newTotalInDollars = newTotal / 100
-  console.log("New Total:", newTotalInDollars)
+  // console.log("New Total:", newTotalInDollars)
 
   setCurrentCartTotal(newTotalInDollars)
   fetchAndUpdateCartData()
@@ -373,11 +373,11 @@ const fetchAndUpdateCartData = async () => {
         setNoCarts(true)
         setCurrentCart(-1) // Resetting currentCart
         checkSession()
-        console.log('Updated cartData: updatedCartData.length === 0', updatedCartData)
+        // console.log('Updated cartData: updatedCartData.length === 0', updatedCartData)
       } else {
         // Carts are available
         setCartData(updatedCartData)
-        console.log('Updated cartData: else', updatedCartData)
+        // console.log('Updated cartData: else', updatedCartData)
         setCurrentUser(prevUser => ({
           ...prevUser,
           cart: updatedCartData

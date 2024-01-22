@@ -21,7 +21,7 @@ const StripeCheckout = () => {
 
   const location = useLocation()
   const { clientSecret } = location.state || {}
-  console.log("CLIENT SECRET:?", clientSecret)
+  // console.log("CLIENT SECRET:?", clientSecret)
   const options = {clientSecret}
 
   return (

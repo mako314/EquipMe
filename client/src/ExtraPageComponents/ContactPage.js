@@ -28,7 +28,7 @@ function ContactUsPage() {
     
             if (response.ok) {
                 const jsonResponse = await response.json();
-                console.log(jsonResponse)
+                // console.log(jsonResponse)
                 toast.success(`📩 Succesfully sent your message `,
                 {
                   "autoClose" : 2000
