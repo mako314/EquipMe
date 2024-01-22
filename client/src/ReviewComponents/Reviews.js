@@ -91,7 +91,7 @@ function Reviews({stars, comment, image, firstName, lastName, profession, review
                     </div>
                   </div>
                 )}
-                  </div>
+            </div>
         </div>
         <p className="text-[#647084] mb-4">{comment}</p>
         <div className="flex mt-auto">
