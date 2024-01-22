@@ -61,6 +61,10 @@ function OwnerEditForm(){
                     res.json().then(owner => {
                         console.log("The UPDATED Owner:", owner)
                         // updateOwner(owner)
+                        toast.success(`Succesfully updated your account `,
+                        {
+                        "autoClose" : 2000
+                        })
                         checkSession()
                         // navigate('/equipment_owners')
                     })
@@ -87,7 +91,7 @@ function OwnerEditForm(){
       
           if (response.ok) {
             // Should I just send them to the home screen?
-            toast.success(`🛒 Succesfully Deleted your account `,
+            toast.success(`Succesfully Deleted your account `,
             {
               "autoClose" : 2000
             })
