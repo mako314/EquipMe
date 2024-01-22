@@ -81,9 +81,14 @@ import OrderHistory from './CheckoutComponents/OrderHistory';
 //---------------------- Rental Agreement Display -----------------------------
 import RentalAgreementDisplay from './RentalComponents/RentalAgreementDisplay'
 
+//---------------------- Extra Pages -----------------------------
+import AboutUsPage from './ExtraPageComponents/AboutUs';
+
+
 //---------------------- Toastify -----------------------------
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
+
 
 
 function App() {
@@ -370,6 +375,9 @@ function App() {
 
             {/* Rental Display */}
             <Route path='/handle/agreements/:rental_agreement_id' element={<RentalAgreementDisplay/>} />
+
+            {/* Extra pages like contact us, cookies, about us, etc */}
+            <Route path='/about/us' element={<AboutUsPage/>} />
 
 
           </Routes>

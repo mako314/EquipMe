@@ -19,9 +19,12 @@ function Footer() {
         <div className="lg:w-1/4 md:w-1/2 w-full px-4">
             <h2 className="title-font font-medium text-white tracking-widest text-sm mb-3">EQUIPME</h2>
             <nav className="list-none mb-10">
+            <Link
+            to="/about/us">
             <li>
                 <span className="text-white hover:text-amber-500">About Us</span>
             </li>
+            </Link>
             <li>
                 <span className="text-white hover:text-amber-500">Terms & Conditions</span>
             </li>

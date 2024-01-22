@@ -1486,6 +1486,7 @@ class BulkEquipmentUpload(Resource):
             return jsonify({'error': 'No file provided'}), 400
         
         # Read CSV, XML, and XLSX documents to rapidly add equipment row by row, appending to the owner's equipment list, and commit
+        index = -1 
         try:
             # file_extension_type = equipmentFile.filename.split('.')[-1].lower()
 

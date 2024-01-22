@@ -61,7 +61,7 @@ function BulkEquipmentUpload() {
     
                         {/* Image Section */}
                         <div className="flex justify-center mb-8">
-                            <img src="path_to_your_image.jpg" alt="Bulk Upload Image" className="h-40" />
+                            <img src="https://kinsta.com/wp-content/uploads/2017/06/how-to-bulk-upload-files-to-wordpress-media-library-via-ftp.jpg" alt="Bulk Upload Image" className="h-40" />
                         </div>
     
                         {/* Form Section */}
@@ -78,7 +78,7 @@ function BulkEquipmentUpload() {
                                 <button
                                     type="button"
                                     onClick={() => document.getElementById('file').click()}
-                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300"
+                                    className="bg-orange-500 hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300"
                                 >
                                     Choose File
                                 </button>
