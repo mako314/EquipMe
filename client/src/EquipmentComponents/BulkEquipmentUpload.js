@@ -14,7 +14,7 @@ function BulkEquipmentUpload() {
         setUploadFile(selectedFile);
         setFeedbackMessage('');
         setFileName(selectedFile.name);
-        console.log(selectedFile);
+        // console.log(selectedFile);
     };
 
     const handleUpload = async (e) => {
@@ -35,18 +35,18 @@ function BulkEquipmentUpload() {
 
             if (response.ok) {
                 const data = await response.json();
-                console.log("File Uploaded Successfully", data)
+                // console.log("File Uploaded Successfully", data)
                 setFeedbackMessage('File uploaded successfully.')
                 setUploadFile(null);
                 setFileName('');
                 setFeedBackColor("text-sm text-green-500")
             } else {
-                console.log("Error Uploading File");
+                // console.log("Error Uploading File");
                 setFeedbackMessage('Error uploading file.');
                 setFeedBackColor("text-sm text-red-500")
             }
         } catch (error) {
-            console.log("Error Caught in Bulk File Upload");
+            // console.log("Error Caught in Bulk File Upload");
             setFeedbackMessage('Error caught in bulk file upload.');
             setFeedBackColor("text-sm text-red-500")
         }

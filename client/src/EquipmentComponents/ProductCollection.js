@@ -7,8 +7,8 @@ function ProductCollection({ equipmentArray, handleEquipmentDelete, handleEditEq
     //Can change this so show x amount of cards per page
     const [cardsPerPage] = useState(8)
     const [cardOffset, setCardOffset] = useState(0)
-    const endOffset = cardOffset + cardsPerPage;
-    console.log(equipmentArray)
+    const endOffset = cardOffset + cardsPerPage
+    // console.log(equipmentArray)
 
     //changed the key to item.id which is unique
     const equipmentCards = equipmentArray?.map((item) => {
