@@ -1,16 +1,25 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { UserSessionContext } from "../UserComponents/SessionContext";
 
 import ApiUrlContext from "../Api";
 
-function BulkEquipmentUpload() {
+function BulkEquipmentUpload({setEquipmentArray}) {
     const [uploadFile, setUploadFile] = useState(null);
     const apiUrl = useContext(ApiUrlContext);
     const [feedbackMessage, setFeedbackMessage] = useState('');
     const [fileName, setFileName] = useState('');
     const [feedbackColor, setFeedBackColor] = useState('');
-    const { checkSession } = UserSessionContext()
+
+    const fetchEquipmentData = () => {
+        fetch(`${apiUrl}equipment`)
+          .then((resp) => resp.json())
+          .then((data) => {
+            setEquipmentArray(data);
+          })
+          .catch((error) => {
+            console.error('Error fetching equipment data:', error);
+          });
+      }
 
     const handleFileUpload = (e) => {
         const selectedFile = e.target.files[0];
@@ -43,7 +52,7 @@ function BulkEquipmentUpload() {
                 setUploadFile(null);
                 setFileName('');
                 setFeedBackColor("text-sm text-green-500")
-                checkSession()
+                fetchEquipmentData()
             } else {
                 // console.log("Error Uploading File");
                 setFeedbackMessage('Error uploading file.');
