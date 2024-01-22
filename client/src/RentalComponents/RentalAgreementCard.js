@@ -37,7 +37,7 @@ function RentalAgreementCard({ equipmentName, rentalId, rentalStart, rentalEnd, 
 
     const toggleReviewModal = () => {
         setIsModalOpen(!isModalOpen)
-        console.log("Modal State: ", !isModalOpen)
+        // console.log("Modal State: ", !isModalOpen)
     }
 
 

@@ -25,7 +25,8 @@ function RentalAgreementDisplay() {
     const navigate = useNavigate()
     const location = useLocation()
     const { fromOwnerDash } = location.state || {}
-    console.log("FROM OWNER DASH:?", fromOwnerDash)
+
+    // console.log("FROM OWNER DASH:?", fromOwnerDash)
 
     const formatDate = (date) => {
         // Was having a lot of issues and couldn't tell where from, so I wrote some validations to test what could be going wrong
@@ -155,12 +156,12 @@ function RentalAgreementDisplay() {
         if (Array.isArray(allRentalAgreementsState)) {
             const selectedAgreementIndex = allRentalAgreementsState.findIndex(agreementObj => 
                 agreementObj.theAgreement.id.toString() === rental_agreement_id
-            );
+            )
 
-            console.log("THE SELECTED AGREEMENT INDEX:", selectedAgreementIndex);
+            // console.log("THE SELECTED AGREEMENT INDEX:", selectedAgreementIndex)
 
             if (selectedAgreementIndex !== -1) {
-                setCurrentAgreementIndex(selectedAgreementIndex);
+                setCurrentAgreementIndex(selectedAgreementIndex)
             }
         }
     }, [rental_agreement_id, allRentalAgreementsState])
@@ -173,7 +174,7 @@ function RentalAgreementDisplay() {
     // console.log("The current rental card:", rentalCardDisplay[0])
     // console.log("currentUser agreements OWNER:", currentUser?.agreements[0])
 
-    console.log("TESTING allRentalAgreementsState CURRENTAGREEMENT INDEX USER AND OWNER:", allRentalAgreementsState[currentAgreementIndex])
+    // console.log("TESTING allRentalAgreementsState CURRENTAGREEMENT INDEX USER AND OWNER:", allRentalAgreementsState[currentAgreementIndex])
     // console.log("TESTING allRentalAgreementsState CURRENTAGREEMENT INDEX USER AND OWNER:", allRentalAgreementsState[currentAgreementIndex])
 
     // if (role === 'owner'){
@@ -237,7 +238,7 @@ function RentalAgreementDisplay() {
     })
 
     
-    console.log("All Agreements:", allRentalAgreementsState[currentAgreementIndex])
+    // console.log("All Agreements:", allRentalAgreementsState[currentAgreementIndex])
     // console.log("THE SPECIFIC AGREEMENT:", allRentalAgreementsState[currentAgreementIndex]?.theAgreement)
     
     // Handles the editing of the agreement, be it delivery address change, or changing the decision
@@ -245,8 +246,8 @@ function RentalAgreementDisplay() {
         let decision = role === 'owner' ? 'owner_decision' : 'user_decision'
         let updatedAgreement
 
-        console.log("DELIVERY CHOICE:", deliveryChoice)
-        console.log("DELIVERY ADDRESS:", deliveryAddress)
+        // console.log("DELIVERY CHOICE:", deliveryChoice)
+        // console.log("DELIVERY ADDRESS:", deliveryAddress)
         //Handle agreement submission
         if((deliveryChoice || deliveryChoice === true) && deliveryAddress){
         updatedAgreement = {
@@ -278,7 +279,7 @@ function RentalAgreementDisplay() {
             })
         }
 
-        console.log("THE AGREEMENT:",updatedAgreement)
+        // console.log("THE AGREEMENT:",updatedAgreement)
 
         
 
@@ -290,7 +291,7 @@ function RentalAgreementDisplay() {
             body: JSON.stringify(updatedAgreement),
         }).then((resp) => {
             if (resp.ok) {
-                console.log(resp)
+                // console.log(resp)
                 if ((updatedAgreement.user_decision || updatedAgreement.owner_decision ) === 'accept'){
                 toast.success(`📝 You've succesfully ACCEPTED ✅ this agreement! Once both parties have accepted you can proceed to checkout. `,
                 {
@@ -307,7 +308,7 @@ function RentalAgreementDisplay() {
                 if (role === 'user'){
                 checkSession().then(updatedUserData => {
                     if (role === 'user') {
-                      console.log("THE CONDITIONAL RAN CART SHOULD UPDATE")
+                    //   console.log("THE CONDITIONAL RAN CART SHOULD UPDATE")
                       calculateReadyToCheckout(updatedUserData.cart)
                     }
                   }).catch(error => {
@@ -344,7 +345,7 @@ function RentalAgreementDisplay() {
         body: JSON.stringify(newComment),
     }).then((resp) => {
         if (resp.ok) {
-            console.log(resp)
+            // console.log(resp)
             setRentalComment('')
             checkSession()
             toast.success(`✍ Successfully left a comment! `,
@@ -451,7 +452,7 @@ function RentalAgreementDisplay() {
             goToNextAgreement()
             checkSession()
             } else {
-            console.log("Error in deleting the rental agreement")
+            // console.log("Error in deleting the rental agreement")
             toast.error(`Error in deleting the rental agreement`,
             {
                 "autoClose" : 2000
@@ -472,7 +473,7 @@ function RentalAgreementDisplay() {
         setToggleDelete(!toggleDelete)
         }
 
-        console.log("All Agreements?:", allRentalAgreementsState)
+        // console.log("All Agreements?:", allRentalAgreementsState)
 
         const navigateBackToOwnerDash = () => {
             navigate(`/dashboard`)
