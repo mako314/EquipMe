@@ -68,7 +68,6 @@ import ProductImageForm from './EquipmentComponents/ProductImageForm';
 import BulkEquipmentUpload from './EquipmentComponents/BulkEquipmentUpload';
 
 //---------------------- Messaging Component-----------------------------
-import MessageThreads from './MessagingComponents/MessageThreads'
 import NewMessageThreads from './MessagingComponents/NewMessageThreads';
 
 //---------------------- Checkout -----------------------------

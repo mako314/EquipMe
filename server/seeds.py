@@ -38,6 +38,7 @@ if __name__ == '__main__':
         EquipmentStateHistory.query.delete()
         EquipmentPrice.query.delete()
         FeaturedEquipment.query.delete()
+        OrderHistory.query.delete()
         UserFavorite.query.delete()
         OwnerFavorite.query.delete()
         Equipment.query.delete()
@@ -45,7 +46,6 @@ if __name__ == '__main__':
         OwnerInbox.query.delete()
         EquipmentOwner.query.delete()
         User.query.delete()
-        OrderHistory.query.delete()
         EquipmentImage.query.delete()
         Message.query.delete()
         Thread.query.delete()
@@ -535,7 +535,7 @@ if __name__ == '__main__':
                     'postal_code': owner.postal_code,
                     'state': owner.state,
                 },
-                'name' : 'Marks Rentals',
+                'name' : f'{owner.firstName} Rentals',
                 'phone' : owner.phone,
                 'tax_id' : '000000000',
             },
