@@ -1,5 +1,7 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { UserSessionContext } from "../UserComponents/SessionContext";
+
 import ApiUrlContext from "../Api";
 
 function BulkEquipmentUpload() {
@@ -8,6 +10,7 @@ function BulkEquipmentUpload() {
     const [feedbackMessage, setFeedbackMessage] = useState('');
     const [fileName, setFileName] = useState('');
     const [feedbackColor, setFeedBackColor] = useState('');
+    const { checkSession } = UserSessionContext()
 
     const handleFileUpload = (e) => {
         const selectedFile = e.target.files[0];
@@ -40,6 +43,7 @@ function BulkEquipmentUpload() {
                 setUploadFile(null);
                 setFileName('');
                 setFeedBackColor("text-sm text-green-500")
+                checkSession()
             } else {
                 // console.log("Error Uploading File");
                 setFeedbackMessage('Error uploading file.');
