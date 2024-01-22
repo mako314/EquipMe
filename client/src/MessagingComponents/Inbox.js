@@ -16,7 +16,7 @@ function Inbox({inboxes, setInboxes, selectedThreadID, setSelectedThreadID, setR
   const [toggleDelete, setToggleDelete] = useState(false)
   const [deletingThreadId, setDeletingThreadId] = useState(null)
 
-  // console.log("THE INBOXES:", inboxes)
+  console.log("THE INBOXES:", inboxes)
   // const [ownerInboxes, setOwnerInboxes] = useState([])
   // const [userInboxes, setUserInboxes] = useState([])
 
@@ -143,7 +143,7 @@ function Inbox({inboxes, setInboxes, selectedThreadID, setSelectedThreadID, setR
 
     // Delete a thread 
     const handleThreadDelete = async () => {
-      // console.log("INCOMING THREAD ID:", deletingThreadId)
+      console.log("INCOMING THREAD ID:", deletingThreadId)
       try {
         const response = await fetch(`${apiUrl}thread/${deletingThreadId}/${role}`, {
           method: 'DELETE',
@@ -188,17 +188,17 @@ function Inbox({inboxes, setInboxes, selectedThreadID, setSelectedThreadID, setR
     const fetchAndUpdateInboxes = async () => {
       let fetchUrl = role === 'owner' ? `thread/owner/` : `thread/user/`
       const url = `${apiUrl}${fetchUrl}${currentUser.id}`
-      // console.log("Constructed URL for fetch:", url)
+      console.log("Constructed URL for fetch:", url)
       // console.log("I RAN")
       try {
         const response = await fetch(url)
         if (response.ok) {
           const updatedInboxes = await response.json()
-          // console.log("THE UPDATED INBOXES:", updatedInboxes)
+          console.log("THE UPDATED INBOXES:", updatedInboxes)
           if (role === 'owner'){
           setCurrentUser(prevUser => ({
             ...prevUser,
-            cart: updatedInboxes
+            owner_inboxes: updatedInboxes
           }))
           setInboxes(updatedInboxes)
         } else {
@@ -296,7 +296,7 @@ function Inbox({inboxes, setInboxes, selectedThreadID, setSelectedThreadID, setR
                 // console.log("Recipient Type:", recipientType)
                 // console.log("Recipient ID:", recipientID)
                 fetchRecipientData(recipientID, recipientType)
-                // console.log("THE DARN INBOX THREAD ID:", inbox.thread_id)
+                console.log("THE DARN INBOX THREAD ID:", inbox.thread_id)
                 
             }}
             >
