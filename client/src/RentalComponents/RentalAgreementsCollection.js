@@ -104,7 +104,7 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
       role === 'user' ? (
         <RentalAgreementCard
           key={`${agreement.id}-${agreement.created_at}`} // Unique key based on ID and created_at
-          rentalId={agreement.item.id}
+          rentalId={agreement.id}
           cartName={agreement.cart_name}
           quantity={agreement.item.quantity}
           equipmentName={agreement.item.equipment.name}
