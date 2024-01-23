@@ -2728,7 +2728,7 @@ class CheckingOut(Resource):
             payment_method_types=['card',],
             mode="payment",
             ui_mode="embedded",
-            return_url="http://localhost:3000/checkout/successful/return?session_id={CHECKOUT_SESSION_ID}",
+            return_url="https://www.equipme.live/checkout/successful/return?session_id={CHECKOUT_SESSION_ID}",
             )
         except Exception as e:
             return make_response({"error": str(e)}, 500)

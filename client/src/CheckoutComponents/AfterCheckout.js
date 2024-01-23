@@ -33,6 +33,7 @@ function AfterCheckout(){
             
             if (!data || Object.keys(data).length === 0) {
                 // Ignore empty messages
+                console.log("THE DATA:", data)
                 return
             }
             // console.log("Update from Server:", data)
