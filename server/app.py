@@ -2780,8 +2780,9 @@ api.add_resource(SSEEndpoint, '/sse/endpoint')
 
 class WebHookForStripeSuccess(Resource):
     def post(self):
-        # endpoint_secret = os.getenv('WEBHOOK_SECRET')
-        endpoint_secret=os.getenv('CLI_WEBHOOK_SECRET')
+        # Changed these 2
+        # endpoint_secret = os.getenv('CLI_WEBHOOK_SECRET')
+        endpoint_secret=os.getenv('WEBHOOK_SECRET')
         # print(request.headers.get("stripe-signature"))
         request.get_data(as_text=True)
         # print(request.get_data(as_text=True))
