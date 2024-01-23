@@ -2802,6 +2802,8 @@ class WebHookForStripeSuccess(Resource):
             print(f"Invalid Signature: {e}")
             return Response(status=400)
         
+        
+        
         # This dictionary will hold the data you want to send to the SSE endpoint
         processed_event_data = {"type": event["type"], "data": {}}
 
@@ -2829,6 +2831,8 @@ class WebHookForStripeSuccess(Resource):
 
         events_queue.put(processed_event_data)
 
+        
+
         print("THE EVENTS QUE:", events_queue)
         # processed_event_data = {"type": event["type"], "data": event["data"]["object"]}
         # events_queue.put(processed_event_data)  # Add the event data to the queue
@@ -2842,7 +2846,9 @@ class WebHookForStripeSuccess(Resource):
         #Unhandled event type: checkout.session.completed
         #127.0.0.1 - - [09/Jan/2024 15:08:53] "POST /webhook HTTP/1.1" 200 -
 
-        return json.dumps({"success": True}), 200
+        # return json.dumps({"success": True}), 200
+        return make_response(jsonify(success=True), 200)
+    
     def handle_checkout_session_expired(self, payment_intent):
         # Logic to Checkout session has expired
         pass
@@ -3021,6 +3027,8 @@ class WebHookForStripeSuccess(Resource):
             "status": payment_intent.get("status"),
             # other fields 
         }
+    
+    
 
 api.add_resource(WebHookForStripeSuccess, '/webhook')
 
