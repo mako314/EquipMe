@@ -1544,7 +1544,7 @@ class BulkEquipmentUpload(Resource):
                 return make_response(jsonify({'error': 'File processing error'}), 500)
             
 
-            all_equipment.columns = ['Equipment_name', 'Equipment_type', 'Make', 'Model', 'Equipment Image', 'State', 'City', 'Address Line 1', 'Address_line_2', 'Postal_Code', 'Availability', 'Delivery', 'Total Quantity', 'Available Quantity', 'Owner First Name', 'Owner Last Name', 'Phone', 'Email',]
+            all_equipment.columns = ['Equipment_name', 'Equipment_type', 'Make', 'Model', 'Equipment Image', 'State', 'City', 'Address Line 1', 'Address_line_2', 'Postal_Code', 'Availability', 'Delivery', 'Total Quantity', 'Available Quantity', 'hourly_rate', 'daily_rate', 'weekly_rate', 'promo_rate', 'Owner First Name', 'Owner Last Name', 'Phone', 'Email',]
             equipment_list = []
 
             for index, row in all_equipment.iterrows():
@@ -1608,9 +1608,25 @@ class BulkEquipmentUpload(Resource):
                 new_state = 'available',
                 changed_at = datetime.utcnow(),
                 )
+                
+                submitted_hourly_rate = int(row['hourly_rate']) * 100
+                submitted_daily_rate = int(row['daily_rate']) * 100
+                submitted_weekly_rate = int(row['weekly_rate']) * 100
+                submitted_promo_rate = int(row['promo_rate']) * 100
 
+                # Need a way to input, owner_id and owner maybe a 2 step process?
+                equipment_price = EquipmentPrice(
+                    hourly_rate = submitted_hourly_rate,
+                    daily_rate = submitted_daily_rate,
+                    weekly_rate = submitted_weekly_rate,
+                    promo_rate = submitted_promo_rate,
+                    equipment_id = equipment.id,
+                )
+
+                db.session.add(equipment_price)
                 db.session.add(new_equipment_status)
                 db.session.add(new_state_history)
+
                 db.session.commit()
             
         except Exception as e:
