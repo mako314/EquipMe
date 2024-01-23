@@ -87,6 +87,7 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
             setDashLoad(false)
           } catch (error) {
             console.error('Error fetching Stripe account:', error)
+            setDashLoad(false)
             // Not sure if I'd like to have an error state
             // setError('Failed to fetch Stripe account details.')
           }
