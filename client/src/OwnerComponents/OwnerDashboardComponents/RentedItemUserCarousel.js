@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 function RentedItemUserCarousel({currentUser, setFromOwnerDash, role}) {
 
 const [currentIndex, setCurrentIndex] = useState(0)
-console.log("CAROUSEL:",currentUser)
+// console.log("CAROUSEL:",currentUser)
 const navigate = useNavigate()
 
 
@@ -40,7 +40,7 @@ const flatMappedUserAgreement = currentUser?.cart?.flatMap(item => {
 
 userAgreementsForDateSorting = flatMappedUserAgreement.flatMap(item => item)
 
-console.log("THE DATA YOU'RE LOOKING FOR:", userAgreementsForDateSorting)
+// console.log("THE DATA YOU'RE LOOKING FOR:", userAgreementsForDateSorting)
 
 {/* 
 to make the #'s pretty
@@ -77,7 +77,7 @@ userAgreementsForDateSorting.forEach((equipment) => {
     )
 })
 
-console.log(carouselItems)
+// console.log(carouselItems)
   
   // Rather simple previous and next functions. Sets a variable to 0 to test if it's the first item in the array, from then it either adds one or removes one depending on whether or not which is being called.
   const goToPrevious = () => {

@@ -51,16 +51,8 @@ function CreateNewCart({addCart, toggleModal, setCurrentCart}){
             throw new Error('Failed to create new cart')
         }
         const createdCart = await resp.json()
-        console.log("THE NEW CART:", createdCart)
-      //   if (createdCart.id) {
-      //     console.log("DOES THIS CART ID EVEN EXIST",createdCart.id)
-      //     return
-      // }
-
-        // I need to work this out, like ASAP, having issues with createdCart and extracting the ID 
-
+        // console.log("THE NEW CART:", createdCart)
         addCart(createdCart)
-        setCurrentCart(createdCart)
         toggleModal()
         checkSession()
 

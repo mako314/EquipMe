@@ -68,7 +68,6 @@ import ProductImageForm from './EquipmentComponents/ProductImageForm';
 import BulkEquipmentUpload from './EquipmentComponents/BulkEquipmentUpload';
 
 //---------------------- Messaging Component-----------------------------
-import MessageThreads from './MessagingComponents/MessageThreads'
 import NewMessageThreads from './MessagingComponents/NewMessageThreads';
 
 //---------------------- Checkout -----------------------------
@@ -81,9 +80,16 @@ import OrderHistory from './CheckoutComponents/OrderHistory';
 //---------------------- Rental Agreement Display -----------------------------
 import RentalAgreementDisplay from './RentalComponents/RentalAgreementDisplay'
 
+//---------------------- Extra Pages -----------------------------
+import AboutUsPage from './ExtraPageComponents/AboutUs';
+import CookiesPolicy from './ExtraPageComponents/Cookies';
+import TermsAndConditionsPage from './ExtraPageComponents/TermsAndConditions';
+import ContactUsPage from './ExtraPageComponents/ContactPage';
+
 //---------------------- Toastify -----------------------------
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
+
 
 
 function App() {
@@ -344,7 +350,7 @@ function App() {
             <Route path='/user/profile/:id' element={<UserProfile setFromOwnerDash={setFromOwnerDash} fromOwnerDash={fromOwnerDash}/>} />
 
             {/* Temp Route for CSV File Upload*/}
-            <Route path='/temp/bulk_equipment_upload' element={<BulkEquipmentUpload />} />
+            <Route path='/temp/bulk_equipment_upload' element={<BulkEquipmentUpload setEquipmentArray={setEquipmentArray}/>} />
 
             {/* Owner Dashboard Page
             Likely converting this to just a general dashboard. Dashboards for everyone!
@@ -371,6 +377,12 @@ function App() {
             {/* Rental Display */}
             <Route path='/handle/agreements/:rental_agreement_id' element={<RentalAgreementDisplay/>} />
 
+            {/* Extra pages like contact us, cookies, about us, etc */}
+            <Route path='/about/us' element={<AboutUsPage/>} />
+            <Route path='/cookies' element={<CookiesPolicy/>} />
+            <Route path='/terms/and/conditions' element={<TermsAndConditionsPage/>} />
+            <Route path='/contact/us' element={<ContactUsPage/>} />
+            
 
           </Routes>
           <ToastContainer

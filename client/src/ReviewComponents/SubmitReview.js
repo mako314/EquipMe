@@ -17,8 +17,8 @@ function SubmitReview({toggleReviewModal, isModalOpen, renterId, ownerId, rental
     // console.log("RENTER ID:", renterId)
     // console.log("OWNER ID:", ownerId)
 
-    console.log("THE REVIEW COMMENT:", reviewComment)
-    console.log("THE STAR AMOUNT:", starAmount)
+    // console.log("THE REVIEW COMMENT:", reviewComment)
+    // console.log("THE STAR AMOUNT:", starAmount)
 
     useEffect(() => {
       if (postedReview && postedReview.review_comment !== undefined && postedReview.review_stars !== undefined) {
@@ -36,7 +36,7 @@ function SubmitReview({toggleReviewModal, isModalOpen, renterId, ownerId, rental
         }
 
         if(starAmount === 0){
-            return toast.warn(`⭐ Star amount must be at least`,
+            return toast.warn(`⭐ Star amount must be at least 1.`,
             {
             "autoClose" : 2000
             })
@@ -60,7 +60,7 @@ function SubmitReview({toggleReviewModal, isModalOpen, renterId, ownerId, rental
 
         let reviewUrl = postedReview ? patchURLs : `${apiUrl}review`
 
-        console.log('REVIEW COMMENT INSIDE OF THE FETCH:', reviewComment)
+        // console.log('REVIEW COMMENT INSIDE OF THE FETCH:', reviewComment)
     
         fetch(reviewUrl, {
             method: reviewMethod,
@@ -71,8 +71,9 @@ function SubmitReview({toggleReviewModal, isModalOpen, renterId, ownerId, rental
           }).then((resp) => {
             if (resp.ok) {
               resp.json().then((newReviewData) => {
-                console.log(newReviewData)
-                postedReview ?                 toast.success(`✅ Succesfully edited the review you left ${role === 'owner' ? `${renterFirstName} ${renterLastName}` : `${ownerFirstName} ${ownerLastName}` } `,
+                // console.log(newReviewData)
+                postedReview ?
+                toast.success(`✅ Succesfully edited the review you left ${role === 'owner' ? `${renterFirstName} ${renterLastName}` : `${ownerFirstName} ${ownerLastName}` } `,
                 {
                   "autoClose" : 2000
                 })
@@ -117,14 +118,14 @@ function SubmitReview({toggleReviewModal, isModalOpen, renterId, ownerId, rental
         alt="" 
         className="mr-1.5 w-4 cursor-pointer"
         onClick={ () => {
-        console.log(`Setting star amount to ${i}`) // Star count
+        // console.log(`Setting star amount to ${i}`) // Star count
         setStarAmount(i)}}
         key={`star-${i}`} 
         />)
       }
 
 
-      console.log(starAmount)
+      // console.log(starAmount)
 
 
 

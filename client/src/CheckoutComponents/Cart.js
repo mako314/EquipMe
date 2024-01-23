@@ -11,9 +11,9 @@ import LoadingPage from "../ExtraPageComponents/LoadingPage";
 import Page404 from "../ExtraPageComponents/Page404";
 
 
-function Cart({setAvailableToCheckoutNumb}){
+function Cart(){
 
-  const { currentUser, role} = UserSessionContext() 
+  const { currentUser, role, setCurrentUser, checkSession} = UserSessionContext() 
   const apiUrl = useContext(ApiUrlContext)
   const [currentCart, setCurrentCart] = useState(0)
   const [cartData, setCartData] = useState([])
@@ -28,8 +28,10 @@ function Cart({setAvailableToCheckoutNumb}){
   const [cartItemsChecked, setCartItemsChecked] = useState({})
 
   const [isLoading, setIsLoading] = useState(true)
-  
 
+  const [toggleDelete, setToggleDelete] = useState(false)
+
+  const [noCarts, setNoCarts] = useState(false)
   const navigate = useNavigate()
 
   // https://stackoverflow.com/questions/42173786/react-router-pass-data-when-navigating-programmatically
@@ -45,8 +47,12 @@ function Cart({setAvailableToCheckoutNumb}){
   // console.log("THE CURRENT CART TOTAL:", currentCartTotal)
   // console.log("AVAILABLE TO CHECK OUT TOTAL:", availableToCheckOutTotal)
   // console.log("THE CURRENT CART TOTAL BACKEND:", cartData[currentCart]?.total)
-
   // console.log(Array.isArray(individualTotal))
+
+  // console.log("THE CART TESTING:", cartData[currentCart])
+  // console.log("THE CART DATA:", cartData)
+  // console.log("THE CURRENT CART VALUE:", currentCart)
+
   useEffect(() => {
 
     let itemsBothPartiesAgreedOn = 0
@@ -55,9 +61,9 @@ function Cart({setAvailableToCheckoutNumb}){
     if(Array.isArray(individualTotal)){
   // Individual total is calculated inside of CartItem.js, values passed in via props below in the return.
   // Filter items belonging to the current cart, filter any time need something for x, so I'm trying to only track totals for this specific cart, filter by cart ID.
-  const itemsInCurrentCartBothAgreed = individualTotal.filter(item => item.cart_id === cartData[currentCart].id && item.agreement_status === 'both-accepted')
+  const itemsInCurrentCartBothAgreed = individualTotal?.filter(item => item?.cart_id === cartData[currentCart]?.id && item?.agreement_status === 'both-accepted')
 
-  console.log("NUMBER I'D TRY TO USE FOR CART STANDING TOTAL AVAILABLE TO CHECKOUT?", itemsInCurrentCartBothAgreed.length)
+  // console.log("NUMBER I'D TRY TO USE FOR CART STANDING TOTAL AVAILABLE TO CHECKOUT?", itemsInCurrentCartBothAgreed.length)
 
   // if(itemsInCurrentCartBothAgreed.length > 0){
   //   setAvailableToCheckoutNumb(itemsInCurrentCartBothAgreed.length)
@@ -68,7 +74,7 @@ function Cart({setAvailableToCheckoutNumb}){
   // console.log("ITEMS IN CURRENT CART:", itemsInCurrentCart)
 
   //This just takes into account ALL the items in a users cart, where the items cart ID matches the current carts ID.
-  const itemsInCurrentCartAll = individualTotal.filter(item => item.cart_id === cartData[currentCart].id)
+  const itemsInCurrentCartAll = individualTotal?.filter(item => item?.cart_id === cartData[currentCart]?.id)
   
   // console.log("CURRENT ITEMS IN CART:", itemsInCurrentCartAll)
   // Sum up the costs of these items
@@ -95,12 +101,19 @@ function Cart({setAvailableToCheckoutNumb}){
 setCurrentCartTotal(allTotalCarts)
 setAvailableToCheckOutTotal(itemsBothPartiesAgreedOn)
 // console.log("THE CURRENT TOTAL FOR CART", cartData[currentCart]?.cart_name, ":", currentTotal)
+
 }, [cartData, individualTotal])
 
 // Math to check for the total amounts both backend and front end
 // console.log("CHECKING FRONT END TO SEE IF BACKEND VALUE IS EQUAL TO", availableToCheckOutTotal * 100 === cartData[currentCart]?.total )
 // console.log(availableToCheckOutTotal * 100)
 // console.log(cartData[currentCart]?.total)
+
+
+// useEffect(() => {
+//   console.log("cartData updated:", cartData);
+//   console.log("currentCart updated:", currentCart);
+// }, [cartData, currentCart])
 
 
 useEffect(() => {
@@ -119,7 +132,7 @@ useEffect(() => {
 
 // UseEffect for initial cart load,
   useEffect(() => {
-    console.log("Fetching cart data...")
+    // console.log("Fetching cart data...")
     if (role === 'user') {
       setCartData(currentUser.cart)
       setIsLoading(false)
@@ -129,15 +142,13 @@ useEffect(() => {
       })
       
     }
-  }, [currentUser])
+  }, [currentUser, currentCart])
 
   //If a user has no items in cart or no cart created display this instead
-  if (!cartData || cartData?.length === 0) {
-    if (role === 'owner'){
+  if (role === 'owner'){
       return <div> Not available! </div>
-    }
-    return <div> Nothing has been added to your cart yet! </div>
   }
+
 
   if (isLoading){
     return <LoadingPage loadDetails={"Cart"}/>
@@ -147,43 +158,45 @@ useEffect(() => {
 
   //Changes cart based on cart ID
   const handleCartChange = (e) => {
-    setCurrentCart(e.target.value)
+    if(currentUser.cart.length === 0){
+
+    }
+    // setCurrentCart(e.target.value)
+    // Find index found it's way back in, what an amazing function
+    const cartId = parseInt(e.target.value, 10) // assuming your IDs are integers
+    const cartIndex = cartData.findIndex(cart => cart.id === cartId)
+    setCurrentCart(cartIndex)
   }
+
+  // //Needed to move this here to have the state update for a re-render, allows for creating a new cart.
+
+  const addCart = (newCart) => {
+    setCartData(prevCartData => {
+      const updatedCartData = [...prevCartData, newCart]
+      setCurrentCart(updatedCartData.length - 1) // Set currentCart to the index of the new cart
+      return updatedCartData
+    })
+  }
+
+  // console.log("THE CURRENT CART INDEX:", currentCart)
 
   //Simple open modal for cart creation
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen)
   }
 
-  //Needed to move this here to have the state update for a re-render, allows for creating a new cart.
-  const addCart = (newCart) => {
-    setCartData((cartData) => [...cartData, newCart])
-  }
-
-  //-------------------------------------
-
-  //  cartData[currentCart].cart_item?.length === 0 ?
-  //   <p> Cart is empty or loading...</p> 
-  //   : 
-  //   cartData[currentCart]?.cart_item.forEach((item) => (
-  //     // console.log("THE ITEM:", item)
-  //   ))  
-    
-
-
-  // Map over carts, present options
-  const cartOptions = cartData?.map((item) => {
-    return (
-    <Fragment key={`${item.id} ${item.cart_name}`}>
-    {/* so the value starts at 0, but the item.id (cart id) starts at 1. So I -1 here to get the right cart index */}
-    <option className="text-black" value={item.id - 1}>{item.cart_name}</option> 
-    </Fragment>)
-  })
+  const cartOptions = currentUser.cart.length > 0 ? (
+    cartData?.map((item) => (
+      <option key={item.id} value={item.id}>{item.cart_name}</option>
+    ))
+  ) : (
+    <option key="no-cart" value="" disabled>No carts available</option>
+  )
 
 
   //Map over equipment price, and take the rates as options
   let rateOptions
-  if(Array.isArray(cartData[currentCart].cart_item)){
+  if(Array.isArray(cartData[currentCart]?.cart_item)){
     cartData[currentCart].cart_item?.flatMap(item => {
       if (Array.isArray(item.equipment.equipment_price)) {
         item.equipment.equipment_price?.map((price) => {
@@ -216,7 +229,7 @@ useEffect(() => {
   const handleCheckoutStripe = async () => {
     const itemsReadyForCheckout = filteredCartItems.filter(item => item.isChecked)
     .map(item => {
-      console.log(item)
+      // console.log(item)
       return {
         agreement_status: item.agreements[0].agreement_status,
         delivery: item.agreements[0].delivery,
@@ -233,7 +246,7 @@ useEffect(() => {
       }
     })
 
-    console.log("ITEMS THAT HAVE BEEN CHECKBOXED:", itemsReadyForCheckout)
+    // console.log("ITEMS THAT HAVE BEEN CHECKBOXED:", itemsReadyForCheckout)
     // Or I can likely use this : o, but this is just checkboxed, so I'd need something to determine it previously (cart amount ready to checkout )
     // console.log("THE USER ID:", currentUser.id)
     // console.log("THE CART ID", currentCart)
@@ -274,7 +287,6 @@ useEffect(() => {
 // This function maps over the filteredCartItems, and is passed to cart_item to be incorporated with the checkbox. When an item is checked it gives the isChecked a value of true, which then allows for that item to be checked out. 
 // This way if a user has say 5 items, and only wants to check out 2, they are able to select the 2 they'd like to checkout.
 //If it matches, a new object is created using the spread operator to copy all existing properties of the item. Then, the `isChecked` property is set to the new value provided by the `isChecked` parameter.
-
 const handleItemCheck = (cartItemId, isChecked) => {
   const updatedCartItems = filteredCartItems.map(item => 
     item.id === cartItemId ? {...item, isChecked} : item
@@ -283,10 +295,122 @@ const handleItemCheck = (cartItemId, isChecked) => {
 }
 
 
+// Toggle for delete button
+const handleToggleDelete = () => {
+  setToggleDelete(!toggleDelete)
+}
+
+//Handles deleting the cart item!
+const handleDeleteCart = async (cartId) => {
+  try {
+    const response = await fetch(`${apiUrl}user/${currentUser.id}/cart/${cartId}`, {
+      method: 'DELETE',
+    })
+
+    if (response.ok) {
+      // Filter out the deleted cart
+      // const updatedCarts = cartData.filter(cart => cart.id !== cartId)
+      // Update the state
+      // setCartData(updatedCarts)
+      await fetchAndUpdateCartData()
+      setToggleDelete(!toggleDelete)
+      toast.success(`💥 Cart successfully deleted!`, {
+        "autoClose": 2000
+    })
+    } else {
+      // console.log("Error in the fetch!")
+      toast.error(`Error: Failed to delete, check your input and try again!`,
+      {
+        "autoClose" : 2000
+      })
+    }
+  } catch (error) {
+    // Handle fetch errors
+    toast.error(`Error: Failed to delete, check your input and try again!`,
+    {
+      "autoClose" : 2000
+    })
+  }
+}
+
+const onItemDeleted = (deletedItemId) => {
+  const updatedCartItems = filteredCartItems.filter(item => item.id !== deletedItemId)
+  setFilteredCartItems(updatedCartItems)
+
+  // Recalculate total and console log each item
+  const newTotal = updatedCartItems.reduce((total, item) => {
+    // console.log(item) // Log each item
+
+    // Determine the price to use (if changed or at addition)
+    const itemPrice = (item.price_cents_if_changed != null) ? item.price_cents_if_changed : item.price_cents_at_addition
+
+    // Calculate item total considering quantity and rental length
+    const itemTotal = itemPrice * item.quantity * item.rental_length
+
+    return total + itemTotal 
+  }, 0)
+
+  // console.log(newTotal)
+
+  // Convert total to a more readable format
+  const newTotalInDollars = newTotal / 100
+  // console.log("New Total:", newTotalInDollars)
+
+  setCurrentCartTotal(newTotalInDollars)
+  fetchAndUpdateCartData()
+  
+}
+
+
+const fetchAndUpdateCartData = async () => {
+  try {
+    const response = await fetch(`${apiUrl}user/${currentUser.id}/cart`)
+    if (response.ok) {
+      const updatedCartData = await response.json()
+      if (updatedCartData.length === 0) {
+        // No carts are available
+        setCartData([])
+        setNoCarts(true)
+        setCurrentCart(-1) // Resetting currentCart
+        checkSession()
+        // console.log('Updated cartData: updatedCartData.length === 0', updatedCartData)
+      } else {
+        // Carts are available
+        setCartData(updatedCartData)
+        // console.log('Updated cartData: else', updatedCartData)
+        setCurrentUser(prevUser => ({
+          ...prevUser,
+          cart: updatedCartData
+        }))
+        checkSession()
+        setNoCarts(false)
+      }
+    } else {
+      const errorData = await response.json()
+      console.error("An error occurred:", errorData.message)
+      setNoCarts(true)
+      setCartData([])
+      setCurrentCart(-1)
+      checkSession()
+      toast.error(`Error: ${errorData.message}`,
+      {
+        "autoClose" : 2000
+      })
+    }
+  } catch (error) {
+    // Handle network/JS errors
+    console.error("A network or JavaScript error occurred:", error.message)
+    // Optionally, display a notification to the user
+    toast.error(`Network/JavaScript Error: ${error.message}`,
+    {
+      "autoClose" : 2000
+    })
+  }
+}
+
+
 // console.log("THE ITEMS TO CHECK OUT:", filteredCartItems)
-
-
-  // console.log("FILTERED CART ITEMS:", filteredCartItems)
+// console.log("FILTERED CART ITEMS:", filteredCartItems)
 
     return(
       <div className="bg-gray-100 pt-10 pb-5">
@@ -296,7 +420,6 @@ const handleItemCheck = (cartItemId, isChecked) => {
         <div className="flex flex-col items-center">
         <div className="mb-4 w-full max-w-4xl px-4 sm:px-6 lg:px-8">
         <div className="flex justify-center space-x-4 bg-white py-3 px-5 rounded-lg shadow-md">
-        
 
         <form className="flex flex-row items-center mb-4">
         <div className="flex items-center mr-2">
@@ -386,10 +509,14 @@ const handleItemCheck = (cartItemId, isChecked) => {
     <div className="mx-auto max-w-5xl justify-center px-6 md:flex md:space-x-6 xl:px-0">
       <div className="rounded-lg md:w-2/3">
       <select
+            key={`cart-select-${cartData.length}`}
             className="text-sm mb-2 font-medium text-gray-900 dark:text-gray-300 border-2 border-black"
-            value={currentCart} 
+            value={currentCart >= 0 && currentCart < cartData.length ? cartData[currentCart].id : ''} 
             onChange={handleCartChange}>
+            <option value="" disabled>--Please Select a Cart--</option>
             {cartOptions}
+
+
       </select>
        {/* Button to open the modal */}
        <button
@@ -398,6 +525,32 @@ const handleItemCheck = (cartItemId, isChecked) => {
         >
           Create New Cart
         </button>
+
+
+        {!toggleDelete ? (
+                <button
+                    onClick={handleToggleDelete}
+                    className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-blue-300 ml-4 mb-2"
+                >
+                    Delete my cart
+                </button>
+            ) : (
+                <>
+                    <button
+                        onClick={() => handleDeleteCart(cartData[currentCart]?.id)}
+                        className="bg-green-500 text-white p-2 rounded-md hover:bg-green-600 focus:outline-none focus:ring-4 focus:ring-blue-300 ml-4 mb-2"
+                    >
+                        Yes, I'm sure
+                    </button>
+                    <button
+                        onClick={handleToggleDelete}
+                        className="bg-gray-500 text-white p-2 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-4 focus:ring-blue-300 ml-4 mb-2"
+                    >
+                        No, I changed my mind
+                    </button>
+                </>
+          )}
+
 
         {/* Modal */}
         {isModalOpen && (
@@ -411,13 +564,14 @@ const handleItemCheck = (cartItemId, isChecked) => {
                 </svg>
                 </div>
                 <h3 className="text-lg leading-6 font-medium text-gray-900">Create New Cart</h3>
-                <CreateNewCart addCart={addCart} toggleModal={toggleModal} />
+                <CreateNewCart addCart={addCart} toggleModal={toggleModal} setCurrentCart={setCurrentCart}/>
               </div>
             </div>
           </div>
         )}
 
       {/* <CreateNewCart addCart={addCart}/> */}
+
     {filteredCartItems && filteredCartItems.length > 0? (
         filteredCartItems.map((item) => {
           // console.log(item)
@@ -452,6 +606,9 @@ const handleItemCheck = (cartItemId, isChecked) => {
               promoRate={promoRateValue}
               proceedToCheckout={cartItemsChecked[item.id]}
               handleItemCheck={handleItemCheck}
+              setFilteredCartItems={setFilteredCartItems}
+              filteredCartItems={filteredCartItems}
+              onItemDeleted={onItemDeleted}
             />
           )
         })
@@ -459,6 +616,14 @@ const handleItemCheck = (cartItemId, isChecked) => {
         <p>No items match your filter criteria.</p>
       )
     }
+
+{cartData.length === 0 && (
+          <div className="text-center p-10">
+            <h2 className="text-2xl font-bold mb-4">No Carts Available</h2>
+            <p>Create a new cart to get started.</p>
+            {/* You can add a button or link to create a new cart here */}
+          </div>
+        )}
 
       </div>
       <div className="mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-12 md:w-1/3">

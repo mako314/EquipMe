@@ -25,7 +25,7 @@ function OwnerEquipmentListing({ addRentalAgreement, owners, equipmentArray, fea
     const navigate = useNavigate()
     const apiUrl = useContext(ApiUrlContext)
 
-    console.log(featuredRental[0].location)
+    // console.log(featuredRental[0].location)
 
     const formSchema = object({
         location: string().required('We need your coordinates Masterchief'),

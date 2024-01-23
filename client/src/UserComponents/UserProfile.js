@@ -18,10 +18,11 @@ function UserProfile({fromOwnerDash, setFromOwnerDash}) {
   const [heartColor, setHeartColor] = useState('white')
   const [isFavorited, setIsFavorited] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [ownerReviews, setOwnerReviews] = useState([])
   const navigate = useNavigate();
   const { id } = useParams()
 
-  console.log("THE CURRENT USER:",currentUser)
+  // console.log("THE CURRENT USER:",currentUser)
 
   // function handleCsvClick(e) {
   //   console.log("Button working")
@@ -35,7 +36,7 @@ function UserProfile({fromOwnerDash, setFromOwnerDash}) {
       .then((data) => {
         setUserProfile(data)
         const favoriteStatus = currentUser?.owner_favorite?.some(favorite => favorite.user_id === parseInt(id, 10))
-        console.log("Favorite Status:", favoriteStatus)
+        // console.log("Favorite Status:", favoriteStatus)
         setHeartColor(favoriteStatus ? "red" : "white")
         // I can't just set is favorited and try it with heart color, it's just too quick and defaults, so I make a variable that contains data and set it to that.
         setIsFavorited(favoriteStatus)
@@ -100,17 +101,32 @@ function UserProfile({fromOwnerDash, setFromOwnerDash}) {
 
   // console.log(source?.user_inboxes?.length)
   
-  console.log("THE REVIEWS:",source.review)
+  // console.log("THE REVIEWS:",source.review)
   // Owner is the one leaving reviews
-  let ownerReviews = source.review?.filter(reviewSubmission => reviewSubmission.reviewer_type === 'owner')
+  // let ownerReviews = source.review?.filter(reviewSubmission => reviewSubmission.reviewer_type === 'owner')
 
-  console.log("Owner Reviews:", ownerReviews)
+//-----------------------------------------------------------------
+    // The portion below handled setting the owners reviews, did this because it makes the delete easier.
+    useEffect(() => {
+      // When component mounts, initialize userReviews
+      setOwnerReviews(source.review?.filter(reviewSubmission => reviewSubmission.reviewer_type === 'owner'))
+      }, [source.review]) // Depend on owner.review
+  
+      // Handles immediately removing the the review a user removes.
+      const handleReviewDelete = (deletedReviewId) => {
+      // Update userReviews state
+      setOwnerReviews(currentReviews => currentReviews.filter(review => review.id !== deletedReviewId));
+      }
+//-----------------------------------------------------------------
+
+
+  // console.log("Owner Reviews:", ownerReviews)
   
   //May actually want to include a banner image so it looks nicer
 
 
   const handleFavoriteSelection = () => {
-    console.log(isFavorited)
+    // console.log(isFavorited)
     // Conditional method and URL based on whether is favorited doesn't exist off the useEffect
     const method = !isFavorited ? "POST" : "DELETE"
     const url = !isFavorited ? `${apiUrl}owner/${currentUser.id}/favorite/user/${id}` : `${apiUrl}remove/owner/${currentUser.id}/favorite/user/${id}`
@@ -138,10 +154,14 @@ function UserProfile({fromOwnerDash, setFromOwnerDash}) {
     })
   }
 
+  // Navigate back to dashboard
   const navigateBackToDash = () => {
     setFromOwnerDash(!fromOwnerDash)
     navigate(`/dashboard`)
   }
+
+
+
 
   // Render loading page if display is still loading
   if (loading) {
@@ -255,13 +275,13 @@ function UserProfile({fromOwnerDash, setFromOwnerDash}) {
                 </div>
               </div>
 
-              <div class="mx-auto w-full max-w-7xl py-16">
+              <div className="mx-auto w-full max-w-7xl py-16">
                         <div className="flex justify-between">
                                 <span className="text-gray-600 font-bold mb-4">Reviews</span>
                         </div>
-                        <ul class="mb-6 grid gap-5 sm:grid-cols-2 md:grid-cols-2 md:mb-16"> 
+                        <ul className="mb-6 grid gap-5 sm:grid-cols-2 md:grid-cols-2 md:mb-16"> 
                         {ownerReviews?.map((item) => (
-                            <Reviews stars={item.review_stars} comment={item.review_comment} image={item.owner.profileImage} firstName={item.owner.firstName} lastName={item.owner.lastName} profession={item.owner.profession}/>
+                            <Reviews key={item.id} stars={item.review_stars} comment={item.review_comment} image={item.owner.profileImage} firstName={item.owner.firstName} lastName={item.owner.lastName} profession={item.owner.profession} onDelete={handleReviewDelete} reviewId={item.id}/>
                         ))}
                         </ul>
 

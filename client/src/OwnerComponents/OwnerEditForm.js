@@ -5,6 +5,7 @@ import {useFormik} from "formik"
 import { object, string, number} from 'yup'
 import ApiUrlContext from "../Api";
 import { UserSessionContext } from "../UserComponents/SessionContext";
+import {toast} from 'react-toastify'
 
 function OwnerEditForm(){
     // READ ME READ ME READ ME
@@ -17,6 +18,7 @@ function OwnerEditForm(){
     // https://avatarfiles.alphacoders.com/224/224246.png
 
     const [error, setError] = useState()
+    const [toggleDelete, setToggleDelete] = useState(false)
     const navigate = useNavigate()
     const apiUrl = useContext(ApiUrlContext)
     const { currentUser, role, checkSession} = UserSessionContext()
@@ -30,7 +32,6 @@ function OwnerEditForm(){
         initialValues: {
             firstName: currentUser.firstName,
             lastName: currentUser.lastName,
-            // location: currentUser.location,
             password: '',
             country: currentUser.country,
             state: currentUser.state,
@@ -58,8 +59,12 @@ function OwnerEditForm(){
               .then(res =>{
                 if (res.ok) {
                     res.json().then(owner => {
-                        console.log("The UPDATED Owner:", owner)
+                        // console.log("The UPDATED Owner:", owner)
                         // updateOwner(owner)
+                        toast.success(`Succesfully updated your account `,
+                        {
+                        "autoClose" : 2000
+                        })
                         checkSession()
                         // navigate('/equipment_owners')
                     })
@@ -69,6 +74,37 @@ function OwnerEditForm(){
               })
         }
     })
+
+
+
+
+    // Handles deleting the account 
+    const handleToggleDelete = () => {
+        setToggleDelete(!toggleDelete)
+      }
+      
+    const handleDeleteUser = async () => {
+        try {
+          const response = await fetch(`${apiUrl}${role === 'owner' ? 'equipment_owner/':'user/'}${currentUser.id}`, {
+            method: 'DELETE',
+          })
+      
+          if (response.ok) {
+            // Should I just send them to the home screen?
+            toast.success(`Succesfully Deleted your account `,
+            {
+              "autoClose" : 2000
+            })
+            navigate('/')
+            window.scrollTo(0, 0)
+
+          } else {
+            // console.log("Error in the fetch!")
+          }
+        } catch (error) {
+          // Handle fetch errors
+        }
+      }
 
     return(
         <div className="bg-white py-6 sm:py-8 lg:py-12">
@@ -88,7 +124,8 @@ function OwnerEditForm(){
                     {/* display errors from formik/yup */}
                     {formik.errors && Object.entries(formik.errors).map(([field, error]) => <p key={field + error}>{error}</p>)}
                     {/* display errors from backend */}
-                    {error && <p>{error}</p>}
+                    {error && <p>{error.message ? error.message : 'An error occurred'}</p>}
+
                     </div>
 
                 {/* Avatar Section */}
@@ -118,12 +155,12 @@ function OwnerEditForm(){
                     <input type="text" name="phone" value={formik.values.phone} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
                 
                     <label htmlFor="email" className="mt-4 mb-2 inline-block text-sm text-gray-800 sm:text-base">Email</label>
-                    <input type="text" name="email" value={formik.values.email} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+                    <input type="email" name="email" value={formik.values.email} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
                 </div>
 
                 <div className="sm:col-span-2">
                     <label htmlFor="password" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">Password</label>
-                    <input type="text" name="password" value={formik.values.password} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+                    <input type="password" name="password" value={formik.values.password} onChange={formik.handleChange} className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
                 </div>
 
                 <div className="sm:col-span-2">
@@ -144,8 +181,8 @@ function OwnerEditForm(){
 
                 <div className="sm:col-span-2">
                     <label htmlFor="bio" className="mb-2 inline-block text-sm text-gray-800 sm:text-base"> Bio </label>
-                    <textarea type="text" name="bio" value={formik.values.bio} onChange={formik.handleChange} className="w-full h-48  rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" 
-                    > </textarea>
+                    <textarea type="text" name="bio" value={formik.values.bio || ''} onChange={formik.handleChange} className="w-full h-48  rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" 
+                    /> 
                 </div>
 
                 <div className="sm:col-span-2">
@@ -192,11 +229,41 @@ function OwnerEditForm(){
 
 
                 <div className="flex items-center justify-between sm:col-span-2">
+                <div>
+                    <button type="submit" className="inline-block rounded-lg bg-orange-500 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 md:text-base">
+                        Save All
+                    </button>
+                    {!toggleDelete ? (
+                <button
+                    onClick={handleToggleDelete}
+                    type="button"
+                    className="bg-red-500 text-white px-8 py-3 rounded-md hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-blue-300 ml-4 mb-2"
+                >
+                    Delete my Account
+                </button>
+            ) : (
+                <>
+                    <button
+                        type="button"
+                        onClick={() => handleDeleteUser()}
+                        className="bg-green-500 text-white px-8 py-3 rounded-md hover:bg-green-600 focus:outline-none focus:ring-4 focus:ring-blue-300 ml-4 mb-2"
+                    >
+                        Yes, I'm sure
+                    </button>
+                    <button
+                        type="button"
+                        onClick={handleToggleDelete}
+                        className="bg-gray-500 text-white px-8 py-3 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-4 focus:ring-blue-300 ml-4 mb-2"
+                    >
+                        No, I changed my mind
+                    </button>
+                </>
+          )}
+                </div>
 
-                    {/* NEED TO CHANGE COLOR */}
-                    <button type="submit" className="inline-block rounded-lg bg-orange-500 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 md:text-base"> Save All</button>
-
-                    <span className="text-sm text-gray-500">*Required</span>
+                <span className="text-sm text-gray-500">
+                    *Required
+                </span>
                 </div>
                 </form>
 
@@ -207,69 +274,3 @@ function OwnerEditForm(){
 }
 
 export default OwnerEditForm;
-
-            // <div className = "form-container">
-            
-            //     <form className="form" onSubmit={formik.handleSubmit}>
-            //         <div className="signup-form">
-    
-            //             {/* display errors from formik/yup */}
-            //             { formik.errors && Object.values(formik.errors).map(e => <p>{e}</p>) }
-    
-            //             {/* display errors from backend */}
-            //             {error && <p>{error}</p>}
-    
-            //             <div className="submit-form"> 
-            //             <label>Name</label>
-            //             <input 
-            //                 type="text"
-            //                 name="name"
-            //                 value={formik.values.name}
-            //                 onChange={formik.handleChange}
-            //             />
-            //             </div>
-    
-            //             <div className="submit-form"> 
-            //             <label>Location</label>
-            //             <input
-            //                 type="text"
-            //                 name="location"
-            //                 value={formik.values.location}
-            //                 onChange={formik.handleChange}
-            //             />
-            //             </div>
-                        
-            //             <div className="submit-form"> 
-            //             <label>Profession</label>
-            //             <input
-            //                 type="text"
-            //                 name="profession"
-            //                 value={formik.values.profession}
-            //                 onChange={formik.handleChange}
-            //             />
-            //             </div>
-                        
-            //             <div className="submit-form"> 
-            //             <label>Phone</label>
-            //             <input
-            //                 type="text"
-            //                 name="phone"
-            //                 value={formik.values.phone}
-            //                 onChange={formik.handleChange}
-            //             />
-            //             </div>
-                        
-            //             <div className="submit-form"> 
-            //             <label>Email</label>
-            //             <input
-            //                 type="text"
-            //                 name="email"
-            //                 value={formik.values.email}
-            //                 onChange={formik.handleChange}
-            //             />
-            //             </div>
-            //         </div>
-            //         <input type='submit' className="submit-btn"/>
-    
-            //     </form>
-            // </div>

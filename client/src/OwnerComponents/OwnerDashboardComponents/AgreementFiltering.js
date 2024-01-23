@@ -78,7 +78,7 @@ function AgreementFiltering({currentUser, role}) {
       }
 
       const handleAgreementSelection = (event) => {
-        console.log('Selected value:', event.target.value)
+        // console.log('Selected value:', event.target.value)
         setAgreementFiltering(event.target.value)
     }
 

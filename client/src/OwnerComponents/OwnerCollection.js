@@ -4,7 +4,7 @@ import OwnerCard from "./OwnerCard";
 
 function OwnerCollection({ searchTerm, handleEditOwner, handleOwnerDelete, equipmentOwnerArray }) {
   
-    console.log(equipmentOwnerArray)
+    // console.log(equipmentOwnerArray)
     const ownerCards = equipmentOwnerArray?.map((item) => {
 
             if (item.firstName?.toLowerCase().includes(searchTerm?.toLowerCase()) || item.lastName?.toLowerCase().includes(searchTerm?.toLowerCase()) ||item.location?.toLowerCase().includes(searchTerm?.toLowerCase()) || item.email?.toLowerCase().includes(searchTerm?.toLowerCase()) || item.phone?.toLowerCase().includes(searchTerm?.toLowerCase())){

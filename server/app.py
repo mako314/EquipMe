@@ -14,6 +14,10 @@ import pandas as pd
 import xml.etree.ElementTree as ET
 import time
 
+from email.message import EmailMessage
+import ssl
+import smtplib
+
 from flask_jwt_extended import create_access_token, set_access_cookies, jwt_required, get_jwt_identity, unset_jwt_cookies, create_refresh_token, get_jwt
 import stripe
 import os
@@ -254,8 +258,8 @@ class UserByID(Resource):
             try:
                 data = request.get_json()
                 for key in data:
-                    if key == 'password':
-                        user.password_hash = data['password']
+                    if key == 'password' and data['password']:
+                            user.password_hash = data['password']
                     if key == 'date_of_birth':
                         birth_date_str = data['date_of_birth']
                         birth_date = datetime.strptime(birth_date_str, '%Y-%m-%d').date()
@@ -267,8 +271,11 @@ class UserByID(Resource):
 
                 response = make_response(user.to_dict(), 202)
                 return response
-            except ValueError:
-                return make_response({"error": ["validations errors, check your input and try again"]} , 400)
+            except ValueError as ve:
+                # Log the error message and the data causing the error
+                print(f"ValueError occurred: {ve}")
+                print(f"Data received: {data}")
+                return make_response({"error": ["Validation errors, check your input and try again", str(ve)]}, 400)
 
         else:
             response = make_response({
@@ -433,8 +440,8 @@ class EquipmentOwners(Resource):
             if data['owner_consent'] == 'yes' and data['create_link']:
                 account_link = stripe.AccountLink.create(
                 account=account.id,
-                refresh_url='http://localhost:3000/dashboard',
-                return_url='http://localhost:3000/dashboard',
+                refresh_url='https://www.equipme.live/dashboard',
+                return_url='https://www.equipme.live/dashboard',
                 type='account_onboarding',
             )
             # https://stripe.com/docs/api/account_links/create
@@ -483,7 +490,7 @@ class EquipmentOwnerById(Resource):
             try:
                 data = request.get_json()
                 for key in data:
-                    if key == 'password':
+                    if key == 'password' and data['password']:
                         equip_owner.password_hash = data['password']
                     if key == 'date_of_birth':
                         birth_date_str = data['date_of_birth']
@@ -511,6 +518,7 @@ class EquipmentOwnerById(Resource):
         print(equip_owner.id)
         if equip_owner:
             # owner.agreements and owner.equipment do I need to cycle through and delete the agreement relationship also?
+            stripe.Account.delete(equip_owner.stripe_id)
             db.session.delete(equip_owner)
             db.session.commit()
             response = make_response({"message":"Succesfully deleted!"}, 204)
@@ -591,6 +599,8 @@ class Equipments(Resource):
                 state_total = available_quantity
             else:
                 state_total = total_quantity
+
+            print("Is this bugging:", state_total)
 
             new_equipment_status = EquipmentStatus(
                 equipment_id = new_equipment.id,
@@ -1177,22 +1187,7 @@ class RentalAgreementsByID(Resource):
             "error": "Rental Agreement not found"
             }, 404)
             return response
-        
-    #delete a single rental agreement
-    def delete(self, id):
-        agreement = RentalAgreement.query.filter(RentalAgreement.id == id).first()
-        if agreement:
-            #may need to delete the renter id and equipment id
-            db.session.delete(agreement)
-            db.session.commit()
-            response = make_response({"message":"Succesfully deleted!"}, 204)
-            return response
-        else:
-            response = make_response({
-            "error": "Rental Agreement not found"
-            }, 404)
-            return response
-        
+         
     #patch a rental agreement
     def patch(self, id):
         agreement = RentalAgreement.query.filter(RentalAgreement.id == id).first()
@@ -1260,6 +1255,74 @@ class RentalAgreementsByID(Resource):
             }, 404)
             return response
 api.add_resource(RentalAgreementsByID, '/rental/agreements/<int:id>')
+
+class RentalAgreementDeleteByID(Resource):
+    #delete a single rental agreement
+    def delete(self, id, role):
+        agreement = RentalAgreement.query.filter(RentalAgreement.id == id).first()
+        cart_item = CartItem.query.filter(CartItem.id == agreement.cart_item_id).first()
+
+        
+        equipment_status = EquipmentStatus.query.filter(EquipmentStatus.equipment_id == cart_item.equipment.id).first()
+
+        print("Reserved Quantity:", equipment_status.reserved_quantity)
+
+        equipment_status.reserved_quantity -= cart_item.quantity
+        equipment_status.available_quantity += cart_item.quantity
+
+        last_state = EquipmentStateHistory.query.filter_by(
+        equipment_id=cart_item.equipment.id
+        ).order_by(EquipmentStateHistory.changed_at.desc()).first()
+
+        # new_state = f'{user.firstName} {user.lastName} has removed {cart_item.quantity} {cart_item.equipment.make} {cart_item.equipment.model} from their cart'
+        
+        if role == 'user':
+            user = User.query.filter(User.id == agreement.user_id).first()
+            new_state_history = EquipmentStateHistory(
+                equipment_id = cart_item.equipment.id,
+                total_quantity = last_state.total_quantity,
+                available_quantity = last_state.available_quantity + cart_item.quantity,
+                reserved_quantity = last_state.reserved_quantity - cart_item.quantity,
+                rented_quantity = last_state.rented_quantity,
+                maintenance_quantity = last_state.maintenance_quantity,
+                transit_quantity = last_state.transit_quantity,
+                damaged_quantity = last_state.damaged_quantity,
+                previous_state = last_state.new_state,
+                new_state = f'{user.firstName} {user.lastName} has removed {cart_item.quantity} {cart_item.equipment.make} {cart_item.equipment.model} from their cart. Since they have deleted the rental agreement' ,
+                changed_at=datetime.utcnow(),
+            )
+        elif role == 'owner':
+            owner = EquipmentOwner.query.filter(EquipmentOwner.id == agreement.owner_id).first()
+            new_state_history = EquipmentStateHistory(
+                equipment_id = cart_item.equipment.id,
+                total_quantity = last_state.total_quantity,
+                available_quantity = last_state.available_quantity + cart_item.quantity,
+                reserved_quantity = last_state.reserved_quantity - cart_item.quantity,
+                rented_quantity = last_state.rented_quantity,
+                maintenance_quantity = last_state.maintenance_quantity,
+                transit_quantity = last_state.transit_quantity,
+                damaged_quantity = last_state.damaged_quantity,
+                previous_state = last_state.new_state,
+                new_state = f' ${role}: {owner.firstName} {owner.lastName} has removed {cart_item.quantity} {cart_item.equipment.make} {cart_item.equipment.model} from their cart. Since they have deleted the rental agreement' ,
+                changed_at=datetime.utcnow(),
+            )
+        
+        print("THE CART ID OF THE AGREEMENT:", agreement.cart_item_id)
+        if agreement:
+            #may need to delete the renter id and equipment id
+            db.session.delete(agreement)
+            db.session.add(new_state_history)
+            db.session.add(equipment_status)
+            db.session.commit()
+            response = make_response({"message":"Succesfully deleted!"}, 204)
+            return response
+        else:
+            response = make_response({
+            "error": "Rental Agreement not found"
+            }, 404)
+            return response
+        
+api.add_resource(RentalAgreementDeleteByID, '/rental/agreements/<int:id>/<string:role>')
 
 #-----------------------------------------------Agreement Comment Routes-----------------------------------------------------------------------------#
 class RentalAgreementComments(Resource):
@@ -1427,58 +1490,162 @@ class BulkEquipmentUpload(Resource):
             return jsonify({'error': 'No file provided'}), 400
         
         # Read CSV, XML, and XLSX documents to rapidly add equipment row by row, appending to the owner's equipment list, and commit
+        index = -1 
         try:
-            file_extension_type = equipmentFile.filename.split('.')[-1].lower()
+            # file_extension_type = equipmentFile.filename.split('.')[-1].lower()
 
-            if file_extension_type == '.csv':
-                allEquipment = pd.read_csv(equipmentFile)
+            # if file_extension_type == '.csv':
+            #     all_equipment = pd.read_csv(equipmentFile)
+
+            # # Conditional for XML file types
+            # elif file_extension_type == 'xml':
+            #     root = ET.fromstring(equipmentFile.read())
+            #     all_equipment = []
+
+            #     for equipment_element in root:
+            #         equipment_data = {}
+            #         for element_data in equipment_element:
+            #             equipment_data[element_data.tag] = element_data.text
+            #         all_equipment.append(equipment_data)
+
+            # # Conditional for Microsoft Excel files
+            # elif file_extension_type == 'xlsx':
+            #     all_equipment = pd.read_excel(equipmentFile)
+            
+            file_extension_type = equipmentFile.filename.rsplit('.', 1)[1].lower()
+            print(file_extension_type)
+
+            if file_extension_type == 'csv':
+                all_equipment = pd.read_csv(equipmentFile)
 
             # Conditional for XML file types
             elif file_extension_type == 'xml':
                 root = ET.fromstring(equipmentFile.read())
-                allEquipment = []
+                all_equipment = []
 
                 for equipment_element in root:
                     equipment_data = {}
                     for element_data in equipment_element:
                         equipment_data[element_data.tag] = element_data.text
-                    allEquipment.append(equipment_data)
+                    all_equipment.append(equipment_data)
 
             # Conditional for Microsoft Excel files
             elif file_extension_type == 'xlsx':
-                allEquipment = pd.read_excel(equipmentFile)
+                all_equipment = pd.read_excel(equipmentFile)
 
-            allEquipment.columns = ['Equipment_name', 'Equipment_type', 'Make', 'Model', 'Owner', 'Phone', 'Email', 'Location', 'Availability', 'Delivery', 'Quantity']
+            # Handling other file types
+            else:
+                return make_response(jsonify({'error': f'Unsupported file type: {file_extension_type}'}), 400)
+            
+            print("ALL THE EQUIPMENT",all_equipment)
+            
+            # Ensure all_equipment is not None before proceeding
+            if all_equipment is None:
+                return make_response(jsonify({'error': 'File processing error'}), 500)
+            
+
+            all_equipment.columns = ['Equipment_name', 'Equipment_type', 'Make', 'Model', 'Equipment Image', 'State', 'City', 'Address Line 1', 'Address_line_2', 'Postal_Code', 'Availability', 'Delivery', 'Total Quantity', 'Available Quantity', 'hourly_rate', 'daily_rate', 'weekly_rate', 'promo_rate', 'Owner First Name', 'Owner Last Name', 'Phone', 'Email',]
             equipment_list = []
 
-            for index, row in allEquipment.iterrows():
-                owner_name = row['Owner']
-                equipment_owner = EquipmentOwner.query.filter(EquipmentOwner.name == owner_name).first()
+            for index, row in all_equipment.iterrows():
+                print(f"Processing row {index}: {row}")
+                owner_first_name = row['Owner First Name']
+                owner_last_name = row['Owner Last Name']
+                owner_phone = row['Phone']
+                owner_email = row['Email']
+                
+                equipment_owner = EquipmentOwner.query.filter_by(firstName=owner_first_name, lastName=owner_last_name, email = owner_email, phone = owner_phone).first()
+
                 equipment = Equipment(
                     name = row['Equipment_name'],
                     type = row['Equipment_type'],
                     make = row['Make'],
                     model = row['Model'],
-                    country = row['country'],
-                    state = row['state'],
-                    city = row['city'],
-                    address = row['address'],
-                    address_line_2 = row['address_line_2'],
-                    postal_code = row['postal_code'],
+                    equipment_image = row['Equipment Image'],
+                    country = "US",
+                    state = row['State'],
+                    city = row['City'],
+                    address = row['Address Line 1'],
+                    address_line_2 = row['Address_line_2'],
+                    postal_code = row['Postal_Code'],
                     availability = row['Availability'],
                     delivery = row['Delivery'],
-                    quantity = row['Quantity'],
                     owner_id = equipment_owner.id
                 )
 
-                equipment_list.append(equipment)
-                equipment_owner.equipment.append(equipment)
+                db.session.add(equipment)
+                db.session.commit()
+                db.session.flush()
 
-            db.session.add_all(equipment_list)
-            db.session.commit()
+                total_quantity = int(row['Total Quantity'])
+                available_quantity = int(row['Available Quantity'])
 
-        except ValueError:
-            return jsonify({'error': 'Value Error when reading file'}), 500
+                if available_quantity > total_quantity:
+                    state_total = available_quantity
+                else:
+                    state_total = total_quantity
+
+                new_equipment_status = EquipmentStatus(
+                equipment_id = equipment.id,
+                total_quantity = state_total,
+                available_quantity = state_total,
+                reserved_quantity = 0,
+                rented_quantity = 0,
+                maintenance_quantity = 0,
+                transit_quantity = 0
+                )
+
+                new_state_history = EquipmentStateHistory(
+                equipment_id = equipment.id,
+                total_quantity = state_total,
+                available_quantity = state_total,
+                reserved_quantity = 0,
+                rented_quantity = 0,
+                maintenance_quantity = 0,
+                transit_quantity = 0,
+                damaged_quantity = 0,
+                previous_state = 'non-existing',
+                new_state = 'available',
+                changed_at = datetime.utcnow(),
+                )
+                
+                submitted_hourly_rate = int(row['hourly_rate']) * 100
+                submitted_daily_rate = int(row['daily_rate']) * 100
+                submitted_weekly_rate = int(row['weekly_rate']) * 100
+                submitted_promo_rate = int(row['promo_rate']) * 100
+
+                # Need a way to input, owner_id and owner maybe a 2 step process?
+                equipment_price = EquipmentPrice(
+                    hourly_rate = submitted_hourly_rate,
+                    daily_rate = submitted_daily_rate,
+                    weekly_rate = submitted_weekly_rate,
+                    promo_rate = submitted_promo_rate,
+                    equipment_id = equipment.id,
+                )
+
+                db.session.add(equipment_price)
+                db.session.add(new_equipment_status)
+                db.session.add(new_state_history)
+
+                db.session.commit()
+            
+        except Exception as e:
+            print(f"Error processing row {index}: {e}")
+            db.session.rollback()
+
+            # db.session.commit()
+
+            
+            return make_response(jsonify({'message': 'Successfully uploaded!'}), 200)
+
+            # equipment_list.append(equipment)
+            # equipment_owner.equipment.append(equipment)
+
+            # db.session.add_all(equipment_list)
+            # db.session.commit()
+
+        except Exception as e:
+            return make_response(jsonify({'error': f'Error processing file: {str(e)}'}), 500)
 
 api.add_resource(BulkEquipmentUpload, '/bulk_file_upload')
 
@@ -1576,6 +1743,22 @@ class OwnerReviewEditing(Resource):
 api.add_resource(OwnerReviewEditing, '/owner/<int:owner_id>/review/<int:review_id>/')
 
 
+class ReviewDeleting(Resource):
+    def delete(self, review_id, role):
+        selected_review = Review.query.filter_by(reviewer_type = role, id = review_id).first()
+        if selected_review:
+            db.session.delete(selected_review)
+            db.session.commit()
+            response = make_response({"message":"Succesfully deleted!"}, 204)
+            return response
+        else:
+            response = make_response({
+            "error": "Review not found"
+            }, 404)
+            return response
+
+api.add_resource(ReviewDeleting, '/review/<int:review_id>/<string:role>')
+
 #-----------------------------------------------Rental Agreement Classes - CHECKING FOR AVAILABILITY AND SUCH -----------------------------------------------------------------------------
 
 # Will need to make a call to this route I believe, to check whether or not the date and end date will be available for using the equipment. Need to find a way to also match the time. If someone's only renting a piece out for two hours, they have another 10 hours ahead in which the equipment can be rented.
@@ -1634,16 +1817,20 @@ class Carts(Resource):
 api.add_resource(Carts, "/carts")
 
 class CartByUserID(Resource):
-    def get(self,user_id):
+    # def get(self,user_id):
+    #     carts = Cart.query.filter(Cart.user_id == user_id).all()
+    #     if carts:
+    #         carts_dict = [cart.to_dict() for cart in carts]
+    #         return make_response(carts_dict,200)
+    #     else:
+    #         response = make_response({
+    #         "error": "Item not found"
+    #         }, 404)
+    #         return response
+    def get(self, user_id):
         carts = Cart.query.filter(Cart.user_id == user_id).all()
-        if carts:
-            carts_dict = [cart.to_dict() for cart in carts]
-            return make_response(carts_dict,200)
-        else:
-            response = make_response({
-            "error": "Item not found"
-            }, 404)
-            return response
+        carts_dict = [cart.to_dict() for cart in carts]
+        return make_response(carts_dict, 200)
         
     def patch(self, user_id):
         cart = Cart.query.filter(Cart.user_id == user_id).first()
@@ -1675,7 +1862,7 @@ class CartByUserID(Resource):
             }, 404)
             return response
         
-api.add_resource(CartByUserID, "/user/<int:user_id>/cart/")
+api.add_resource(CartByUserID, "/user/<int:user_id>/cart")
 
 class UserCartByCartID(Resource):
     def get(self,cart_id, user_id):
@@ -1808,6 +1995,8 @@ class AddItemToCart(Resource):
             cart.cart_item.append(new_item)
             db.session.add(new_item)
             db.session.commit()
+            new_available_quantity = equipment_status.available_quantity - amount_added_to_cart
+            new_reserved_quantity = equipment_status.reserved_quantity + amount_added_to_cart
             equipment_status.available_quantity -= amount_added_to_cart
             equipment_status.reserved_quantity += amount_added_to_cart
 
@@ -1816,9 +2005,9 @@ class AddItemToCart(Resource):
         new_state_history = EquipmentStateHistory(
             equipment_id = equipment.id,
             total_quantity = equipment_status.total_quantity,
-            available_quantity = equipment_status.available_quantity,
+            available_quantity = new_available_quantity,
             # amount_added_to_cart 
-            reserved_quantity = equipment_status.available_quantity,
+            reserved_quantity = new_reserved_quantity,
             rented_quantity = previous_state_history.rented_quantity,
             maintenance_quantity = previous_state_history.maintenance_quantity,
             transit_quantity = previous_state_history.transit_quantity,
@@ -1947,7 +2136,43 @@ class CartItemById(Resource):
         cart_item = CartItem.query.filter(CartItem.id == cart_item_id).first()
 
         if cart_item:
+            print(cart_item.agreements[0].agreement_status)
+            print(cart_item.equipment.make)
+            print(cart_item.equipment.model)
+            print(cart_item.equipment.id)
+
+            user = User.query.filter(User.id == cart_item.agreements[0].user_id).first()
+
+            equipment_status = EquipmentStatus.query.filter(EquipmentStatus.equipment_id == cart_item.equipment.id).first()
+
+            print("Reserved Quantity:", equipment_status.reserved_quantity)
+
+            equipment_status.reserved_quantity -= cart_item.quantity
+            equipment_status.available_quantity += cart_item.quantity
+
+            last_state = EquipmentStateHistory.query.filter_by(
+            equipment_id=cart_item.equipment.id
+            ).order_by(EquipmentStateHistory.changed_at.desc()).first()
+
+            # new_state = f'{user.firstName} {user.lastName} has removed {cart_item.quantity} {cart_item.equipment.make} {cart_item.equipment.model} from their cart'
+            
+            new_state_history = EquipmentStateHistory(
+                equipment_id = cart_item.equipment.id,
+                total_quantity = last_state.total_quantity,
+                available_quantity = last_state.available_quantity + cart_item.quantity,
+                reserved_quantity = last_state.reserved_quantity - cart_item.quantity,
+                rented_quantity = last_state.rented_quantity,
+                maintenance_quantity = last_state.maintenance_quantity,
+                transit_quantity = last_state.transit_quantity,
+                damaged_quantity = last_state.damaged_quantity,
+                previous_state = last_state.new_state,
+                new_state = f'{user.firstName} {user.lastName} has removed {cart_item.quantity} {cart_item.equipment.make} {cart_item.equipment.model} from their cart' ,
+                changed_at=datetime.utcnow(),
+            )
+
             db.session.delete(cart_item)
+            db.session.add(new_state_history)
+            db.session.add(equipment_status)
             db.session.commit()
             response = make_response({"message":"Succesfully deleted!"}, 204)
             return response
@@ -2011,6 +2236,7 @@ class StartNewThread(Resource):
 
 api.add_resource(StartNewThread, "/new/thread")
 
+
 class AddToInboxes(Resource):
     def post(self):
         data = request.get_json()
@@ -2043,6 +2269,34 @@ class AddToInboxes(Resource):
 
 api.add_resource(AddToInboxes, "/new/inboxes")
 
+class UserInboxByUserId(Resource):
+    def get(self, user_id):
+        user_inboxes = UserInbox.query.filter(UserInbox.user_id == user_id).all()
+        if user_inboxes:
+            user_inboxes_dict = [user_inbox.to_dict() for user_inbox in user_inboxes]
+            return make_response(user_inboxes_dict,200)
+        else:
+            response = make_response({
+            "error": "Item not found"
+            }, 404)
+            return response
+
+api.add_resource(UserInboxByUserId, "/thread/user/<int:user_id>")
+
+class OwnerInboxByUserId(Resource):
+    def get(self, owner_id):
+        owner_inboxes = OwnerInbox.query.filter(OwnerInbox.owner_id == owner_id).all()
+        if owner_inboxes:
+            owner_inboxes_dict = [owner_inbox.to_dict() for owner_inbox in owner_inboxes]
+            return make_response(owner_inboxes_dict,200)
+        else:
+            response = make_response({
+            "error": "Item not found"
+            }, 404)
+            return response
+
+api.add_resource(OwnerInboxByUserId, "/thread/owner/<int:owner_id>")
+
 
 class ThreadById(Resource):
     def get(self, thread_id):
@@ -2055,8 +2309,32 @@ class ThreadById(Resource):
             "error": "Thread not found"
             }, 404)
             return response
+        
+    def delete(self, thread_id, role):
+        thread = Thread.query.filter(Thread.id == thread_id).first()
+        owner_inbox = OwnerInbox.query.filter(OwnerInbox.thread_id == thread_id).first()
+        user_inbox = UserInbox.query.filter(UserInbox.thread_id == thread_id).first()
+        print("THE ROLE:", role)
 
-api.add_resource(ThreadById, "/thread/<int:thread_id>")
+        # I don't even think I need to access the thread since there's a cascade deletes.
+
+        if role:
+            if role == 'user':
+                # db.session.delete(thread)
+                db.session.delete(user_inbox)
+            if role == 'owner':
+                # db.session.delete(thread)
+                db.session.delete(owner_inbox)
+            db.session.commit()
+            response = make_response({"message":"Succesfully deleted!"}, 204)
+            return response
+        else:
+            response = make_response({
+            "error": "Item not found"
+            }, 404)
+            return response
+
+api.add_resource(ThreadById, "/thread/<int:thread_id>/<string:role>")
 
 class MessageByID(Resource):
     def get(self, id):
@@ -2091,7 +2369,6 @@ class MessageByID(Resource):
         message = Message.query.filter(Message.id == id).first()
 
         if message:
-            #may need to delete the renter id and equipment id
             db.session.delete(message)
             db.session.commit()
             response = make_response({"message":"Succesfully deleted!"}, 204)
@@ -2300,8 +2577,8 @@ class StripeCreateAccountLink(Resource):
         
         account_link = stripe.AccountLink.create(
                 account=equip_owner.stripe_id,
-                refresh_url='http://localhost:3000/dashboard',
-                return_url='http://localhost:3000/dashboard',
+                refresh_url='https://www.equipme.live/dashboard',
+                return_url='https://www.equipme.live/dashboard',
                 type='account_onboarding',
         )
 
@@ -2314,46 +2591,6 @@ class StripeCreateAccountLink(Resource):
         return response
         
 api.add_resource(StripeCreateAccountLink, '/v1/account_links')
-
-# class CheckingOut(Resource):
-#     def checkout_equipment(equipment_id, quantity):
-#         # Fetch the most recent state history
-#         last_state = EquipmentStateHistory.query.filter_by(
-#             equipment_id=equipment_id
-#         ).order_by(EquipmentStateHistory.changed_at.desc()).first()
-
-#         # Ensure that the equipment is actually reserved before proceeding
-#         if 'reserved' in last_state.new_state:
-#             raise ValueError("Equipment must be in reserved state to check out.")
-
-#         # Deduct the quantity from the equipment's available stock
-#         equipment = Equipment.query.get(equipment_id)
-#         if equipment.status[0].current_quantity < quantity:
-#             raise ValueError("Not enough equipment available to fulfill this rental.")
-
-#         equipment.status[0].current_quantity -= quantity
-#         equipment.status[0].reserved_quantity += quantity
-#         db.session.add(equipment)
-
-#         # Record the state change
-#         new_state_history = EquipmentStateHistory(
-#             equipment_id = equipment_id,
-#             total_quantity = last_state.new_quantity,
-#             available_quantity = last_state.available_quantity,
-#             reserved_quantity = last_state.reserved_quantity,
-#             rented_quantity = 0,
-#             maintenance_quantity = 0,
-#             transit_quantity = 0,
-#             damaged_quantity = 0,
-#             previous_state = last_state.new_state,
-#             new_state = 'available',
-#             changed_at=datetime.utcnow(),
-#         )
-#         db.session.add(new_state_history)
-
-#         db.session.commit()
-
-# api.add_resource(CheckingOut, '/checkout/<int:equipment_id>/<int:quantity>')
 
 class CheckingOut(Resource):
     def post(self):
@@ -2653,6 +2890,7 @@ class WebHookForStripeSuccess(Resource):
                     if equipment.status[0].reserved_quantity < cart_item.quantity:
                         raise ValueError("Not enough equipment available to fulfill this rental.")
                     
+                    # check this again make sure it's working
                     equipment.status[0].reserved_quantity -= cart_item.quantity
                     equipment.status[0].rented_quantity += cart_item.quantity
                     db.session.commit()
@@ -2925,6 +3163,57 @@ class OrderHistoryByOwnerId(Resource):
         return response
 
 api.add_resource(OrderHistoryByOwnerId, '/owner/order/history/<int:owner_id>')
+
+#https://www.youtube.com/watch?v=g_j6ILT-X0k
+class ContactFormSubmission(Resource):
+    def post(self):
+        data = request.json
+        name = data.get('name')
+        email = data.get('email')
+        subject = data.get('subject')
+        message = data.get('message')
+        
+
+        # Print statements for debugging
+        print("Name:", name)
+        print("Email:", email)
+        print("Subject:", subject)
+        print("Message:", message)
+
+        email_sender = 'equipmelive@gmail.com'
+        email_password = os.getenv('EMAIL_PASSWORD')
+        email_receiver = 'bispo.swe@gmail.com'
+
+
+        body= f"""
+        Sender Name: {name}
+        Their Email: {email}
+
+        {subject}
+        ----------------------------
+        {message}
+        """
+        em = EmailMessage()
+        em['From'] = email_sender
+        em['To'] = email_receiver
+        em['Subject'] = subject
+        em.set_content(body)
+
+        context = ssl.create_default_context()
+
+
+        # Compose and send the email
+        try:
+            with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
+                smtp.login(email_sender, email_password)
+                smtp.sendmail(email_sender, email_receiver, em.as_string())
+                return make_response(jsonify({"message": "Email sent successfully"}), 200)
+        except Exception as e:
+            print("Error sending email:", e)  # Print the error for debugging
+            return make_response(jsonify({"error": str(e)}), 500)
+        
+api.add_resource(ContactFormSubmission, '/contact/form')
+
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

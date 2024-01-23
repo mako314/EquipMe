@@ -29,8 +29,8 @@ if __name__ == '__main__':
         #Clear dbs
         print("Clearing db...")
         AgreementComment.query.delete()
-        RentalAgreement.query.delete()
         Review.query.delete()
+        RentalAgreement.query.delete()
         CartItem.query.delete()
         Cart.query.delete()
         EquipmentStatus.query.delete()
@@ -38,6 +38,7 @@ if __name__ == '__main__':
         EquipmentStateHistory.query.delete()
         EquipmentPrice.query.delete()
         FeaturedEquipment.query.delete()
+        OrderHistory.query.delete()
         UserFavorite.query.delete()
         OwnerFavorite.query.delete()
         Equipment.query.delete()
@@ -45,7 +46,6 @@ if __name__ == '__main__':
         OwnerInbox.query.delete()
         EquipmentOwner.query.delete()
         User.query.delete()
-        OrderHistory.query.delete()
         EquipmentImage.query.delete()
         Message.query.delete()
         Thread.query.delete()
@@ -535,7 +535,7 @@ if __name__ == '__main__':
                     'postal_code': owner.postal_code,
                     'state': owner.state,
                 },
-                'name' : 'Marks Rentals',
+                'name' : f"{owner.firstName}'s Rentals",
                 'phone' : owner.phone,
                 'tax_id' : '000000000',
             },
@@ -1439,19 +1439,19 @@ if __name__ == '__main__':
         #     new_state = f'User rented {cart_items[2].quantity} item or items',
         #     changed_at = datetime(2023, 12, 13),
         # ),
-        EquipmentStateHistory(
-            equipment_id = cart_items[3].equipment_id,  # John Deere
-            total_quantity = cart_item_equipment_state_histories[3].total_quantity,
-            available_quantity = cart_item_equipment_state_histories[3].available_quantity,
-            reserved_quantity = cart_item_equipment_state_histories[3].reserved_quantity - cart_items[3].quantity,
-            rented_quantity = cart_items[3].quantity,
-            maintenance_quantity = 0,
-            transit_quantity = 0,
-            damaged_quantity = 0,
-            previous_state = cart_item_equipment_state_histories[3].new_state,
-            new_state = f'User: {user_1.firstName} {user_1.lastName} rented {cart_items[3].quantity} item or items',
-            changed_at = datetime(2023, 11, 11),
-        ),
+        # EquipmentStateHistory(
+        #     equipment_id = cart_items[3].equipment_id,  # John Deere
+        #     total_quantity = cart_item_equipment_state_histories[3].total_quantity,
+        #     available_quantity = cart_item_equipment_state_histories[3].available_quantity,
+        #     reserved_quantity = cart_item_equipment_state_histories[3].reserved_quantity - cart_items[3].quantity,
+        #     rented_quantity = cart_items[3].quantity,
+        #     maintenance_quantity = 0,
+        #     transit_quantity = 0,
+        #     damaged_quantity = 0,
+        #     previous_state = cart_item_equipment_state_histories[3].new_state,
+        #     new_state = f'User: {user_1.firstName} {user_1.lastName} rented {cart_items[3].quantity} item or items',
+        #     changed_at = datetime(2023, 11, 11),
+        # ),
         EquipmentStateHistory(
             equipment_id = cart_items[4].equipment_id,  # Pressure Washer
             total_quantity = cart_item_equipment_state_histories[4].total_quantity,
@@ -1607,14 +1607,14 @@ if __name__ == '__main__':
 
         # Since I removed the lawnmower from the rental_agreements_state_history (as I decided it was never rented / no completed status), I ended up having to move all these array indexes -1
 
-        equipment_statuses[3].rented_quantity += rental_agreements_state_history[0].rented_quantity
-        equipment_statuses[3].reserved_quantity -= rental_agreements_state_history[0].rented_quantity
+        # equipment_statuses[3].rented_quantity += rental_agreements_state_history[0].rented_quantity
+        # equipment_statuses[3].reserved_quantity -= rental_agreements_state_history[0].rented_quantity
 
-        equipment_statuses[6].rented_quantity += rental_agreements_state_history[1].rented_quantity
-        equipment_statuses[6].reserved_quantity -= rental_agreements_state_history[1].rented_quantity
+        equipment_statuses[6].rented_quantity += rental_agreements_state_history[0].rented_quantity
+        equipment_statuses[6].reserved_quantity -= rental_agreements_state_history[0].rented_quantity
         
-        equipment_statuses[7].rented_quantity += rental_agreements_state_history[2].rented_quantity
-        equipment_statuses[7].reserved_quantity -= rental_agreements_state_history[2].rented_quantity
+        equipment_statuses[7].rented_quantity += rental_agreements_state_history[1].rented_quantity
+        equipment_statuses[7].reserved_quantity -= rental_agreements_state_history[1].rented_quantity
 
         db.session.add_all([one_rented_8_added, one_maintained_9])
         db.session.commit()

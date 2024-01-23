@@ -82,7 +82,7 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
             }
 
             const data = await response.json()
-            console.log("THE DATA:", data)
+            // console.log("THE DATA:", data)
             setStripeAccount(data)
             setDashLoad(false)
           } catch (error) {
@@ -95,15 +95,15 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
         if (role === 'owner' && currentUser.stripe_id) {
             fetchStripeAccount()
             // checkSession()
-            console.log("FUNCTION RAN")
-            console.log("THE CURRENT DATA IN STRIPE ACCOUNT:", stripeAccount)
+            // console.log("FUNCTION RAN")
+            // console.log("THE CURRENT DATA IN STRIPE ACCOUNT:", stripeAccount)
           } else {
             setDashLoad(false)
           }
 
       }, [])
 
-    console.log("USER INFO",currentUser)
+    // console.log("USER INFO",currentUser)
     
 
     // Wait for useEffect to load before displaying the page
@@ -170,7 +170,7 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
                 // If the response is OK
                 resp.json().then((data) => {
                     setStripeAccount(data)
-                    console.log(data)
+                    // console.log(data)
                     checkSession()
                 })
             } else {
@@ -185,9 +185,9 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
         })
     }
 
-    console.log(stripeAccount)
-    console.log("THE DETAILS SUBMITTED VALUE:", stripeAccount?.details_submitted)
-    console.log("THE CHARGES ENABLED VALUE:", stripeAccount?.charges_enabled)
+    // console.log(stripeAccount)
+    // console.log("THE DETAILS SUBMITTED VALUE:", stripeAccount?.details_submitted)
+    // console.log("THE CHARGES ENABLED VALUE:", stripeAccount?.charges_enabled)
     // console.log(typeof(stripeAccount.details_submitted))
     
     
@@ -212,8 +212,8 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
                 // If the response is OK
                 resp.json().then((data) => {
                     if (data) {
-                    console.log(data)
-                    console.log("THE URL:", data.url)
+                    // console.log(data)
+                    // console.log("THE URL:", data.url)
                         // Redirect the user to the new onboarding link
                       const onboardLink = data.url
                       window.open(onboardLink, '_blank')
@@ -250,8 +250,8 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
                 // If the response is OK
                 resp.json().then((data) => {
                     if (data) {
-                    console.log(data)
-                    console.log("THE URL:", data.url)
+                    // console.log(data)
+                    // console.log("THE URL:", data.url)
                         // Redirect the user to the new onboarding link
                       const dashBoardLink = data.url
                       window.open(dashBoardLink, '_blank')
@@ -273,7 +273,7 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
     function RentalAgreements() {
         // setPageTitle('Rental Agreements')
         fromOwnerDash = true
-        console.log("RENTAL AGREEMENTS IN OWNER DASH FROM OWNER DASH:", fromOwnerDash)
+        // console.log("RENTAL AGREEMENTS IN OWNER DASH FROM OWNER DASH:", fromOwnerDash)
         // agreementFiltering={agreementFiltering}
         return(<>
             <RentalAgreementsCollection setFromOwnerDash={setFromOwnerDash} fromOwnerDash={fromOwnerDash} /> 
@@ -318,7 +318,7 @@ function OwnerDashboard({fromOwnerDash, setFromOwnerDash, searchTerm}) {
             setSelectedFavorite(event.target.value)
         }
 
-        console.log(selectedFavorite)
+        // console.log(selectedFavorite)
 
         return (
             <div className="ml-6">
@@ -566,6 +566,7 @@ function AccountSettings() {
     // <div className="h-24 col-span-1 bg-white border border-gray-300"></div>
     // <div className="h-24 col-span-2 bg-white border border-gray-300"></div>
 
+    // Assists in rendering the current view with a switch statement, prior I was using state
     const renderCurrentView = () => {
         switch (currentView) {
             case 'Home':
@@ -573,12 +574,13 @@ function AccountSettings() {
             case 'Active Listings':
                 return <ActiveListings />
             case 'Rental Agreements':
-                return <RentalAgreements />
+                // setFromOwnerDash(prevState => !prevState)
+                return <RentalAgreements/>
             case 'Potential Renters':
                 if (isLoading) {
                     return <div>Loading...</div> // Loading indicator
                 } 
-                console.log("THE POTENTIAL RENTAL USERS:", potentialRentalUsers)
+                // console.log("THE POTENTIAL RENTAL USERS:", potentialRentalUsers)
                 if (potentialRentalUsers.error === 'Users not found'){
                     return(
                     <div className="flex flex-col items-center justify-center p-10 bg-white shadow-md rounded-lg">
@@ -638,9 +640,9 @@ function AccountSettings() {
     // {renderCurrentView()}
 
     const handleViewClick = (viewName) => {
-    console.log("THE VIEW NAME:", viewName)
+    // console.log("THE VIEW NAME:", viewName)
 
-    console.log("THE PAGE TITLE ", pageTitle)
+    // console.log("THE PAGE TITLE ", pageTitle)
 
     if (viewName === 'Owner Favorites' || viewName === 'User Favorites') {
         setPageTitle('Favorites')

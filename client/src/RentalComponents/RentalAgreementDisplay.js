@@ -2,11 +2,11 @@ import React, {useState, useContext, useEffect} from "react"
 import RentalAgreementCard from "./RentalAgreementCard";
 import { UserSessionContext } from "../UserComponents/SessionContext";
 import { CartAvailProviderContext } from "../CheckoutComponents/AvailToCheckoutContext";
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import ApiUrlContext from "../Api";
 import {toast} from 'react-toastify'
 
-function RentalAgreementDisplay({setAvailableToCheckoutNumb}) {
+function RentalAgreementDisplay() {
     const apiUrl = useContext(ApiUrlContext)
     const { currentUser, role, checkSession} = UserSessionContext()
     
@@ -17,9 +17,16 @@ function RentalAgreementDisplay({setAvailableToCheckoutNumb}) {
     const [deliveryChoice, setDeliveryChoice] = useState(null)
     const [isDeliveryAddress, setIsDeliveryAddress] = useState(false)
     const [deliveryAddress, setDeliveryAddress] = useState(false)
-
+    const [toggleDelete, setToggleDelete] = useState(false)
+    const [allRentalAgreementsState, setAllRentalAgreementsState] = useState(false)
     const { rental_agreement_id } = useParams()
     const { calculateReadyToCheckout } = CartAvailProviderContext()
+
+    const navigate = useNavigate()
+    const location = useLocation()
+    const { fromOwnerDash } = location.state || {}
+
+    // console.log("FROM OWNER DASH:?", fromOwnerDash)
 
     const formatDate = (date) => {
         // Was having a lot of issues and couldn't tell where from, so I wrote some validations to test what could be going wrong
@@ -45,6 +52,12 @@ function RentalAgreementDisplay({setAvailableToCheckoutNumb}) {
     //Went with flat map, but since there's another nested array inside of cart.cart_item, I needed to flatten that also, and finally, I map over item.agreements to get the agreement dates.
     // Had to change USER to contain OWNER information for comments, changed USER to owner in this IF with user. The one under it was already properly done!
     //Luckily with flatmap, everything was available!
+
+    useEffect(() => {
+        setAllRentalAgreementsState(allAgreements)
+    }, [currentUser])
+
+
     if (role === 'user'){
         (rentalCard = currentUser?.cart?.flatMap(cart => 
         cart.cart_item?.flatMap(item => 
@@ -118,14 +131,17 @@ function RentalAgreementDisplay({setAvailableToCheckoutNumb}) {
     }
 
     // iterate over allAgreements and find the agreement within each theAgreement property, match it with useParams that was clicked on the card. 
-    const selectedAgreement = allAgreements.find(agreementObj => agreementObj.theAgreement.id.toString() === rental_agreement_id)?.theAgreement
-    // console.log("THE TYPE OF allAgreements.theAgreement:", typeof(allAgreements))
+   
+    // const selectedAgreement = allRentalAgreementsState?.find(agreementObj => agreementObj.theAgreement.id.toString() === rental_agreement_id)?.theAgreement
+    
+    
+    // console.log("THE TYPE OF allRentalAgreementsState.theAgreement:", typeof(allRentalAgreementsState))
     // console.log("THE RENTAL ID:", rental_agreement_id)
     // console.log("THE SELECTED AGREEMENT:",selectedAgreement)
 
     // https://www.w3schools.com/jsref/jsref_findindex.asp
     // Take what we just did with find, but we're only really looking for the index since we have all the agreement information anyway.
-    // const selectedAgreementIndex = allAgreements.findIndex(agreementObj => 
+    // const selectedAgreementIndex = allRentalAgreementsState.findIndex(agreementObj => 
     //     agreementObj.theAgreement.id.toString() === rental_agreement_id
     // )
     // setCurrentAgreementIndex(selectedAgreementIndex)
@@ -135,51 +151,53 @@ function RentalAgreementDisplay({setAvailableToCheckoutNumb}) {
     // }
 
     // Looping because issue where it causes an infinite loop
+
     useEffect(() => {
-        const selectedAgreementIndex = allAgreements.findIndex(agreementObj => 
-            agreementObj.theAgreement.id.toString() === rental_agreement_id
-        )
+        if (Array.isArray(allRentalAgreementsState)) {
+            const selectedAgreementIndex = allRentalAgreementsState.findIndex(agreementObj => 
+                agreementObj.theAgreement.id.toString() === rental_agreement_id
+            )
 
-        console.log("THE SELECTED AGREEMENT INDEX:", selectedAgreementIndex)
-    
-        if (selectedAgreementIndex !== -1) {
-            setCurrentAgreementIndex(selectedAgreementIndex);
+            // console.log("THE SELECTED AGREEMENT INDEX:", selectedAgreementIndex)
+
+            if (selectedAgreementIndex !== -1) {
+                setCurrentAgreementIndex(selectedAgreementIndex)
+            }
         }
-
-    }, [rental_agreement_id])
+    }, [rental_agreement_id, allRentalAgreementsState])
 
     
 
     // console.log(currentUser)
-    // console.log("RENTAL AGREEMENT ARRAY LENGTH:",allAgreements)
+    // console.log("RENTAL AGREEMENT ARRAY LENGTH:",allRentalAgreementsState)
 
     // console.log("The current rental card:", rentalCardDisplay[0])
     // console.log("currentUser agreements OWNER:", currentUser?.agreements[0])
 
-    console.log("TESTING ALLAGREEMENTS CURRENTAGREEMENT INDEX USER AND OWNER:", allAgreements[currentAgreementIndex])
-    console.log("TESTING ALLAGREEMENTS CURRENTAGREEMENT INDEX USER AND OWNER:", allAgreements[currentAgreementIndex])
+    // console.log("TESTING allRentalAgreementsState CURRENTAGREEMENT INDEX USER AND OWNER:", allRentalAgreementsState[currentAgreementIndex])
+    // console.log("TESTING allRentalAgreementsState CURRENTAGREEMENT INDEX USER AND OWNER:", allRentalAgreementsState[currentAgreementIndex])
 
     // if (role === 'owner'){
-    //     otherUser = allAgreements[currentAgreementIndex]?.user
+    //     otherUser = allRentalAgreementsState[currentAgreementIndex]?.user
     // } else if (role === 'user'){
-    //     otherUser = allAgreements[currentAgreementIndex]?.owner
+    //     otherUser = allRentalAgreementsState[currentAgreementIndex]?.owner
     // }
 
-    let otherUser = allAgreements[currentAgreementIndex]?.user || allAgreements[currentAgreementIndex]?.owner
+    let otherUser = allRentalAgreementsState[currentAgreementIndex]?.user || allRentalAgreementsState[currentAgreementIndex]?.owner
 
-    console.log("Other USER:", otherUser)
+    // console.log("Other USER:", otherUser)
 
-    //So I decided to make an object be pushed into AllAgreements, that way I'll have access to user information too, and it'll be much cleaner. It's one rental agreement per, so I didn't need to grab the currentAgreementIndex for it. This puts out all the comments
-    // const test = allAgreements[currentAgreementIndex]?.theAgreement.comment?.map((item) => console.log("THE ITEMS INSIDE OF THIS", item))
+    //So I decided to make an object be pushed into allRentalAgreementsState, that way I'll have access to user information too, and it'll be much cleaner. It's one rental agreement per, so I didn't need to grab the currentAgreementIndex for it. This puts out all the comments
+    // const test = allRentalAgreementsState[currentAgreementIndex]?.theAgreement.comment?.map((item) => console.log("THE ITEMS INSIDE OF THIS", item))
 
     // I'm pretty sure what I had before would've worked, but I eventually needed to include origin. Initially I had a ternary that would test the user_id being present or owner_id being present, and in my seed file I was only sending one in. However since I have two types of users, both an owner and a regular user, I can have two IDS of 1. So the user_id can match the currentUser.id of 1, and it could be two different people. This is the reason I decided to include an origin. 
 
-    // Also, when I was mapping:         allAgreements.push({theAgreement : singleAgreement, owner: item.equipment.owner})
+    // Also, when I was mapping:         allRentalAgreementsState.push({theAgreement : singleAgreement, owner: item.equipment.owner})
     // I had this as user: cart.user, this being the mapped rental agreements for user, meant I was just filling the array with more user information that was already available since they're the currently signed in user. However, I spotted it in time for my sanity, and realized that it was just the same user as the currently signed in user. It would be different for owner, because there I remembered to properly set it to grab the users information that is acquiring the rental agreement. 
 
     // Such a foolish mistake that took so long, but we learn and move on!
 
-    const comments = allAgreements[currentAgreementIndex]?.theAgreement.comment?.map((item) => {
+    const comments = allRentalAgreementsState[currentAgreementIndex]?.theAgreement.comment?.map((item) => {
         let profileImage, firstName, lastName
     
         if (item.user_id === currentUser.id && item.origin === role) {
@@ -199,7 +217,7 @@ function RentalAgreementDisplay({setAvailableToCheckoutNumb}) {
             lastName = otherUser?.lastName
         }
 
-        console.log(profileImage)
+        // console.log(profileImage)
     
         return (
             <div key={item.id} className="mb-6 w-full overflow-hidden bg-[#f2f2f7] p-8 rounded-sm border-b border-black">
@@ -220,18 +238,18 @@ function RentalAgreementDisplay({setAvailableToCheckoutNumb}) {
     })
 
     
-    console.log("All Agreements:", allAgreements[currentAgreementIndex])
-    console.log("THE SPECIFIC AGREEMENT:", allAgreements[currentAgreementIndex]?.theAgreement)
+    // console.log("All Agreements:", allRentalAgreementsState[currentAgreementIndex])
+    // console.log("THE SPECIFIC AGREEMENT:", allRentalAgreementsState[currentAgreementIndex]?.theAgreement)
     
     // Handles the editing of the agreement, be it delivery address change, or changing the decision
     const handleAgreementEdit = () => {
         let decision = role === 'owner' ? 'owner_decision' : 'user_decision'
         let updatedAgreement
 
-        console.log("DELIVERY CHOICE:", deliveryChoice)
-        console.log("DELIVERY ADDRESS:", deliveryAddress)
+        // console.log("DELIVERY CHOICE:", deliveryChoice)
+        // console.log("DELIVERY ADDRESS:", deliveryAddress)
         //Handle agreement submission
-        if(deliveryChoice || deliveryChoice === true && deliveryAddress){
+        if((deliveryChoice || deliveryChoice === true) && deliveryAddress){
         updatedAgreement = {
             [decision]: selectedDecision,
             delivery: deliveryChoice,
@@ -261,11 +279,11 @@ function RentalAgreementDisplay({setAvailableToCheckoutNumb}) {
             })
         }
 
-        console.log("THE AGREEMENT:",updatedAgreement)
+        // console.log("THE AGREEMENT:",updatedAgreement)
 
         
 
-        fetch(`${apiUrl}rental/agreements/${allAgreements[currentAgreementIndex]?.theAgreement.id}`, {
+        fetch(`${apiUrl}rental/agreements/${allRentalAgreementsState[currentAgreementIndex]?.theAgreement.id}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
@@ -273,7 +291,7 @@ function RentalAgreementDisplay({setAvailableToCheckoutNumb}) {
             body: JSON.stringify(updatedAgreement),
         }).then((resp) => {
             if (resp.ok) {
-                console.log(resp)
+                // console.log(resp)
                 if ((updatedAgreement.user_decision || updatedAgreement.owner_decision ) === 'accept'){
                 toast.success(`📝 You've succesfully ACCEPTED ✅ this agreement! Once both parties have accepted you can proceed to checkout. `,
                 {
@@ -290,7 +308,7 @@ function RentalAgreementDisplay({setAvailableToCheckoutNumb}) {
                 if (role === 'user'){
                 checkSession().then(updatedUserData => {
                     if (role === 'user') {
-                      console.log("THE CONDITIONAL RAN CART SHOULD UPDATE")
+                    //   console.log("THE CONDITIONAL RAN CART SHOULD UPDATE")
                       calculateReadyToCheckout(updatedUserData.cart)
                     }
                   }).catch(error => {
@@ -312,10 +330,10 @@ function RentalAgreementDisplay({setAvailableToCheckoutNumb}) {
 
     const newComment = {
         comment : rentalComment,
-        user_id: role === 'user' ? currentUser?.id : allAgreements[currentAgreementIndex]?.theAgreement.user_id,
-        owner_id: role === 'owner' ? currentUser?.id : allAgreements[currentAgreementIndex]?.theAgreement.owner_id,
+        user_id: role === 'user' ? currentUser?.id : allRentalAgreementsState[currentAgreementIndex]?.theAgreement.user_id,
+        owner_id: role === 'owner' ? currentUser?.id : allRentalAgreementsState[currentAgreementIndex]?.theAgreement.owner_id,
         origin : role,
-        agreement_id: allAgreements[currentAgreementIndex]?.theAgreement.id
+        agreement_id: allRentalAgreementsState[currentAgreementIndex]?.theAgreement.id
     }
 
     // console.log( "RENTAL COMMENT:", rentalComment)
@@ -327,7 +345,7 @@ function RentalAgreementDisplay({setAvailableToCheckoutNumb}) {
         body: JSON.stringify(newComment),
     }).then((resp) => {
         if (resp.ok) {
-            console.log(resp)
+            // console.log(resp)
             setRentalComment('')
             checkSession()
             toast.success(`✍ Successfully left a comment! `,
@@ -353,46 +371,54 @@ function RentalAgreementDisplay({setAvailableToCheckoutNumb}) {
         return () => {
           document.removeEventListener("keydown", keyDownHandler)
         }
-      }, [allAgreements.length])
+      }, [allRentalAgreementsState.length])
 
 
+    // Go to next agreement,
     const goToNextAgreement = () => {
         //go to next agreement
         setCurrentAgreementIndex((prevIndex) =>
-          prevIndex < allAgreements.length - 1 ? prevIndex + 1 : 0
+          prevIndex < allRentalAgreementsState.length - 1 ? prevIndex + 1 : 0
         )
         resetAgreementForm()
       }
-
+    
+    // Go to previous agreement,
     const goToPreviousAgreement = () => {
         //go to previous agreement
-        setCurrentAgreementIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : allAgreements.length - 1))
+        setCurrentAgreementIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : allRentalAgreementsState.length - 1))
         resetAgreementForm()
     }
 
+    // Handle a decision change, i.e accept / decline an agreement
     const handleDecisionChange = (e) => {
         // If pickup selected setDelivery to false
         setSelectedDecision(e.target.value)
         // If the checkbox is unchecked, clear the delivery address
     }
     
+    // Handle a change in the delivery
     const handleDeliveryChange = (e) => {
         // IF IsDelivery set to false ( meaning it the checkbox was clicked again you set choice to false)
         setDeliveryChoice(e.target.value === 'true')
     }
 
+    // Handles the actual toggle of the delivery /address
     const handleDeliveryToggle = () => {
         //Toggle delivery field, then set delivery to false if you click it again
         setIsDelivery(!isDelivery)
         // setDeliveryChoice(false)
     }
 
+
+    // Handles toggling the delivery address
     const handleDeliveryAddressToggle = ()  => {
         //Toggle delivery address field, then set delivery address to be blank if you unclick it
         setIsDeliveryAddress(!isDeliveryAddress)
         setDeliveryAddress('')
     }
 
+    // Resets the agreement form
     const resetAgreementForm = () => {
         setIsDelivery(false);
         setIsDeliveryAddress(false);
@@ -407,6 +433,51 @@ function RentalAgreementDisplay({setAvailableToCheckoutNumb}) {
     // console.log(typeof(deliveryChoice))
     // console.log("DELIVERY ADDRESS:",deliveryAddress)
     // console.log("DELIVERY ADDRESS:", typeof(deliveryAddress))
+
+    // Delete a cart item
+    const handleDeleteRentalAgreement = async (rentalAgreementId) => {
+        try {
+            const response = await fetch(`${apiUrl}rental/agreements/${rentalAgreementId}/${role}`, {
+            method: 'DELETE',
+            })
+            
+            if (response.ok) {
+            // Filter out the deleted item
+            const updatedAgreements = allRentalAgreementsState.filter(agreement => agreement.theAgreement.id !== rentalAgreementId)
+            setAllRentalAgreementsState(updatedAgreements)
+            toast.success(`💥 You've succesfully deleted this agreement `,
+            {
+              "autoClose" : 3000
+            })
+            goToNextAgreement()
+            checkSession()
+            } else {
+            // console.log("Error in deleting the rental agreement")
+            toast.error(`Error in deleting the rental agreement`,
+            {
+                "autoClose" : 2000
+            })
+            }
+        } catch (error) {
+            console.error('Fetch Error:', error)
+            toast.error(`Error in deleting the rental agreement: ${error}`,
+            {
+                "autoClose" : 2000
+            })
+            // Handle fetch errors
+        }
+        }
+    
+        // Toggle for delete button
+        const handleToggleDelete = () => {
+        setToggleDelete(!toggleDelete)
+        }
+
+        // console.log("All Agreements?:", allRentalAgreementsState)
+
+        const navigateBackToOwnerDash = () => {
+            navigate(`/dashboard`)
+        }
     
     return(
         <section>
@@ -418,7 +489,7 @@ function RentalAgreementDisplay({setAvailableToCheckoutNumb}) {
                 {rentalCardDisplay[currentAgreementIndex]}
                 </div>
 
-                { allAgreements[currentAgreementIndex]?.theAgreement.agreement_status !== 'both-accepted' && role === 'owner' && (
+                { allRentalAgreementsState[currentAgreementIndex]?.theAgreement.agreement_status !== 'both-accepted' && role === 'owner' && (
                 <div> 
 
                 <input
@@ -495,7 +566,7 @@ function RentalAgreementDisplay({setAvailableToCheckoutNumb}) {
                     <br></br>
                 </div>
             )}
-            { allAgreements[currentAgreementIndex]?.theAgreement.agreement_status !== 'both-accepted' &&
+            { allRentalAgreementsState[currentAgreementIndex]?.theAgreement.agreement_status !== 'both-accepted' &&
             <>
             <div className="mt-6 flex justify-between"> 
 
@@ -526,14 +597,53 @@ function RentalAgreementDisplay({setAvailableToCheckoutNumb}) {
 
             </div>
 
-            <div className="flex justify-end"> 
+            <div className="flex justify-between"> 
+
+                    <button
+                        onClick={handleToggleDelete}
+                        className="bg-red-500 text-white text-sm px-6 py-3 mt-8 rounded-lg shadow transition duration-150 ease-in-out hover:bg-gray-700 focus:outline-none"
+                    >
+                        Delete this Rental Agreement
+                    </button>
+
+
                     <button 
                     onClick={handleAgreementEdit}
                     className="bg-black text-white text-sm px-6 py-3 mt-8 rounded-lg shadow transition duration-150 ease-in-out hover:bg-gray-700 focus:outline-none">
                     Submit Changes
                     </button>
+
+                    
+
+                  {toggleDelete && (
+                  <div className="fixed inset-0 bg-gray-600 bg-opacity-50 z-40 overflow-y-auto h-full w-full" onClick={() => setToggleDelete(false)}>
+                    <div className="relative top-20 mx-auto p-5 border w-1/3 shadow-lg rounded-md bg-white">
+                      <h3 className="text-lg font-medium leading-6 text-gray-900">Are you sure you want to delete this item?</h3>
+                      <div className="mt-2">
+                        <button
+                          onClick={() => handleDeleteRentalAgreement(allRentalAgreementsState[currentAgreementIndex]?.theAgreement?.id)}
+                          className="mr-2 rounded bg-red-500 py-2 px-4 text-white hover:bg-red-600"
+                        >
+                          Yes, Remove This Rental Agreement.
+                        </button>
+                        <button
+                          onClick={handleToggleDelete}
+                          className="rounded bg-gray-500 py-2 px-4 text-white hover:bg-gray-600"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+
             </div>
-            </>}
+            
+            </>
+
+            
+            }
 
             </div>
 
@@ -590,6 +700,11 @@ function RentalAgreementDisplay({setAvailableToCheckoutNumb}) {
                         </svg>
                     </button>
                 </div>
+
+                {fromOwnerDash && 
+              <button className="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded bg-amber-500 px-5 text-sm font-medium tracking-wide text-white shadow-md shadow-amber-200 transition duration-300 hover:bg-emerald-600 hover:shadow-sm hover:shadow-emerald-200 focus:bg-emerald-700 focus:shadow-sm focus:shadow-emerald-200 focus-visible:outline-none disabled:cursor-not-allowed disabled:border-emerald-300 disabled:bg-emerald-300 disabled:shadow-none"  onClick={navigateBackToOwnerDash}>
+               Return to Dashboard
+              </button>}
             </div>
             </div>
 
@@ -599,25 +714,3 @@ function RentalAgreementDisplay({setAvailableToCheckoutNumb}) {
 }
 
 export default RentalAgreementDisplay;
-
-
-        // Need to just do const, cause state and asynchrous. I'll update this later.
-        // if (role === 'user'){
-        //     setRentalComment(prevState => {
-        //         return {
-        //             ...prevState,
-        //             user_id: currentUser?.id,
-        //             owner_id: "",
-        //             agreement_id: currentUser?.agreements[0]?.id
-        //         }
-        //     })
-        // } else if (role ==='owner'){
-        //     setRentalComment(prevState => {
-        //         return {
-        //             ...prevState,
-        //             user_id: currentUser?.agreements[0]?.user_id,
-        //             owner_id: currentUser?.id,
-        //             agreement_id: currentUser?.agreements[0]?.id
-        //         }
-        //     })
-        // }

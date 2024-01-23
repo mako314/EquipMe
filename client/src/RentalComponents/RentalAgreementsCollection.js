@@ -11,7 +11,7 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
     const [agreementFiltering, setAgreementFiltering] = useState('newest')
     const [filterKeyWord, setFilterKeyWord] = useState('none')
 
-  console.log(filterKeyWord)
+  // console.log(filterKeyWord)
   //This formatdate function takes the created_at and updated_at dates and changes them into a much simpler format. This reads like the following:
   // Created At: Dec 8, 2023, 07:00:00 PM
   // Updated At: Dec 8, 2023, 07:00:00 PM
@@ -54,7 +54,7 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
 
     // take an agreement and filter it, it's called on all agreements which is an array with the agreement data we need. It's been flatmapped twice if it's a user, and then mapped over for the data we need. We compare it with the selected filter key word, which is decided by the radio buttons and compared with agreement_status of the agreement.
     const filterAgreementsByStatus = (agreement) => {
-      console.log("Agreement status: ", agreement.agreement_status, "Filter keyword: ", filterKeyWord)
+      // console.log("Agreement status: ", agreement.agreement_status, "Filter keyword: ", filterKeyWord)
       return filterKeyWord ? agreement.agreement_status === filterKeyWord : true
     }
 
@@ -77,12 +77,12 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
     }))
 
     // Check agreements before filtering
-    console.log("Agreements before filtering:", allAgreements) 
+    // console.log("Agreements before filtering:", allAgreements) 
 
     //If filterKeyWord exists and is not equal to none, go ahead and filter with the function 
     if (filterKeyWord && filterKeyWord !== 'none') {
       // Check agreements after filtering
-      console.log("Agreements after filtering:", allAgreements) 
+      // console.log("Agreements after filtering:", allAgreements) 
       allAgreements = allAgreements.filter(filterAgreementsByStatus)
     }
 
@@ -104,7 +104,7 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
       role === 'user' ? (
         <RentalAgreementCard
           key={`${agreement.id}-${agreement.created_at}`} // Unique key based on ID and created_at
-          rentalId={agreement.item.id}
+          rentalId={agreement.id}
           cartName={agreement.cart_name}
           quantity={agreement.item.quantity}
           equipmentName={agreement.item.equipment.name}
@@ -175,7 +175,7 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
   }, [currentUser, agreementFiltering, filterKeyWord])
 
   const handleAgreementSelection = (event) => {
-    console.log('Selected value:', event.target.value)
+    // console.log('Selected value:', event.target.value)
     setAgreementFiltering(event.target.value)
   }
 
@@ -263,7 +263,18 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
         
   
   <div className="flex flex-row flex-wrap justify-start"> 
-    {sortedCards.length > 0 ? sortedCards : (
+    {sortedCards?.length > 0 ? sortedCards : currentUser?.equipment?.length > 0 ? (
+                <div className="flex flex-col items-center justify-center p-10 bg-white shadow-md rounded-lg">
+                    <img
+                        src="https://www.kaser-albehar.com/wp-content/uploads/2018/10/110819093004-1.jpg"
+                        alt="More Heavy Equipment just Sitting Out"
+                        className="max-w-xs md:max-w-sm lg:max-w-md mb-4 rounded-lg shadow-lg"
+                    />
+                    <p className="text-lg md:text-xl lg:text-2xl text-center text-gray-700 font-semibold">
+                      There are currently no rental agreements formed, try getting touch with users or sending them a link to reserve your equipment!
+                    </p>
+                </div>
+            ): (
                 <div className="flex flex-col items-center justify-center p-10 bg-white shadow-md rounded-lg">
                     <img
                         src="https://www.kaser-albehar.com/wp-content/uploads/2018/10/110819093004-1.jpg"

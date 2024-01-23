@@ -135,8 +135,8 @@ function Calendar({startRental, setStartRental, endRental, setEndRental, duratio
     // Calculate the minimum end time, which is one hour after the start time
     let minEndDateTime = new Date(currentStart.getTime() + 3600000)
   
-    console.log("THE NEW END:", newEnd.toISOString())
-    console.log("THE minEndDateTime:", minEndDateTime.toISOString())
+    // console.log("THE NEW END:", newEnd.toISOString())
+    // console.log("THE minEndDateTime:", minEndDateTime.toISOString())
   
     // Check if the new end time is greater than or equal to the minimum end time
     if (newEnd >= minEndDateTime) {

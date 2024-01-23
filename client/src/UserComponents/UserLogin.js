@@ -9,9 +9,6 @@ function UserLogin(){
     //Take me to my page scotty,
     const navigate = useNavigate();
     const [error, setError] = useState(null)
-
-    // const [user, setUser] = useState(null); // stores user on client-side
-    // const [user, setUser] = useContext(UserContext)
     const apiUrl = useContext(ApiUrlContext)
     const { currentUser, role, setCurrentUser, setRole } = UserSessionContext()
 
@@ -19,38 +16,6 @@ function UserLogin(){
 
 
     // sends information to server-side, sets session, and sets state
-    // function handleLogin(e) {
-    //     e.preventDefault();
-
-    //     let email = e.target.email.value;
-    //     let password = e.target.password.value;
-
-    //     fetch(`${apiUrl}login`, {
-    //         method: "POST",
-    //         credentials: 'include',
-    //         headers: {
-    //           "Content-Type": "application/json",
-    //         },
-    //         body: JSON.stringify( { email, password } ),
-    //       }).then((resp) => {
-    //         if (resp.ok) {
-    //           resp.json().then((data) => {
-    //             console.log(data.role)
-    //             if(data.role === 'user'){
-    //               setCurrentUser(data.user)
-    //               setRole(data.role)
-    //               navigate(`/dashboard`) 
-    //               // navigate(`/user/profile/${data.id}`); // <-------- navigates to the profile
-    //             } else if(data.role === 'owner'){
-    //               setCurrentUser(data.owner)
-    //               setRole(data.role)
-    //               navigate(`/dashboard`) 
-    //             }
-    //           })
-    //         }
-    //       })
-    // }
-
     function handleLogin(e) {
       e.preventDefault()
   
@@ -67,7 +32,7 @@ function UserLogin(){
       }).then((resp) => {
           if (resp.ok) {
               resp.json().then((data) => {
-                  console.log(data.role)
+                  // console.log(data.role)
                   if (data.role === 'user') {
                       setCurrentUser(data.user)
                       setRole(data.role)
@@ -82,7 +47,7 @@ function UserLogin(){
               })
           } else {
               // Handle login failure here
-              console.log(resp)
+              // console.log(resp)
               console.error('Login failed. Incorrect email or password.')
 
               // You can display an error message to the user, e.g., set an error state

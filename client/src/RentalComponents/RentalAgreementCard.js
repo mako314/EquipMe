@@ -11,7 +11,7 @@ function RentalAgreementCard({ equipmentName, rentalId, rentalStart, rentalEnd, 
     // console.log("The type of:", typeof(rentalDelivery))
     // console.log(item)
 
-    console.log("THE REVIEWS:",existingReviews)
+    // console.log("THE REVIEWS:",existingReviews)
 
     const [isModalOpen, setIsModalOpen] = useState(false)
     
@@ -25,8 +25,8 @@ function RentalAgreementCard({ equipmentName, rentalId, rentalStart, rentalEnd, 
 
     const navigateToAgreementHandling = () => {
         // setFromOwnerDash(!fromOwnerDash)
-        setFromOwnerDash(!fromOwnerDash)
-        navigate(`/handle/agreements/${rentalId}`)
+        setFromOwnerDash(fromOwnerDash)
+        navigate(`/handle/agreements/${rentalId}`, { state: { fromOwnerDash: fromOwnerDash} })
     }
 
     // const navigateToReviewHandling = () => {
@@ -37,7 +37,7 @@ function RentalAgreementCard({ equipmentName, rentalId, rentalStart, rentalEnd, 
 
     const toggleReviewModal = () => {
         setIsModalOpen(!isModalOpen)
-        console.log("Modal State: ", !isModalOpen)
+        // console.log("Modal State: ", !isModalOpen)
     }
 
 
@@ -67,7 +67,8 @@ function RentalAgreementCard({ equipmentName, rentalId, rentalStart, rentalEnd, 
 
     return (
 
-            <div className="w-full max-w-sm overflow-hidden bg-white rounded-lg shadow-lg mb-4 mt-3 mx-2">
+            <div className="flex flex-col w-full max-w-sm overflow-hidden bg-white rounded-lg shadow-lg mb-4 mt-3 mx-2">
+                <div className="flex-grow"> 
         <div className="px-6 py-3 bg-gray-900 flex items-center">
             {/*  SVG for the cart icon  */}
             <svg aria-label="cart icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="white" className="bi bi-cart4 ml-0" viewBox="0 0 16 16">
@@ -148,8 +149,9 @@ function RentalAgreementCard({ equipmentName, rentalId, rentalStart, rentalEnd, 
             </div>
 
         </div>
+        </div>
         {showHandleButton && fromOwnerDash && 
-        <button className="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded bg-amber-500 px-5 text-sm font-medium tracking-wide text-white shadow-md shadow-amber-200 transition duration-300 hover:bg-emerald-600 hover:shadow-sm hover:shadow-emerald-200 focus:bg-emerald-700 focus:shadow-sm focus:shadow-emerald-200 focus-visible:outline-none disabled:cursor-not-allowed disabled:border-emerald-300 disabled:bg-emerald-300 disabled:shadow-none"  onClick={navigateToAgreementHandling}>
+        <button className="inline-flex w-full h-10 items-center justify-center gap-2 whitespace-nowrap rounded bg-amber-500 px-5 text-sm font-medium tracking-wide text-white shadow-md shadow-amber-200 transition duration-300 hover:bg-emerald-600 hover:shadow-sm hover:shadow-emerald-200 focus:bg-emerald-700 focus:shadow-sm focus:shadow-emerald-200 focus-visible:outline-none disabled:cursor-not-allowed disabled:border-emerald-300 disabled:bg-emerald-300 disabled:shadow-none"  onClick={navigateToAgreementHandling}>
         Handle This Agreement
         </button>}
 
