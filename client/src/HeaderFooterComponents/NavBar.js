@@ -32,6 +32,7 @@ function NavBar({ setSearchTerm}) {
       setCurrentUser(null); // Clearing the current user in session context
       setRole(''); //  Clear the role
       closeMobileView()
+      navigate(`/`)
     })
   }
 

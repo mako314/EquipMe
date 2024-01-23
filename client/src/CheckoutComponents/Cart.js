@@ -185,7 +185,7 @@ useEffect(() => {
     setIsModalOpen(!isModalOpen)
   }
 
-  const cartOptions = currentUser.cart.length > 0 ? (
+  const cartOptions = currentUser?.cart?.length > 0 ? (
     cartData?.map((item) => (
       <option key={item.id} value={item.id}>{item.cart_name}</option>
     ))
@@ -276,6 +276,9 @@ useEffect(() => {
         // navigate(`/checkout`)
       } else {
         const errorData = await response.json()
+        toast.warn(`🚧 The owner likely hasn't finished their stripe onboarding yet, maybe send them a message as a reminder!`,{
+        "autoClose" : 6000
+        })
         console.error('Error Response:', errorData)
       }
     } catch (error) {
