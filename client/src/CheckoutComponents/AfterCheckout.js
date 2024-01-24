@@ -2,10 +2,13 @@ import React, { useEffect, useState, useContext } from 'react';
 import ApiUrlContext from '../Api'
 import { useNavigate} from 'react-router-dom';
 import LoadingPage from '../ExtraPageComponents/LoadingPage';
+import { UserSessionContext } from '../UserComponents/SessionContext';
 
 function AfterCheckout(){
     const apiUrl = useContext(ApiUrlContext)
-    const [eventData, setEventData] = useState([])
+    const { currentUser, role, checkSession} = UserSessionContext()
+    // const [eventData, setEventData] = useState([])
+    const [paymentRecord, setPaymentRecord] = useState(null);
     const [isLoading, setIsLoading] = useState(true)
     const navigate = useNavigate();
 
@@ -24,51 +27,71 @@ function AfterCheckout(){
     // https://developer.mozilla.org/en-US/docs/Web/API/EventSource
     // https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events
 
-    useEffect(() => {
+    // useEffect(() => {
         
-        const eventSource = new EventSource(`${apiUrl}sse/endpoint`)
+    //     const eventSource = new EventSource(`${apiUrl}sse/endpoint`)
 
-        eventSource.onmessage = function(event) {
-            const data = JSON.parse(event.data)
+    //     eventSource.onmessage = function(event) {
+    //         const data = JSON.parse(event.data)
             
-            if (!data || Object.keys(data).length === 0) {
-                // Ignore empty messages
-                console.log("THE DATA:", data)
-                return
+    //         if (!data || Object.keys(data).length === 0) {
+    //             // Ignore empty messages
+    //             console.log("THE DATA:", data)
+    //             return
+    //         }
+    //         console.log("Update from Server:", data)
+    //         setEventData(prevEvents => [...prevEvents, data])
+    //         setIsLoading(false)
+    //         // console.log("Update from Server:", data)
+    //     }
+
+    //     eventSource.onerror = function(err) {
+    //         console.error("EventSource failed:", err)
+    //         // Handle errors
+    //         setIsLoading(false)
+    //     }
+
+    //     return () => {
+    //         eventSource.close() // Close the connection when component unmounts
+    //     }
+    // }, [])
+
+    useEffect(() => {
+        console.log("USE EFFECT RUNNING")
+        const fetchPaymentRecord = async () => {
+            try {
+                const response = await fetch(`${apiUrl}payment/record/user/${currentUser.id}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const data = await response.json();
+                setPaymentRecord(data);
+                setIsLoading(false);
+            } catch (error) {
+                console.error("Fetch error:", error);
+                setIsLoading(false);
             }
-            console.log("Update from Server:", data)
-            setEventData(prevEvents => [...prevEvents, data])
-            setIsLoading(false)
-            // console.log("Update from Server:", data)
-        }
+        };
 
-        eventSource.onerror = function(err) {
-            console.error("EventSource failed:", err)
-            // Handle errors
-            setIsLoading(false)
-        }
+        fetchPaymentRecord();
+    }, [userId]);
 
-        return () => {
-            eventSource.close() // Close the connection when component unmounts
-        }
-    }, [])
-
-    console.log("CHECKING STATE DATA:", eventData)
+    console.log("CHECKING STATE DATA:", paymentRecord)
 
     if (isLoading){
         return <LoadingPage loadDetails={"your Order Confirmation"}/>
     }
 
-    if (eventData){
+    if (paymentRecord){
     return(
         <div className="bg-white min-h-screen flex flex-col items-center pt-5 pb-5">
 
-            {eventData.map((event, index) => (
+            {paymentRecord.map((event, index) => (
                 <div key={index} className="text-center">
                     {event.type === 'payment_intent.succeeded' && (
                         <div className="flex flex-col items-center justify-center">
                             <img src="https://i.imgur.com/9L7Tjf9.png" alt="Successful Checkout" className="w-80 mt-20"/>
-                            <p className="text-green-600 text-2xl mt-4">Payment Successful - ID: {event.data.id}</p>
+                            <p className="text-green-600 text-2xl mt-4">Payment Successful - ID: {paymentRecord.payment_intent_id}</p>
                             <p className="font-semibold text-2xl mt-10 text-gray-700">Thank you for your rental!</p>
                             <p className="mt-10 text-gray-600 max-w-lg">Your rental was successful and you will receive a confirmation email soon. If delivery was possible, we'll be in touch with the Owner to coordinate the delivery of your Equipment!</p>
                         </div>
