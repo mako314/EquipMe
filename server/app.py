@@ -2863,11 +2863,12 @@ class WebHookForStripeSuccess(Resource):
     
     def handle_payment_intent_created(self, payment_intent):
         # Logic to handle created payment intent
-        print(f"Created payment intent: {payment_intent}")
+        pass
+        # print(f"Created payment intent: {payment_intent}")
 
     def handle_successful_payment_intent(self, payment_intent):
         # Logic to handle successful payment intent
-        print(f"Payment intent SUCCEEDED: {payment_intent}")
+        # print(f"Payment intent SUCCEEDED: {payment_intent}")
         equipment_ids_str = payment_intent.get("metadata", {}).get("equipment_ids")
         cart_item_ids_str = payment_intent.get("metadata", {}).get("cart_item_ids")
         user_ids_str = payment_intent.get("metadata", {}).get("user_ids")
@@ -2879,7 +2880,7 @@ class WebHookForStripeSuccess(Resource):
 
                 for equipment_id, cart_item_id, user_id in zip(equipment_ids, cart_item_ids, user_ids):
                     # Process each equipment, cart item, and user
-                    print(f"Processing: Equipment ID {equipment_id}, Cart Item ID {cart_item_id}, User ID {user_id}")
+                    # print(f"Processing: Equipment ID {equipment_id}, Cart Item ID {cart_item_id}, User ID {user_id}")
                     equipment = Equipment.query.get(equipment_id)
                     cart_item = CartItem.query.get(cart_item_id)
                     user = User.query.get(user_id)
@@ -2917,12 +2918,12 @@ class WebHookForStripeSuccess(Resource):
                     changed_at=datetime.utcnow(),
                 )
                     
-                    print("THE NEW STATE HISTORY:",new_state_history)
+                    # print("THE NEW STATE HISTORY:",new_state_history)
                     
                     db.session.add(new_state_history)
 
                     payment_method_id = payment_intent.get('payment_method')
-                    print('THE PAYMENT METHOD:',payment_intent.get('payment_method') )
+                    # print('THE PAYMENT METHOD:',payment_intent.get('payment_method') )
                     card_details = None
                     if payment_method_id:
                         try:
@@ -2944,7 +2945,7 @@ class WebHookForStripeSuccess(Resource):
                             # Handle error
                             print("Error fetching payment method:", e)
 
-                    print("WHAT I BELIEVE TO BE THE ID OF THE PAYMENT INTENT:", payment_intent.id)
+                    # print("WHAT I BELIEVE TO BE THE ID OF THE PAYMENT INTENT:", payment_intent.id)
 
                     # Convert data to python date time object
                     def parse_iso_date(date_str):
@@ -2981,7 +2982,7 @@ class WebHookForStripeSuccess(Resource):
                         return total_price_dollars
                     
                     total_item_indv_cost = calculate_item_total(cart_item)
-                    print(calculate_item_total(cart_item))
+                    # print(calculate_item_total(cart_item))
 
                     new_order_history = OrderHistory(
                     order_datetime = datetime.utcnow(),
@@ -3030,14 +3031,17 @@ class WebHookForStripeSuccess(Resource):
 
     def handle_payment_intent_canceled(self, payment_intent):
         # Logic to handle canceled payment intent
-        print(f"Canceled payment intent: {payment_intent}")
+        pass
+        # print(f"Canceled payment intent: {payment_intent}")
 
     def handle_payment_intent_failed(self, payment_intent):
         # Logic to handle failed payment intent
-        print(f"Failed payment intent: {payment_intent}")
+        pass
+        # print(f"Failed payment intent: {payment_intent}")
 
     def format_payment_intent_data(self, payment_intent):
-        print("THE PAYMENT INTENT DATA:", payment_intent)
+        pass
+        # print("THE PAYMENT INTENT DATA:", payment_intent)
         # Format payment_intent data 
         return {
             "id": payment_intent.get("id"),
