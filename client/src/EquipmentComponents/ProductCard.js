@@ -4,7 +4,9 @@ import { useNavigate } from "react-router-dom";
 
 function ProductCard({ id, name, model, make, equipment_image, address, address_line_2, city, state, postal_code }) {
 
-    const equipmentLocation = `${address_line_2 === '' ?  address : address + ',' + address_line_2}, ${city}, ${state} ${postal_code} `
+    // const equipmentLocation = `${address_line_2 === '' ?  address : address + ',' + address_line_2}, ${city}, ${state} ${postal_code} `
+
+    const equipmentLocation = `${address}${address_line_2 ? ', ' + address_line_2 : ''}, ${city}, ${state} ${postal_code}`;
 
     const navigate = useNavigate();
 

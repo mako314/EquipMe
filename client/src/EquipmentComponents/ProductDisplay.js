@@ -31,7 +31,9 @@ function EquipmentDisplay({}) {
 
   const { model, name, make, state, city, address, address_line_2, postal_code, email, phone, equipment_image, equipment_price, owner } = oneEquipment
   
-  const equipmentLocation = `${address_line_2 === '' ?  address : address + ',' + address_line_2}, ${city}, ${state} ${postal_code} `
+  // const equipmentLocation = `${address_line_2 === '' ?  address : address + ',' + address_line_2}, ${city}, ${state} ${postal_code} `
+  const equipmentLocation = `${address}${address_line_2 ? ', ' + address_line_2 : ''}, ${city}, ${state} ${postal_code}`;
+
 
   let firstName, lastName
   if (oneEquipment && oneEquipment.owner) {
