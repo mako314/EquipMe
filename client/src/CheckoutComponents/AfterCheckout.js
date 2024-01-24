@@ -99,7 +99,15 @@ function AfterCheckout(){
 
                 <div className="flex flex-col items-center justify-center">
                     <img src="https://i.imgur.com/9L7Tjf9.png" alt="Successful Checkout" className="w-80 mt-20"/>
+
                     <p className="text-green-600 text-2xl mt-4">Payment Successful - ID: {paymentRecord.payment_intent_id}</p>
+
+                    {/* Display the payment method */}
+                    <p className="text-gray-700 mt-4">Payment Method: {paymentRecord.payment_method}</p>
+
+                    {/* Display the amount received, converting cents to dollars */}
+                    <p className="text-gray-700 mt-2">Amount Received: ${(paymentRecord.amount_received / 100).toFixed(2)} {paymentRecord.currency.toUpperCase()}</p>
+
                     <p className="font-semibold text-2xl mt-10 text-gray-700">Thank you for your rental!</p>
                     <p className="mt-10 text-gray-600 max-w-lg">Your rental was successful and you will receive a confirmation email soon. If delivery was possible, we'll be in touch with the Owner to coordinate the delivery of your Equipment!</p>
                 </div>
@@ -131,6 +139,8 @@ function AfterCheckout(){
 
         </div>
     )}
+
+
 }
 
 export default AfterCheckout
