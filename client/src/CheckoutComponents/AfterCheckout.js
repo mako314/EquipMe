@@ -76,7 +76,7 @@ function AfterCheckout(){
         };
 
         fetchPaymentRecord();
-    }, [currentUser.id]);
+    }, [currentUser, apiUrl]);
 
     console.log("CHECKING STATE DATA:", paymentRecord)
 
@@ -88,19 +88,13 @@ function AfterCheckout(){
     return(
         <div className="bg-white min-h-screen flex flex-col items-center pt-5 pb-5">
 
-            {paymentRecord.map((event, index) => (
-                <div key={index} className="text-center">
-                    {event.type === 'payment_intent.succeeded' && (
-                        <div className="flex flex-col items-center justify-center">
-                            <img src="https://i.imgur.com/9L7Tjf9.png" alt="Successful Checkout" className="w-80 mt-20"/>
-                            <p className="text-green-600 text-2xl mt-4">Payment Successful - ID: {paymentRecord.payment_intent_id}</p>
-                            <p className="font-semibold text-2xl mt-10 text-gray-700">Thank you for your rental!</p>
-                            <p className="mt-10 text-gray-600 max-w-lg">Your rental was successful and you will receive a confirmation email soon. If delivery was possible, we'll be in touch with the Owner to coordinate the delivery of your Equipment!</p>
-                        </div>
-                    )}
-                    {/* Render other event types if necessary */}
+                <div className="flex flex-col items-center justify-center">
+                    <img src="https://i.imgur.com/9L7Tjf9.png" alt="Successful Checkout" className="w-80 mt-20"/>
+                    <p className="text-green-600 text-2xl mt-4">Payment Successful - ID: {paymentRecord.payment_intent_id}</p>
+                    <p className="font-semibold text-2xl mt-10 text-gray-700">Thank you for your rental!</p>
+                    <p className="mt-10 text-gray-600 max-w-lg">Your rental was successful and you will receive a confirmation email soon. If delivery was possible, we'll be in touch with the Owner to coordinate the delivery of your Equipment!</p>
                 </div>
-                ))}
+
             <div className='flex flex-row gap-4'> 
             <button 
                 onClick={handleCartNav}
@@ -131,3 +125,18 @@ function AfterCheckout(){
 }
 
 export default AfterCheckout
+
+
+// {paymentRecord.map((event, index) => (
+//     <div key={index} className="text-center">
+//         {event.type === 'payment_intent.succeeded' && (
+//             <div className="flex flex-col items-center justify-center">
+//                 <img src="https://i.imgur.com/9L7Tjf9.png" alt="Successful Checkout" className="w-80 mt-20"/>
+//                 <p className="text-green-600 text-2xl mt-4">Payment Successful - ID: {paymentRecord.payment_intent_id}</p>
+//                 <p className="font-semibold text-2xl mt-10 text-gray-700">Thank you for your rental!</p>
+//                 <p className="mt-10 text-gray-600 max-w-lg">Your rental was successful and you will receive a confirmation email soon. If delivery was possible, we'll be in touch with the Owner to coordinate the delivery of your Equipment!</p>
+//             </div>
+//         )}
+//         {/* Render other event types if necessary */}
+//     </div>
+//     ))}
