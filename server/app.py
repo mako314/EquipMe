@@ -1,4 +1,4 @@
-from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement, Message, Thread,UserInbox, OwnerInbox, Cart, CartItem, EquipmentPrice, Review, UserFavorite, OwnerFavorite, AgreementComment, FeaturedEquipment, EquipmentStateHistory, EquipmentStatus, EquipmentStateSummary, OrderHistory
+from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement, Message, Thread,UserInbox, OwnerInbox, Cart, CartItem, EquipmentPrice, Review, UserFavorite, OwnerFavorite, AgreementComment, FeaturedEquipment, EquipmentStateHistory, EquipmentStatus, EquipmentStateSummary, OrderHistory, PaymentRecord
 # from flask_cors import CORS
 # from flask_migrate import Migrate
 # from flask import Flask, request, make_response, jsonify
@@ -32,8 +32,8 @@ load_dotenv('../.env.local')
 stripe.api_key=os.getenv('STRIPE_TEST_SECRET_KEY')
 # endpoint_secret=os.getenv('WEBHOOK_SECRET')
 
-# This does not work on render :/
 from queue import Queue
+
 # Global queue for SSE events
 # https://docs.python.org/3/library/queue.html
 # https://stackoverflow.com/questions/63394902/how-to-install-queuefrom-queue-import-queue-library-in-python3-8
@@ -2744,6 +2744,8 @@ class CheckingOut(Resource):
 
 api.add_resource(CheckingOut, '/v1/checkout/sessions')
 
+
+
 # Route to create login link for stripe dashboard
 class CreateLoginLinkStripeDash(Resource):
     def post(self,id):
@@ -2771,7 +2773,7 @@ class SSEEndpoint(Resource):
                     data = events_queue.get()  # Get the event data from the queue
                     yield f"data: {json.dumps(data)}\n\n"
                 else:
-                    # time.sleep(1)  # Adjust the sleep time as needed
+                    time.sleep(1)  # Adjust the sleep time as needed
                     continue  # Skip sending a message if the queue is empty
 
         return Response(stream_with_context(event_stream()), content_type='text/event-stream')
@@ -3001,8 +3003,21 @@ class WebHookForStripeSuccess(Resource):
                     order_number = payment_intent.id,
                     individual_item_total = total_item_indv_cost
                     )
-                    
 
+                    payment_status = payment_intent.get('status')
+                    payment_currency = payment_intent.get('currency')
+                    payment_total = payment_intent.get('amount')
+
+                    payment_record = PaymentRecord(
+                    payment_intent_id=payment_method_id,
+                    status=payment_status,
+                    amount_received=payment_total,
+                    currency=payment_currency,
+                    payment_method =f'{payment_method_type} - {card_details.brand}: {card_details.last4}',
+                    user_id = user.id
+                    )
+
+                    db.session.add(payment_record)
                     db.session.add(new_order_history)
                     db.session.commit()
                 
@@ -3027,10 +3042,24 @@ class WebHookForStripeSuccess(Resource):
             "status": payment_intent.get("status"),
             # other fields 
         }
-    
-    
 
 api.add_resource(WebHookForStripeSuccess, '/webhook')
+
+class PaymentRecordByUserID(Resource):
+    #get one user by ID, may not even be necessary
+    def get(self, user_id):
+        payment_record = PaymentRecord.query.filter_by(user_id=user_id).order_by(PaymentRecord.order_datetime.desc()).first()
+
+        if payment_record:
+            return make_response(payment_record.to_dict(), 200)
+        else:
+            response = make_response({
+                "error": "User not found or no payment records available"
+            }, 404)
+            return response
+        
+api.add_resource(PaymentRecordByUserID, '/payment/record/<int:user_id>')
+        
 
 class CalculateMonthlyTotals(Resource):
     def get(self, month, year):
