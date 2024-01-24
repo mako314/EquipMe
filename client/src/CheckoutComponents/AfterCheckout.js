@@ -79,8 +79,7 @@ function AfterCheckout(){
         } else {
             console.log("User ID is undefined");
         }
-
-        fetchPaymentRecord();
+        
     }, [currentUser, apiUrl]);
 
     console.log("CHECKING STATE DATA:", paymentRecord)
