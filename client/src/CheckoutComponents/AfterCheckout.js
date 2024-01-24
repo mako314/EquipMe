@@ -63,7 +63,12 @@ function AfterCheckout(){
         if (currentUser?.id) {  // Ensure currentUser ID is defined
             const fetchPaymentRecord = async () => {
                 try {
-                    const response = await fetch(`${apiUrl}payment/record/user/${currentUser.id}`);
+                    const response = await fetch(`${apiUrl}payment/record/user/${currentUser.id}`, {
+                        method: 'GET', 
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    });
                     if (!response.ok) {
                         throw new Error(`HTTP error! Status: ${response.status}`);
                     }
@@ -79,7 +84,7 @@ function AfterCheckout(){
         } else {
             console.log("User ID is undefined");
         }
-        
+
     }, [currentUser, apiUrl]);
 
     console.log("CHECKING STATE DATA:", paymentRecord)
