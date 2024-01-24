@@ -131,21 +131,29 @@ function App() {
   //-------------------------------------------- FOR USER - CHECK SESSION TO STAY LOGGED IN ON REFRESH--------------------------
   useEffect(() => {
     fetch(`${apiUrl}check_session`, {
-      credentials: 'include' // Ensures cookies are sent with the request
+      credentials: 'include'
     })
     .then(response => {
       if (response.ok) {
-        return response.json()
+        return response.json();
+      } else if (response.status === 401) {
+        console.log('User is not logged in.');
+        setCurrentUser(null)
+        setRole('')
       } else {
-        throw new Error('Session check failed')
+        // Handle other types of errors
+        throw new Error(`Session check failed with status: ${response.status}`);
       }
     })
     .then(data => {
-      console.log("The Data",data)
-      if (data.role === 'user') {
+      if (data.role === 'user' || data.role === 'owner') {
         setCurrentUser(data.details)
-      } else if (data.role === 'owner') {
-        setCurrentUser(data.details)
+        setRole(data.role)
+        resolve(data.details) 
+      } else if (!data){
+        reject(new Error('No data received'))
+      } else {
+        reject(new Error('No valid user role found'))
       }
     })
     .catch(error => {

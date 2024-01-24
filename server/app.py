@@ -2771,7 +2771,7 @@ class SSEEndpoint(Resource):
                     data = events_queue.get()  # Get the event data from the queue
                     yield f"data: {json.dumps(data)}\n\n"
                 else:
-                    time.sleep(1)  # Adjust the sleep time as needed
+                    # time.sleep(1)  # Adjust the sleep time as needed
                     continue  # Skip sending a message if the queue is empty
 
         return Response(stream_with_context(event_stream()), content_type='text/event-stream')
