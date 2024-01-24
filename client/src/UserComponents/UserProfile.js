@@ -161,7 +161,11 @@ function UserProfile({fromOwnerDash, setFromOwnerDash}) {
   }
 
 
+  let allOwnerReviewsVar = ownerReviews?.map((item) => (
+    <Reviews key={item.id} stars={item.review_stars} comment={item.review_comment} image={item.owner.profileImage} firstName={item.owner.firstName} lastName={item.owner.lastName} profession={item.owner.profession} onDelete={handleReviewDelete} reviewId={item.id}/>
+  ))
 
+  const allOwnerReviews = allOwnerReviewsVar?.length > 0 ? allOwnerReviewsVar : <div>No reviews currently available.</div>
 
   // Render loading page if display is still loading
   if (loading) {
@@ -280,9 +284,7 @@ function UserProfile({fromOwnerDash, setFromOwnerDash}) {
                                 <span className="text-gray-600 font-bold mb-4">Reviews</span>
                         </div>
                         <ul className="mb-6 grid gap-5 sm:grid-cols-2 md:grid-cols-2 md:mb-16"> 
-                        {ownerReviews?.map((item) => (
-                            <Reviews key={item.id} stars={item.review_stars} comment={item.review_comment} image={item.owner.profileImage} firstName={item.owner.firstName} lastName={item.owner.lastName} profession={item.owner.profession} onDelete={handleReviewDelete} reviewId={item.id}/>
-                        ))}
+                        {allOwnerReviews}
                         </ul>
 
                         <div className="flex mb-8">
