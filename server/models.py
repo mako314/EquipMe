@@ -61,6 +61,8 @@ class User(db.Model, SerializerMixin):
     user_favorite = db.relationship('UserFavorite', back_populates='user', cascade="all, delete")
     owner_favorite = db.relationship('OwnerFavorite', back_populates='user', cascade="all, delete")
 
+    payment_record = db.relationship('PaymentRecord', back_populates='user')
+
     #Serialization rules
     # serialize_rules = ('-agreements.user', '-user_inboxes.user', '-cart.user', '-review.user', '-review.cart_item','-review_owner', )
     # '-cart.items.review', '-agreements.items.review', '-agreements.owner.review','-review.user_id','-cart.items.agreement' 
@@ -69,7 +71,7 @@ class User(db.Model, SerializerMixin):
     # I may not need the relationship agreements to user directly, if it can be accessed inside of the cart_items, etc.
     # I'll probably clean these up as the time comes near for me to announce the site. But my lord, a lot of rules.
 
-    serialize_rules = ('-review.user.cart','-review.user.user_inboxes', '-review.user.user_favorite','-review.user.owner_favorite','-review.owner.owner_favorite','-review.owner.owner_inboxes','-review.owner.equipment','-review.owner.agreements','-review.cart_item','-cart.cart_item.agreements.cart_item','-cart.cart_item.agreements.review.user', '-cart.cart_item.agreements.review.owner','-cart.cart_item.equipment.featured_equipment','-cart.cart_item.equipment', '-cart.cart_item.equipment.owner.owner_inboxes','-cart.cart_item.equipment.owner.review','-cart.user.user_inboxes', '-cart.user.user_favorite', '-agreements', '-user_inboxes.user', '-user_favorite.owner_favorite', '-cart.cart_item.equipment.user_favorite', '-owner_favorite', '-cart.cart_item.equipment.owner.owner_favorite','-cart.cart_item.equipment.owner.user_favorite', '-review.owner.user_favorite', '-user_favorite.owner.equipment', '-user_favorite.owner.agreements', '-user_favorite.owner.review', '-user_favorite.owner.owner_favorite','-user_favorite.owner.user_favorite', '-user_favorite.owner.owner_favorite', '-user_favorite.owner.owner_inboxes','-user_favorite.equipment.cart_item', '-user_favorite.equipment.equipment_price', '-user_favorite.equipment.featured_equipment', '-user_favorite.equipment.owner', '-user_favorite.user','-orders.user', '-orders.owner')
+    serialize_rules = ('-review.user.cart','-review.user.user_inboxes', '-review.user.user_favorite','-review.user.owner_favorite','-review.owner.owner_favorite','-review.owner.owner_inboxes','-review.owner.equipment','-review.owner.agreements','-review.cart_item','-cart.cart_item.agreements.cart_item','-cart.cart_item.agreements.review.user', '-cart.cart_item.agreements.review.owner','-cart.cart_item.equipment.featured_equipment','-cart.cart_item.equipment', '-cart.cart_item.equipment.owner.owner_inboxes','-cart.cart_item.equipment.owner.review','-cart.user.user_inboxes', '-cart.user.user_favorite', '-agreements', '-user_inboxes.user', '-user_favorite.owner_favorite', '-cart.cart_item.equipment.user_favorite', '-owner_favorite', '-cart.cart_item.equipment.owner.owner_favorite','-cart.cart_item.equipment.owner.user_favorite', '-review.owner.user_favorite', '-user_favorite.owner.equipment', '-user_favorite.owner.agreements', '-user_favorite.owner.review', '-user_favorite.owner.owner_favorite','-user_favorite.owner.user_favorite', '-user_favorite.owner.owner_favorite', '-user_favorite.owner.owner_inboxes','-user_favorite.equipment.cart_item', '-user_favorite.equipment.equipment_price', '-user_favorite.equipment.featured_equipment', '-user_favorite.equipment.owner', '-user_favorite.user','-orders.user', '-orders.owner', '-payment_record.user')
 
     #'-cart.cart_item.equipment.equipment_price' needed for price
 
@@ -657,6 +659,7 @@ class CartItem(db.Model, SerializerMixin):
         
 class OrderHistory(db.Model, SerializerMixin):
     __tablename__="order_history"
+
     id = db.Column(db.Integer, primary_key=True)
     order_datetime = db.Column(db.DateTime, default=datetime.utcnow)
     total_amount = db.Column(db.Integer)  # For monetary values
@@ -688,6 +691,26 @@ class OrderHistory(db.Model, SerializerMixin):
     #Serialize Rules
     # I had to remove the move back to 'equipment.orders' here to remove the order data from my owners orders object
     serialize_rules = ('-user.review','-user.agreements','-user.user_inboxes','-user.cart','-user.orders', '-user.user_favorite','-user.owner_favorite','-owner.agreements','-owner.owner_inboxes','-owner.review','-owner.owner_favorite','-owner.user_favorite','-owner.orders','-owner.equipment','-equipment.cart_item', '-equipment.equipment_price', '-equipment.featured_equipment',  '-equipment.user_favorite', '-equipment.state_history', '-equipment.status', '-equipment.equipment_state_summary', '-equipment.orders',)
+
+
+class PaymentRecord(db.Model, SerializerMixin):
+    __tablename__="payment_records"
+
+    id = db.Column(db.Integer, primary_key=True)
+    payment_intent_id = db.Column(db.String(255), nullable=True, unique=True)
+    status = db.Column(db.String(50), nullable=True)
+    amount_received = db.Column(db.Integer, nullable=True)
+    currency = db.Column(db.String(3), nullable=True, default='USD')
+    payment_method = db.Column(db.String(50), nullable=True)
+    order_datetime = db.Column(db.DateTime, default=datetime.utcnow)
+    # Foreign Keys
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    # Relationships
+    user = db.relationship('User', back_populates='payment_record')
+
+    #Serialize Rules
+    serialize_rules = ('user.payment_record',)
 
 
 class Review(db.Model, SerializerMixin):

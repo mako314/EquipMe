@@ -1,4 +1,4 @@
-from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement, Message, Thread,UserInbox, OwnerInbox, Cart, CartItem, EquipmentPrice, Review, UserFavorite, OwnerFavorite, AgreementComment, FeaturedEquipment, EquipmentStateHistory, EquipmentStatus, EquipmentStateSummary, OrderHistory
+from models import db, User, EquipmentOwner, Equipment, EquipmentImage, RentalAgreement, Message, Thread,UserInbox, OwnerInbox, Cart, CartItem, EquipmentPrice, Review, UserFavorite, OwnerFavorite, AgreementComment, FeaturedEquipment, EquipmentStateHistory, EquipmentStatus, EquipmentStateSummary, OrderHistory, PaymentRecord
 # from flask_cors import CORS
 # from flask_migrate import Migrate
 # from flask import Flask, request, make_response, jsonify
@@ -27,23 +27,17 @@ from datetime import datetime, timezone, timedelta
 from dotenv import load_dotenv
 from queue import Queue
 
-
-import asyncio
-import websockets
-
 # Have to tell the dotenv what to load specifically
 load_dotenv('../.env.local')
 stripe.api_key=os.getenv('STRIPE_TEST_SECRET_KEY')
 # endpoint_secret=os.getenv('WEBHOOK_SECRET')
 
-# This does not work on render :/
 from queue import Queue
+
 # Global queue for SSE events
 # https://docs.python.org/3/library/queue.html
 # https://stackoverflow.com/questions/63394902/how-to-install-queuefrom-queue-import-queue-library-in-python3-8
 events_queue = Queue()
-
-
 
 
 #------------------------------------ BOTH USER LOGIN-----------------------------------------------------------------------------
@@ -2750,6 +2744,8 @@ class CheckingOut(Resource):
 
 api.add_resource(CheckingOut, '/v1/checkout/sessions')
 
+
+
 # Route to create login link for stripe dashboard
 class CreateLoginLinkStripeDash(Resource):
     def post(self,id):
@@ -2777,48 +2773,12 @@ class SSEEndpoint(Resource):
                     data = events_queue.get()  # Get the event data from the queue
                     yield f"data: {json.dumps(data)}\n\n"
                 else:
-                    # time.sleep(1)  # Adjust the sleep time as needed
+                    time.sleep(1)  # Adjust the sleep time as needed
                     continue  # Skip sending a message if the queue is empty
 
         return Response(stream_with_context(event_stream()), content_type='text/event-stream')
             
 api.add_resource(SSEEndpoint, '/sse/endpoint')
-
-connected_clients = set()
-
-async def register(websocket):
-    connected_clients.add(websocket)
-
-async def unregister(websocket):
-    connected_clients.remove(websocket)
-
-async def handle_websocket(websocket, path):
-    # Register client
-    await register(websocket)
-    try:
-        async for message in websocket:
-            # Process incoming messages here if necessary
-            pass
-    finally:
-        # Unregister client
-        await unregister(websocket)
-
-async def send_data_to_clients(data):
-    if connected_clients:  # Check if there are any connected clients
-        message = json.dumps(data)
-        await asyncio.wait([client.send(message) for client in connected_clients])
-
-# Start the WebSocket server
-# internal_host = 'equip-me.onrender.com'
-# # internal_port = 4000
-# start_server = websockets.serve(handle_websocket, internal_host, 10000)
-start_server = websockets.serve(handle_websocket, '0.0.0.0', 10000)
-
-# Run the server indefinitely
-asyncio.get_event_loop().run_until_complete(start_server)
-asyncio.get_event_loop().run_forever()
-
-
 
 class WebHookForStripeSuccess(Resource):
     def post(self):
@@ -2844,40 +2804,34 @@ class WebHookForStripeSuccess(Resource):
             print(f"Invalid Signature: {e}")
             return Response(status=400)
         
+        
+        
         # This dictionary will hold the data you want to send to the SSE endpoint
-        # processed_event_data = {"type": event["type"], "data": {}}
+        processed_event_data = {"type": event["type"], "data": {}}
 
         # Check the event type and handle accordingly
         if event['type'] == 'payment_intent.canceled':
             self.handle_payment_intent_canceled(event['data']['object'])
-            # processed_event_data["data"] = self.format_payment_intent_data(event['data']['object'])
+            processed_event_data["data"] = self.format_payment_intent_data(event['data']['object'])
         elif event['type'] == 'payment_intent.payment_failed':
             self.handle_payment_intent_failed(event['data']['object'])
-            # processed_event_data["data"] = self.format_payment_intent_data(event['data']['object'])
+            processed_event_data["data"] = self.format_payment_intent_data(event['data']['object'])
         elif event['type'] == 'payment_intent.succeeded':
             self.handle_successful_payment_intent(event['data']['object'])
-            # processed_event_data["data"] = self.format_payment_intent_data(event['data']['object'])
+            processed_event_data["data"] = self.format_payment_intent_data(event['data']['object'])
         elif event['type'] == 'payment_intent.created':
             self.handle_payment_intent_created(event['data']['object'])
-            # processed_event_data["data"] = self.format_payment_intent_data(event['data']['object'])
+            processed_event_data["data"] = self.format_payment_intent_data(event['data']['object'])
         elif event['type'] == 'application_fee.created':
             self.handle_application_fee_created(event['data']['object'])
-            # processed_event_data["data"] = self.format_payment_intent_data(event['data']['object'])
+            processed_event_data["data"] = self.format_payment_intent_data(event['data']['object'])
         elif event['type'] == 'checkout.session.expired':
             self.handle_checkout_session_expired(event['data']['object'])
-            # processed_event_data["data"] = self.format_payment_intent_data(event['data']['object'])
+            processed_event_data["data"] = self.format_payment_intent_data(event['data']['object'])
         else:
             print(f'Unhandled event type: {event["type"]}')
 
-        # events_queue.put(processed_event_data)
-            
-        data_to_send = {
-            "event_type": event["type"], 
-            "event_data": self.format_payment_intent_data(event["data"]["object"])
-        }
-
-        # Send data to all connected WebSocket clients
-        asyncio.get_event_loop().run_until_complete(send_data_to_clients(data_to_send))
+        events_queue.put(processed_event_data)
 
         
 
@@ -3049,8 +3003,21 @@ class WebHookForStripeSuccess(Resource):
                     order_number = payment_intent.id,
                     individual_item_total = total_item_indv_cost
                     )
-                    
 
+                    payment_status = payment_intent.get('status')
+                    payment_currency = payment_intent.get('currency')
+                    payment_total = payment_intent.get('amount')
+
+                    payment_record = PaymentRecord(
+                    payment_intent_id=payment_method_id,
+                    status=payment_status,
+                    amount_received=payment_total,
+                    currency=payment_currency,
+                    payment_method =f'{payment_method_type} - {card_details.brand}: {card_details.last4}',
+                    user_id = user.id
+                    )
+
+                    db.session.add(payment_record)
                     db.session.add(new_order_history)
                     db.session.commit()
                 
@@ -3075,10 +3042,24 @@ class WebHookForStripeSuccess(Resource):
             "status": payment_intent.get("status"),
             # other fields 
         }
-    
-    
 
 api.add_resource(WebHookForStripeSuccess, '/webhook')
+
+class PaymentRecordByUserID(Resource):
+    #get one user by ID, may not even be necessary
+    def get(self, user_id):
+        payment_record = PaymentRecord.query.filter_by(user_id=user_id).order_by(PaymentRecord.order_datetime.desc()).first()
+
+        if payment_record:
+            return make_response(payment_record.to_dict(), 200)
+        else:
+            response = make_response({
+                "error": "User not found or no payment records available"
+            }, 404)
+            return response
+        
+api.add_resource(PaymentRecordByUserID, '/payment/record/<int:user_id>')
+        
 
 class CalculateMonthlyTotals(Resource):
     def get(self, month, year):

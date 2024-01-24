@@ -24,61 +24,34 @@ function AfterCheckout(){
     // https://developer.mozilla.org/en-US/docs/Web/API/EventSource
     // https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events
 
-    // useEffect(() => {
-        
-    //     const eventSource = new EventSource(`${apiUrl}sse/endpoint`)
-
-    //     eventSource.onmessage = function(event) {
-    //         const data = JSON.parse(event.data)
-            
-    //         if (!data || Object.keys(data).length === 0) {
-    //             // Ignore empty messages
-    //             console.log("THE DATA:", data)
-    //             return
-    //         }
-    //         console.log("Update from Server:", data)
-    //         setEventData(prevEvents => [...prevEvents, data])
-    //         setIsLoading(false)
-    //         // console.log("Update from Server:", data)
-    //     }
-
-    //     eventSource.onerror = function(err) {
-    //         console.error("EventSource failed:", err)
-    //         // Handle errors
-    //         setIsLoading(false)
-    //     }
-
-    //     return () => {
-    //         eventSource.close() // Close the connection when component unmounts
-    //     }
-    // }, [])
-
     useEffect(() => {
-        const ws = new WebSocket('wss://equip-me.onrender.com');
-    
-        ws.onopen = () => {
-            console.log('Connected to WebSocket server');
-        };
-    
-        ws.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            console.log(event.data)
-            setEventData(prevEvents => [...prevEvents, data]);
-            setIsLoading(false);
-        };
-    
-        ws.onerror = (error) => {
-            console.error('WebSocket error:', error);
-        };
-    
-        ws.onclose = () => {
-            console.log('Disconnected from WebSocket server');
-        };
-    
+        
+        const eventSource = new EventSource(`${apiUrl}sse/endpoint`)
+
+        eventSource.onmessage = function(event) {
+            const data = JSON.parse(event.data)
+            
+            if (!data || Object.keys(data).length === 0) {
+                // Ignore empty messages
+                console.log("THE DATA:", data)
+                return
+            }
+            console.log("Update from Server:", data)
+            setEventData(prevEvents => [...prevEvents, data])
+            setIsLoading(false)
+            // console.log("Update from Server:", data)
+        }
+
+        eventSource.onerror = function(err) {
+            console.error("EventSource failed:", err)
+            // Handle errors
+            setIsLoading(false)
+        }
+
         return () => {
-            ws.close();
-        };
-    }, []);
+            eventSource.close() // Close the connection when component unmounts
+        }
+    }, [])
 
     console.log("CHECKING STATE DATA:", eventData)
 
