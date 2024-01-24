@@ -100,6 +100,7 @@ function App() {
 
   //Grab user and have it throughout the whole app
   const [currentUser, setCurrentUser] = useState([])
+  const [role, setRole] = useState('')
 
   //These useStates will handle POST. Grabbing and ...spreading so it updates accordingly. Set Search Term & Grab Equipment Array
   const [equipmentArray, setEquipmentArray] = useState([])
@@ -151,9 +152,9 @@ function App() {
         setRole(data.role)
         resolve(data.details) 
       } else if (!data){
-        reject(new Error('No data received'))
+        console.log("Error:", data)
       } else {
-        reject(new Error('No valid user role found'))
+        console.log("No valid role found!")
       }
     })
     .catch(error => {
