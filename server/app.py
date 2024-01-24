@@ -3029,7 +3029,7 @@ class WebHookForStripeSuccess(Resource):
 
                     print("LOOK HERE:", payment_record)
 
-                    if not (cart_item.name == "Excavator" and cart_item.type == "Heavy Machinery"):
+                    if not (equipment.name == "Excavator" and equipment.type == "Heavy Machinery"):
                         db.session.delete(cart_item)
 
 
