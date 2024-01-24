@@ -1995,6 +1995,7 @@ class AddItemToCart(Resource):
             cart.cart_item.append(new_item)
             db.session.add(new_item)
             db.session.commit()
+            # MAY NEED TO CHANGE THIS RESERVED QUANTITY.
             new_available_quantity = equipment_status.available_quantity - amount_added_to_cart
             new_reserved_quantity = equipment_status.reserved_quantity + amount_added_to_cart
             equipment_status.available_quantity -= amount_added_to_cart
@@ -3064,7 +3065,7 @@ class PaymentRecordByUserID(Resource):
             }, 404)
             return response
         
-api.add_resource(PaymentRecordByUserID, '/payment/record/<int:user_id>')
+api.add_resource(PaymentRecordByUserID, '/payment/record/user/<int:user_id>')
         
 
 class CalculateMonthlyTotals(Resource):
