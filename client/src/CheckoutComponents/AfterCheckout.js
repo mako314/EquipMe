@@ -56,11 +56,13 @@ function AfterCheckout(){
     //     }
     // }, [])
 
+    console.log("current user ID:", currentUser?.id)
+
     useEffect(() => {
         console.log("USE EFFECT RUNNING")
         const fetchPaymentRecord = async () => {
             try {
-                const response = await fetch(`${apiUrl}payment/record/user/${currentUser.id}`);
+                const response = await fetch(`${apiUrl}payment/record/user/${currentUser?.id}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
@@ -74,7 +76,7 @@ function AfterCheckout(){
         };
 
         fetchPaymentRecord();
-    }, []);
+    }, [currentUser.id]);
 
     console.log("CHECKING STATE DATA:", paymentRecord)
 

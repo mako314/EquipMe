@@ -2835,7 +2835,7 @@ class WebHookForStripeSuccess(Resource):
 
         
 
-        print("THE EVENTS QUE:", events_queue)
+        # print("THE EVENTS QUE:", events_queue)
         # processed_event_data = {"type": event["type"], "data": event["data"]["object"]}
         # events_queue.put(processed_event_data)  # Add the event data to the queue
             
