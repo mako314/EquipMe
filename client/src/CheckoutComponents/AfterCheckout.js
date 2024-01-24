@@ -81,6 +81,7 @@ function AfterCheckout(){
                 }
             };
             fetchPaymentRecord();
+            checkSession()
         } else {
             console.log("User ID is undefined");
         }
