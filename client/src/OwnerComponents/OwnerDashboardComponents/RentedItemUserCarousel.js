@@ -15,7 +15,7 @@ let userAgreementsForDateSorting = []
 const flatMappedUserAgreement = currentUser?.cart?.flatMap(item => {
   return item.cart_item?.flatMap(cartItem => {
     return cartItem.agreements
-      .filter(agreement => agreement.agreement_status === "in-progress") // Filter first, forgot and tried to just do an if, but why use an if when you can filter
+      .filter(agreement => agreement.agreement_status === "completed") // Filter first, forgot and tried to just do an if, but why use an if when you can filter
       .map(agreement => { 
         // Then map
         // console.log('Agreement:', agreement)
