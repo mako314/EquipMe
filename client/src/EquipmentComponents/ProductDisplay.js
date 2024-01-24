@@ -159,8 +159,8 @@ function EquipmentDisplay({}) {
             <h1 className="text-white text-3xl title-font font-medium mb-4">{make} {model}</h1>
             <div className="flex mb-4">
               <span className="flex-grow text-indigo-400 border-b-2 border-indigo-500 py-1 text-lg px-1 mr-2">Description</span>
-              <span className="flex-grow border-b-2 border-gray-800 py-1 text-lg px-1 mr-2">Reviews</span>
-              <span className="flex-grow border-b-2 border-gray-800 py-1 text-lg px-1">Details</span>
+              {/* <span className="flex-grow border-b-2 border-gray-800 py-1 text-lg px-1 mr-2">Reviews</span>
+              <span className="flex-grow border-b-2 border-gray-800 py-1 text-lg px-1">Details</span> */}
             </div>
             <p className="leading-relaxed mb-4">{oneEquipment.description}</p>
 
