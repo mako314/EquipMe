@@ -60,20 +60,25 @@ function AfterCheckout(){
 
     useEffect(() => {
         console.log("USE EFFECT RUNNING")
-        const fetchPaymentRecord = async () => {
-            try {
-                const response = await fetch(`${apiUrl}payment/record/user/${currentUser?.id}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
+        if (currentUser?.id) {  // Ensure currentUser ID is defined
+            const fetchPaymentRecord = async () => {
+                try {
+                    const response = await fetch(`${apiUrl}payment/record/user/${currentUser.id}`);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    const data = await response.json();
+                    setPaymentRecord(data);
+                    setIsLoading(false);
+                } catch (error) {
+                    console.error("Fetch error:", error);
+                    setIsLoading(false);
                 }
-                const data = await response.json();
-                setPaymentRecord(data);
-                setIsLoading(false);
-            } catch (error) {
-                console.error("Fetch error:", error);
-                setIsLoading(false);
-            }
-        };
+            };
+            fetchPaymentRecord();
+        } else {
+            console.log("User ID is undefined");
+        }
 
         fetchPaymentRecord();
     }, [currentUser, apiUrl]);
