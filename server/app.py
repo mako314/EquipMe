@@ -3017,6 +3017,8 @@ class WebHookForStripeSuccess(Resource):
                     user_id = user.id
                     )
 
+                    print("LOOK HERE:", payment_record)
+
                     db.session.add(payment_record)
                     db.session.add(new_order_history)
                     db.session.commit()
