@@ -15,6 +15,16 @@ function Page404({errorString}){
         window.scrollTo(0, 0)
     }
 
+    const handleContactUsNav = () => {
+        navigate(`/contact/us`)
+        window.scrollTo(0, 0)
+    }
+
+    const handleAboutUsNav = () => {
+        navigate(`/about/us`)
+        window.scrollTo(0, 0)
+    }
+
     // We've Run into An Error!
     return(
             <section className="bg-white dark:bg-gray-900 ">
@@ -54,12 +64,12 @@ function Page404({errorString}){
                             </svg>
                         </span>
                         
-                        <h3 className="mt-6 font-medium text-gray-700 dark:text-gray-200 ">Documentation</h3>
+                        <h3 className="mt-6 font-medium text-gray-700 dark:text-gray-200 ">About Us</h3>
 
                         <p className="mt-2 text-gray-500 dark:text-gray-400 ">Dive in to learn all about our product.</p>
 
                         <a href="#" className="inline-flex items-center mt-4 text-sm text-blue-500 gap-x-2 dark:text-blue-400 hover:underline">
-                            <span>Start learning</span>
+                            <span onClick={handleAboutUsNav}>Start learning</span>
 
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5 rtl:rotate-180">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
@@ -79,7 +89,7 @@ function Page404({errorString}){
                         <p className="mt-2 text-gray-500 dark:text-gray-400" >Lets get you signed back in!</p>
 
                         <span className="inline-flex items-center mt-4 text-sm text-blue-500 gap-x-2 dark:text-blue-400 cursor-pointer hover:underline" onClick={HandleLoginNavigation}>
-                            <span>View lastest posts</span>
+                            <span>Sign back in</span>
 
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5 rtl:rotate-180">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
@@ -94,12 +104,12 @@ function Page404({errorString}){
                             </svg>
                         </span>
                         
-                        <h3 className="mt-6 font-medium text-gray-700 dark:text-gray-200 ">Chat to us</h3>
+                        <h3 className="mt-6 font-medium text-gray-700 dark:text-gray-200 ">Need to reach out to us?</h3>
 
                         <p className="mt-2 text-gray-500 dark:text-gray-400 ">Can’t find what you’re looking for?</p>
 
                         <a href="#" className="inline-flex items-center mt-4 text-sm text-blue-500 gap-x-2 dark:text-blue-400 hover:underline">
-                            <span>Chat to our team</span>
+                            <span  onClick={handleContactUsNav} >Chat to our team</span>
 
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5 rtl:rotate-180">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
