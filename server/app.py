@@ -1996,10 +1996,13 @@ class AddItemToCart(Resource):
             db.session.add(new_item)
             db.session.commit()
             # MAY NEED TO CHANGE THIS RESERVED QUANTITY.
+
             new_available_quantity = equipment_status.available_quantity - amount_added_to_cart
             new_reserved_quantity = equipment_status.reserved_quantity + amount_added_to_cart
+            print("The new reserved quantity:", new_reserved_quantity)
             equipment_status.available_quantity -= amount_added_to_cart
             equipment_status.reserved_quantity += amount_added_to_cart
+            print("What the math of the new reserved quantity curently is:", equipment_status.reserved_quantity)
 
         print('NEW RESERVED QUANTITY', equipment_status.reserved_quantity)
 
@@ -2636,7 +2639,9 @@ class CheckingOut(Resource):
                 # Validate incoming data against CartItem data
                 if cart_item.quantity != int(item['quantity']) or cart_item.rental_length != int(item['rental_length']) or cart_item.rental_rate != item['rental_rate']:
                     continue  # Skip items with mismatched data
-
+                
+                # MAY NEED TO CHANGE THIS RESERVED QUANTITY. No it does not, the reserved quantity 
+                # This should be maybe < available_quantity 
                 if equipment.status[0].reserved_quantity < cart_item.quantity:
                     raise ValueError("Not enough equipment available to fulfill this rental.")
                 
@@ -2886,6 +2891,9 @@ class WebHookForStripeSuccess(Resource):
                     cart_item = CartItem.query.get(cart_item_id)
                     user = User.query.get(user_id)
 
+                    agreement = RentalAgreement.filter(RentalAgreement.cart_item_id == cart_item_id).first()
+
+                    agreement.agreement_status = "completed"
                     # May also need to grab the rental agreement and set it to completed here once it's done 
 
                     if not equipment or not cart_item or not user:
@@ -3020,6 +3028,10 @@ class WebHookForStripeSuccess(Resource):
                     )
 
                     print("LOOK HERE:", payment_record)
+
+                    if not (cart_item.name == "Excavator" and cart_item.type == "Heavy Machinery"):
+                        db.session.delete(cart_item)
+
 
                     db.session.add(payment_record)
                     db.session.add(new_order_history)
