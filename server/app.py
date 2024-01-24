@@ -3056,13 +3056,13 @@ class PaymentRecordByUserID(Resource):
     def get(self, user_id):
         payment_record = PaymentRecord.query.filter_by(user_id=user_id).order_by(PaymentRecord.order_datetime.desc()).first()
 
-        # if payment_record:
-        return make_response(payment_record.to_dict(), 200)
-        # else:
-        #     response = make_response({
-        #         "error": "User not found or no payment records available"
-        #     }, 404)
-        #     return response
+        if payment_record:
+            return make_response(payment_record.to_dict(), 200)
+        else:
+            response = make_response({
+                "error": "User not found or no payment records available"
+            }, 404)
+            return response
         
 api.add_resource(PaymentRecordByUserID, '/payment/record/<int:user_id>')
         
