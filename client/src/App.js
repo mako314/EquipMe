@@ -348,7 +348,7 @@ function App() {
 
             {/* Respective Edit Routes */}
             <Route path='/owner/:id/edit' element={<OwnerEditForm ownerToEdit={ownerToEdit} updateOwner={updateOwner} />} />
-            <Route path='/equipment/:id/edit' element={<ProductEditForm equipmentToEdit={equipmentToEdit} updateEquipment={updateEquipment} />} />
+            <Route path='/equipment/:id/edit' element={<ProductEditForm equipmentToEdit={equipmentToEdit} updateEquipment={updateEquipment} setEquipmentArray={setEquipmentArray} />} />
 
             {/* Login Page Route */}
             <Route path='/login' element={<UserLogin/>} />

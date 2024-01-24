@@ -818,10 +818,10 @@ class EquipmentByID(Resource):
     def delete(self, id):
         equipment = Equipment.query.filter(Equipment.id == id).first()
         if equipment:
-            #Do I only need to delete the foreign key? Or the thing with a relationship also?
-            owners = [Equipment.query.filter(Equipment.owner_id == id).all()]
-            for owner in owners:
-                db.session.delete(owner)
+            # #Do I only need to delete the foreign key? Or the thing with a relationship also?
+            # owners = [Equipment.query.filter(Equipment.owner_id == id).all()]
+            # for owner in owners:
+            #     db.session.delete(owner)
             #This should take care of excess stuff, need to inquire about deleting 
             db.session.delete(equipment)
 

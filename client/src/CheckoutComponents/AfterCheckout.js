@@ -13,14 +13,17 @@ function AfterCheckout(){
     const navigate = useNavigate();
 
     const handleDashNav = () => {
+        window.scrollTo(0, 0)
         navigate(`/dashboard`)
     }
 
     const handleHomeNav = () => {
+        window.scrollTo(0, 0)
         navigate(`/`)
     }
 
     const handleCartNav = () => {
+        window.scrollTo(0, 0)
         navigate(`/cart`)
     }
 

@@ -7,7 +7,7 @@ import ApiUrlContext from "../Api";
 import { UserSessionContext } from "../UserComponents/SessionContext";
 import {toast} from 'react-toastify'
 
-function ProductEditForm({equipmentToEdit, updateEquipment}){
+function ProductEditForm({equipmentToEdit, updateEquipment, setEquipmentArray}){
     
     //Going to likely need owner context and check session here also
     const [featureEquipment, setFeatureEquipment] = useState(null)
@@ -17,6 +17,8 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
     const { oneEquipment } = location.state || {}
     const apiUrl = useContext(ApiUrlContext)
     const { currentUser, role, checkSession } = UserSessionContext()
+    const [toggleDelete, setToggleDelete] = useState(false)
+
     
     // Need some toast notifications
     // STILL NEED TO WRITE THE DELETE
@@ -27,8 +29,11 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
 
     // console.log("EQUIPMENT TO EDIT",oneEquipment)
     // console.log("ONE EQUIPMENT ID:", oneEquipment.id)
-
     // console.log(error)
+
+  
+
+
     
     const formSchema = object({
         name: string().required('Please enter a name'),
@@ -164,9 +169,6 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
       }
   })
 
-
-    
-
     // console.log(oneEquipment.featured_equipment?.equipment_id === oneEquipment.id)
 
     // console.log(oneEquipment.featured_equipment[0].equipment_id)
@@ -177,6 +179,75 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
         setFeatureEquipment(e.target.value === 'true')
     }
 
+  const handleEquipmentCollectionNav = () => {
+      window.scrollTo(0, 0)
+      navigate(`/equipment`)
+  }
+
+  // Toggle for delete button
+  const handleToggleDelete = () => {
+    setToggleDelete(!toggleDelete)
+  }
+
+  const fetchAndUpdateEquipmentData = async () => {
+    try {
+      const response = await fetch(`${apiUrl}equipment`)
+      if (response.ok) {
+        const updatedEquipment = await response.json()
+        setEquipmentArray(updatedEquipment)
+        checkSession()
+        handleEquipmentCollectionNav()
+      } else {
+        const errorData = await response.json()
+        console.error("An error occurred:", errorData.message)
+        toast.error(`Error: ${errorData.message}`,
+        {
+          "autoClose" : 2000
+        })
+      }
+    } catch (error) {
+      console.error("A network or JavaScript error occurred:", error.message)
+      toast.error(`Network/JavaScript Error: ${error.message}`,
+      {
+        "autoClose" : 2000
+      })
+    }
+  }
+
+  //Handles deleting the cart item!
+  const handleDeleteEquipment = async () => {
+    try {
+      const response = await fetch(`${apiUrl}equipment/${oneEquipment.id}`, {
+        method: 'DELETE',
+      })
+
+      if (response.ok) {
+        await fetchAndUpdateEquipmentData()
+        setToggleDelete(!toggleDelete)
+        
+        toast.success(`💥 Equipment Item successfully deleted!`, {
+          "autoClose": 2000
+      })
+      } else {
+        // console.log("Error in the fetch!")
+        toast.error(`Error: Failed to delete, check your input and try again!`,
+        {
+          "autoClose" : 2000
+        })
+      }
+    } catch (error) {
+      // Handle fetch errors
+      toast.error(`Error: Failed to delete, check your input and try again!`,
+      {
+        "autoClose" : 2000
+      })
+    }
+  }
+
+
+
+
+
     return (
         <div className="bg-white py-6 sm:py-8 lg:py-12">
     <div className="mx-auto max-w-screen-2xl px-4 md:px-8">
@@ -186,7 +257,7 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
  
         <p className="mx-auto max-w-screen-md text-center text-gray-500 md:text-lg"> Get listing in a few simple steps!</p>
       </div>
- 
+      <div className="mx-auto max-w-screen-md px-4 md:px-8"> 
       <form onSubmit={formik.handleSubmit} className="mx-auto grid max-w-screen-md gap-4 sm:grid-cols-2">
          
           <div className="sm:col-span-2">
@@ -343,14 +414,41 @@ function ProductEditForm({equipmentToEdit, updateEquipment}){
 
             </div>
 
-        <div className="flex items-center justify-between sm:col-span-2">
+        <div className="flex items-center justify-between sm:col-span-2 mt-4">
  
           {/* NEED TO CHANGE COLOR */}
           <span className="text-sm text-gray-500">*Required</span>
           <button type="submit" className="inline-block rounded-lg bg-orange-500 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 md:text-base">Submit</button>
+
         </div>
       </form>
- 
+      
+      <div className="flex justify-end items-center mt-4 mb-2"> 
+      {!toggleDelete ? (
+                <button
+                    onClick={handleToggleDelete}
+                    className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-blue-300 mb-2"
+                >
+                    Delete this Equipment
+                </button>
+            ) : (
+                <>
+                    <button
+                        onClick={handleDeleteEquipment}
+                        className="bg-green-500 text-white p-2 rounded-md hover:bg-green-600 focus:outline-none focus:ring-4 focus:ring-blue-300 ml-4 mb-2"
+                    >
+                        Yes, I'm sure
+                    </button>
+                    <button
+                        onClick={handleToggleDelete}
+                        className="bg-gray-500 text-white p-2 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-4 focus:ring-blue-300 ml-4 mb-2"
+                    >
+                        No, I changed my mind
+                    </button>
+                </>
+          )}
+          </div>
+          </div>
     </div>
   </div> 
     )
