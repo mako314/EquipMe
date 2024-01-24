@@ -107,9 +107,9 @@ const featuredEquipment = owner.equipment?.filter(item => item.featured_equipmen
 )) || []
 
 // Check if there are any featured equipment items, if not show a message
-const displayFeaturedEquipment = featuredEquipment?.length > 0 ? featuredEquipment : <div>No items currently featured</div>
+const displayFeaturedEquipment = featuredEquipment?.length > 0 ? featuredEquipment : <div>No items currently featured.</div>
 
-const displayAllEquipment = equipmentCards?.length > 0 ? equipmentCards : <div>No items currently listed</div>
+const displayAllEquipment = equipmentCards?.length > 0 ? equipmentCards : <div>No items currently listed.</div>
 
 let userReviewsVar = userReviews?.map((item) => (
     <Reviews key={item.id} stars={item.review_stars} comment={item.review_comment} image={item.user.profileImage} firstName={item.user.firstName} lastName={item.user.lastName} profession={item.user.profession} onDelete={handleReviewDelete} reviewId={item.id}/>

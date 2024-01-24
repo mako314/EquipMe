@@ -2891,7 +2891,7 @@ class WebHookForStripeSuccess(Resource):
                     cart_item = CartItem.query.get(cart_item_id)
                     user = User.query.get(user_id)
 
-                    agreement = RentalAgreement.filter(RentalAgreement.cart_item_id == cart_item_id).first()
+                    agreement = RentalAgreement.query.filter(RentalAgreement.cart_item_id == cart_item_id).first()
 
                     agreement.agreement_status = "completed"
                     # May also need to grab the rental agreement and set it to completed here once it's done 
