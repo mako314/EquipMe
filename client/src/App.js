@@ -150,7 +150,6 @@ function App() {
       if (data.role === 'user' || data.role === 'owner') {
         setCurrentUser(data.details)
         setRole(data.role)
-        resolve(data.details) 
       } else if (!data){
         console.log("Error:", data)
       } else {
