@@ -58,4 +58,5 @@ typing-extensions==4.8.0 ; python_version >= '3.8'
 tzdata==2023.3 ; python_version >= '2'
 wcwidth==0.2.9
 werkzeug==3.0.1 ; python_version >= '3.8'
+websockets==12.0
 zipp==3.17.0 ; python_version < '3.10'

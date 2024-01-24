@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 
 load_dotenv('../.env.local')
 
-from seeds import seed_database
+# from seeds import seed_database
 
 from app import app
 
