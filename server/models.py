@@ -610,7 +610,7 @@ class CartItem(db.Model, SerializerMixin):
 
     cart = db.relationship('Cart', back_populates='cart_item')
     equipment = db.relationship('Equipment', back_populates='cart_item')
-    agreements = db.relationship('RentalAgreement',back_populates="cart_item", cascade="all, delete")
+    agreements = db.relationship('RentalAgreement',back_populates="cart_item", cascade="all, delete-orphan")
 
     # review = db.relationship('Review', back_populates="cart_item")
 
