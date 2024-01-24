@@ -36,7 +36,7 @@ function AfterCheckout(){
                 console.log("THE DATA:", data)
                 return
             }
-            // console.log("Update from Server:", data)
+            console.log("Update from Server:", data)
             setEventData(prevEvents => [...prevEvents, data])
             setIsLoading(false)
             // console.log("Update from Server:", data)
