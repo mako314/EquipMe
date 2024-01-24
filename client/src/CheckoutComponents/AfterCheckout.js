@@ -74,7 +74,7 @@ function AfterCheckout(){
         };
 
         fetchPaymentRecord();
-    }, [userId]);
+    }, []);
 
     console.log("CHECKING STATE DATA:", paymentRecord)
 
