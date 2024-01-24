@@ -74,6 +74,7 @@ function AfterCheckout(){
                     }
                     const data = await response.json();
                     setPaymentRecord(data);
+                    checkSession()
                     setIsLoading(false);
                 } catch (error) {
                     console.error("Fetch error:", error);
