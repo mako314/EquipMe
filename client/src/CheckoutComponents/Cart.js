@@ -276,7 +276,7 @@ useEffect(() => {
         // navigate(`/checkout`)
       } else {
         const errorData = await response.json()
-        toast.warn(`🚧 The owner likely hasn't finished their stripe onboarding yet, maybe send them a message as a reminder!`,{
+        toast.warn(`🚧 The owner likely either hasn;t finished their stripe onboarding yet, or there's an error with the reserved quantity. Please contact the owner of this equipment`,{
         "autoClose" : 6000
         })
         console.error('Error Response:', errorData)
