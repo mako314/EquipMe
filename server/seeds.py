@@ -1,4 +1,4 @@
-from models import db, User, EquipmentOwner, Equipment, RentalAgreement, EquipmentImage, Thread, UserInbox, OwnerInbox, Message, Cart, CartItem, EquipmentPrice, FeaturedEquipment, Review, UserFavorite, OwnerFavorite, AgreementComment, EquipmentStateHistory, EquipmentStateSummary, EquipmentStatus, OrderHistory
+from models import db, User, EquipmentOwner, Equipment, RentalAgreement, EquipmentImage, Thread, UserInbox, OwnerInbox, Message, Cart, CartItem, EquipmentPrice, FeaturedEquipment, Review, UserFavorite, OwnerFavorite, AgreementComment, EquipmentStateHistory, EquipmentStateSummary, EquipmentStatus, OrderHistory, PaymentRecord
 import pandas as pd
 from app import app
 from random import randint, choice as rc
@@ -45,6 +45,7 @@ if __name__ == '__main__':
         UserInbox.query.delete()
         OwnerInbox.query.delete()
         EquipmentOwner.query.delete()
+        PaymentRecord.query.delete()
         User.query.delete()
         EquipmentImage.query.delete()
         Message.query.delete()
