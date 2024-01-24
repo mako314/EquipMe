@@ -13,15 +13,23 @@ function AfterCheckout(){
     const navigate = useNavigate();
 
     const handleDashNav = () => {
+        window.scrollTo(0, 0)
         navigate(`/dashboard`)
     }
 
     const handleHomeNav = () => {
+        window.scrollTo(0, 0)
         navigate(`/`)
     }
 
     const handleCartNav = () => {
+        window.scrollTo(0, 0)
         navigate(`/cart`)
+    }
+
+    const handleSupportNav = () => {
+        navigate(`/contact/us`)
+        window.scrollTo(0, 0)
     }
 
     // https://developer.mozilla.org/en-US/docs/Web/API/EventSource
@@ -107,7 +115,7 @@ function AfterCheckout(){
                     <p className="text-gray-700 mt-4">Payment Method: {paymentRecord.payment_method}</p>
 
                     {/* Display the amount received, converting cents to dollars */}
-                    <p className="text-gray-700 mt-2">Amount Received: ${(paymentRecord.amount_received / 100).toFixed(2)} {paymentRecord.currency.toUpperCase()}</p>
+                    <p className="text-gray-700 mt-2">Amount Paid: ${(paymentRecord.amount_received / 100).toFixed(2)} {paymentRecord.currency.toUpperCase()}</p>
 
                     <p className="font-semibold text-2xl mt-10 text-gray-700">Thank you for your rental!</p>
                     <p className="mt-10 text-gray-600 max-w-lg">Your rental was successful and you will receive a confirmation email soon. If delivery was possible, we'll be in touch with the Owner to coordinate the delivery of your Equipment!</p>
@@ -139,7 +147,26 @@ function AfterCheckout(){
 
 
         </div>
-    )}
+    )} else {
+        return (
+            <div className="bg-white min-h-screen flex flex-col items-center justify-center pt-5 pb-5">
+                <div className="flex flex-col items-center justify-center">
+                    <img src="https://i.imgur.com/ZK0b4sZ.png" alt="Payment Unsuccessful" className="w-80 mt-20"/>
+                    <p className="text-red-600 text-2xl mt-4">Payment Unsuccessful</p>
+                    <p className="font-semibold text-xl mt-10 text-gray-700">We encountered an issue processing your payment.</p>
+                    <p className="mt-5 text-gray-600 max-w-lg">Please check your payment details and try again. If you continue to experience issues, contact our support team for assistance.</p>
+                </div>
+                <div className='flex flex-row gap-4 mt-20'> 
+                    <button
+                        onClick={handleSupportNav}
+                        className="inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 border border-transparent"
+                    >
+                        Contact Support
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
 
 }

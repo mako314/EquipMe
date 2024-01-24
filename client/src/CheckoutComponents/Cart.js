@@ -403,7 +403,6 @@ const fetchAndUpdateCartData = async () => {
   } catch (error) {
     // Handle network/JS errors
     console.error("A network or JavaScript error occurred:", error.message)
-    // Optionally, display a notification to the user
     toast.error(`Network/JavaScript Error: ${error.message}`,
     {
       "autoClose" : 2000
