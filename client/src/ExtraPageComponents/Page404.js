@@ -68,13 +68,13 @@ function Page404({errorString}){
 
                         <p className="mt-2 text-gray-500 dark:text-gray-400 ">Dive in to learn all about our product.</p>
 
-                        <a href="#" className="inline-flex items-center mt-4 text-sm text-blue-500 gap-x-2 dark:text-blue-400 hover:underline">
+                        <span className="inline-flex items-center mt-4 text-sm text-blue-500 gap-x-2 dark:text-blue-400 hover:underline">
                             <span onClick={handleAboutUsNav}>Start learning</span>
 
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5 rtl:rotate-180">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
                             </svg>
-                        </a>
+                        </span>
                     </div>
 
                     <div className="p-6 rounded-lg bg-blue-50 dark:bg-gray-800">

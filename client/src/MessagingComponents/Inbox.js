@@ -262,7 +262,7 @@ function Inbox({inboxes, setInboxes, selectedThreadID, setSelectedThreadID, setR
               }`}
               onClick={() => {
                 // If anything breaks, I used to have this as just inbox.id, but the threads are separate from inboxes.
-                handleThreadSelect(inbox.thread_id)
+                handleThreadSelect(inbox.id)
                 const firstMessage = inbox.thread.messages[0]
                 
                 let recipientType
