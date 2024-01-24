@@ -143,7 +143,7 @@ function App() {
         setRole('')
       } else {
         // Handle other types of errors
-        throw new Error(`Session check failed with status: ${response.status}`);
+        console.log(`Session check failed`);
       }
     })
     .then(data => {
