@@ -2809,9 +2809,10 @@ async def send_data_to_clients(data):
         await asyncio.wait([client.send(message) for client in connected_clients])
 
 # Start the WebSocket server
-internal_host = 'equip-me.onrender.com'
-internal_port = 4000
-start_server = websockets.serve(handle_websocket, internal_host, 6789)
+# internal_host = 'equip-me.onrender.com'
+# # internal_port = 4000
+# start_server = websockets.serve(handle_websocket, internal_host, 10000)
+start_server = websockets.serve(handle_websocket, '0.0.0.0', 10000)
 
 # Run the server indefinitely
 asyncio.get_event_loop().run_until_complete(start_server)
