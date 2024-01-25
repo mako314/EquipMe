@@ -40,7 +40,7 @@ function CartItem({equipment_image, name, make, model, rateOptions, cartItemRate
 
 // Checks the agreement status of the cart item before allowing any changes to be made. If something is in-progress, completed, or both parties have accepted, you cannot do anything to it. I.E adjust price, rental length, quantity.
 function checkAgreementStatus(agreementStatus) {
-  if (agreementStatus === 'both-accepted' || agreementStatus === 'completed' || agreementStatus === 'in-progress') {
+  if (agreementStatus === 'both-accepted' || agreementStatus === 'completed') {
       const statusMessage = agreementStatus === 'both-accepted' ? 'Already Accepted' : 'Completed this Agreement'
       toast.warn(`🤝 Both Parties have ${statusMessage}, Unable to Edit this Item.`, {
           "autoClose": 2000
