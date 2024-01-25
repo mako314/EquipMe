@@ -505,14 +505,13 @@ class RentalAgreement(db.Model, SerializerMixin):
     owner = db.relationship(
         "EquipmentOwner", back_populates="agreements"
     )
-    # cart_item = db.relationship(
-    # 'CartItem', back_populates='agreements', cascade="all, delete-orphan", uselist=False)
-
-    cart_item = db.relationship('CartItem', back_populates='agreements')
-
+    cart_item = db.relationship(
+    'CartItem', back_populates='agreements', cascade="all, delete")
+    
     comment = db.relationship('AgreementComment', back_populates='agreements', cascade="all, delete")
 
-    review = db.relationship('Review', back_populates="agreements" , cascade="all, delete")
+    review = db.relationship('Review', back_populates="agreements")
+    #, cascade="all, delete"
     
     #Serialization rules
     serialize_rules = ('-owner', '-user', '-cart_item.agreements', '-cart_item.cart.user.user_favorite','-comment.agreements', '-cart_item.equipment.featured_equipment', '-cart_item.equipment.user_favorite', '-review.agreements')
@@ -612,9 +611,8 @@ class CartItem(db.Model, SerializerMixin):
 
     cart = db.relationship('Cart', back_populates='cart_item')
     equipment = db.relationship('Equipment', back_populates='cart_item')
-    # agreements = db.relationship('RentalAgreement',back_populates="cart_item")
+    agreements = db.relationship('RentalAgreement',back_populates="cart_item", cascade="all, delete")
 
-    agreements = db.relationship('RentalAgreement', back_populates="cart_item")
     # , cascade="all, delete-orphan"
 
     # review = db.relationship('Review', back_populates="cart_item")
