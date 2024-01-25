@@ -94,7 +94,7 @@ function AfterCheckout(){
             console.log("User ID is undefined");
         }
 
-    }, []);
+    }, [currentUser]);
 
     console.log("CHECKING STATE DATA:", paymentRecord)
 
