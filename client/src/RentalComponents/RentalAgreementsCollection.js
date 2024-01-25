@@ -180,6 +180,9 @@ if (role === 'user') {
     //   allAgreements = allAgreements.filter(filterAgreements)
     // }
 
+    console.log('Agreement:', agreement, 'Cart Item:', agreement?.cart_item, 'Cart:', agreement?.cart_item?.cart);
+
+
     // Sort the ( possibly filtered) agreements. Agreements are always sorted regardless if filtering occurs or not.
     const sortedAgreements = allAgreements.sort(userSortOption)
     // console.log("Sorted agreements:", sortedAgreements)
@@ -230,7 +233,7 @@ if (role === 'user') {
         quantity={agreement?.cart_item?.quantity}
         equipmentName={agreement?.cart_item?.equipment?.name}
         equipmentModel={agreement?.cart_item?.equipment?.model}
-        equipmentMake={agreement?.cart_item?.equipment.make}
+        equipmentMake={agreement?.cart_item?.equipment?.make}
         rentalStart={formatDate(agreement?.rental_start_date)}
         rentalEnd={formatDate(agreement?.rental_end_date)}
         rentalDelivery={agreement?.delivery}
