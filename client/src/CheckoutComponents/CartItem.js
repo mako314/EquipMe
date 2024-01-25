@@ -462,12 +462,13 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
                   <div className="fixed inset-0 bg-gray-600 bg-opacity-50 z-40 overflow-y-auto h-full w-full" onClick={() => setToggleDelete(false)}>
                     <div className="relative top-20 mx-auto p-5 border w-1/3 shadow-lg rounded-md bg-white">
                       <h3 className="text-lg font-medium leading-6 text-gray-900">Are you sure you want to delete this item?</h3>
+                      <p className="mt-2 text-red-600">Warning: Deleting this cart item will also delete any associated rental agreement.</p>
                       <div className="mt-2">
                         <button
                           onClick={() => handleDeleteCartItem(cartItemId)}
                           className="mr-2 rounded bg-red-500 py-2 px-4 text-white hover:bg-red-600"
                         >
-                          Yes, Remove This Item from My Cart.
+                          Yes, Remove This Item and Its Rental Agreement.
                         </button>
                         <button
                           onClick={handleToggleDelete}
@@ -479,6 +480,7 @@ const handleTotalChange = async (rateValue = 0, totalQuantity = equipmentQuantit
                     </div>
                   </div>
                 )}
+
                   </div>
                   {/* DELETE BUTTON IT'S AN SVG X */}
 
