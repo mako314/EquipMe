@@ -143,7 +143,7 @@ function App() {
         setRole('')
       } else {
         // Handle other types of errors
-        console.log(`Session check failed`);
+        // console.log(`Session check failed`);
       }
     })
     .then(data => {
@@ -151,7 +151,7 @@ function App() {
         setCurrentUser(data.details)
         setRole(data.role)
       } else if (!data){
-        console.log("Error:", data)
+        // console.log("Error:", data)
       } else {
         console.log("No valid role found!")
       }
