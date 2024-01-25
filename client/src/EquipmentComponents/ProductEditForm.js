@@ -86,6 +86,13 @@ function ProductEditForm({equipmentToEdit, updateEquipment, setEquipmentArray}){
             // console.log("I'VE FIRED")
             // console.log("THE VALUES", values)
 
+            if(patchResponse.ok){
+              toast.success(`🏗 Succesfully edited ${oneEquipment.make} ${oneEquipment.name}.`,
+              {
+                "autoClose" : 2000
+              })
+            }
+
             if (!patchResponse.ok){
               const patchError = await patchResponse.json()
               console.log(patchError)
