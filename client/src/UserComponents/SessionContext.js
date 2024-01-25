@@ -48,7 +48,7 @@ const checkSession = () => {
       }
     })
     .catch(error => {
-      console.error('Error during session check:', error)
+      // console.error('Error during session check:', error)
       // Optionally, reject the promise here if you need to handle this error elsewhere
       // reject(error)
     })

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { GoogleMap, useJsApiLoader, Marker, Circle } from "@react-google-maps/api";
 
-const google = console.google;
+// const google = console.google;
 const GOOGLE_MAPS_API_KEY = "INSERT KEY HERE";
 
 function EquipmentMap({ location }) {
@@ -14,23 +14,23 @@ function EquipmentMap({ location }) {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(success, error);
     } else {
-      console.log("Geolocation not supported");
+      // console.log("Geolocation not supported");
     }
   }
 
   // Helper function for successful location request
   function success(position) {
-    console.log(position)
+    // console.log(position)
     const lat = parseFloat(position.coords.latitude);
     const lng = parseFloat(position.coords.longitude);
     setUserLocation({ lat, lng });
-    console.log(`Latitude: ${lat}, Longitude: ${lng}`);
+    // console.log(`Latitude: ${lat}, Longitude: ${lng}`);
   }
 
   // Helper function for unsuccessful location request
   function error(error) {
-    console.log(error)
-    console.log("Unable to retrieve your location");
+    // console.log(error)
+    // console.log("Unable to retrieve your location");
   }
 
   // JS API loader for Google Maps
@@ -44,18 +44,18 @@ function EquipmentMap({ location }) {
       if (!location || !isLoaded) return;
       try {
         const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(location)}&key=${GOOGLE_MAPS_API_KEY}`);
-        console.log(response)
+        // console.log(response)
         const data = await response.json()
-        console.log(data)
+        // console.log(data)
         if (data.results && data.results.length > 0) {
           const temp = data.results[0].geometry.location
-          console.log(temp)
+          // console.log(temp)
           setCoords(temp)
         } else {
           throw new Error('Invalid City Name');
         }
       } catch (error) {
-        console.error(error.message);
+        // console.error(error.message);
         setCoords({ lat: 0, lng: 0 })
         throw new Error(`Error fetching data from Geocoding API`)
       }
@@ -68,11 +68,11 @@ function EquipmentMap({ location }) {
 
   // Ensure map is loaded into the jsApiLoader before continuing
   if (!isLoaded) {
-    console.log("No Map Loaded")
+    // console.log("No Map Loaded")
     return;
   }
 
-  console.log(userLocation)
+  // console.log(userLocation)
 
 
   // Returns a Google Map centered at the equipment location, a radius illustrating where the owner
