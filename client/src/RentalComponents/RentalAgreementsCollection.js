@@ -105,29 +105,63 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
   //   }
   // }
 
-  let allAgreements = []
+  // let allAgreements = []
 
-  if (role === 'user') {
-      // Check if currentUser and currentUser.cart are not null
-      if (currentUser?.cart) {
-          allAgreements = currentUser.cart.flatMap(cart => 
-              (cart?.cart_item ?? []).flatMap(item => 
-                  (item?.agreements ?? []).map(agreement => ({
-                      ...agreement,
-                      cartName: cart.cart_name,
-                      item,
-                  }))
-              )
-          )
-      }
-  } else {
-      // Handle cases where the user role is not 'user'
-      if (currentUser?.agreements) {
-          allAgreements = currentUser.agreements.map(agreement => ({
-              ...agreement,
-          }))
-      }
-  }
+  // if (role === 'user') {
+  //     // Check if currentUser and currentUser.cart are not null
+  //     if (currentUser?.cart) {
+  //         allAgreements = currentUser.cart.flatMap(cart => 
+  //             (cart?.cart_item ?? []).flatMap(item => 
+  //                 (item?.agreements ?? []).map(agreement => ({
+  //                     ...agreement,
+  //                     cartName: cart.cart_name,
+  //                     item,
+  //                 }))
+  //             )
+  //         )
+  //     }
+  // } else {
+  //     // Handle cases where the user role is not 'user'
+  //     if (currentUser?.agreements) {
+  //         allAgreements = currentUser.agreements.map(agreement => ({
+  //             ...agreement,
+  //         }))
+  //     }
+  // }
+
+
+
+  let allAgreements = [];
+
+if (role === 'user') {
+    // Safely check if currentUser exists and has a cart property
+    if (currentUser && Array.isArray(currentUser.cart)) {
+        allAgreements = currentUser.cart.flatMap(cart => {
+            // Check if cart is not null and has cart_item property
+            if (cart && Array.isArray(cart.cart_item)) {
+                return cart.cart_item.flatMap(item => {
+                    // Check if item is not null and has agreements property
+                    if (item && Array.isArray(item.agreements)) {
+                        return item.agreements.map(agreement => ({
+                            ...agreement,
+                            cartName: cart.cart_name,
+                            item,
+                        }));
+                    }
+                    return [];
+                });
+            }
+            return [];
+        });
+    }
+} else {
+    // Handle cases where the user role is not 'user'
+    if (currentUser && Array.isArray(currentUser.agreements)) {
+        allAgreements = currentUser.agreements.map(agreement => ({
+            ...agreement,
+        }));
+    }
+}
 
 
     // Check agreements before filtering
@@ -157,66 +191,66 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
     const cards = sortedAgreements?.map(agreement => (
       role === 'user' ? (
         <RentalAgreementCard
-          key={`${agreement.id}-${agreement.created_at}`} // Unique key based on ID and created_at
-          rentalId={agreement.id}
-          cartName={agreement.cart_name}
-          quantity={agreement.item.quantity}
-          equipmentName={agreement.item.equipment.name}
-          equipmentModel={agreement.item.equipment.model}
-          equipmentMake={agreement.item.equipment.make}
-          rentalStart={formatDate(agreement.rental_start_date)}
-          rentalEnd={formatDate(agreement.rental_end_date)}
-          rentalDelivery={agreement.delivery}
-          rentalDeliveryAddress={agreement.delivery_address}
-          rentalRevisions={agreement.revisions}
-          rentalStatus={agreement.agreement_status}
-          rentalCreatedAt={agreement.created_at}
-          rentalUpdatedAt={agreement.updated_at}
-          renterFirstName={currentUser.firstName}
-          renterLastName={currentUser.lastName}
-          renterId={currentUser.id}
-          state={agreement.item.equipment.state }
-          city={agreement.item.equipment.city }
-          address={agreement.item.equipment.address }
-          address_line_2={agreement.item.equipment.address_line_2 }
-          postal_code={agreement.item.equipment.postal_code}
-          ownerEmail={agreement.item.equipment.owner.email}
-          ownerFirstName={agreement.item.equipment.owner.firstName}
-          ownerLastName={agreement.item.equipment.owner.lastName}
-          ownerId={agreement.item.equipment.owner.id}
+          key={`${agreement?.id}-${agreement?.created_at}`} // Unique key based on ID and created_at
+          rentalId={agreement?.id}
+          cartName={agreement?.cart_name}
+          quantity={agreement?.item.quantity}
+          equipmentName={agreement?.item?.equipment?.name}
+          equipmentModel={agreement?.item?.equipment?.model}
+          equipmentMake={agreement?.item?.equipment?.make}
+          rentalStart={formatDate(agreement?.rental_start_date)}
+          rentalEnd={formatDate(agreement?.rental_end_date)}
+          rentalDelivery={agreement?.delivery}
+          rentalDeliveryAddress={agreement?.delivery_address}
+          rentalRevisions={agreement?.revisions}
+          rentalStatus={agreement?.agreement_status}
+          rentalCreatedAt={agreement?.created_at}
+          rentalUpdatedAt={agreement?.updated_at}
+          renterFirstName={currentUser?.firstName}
+          renterLastName={currentUser?.lastName}
+          renterId={currentUser?.id}
+          state={agreement?.item?.equipment?.state }
+          city={agreement?.item?.equipment?.city }
+          address={agreement?.item?.equipment?.address }
+          address_line_2={agreement?.item?.equipment?.address_line_2 }
+          postal_code={agreement?.item?.equipment?.postal_code}
+          ownerEmail={agreement?.item?.equipment?.owner?.email}
+          ownerFirstName={agreement?.item?.equipment?.owner?.firstName}
+          ownerLastName={agreement?.item?.equipment?.owner?.lastName}
+          ownerId={agreement?.item?.equipment?.owner.id}
           setFromOwnerDash={setFromOwnerDash}
           fromOwnerDash={fromOwnerDash}
           existingReviews={agreement.review}
         />
       ) : (
       <RentalAgreementCard
-        key={agreement.id}
-        rentalId={agreement.id}
-        cartName={agreement.cart_item.cart.cart_name}
-        quantity={agreement.cart_item.quantity}
-        equipmentName={agreement.cart_item.equipment.name}
-        equipmentModel={agreement.cart_item.equipment.model}
-        equipmentMake={agreement.cart_item.equipment.make}
-        rentalStart={formatDate(agreement.rental_start_date)}
-        rentalEnd={formatDate(agreement.rental_end_date)}
-        rentalDelivery={agreement.delivery}
-        rentalDeliveryAddress={agreement.delivery_address}
-        rentalRevisions={agreement.revisions}
-        rentalStatus={agreement.agreement_status}
-        rentalCreatedAt={agreement.created_at}
-        rentalUpdatedAt={agreement.updated_at}
-        renterFirstName={agreement.cart_item.cart.user.firstName}
-        renterLastName={agreement.cart_item.cart.user.lastName}
-        renterId = {agreement.cart_item.cart.user.id}
-        state={currentUser.state}
-        city={currentUser.city}
-        address={currentUser.address}
-        address_line_2={currentUser.address_line_2}
-        postal_code={currentUser.postal_code}
-        ownerEmail ={currentUser.email}
-        ownerFirstName = {currentUser.firstName}
-        ownerLastName ={currentUser.lastName}
-        ownerId = {currentUser.id}
+        key={agreement?.id}
+        rentalId={agreement?.id}
+        cartName={agreement?.cart_item?.cart?.cart_name}
+        quantity={agreement?.cart_item?.quantity}
+        equipmentName={agreement?.cart_item?.equipment?.name}
+        equipmentModel={agreement?.cart_item?.equipment?.model}
+        equipmentMake={agreement?.cart_item?.equipment.make}
+        rentalStart={formatDate(agreement?.rental_start_date)}
+        rentalEnd={formatDate(agreement?.rental_end_date)}
+        rentalDelivery={agreement?.delivery}
+        rentalDeliveryAddress={agreement?.delivery_address}
+        rentalRevisions={agreement?.revisions}
+        rentalStatus={agreement?.agreement_status}
+        rentalCreatedAt={agreement?.created_at}
+        rentalUpdatedAt={agreement?.updated_at}
+        renterFirstName={agreement?.cart_item.cart.user.firstName}
+        renterLastName={agreement?.cart_item.cart.user.lastName}
+        renterId = {agreement?.cart_item?.cart.user?.id}
+        state={currentUser?.state}
+        city={currentUser?.city}
+        address={currentUser?.address}
+        address_line_2={currentUser?.address_line_2}
+        postal_code={currentUser?.postal_code}
+        ownerEmail ={currentUser?.email}
+        ownerFirstName = {currentUser?.firstName}
+        ownerLastName ={currentUser?.lastName}
+        ownerId = {currentUser?.id}
         setFromOwnerDash={setFromOwnerDash} 
         fromOwnerDash={fromOwnerDash}
         existingReviews={agreement.review}
