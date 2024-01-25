@@ -10,6 +10,8 @@ function AfterCheckout(){
     // const [eventData, setEventData] = useState([])
     const [paymentRecord, setPaymentRecord] = useState(null);
     const [isLoading, setIsLoading] = useState(true)
+    const [hasFetchedData, setHasFetchedData] = useState(false);
+
     const navigate = useNavigate();
 
     const handleDashNav = () => {
@@ -68,8 +70,7 @@ function AfterCheckout(){
 
     useEffect(() => {
         console.log("USE EFFECT RUNNING")
-        if (currentUser?.id) {  // Ensure currentUser ID is defined
-            if (isLoading){
+        if (!hasFetchedData && currentUser?.id) {  // Ensure currentUser ID is defined
             const fetchPaymentRecord = async () => {
                 try {
                     const response = await fetch(`${apiUrl}payment/record/user/${currentUser.id}`, {
@@ -85,18 +86,19 @@ function AfterCheckout(){
                     setPaymentRecord(data);
                     checkSession()
                     setIsLoading(false);
+                    setHasFetchedData(true)
                 } catch (error) {
                     console.error("Fetch error:", error);
                     setIsLoading(false);
+                    setHasFetchedData(true)
                 }
             };
-            fetchPaymentRecord()
-        }
+            fetchPaymentRecord();
         } else {
             console.log("User ID is undefined");
         }
 
-    }, [isLoading]);
+    }, [currentUser, apiUrl, hasFetchedData]);
 
     console.log("CHECKING STATE DATA:", paymentRecord)
 
