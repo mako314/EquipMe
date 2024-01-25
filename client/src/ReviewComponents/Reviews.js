@@ -3,11 +3,16 @@ import ApiUrlContext from '../Api';
 import {toast} from 'react-toastify'
 import { UserSessionContext } from '../UserComponents/SessionContext';
 
-function Reviews({stars, comment, image, firstName, lastName, profession, reviewId, onDelete}){
+function Reviews({stars, comment, image, firstName, lastName, profession, reviewId, onDelete, itemUserId, itemOwnerId}){
 
   const { currentUser, role, setCurrentUser, checkSession} = UserSessionContext() 
   const apiUrl = useContext(ApiUrlContext)
   const [toggleDelete, setToggleDelete] = useState(false)
+
+  console.log("ITEM OWNER ID:", itemOwnerId)
+  console.log("ITEM USER ID:", itemUserId)
+  
+  console.log("CURRENT USER ID:", currentUser?.id)
 
   let starDisplayer = []
 
@@ -61,11 +66,16 @@ function Reviews({stars, comment, image, firstName, lastName, profession, review
     <div className="flex"> {/* Ensure this div has `flex` to layout stars horizontally */}
       {starDisplayer}
     </div>
+
+    {((role === 'user' && currentUser?.id === itemUserId) || (role === 'owner' && currentUser?.id === itemOwnerId)) &&
     <button onClick={handleToggleDelete} className="ml-4 self-start">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
         <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
       </svg>
     </button>
+    }
+
+
   </div>
   <p className="text-[#647084]">{comment}</p>
   <div className="flex mt-4">
@@ -75,6 +85,8 @@ function Reviews({stars, comment, image, firstName, lastName, profession, review
       <p className="text-sm text-[#636262]">{profession}</p>
     </div>
   </div>
+
+
   {toggleDelete && (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 z-40 overflow-y-auto h-full w-full" onClick={() => setToggleDelete(false)}>
       <div className="relative top-20 mx-auto p-5 border w-1/3 shadow-lg rounded-md bg-white">

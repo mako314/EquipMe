@@ -111,11 +111,6 @@ const displayFeaturedEquipment = featuredEquipment?.length > 0 ? featuredEquipme
 
 const displayAllEquipment = equipmentCards?.length > 0 ? equipmentCards : <div>No items currently listed.</div>
 
-let userReviewsVar = userReviews?.map((item) => (
-    <Reviews key={item.id} stars={item.review_stars} comment={item.review_comment} image={item.user.profileImage} firstName={item.user.firstName} lastName={item.user.lastName} profession={item.user.profession} onDelete={handleReviewDelete} reviewId={item.id}/>
-))
-
-const allUserReviews = userReviewsVar?.length > 0 ? userReviewsVar : <div>No reviews currently available.</div>
 
 // handleEquipmentDelete={handleEquipmentDelete} handleEditEquipment={handleEditEquipment}
 
@@ -147,6 +142,12 @@ const allUserReviews = userReviewsVar?.length > 0 ? userReviewsVar : <div>No rev
     setUserReviews(currentReviews => currentReviews.filter(review => review.id !== deletedReviewId));
     }
     //-----------------------------------------------------------------
+
+    let userReviewsVar = userReviews?.map((item) => (
+        <Reviews key={item.id} stars={item.review_stars} comment={item.review_comment} image={item.user.profileImage} firstName={item.user.firstName} lastName={item.user.lastName} profession={item.user.profession} onDelete={handleReviewDelete} reviewId={item.id} itemOwnerId={item.owner_id} itemUserId={item.user_id}/>
+    ))
+    
+    const allUserReviews = userReviewsVar?.length > 0 ? userReviewsVar : <div>No reviews currently available.</div>
 
 // Render loading page if display is still loading
   if (loading) {
