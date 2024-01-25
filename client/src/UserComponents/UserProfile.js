@@ -162,7 +162,7 @@ function UserProfile({fromOwnerDash, setFromOwnerDash}) {
 
 
   let allOwnerReviewsVar = ownerReviews?.map((item) => (
-    <Reviews key={item.id} stars={item.review_stars} comment={item.review_comment} image={item.owner.profileImage} firstName={item.owner.firstName} lastName={item.owner.lastName} profession={item.owner.profession} onDelete={handleReviewDelete} reviewId={item.id} itemUserId={item.user_id}/>
+    <Reviews key={item.id} stars={item.review_stars} comment={item.review_comment} image={item.owner.profileImage} firstName={item.owner.firstName} lastName={item.owner.lastName} profession={item.owner.profession} onDelete={handleReviewDelete} reviewId={item.id} itemUserId={item.user_id} itemOwnerId={item.owner_id}/>
   ))
 
   const allOwnerReviews = allOwnerReviewsVar?.length > 0 ? allOwnerReviewsVar : <div>No reviews currently available.</div>
