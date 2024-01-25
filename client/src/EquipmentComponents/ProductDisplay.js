@@ -62,7 +62,9 @@ function EquipmentDisplay({}) {
 
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing
 
-  const quantity = oneEquipment?.status?.[0]?.available_quantity ?? 0
+  // const quantity = oneEquipment?.status?.[0]?.available_quantity ?? 0
+
+  const quantity = (oneEquipment?.status?.[0]?.available_quantity > 0) ? oneEquipment.status[0].available_quantity : 0
   
   // const quantity = oneEquipment ? oneEquipment?.status[0]?.current_quantity : 0
   // console.log("Display Page one equipment:", oneEquipment)
