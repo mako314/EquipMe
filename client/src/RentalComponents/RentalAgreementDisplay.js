@@ -615,7 +615,7 @@ function RentalAgreementDisplay() {
 
                     
 
-                  {toggleDelete && (
+                  {/* {toggleDelete && (
                   <div className="fixed inset-0 bg-gray-600 bg-opacity-50 z-40 overflow-y-auto h-full w-full" onClick={() => setToggleDelete(false)}>
                     <div className="relative top-20 mx-auto p-5 border w-1/3 shadow-lg rounded-md bg-white">
                       <h3 className="text-lg font-medium leading-6 text-gray-900">Are you sure you want to delete this item?</h3>
@@ -636,7 +636,33 @@ function RentalAgreementDisplay() {
                       </div>
                     </div>
                   </div>
-                )}
+                )} */}
+
+                    {toggleDelete && (
+                        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 z-40 overflow-y-auto h-full w-full" onClick={() => setToggleDelete(false)}>
+                            <div className="relative top-20 mx-auto p-5 border w-1/3 shadow-lg rounded-md bg-white">
+                                <h3 className="text-lg font-medium leading-6 text-gray-900">Are you sure you want to delete this item?</h3>
+                                <p className="mt-4 mb-6 text-red-600">
+                                    Warning: Deleting this Rental Agreement {role === 'owner' ? 'will remove this item from the Users Cart' : 'will also remove the item from your cart.'} will also delete any associated rental agreement.
+                                </p>
+                                <div className="flex items-center justify-center space-x-4">
+                                    <button
+                                        onClick={() => handleDeleteRentalAgreement(allRentalAgreementsState[currentAgreementIndex]?.theAgreement?.id)}
+                                        className="rounded bg-red-500 py-2 px-4 text-white hover:bg-red-600"
+                                    >
+                                        Yes, Remove This Rental Agreement and the associated Cart Item.
+                                    </button>
+                                    <button
+                                        onClick={handleToggleDelete}
+                                        className="rounded bg-gray-500 py-2 px-4 text-white hover:bg-gray-600"
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
 
 
             </div>
