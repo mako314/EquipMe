@@ -64,17 +64,46 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
     // }
 
     // Flatten the agreements into a single array, I needed the cart, the cart_item for quantity etc, when everything is flattened, spread it into allAgreements
-    let allAgreements = role === 'user' ? (currentUser?.cart ?? []).flatMap(cart => 
-      (cart.cart_item ?? []).flatMap(item => 
-        (item.agreements ?? []).map(agreement => ({
-          ...agreement,
-          cartName: cart.cart_name,
-          item,
-        }))
-      )
-    ) : currentUser.agreements.map(agreement => ({
-      ...agreement,
-    }))
+    // let allAgreements = role === 'user' ? (currentUser?.cart ?? []).flatMap(cart => 
+    //   (cart.cart_item ?? []).flatMap(item => 
+    //     (item.agreements ?? []).map(agreement => ({
+    //       ...agreement,
+    //       cartName: cart.cart_name,
+    //       item,
+    //     }))
+    //   )
+    // ) :  currentUser.agreements.map(agreement => ({
+    //   ...agreement,
+    // }))
+
+    let allAgreements;
+
+  if (role === 'user') {
+    if (currentUser && currentUser.cart) {
+      allAgreements = currentUser.cart.flatMap(cart => 
+        (cart.cart_item ?? []).flatMap(item => 
+          (item.agreements ?? []).map(agreement => ({
+            ...agreement,
+            cartName: cart.cart_name,
+            item,
+          }))
+        )
+      );
+    } else {
+      // Handle the case where currentUser or currentUser.cart is null
+      allAgreements = []
+    }
+  } else {
+    // Handle cases where the user role is not 'user'
+    if (currentUser && currentUser.agreements) {
+      allAgreements = currentUser.agreements.map(agreement => ({
+        ...agreement,
+      }))
+    } else {
+      // Handle the case where currentUser or currentUser.agreements is null
+      allAgreements = []
+    }
+  }
 
     // Check agreements before filtering
     // console.log("Agreements before filtering:", allAgreements) 
