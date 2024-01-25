@@ -95,7 +95,7 @@ function AgreementFiltering({currentUser, role}) {
 
                 {role === 'owner' ?
                     <>
-                        {agreement.cart_item.cart.user.firstName} {agreement.cart_item.cart.user.lastName}
+                        {agreement?.cart_item?.cart?.user?.firstName} {agreement?.cart_item?.cart.user?.lastName}
                     </> :
 
                     <>
