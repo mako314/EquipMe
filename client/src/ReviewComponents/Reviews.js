@@ -3,7 +3,7 @@ import ApiUrlContext from '../Api';
 import {toast} from 'react-toastify'
 import { UserSessionContext } from '../UserComponents/SessionContext';
 
-function Reviews({stars, comment, image, firstName, lastName, profession, reviewId, onDelete}){
+function Reviews({stars, comment, image, firstName, lastName, profession, reviewId, onDelete, itemUserId, itemOwnerId}){
 
   const { currentUser, role, setCurrentUser, checkSession} = UserSessionContext() 
   const apiUrl = useContext(ApiUrlContext)
@@ -75,7 +75,9 @@ function Reviews({stars, comment, image, firstName, lastName, profession, review
       <p className="text-sm text-[#636262]">{profession}</p>
     </div>
   </div>
-  {toggleDelete && (
+
+
+  {((role === 'user' && currentUser.id === itemUserId) || (role === 'owner' && currentUser.id === itemOwnerId)) && toggleDelete && (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 z-40 overflow-y-auto h-full w-full" onClick={() => setToggleDelete(false)}>
       <div className="relative top-20 mx-auto p-5 border w-1/3 shadow-lg rounded-md bg-white">
         <h3 className="text-lg font-medium leading-6 text-gray-900">Are you sure you want to delete this item?</h3>
