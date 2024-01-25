@@ -66,10 +66,10 @@ function AfterCheckout(){
     //     }
     // }, [])
 
-    console.log("current user ID:", currentUser?.id)
+    // console.log("current user ID:", currentUser?.id)
 
     useEffect(() => {
-        console.log("USE EFFECT RUNNING")
+        // console.log("USE EFFECT RUNNING")
         if (!hasFetchedData && currentUser?.id) {  // Ensure currentUser ID is defined
             const fetchPaymentRecord = async () => {
                 try {
@@ -100,7 +100,7 @@ function AfterCheckout(){
 
     }, [currentUser, apiUrl, hasFetchedData]);
 
-    console.log("CHECKING STATE DATA:", paymentRecord)
+    // console.log("CHECKING STATE DATA:", paymentRecord)
 
     if (isLoading){
         return <LoadingPage loadDetails={"your Order Confirmation"}/>
