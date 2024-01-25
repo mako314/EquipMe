@@ -157,7 +157,7 @@ function App() {
       }
     })
     .catch(error => {
-      console.error('Error during session check:', error)
+      // console.error('Error during session check:', error)
     })
   }, [apiUrl, setCurrentUser])
   
