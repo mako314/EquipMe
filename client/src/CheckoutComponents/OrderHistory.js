@@ -89,12 +89,12 @@ function OrderHistory({fromOwnerDash}){
         Object.entries(groupedOrders).forEach(([orderNumber, orders]) => {
             // console.log("Order Number:", orderNumber)
             orders.forEach((order) => {
-                // console.log("Order ID:", order.id)
-                // console.log("ORDER ORDER ORDER:", order)
-                // console.log("Order Details:", order.order_details)
-                // console.log("Total Amount:", order.total_amount)
-                // console.log("Equipment Name:", order.equipment.name)
-                // console.log("Equipment Image URL:", order.equipment.equipment_image)
+                console.log("Order ID:", order.id)
+                console.log("ORDER ORDER ORDER:", order)
+                console.log("Order Details:", order.order_details)
+                console.log("Total Amount:", order.total_amount)
+                console.log("Equipment Name:", order.equipment.name)
+                console.log("Equipment Image URL:", order.equipment.equipment_image)
             })
         })
     } else {
