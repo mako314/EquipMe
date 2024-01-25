@@ -180,7 +180,7 @@ if (role === 'user') {
     //   allAgreements = allAgreements.filter(filterAgreements)
     // }
 
-    console.log('Agreement:', agreement, 'Cart Item:', agreement?.cart_item, 'Cart:', agreement?.cart_item?.cart);
+    // console.log('Agreement:', agreement, 'Cart Item:', agreement?.cart_item, 'Cart:', agreement?.cart_item?.cart)
 
 
     // Sort the ( possibly filtered) agreements. Agreements are always sorted regardless if filtering occurs or not.
