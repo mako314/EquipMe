@@ -57,7 +57,7 @@ class EquipmentMap extends Component {
       console.error('Google Maps API is not loaded yet.')
       return
     }
-    console.log("Beep boop", )
+    // console.log("Beep boop", )
     //Only load map once element with id of map exists
     const mapDiv = document.getElementById('map')
     if (this.props.location && mapDiv) {
@@ -84,7 +84,7 @@ class EquipmentMap extends Component {
           position: results[0].geometry.location,
         })
       } else {
-        console.error('Geocode was not successful for the following reason:', status)
+        // console.error('Geocode was not successful for the following reason:', status)
       }
     })
   }
