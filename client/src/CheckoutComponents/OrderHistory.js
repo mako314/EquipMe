@@ -204,7 +204,7 @@ function OrderHistory({fromOwnerDash}){
                                               <li className="p-4 sm:p-6" key={order.id}>
                                                   <div className="flex items-center sm:items-start">
                                                       <div className="flex-shrink-0 w-20 h-20 bg-gray-200 rounded-lg overflow-hidden sm:w-40 sm:h-40">
-                                                          <img src={order.equipment.equipment_image} alt={`${order.equipment.make} ${order.equipment.model}`} className="w-full h-full object-center object-cover"/>
+                                                          <img src={order?.equipment?.equipment_image} alt={`${order?.equipment?.make} ${order?.equipment?.model}`} className="w-full h-full object-center object-cover"/>
                                                       </div>
                                                       <div className="flex-1 ml-6 text-sm">
                                                           <div className="font-medium text-gray-900 sm:flex sm:justify-between">
