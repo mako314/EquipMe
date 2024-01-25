@@ -64,104 +64,17 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
     // }
 
     // Flatten the agreements into a single array, I needed the cart, the cart_item for quantity etc, when everything is flattened, spread it into allAgreements
-    // let allAgreements = role === 'user' ? (currentUser?.cart ?? []).flatMap(cart => 
-    //   (cart.cart_item ?? []).flatMap(item => 
-    //     (item.agreements ?? []).map(agreement => ({
-    //       ...agreement,
-    //       cartName: cart.cart_name,
-    //       item,
-    //     }))
-    //   )
-    // ) :  currentUser.agreements.map(agreement => ({
-    //   ...agreement,
-    // }))
-
-  //   let allAgreements;
-
-  // if (role === 'user') {
-  //   if (currentUser && currentUser?.cart) {
-  //     allAgreements = currentUser?.cart.flatMap(cart => 
-  //       (cart.cart_item ?? []).flatMap(item => 
-  //         (item.agreements ?? []).map(agreement => ({
-  //           ...agreement,
-  //           cartName: cart.cart_name,
-  //           item,
-  //         }))
-  //       )
-  //     );
-  //   } else {
-  //     // Handle the case where currentUser or currentUser.cart is null
-  //     allAgreements = []
-  //   }
-  // } else {
-  //   // Handle cases where the user role is not 'user'
-  //   if (currentUser && currentUser?.agreements) {
-  //     allAgreements = currentUser.agreements.map(agreement => ({
-  //       ...agreement,
-  //     }))
-  //   } else {
-  //     // Handle the case where currentUser or currentUser.agreements is null
-  //     allAgreements = []
-  //   }
-  // }
-
-  // let allAgreements = []
-
-  // if (role === 'user') {
-  //     // Check if currentUser and currentUser.cart are not null
-  //     if (currentUser?.cart) {
-  //         allAgreements = currentUser.cart.flatMap(cart => 
-  //             (cart?.cart_item ?? []).flatMap(item => 
-  //                 (item?.agreements ?? []).map(agreement => ({
-  //                     ...agreement,
-  //                     cartName: cart.cart_name,
-  //                     item,
-  //                 }))
-  //             )
-  //         )
-  //     }
-  // } else {
-  //     // Handle cases where the user role is not 'user'
-  //     if (currentUser?.agreements) {
-  //         allAgreements = currentUser.agreements.map(agreement => ({
-  //             ...agreement,
-  //         }))
-  //     }
-  // }
-
-
-
-  let allAgreements = [];
-
-if (role === 'user') {
-    // Safely check if currentUser exists and has a cart property
-    if (currentUser && Array.isArray(currentUser.cart)) {
-        allAgreements = currentUser.cart.flatMap(cart => {
-            // Check if cart is not null and has cart_item property
-            if (cart && Array.isArray(cart.cart_item)) {
-                return cart.cart_item.flatMap(item => {
-                    // Check if item is not null and has agreements property
-                    if (item && Array.isArray(item.agreements)) {
-                        return item.agreements.map(agreement => ({
-                            ...agreement,
-                            cartName: cart.cart_name,
-                            item,
-                        }));
-                    }
-                    return [];
-                });
-            }
-            return [];
-        });
-    }
-} else {
-    // Handle cases where the user role is not 'user'
-    if (currentUser && Array.isArray(currentUser.agreements)) {
-        allAgreements = currentUser.agreements.map(agreement => ({
-            ...agreement,
-        }));
-    }
-}
+    let allAgreements = role === 'user' ? (currentUser?.cart ?? []).flatMap(cart => 
+      (cart.cart_item ?? []).flatMap(item => 
+        (item.agreements ?? []).map(agreement => ({
+          ...agreement,
+          cartName: cart.cart_name,
+          item,
+        }))
+      )
+    ) :  currentUser.agreements.map(agreement => ({
+      ...agreement,
+    }))
 
 
     // Check agreements before filtering
@@ -180,7 +93,7 @@ if (role === 'user') {
     //   allAgreements = allAgreements.filter(filterAgreements)
     // }
 
-    // console.log('Agreement:', agreement, 'Cart Item:', agreement?.cart_item, 'Cart:', agreement?.cart_item?.cart)
+  
 
 
     // Sort the ( possibly filtered) agreements. Agreements are always sorted regardless if filtering occurs or not.
