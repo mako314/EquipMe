@@ -70,7 +70,7 @@ function RentalMonitor({currentUser, role}){
         const monthCounts = data.reduce((acc, agreement) => {
         // console.log("the agreement in the reducer:", agreement)
 
-        const agreementPriceAtAddition = role === 'owner' ? agreement?.cart_item.price_cents_at_addition : agreement.price_cents_at_addition
+        const agreementPriceAtAddition = role === 'owner' ? agreement?.cart_item?.price_cents_at_addition : agreement?.price_cents_at_addition
 
         //Send the current month in created_at (the date string or date object really, and have it find the month)
         const month = getMonthName(agreement?.created_at)
