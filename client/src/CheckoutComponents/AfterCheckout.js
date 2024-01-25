@@ -69,6 +69,7 @@ function AfterCheckout(){
     useEffect(() => {
         console.log("USE EFFECT RUNNING")
         if (currentUser?.id) {  // Ensure currentUser ID is defined
+            if (isLoading){
             const fetchPaymentRecord = async () => {
                 try {
                     const response = await fetch(`${apiUrl}payment/record/user/${currentUser.id}`, {
@@ -89,12 +90,13 @@ function AfterCheckout(){
                     setIsLoading(false);
                 }
             };
-            fetchPaymentRecord();
+            fetchPaymentRecord()
+        }
         } else {
             console.log("User ID is undefined");
         }
 
-    }, [currentUser]);
+    }, [isLoading]);
 
     console.log("CHECKING STATE DATA:", paymentRecord)
 
