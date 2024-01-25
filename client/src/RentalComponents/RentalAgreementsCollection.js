@@ -76,34 +76,59 @@ function RentalAgreementsCollection({ setFromOwnerDash, fromOwnerDash}) {
     //   ...agreement,
     // }))
 
-    let allAgreements;
+  //   let allAgreements;
+
+  // if (role === 'user') {
+  //   if (currentUser && currentUser?.cart) {
+  //     allAgreements = currentUser?.cart.flatMap(cart => 
+  //       (cart.cart_item ?? []).flatMap(item => 
+  //         (item.agreements ?? []).map(agreement => ({
+  //           ...agreement,
+  //           cartName: cart.cart_name,
+  //           item,
+  //         }))
+  //       )
+  //     );
+  //   } else {
+  //     // Handle the case where currentUser or currentUser.cart is null
+  //     allAgreements = []
+  //   }
+  // } else {
+  //   // Handle cases where the user role is not 'user'
+  //   if (currentUser && currentUser?.agreements) {
+  //     allAgreements = currentUser.agreements.map(agreement => ({
+  //       ...agreement,
+  //     }))
+  //   } else {
+  //     // Handle the case where currentUser or currentUser.agreements is null
+  //     allAgreements = []
+  //   }
+  // }
+
+  let allAgreements = []
 
   if (role === 'user') {
-    if (currentUser && currentUser.cart) {
-      allAgreements = currentUser.cart.flatMap(cart => 
-        (cart.cart_item ?? []).flatMap(item => 
-          (item.agreements ?? []).map(agreement => ({
-            ...agreement,
-            cartName: cart.cart_name,
-            item,
-          }))
-        )
-      );
-    } else {
-      // Handle the case where currentUser or currentUser.cart is null
-      allAgreements = []
-    }
+      // Check if currentUser and currentUser.cart are not null
+      if (currentUser?.cart) {
+          allAgreements = currentUser.cart.flatMap(cart => 
+              (cart?.cart_item ?? []).flatMap(item => 
+                  (item?.agreements ?? []).map(agreement => ({
+                      ...agreement,
+                      cartName: cart.cart_name,
+                      item,
+                  }))
+              )
+          )
+      }
   } else {
-    // Handle cases where the user role is not 'user'
-    if (currentUser && currentUser.agreements) {
-      allAgreements = currentUser.agreements.map(agreement => ({
-        ...agreement,
-      }))
-    } else {
-      // Handle the case where currentUser or currentUser.agreements is null
-      allAgreements = []
-    }
+      // Handle cases where the user role is not 'user'
+      if (currentUser?.agreements) {
+          allAgreements = currentUser.agreements.map(agreement => ({
+              ...agreement,
+          }))
+      }
   }
+
 
     // Check agreements before filtering
     // console.log("Agreements before filtering:", allAgreements) 
