@@ -7,7 +7,7 @@ function OwnerCard({ id, email, firstName, lastName, address, address_line_2, ci
     //test can likely delete below
     // console.log(item)
 
-    const ownerLocation = `${address_line_2 === '' ?  address : address + ',' + address_line_2}, ${city}, ${state} ${postal_code} `
+    const ownerLocation = `${address_line_2 === '' ?  address : address + ', ' + address_line_2}, ${city}, ${state} ${postal_code} `
 
     const navigate = useNavigate()
 

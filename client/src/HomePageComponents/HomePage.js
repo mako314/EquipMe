@@ -28,17 +28,27 @@ function HomePage({ equipmentArray, setFeaturedRental }) {
     }
 
     const handleClickLawnmowerClick = () => {
-        navigate(`/equipment/${3}`)
+        const lawnMower = equipmentArray?.filter((item) => {
+            return item.model === "HRX217VKA"
+        })
+        
+        navigate(`/equipment/${lawnMower[0].id}`)
         window.scrollTo(0, 0)
     }
 
     const handleForkLiftClick = () => {
-        navigate(`/equipment/${2}`)
+        const forkLift = equipmentArray?.filter((item) => {
+            return item.model === "8FGCU25"
+        })
+        navigate(`/equipment/${forkLift[0].id}`)
         window.scrollTo(0, 0)
     }
 
     const handleTractorClick = () => {
-        navigate(`/equipment/${4}`)
+        const tractor = equipmentArray?.filter((item) => {
+            return item.model === "8R 410"
+        })
+        navigate(`/equipment/${tractor[0].id}`)
         window.scrollTo(0, 0)
     }
 
