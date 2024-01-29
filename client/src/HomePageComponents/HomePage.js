@@ -25,6 +25,7 @@ function HomePage({ equipmentArray, setFeaturedRental }) {
             return item.model === featuredModel
         })
         navigate(`/equipment/${test_item[0].id}`)
+        window.scrollTo(0, 0)
     }
 
     const handleClickLawnmowerClick = () => {
@@ -156,7 +157,7 @@ function HomePage({ equipmentArray, setFeaturedRental }) {
                                 </div>
                                 <div className="flex-grow pl-4">
                                     <h2 className="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">STEP 1 : GET STARTED</h2>
-                                    <p className="leading-relaxed">Create an account or a listing.</p>
+                                    <p className="leading-relaxed">Create an account to get renting, become a partner and start listing.</p>
                                 </div>
                             </div>
                             <div className="flex relative pb-12">
@@ -186,7 +187,7 @@ function HomePage({ equipmentArray, setFeaturedRental }) {
                                 </div>
                                 <div className="flex-grow pl-4">
                                     <h2 className="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">STEP 3 : RENT CONFIDENTLY</h2>
-                                    <p className="leading-relaxed">Finalize your rental with a legally approved agreement.</p>
+                                    <p className="leading-relaxed">Finalize your rental when both parties have both accepted.</p>
                                 </div>
                             </div>
                             <div className="flex relative">
