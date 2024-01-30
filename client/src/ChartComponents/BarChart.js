@@ -187,7 +187,7 @@ function BarChart({currentUser, setDashLoad}){
           const updateMonth = new Date().getMonth() + 1
       
           try {
-              const response = await fetch(`${apiUrl}summarize/${updateMonth}/${updateYear}`)
+              const response = await fetch(`${apiUrl}summarize/${updateMonth}/${updateYear}/${currentUser.id}`)
               const newDataObject = await response.json()
 
               console.log("Received data:", newDataObject)
