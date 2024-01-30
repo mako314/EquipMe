@@ -3092,11 +3092,15 @@ class CalculateMonthlyTotals(Resource):
         print("Query datetime:", start_of_month)
         print("THE START OF THE MONTH:", start_of_month)
         print("THE END OF THE MONTH:", end_of_month)
+        print(owner_id)
 
         # unique_equipment_ids = EquipmentStateHistory.query.with_entities(EquipmentStateHistory.equipment_id).distinct().all()
         
         # Select only equipment belonging to the specified owner
         unique_equipment_ids = EquipmentStateHistory.query.join(Equipment, Equipment.id == EquipmentStateHistory.equipment_id).filter(Equipment.owner_id == owner_id).with_entities(EquipmentStateHistory.equipment_id).distinct().all()
+
+        print("THE UNIQUE EQUIPMENT IDS:", unique_equipment_ids)
+
 
         all_summaries = {}
 
@@ -3182,6 +3186,8 @@ class CalculateMonthlyTotals(Resource):
                     'equipment_id': equipment_id
                 } for equipment_id, summary_data in all_summaries.items()
             }
+            
+            print(all_summaries_serializable)
 
             return jsonify(all_summaries_serializable)
         except IntegrityError:

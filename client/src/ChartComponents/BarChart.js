@@ -4,11 +4,13 @@ import {toast} from 'react-toastify'
 import { Bar } from 'react-chartjs-2';
 import { useEquipmentData } from "./BarChartDataContext";
 import ApiUrlContext from "../Api";
+import LoadingPage from "../ExtraPageComponents/LoadingPage";
 
 // useRef
 function BarChart({currentUser, setDashLoad}){
 
-    const [existingData, setExistingData] = useState(currentUser?.equipment); // initialData is existing data
+    // const [existingData, setExistingData] = useState(currentUser?.equipment); // initialData is existing data
+    const [existingData, setExistingData] = useState(null)
     // const [updateCounter, setUpdateCounter] = useState(0)
     const [showAll, setShowAll] = useState(false)
     const apiUrl = useContext(ApiUrlContext)
@@ -17,6 +19,12 @@ function BarChart({currentUser, setDashLoad}){
 
     // I needed to make a context to hold some data so it would persist
     const { barChartEquipmentData, setBarChartEquipmentData } = useEquipmentData()
+
+    useEffect(() => {
+      if (currentUser?.equipment) {
+        setExistingData(currentUser.equipment)
+      }
+    }, [currentUser])
 
     const [monthlyData, setMonthlyData] = useState({
       labels: [],
@@ -453,6 +461,10 @@ function BarChart({currentUser, setDashLoad}){
       // setDashLoad(false)
       
   }, [])
+
+  if (!existingData) {
+    return <LoadingPage loadDetails={"Loading equipment data..."}/>
+  }
 
 
   // console.log("THE CHART DATA:", monthlyData)
