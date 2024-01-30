@@ -16,7 +16,7 @@ function Inbox({inboxes, setInboxes, selectedThreadID, setSelectedThreadID, setR
   const [toggleDelete, setToggleDelete] = useState(false)
   const [deletingThreadId, setDeletingThreadId] = useState(null)
 
-  console.log("THE INBOXES:", inboxes)
+  // console.log("THE INBOXES:", inboxes)
   // const [ownerInboxes, setOwnerInboxes] = useState([])
   // const [userInboxes, setUserInboxes] = useState([])
 
