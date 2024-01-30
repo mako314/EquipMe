@@ -1949,8 +1949,8 @@ if __name__ == '__main__':
         ]
 
         db.session.add_all(owner_inbox)
-        print("ADD 10000 RESERVED TO EXCAVATOR FOR STRIPE TESTING")
-        equipment_statuses[0].reserved_quantity = 10000
+        print("ADD 10000 AVAILABLE TO EXCAVATOR FOR STRIPE TESTING")
+        equipment_statuses[0].available_quantity = 10000
         db.session.commit()
 
 #----------------Testing Stripe--------------
