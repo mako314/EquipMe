@@ -58,7 +58,7 @@ On the renter side, the primary focus was on streamlining the checkout process. 
 Developing a contact form that could send emails to my Gmail account was a novel and practical feature. This involved using EmailMessage, ssl (for creating a secure context), and smtplib.SMTP_SSL for secure email sending.
 
 ## Front-End Development: Expanding Horizons Mastering React and Related Technologies
-### Advanced Use of React Router DOM: 
+#### Advanced Use of React Router DOM: 
 Implementing this in a larger application deepened my understanding of efficient navigation and routing in React.
 
 ### Effective Context Management in React: 
