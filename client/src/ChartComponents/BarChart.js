@@ -206,47 +206,7 @@ function BarChart({currentUser, setDashLoad}){
                   month: key // Assuming the key represents the month
               }))
       
-              // console.log("Transformed array:", newDataArray)
-             
-              // let mergedData
-              // console.log("THIS IS THE MERGED DATA:", mergedData)
-              // updatedData
 
-              // Merge with existing data
-              // if (updateCounter > 0){
-              //   return toast.warn(`❌ Please limit refreshes to once per page load!`,
-              //   {
-              //   "autoClose" : 2000
-              //   })
-              // // Process merged data
-              // }
-
-              // let testData;
-              // if (allVisible && updateCounter < 1) {
-              //     // Update or add new data points in existing data
-              //     testData = barChartEquipmentData.datasets.map(dataset => {
-              //         const updatedDatasetData = dataset.data.slice(); // Clone the data array
-
-              //         newDataArray.forEach(newData => {
-              //             const monthIndex = barChartEquipmentData.labels.indexOf(newData.month);
-              //             if (monthIndex !== -1) {
-              //                 // Month exists, update data
-              //                 updatedDatasetData[monthIndex] = newData[dataset.label.toLowerCase().replace(/ /g, "_")];
-              //             } else {
-              //                 // Month doesn't exist, add new month and data
-              //                 barChartEquipmentData.labels.push(newData.month);
-              //                 updatedDatasetData.push(newData[dataset.label.toLowerCase().replace(/ /g, "_")]);
-              //             }
-              //         });
-
-              //         return { ...dataset, data: updatedDatasetData };
-              //     });
-
-              //     // Update state
-              //     setBarChartEquipmentData({ ...barChartEquipmentData, datasets: testData });
-              // } else {
-
-              // }
 
               if (allVisible) {
                 // updateAllDataWithMonthlyChanges()
@@ -460,7 +420,7 @@ function BarChart({currentUser, setDashLoad}){
       setShowAll(true)
       // setDashLoad(false)
       
-  }, [])
+  }, [currentUser])
 
   if (!existingData) {
     return <LoadingPage loadDetails={"Loading equipment data..."}/>
@@ -507,3 +467,46 @@ function BarChart({currentUser, setDashLoad}){
 }
 
 export default BarChart
+
+
+              // console.log("Transformed array:", newDataArray)
+             
+              // let mergedData
+              // console.log("THIS IS THE MERGED DATA:", mergedData)
+              // updatedData
+
+              // Merge with existing data
+              // if (updateCounter > 0){
+              //   return toast.warn(`❌ Please limit refreshes to once per page load!`,
+              //   {
+              //   "autoClose" : 2000
+              //   })
+              // // Process merged data
+              // }
+
+              // let testData;
+              // if (allVisible && updateCounter < 1) {
+              //     // Update or add new data points in existing data
+              //     testData = barChartEquipmentData.datasets.map(dataset => {
+              //         const updatedDatasetData = dataset.data.slice(); // Clone the data array
+
+              //         newDataArray.forEach(newData => {
+              //             const monthIndex = barChartEquipmentData.labels.indexOf(newData.month);
+              //             if (monthIndex !== -1) {
+              //                 // Month exists, update data
+              //                 updatedDatasetData[monthIndex] = newData[dataset.label.toLowerCase().replace(/ /g, "_")];
+              //             } else {
+              //                 // Month doesn't exist, add new month and data
+              //                 barChartEquipmentData.labels.push(newData.month);
+              //                 updatedDatasetData.push(newData[dataset.label.toLowerCase().replace(/ /g, "_")]);
+              //             }
+              //         });
+
+              //         return { ...dataset, data: updatedDatasetData };
+              //     });
+
+              //     // Update state
+              //     setBarChartEquipmentData({ ...barChartEquipmentData, datasets: testData });
+              // } else {
+
+              // }
