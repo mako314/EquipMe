@@ -3081,7 +3081,7 @@ api.add_resource(PaymentRecordByUserID, '/payment/record/user/<int:user_id>')
         
 
 class CalculateMonthlyTotals(Resource):
-    def get(self, month, year):
+    def get(self, month, year, owner_id):
         print(f"Processing summaries for month: {month}, year: {year}")
         intYear = int(year)
         intMonth = int(month)
@@ -3092,8 +3092,12 @@ class CalculateMonthlyTotals(Resource):
         print("Query datetime:", start_of_month)
         print("THE START OF THE MONTH:", start_of_month)
         print("THE END OF THE MONTH:", end_of_month)
-        unique_equipment_ids = EquipmentStateHistory.query.with_entities(EquipmentStateHistory.equipment_id).distinct().all()
+
+        # unique_equipment_ids = EquipmentStateHistory.query.with_entities(EquipmentStateHistory.equipment_id).distinct().all()
         
+        # Select only equipment belonging to the specified owner
+        unique_equipment_ids = EquipmentStateHistory.query.join(Equipment, Equipment.id == EquipmentStateHistory.equipment_id).filter(Equipment.owner_id == owner_id).with_entities(EquipmentStateHistory.equipment_id).distinct().all()
+
         all_summaries = {}
 
         # EquipmentStateSummary.query.delete()
@@ -3186,7 +3190,7 @@ class CalculateMonthlyTotals(Resource):
             return {"message": "An error occurred while calculating monthly totals."}, 500
 
     
-api.add_resource(CalculateMonthlyTotals, '/summarize/<string:month>/<string:year>')
+api.add_resource(CalculateMonthlyTotals, '/summarize/<string:month>/<string:year>/<int:owner_id>')
 
 class OrderHistoryByUserId(Resource):
     def get(self, user_id):
