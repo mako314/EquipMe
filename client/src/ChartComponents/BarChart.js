@@ -366,6 +366,7 @@ function BarChart({currentUser, setDashLoad}){
     useEffect(() => {
       if (currentUser?.equipment && Array.isArray(currentUser?.equipment)) {
           const initialProcessedData = countAgreementsByMonth(currentUser?.equipment)
+          console.log("THE INTIIAL PROCESSED DATA:", initialProcessedData)
           setBarChartEquipmentData({
               labels: initialProcessedData.map(item => item.month),
               datasets: [
@@ -416,11 +417,15 @@ function BarChart({currentUser, setDashLoad}){
           })
       }
       // setInititalDataLoaded(true)
+
+     
       
       setShowAll(true)
       // setDashLoad(false)
       
-  }, [currentUser])
+  }, [])
+
+  console.log("THE BAR CHART EQUIPMENT DATA:", barChartEquipmentData)
 
   if (!existingData) {
     return <LoadingPage loadDetails={"Loading equipment data..."}/>
