@@ -423,7 +423,7 @@ function BarChart({currentUser, setDashLoad}){
       setShowAll(true)
       // setDashLoad(false)
       
-  }, [])
+  }, [currentUser])
 
   console.log("THE BAR CHART EQUIPMENT DATA:", barChartEquipmentData)
 
