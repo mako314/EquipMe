@@ -63,7 +63,7 @@ The process of developing EquipMe was not just about mastering technical skills;
 
 
 ## Front-End Development: Expanding Horizons
-### Mastering React and Related Technologies
+## Mastering React and Related Technologies
 ## Advanced Use of React Router DOM: 
 Implementing this in a larger application deepened my understanding of efficient navigation and routing in React.
 
