@@ -25,13 +25,16 @@ The primary challenge I aimed to tackle with EquipMe was the complexity and inac
 ### Creating a Marketplace: 
 EquipMe is the intersection of a traditional marketplace and an equipment rental service, akin to what you'd get if Craigslist met an equipment rental store. It's about making the process as straightforward as shopping online, yet with the added trust and community feel of a local marketplace.
 
+<p align="center">
+  <img src="https://github.com/mako314/EquipMe/assets/119079347/7f45df61-7b2f-4ee8-8a40-57cffa9f4c84" width="800" style="display: inline-block;">
+  <img src="https://github.com/mako314/EquipMe/assets/119079347/3574b92f-0646-409a-9f77-af70e35a5e3c" width="800" style="display: inline-block;">
+</p>
+
+
+
+
 ### Community and Trust: 
 By integrating features like ratings and reviews, EquipMe fosters a sense of community and trust. It's not just about transactions; it's about building relationships and a network of reliable, local equipment-sharing options.
-
-
-What did you learn?
-
-What I Learned
 
 ## Back-End Development: A Deep Dive
 
@@ -64,7 +67,7 @@ Developing a contact form that could send emails to my Gmail account was a novel
 Implementing this in a larger application deepened my understanding of efficient navigation and routing in React.
 
 ### Effective Context Management in React: 
-I learned to proficiently use React Context for managing and passing around an API URL (also managed in a .env file) and for session checking. This was crucial for maintaining a consistent state across the application, especially for user roles and current user information.
+I learned to proficiently use React Context for managing and passing around an API URL (also managed in a .env file), number of items ready for checkout and for session checking. This was crucial for maintaining a consistent state across the application, especially for user roles and current user information.
 
 ### Netlify Hosting and Optimization: 
 Deploying the application on Netlify introduced me to new deployment strategies. I created a Netlify toml file for optimized server fetching, ensuring seamless transitions between local development and live updates.
@@ -122,10 +125,13 @@ The process of developing EquipMe was not just about mastering technical skills;
 
 
 Table of Contents 
-
 What was your motivation?
 Why did you build this project?
 What problem does it solve?
+
+What did you learn?
+
+What I Learned
 
 How to Use the Project
 
