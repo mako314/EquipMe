@@ -31,40 +31,14 @@ EquipMe is the intersection of a traditional marketplace and an equipment rental
 </p>
 
 
-
-
 ### Community and Trust: 
 By integrating features like ratings and reviews, EquipMe fosters a sense of community and trust. It's not just about transactions; it's about building relationships and a network of reliable, local equipment-sharing options.
 
-## Back-End Development: A Deep Dive
-
-### Database Management with Flask and SQLAlchemy: 
-Managing 22 tables was a formidable challenge. I gained valuable experience in handling database errors, both locally and with an online database hosted on Render. This included tackling issues like mismatched migrations and managing nullable fields.
-
-### User Authentication and Security: 
-Implementing two user types (owners and regular users) was ambitious but rewarding. I used Flask-Bcrypt for hashing passwords and Flask-JWT-Extended for managing authentication tokens and cookies. This approach ensured secure user sessions and data handling, especially critical for sensitive operations like Stripe API transactions.
-
-### Advanced Routing Techniques: 
-Learning to route based on criteria other than IDs, such as profession and location, added a new layer of complexity. I also managed linked tables and routes to create a dynamic and responsive system. For example, an equipment piece could link to its status for quantity monitoring, with its state history tracking changes and a summary table providing an overview.
-
-### Integrating Environmental Variables: 
-Utilizing .env files for managing environment variables enhanced the security and flexibility of the application.
-
-### Payment Processing with Stripe: 
-The integration of Stripe for payment processing was a key learning area. This included understanding webhooks for handling payment intents and creating a payment record table. Although I initially experimented with SSE endpoints for real-time updates, compatibility issues led me to adapt the implementation.
-
-### Owner and Equipment Management: 
-Enabling owners to create a Stripe Express account upon registration allowed them to manage payments and listings effectively. This included features like equipment highlighting, pricing, and quantity management through table relationships.
-
-### Simplifying User Experience for Renters: 
-On the renter side, the primary focus was on streamlining the checkout process. This involved handling multiple line items and integrating with Stripe's checkout system to allow for multi-item transactions.
-
-### Building a Contact Form with Email Integration: 
-Developing a contact form that could send emails to my Gmail account was a novel and practical feature. This involved using EmailMessage, ssl (for creating a secure context), and smtplib.SMTP_SSL for secure email sending.
 
 ## Front-End Development: Expanding Horizons Mastering React and Related Technologies
+
 ### Advanced Use of React Router DOM: 
-Implementing this in a larger application deepened my understanding of efficient navigation and routing in React.
+While developing a larger application in React, I gained a deeper understanding of efficient navigation and routing. Additionally, I also learned about implementing location.state with React Router, further enhancing my skills in state management and user experience.
 
 ### Effective Context Management in React: 
 I learned to proficiently use React Context for managing and passing around an API URL (also managed in a .env file), number of items ready for checkout and for session checking. This was crucial for maintaining a consistent state across the application, especially for user roles and current user information.
@@ -77,10 +51,19 @@ Utilizing global states for tracking user checkout items and equipment data prov
 
 ### Enhancing User Experience
 Form Management and Validation: 
-While initially using Formik, I also integrated Yup for front-end validations. This experience highlighted the importance of keeping up with current tools and technologies in front-end development.
+While using Formik and Yup for form validations, I realized the need to stay updated with newer front-end technologies. Recognizing Formik's limitations, I am open to learning about more current form management tools and welcome any recommendations.
 
 ### User and Owner Profiles: 
 Creating distinct and interactive profiles for users and owners, complete with Google Maps API integration for location display, enhanced user engagement. These profiles included features like public information display, reviews, and favoriting functionality.
+
+<p align="center">
+  <em>EquipMe Owner Dashboard</em><br>
+  <img src="https://github.com/mako314/EquipMe/assets/119079347/919c7b3c-c2eb-4cd2-91e6-e696ad523fff" width="800"><br><br>
+  <em>EquipMe User Dashboard Home</em><br>
+  <img src="https://github.com/mako314/EquipMe/assets/119079347/6fde57c9-e7f2-48c5-8566-b246053e8e63" width="800">
+</p>
+
+
 
 ### Unified Login and Registration Process: 
 Implementing a single login and sign-up system for both user types streamlined the authentication process while maintaining role-specific functionalities.
@@ -116,6 +99,35 @@ The development of a sophisticated system to manage multiple carts, rental durat
 
 ### Bulk Data Upload via CSV: 
 The ability to upload equipment data en masse via a CSV file upload functionality added an important feature for bulk data management.
+
+
+## Back-End Development: A Deep Dive
+
+### Database Management with Flask and SQLAlchemy: 
+Managing 22 tables was a formidable challenge. I gained valuable experience in handling database errors, both locally and with an online database hosted on Render. This included tackling issues like mismatched migrations and managing nullable fields.
+
+### User Authentication and Security: 
+Implementing two user types (owners and regular users) was ambitious but rewarding. I used Flask-Bcrypt for hashing passwords and Flask-JWT-Extended for managing authentication tokens and cookies. This approach ensured secure user sessions and data handling, especially critical for sensitive operations like Stripe API transactions.
+
+### Advanced Routing Techniques: 
+Learning to route based on criteria other than IDs, such as profession and location, added a new layer of complexity. I also managed linked tables and routes to create a dynamic and responsive system. For example, an equipment piece could link to its status for quantity monitoring, with its state history tracking changes and a summary table providing an overview.
+
+### Integrating Environmental Variables: 
+Utilizing .env files for managing environment variables enhanced the security and flexibility of the application.
+
+### Payment Processing with Stripe: 
+The integration of Stripe for payment processing was a key learning area. This included understanding webhooks for handling payment intents and creating a payment record table. Although I initially experimented with SSE endpoints for real-time updates, compatibility issues led me to adapt the implementation.
+
+### Owner and Equipment Management: 
+Enabling owners to create a Stripe Express account upon registration allowed them to manage payments and listings effectively. This included features like equipment highlighting, pricing, and quantity management through table relationships.
+
+### Simplifying User Experience for Renters: 
+On the renter side, the primary focus was on streamlining the checkout process. This involved handling multiple line items and integrating with Stripe's checkout system to allow for multi-item transactions.
+
+### Building a Contact Form with Email Integration: 
+Developing a contact form that could send emails to my Gmail account was a novel and practical feature. This involved using EmailMessage, ssl (for creating a secure context), and smtplib.SMTP_SSL for secure email sending.
+
+
 
 ### Concluding Thoughts
 The front-end development of EquipMe was a journey of discovery and innovation. From mastering React and its ecosystem to creating a user-friendly and interactive e-commerce experience, each aspect of the project added to my skillset. I learned not only the technicalities of front-end development but also the art of creating an engaging and intuitive user experience. This project was a testament to the importance of continual learning and adaptation in the ever-evolving field of web development.
