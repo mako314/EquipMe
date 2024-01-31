@@ -199,6 +199,11 @@ The process of developing EquipMe was not just about mastering technical skills;
     <em>EquipMe User Dashboard Rental Agreements</em><br>
     <img src="https://github.com/mako314/EquipMe/assets/119079347/eaa7fc79-963d-4951-8627-0ca15eef9eff" width="800"><br><br>
   </p>
+  
+  <p align="center">
+  <em>EquipMe User Dashboard Handle Rental Agreements</em><br>
+  <img src="https://github.com/mako314/EquipMe/assets/119079347/6a5c0ebf-b339-457b-8abf-b89cf48101c9" width="800"><br><br>
+  </p>
 
 - **Checkout:** Proceed to checkout after accepting the rental agreement.
   <p align="center">
