@@ -166,10 +166,10 @@ The process of developing EquipMe was not just about mastering technical skills;
 
 # How to Use EquipMe
 
-## If You're Logged Out:
+### If You're Logged Out:
 - **View Equipment Listings:** Browse through available equipment without logging in.
 
-## For Users:
+### For Users:
 - **Account Creation and Sign In:** Create an account or sign in to access all features.
 - **Browsing:** Explore equipment listings and owner profiles.
 - **Adding to Cart:** Add items to different carts for various projects.
@@ -177,7 +177,7 @@ The process of developing EquipMe was not just about mastering technical skills;
 - **Rental Agreement:** Form and manage rental agreements through your dashboard.
 - **Checkout:** Proceed to checkout after accepting the rental agreement.
 
-## For Owners:
+### For Owners:
 - **Account Setup:** Sign up or log in and complete Stripe onboarding for payments.
 - **Equipment Upload:** Upload individual items or a CSV file for bulk listings.
 - **Dashboard Insights:** Access analytics and charts for your equipment.
@@ -187,7 +187,7 @@ The process of developing EquipMe was not just about mastering technical skills;
   - Change delivery information.
   - Accept or decline agreements.
 
-## Global Features
+### Global Features
 - **Favorites:** Mark equipment, owners, and users as favorites for quick access.
 - **In-House Messaging System:** Facilitate communication through the dashboard messaging system.
 
