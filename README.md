@@ -26,7 +26,6 @@ The primary challenge I aimed to tackle with EquipMe was the complexity and inac
 EquipMe is the intersection of a traditional marketplace and an equipment rental service, akin to what you'd get if Craigslist met an equipment rental store. It's about making the process as straightforward as shopping online, yet with the added trust and community feel of a local marketplace.
 
 <p align="center">
-  <strong>Equipment Collection Page</strong><br><br>
   <em>Equipment Collection Page</em><br>
   <img src="https://github.com/mako314/EquipMe/assets/119079347/7f45df61-7b2f-4ee8-8a40-57cffa9f4c84" width="800"><br><br>
   <em>Equipment Display Page</em><br>
@@ -165,6 +164,35 @@ The process of developing EquipMe was not just about mastering technical skills;
 
 
 
+# How to Use EquipMe
+
+## If You're Logged Out:
+- **View Equipment Listings:** Browse through available equipment without logging in.
+
+## For Users:
+- **Account Creation and Sign In:** Create an account or sign in to access all features.
+- **Browsing:** Explore equipment listings and owner profiles.
+- **Adding to Cart:** Add items to different carts for various projects.
+- **Rental Time Selection:** Choose from hourly, daily, or weekly rental durations.
+- **Rental Agreement:** Form and manage rental agreements through your dashboard.
+- **Checkout:** Proceed to checkout after accepting the rental agreement.
+
+## For Owners:
+- **Account Setup:** Sign up or log in and complete Stripe onboarding for payments.
+- **Equipment Upload:** Upload individual items or a CSV file for bulk listings.
+- **Dashboard Insights:** Access analytics and charts for your equipment.
+- **Stripe Onboarding and Rental Agreement Management:** 
+  - Complete Stripe onboarding before renting out equipment.
+  - Filter rental agreements by status and time created.
+  - Change delivery information.
+  - Accept or decline agreements.
+
+## Global Features
+- **Favorites:** Mark equipment, owners, and users as favorites for quick access.
+- **In-House Messaging System:** Facilitate communication through the dashboard messaging system.
+
+
+
 Table of Contents 
 What was your motivation?
 Why did you build this project?
@@ -173,8 +201,6 @@ What problem does it solve?
 What did you learn?
 
 What I Learned
-
-How to Use the Project
 
 Credits
 https://www.freecodecamp.org/news/how-to-write-a-good-readme-file/
