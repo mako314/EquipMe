@@ -166,8 +166,6 @@ The process of developing EquipMe was not just about mastering technical skills;
 
 # How to Use EquipMe
 
-# How to Use EquipMe
-
 ### If You're Logged Out:
 - **View Equipment Listings:** Browse through available equipment without logging in.
 
