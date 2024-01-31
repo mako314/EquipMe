@@ -56,11 +56,12 @@ While using Formik and Yup for form validations, I realized the need to stay upd
 ### User and Owner Profiles: 
 Creating distinct and interactive profiles for users and owners, complete with Google Maps API integration for location display, enhanced user engagement. These profiles included features like public information display, reviews, and favoriting functionality.
 
+
 <p align="center">
-  <em>EquipMe Owner Dashboard</em><br>
-  <img src="https://github.com/mako314/EquipMe/assets/119079347/919c7b3c-c2eb-4cd2-91e6-e696ad523fff" width="800"><br><br><br>
-  <em>EquipMe User Dashboard Home</em><br>
-  <img src="https://github.com/mako314/EquipMe/assets/119079347/6fde57c9-e7f2-48c5-8566-b246053e8e63" width="800">
+  <em>EquipMe User Public Profile</em><br>
+  <img src="https://github.com/mako314/EquipMe/assets/119079347/a6b18521-ad18-4751-a22a-06b0d3ec1b97" width="800"><br><br><br>
+  <em>EquipMe Owner Profile Page</em><br>
+  <img src="https://github.com/mako314/EquipMe/assets/119079347/b760afba-9be4-4f06-8af6-7c9585cba936" width="800">
 </p>
 
 
@@ -81,6 +82,14 @@ For owner dashboards, I implemented Chart.js to create dynamic doughnut and bar 
 
 ### User Dashboards: 
 Developing distinct dashboards for owners and users, each with role-specific features, was a significant undertaking that improved my skills in user interface design.
+
+<p align="center">
+  <em>EquipMe Owner Dashboard</em><br>
+  <img src="https://github.com/mako314/EquipMe/assets/119079347/919c7b3c-c2eb-4cd2-91e6-e696ad523fff" width="800"><br><br><br>
+  <em>EquipMe User Dashboard Home</em><br>
+  <img src="https://github.com/mako314/EquipMe/assets/119079347/6fde57c9-e7f2-48c5-8566-b246053e8e63" width="800">
+</p>
+
 
 ### In-House Messaging System
 Creating a custom messaging system, including tables for inboxes, threads, and messages, was a unique challenge. This feature facilitated direct communication between users and owners, essential for negotiating and finalizing rental agreements.
