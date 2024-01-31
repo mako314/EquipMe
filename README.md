@@ -1,4 +1,4 @@
-<h1 align="center"> 🛠️ EquipMe: Your Local Tool & Equipment Rental Hub </h1> 
+<h1 align="center"> 🛠️ EquipMe: Your Local Tool & Equipment Rental Center </h1> 
 
 <h2 align="center">Welcome to EquipMe, where we connect neighbors and tools! 🌟</h2> 
 
