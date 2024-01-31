@@ -58,10 +58,11 @@ Creating distinct and interactive profiles for users and owners, complete with G
 
 <p align="center">
   <em>EquipMe Owner Dashboard</em><br>
-  <img src="https://github.com/mako314/EquipMe/assets/119079347/919c7b3c-c2eb-4cd2-91e6-e696ad523fff" width="800"><br><br>
+  <img src="https://github.com/mako314/EquipMe/assets/119079347/919c7b3c-c2eb-4cd2-91e6-e696ad523fff" width="800"><br><br><br>
   <em>EquipMe User Dashboard Home</em><br>
   <img src="https://github.com/mako314/EquipMe/assets/119079347/6fde57c9-e7f2-48c5-8566-b246053e8e63" width="800">
 </p>
+
 
 
 
