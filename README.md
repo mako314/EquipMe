@@ -166,30 +166,104 @@ The process of developing EquipMe was not just about mastering technical skills;
 
 # How to Use EquipMe
 
+# How to Use EquipMe
+
 ### If You're Logged Out:
 - **View Equipment Listings:** Browse through available equipment without logging in.
 
 ### For Users:
 - **Account Creation and Sign In:** Create an account or sign in to access all features.
+  <p align="center">
+    <em>EquipMe User Sign Up</em><br>
+    <img src="https://github.com/mako314/EquipMe/assets/119079347/87c27f1f-cc09-4df3-8185-6b54eacb7234" width="800"><br><br>
+  </p>
+
 - **Browsing:** Explore equipment listings and owner profiles.
+  <p align="center">
+    <em>EquipMe User View Owners</em><br>
+    <img src="https://github.com/mako314/EquipMe/assets/119079347/451fe674-163c-4a7a-b6f3-eacd6d7fe474" width="800"><br><br>
+  </p>
+
 - **Adding to Cart:** Add items to different carts for various projects.
+  <p align="center">
+    <em>EquipMe User Create New Cart</em><br>
+    <img src="https://github.com/mako314/EquipMe/assets/119079347/d21ba6de-ad1e-4d86-a3ac-ea8a5b37b4e5" width="800"><br><br>
+  </p>
+
 - **Rental Time Selection:** Choose from hourly, daily, or weekly rental durations.
+  <p align="center">
+    <em>EquipMe User Add to Cart</em><br>
+    <img src="https://github.com/mako314/EquipMe/assets/119079347/0a9c7849-7998-4b33-a057-d21b2eceeb72" width="800"><br><br>
+  </p>
+
 - **Rental Agreement:** Form and manage rental agreements through your dashboard.
+  <p align="center">
+    <em>EquipMe User Dashboard Rental Agreements</em><br>
+    <img src="https://github.com/mako314/EquipMe/assets/119079347/eaa7fc79-963d-4951-8627-0ca15eef9eff" width="800"><br><br>
+  </p>
+
 - **Checkout:** Proceed to checkout after accepting the rental agreement.
+  <p align="center">
+    <em>EquipMe User Carts </em><br>
+    <img src="https://github.com/mako314/EquipMe/assets/119079347/0e7beed9-2174-4a9e-b91f-caa18788f459" width="800"><br><br>
+  </p>
+
+
 
 ### For Owners:
 - **Account Setup:** Sign up or log in and complete Stripe onboarding for payments.
+  <p align="center">
+    <em>EquipMe Owner Signup</em><br>
+    <img src="https://github.com/mako314/EquipMe/assets/119079347/d4bd1a20-30f5-4288-b75f-7ca4eaa19226" width="800"><br><br>
+  </p>
+
 - **Equipment Upload:** Upload individual items or a CSV file for bulk listings.
+  <p align="center">
+    <em>EquipMe Owner CSV Upload</em><br>
+    <img src="https://github.com/mako314/EquipMe/assets/119079347/1c479f06-8df3-4031-92f9-4d92c61a00fb" width="800"><br><br>
+    <em>EquipMe Owner Listing Individual Items</em><br>
+    <img src="https://github.com/mako314/EquipMe/assets/119079347/20263ed7-6b97-468a-9166-19f0c00dc137" width="800"><br><br>
+  </p>
+
 - **Dashboard Insights:** Access analytics and charts for your equipment.
+  <p align="center">
+    <em>EquipMe Owner Dashboard</em><br>
+    <img src="https://github.com/mako314/EquipMe/assets/119079347/faa39cec-26d3-4ff0-86de-e0297e8eec01" width="800"><br><br>
+  </p>
+
 - **Stripe Onboarding and Rental Agreement Management:** 
   - Complete Stripe onboarding before renting out equipment.
+    <p align="center">
+      <em>EquipMe Dashboard Stripe Onboarding</em><br>
+      <img src="https://github.com/mako314/EquipMe/assets/119079347/218b92c5-150a-47d5-8188-ed56d3a87d19" width="800"><br><br>
+    </p>
+
   - Filter rental agreements by status and time created.
-  - Change delivery information.
+    <p align="center">
+      <em>EquipMe Rental Agreements</em><br>
+      <img src="https://github.com/mako314/EquipMe/assets/119079347/e0c59b5f-062f-4e90-80e2-a7728c648cf3" width="800"><br><br>
+    </p>
+
+  - Change delivery information if needed.
   - Accept or decline agreements.
+    <p align="center">
+      <em>EquipMe Owner Dashboard Rental Agreements</em><br>
+      <img src="https://github.com/mako314/EquipMe/assets/119079347/ecea5edd-df97-49ef-9a1a-a6fd3fac0dd5" width="800"><br><br>
+    </p>
 
 ### Global Features
 - **Favorites:** Mark equipment, owners, and users as favorites for quick access.
+  <p align="center">
+    <em>EquipMe Dashboard Favorites</em><br>
+    <img src="https://github.com/mako314/EquipMe/assets/119079347/c0ff2b1d-b3be-4072-ac12-cdf61b7361b8" width="800"><br><br>
+  </p>
+
 - **In-House Messaging System:** Facilitate communication through the dashboard messaging system.
+  <p align="center">
+    <em>EquipMe Inboxes </em><br>
+    <img src="https://github.com/mako314/EquipMe/assets/119079347/3590b30d-cc06-4a32-97dd-aaed2eeb7f48" width="800"><br><br>
+  </p>
+
 
 
 
