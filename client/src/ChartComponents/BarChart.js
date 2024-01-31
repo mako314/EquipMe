@@ -198,7 +198,7 @@ function BarChart({currentUser, setDashLoad}){
               const response = await fetch(`${apiUrl}summarize/${updateMonth}/${updateYear}/${currentUser.id}`)
               const newDataObject = await response.json()
 
-              console.log("Received data:", newDataObject)
+              // console.log("Received data:", newDataObject)
       
               // Transform the object into an array
               const newDataArray = Object.entries(newDataObject).map(([key, value]) => ({
@@ -425,7 +425,7 @@ function BarChart({currentUser, setDashLoad}){
       
   }, [currentUser])
 
-  console.log("THE BAR CHART EQUIPMENT DATA:", barChartEquipmentData)
+  // console.log("THE BAR CHART EQUIPMENT DATA:", barChartEquipmentData)
 
   if (!existingData) {
     return <LoadingPage loadDetails={"Loading equipment data..."}/>
