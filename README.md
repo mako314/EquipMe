@@ -4,7 +4,9 @@
 
 <p align="center"> Our community-focused platform is all about making tool and equipment rental easy and accessible. Whether you're a handy homeowner, a creative DIYer, or a professional in need of specific equipment, EquipMe is your one-stop solution! </p> 
 
-<img src="https://github.com/mako314/EquipMe/assets/119079347/fb4724b6-8cad-4bac-91fa-610e65417150.png" width="550" align="center">
+<p align="center">
+  <img src="https://github.com/mako314/EquipMe/assets/119079347/fb4724b6-8cad-4bac-91fa-610e65417150.png" width="800">
+</p>
 
 ## Motivation and Inspiration
 ### Growing Up in the Construction Industry: 
