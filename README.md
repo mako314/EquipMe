@@ -271,4 +271,25 @@ The process of developing EquipMe was not just about mastering technical skills;
 
 
 # Credits
-https://www.freecodecamp.org/news/how-to-write-a-good-readme-file/
+## Credits and Acknowledgements
+
+This project was made possible thanks to a variety of open-source resources and contributions from the web development community. Special thanks to the following for their exceptional work:
+
+- **Owner Profile Page:** Inspired by [Ketan's Tailwind Flex Profile](https://tailwindflex.com/@rp-ketan).
+- **User Profile Page:** Based on the [Tailwind Starter Kit's React Profile Page](https://github.com/creativetimofficial/tailwind-starter-kit/blob/main/Profile%20Page/react-profile-page/src/views/Profile.js).
+- **Product Cards and Footer:** Utilized components from [Tailblocks](https://tailblocks.cc/).
+- **Login Form:** Adopted from [Wicked Blocks](https://wickedblocks.dev/groups/login/).
+- **Input Error Styling:** Inspired by Meraki UI's Input Components, particularly style #7 ([Meraki UI](https://merakiui.com/components/inputs)).
+- **Various Forms:** Integrated designs from [Flowrift](https://flowrift.com/c/form/bUtAg?view=preview).
+- **Rental Card:** Adapted from [Meraki UI Cards](https://merakiui.com/components/cards).
+- **Contact Modal:** Based on Flowbite's Components ([Flowbite Modal](https://flowbite.com/docs/components/modal/)).
+- **Checkout Page Design:** Inspired by designs on [Harisha's Codepen](https://codepen.io/Harishash).
+- **Shopping Cart:** Layout from [Tailwind Components](https://tailwindcomponents.com/component/shopping-cart-responsive).
+- **Date-Time Selection:** Implemented HTML's `date-time-local` input type.
+- **Reviews Section:** Testimonial component from [Tailspark](https://tailspark.co/?component=Testimonial) and [Tailspark Rental Agreements](https://tailspark.co/).
+- **404 Page Design:** Creative 404 page design from [Meraki UI Marketing](https://merakiui.com/components/marketing/404-pages).
+- **Order History Page:** Adapted from [Tailwind Template by Santosharron](https://tailwind-template-santosharron.netlify.app/components/ecommerce/components/order-history/).
+
+Additionally, I'd like to acknowledge freeCodeCamp for their excellent guide on writing README files, which greatly assisted in the documentation of this project. You can find their guide here: [How to Write a Good README File](https://www.freecodecamp.org/news/how-to-write-a-good-readme-file/).
+
+Thank you to all the creators and developers for their amazing work that has greatly contributed to this project.
