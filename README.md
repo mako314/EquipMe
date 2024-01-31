@@ -35,7 +35,7 @@ EquipMe is the intersection of a traditional marketplace and an equipment rental
 
 
 ### Community and Trust: 
-By integrating features like ratings and reviews, EquipMe fosters a sense of community and trust. It's not just about transactions; it's about building relationships and a network of reliable, local equipment-sharing options.
+By integrating features like reviews, EquipMe fosters a sense of community and trust. It's not just about transactions; it's about building relationships and a network of reliable, local equipment-sharing options.
 
 
 ## Front-End Development: Expanding Horizons Mastering React and Related Technologies
