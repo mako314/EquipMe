@@ -459,7 +459,7 @@ function BarChart({currentUser, setDashLoad}){
         </button>
         </div>
 
-        <div className="w-full h-full">
+        {/* <div className="w-full h-full">
         {showAll ? (
             barChartEquipmentData && barChartEquipmentData.labels.length > 0 ? (
                 <Bar data={barChartEquipmentData} options={barChartOptions} />
@@ -473,7 +473,18 @@ function BarChart({currentUser, setDashLoad}){
                 <LoadingPage loadDetails={"Loading your chart"}/>
             )
         )}
-        </div>
+        </div> */}
+
+      <div className="w-full h-full">
+          {(barChartEquipmentData && barChartEquipmentData.labels.length > 0) || (monthlyData && monthlyData.labels.length > 0) ? (
+              <Bar data={showAll ? barChartEquipmentData : monthlyData} options={barChartOptions} />
+          ) : (
+              // Display this message when there is no chart data
+              <div className="flex items-center justify-center h-full text-center text-gray-800">
+                  <p className="text-lg font-medium">No listed equipment quite yet, we'll populate this chart for you after you've listed one to track all the essentials!</p>
+              </div>
+          )}
+      </div>
 
         </div>
   ))
