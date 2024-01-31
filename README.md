@@ -249,10 +249,11 @@ The process of developing EquipMe was not just about mastering technical skills;
 
   - Change delivery information if needed.
   - Accept or decline agreements.
-    <p align="center">
-      <em>EquipMe Owner Dashboard Rental Agreements</em><br>
-      <img src="https://github.com/mako314/EquipMe/assets/119079347/ecea5edd-df97-49ef-9a1a-a6fd3fac0dd5" width="800"><br><br>
-    </p>
+  <p align="center">
+    <em>EquipMe Owner Rental Agreement Handle Agreements</em><br>
+    <img src="https://github.com/mako314/EquipMe/assets/119079347/a7be669b-96e8-4a41-bf0f-49bd55c7d73f" width="800"><br><br>
+  </p>
+
 
 ### Global Features
 - **Favorites:** Mark equipment, owners, and users as favorites for quick access.
@@ -269,46 +270,5 @@ The process of developing EquipMe was not just about mastering technical skills;
 
 
 
-
-Table of Contents 
-What was your motivation?
-Why did you build this project?
-What problem does it solve?
-
-What did you learn?
-
-What I Learned
-
-Credits
+# Credits
 https://www.freecodecamp.org/news/how-to-write-a-good-readme-file/
-🌈 Features
-
-🙋‍♂️ Two Types of Users
-Regular Users: Perfect for those looking to rent equipment. Browse, search, and book with ease.
-Owners: Got tools to share? List your equipment, set your terms, and start earning!
-🎨 Listings
-Owners' Oasis: As an owner, list your tools with detailed descriptions, charming photos, and clear availability.
-Clear Conditions: Set your rental rates and additional terms, making everything transparent and straightforward.
-🔍 Searching and Booking
-Effortless Exploration: Users can easily search for the tools they need, using filters for precision.
-Seamless Booking: Choose your tool, check the terms, and book for your desired duration.
-🤝 Coordination
-Smooth Scheduling: Our platform helps organize pick-ups or deliveries, ensuring a hassle-free exchange.
-Chat & Coordinate: Direct messaging makes it simple to arrange the finer details.
-💬 Ratings and Reviews
-Community Trust: After the rental, users and owners can leave reviews, building a trusted community.
-💳 Payment Processing
-Secure and Simple: Our integrated stripe payment system handles transactions smoothly and safely.
-🛡️ Safety and Insurance
-Guidelines for Guardianship: Ensuring the safety and proper use of the tools.
-Optional Insurance Coverage: For that extra layer of security and peace of mind.
-🌻 Community Engagement
-Engage and Enrich: A space for users to share experiences, tips, and project ideas.
-🎨 Tech Stack
-Front-End Fun: [Your front-end technologies]
-Back-End Brilliance: [Your back-end solutions]
-Database Delights: [Your database technologies]
-Payment Pathways: [Payment processing details]
-Security Safeguards: [Implemented security measures]
-🚀 Getting Started
-Easy Setup: Simple steps to get you started on EquipMe:
