@@ -58,9 +58,9 @@ Creating distinct and interactive profiles for users and owners, complete with G
 
 
 <p align="center">
-  <em>EquipMe User Public Profile</em><br>
+  <em>EquipMe User Profile</em><br>
   <img src="https://github.com/mako314/EquipMe/assets/119079347/a6b18521-ad18-4751-a22a-06b0d3ec1b97" width="800"><br><br><br>
-  <em>EquipMe Owner Profile Page</em><br>
+  <em>EquipMe Owner Profile</em><br>
   <img src="https://github.com/mako314/EquipMe/assets/119079347/b760afba-9be4-4f06-8af6-7c9585cba936" width="800">
 </p>
 
@@ -94,6 +94,11 @@ Developing distinct dashboards for owners and users, each with role-specific fea
 ### In-House Messaging System
 Creating a custom messaging system, including tables for inboxes, threads, and messages, was a unique challenge. This feature facilitated direct communication between users and owners, essential for negotiating and finalizing rental agreements.
 
+<p align="center">
+  <em>EquipMe Owner Inbox</em><br>
+  <img src="https://github.com/mako314/EquipMe/assets/119079347/6c0db6f1-6dd8-46b9-a3f0-29fbe4466601" width="800"><br><br>
+</p>
+
 ## Additional Front-End Features
 ### Google Maps API Integration: 
 Extensive use of this API for owners, equipment, and users added a geographical dimension to the application.
@@ -104,11 +109,21 @@ Implementing loading pages and state tracking for various actions significantly 
 ### Stripe Integration for Secure Payments: 
 Embedding Stripe pages ensured a secure and smooth checkout process, complemented by post-checkout payment records and display.
 
+<p align="center">
+  <em>EquipMe Stripe Checkout Page</em><br>
+  <img src="https://github.com/mako314/EquipMe/assets/119079347/0cd5adab-1109-48ef-b221-ded76c412430" width="800"><br><br>
+</p>
+
 ### Streamlining the Cart and Checkout Process: 
 The development of a sophisticated system to manage multiple carts, rental durations, and pricing calculations was the most formidable task. This included implementing calendar components and real-time updates based on user actions.
 
 ### Bulk Data Upload via CSV: 
 The ability to upload equipment data en masse via a CSV file upload functionality added an important feature for bulk data management.
+
+<p align="center">
+  <em>EquipMe Owner CSV Upload</em><br>
+  <img src="https://github.com/mako314/EquipMe/assets/119079347/a22e4e60-f7ab-4ac8-bec3-3ce263e74a6c" width="800"><br><br>
+</p>
 
 
 ## Back-End Development: A Deep Dive
