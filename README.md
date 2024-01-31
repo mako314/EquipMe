@@ -4,9 +4,7 @@
 
 <p align="center"> Our community-focused platform is all about making tool and equipment rental easy and accessible. Whether you're a handy homeowner, a creative DIYer, or a professional in need of specific equipment, EquipMe is your one-stop solution! </p> 
 
-What was your motivation?
-Why did you build this project?
-What problem does it solve?
+![EquipMe Home Page](https://github.com/mako314/EquipMe/assets/119079347/fb4724b6-8cad-4bac-91fa-610e65417150 width=100)
 
 ## Motivation and Inspiration
 ### Growing Up in the Construction Industry: 
@@ -122,6 +120,10 @@ The process of developing EquipMe was not just about mastering technical skills;
 
 
 Table of Contents 
+
+What was your motivation?
+Why did you build this project?
+What problem does it solve?
 
 How to Use the Project
 
