@@ -1,6 +1,8 @@
-# 🛠️ EquipMe: Your Local Tool & Equipment Rental Hub
+<h1 align="center"> 🛠️ EquipMe: Your Local Tool & Equipment Rental Hub </h1> 
 
-Welcome to EquipMe, where we connect neighbors and tools! 🌟 Our community-focused platform is all about making tool and equipment rental easy and accessible. Whether you're a handy homeowner, a creative DIYer, or a professional in need of specific equipment, EquipMe is your one-stop solution!
+<h2 align="center">Welcome to EquipMe, where we connect neighbors and tools! 🌟</h2> 
+
+<p align="center"> Our community-focused platform is all about making tool and equipment rental easy and accessible. Whether you're a handy homeowner, a creative DIYer, or a professional in need of specific equipment, EquipMe is your one-stop solution! </p> 
 
 What was your motivation?
 Why did you build this project?
