@@ -26,8 +26,8 @@ The primary challenge I aimed to tackle with EquipMe was the complexity and inac
 EquipMe is the intersection of a traditional marketplace and an equipment rental service, akin to what you'd get if Craigslist met an equipment rental store. It's about making the process as straightforward as shopping online, yet with the added trust and community feel of a local marketplace.
 
 <p align="center">
-  <img src="https://github.com/mako314/EquipMe/assets/119079347/7f45df61-7b2f-4ee8-8a40-57cffa9f4c84" width="800" style="display: inline-block;">
-  <img src="https://github.com/mako314/EquipMe/assets/119079347/3574b92f-0646-409a-9f77-af70e35a5e3c" width="800" style="display: inline-block;">
+  <img src="https://github.com/mako314/EquipMe/assets/119079347/7f45df61-7b2f-4ee8-8a40-57cffa9f4c84" width="800"><br><br>
+  <img src="https://github.com/mako314/EquipMe/assets/119079347/3574b92f-0646-409a-9f77-af70e35a5e3c" width="800">
 </p>
 
 
