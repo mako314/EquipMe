@@ -461,10 +461,18 @@ function BarChart({currentUser, setDashLoad}){
 
         <div className="w-full h-full">
         {showAll ? (
-            <Bar data={barChartEquipmentData} options={barChartOptions} />
-          ) : (
-            <Bar data={monthlyData} options={barChartOptions} />
-          )}
+            barChartEquipmentData && barChartEquipmentData.labels.length > 0 ? (
+                <Bar data={barChartEquipmentData} options={barChartOptions} />
+            ) : (
+                <LoadingPage loadDetails={"Loading your chart"}/>
+            )
+        ) : (
+            monthlyData && monthlyData.labels.length > 0 ? (
+                <Bar data={monthlyData} options={barChartOptions} />
+            ) : (
+                <LoadingPage loadDetails={"Loading your chart"}/>
+            )
+        )}
         </div>
 
         </div>
