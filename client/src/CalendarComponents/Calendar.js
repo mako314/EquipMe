@@ -85,8 +85,8 @@ function Calendar({startRental, setStartRental, endRental, setEndRental}) {
     //Formatted date (min value of the input) becomes newEndDate, allowing nothing in the past to be selected
     setFormattedEndDate(formatDate(newEndDate))
 
-    // If the new Date (end) is less than the end date ( which gets set after you set or re-set the start rental date) reset the end date to a new starting position. End rental is our prop that's coming in, we end up testing the date that was previously selected vs the newEndDate to see if it's alright to keep that data.
-    // I.E. 
+    // If the new Date (end) is less than the end date ( which gets set after you set or re-set the start rental date) reset the end date to a new starting position. End rental is our prop that's coming in, we end up testing the date that was previously selected vs the newEndDate to see if it's alright to keep that data. The way the browser handles re-setting the minimum date for end rental seems to reset the date to that day regardless.
+    // I.E. You want to start a rental on 1/2 and end it on 1/12, you move the start date to 1/5 changes the minimum rental date to 1/5, resetting it.
     // if (new Date(endRental) < newEndDate) {
     //   setEndRental(formatDate(newEndDate))
     // }
@@ -130,8 +130,6 @@ function Calendar({startRental, setStartRental, endRental, setEndRental}) {
   // console.log("STARTING ONE YEAR FROM NOW:",addDays(365))
   // console.log("End date should be +1 hr:", formattedEndDate)
   // console.log("One year from now:",(addDays(365,3600000)) )
-  // console.log("Starting day:", startRental)
-  // console.log("Ending day:", endRental)
 
   return (
     <div className='Calendar bg-white rounded-lg shadow'>
