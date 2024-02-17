@@ -5,7 +5,7 @@ const AvailCheckoutNumb = createContext();
 
 export const CartAvailProviderContext = () => useContext(AvailCheckoutNumb)
 
-export const CartTotalNumbProvider = ({ children, cartData }) => {
+export const CartTotalNumbProvider = ({ children }) => {
   // State to simply hold the amount of items ready to be checked out in a cart
   const [availableToCheckoutNumb, setAvailableToCheckoutNumb] = useState(0)
   const { currentUser, role } = UserSessionContext()
@@ -14,7 +14,7 @@ export const CartTotalNumbProvider = ({ children, cartData }) => {
     if (role === 'user'){
     calculateReadyToCheckout(currentUser.cart)
     }
-  }, [cartData, currentUser]) // Recalculate whenever cartData changes
+  }, [currentUser]) // Recalculate whenever currentUser changes
 
   const calculateReadyToCheckout = (cartData) => {
     // Calculates the total items ready for checkout and displays the number in the cart svg in the navbar for users
