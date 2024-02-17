@@ -8,10 +8,11 @@ export const SessionProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState()
   const [role, setRole] = useState('')
   const apiUrl=process.env.REACT_APP_API_URL
-//   console.log(process.env.REACT_APP_API_URL)
+// console.log(process.env.REACT_APP_API_URL)
 
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
 // https://stackoverflow.com/questions/60694924/what-does-resolve-and-reject-actually-do-in-javascript-promise
+// https://javascript.info/promise-basics
 
 const checkSession = () => {
   return new Promise((resolve, reject) => {
@@ -28,7 +29,7 @@ const checkSession = () => {
         setCurrentUser(null)
         setRole('')
         // Optionally, return a resolved promise with a specific value
-        // return Promise.resolve('Not Authenticated')
+        return Promise.reject(new Error('Invalid session or role'))
       } else {
         // Handle other types of errors
         throw new Error(`Session check failed with status: ${response.status}`);
@@ -48,7 +49,7 @@ const checkSession = () => {
       }
     })
     .catch(error => {
-      // console.error('Error during session check:', error)
+      console.error('Error during session check:', error)
       // Optionally, reject the promise here if you need to handle this error elsewhere
       // reject(error)
     })

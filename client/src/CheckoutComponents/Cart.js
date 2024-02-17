@@ -5,9 +5,7 @@ import ApiUrlContext from '../Api'
 import { useNavigate } from "react-router-dom";
 import {toast} from 'react-toastify'
 import { UserSessionContext } from "../UserComponents/SessionContext";
-
 import LoadingPage from "../ExtraPageComponents/LoadingPage";
-
 import Page404 from "../ExtraPageComponents/Page404";
 
 
@@ -35,6 +33,7 @@ function Cart(){
   const navigate = useNavigate()
 
   // https://stackoverflow.com/questions/42173786/react-router-pass-data-when-navigating-programmatically
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some
 
   // Handles navigating to the checkout with the clientSecret
   const handleCheckoutNavigation = (client_secret) => {
@@ -42,13 +41,10 @@ function Cart(){
   }
 
   // console.log("THE CART TOTAL:", individualTotal)
-  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some
-
   // console.log("THE CURRENT CART TOTAL:", currentCartTotal)
   // console.log("AVAILABLE TO CHECK OUT TOTAL:", availableToCheckOutTotal)
   // console.log("THE CURRENT CART TOTAL BACKEND:", cartData[currentCart]?.total)
   // console.log(Array.isArray(individualTotal))
-
   // console.log("THE CART TESTING:", cartData[currentCart])
   // console.log("THE CART DATA:", cartData)
   // console.log("THE CURRENT CART VALUE:", currentCart)
@@ -77,7 +73,7 @@ function Cart(){
   const itemsInCurrentCartAll = individualTotal?.filter(item => item?.cart_id === cartData[currentCart]?.id)
   
   // console.log("CURRENT ITEMS IN CART:", itemsInCurrentCartAll)
-  // Sum up the costs of these items
+  // Sum up the costs of these items in the users current cart
   itemsInCurrentCartBothAgreed.forEach((item) => {
     // console.log("LOOK HERE FOR THE ITEM:",item)
     // Can likely just do a +1 here or prevCount => prevCount +1 state for the cart number
@@ -148,7 +144,6 @@ useEffect(() => {
   if (role === 'owner'){
       return <div> Not available! </div>
   }
-
 
   if (isLoading){
     return <LoadingPage loadDetails={"Cart"}/>
@@ -276,7 +271,7 @@ useEffect(() => {
         // navigate(`/checkout`)
       } else {
         const errorData = await response.json()
-        toast.warn(`🚧 The owner likely either hasn;t finished their stripe onboarding yet, or there's an error with the reserved quantity. Please contact the owner of this equipment`,{
+        toast.warn(`🚧 The owner likely either hasn't finished their stripe onboarding yet, or there's an error with the reserved quantity. Please contact the owner of this equipment`,{
         "autoClose" : 6000
         })
         console.error('Error Response:', errorData)
@@ -642,7 +637,6 @@ const fetchAndUpdateCartData = async () => {
           <p className="text-lg font-bold">Total</p>
           <div className="">
             <p className="mb-1 text-lg font-bold">${(availableToCheckOutTotal).toFixed(2)}</p>
-            <p className="text-sm text-gray-700">including VAT</p>
           </div>
         </div>
         <button 

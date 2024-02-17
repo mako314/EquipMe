@@ -307,10 +307,9 @@ function RentalAgreementDisplay() {
                 // Test if role is user, take the returned promise, and pass it to calculateReadyCartTotal for real time update on how many cart items available for checkout.
                 if (role === 'user'){
                 checkSession().then(updatedUserData => {
-                    if (role === 'user') {
-                    //   console.log("THE CONDITIONAL RAN CART SHOULD UPDATE")
-                      calculateReadyToCheckout(updatedUserData.cart)
-                    }
+                    // console.log("THE CONDITIONAL RAN CART SHOULD UPDATE")
+                    calculateReadyToCheckout(updatedUserData.cart)
+                    
                   }).catch(error => {
                     console.error("Error in checkSession:", error)
                   })
