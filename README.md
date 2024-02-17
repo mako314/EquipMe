@@ -205,7 +205,7 @@ The process of developing EquipMe was not just about mastering technical skills;
   <img src="https://github.com/mako314/EquipMe/assets/119079347/6a5c0ebf-b339-457b-8abf-b89cf48101c9" width="800"><br><br>
   </p>
 
-- **Checkout:** Proceed to checkout after accepting the rental agreement.
+- **Checkout:** Proceed to checkout after accepting the rental agreement. ***BOTH Parties must have accepted the agreement for you to checkout!
   <p align="center">
     <em>EquipMe User Carts </em><br>
     <img src="https://github.com/mako314/EquipMe/assets/119079347/0e7beed9-2174-4a9e-b91f-caa18788f459" width="800"><br><br>
