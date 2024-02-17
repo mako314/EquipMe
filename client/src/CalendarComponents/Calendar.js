@@ -29,7 +29,7 @@ function Calendar({startRental, setStartRental, endRental, setEndRental}) {
     }
     // Adjust the date to local timezone, .getTimeZoneOffset returns the difference in minutes. Most of this needs second / milliseconds so that's where the *60000 comes from
     let timezoneOffset = date.getTimezoneOffset() * 60000
-    // To get the local date, you just take the date z(which we test to see if it was an instance of Date, since the useEffect makes it so it continues). When subtracting timezoneOffset, you just get the appropriate time, 24hr format.
+    // To get the local date, you just take the date (which we test to see if it was an instance of Date, since the useEffect makes it a Date, we're good to continue). When subtracting timezoneOffset, you just get the local time, 24hr format.
     let localDate = new Date(date - timezoneOffset)
     // Slice so I don't get the very long info, can do -8 or 16. 
     // https://stackoverflow.com/questions/67423091/react-jsx-add-min-date-time-to-datetime-local-input
