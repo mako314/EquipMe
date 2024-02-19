@@ -166,6 +166,24 @@ The process of developing EquipMe was not just about continuing to enhance my te
 
 # How to Use EquipMe
 
+### Login Information
+
+**For Users:**
+- **Email:** `benjamin.davis23@EquipMe.com`
+- **Password:** `123`
+
+**For Owners:**
+- **Email:** `ejohnson@EquipMe.com`
+- **Password:** `123`
+
+### Stripe Testing
+For testing payments, use the following card information:
+- **Card Number:** `4242 4242 4242 4242`
+- **CVC:** Any 3 digits
+- **Expiration Date:** Any future date
+
+This will allow you to simulate transactions without making actual payments.
+
 ### If You're Logged Out:
 - **View Equipment Listings:** Browse through available equipment without logging in.
 
