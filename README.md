@@ -235,7 +235,7 @@ The process of developing EquipMe was not just about continuing to enhance my te
   </p>
 
 - **Stripe Onboarding and Rental Agreement Management:** 
-  - Complete Stripe onboarding before renting out equipment.
+  - Complete Stripe onboarding before being able to "receive payment".
     <p align="center">
       <em>EquipMe Dashboard Stripe Onboarding</em><br>
       <img src="https://github.com/mako314/EquipMe/assets/119079347/218b92c5-150a-47d5-8188-ed56d3a87d19" width="800"><br><br>
