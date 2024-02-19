@@ -168,6 +168,8 @@ The process of developing EquipMe was not just about continuing to enhance my te
 
 ### Login Information
 
+Feel free to use these accounts, or test with an account of your own!
+
 **For Users:**
 - **Email:** `benjamin.davis23@EquipMe.com`
 - **Password:** `123`
