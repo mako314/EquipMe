@@ -194,7 +194,7 @@ The process of developing EquipMe was not just about continuing to enhance my te
     <img src="https://github.com/mako314/EquipMe/assets/119079347/0a9c7849-7998-4b33-a057-d21b2eceeb72" width="800"><br><br>
   </p>
 
-- **Rental Agreement:** Form and manage rental agreements through your dashboard.
+- **Rental Agreement:** Manage rental agreements through your dashboard. *** These are created for both parties when a Renter adds an item to their cart!
   <p align="center">
     <em>EquipMe User Dashboard Rental Agreements</em><br>
     <img src="https://github.com/mako314/EquipMe/assets/119079347/eaa7fc79-963d-4951-8627-0ca15eef9eff" width="800"><br><br>
