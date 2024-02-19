@@ -160,7 +160,7 @@ Developing a contact form that could send emails to my Gmail account was a novel
 ### Concluding Thoughts
 The front-end development of EquipMe was a journey of discovery and innovation. From diving deeper into React and its ecosystem to creating a user-friendly and interactive e-commerce experience, each aspect of the project added to my skillset. I learned not only the technicalities of front-end development but also the art of creating an engaging and intuitive user experience. This project was a testament to the importance of continual learning and adaptation in the ever-evolving field of web development.
 
-The process of developing EquipMe was not just about mastering technical skills; it was also a journey in problem-solving, creativity, and perseverance. Each challenge, whether it was managing complex database relationships or integrating third-party APIs like Stripe, contributed to a deeper understanding of back-end development and its nuances. This project has been a testament to the power of learning through doing, and it has significantly enhanced my skills as a developer.
+The process of developing EquipMe was not just about continuing to enhance my technical skills; it was also a journey in problem-solving, creativity, and perseverance. Each challenge, whether it was managing complex database relationships or integrating third-party APIs like Stripe, contributed to a deeper understanding of back-end development and its nuances. This project has been a testament to the power of learning through doing, and it has significantly enhanced my skills as a developer.
 
 
 
